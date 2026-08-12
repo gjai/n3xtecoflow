@@ -137,10 +137,10 @@ ou {"skip":true}`;
 Mission: rédiger un VRAI ARTICLE complet (pas un résumé de 3 lignes), bilingue, à partir de la source fournie.
 
 Périmètre STRICT:
-- Sujet UNIQUEMENT pistolets de massage / massage guns / thérapie par percussion (Theragun, Hypervolt, Renpho, TOLOCO, Bob and Brad, etc.)
+- Sujet UNIQUEMENT pistolets de massage / massage guns / thérapie par percussion / masseurs cervicaux & shiatsu (Theragun, Hypervolt, Renpho, TOLOCO, Bob and Brad, Brelley, AERLANG, etc.)
 - Si la source n'est PAS centrée sur ce sujet → réponds exactement {"skip":true}
 - Interdiction d'inventer un angle "massage gun" si la source en parle à peine
-- Les titres FR/EN doivent mentionner clairement pistolet de massage, massage gun ou une marque du périmètre
+- Les titres FR/EN doivent mentionner clairement pistolet de massage, massage gun, masseur cervical/shiatsu ou une marque du périmètre
 - Si la source est une pure promo / deal / coupon / soldes sans angle éditorial utile → {"skip":true}
 
 Règles rédaction:
@@ -319,6 +319,9 @@ function guessTags(
     if (/toloco/.test(hay)) tags.add("toloco");
     if (/bob\s*(and|&)\s*brad/.test(hay)) tags.add("bob-brad");
     if (/opove/.test(hay)) tags.add("opove");
+    if (/brelley/.test(hay)) tags.add("brelley");
+    if (/aerlang/.test(hay)) tags.add("aerlang");
+    if (/shiatsu|cervical|neck\s*massager|coussin/.test(hay)) tags.add("masseur");
     if (/promo|prix|deal|amazon/.test(hay)) tags.add("promo");
     if (tags.size === 0) tags.add("massage-gun");
     return [...tags];
