@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { articleJsonLd, JsonLd } from "@/components/JsonLd";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
+import { AmazonButton } from "@/components/AmazonButton";
 import { SmartCover } from "@/components/SmartCover";
 import { editorialImages } from "@/data/images";
+import { amazonCtaForNews } from "@/lib/news/amazon-cta";
 import { getNewsBySlug, readNewsStore } from "@/lib/news/store";
 import { localeAlternates } from "@/lib/seo";
 
@@ -39,6 +41,7 @@ export default async function NewsArticlePage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("news");
+  const a = await getTranslations("amazon");
   const store = await readNewsStore();
   const article = getNewsBySlug(slug, store);
   if (!article) notFound();
@@ -50,6 +53,36 @@ export default async function NewsArticlePage({
   const date = new Date(article.publishedAt).toLocaleDateString(
     isEn ? "en-US" : "fr-FR",
     { year: "numeric", month: "long", day: "numeric" },
+  );
+  const cta = amazonCtaForNews(article);
+  const buyLabel = isEn ? "Buy on Amazon.fr" : "Acheter sur Amazon.fr";
+  const buyBadge = isEn ? "Amazon affiliate link" : "Lien affilié Amazon";
+  const mid = Math.max(2, Math.floor(copy.body.length / 2));
+
+  const amazonBlock = (
+    <div className="space-y-3 rounded-none border border-[var(--accent)] bg-[var(--surface)] p-5">
+      <p className="text-sm font-medium text-[var(--heading)]">
+        {isEn
+          ? cta.product
+            ? `See ${cta.product.name} on Amazon`
+            : "See EcoFlow on Amazon"
+          : cta.product
+            ? `Voir ${cta.product.name} sur Amazon`
+            : "Voir EcoFlow sur Amazon"}
+      </p>
+      <AmazonButton
+        href={cta.href}
+        label={buyLabel}
+        badge={buyBadge}
+        size="lg"
+        priceFallback={
+          isEn
+            ? "See current price on Amazon.fr →"
+            : "Voir le prix actuel sur Amazon.fr →"
+        }
+      />
+      <AffiliateDisclosure compact />
+    </div>
   );
 
   return (
@@ -99,14 +132,18 @@ export default async function NewsArticlePage({
             </a>
             {article.rewrittenBy === "ai" ? ` · ${t("aiBadge")}` : null}
           </p>
+          <div className="mt-6">{amazonBlock}</div>
         </div>
       </header>
 
       <div className="mx-auto max-w-3xl space-y-5 px-5 py-12 text-[var(--fog)] leading-relaxed md:px-8">
-        {copy.body.map((p) => (
+        {copy.body.slice(0, mid).map((p) => (
           <p key={p.slice(0, 48)}>{p}</p>
         ))}
-        <AffiliateDisclosure compact />
+        {amazonBlock}
+        {copy.body.slice(mid).map((p) => (
+          <p key={p.slice(0, 48)}>{p}</p>
+        ))}
         <p className="border-t border-[var(--line)] pt-6">
           <a
             href={article.sourceUrl}
@@ -124,8 +161,22 @@ export default async function NewsArticlePage({
           >
             {t("catalogCta")}
           </Link>
+          {" · "}
+          <span className="text-xs text-[var(--muted)]">{a("disclosureShort")}</span>
         </p>
       </div>
+
+      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-[var(--line)] bg-[var(--bg)]/95 p-3 backdrop-blur md:hidden">
+        <a
+          href={cta.href}
+          target="_blank"
+          rel="nofollow sponsored noopener noreferrer"
+          className="flex min-h-12 items-center justify-center bg-[var(--accent)] px-4 text-sm font-semibold text-[var(--accent-ink)]"
+        >
+          {buyLabel}
+        </a>
+      </div>
+      <div className="h-16 md:hidden" aria-hidden />
     </article>
   );
 }
