@@ -59,7 +59,17 @@ async function rewriteGuideWithAi(topic: GuideTopic): Promise<{
 
   const existing = staticGuides.find((g) => g.slug === topic.slug);
 
-  const prompt = `Tu rédiges un GUIDE D'ACHAT long et utile pour EcoFlow Stream (site éditorial indépendant FR/EN, affiliation Amazon).
+  const site = guideSiteId(topic);
+  const brand =
+    site === "tumbler" ? "La gourde isotherme" : "EcoFlow Stream";
+  const scope =
+    site === "tumbler"
+      ? "gourdes / tumblers / mugs isothermes (Hydro Flask, Stanley, Qwetch, Owala, etc.)"
+      : "EcoFlow / PowerStream / stations DELTA-RIVER / solaire EcoFlow";
+
+  const prompt = `Tu rédiges un GUIDE D'ACHAT long et utile pour ${brand} (site éditorial indépendant FR/EN, affiliation Amazon).
+
+Périmètre STRICT: ${scope}
 
 Sujet FR: ${topic.topicFr}
 Angle FR: ${topic.angleFr}
@@ -74,7 +84,7 @@ Règles:
 - Ne pas inventer de prix chiffrés Amazon
 - Chaque langue: title, subtitle, sections = 7 à 10 sections
 - Chaque section: heading + 2 à 4 paragraphs utiles (+ bullets optionnels)
-- Couvrir: contexte, méthode, cas d'usage, dimensionnement, pièges, checklist, conclusion actionable
+- Couvrir: contexte, méthode, cas d'usage, critères, pièges, checklist, conclusion actionable
 - JSON strict uniquement
 
 Format:
@@ -87,8 +97,7 @@ Format:
     messages: [
       {
         role: "system",
-        content:
-          "You write long bilingual EcoFlow buying guides as strict JSON only. No markdown fences.",
+        content: `You write long bilingual ${brand} buying guides as strict JSON only. No markdown fences.`,
       },
       { role: "user", content: prompt },
     ],
@@ -343,6 +352,7 @@ export async function refreshGuides(options?: {
           slug: topic.slug,
           title: entry.fr.title,
           subtitle: entry.fr.subtitle,
+          siteId: guideSiteId(topic),
         });
         if (cover) {
           entry.imageSrc = cover.imageSrc;

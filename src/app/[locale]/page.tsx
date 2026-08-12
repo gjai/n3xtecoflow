@@ -11,8 +11,8 @@ import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/JsonLd";
 import { AMAZON_QUERIES, buildAmazonSearchUrl } from "@/lib/amazon";
 import {
   categoryImages,
-  editorialImages,
-  heroImage,
+  getEditorialImages,
+  getHeroImage,
 } from "@/data/images";
 import {
   getCategoriesForSite,
@@ -65,6 +65,8 @@ export default async function HomePage({
   const isEn = locale === "en";
   const siteUrl = `https://${site.primaryHost}`;
   const brandName = site.brand.name;
+  const editorialImages = getEditorialImages(site.id);
+  const heroImage = getHeroImage(site.id);
 
   const newsArticles = getNewsArticles(await readNewsStore(), site.id);
   const latestNews = newsArticles.slice(0, 3);
@@ -126,13 +128,19 @@ export default async function HomePage({
             altFr: guideCopy.title,
             altEn: guideCopy.title,
           }
-        : resolveArticlePrimaryImage(latestGuide.slug, "guide", ecoflowMap)
+        : resolveArticlePrimaryImage(
+            latestGuide.slug,
+            "guide",
+            ecoflowMap,
+            site.id,
+          )
       : null;
   const comparisonCover = latestComparisonHub
     ? resolveArticlePrimaryImage(
         latestComparisonHub.slug,
         "comparison",
         ecoflowMap,
+        site.id,
       )
     : null;
 

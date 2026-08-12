@@ -1,6 +1,7 @@
 import { createHash } from "crypto";
 import { promises as fs } from "fs";
 import path from "path";
+import type { SiteId } from "@/sites/types";
 
 function mediaDir() {
   return (
@@ -18,6 +19,7 @@ export async function generateGuideCoverAi(args: {
   slug: string;
   title: string;
   subtitle?: string;
+  siteId?: SiteId;
 }): Promise<{ imageSrc: string; imageCredit: string } | null> {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) return null;
@@ -25,7 +27,16 @@ export async function generateGuideCoverAi(args: {
   const model =
     process.env.NEWS_IMAGE_MODEL?.trim() || "gemini-2.5-flash-image";
 
-  const prompt = `Create a photorealistic editorial cover image (16:9) for an EcoFlow buying guide.
+  const siteId = args.siteId || "ecoflow";
+  const prompt =
+    siteId === "tumbler"
+      ? `Create a photorealistic editorial cover image (16:9) for an insulated bottle / tumbler buying guide.
+No text, no logos, no watermarks, no UI chrome.
+Guide title: "${args.title}".
+Context: ${args.subtitle || "insulated water bottle, tumbler, daily hydration"}.
+Style: premium lifestyle / product photography, natural light, shallow depth of field.
+Show generic unbranded stainless steel bottles or tumblers.`
+      : `Create a photorealistic editorial cover image (16:9) for an EcoFlow buying guide.
 No text, no logos, no watermarks, no UI chrome.
 Guide title: "${args.title}".
 Context: ${args.subtitle || "portable power, solar energy, home backup"}.
@@ -82,7 +93,10 @@ Show relevant EcoFlow-like gear (power station, solar panel, balcony kit, campin
       await fs.writeFile(path.join(dir, filename), buf);
       return {
         imageSrc: `/api/media/guides/${filename}`,
-        imageCredit: "EcoFlow Stream (IA)",
+        imageCredit:
+          siteId === "tumbler"
+            ? "La gourde isotherme (IA)"
+            : "EcoFlow Stream (IA)",
       };
     }
     return null;

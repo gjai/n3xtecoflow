@@ -63,6 +63,7 @@
   "news": {
     "title": "Actualités",
     "subtitle": "Sélections et notes éditoriales autour des gourdes et tumblers isothermes.",
+    "empty": "Aucune actu gourdes/tumblers pour le moment — le prochain passage automatique va peupler cette section.",
     "catalogCta": "Voir le catalogue →"
   }
 }

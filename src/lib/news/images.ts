@@ -1,9 +1,10 @@
 import { createHash } from "crypto";
 import { promises as fs } from "fs";
 import path from "path";
-import { products } from "@/data/products";
+import { getProductsForSite } from "@/data/products";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import { resolveProductMedia } from "@/lib/product-presentation";
+import type { SiteId } from "@/sites/types";
 import { fetchSourcePage } from "./source";
 
 function mediaDir() {
@@ -195,6 +196,7 @@ async function generateCoverWithGemini(args: {
   title: string;
   excerpt?: string;
   slug: string;
+  siteId?: SiteId;
 }): Promise<string | null> {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) return null;
@@ -202,7 +204,15 @@ async function generateCoverWithGemini(args: {
   const model =
     process.env.NEWS_IMAGE_MODEL?.trim() || "gemini-2.5-flash-image";
 
-  const prompt = `Create a photorealistic editorial cover image (16:9) for an energy / EcoFlow news article.
+  const prompt =
+    args.siteId === "tumbler"
+      ? `Create a photorealistic editorial cover image (16:9) for insulated bottles / tumblers news.
+No text, no logos, no watermarks, no Google branding, no UI chrome.
+Subject inspired by: "${args.title}".
+Context: ${args.excerpt || "insulated water bottle, tumbler, daily hydration"}.
+Style: premium product photography, natural light, lifestyle desk/outdoor, shallow depth of field.
+Show generic unbranded stainless steel bottles or tumblers if unsure.`
+      : `Create a photorealistic editorial cover image (16:9) for an energy / EcoFlow news article.
 No text, no logos, no watermarks, no Google branding, no UI chrome.
 Subject inspired by: "${args.title}".
 Context: ${args.excerpt || "portable power station, solar energy, battery backup"}.
@@ -263,18 +273,21 @@ Show EcoFlow-like portable power gear or solar panels if relevant — generic un
   }
 }
 
-/** Fallback: packshot produit EcoFlow lié au titre / tags. */
+/** Fallback: packshot produit lié au titre / tags. */
 async function resolveProductPackshotCover(args: {
   title: string;
   tags?: string[];
   slug: string;
+  siteId?: SiteId;
 }): Promise<string | null> {
+  const siteId = args.siteId || "ecoflow";
   const hay = `${args.title} ${(args.tags || []).join(" ")}`
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
 
-  const scored = products
+  const catalog = getProductsForSite(siteId);
+  const scored = catalog
     .map((p) => {
       const tokens = [
         p.slug,
@@ -297,10 +310,15 @@ async function resolveProductPackshotCover(args: {
     .filter((x) => x.score > 0)
     .sort((a, b) => b.score - a.score);
 
-  const pick = scored[0]?.p || products.find((p) => p.slug === "delta-2");
+  const pick =
+    scored[0]?.p ||
+    (siteId === "ecoflow"
+      ? catalog.find((p) => p.slug === "delta-2")
+      : catalog[0]) ||
+    null;
   if (!pick) return null;
 
-  const eco = await getEcoflowEntriesMap();
+  const eco = siteId === "ecoflow" ? await getEcoflowEntriesMap() : {};
   const media = resolveProductMedia(pick, eco[pick.slug]);
   if (media.source === "category") return null;
 
@@ -322,7 +340,9 @@ export async function resolveNewsCover(args: {
   excerpt?: string;
   tags?: string[];
   ogImageHint?: string | null;
+  siteId?: SiteId;
 }): Promise<NewsCoverResult | null> {
+  const siteId = args.siteId || "ecoflow";
   let imageUrl = args.ogImageHint?.trim() || null;
   if (imageUrl && isJunkImageUrl(imageUrl)) imageUrl = null;
 
@@ -348,11 +368,13 @@ export async function resolveNewsCover(args: {
     title,
     excerpt: args.excerpt,
     slug: args.slug,
+    siteId,
   });
   if (ai) {
     return {
       imageSrc: ai,
-      imageCredit: "EcoFlow Stream (IA)",
+      imageCredit:
+        siteId === "tumbler" ? "La gourde isotherme (IA)" : "EcoFlow Stream (IA)",
       imageKind: "ai",
     };
   }
@@ -361,11 +383,12 @@ export async function resolveNewsCover(args: {
     title,
     tags: args.tags,
     slug: args.slug,
+    siteId,
   });
   if (pack) {
     return {
       imageSrc: pack,
-      imageCredit: "EcoFlow",
+      imageCredit: siteId === "tumbler" ? "Amazon" : "EcoFlow",
       imageKind: "fallback",
     };
   }

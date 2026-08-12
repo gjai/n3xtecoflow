@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleBody } from "@/components/ArticleBody";
 import { ArticleCover } from "@/components/ArticleCover";
-import { editorialImages } from "@/data/images";
+import { getEditorialImages } from "@/data/images";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import {
   resolveArticlePrimaryImage,
@@ -36,7 +36,7 @@ export async function generateMetadata({
     site.id === "ecoflow" ? await getEcoflowEntriesMap() : {};
   const og = guide.imageSrc
     ? { src: guide.imageSrc }
-    : resolveArticlePrimaryImage(slug, "guide", ecoflowMap);
+    : resolveArticlePrimaryImage(slug, "guide", ecoflowMap, site.id);
   return {
     title: copy.title,
     description: copy.subtitle,
@@ -74,6 +74,7 @@ export default async function GuideArticlePage({
         },
       ]
     : productImages;
+  const editorialImages = getEditorialImages(site.id);
 
   return (
     <article>

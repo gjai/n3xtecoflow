@@ -1,10 +1,14 @@
-import { editorialImages, type SiteImage } from "@/data/images";
+import {
+  getEditorialImages,
+  type SiteImage,
+} from "@/data/images";
 import { products, type Product } from "@/data/products";
 import type { EcoflowCatalogEntry } from "@/lib/ecoflow/types";
 import {
   amazonPackshotUrl,
   resolveProductMedia,
 } from "@/lib/product-presentation";
+import type { SiteId } from "@/sites/types";
 
 /** Produits représentatifs par article (guides / comparatifs). */
 export const ARTICLE_PRODUCT_SLUGS: Record<string, string[]> = {
@@ -90,10 +94,10 @@ export function resolveArticlePrimaryImage(
   articleSlug: string,
   kind: "guide" | "comparison",
   ecoflowMap: Record<string, EcoflowCatalogEntry>,
+  siteId: SiteId = "ecoflow",
 ): SiteImage {
   const images = resolveArticleProductImages(articleSlug, ecoflowMap);
   if (images[0]) return images[0];
-  return kind === "comparison"
-    ? editorialImages.comparatifs
-    : editorialImages.guides;
+  const editorial = getEditorialImages(siteId);
+  return kind === "comparison" ? editorial.comparatifs : editorial.guides;
 }

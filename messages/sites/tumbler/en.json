@@ -63,6 +63,7 @@
   "news": {
     "title": "News",
     "subtitle": "Editorial picks and notes around insulated bottles and tumblers.",
+    "empty": "No bottle/tumbler news yet — the next automated run will fill this section.",
     "catalogCta": "Browse the catalog →"
   }
 }

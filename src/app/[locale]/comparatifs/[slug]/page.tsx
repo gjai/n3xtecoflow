@@ -7,7 +7,7 @@ import { ComparisonPicker } from "@/components/ComparisonPicker";
 import { ArticleBody } from "@/components/ArticleBody";
 import { ArticleCover } from "@/components/ArticleCover";
 import { comparisons, getComparison } from "@/data/articles";
-import { editorialImages } from "@/data/images";
+import { getEditorialImages } from "@/data/images";
 import {
   getCategory,
   getLocalizedCategory,
@@ -59,7 +59,7 @@ export async function generateMetadata({
   if (!item) return {};
   const copy = locale === "en" ? item.en : item.fr;
   const ecoflowMap = await getEcoflowEntriesMap();
-  const og = resolveArticlePrimaryImage(slug, "comparison", ecoflowMap);
+  const og = resolveArticlePrimaryImage(slug, "comparison", ecoflowMap, "ecoflow");
   return {
     title: copy.title,
     description: copy.subtitle,
@@ -161,6 +161,7 @@ export default async function ComparisonSlugPage({
   const articleCopy = locale === "en" ? item.en : item.fr;
   const ecoflowMap = await getEcoflowEntriesMap();
   const images = resolveArticleProductImages(slug, ecoflowMap);
+  const editorialImages = getEditorialImages("ecoflow");
 
   return (
     <article>

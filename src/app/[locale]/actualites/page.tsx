@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { Pagination } from "@/components/Pagination";
 import { SmartCover } from "@/components/SmartCover";
-import { editorialImages } from "@/data/images";
+import { getEditorialImages } from "@/data/images";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 import { paginate, parsePageParam } from "@/lib/pagination";
 import { siteLocaleAlternates } from "@/lib/seo";
@@ -46,6 +46,7 @@ export default async function NewsIndexPage({
   const t = await getTranslations("news");
   const store = await readNewsStore();
   const all = getNewsArticles(store, site.id);
+  const editorialImages = getEditorialImages(site.id);
   const { items, page, totalPages, total } = paginate(
     all,
     parsePageParam(pageRaw),

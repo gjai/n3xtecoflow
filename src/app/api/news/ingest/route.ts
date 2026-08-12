@@ -28,6 +28,9 @@ function parseOptions(request: Request): IngestOptions {
   const refreshLimitRaw = url.searchParams.get("refreshLimit");
   const refreshOffsetRaw = url.searchParams.get("refreshOffset");
   const limitRaw = url.searchParams.get("limit");
+  const siteRaw = url.searchParams.get("siteId");
+  const siteId =
+    siteRaw === "tumbler" || siteRaw === "ecoflow" ? siteRaw : undefined;
   return {
     refreshExisting,
     forceRefresh,
@@ -36,6 +39,7 @@ function parseOptions(request: Request): IngestOptions {
     refreshLimit: refreshLimitRaw ? Number(refreshLimitRaw) : undefined,
     refreshOffset: refreshOffsetRaw ? Number(refreshOffsetRaw) : undefined,
     limit: limitRaw ? Number(limitRaw) : undefined,
+    siteId,
   };
 }
 

@@ -6,7 +6,7 @@ import { articleJsonLd, JsonLd } from "@/components/JsonLd";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AmazonButton } from "@/components/AmazonButton";
 import { SmartCover } from "@/components/SmartCover";
-import { editorialImages } from "@/data/images";
+import { getEditorialImages } from "@/data/images";
 import { amazonCtaForNews } from "@/lib/news/amazon-cta";
 import { getNewsBySlug, readNewsStore } from "@/lib/news/store";
 import { localeAlternates } from "@/lib/seo";
@@ -52,6 +52,7 @@ export default async function NewsArticlePage({
   const isEn = locale === "en";
   const copy = isEn ? article.en : article.fr;
   const siteUrl = `https://${site.primaryHost}`;
+  const editorialImages = getEditorialImages(site.id);
   const date = new Date(article.publishedAt).toLocaleDateString(
     isEn ? "en-US" : "fr-FR",
     { year: "numeric", month: "long", day: "numeric" },

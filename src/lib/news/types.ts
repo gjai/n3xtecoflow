@@ -31,23 +31,40 @@ export function newsSiteId(
   return article?.siteId || "ecoflow";
 }
 
-
 export type NewsStore = {
   updatedAt: string;
   articles: NewsArticle[];
 };
 
-export const NEWS_FEEDS = [
+export type NewsFeed = {
+  id: string;
+  url: string;
+  siteId: SiteId;
+};
+
+export const NEWS_FEEDS: NewsFeed[] = [
   {
-    id: "gnews-fr",
-    // Always require EcoFlow in the query (no bare DELTA/STREAM).
+    id: "ecoflow-gnews-fr",
+    siteId: "ecoflow",
     url: "https://news.google.com/rss/search?q=EcoFlow+(DELTA+OR+RIVER+OR+STREAM+OR+PowerStream+OR+station+OR+solaire+OR+batterie)&hl=fr&gl=FR&ceid=FR:fr",
   },
   {
-    id: "gnews-en",
+    id: "ecoflow-gnews-en",
+    siteId: "ecoflow",
     url: "https://news.google.com/rss/search?q=EcoFlow+(DELTA+OR+RIVER+OR+STREAM+OR+PowerStream+OR+%22power+station%22+OR+solar+OR+battery)&hl=en-US&gl=US&ceid=US:en",
   },
-] as const;
+  {
+    id: "tumbler-gnews-fr",
+    siteId: "tumbler",
+    url: "https://news.google.com/rss/search?q=(%22gourde+isotherme%22+OR+%22tumbler+isotherme%22+OR+%22mug+isotherme%22+OR+Hydro+Flask+OR+Qwetch+OR+%22Stanley+Quencher%22+OR+Owala)+when:30d&hl=fr&gl=FR&ceid=FR:fr",
+  },
+  {
+    id: "tumbler-gnews-en",
+    siteId: "tumbler",
+    url: "https://news.google.com/rss/search?q=(%22insulated+bottle%22+OR+%22insulated+tumbler%22+OR+%22Hydro+Flask%22+OR+%22Stanley+Quencher%22+OR+Owala+OR+Qwetch)+when:30d&hl=en-US&gl=US&ceid=US:en",
+  },
+];
 
-export const MAX_NEWS_ARTICLES = 60;
-export const MAX_NEW_PER_RUN = 4;
+export const MAX_NEWS_ARTICLES = 80;
+/** New articles created per ingest run (shared across sites). */
+export const MAX_NEW_PER_RUN = 6;

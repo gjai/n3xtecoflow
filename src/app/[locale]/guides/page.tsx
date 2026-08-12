@@ -2,7 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { ArticleCover } from "@/components/ArticleCover";
-import { editorialImages } from "@/data/images";
+import { getEditorialImages } from "@/data/images";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import { resolveArticleProductImages } from "@/lib/article-images";
 import { resolveAllGuides } from "@/lib/guides/refresh";
@@ -41,6 +41,7 @@ export default async function GuidesIndexPage({
   const ecoflowMap =
     site.id === "ecoflow" ? await getEcoflowEntriesMap() : {};
   const allGuides = await resolveAllGuides(site.id);
+  const editorialImages = getEditorialImages(site.id);
 
   return (
     <div className="pt-6">

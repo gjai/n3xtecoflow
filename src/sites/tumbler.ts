@@ -65,7 +65,7 @@ export const tumblerSite: SiteConfig = {
       heroTo: "#f7f1ea",
     },
   },
-  heroImage: "/images/editorial/guides.jpg",
+  heroImage: "/images/tumbler/hero.jpg",
   featuredCategoryIds: ["gourdes", "tumblers"],
   network: [
     {

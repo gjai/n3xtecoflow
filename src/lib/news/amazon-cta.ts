@@ -1,6 +1,7 @@
-import { products, type Product } from "@/data/products";
+import { getProductsForSite, type Product } from "@/data/products";
 import { amazonHrefForProduct, buildAmazonSearchUrl } from "@/lib/amazon";
 import type { NewsArticle } from "@/lib/news/types";
+import { newsSiteId } from "@/lib/news/types";
 
 function scoreProduct(haystack: string, product: Product): number {
   const h = haystack
@@ -28,12 +29,13 @@ function scoreProduct(haystack: string, product: Product): number {
   return score;
 }
 
-/** Pick best catalog product for a news piece, else generic EcoFlow search. */
+/** Pick best catalog product for a news piece, else site-aware Amazon search. */
 export function amazonCtaForNews(article: NewsArticle): {
   href: string;
   queryLabel: string;
   product: Product | null;
 } {
+  const siteId = newsSiteId(article);
   const hay = [
     article.fr?.title,
     article.en?.title,
@@ -43,7 +45,7 @@ export function amazonCtaForNews(article: NewsArticle): {
     .filter(Boolean)
     .join(" ");
 
-  const ranked = products
+  const ranked = getProductsForSite(siteId)
     .map((p) => ({ p, s: scoreProduct(hay, p) }))
     .filter((x) => x.s >= 3)
     .sort((a, b) => b.s - a.s);
@@ -57,7 +59,8 @@ export function amazonCtaForNews(article: NewsArticle): {
     };
   }
 
-  const query = "EcoFlow station électrique";
+  const query =
+    siteId === "tumbler" ? "gourde isotherme" : "EcoFlow station électrique";
   return {
     href: buildAmazonSearchUrl(query),
     queryLabel: query,

@@ -1,4 +1,5 @@
-import { NEWS_FEEDS, MAX_NEW_PER_RUN } from "./types";
+import type { SiteId } from "@/sites/types";
+import { NEWS_FEEDS, MAX_NEW_PER_RUN, newsSiteId } from "./types";
 import { fetchFeedItems, isOnTopicArticle, type RssItem } from "./rss";
 import { buildArticleFromRss, refreshArticle } from "./rewrite";
 import { isStoredNewsImageJunk, resolveNewsCover } from "./images";
@@ -18,6 +19,8 @@ export type IngestOptions = {
   refreshLimit?: number;
   /** Skip first N refresh candidates (batching). */
   refreshOffset?: number;
+  /** Only ingest feeds for this site (default: all). */
+  siteId?: SiteId;
 };
 
 export type IngestResult = {
@@ -36,15 +39,19 @@ export type IngestResult = {
 };
 
 function articleOnTopic(article: {
+  siteId?: SiteId;
   fr?: { title?: string; excerpt?: string };
   en?: { title?: string; excerpt?: string };
 }) {
-  return isOnTopicArticle({
-    titleFr: article.fr?.title,
-    titleEn: article.en?.title,
-    excerptFr: article.fr?.excerpt,
-    excerptEn: article.en?.excerpt,
-  });
+  return isOnTopicArticle(
+    {
+      titleFr: article.fr?.title,
+      titleEn: article.en?.title,
+      excerptFr: article.fr?.excerpt,
+      excerptEn: article.en?.excerpt,
+    },
+    newsSiteId(article),
+  );
 }
 
 export async function ingestNews(
@@ -54,33 +61,58 @@ export async function ingestNews(
   const store = await readNewsStore();
   const known = new Set(store.articles.map((a) => a.sourceGuid));
 
-  const collected: RssItem[] = [];
-  for (const feed of NEWS_FEEDS) {
+  type Collected = RssItem & { siteId: SiteId };
+  const collected: Collected[] = [];
+  const feeds = options?.siteId
+    ? NEWS_FEEDS.filter((f) => f.siteId === options.siteId)
+    : NEWS_FEEDS;
+
+  for (const feed of feeds) {
     try {
-      const items = await fetchFeedItems(feed.url);
-      collected.push(...items);
+      const items = await fetchFeedItems(feed.url, feed.siteId);
+      for (const item of items) {
+        collected.push({ ...item, siteId: feed.siteId });
+      }
     } catch (err) {
       console.error("feed_error", feed.id, err);
     }
   }
 
-  const byGuid = new Map<string, RssItem>();
+  const byGuid = new Map<string, Collected>();
   for (const item of collected) {
     if (!byGuid.has(item.guid)) byGuid.set(item.guid, item);
   }
-  const candidates = [...byGuid.values()]
-    .filter((i) => !known.has(i.guid))
-    .sort(
-      (a, b) =>
-        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
-    )
-    .slice(0, limit);
+
+  // Prefer balanced intake across sites when ingesting everything.
+  const perSiteCap = Math.max(2, Math.ceil(limit / 2));
+  const bySite = new Map<SiteId, Collected[]>();
+  for (const item of byGuid.values()) {
+    if (known.has(item.guid)) continue;
+    const list = bySite.get(item.siteId) || [];
+    list.push(item);
+    bySite.set(item.siteId, list);
+  }
+  const candidates: Collected[] = [];
+  for (const [, list] of bySite) {
+    list
+      .sort(
+        (a, b) =>
+          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+      )
+      .slice(0, perSiteCap)
+      .forEach((i) => candidates.push(i));
+  }
+  candidates.sort(
+    (a, b) =>
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+  );
+  const selected = candidates.slice(0, limit);
 
   const created = [];
   let rejected = 0;
   let aiUsed = false;
-  for (const item of candidates) {
-    const article = await buildArticleFromRss(item);
+  for (const item of selected) {
+    const article = await buildArticleFromRss(item, { siteId: item.siteId });
     if (!article) {
       rejected += 1;
       continue;
@@ -113,7 +145,6 @@ export async function ingestNews(
         const feedItem = feedByGuid.get(article.sourceGuid) || null;
         const next = await refreshArticle(article, feedItem);
         if (!articleOnTopic(next)) {
-          // Keep slot empty — purge below will drop off-topic.
           continue;
         }
         if (next.rewrittenBy === "ai") aiUsed = true;
@@ -150,6 +181,7 @@ export async function ingestNews(
       title: article.fr?.title || article.en?.title,
       excerpt: article.fr?.excerpt || article.en?.excerpt,
       tags: article.tags,
+      siteId: newsSiteId(article),
     });
     if (!cover) continue;
     article.imageSrc = cover.imageSrc;

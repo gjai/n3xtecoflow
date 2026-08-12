@@ -1,3 +1,5 @@
+import type { SiteId } from "@/sites/types";
+
 export type RssItem = {
   title: string;
   link: string;
@@ -69,71 +71,84 @@ export function parseRssItems(xml: string): RssItem[] {
     .filter((i) => i.title && i.link && i.guid);
 }
 
-/** Brand must appear — generic "power station" / "DELTA 2" alone are too noisy. */
-const BRAND =
+const ECOFLOW_BRAND =
   /\becoflow\b|\bpowerstream\b|\bpower\s*stream\b/i;
-
-/** Optional product lines (only accepted WITH brand). */
-const PRODUCT_LINE =
+const ECOFLOW_PRODUCT =
   /\bdelta(\s|-)?(2|3|pro|max|ultra)?\b|\briver(\s|-)?(2|3|pro|max|plus)?\b|\bstream(\s|-)?(ultra|pro|max|x)?\b|\bocean\b|\bglacier\b|\bwave(\s|-)?\d?\b|\brapid(\s|-)?pro\b/i;
 
-/** Hard rejects when these lead the story (EcoFlow only as side mention). */
-const OFF_TOPIC =
-  /\bsegway\b|\bxyber\b|\be-?bike\b|\btesla\b|\biphone\b|\bsamsung\b|\bplaystation\b|\bxbox\b|\bnintendo\b|\bdyson\b|\broborock\b|\becovacs\b|\broborock\b/i;
+const TUMBLER_BRAND =
+  /\bgourde\b|\btumbler\b|\bmug\s+isotherme\b|\binsulated\s+(bottle|tumbler|mug|flask)\b|\bhydro\s*flask\b|\bstanley\b|\bqwetch\b|\bowala\b|\bthermos\b|\bsuper\s*sparrow\b|\bisotherme\b|\bwater\s*bottle\b/i;
 
-function brandIsPrimary(title: string) {
+const OFF_TOPIC =
+  /\bsegway\b|\bxyber\b|\be-?bike\b|\btesla\b|\biphone\b|\bsamsung\b|\bplaystation\b|\bxbox\b|\bnintendo\b|\bdyson\b|\broborock\b|\becovacs\b/i;
+
+function brandPrimary(title: string, brand: RegExp) {
   const t = title.trim();
-  if (!t) return false;
-  if (!BRAND.test(t)) return false;
+  if (!t || !brand.test(t)) return false;
   if (OFF_TOPIC.test(t)) {
     const offIdx = t.search(OFF_TOPIC);
-    const brandIdx = t.search(BRAND);
-    // Off-topic brand appears first → roundup / wrong story
+    const brandIdx = t.search(brand);
     if (offIdx >= 0 && (brandIdx < 0 || offIdx < brandIdx)) return false;
   }
-  // Mega deal roundups ending with ", more"
   if (/,\s*more\s*$/i.test(t) && OFF_TOPIC.test(t)) return false;
   return true;
 }
 
-export function isRelevantItem(item: RssItem) {
-  const hay = `${item.title} ${item.description}`;
-  if (!BRAND.test(hay)) return false;
-  if (!brandIsPrimary(item.title) && !brandIsPrimary(hay.slice(0, 160))) {
-    return false;
-  }
-  if (BRAND.test(item.title)) return brandIsPrimary(item.title);
-  return PRODUCT_LINE.test(hay);
+function topicBrand(siteId: SiteId) {
+  return siteId === "tumbler" ? TUMBLER_BRAND : ECOFLOW_BRAND;
 }
 
-/** Post-rewrite / store guard — article must stay on EcoFlow ecosystem. */
-export function isOnTopicArticle(input: {
-  titleFr?: string;
-  titleEn?: string;
-  excerptFr?: string;
-  excerptEn?: string;
-  sourceTitle?: string;
-}): boolean {
-  const titles = `${input.titleFr || ""} ${input.titleEn || ""} ${input.sourceTitle || ""}`;
-  if (!BRAND.test(titles) && !BRAND.test(`${input.excerptFr || ""} ${input.excerptEn || ""}`)) {
+export function isRelevantItem(item: RssItem, siteId: SiteId = "ecoflow") {
+  const brand = topicBrand(siteId);
+  const hay = `${item.title} ${item.description}`;
+  if (!brand.test(hay)) return false;
+  if (!brandPrimary(item.title, brand) && !brandPrimary(hay.slice(0, 160), brand)) {
     return false;
   }
-  // Prefer checking each title independently
+  if (brand.test(item.title)) return brandPrimary(item.title, brand);
+  if (siteId === "tumbler") return true;
+  return ECOFLOW_PRODUCT.test(hay);
+}
+
+/** Post-rewrite / store guard — article must stay on the site topic. */
+export function isOnTopicArticle(
+  input: {
+    titleFr?: string;
+    titleEn?: string;
+    excerptFr?: string;
+    excerptEn?: string;
+    sourceTitle?: string;
+  },
+  siteId: SiteId = "ecoflow",
+): boolean {
+  const brand = topicBrand(siteId);
+  const titles = `${input.titleFr || ""} ${input.titleEn || ""} ${input.sourceTitle || ""}`;
+  const excerpts = `${input.excerptFr || ""} ${input.excerptEn || ""}`;
+  if (!brand.test(titles) && !brand.test(excerpts)) return false;
+
   const fr = input.titleFr || "";
   const en = input.titleEn || "";
   const src = input.sourceTitle || "";
-  if (fr && !brandIsPrimary(fr) && en && !brandIsPrimary(en)) return false;
-  if (src && OFF_TOPIC.test(src) && !brandIsPrimary(src)) return false;
-  if (fr && OFF_TOPIC.test(fr) && !brandIsPrimary(fr)) return false;
-  if (en && OFF_TOPIC.test(en) && !brandIsPrimary(en)) return false;
-  return BRAND.test(titles) || BRAND.test(`${input.excerptFr || ""}`);
+  if (fr && !brandPrimary(fr, brand) && en && !brandPrimary(en, brand)) {
+    return false;
+  }
+  if (src && OFF_TOPIC.test(src) && !brandPrimary(src, brand)) return false;
+  if (fr && OFF_TOPIC.test(fr) && !brandPrimary(fr, brand)) return false;
+  if (en && OFF_TOPIC.test(en) && !brandPrimary(en, brand)) return false;
+  return brand.test(titles) || brand.test(excerpts);
 }
 
-export async function fetchFeedItems(url: string): Promise<RssItem[]> {
+export async function fetchFeedItems(
+  url: string,
+  siteId: SiteId = "ecoflow",
+): Promise<RssItem[]> {
+  const ua =
+    siteId === "tumbler"
+      ? "LaGourdeIsothermeBot/1.0 (+https://mon-tumbler.fr; editorial aggregator)"
+      : "EcoFlowStreamBot/1.0 (+https://ecoflow-stream.com; editorial aggregator)";
   const res = await fetch(url, {
     headers: {
-      "User-Agent":
-        "EcoFlowStreamBot/1.0 (+https://ecoflow-stream.com; editorial aggregator)",
+      "User-Agent": ua,
       Accept: "application/rss+xml, application/xml, text/xml, */*",
     },
     next: { revalidate: 0 },
@@ -142,5 +157,5 @@ export async function fetchFeedItems(url: string): Promise<RssItem[]> {
     throw new Error(`feed_fetch_failed:${res.status}`);
   }
   const xml = await res.text();
-  return parseRssItems(xml).filter(isRelevantItem);
+  return parseRssItems(xml).filter((item) => isRelevantItem(item, siteId));
 }

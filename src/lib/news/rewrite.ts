@@ -1,3 +1,4 @@
+import type { SiteId } from "@/sites/types";
 import type { NewsArticle, NewsLocaleCopy } from "./types";
 import type { RssItem } from "./rss";
 import { isOnTopicArticle, isRelevantItem } from "./rss";
@@ -13,6 +14,7 @@ function templateCopy(
   locale: "fr" | "en",
   item: RssItem,
   source: SourcePage | null,
+  siteId: SiteId,
 ): NewsLocaleCopy {
   const title = cleanTitle(source?.title || item.title);
   const when = new Date(item.publishedAt).toLocaleDateString(
@@ -26,18 +28,33 @@ function templateCopy(
     .filter((s) => s.length > 40)
     .slice(0, 8);
 
+  const tipFr =
+    siteId === "tumbler"
+      ? "Pour les lecteurs de La gourde isotherme : croisez volume, isolation, type de bouchon et le prix du jour avant d’acheter."
+      : "Pour les lecteurs EcoFlow Stream : croisez toujours capacité (Wh), puissance (W), compatibilité STREAM / stations et le prix du jour avant d’acheter.";
+  const tipEn =
+    siteId === "tumbler"
+      ? "For La gourde isotherme readers: always cross-check volume, insulation, lid type, and live pricing before buying."
+      : "For EcoFlow Stream readers: always cross-check capacity (Wh), output (W), STREAM / station compatibility, and live pricing before buying.";
+  const excerptFallbackFr =
+    siteId === "tumbler"
+      ? `Couverture ${item.sourceName} du ${when} sur les gourdes et tumblers isothermes.`
+      : `Couverture ${item.sourceName} du ${when} sur l’écosystème EcoFlow.`;
+  const excerptFallbackEn =
+    siteId === "tumbler"
+      ? `${item.sourceName} coverage on ${when} about insulated bottles and tumblers.`
+      : `${item.sourceName} coverage on ${when} about the EcoFlow ecosystem.`;
+
   if (locale === "fr") {
     const body = [
       `Selon ${item.sourceName} (${when}), l’actualité porte sur : ${title}.`,
       ...chunks.slice(0, 5),
-      `Pour les lecteurs EcoFlow Stream : croisez toujours capacité (Wh), puissance (W), compatibilité STREAM / stations et le prix du jour avant d’acheter.`,
+      tipFr,
       `Article rédigé à partir de la source citée — vérifiez le texte d’origine pour les détails primaires.`,
     ].filter(Boolean);
     return {
       title,
-      excerpt:
-        chunks[0]?.slice(0, 220) ||
-        `Couverture ${item.sourceName} du ${when} sur l’écosystème EcoFlow.`,
+      excerpt: chunks[0]?.slice(0, 220) || excerptFallbackFr,
       body,
     };
   }
@@ -45,14 +62,12 @@ function templateCopy(
   const body = [
     `According to ${item.sourceName} (${when}), the story focuses on: ${title}.`,
     ...chunks.slice(0, 5),
-    `For EcoFlow Stream readers: always cross-check capacity (Wh), output (W), STREAM / station compatibility, and live pricing before buying.`,
+    tipEn,
     `Written from the cited source — check the original for primary details.`,
   ].filter(Boolean);
   return {
     title,
-    excerpt:
-      chunks[0]?.slice(0, 220) ||
-      `${item.sourceName} coverage on ${when} about the EcoFlow ecosystem.`,
+    excerpt: chunks[0]?.slice(0, 220) || excerptFallbackEn,
     body,
   };
 }
@@ -64,34 +79,47 @@ type AiPayload = {
   skip?: boolean;
 };
 
-async function rewriteWithAi(
+function aiPromptForSite(
+  siteId: SiteId,
   item: RssItem,
   source: SourcePage | null,
-): Promise<AiPayload | null> {
-  const apiKey =
-    process.env.GEMINI_API_KEY?.trim() ||
-    process.env.OPENAI_API_KEY?.trim() ||
-    process.env.AI_API_KEY?.trim();
-  if (!apiKey) return null;
+  sourceText: string,
+) {
+  if (siteId === "tumbler") {
+    return `Tu es journaliste / rédacteur senior pour La gourde isotherme (site éditorial indépendant FR/EN).
 
-  const usingGemini =
-    Boolean(process.env.GEMINI_API_KEY?.trim()) ||
-    (process.env.OPENAI_BASE_URL || "").includes(
-      "generativelanguage.googleapis.com",
-    );
+Mission: rédiger un VRAI ARTICLE complet (pas un résumé de 3 lignes), bilingue, à partir de la source fournie.
 
-  const base =
-    process.env.OPENAI_BASE_URL?.trim() ||
-    (usingGemini
-      ? "https://generativelanguage.googleapis.com/v1beta/openai/"
-      : "https://api.openai.com/v1");
-  const model =
-    process.env.OPENAI_MODEL?.trim() ||
-    (usingGemini ? "gemini-2.5-flash-lite" : "gpt-4o-mini");
+Périmètre STRICT:
+- Sujet UNIQUEMENT gourdes / tumblers / mugs isothermes (Hydro Flask, Stanley, Qwetch, Owala, Thermos, Super Sparrow, etc.)
+- Si la source n'est PAS centrée sur ce sujet → réponds exactement {"skip":true}
+- Interdiction d'inventer un angle "gourde" si la source en parle à peine
+- Les titres FR/EN doivent mentionner clairement gourde, tumbler, mug isotherme ou une marque du périmètre
 
-  const sourceText = (source?.text || item.description || "").slice(0, 5500);
+Règles rédaction:
+- Contenu ORIGINAL (reformulation totale)
+- Ne pas inventer de chiffres, promos, dates ou specs absents de la source
+- Citer clairement la source (${item.sourceName})
+- Structure par langue: titre, excerpt, body = 7 à 10 paragraphes utiles
+- Développer: contexte, faits, critères d’achat (volume, isolation, bouchon, entretien), limites, conclusion actionable
+- JSON strict uniquement, sans markdown
 
-  const prompt = `Tu es journaliste / rédacteur senior pour EcoFlow Stream (site éditorial indépendant FR/EN).
+Entrée:
+sourceName=${item.sourceName}
+date=${item.publishedAt}
+rssTitle=${item.title}
+publisherTitle=${source?.title || ""}
+publisherUrl=${source?.finalUrl || item.link}
+sourceText=<<
+${sourceText}
+>>
+
+Format JSON:
+{"fr":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"en":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"tags":["gourde","tumbler"]}
+ou {"skip":true}`;
+  }
+
+  return `Tu es journaliste / rédacteur senior pour EcoFlow Stream (site éditorial indépendant FR/EN).
 
 Mission: rédiger un VRAI ARTICLE complet (pas un résumé de 3 lignes), bilingue, à partir de la source fournie.
 
@@ -123,6 +151,36 @@ ${sourceText}
 Format JSON:
 {"fr":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"en":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"tags":["ecoflow","delta"]}
 ou {"skip":true}`;
+}
+
+async function rewriteWithAi(
+  item: RssItem,
+  source: SourcePage | null,
+  siteId: SiteId,
+): Promise<AiPayload | null> {
+  const apiKey =
+    process.env.GEMINI_API_KEY?.trim() ||
+    process.env.OPENAI_API_KEY?.trim() ||
+    process.env.AI_API_KEY?.trim();
+  if (!apiKey) return null;
+
+  const usingGemini =
+    Boolean(process.env.GEMINI_API_KEY?.trim()) ||
+    (process.env.OPENAI_BASE_URL || "").includes(
+      "generativelanguage.googleapis.com",
+    );
+
+  const base =
+    process.env.OPENAI_BASE_URL?.trim() ||
+    (usingGemini
+      ? "https://generativelanguage.googleapis.com/v1beta/openai/"
+      : "https://api.openai.com/v1");
+  const model =
+    process.env.OPENAI_MODEL?.trim() ||
+    (usingGemini ? "gemini-2.5-flash-lite" : "gpt-4o-mini");
+
+  const sourceText = (source?.text || item.description || "").slice(0, 5500);
+  const prompt = aiPromptForSite(siteId, item, source, sourceText);
 
   const payload: Record<string, unknown> = {
     model,
@@ -185,10 +243,26 @@ ou {"skip":true}`;
   }
 }
 
-function guessTags(item: RssItem, source: SourcePage | null): string[] {
+function guessTags(
+  item: RssItem,
+  source: SourcePage | null,
+  siteId: SiteId,
+): string[] {
   const hay =
     `${item.title} ${item.description} ${source?.title || ""} ${source?.text || ""}`.toLowerCase();
   const tags = new Set<string>();
+  if (siteId === "tumbler") {
+    if (/gourde|bottle/.test(hay)) tags.add("gourde");
+    if (/tumbler|mug/.test(hay)) tags.add("tumbler");
+    if (/stanley/.test(hay)) tags.add("stanley");
+    if (/hydro\s*flask|hydroflask/.test(hay)) tags.add("hydroflask");
+    if (/qwetch/.test(hay)) tags.add("qwetch");
+    if (/owala/.test(hay)) tags.add("owala");
+    if (/thermos/.test(hay)) tags.add("thermos");
+    if (/promo|prix|deal|amazon/.test(hay)) tags.add("promo");
+    if (tags.size === 0) tags.add("gourde");
+    return [...tags];
+  }
   if (/ecoflow/.test(hay)) tags.add("ecoflow");
   if (/delta/.test(hay)) tags.add("delta");
   if (/river/.test(hay)) tags.add("river");
@@ -215,38 +289,42 @@ function normalizeCopy(copy: NewsLocaleCopy): NewsLocaleCopy {
 
 export async function buildArticleFromRss(
   item: RssItem,
-  options?: { keepSlug?: string },
+  options?: { keepSlug?: string; siteId?: SiteId },
 ): Promise<NewsArticle | null> {
-  if (!isRelevantItem(item)) return null;
+  const siteId = options?.siteId || "ecoflow";
+  if (!isRelevantItem(item, siteId)) return null;
 
   const source = await fetchSourcePage(item.link, {
     title: item.title,
     sourceHomepage: item.sourceHomepage,
   });
-  const ai = await rewriteWithAi(item, source);
+  const ai = await rewriteWithAi(item, source, siteId);
   if (ai?.skip) return null;
 
   const rewrittenBy = ai && ai.fr && ai.en ? "ai" : "template";
   const fr = normalizeCopy(
-    ai?.fr && !ai.skip ? ai.fr : templateCopy("fr", item, source),
+    ai?.fr && !ai.skip ? ai.fr : templateCopy("fr", item, source, siteId),
   );
   const en = normalizeCopy(
-    ai?.en && !ai.skip ? ai.en : templateCopy("en", item, source),
+    ai?.en && !ai.skip ? ai.en : templateCopy("en", item, source, siteId),
   );
 
   if (
-    !isOnTopicArticle({
-      titleFr: fr.title,
-      titleEn: en.title,
-      excerptFr: fr.excerpt,
-      excerptEn: en.excerpt,
-      sourceTitle: item.title,
-    })
+    !isOnTopicArticle(
+      {
+        titleFr: fr.title,
+        titleEn: en.title,
+        excerptFr: fr.excerpt,
+        excerptEn: en.excerpt,
+        sourceTitle: item.title,
+      },
+      siteId,
+    )
   ) {
     return null;
   }
 
-  const tags = ai?.tags?.length ? ai.tags : guessTags(item, source);
+  const tags = ai?.tags?.length ? ai.tags : guessTags(item, source, siteId);
   const slug =
     options?.keepSlug ||
     makeSlug(fr.title || item.title, item.publishedAt, item.guid);
@@ -264,10 +342,12 @@ export async function buildArticleFromRss(
     excerpt: fr.excerpt,
     tags,
     ogImageHint: source?.ogImage,
+    siteId,
   });
 
   return {
     slug,
+    siteId,
     sourceUrl: publisherUrl,
     sourceName: source?.sourceHint || item.sourceName,
     sourceGuid: item.guid,
@@ -316,10 +396,14 @@ export async function refreshArticle(
       article.en.excerpt ||
       "",
   };
-  const next = await buildArticleFromRss(item, { keepSlug: article.slug });
+  const next = await buildArticleFromRss(item, {
+    keepSlug: article.slug,
+    siteId: article.siteId || "ecoflow",
+  });
   if (!next) return article;
   return {
     ...next,
+    siteId: article.siteId || next.siteId || "ecoflow",
     sourceGuid: article.sourceGuid,
     publishedAt: article.publishedAt,
     ingestedAt: article.ingestedAt,
