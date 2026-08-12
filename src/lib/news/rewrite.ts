@@ -69,7 +69,7 @@ async function rewriteWithAi(item: RssItem): Promise<AiPayload | null> {
       : "https://api.openai.com/v1");
   const model =
     process.env.OPENAI_MODEL?.trim() ||
-    (usingGemini ? "gemini-2.0-flash" : "gpt-4o-mini");
+    (usingGemini ? "gemini-2.5-flash-lite" : "gpt-4o-mini");
 
   const prompt = `Tu es rédacteur pour EcoFlow Stream, site éditorial indépendant FR/EN.
 À partir d'un titre/description d'actualité réelle, écris une SYNTHÈSE ORIGINALE (pas de copier-coller).

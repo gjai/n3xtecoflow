@@ -6,6 +6,8 @@ export const ecoflowSite: SiteConfig = {
   hosts: [
     "ecoflow-stream.com",
     "www.ecoflow-stream.com",
+    "powerstream.fr",
+    "www.powerstream.fr",
     "localhost",
     "127.0.0.1",
   ],
@@ -60,14 +62,8 @@ export const ecoflowSite: SiteConfig = {
     },
   },
   heroImage: "/images/hero/station-solaire.jpg",
-  featuredCategoryIds: ["stream", "delta", "river", "solaire"],
-  network: [
-    {
-      siteId: "powerstream",
-      labelFr: "PowerStream.fr — focus micro-onduleur",
-      labelEn: "PowerStream.fr — micro-inverter focus",
-    },
-  ],
+  featuredCategoryIds: ["stream", "delta", "river", "solaire", "powerstream"],
+  network: [],
   focusFr:
     "Catalogue large EcoFlow + guides d’achat (camping, backup, solaire balcon).",
   focusEn:

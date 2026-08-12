@@ -114,12 +114,22 @@ export default async function ProductPage({
             </div>
           </div>
           <CoverImage
-            image={image}
+            image={
+              product.imageSrc
+                ? {
+                    src: product.imageSrc,
+                    altFr: product.name,
+                    altEn: product.name,
+                    credit: "Produit",
+                    creditUrl: "#",
+                  }
+                : image
+            }
             locale={locale}
             className="aspect-[4/3] w-full border border-[var(--line)]"
             sizes="(max-width: 768px) 100vw, 40vw"
             priority
-            showCredit
+            showCredit={!product.imageSrc}
           />
         </div>
       </header>

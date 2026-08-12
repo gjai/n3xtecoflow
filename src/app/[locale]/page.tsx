@@ -1,14 +1,17 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AmazonButton } from "@/components/AmazonButton";
 import { CoverImage } from "@/components/CoverImage";
 import { SmartCover } from "@/components/SmartCover";
-import { HeroVisual } from "@/components/HeroVisual";
+import { HeroSlider, type HeroSlide } from "@/components/HeroSlider";
 import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/JsonLd";
 import { AMAZON_QUERIES, buildAmazonSearchUrl } from "@/lib/amazon";
-import { categoryImages, editorialImages, heroImage } from "@/data/images";
+import {
+  categoryImages,
+  editorialImages,
+  heroImage,
+} from "@/data/images";
 import { categories, products, type CategoryId } from "@/data/products";
 import { comparisons, guides } from "@/data/articles";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
@@ -29,7 +32,16 @@ export default async function HomePage({
   const site = await getCurrentSite();
   const isEn = locale === "en";
   const siteUrl = `https://${site.primaryHost}`;
-  const latestNews = getNewsArticles(await readNewsStore()).slice(0, 3);
+  const newsArticles = getNewsArticles(await readNewsStore());
+  const latestNews = newsArticles.slice(0, 3);
+  const latestNewsItem = newsArticles[0];
+  const latestGuide = guides.at(-1)!;
+  const latestComparison = comparisons.at(-1)!;
+  const featuredProducts = products.filter((p) =>
+    site.featuredCategoryIds.includes(p.category),
+  );
+  const latestProduct =
+    featuredProducts.at(-1) ?? products.at(-1)!;
   const featured = site.featuredCategoryIds
     .map((id) => categories.find((c) => c.id === (id as CategoryId)))
     .filter(Boolean) as typeof categories;
@@ -37,58 +49,86 @@ export default async function HomePage({
     ...featured,
     ...categories.filter((c) => !site.featuredCategoryIds.includes(c.id)),
   ];
-  const heroSrc = site.heroImage || heroImage.src;
   const brandName = site.brand.name;
-  const headline = isEn ? site.brand.headlineEn : site.brand.headlineFr;
-  const subhead = isEn ? site.brand.subheadEn : site.brand.subheadFr;
+
+  const productImage =
+    latestProduct.imageSrc ||
+    categoryImages[latestProduct.category]?.src ||
+    heroImage.src;
+  const newsCopy = latestNewsItem
+    ? isEn
+      ? latestNewsItem.en
+      : latestNewsItem.fr
+    : null;
+  const guideCopy = isEn ? latestGuide.en : latestGuide.fr;
+  const comparisonCopy = isEn
+    ? latestComparison.en
+    : latestComparison.fr;
+  const productCopy = isEn ? latestProduct.en : latestProduct.fr;
+
+  const heroSlides: HeroSlide[] = [
+    {
+      id: latestNewsItem ? `news-${latestNewsItem.slug}` : "news-fallback",
+      kind: t("slideNews"),
+      title: newsCopy?.title || t("slideNewsFallback"),
+      excerpt:
+        newsCopy?.excerpt ||
+        t("slideNewsExcerpt"),
+      href: latestNewsItem
+        ? `/actualites/${latestNewsItem.slug}`
+        : "/actualites",
+      cta: t("slideNewsCta"),
+      imageSrc:
+        latestNewsItem?.imageSrc ||
+        editorialImages.news.src ||
+        site.heroImage ||
+        heroImage.src,
+      imageAlt: isEn
+        ? editorialImages.news.altEn
+        : editorialImages.news.altFr,
+    },
+    {
+      id: `guide-${latestGuide.slug}`,
+      kind: t("slideGuide"),
+      title: guideCopy.title,
+      excerpt: guideCopy.subtitle,
+      href: `/guides/${latestGuide.slug}`,
+      cta: t("slideGuideCta"),
+      imageSrc: editorialImages.guides.src,
+      imageAlt: isEn
+        ? editorialImages.guides.altEn
+        : editorialImages.guides.altFr,
+    },
+    {
+      id: `comparison-${latestComparison.slug}`,
+      kind: t("slideComparison"),
+      title: comparisonCopy.title,
+      excerpt: comparisonCopy.subtitle,
+      href: `/comparatifs/${latestComparison.slug}`,
+      cta: t("slideComparisonCta"),
+      imageSrc: editorialImages.comparatifs.src,
+      imageAlt: isEn
+        ? editorialImages.comparatifs.altEn
+        : editorialImages.comparatifs.altFr,
+    },
+    {
+      id: `product-${latestProduct.slug}`,
+      kind: t("slideProduct"),
+      title: latestProduct.name,
+      excerpt: productCopy.summary,
+      href: `/produits/${latestProduct.category}/${latestProduct.slug}`,
+      cta: t("slideProductCta"),
+      imageSrc: productImage,
+      imageAlt: latestProduct.name,
+    },
+  ];
 
   return (
     <>
       <JsonLd data={organizationJsonLd(siteUrl)} />
       <JsonLd data={websiteJsonLd(siteUrl)} />
 
-      <section className="hero-grid relative min-h-[100svh] overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src={heroSrc}
-            alt={isEn ? heroImage.altEn : heroImage.altFr}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-45 dark:opacity-35"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[var(--hero-from)] via-[color-mix(in_srgb,var(--hero-from)_75%,transparent)] to-transparent" />
-        </div>
-        <HeroVisual />
-        <div className="relative mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-5 pb-16 pt-28 md:justify-center md:px-8 md:pb-24">
-          <p className="reveal font-[family-name:var(--font-display)] text-sm uppercase tracking-[0.28em] text-[var(--accent)]">
-            {brandName}
-          </p>
-          <h1 className="reveal-delay mt-4 max-w-2xl font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] tracking-tight text-[var(--hero-fg)] sm:text-5xl md:text-6xl lg:text-7xl">
-            {headline}
-          </h1>
-          <p className="reveal-delay-2 mt-6 max-w-xl text-base text-[var(--hero-muted)] md:text-lg">
-            {subhead}
-          </p>
-          <div className="reveal-delay-2 mt-10 flex flex-wrap gap-3 sm:gap-4">
-            <Link
-              href="/produits"
-              className="bg-[var(--accent)] px-5 py-3 text-sm font-semibold tracking-wide text-[var(--accent-ink)] transition hover:brightness-110"
-            >
-              {isEn ? "Browse catalog" : "Voir le catalogue"}
-            </Link>
-            <Link
-              href="/guides/choisir-station"
-              className="border border-[var(--hero-border)] px-5 py-3 text-sm font-semibold tracking-wide text-[var(--hero-fg)] transition hover:border-[var(--accent)]"
-            >
-              {t("ctaPrimary")}
-            </Link>
-          </div>
-          <div className="reveal-delay-2 mt-8 max-w-xl">
-            <AffiliateDisclosure compact />
-          </div>
-        </div>
-      </section>
+      <HeroSlider brandName={brandName} slides={heroSlides} />
 
       <section className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
         <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">

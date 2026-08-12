@@ -1,18 +1,15 @@
 import { ecoflowSite } from "./ecoflow";
-import { powerstreamSite } from "./powerstream";
 import type { SiteConfig, SiteId } from "./types";
 
-export const sites: SiteConfig[] = [ecoflowSite, powerstreamSite];
+export const sites: SiteConfig[] = [ecoflowSite];
 
 export const sitesById: Record<SiteId, SiteConfig> = {
   ecoflow: ecoflowSite,
-  powerstream: powerstreamSite,
 };
 
 /**
- * Multi-site: hostname → theme/brand/focus.
- * Add a site: 1) new file in src/sites/ 2) SiteId + registry 3) network links
- * 4) DNS + Coolify hostname on the SAME app. Shared: routes, ads, Amazon, SEO, legal.
+ * Multi-host, one brand: ecoflow-stream.com + powerstream.fr → univers EcoFlow.
+ * Add another brand later: new file in src/sites/, SiteId + registry, DNS + Coolify.
  */
 
 export const DEFAULT_SITE_ID: SiteId = "ecoflow";
@@ -29,7 +26,6 @@ export function resolveSiteIdFromHost(host: string | null | undefined): SiteId {
   for (const site of sites) {
     if (site.hosts.includes(h)) return site.id;
   }
-  // Coolify preview / sslip / IP → default
   return DEFAULT_SITE_ID;
 }
 
@@ -47,7 +43,7 @@ export function absoluteSiteUrl(site: SiteConfig, path = "/"): string {
   return `https://${site.primaryHost}${clean}`;
 }
 
-/** Sister sites for cross-linking (excludes current). */
+/** Sister sites for cross-linking (excludes current). Empty while single-brand. */
 export function getNetworkLinks(site: SiteConfig) {
   return site.network
     .map((n) => {

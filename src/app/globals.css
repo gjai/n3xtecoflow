@@ -131,32 +131,12 @@ a {
   animation: rise 1.2s ease 0.28s both;
 }
 
-.hero-float {
-  animation: floaty 8s ease-in-out infinite;
+.hero-kenburns {
+  animation: kenburns 7.2s ease-out both;
 }
 
-.hero-pulse {
-  animation: softPulse 3.2s ease-in-out infinite;
-}
-
-.hero-bar {
-  transform-origin: bottom;
-  animation: barGrow 1.6s ease both;
-}
-
-.hero-bolt {
-  animation: boltFlash 2.4s ease-in-out infinite;
-}
-
-.hero-ray {
-  stroke-dasharray: 220;
-  stroke-dashoffset: 220;
-  animation: rayDraw 2.8s ease-in-out infinite;
-}
-
-.hero-panel {
-  animation: panelTilt 6s ease-in-out infinite;
-  transform-origin: center;
+.hero-slide-copy {
+  animation: rise 0.7s ease both;
 }
 
 @keyframes rise {
@@ -170,69 +150,12 @@ a {
   }
 }
 
-@keyframes floaty {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-12px);
-  }
-}
-
-@keyframes softPulse {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 0 transparent);
-  }
-  50% {
-    filter: drop-shadow(0 0 18px var(--glow));
-  }
-}
-
-@keyframes barGrow {
+@keyframes kenburns {
   from {
-    transform: scaleY(0.2);
-    opacity: 0.4;
+    transform: scale(1.06) translate3d(0, 0, 0);
   }
   to {
-    transform: scaleY(1);
-    opacity: 1;
-  }
-}
-
-@keyframes boltFlash {
-  0%,
-  100% {
-    opacity: 0.75;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-@keyframes rayDraw {
-  0% {
-    stroke-dashoffset: 220;
-    opacity: 0.2;
-  }
-  40% {
-    stroke-dashoffset: 0;
-    opacity: 1;
-  }
-  100% {
-    stroke-dashoffset: -220;
-    opacity: 0.2;
-  }
-}
-
-@keyframes panelTilt {
-  0%,
-  100% {
-    transform: rotate(12deg) translateY(0);
-  }
-  50% {
-    transform: rotate(10deg) translateY(-6px);
+    transform: scale(1) translate3d(0, 0, 0);
   }
 }
 
@@ -246,12 +169,8 @@ a {
   .reveal,
   .reveal-delay,
   .reveal-delay-2,
-  .hero-float,
-  .hero-pulse,
-  .hero-bar,
-  .hero-bolt,
-  .hero-ray,
-  .hero-panel {
+  .hero-kenburns,
+  .hero-slide-copy {
     animation: none;
   }
 
