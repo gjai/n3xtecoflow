@@ -135,33 +135,45 @@ function extractArticleText(html: string): string {
   return chunks.join("\n\n").slice(0, 6500);
 }
 
+function isLikelyArticleUrl(url: string): boolean {
+  try {
+    const u = new URL(url);
+    if (!/^https?:$/i.test(u.protocol)) return false;
+    if (
+      /googleusercontent|gstatic|googleapis|schema\.org|doubleclick|facebook\.com\/tr/i.test(
+        u.hostname,
+      )
+    ) {
+      return false;
+    }
+    if (/\.(jpe?g|png|webp|gif|svg|ico|avif)(\?|$)/i.test(u.pathname)) {
+      return false;
+    }
+    // Tiny Google resize params
+    if (/=w\d+$/i.test(u.href) || /=s\d+$/i.test(u.href)) return false;
+    return u.hostname.includes(".") && u.pathname.length > 1;
+  } catch {
+    return false;
+  }
+}
+
 function pickPublisherFromGoogleHtml(html: string, pageUrl: string): string | null {
-  // data-n-au / c-wiz sometimes embeds publisher URLs
   const candidates = [
-    ...html.matchAll(/https?:\/\/(?!(?:[\w.-]+\.)?google\.com|news\.google)[^\s"'<>]+/gi),
+    ...html.matchAll(
+      /https?:\/\/(?!(?:[\w.-]+\.)?google\.com|news\.google)[^\s"'<>]+/gi,
+    ),
   ].map((m) => m[0].replace(/[),.;]+$/, ""));
 
   for (const c of candidates) {
-    try {
-      const u = new URL(c);
-      if (u.protocol !== "http:" && u.protocol !== "https:") continue;
-      if (/google\./i.test(u.hostname)) continue;
-      if (/gstatic|googleapis|schema\.org/i.test(u.hostname)) continue;
-      // Prefer article-looking paths
-      if (u.pathname.length > 1) return u.toString();
-    } catch {
-      /* skip */
-    }
+    if (isLikelyArticleUrl(c)) return c;
   }
 
-  // Relative article hop sometimes in <a href=
   const hrefs = [...html.matchAll(/href=["']([^"']+)["']/gi)].map((m) => m[1]);
   for (const href of hrefs) {
     try {
-      const u = new URL(href, pageUrl);
-      if (/news\.google\.com/i.test(u.hostname)) continue;
-      if (/google\./i.test(u.hostname)) continue;
-      if (u.pathname.length > 1) return u.toString();
+      const u = new URL(href, pageUrl).toString();
+      if (/news\.google\.com/i.test(u)) continue;
+      if (isLikelyArticleUrl(u)) return u;
     } catch {
       /* skip */
     }
@@ -195,11 +207,11 @@ export async function resolvePublisherUrl(url: string): Promise<string> {
   if (!first) return url;
 
   if (!/news\.google\.com/i.test(first.finalUrl)) {
-    return first.finalUrl;
+    return isLikelyArticleUrl(first.finalUrl) ? first.finalUrl : url;
   }
 
   const hopped = pickPublisherFromGoogleHtml(first.html, first.finalUrl);
-  return hopped || first.finalUrl;
+  return hopped || url;
 }
 
 export async function fetchSourcePage(url: string): Promise<SourcePage | null> {
@@ -218,6 +230,11 @@ export async function fetchSourcePage(url: string): Promise<SourcePage | null> {
         finalUrl = second.finalUrl;
       }
     }
+  }
+
+  if (!isLikelyArticleUrl(finalUrl)) {
+    finalUrl = publisherUrl;
+    if (!isLikelyArticleUrl(finalUrl)) finalUrl = url;
   }
 
   const title = decodeHtml(extractTitle(html)).slice(0, 220);

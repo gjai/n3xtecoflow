@@ -215,8 +215,13 @@ export async function buildArticleFromRss(
     options?.keepSlug ||
     makeSlug(fr.title || item.title, item.publishedAt, item.guid);
 
+  const publisherUrl =
+    source?.finalUrl && isPublisherOk(source.finalUrl)
+      ? source.finalUrl
+      : item.link;
+
   const cover = await resolveNewsCover({
-    sourceUrl: source?.finalUrl || item.link,
+    sourceUrl: publisherUrl,
     sourceName: source?.sourceHint || item.sourceName,
     slug,
     ogImageHint: source?.ogImage,
@@ -224,7 +229,7 @@ export async function buildArticleFromRss(
 
   return {
     slug,
-    sourceUrl: source?.finalUrl || item.link,
+    sourceUrl: publisherUrl,
     sourceName: source?.sourceHint || item.sourceName,
     sourceGuid: item.guid,
     publishedAt: item.publishedAt,
@@ -243,17 +248,33 @@ export async function buildArticleFromRss(
   };
 }
 
+function isPublisherOk(url: string) {
+  try {
+    const u = new URL(url);
+    if (/googleusercontent|gstatic/i.test(u.hostname)) return false;
+    if (/\.(jpe?g|png|webp|gif)(\?|$)/i.test(u.pathname)) return false;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /** Rebuild an existing article from its source URL (full text + image). */
 export async function refreshArticle(
   article: NewsArticle,
+  feedItem?: RssItem | null,
 ): Promise<NewsArticle> {
   const item: RssItem = {
-    title: article.fr.title || article.en.title,
-    link: article.sourceUrl,
+    title: feedItem?.title || article.fr.title || article.en.title,
+    link: feedItem?.link || article.sourceUrl,
     guid: article.sourceGuid,
     publishedAt: article.publishedAt,
-    sourceName: article.sourceName,
-    description: article.fr.excerpt || article.en.excerpt || "",
+    sourceName: feedItem?.sourceName || article.sourceName,
+    description:
+      feedItem?.description ||
+      article.fr.excerpt ||
+      article.en.excerpt ||
+      "",
   };
   const next = await buildArticleFromRss(item, { keepSlug: article.slug });
   return {

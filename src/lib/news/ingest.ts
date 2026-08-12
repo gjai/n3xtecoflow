@@ -10,6 +10,8 @@ export type IngestOptions = {
   backfillImagesAll?: boolean;
   /** Rewrite existing articles as full pieces from source (one-shot). */
   refreshExisting?: boolean;
+  /** Force refresh even if bodies are already long (e.g. fix images/URLs). */
+  forceRefresh?: boolean;
   /** Max existing articles to refresh in one run. */
   refreshLimit?: number;
 };
@@ -67,17 +69,22 @@ export async function ingestNews(
   const refreshedSlugs: string[] = [];
   if (options?.refreshExisting) {
     const refreshLimit = options.refreshLimit ?? store.articles.length;
+    const feedByGuid = byGuid;
     const needsRefresh = (a: (typeof store.articles)[number]) =>
+      options.forceRefresh ||
       (a.fr?.body?.length || 0) < 6 ||
       (a.en?.body?.length || 0) < 6 ||
-      a.rewrittenBy === "template";
+      a.rewrittenBy === "template" ||
+      !a.imageSrc ||
+      /googleusercontent|gstatic/i.test(a.sourceUrl || "");
     const targets = store.articles
       .map((article, index) => ({ article, index }))
       .filter(({ article }) => needsRefresh(article))
       .slice(0, refreshLimit);
     for (const { article, index } of targets) {
       try {
-        const next = await refreshArticle(article);
+        const feedItem = feedByGuid.get(article.sourceGuid) || null;
+        const next = await refreshArticle(article, feedItem);
         if (next.rewrittenBy === "ai") aiUsed = true;
         store.articles[index] = next;
         refreshed += 1;
