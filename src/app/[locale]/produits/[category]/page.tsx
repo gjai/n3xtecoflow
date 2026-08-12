@@ -14,6 +14,8 @@ import {
   getProductsByCategory,
 } from "@/data/products";
 
+export const revalidate = 600;
+
 export function generateStaticParams() {
   return categories.flatMap((cat) =>
     ["fr", "en"].map((locale) => ({ locale, category: cat.slug })),

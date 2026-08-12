@@ -98,6 +98,8 @@ export function articleJsonLd(args: {
   description: string;
   url: string;
   locale: string;
+  datePublished?: string;
+  image?: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -106,6 +108,8 @@ export function articleJsonLd(args: {
     description: args.description,
     inLanguage: args.locale,
     mainEntityOfPage: args.url,
+    datePublished: args.datePublished,
+    image: args.image ? [args.image] : undefined,
     author: { "@type": "Organization", name: "EcoFlow Stream" },
     publisher: { "@type": "Organization", name: "EcoFlow Stream" },
   };

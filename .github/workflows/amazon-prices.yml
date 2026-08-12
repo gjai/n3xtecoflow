@@ -15,8 +15,8 @@ jobs:
           SITE_URL: https://ecoflow-stream.com
         run: |
           if [ -z "$NEWS_CRON_SECRET" ]; then
-            echo "NEWS_CRON_SECRET missing — skip"
-            exit 0
+            echo "NEWS_CRON_SECRET missing"
+            exit 1
           fi
           curl -fsS -X POST \
             -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \

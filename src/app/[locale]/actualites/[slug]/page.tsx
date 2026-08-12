@@ -60,6 +60,8 @@ export default async function NewsArticlePage({
           description: copy.excerpt,
           url: `${siteUrl}/${locale}/actualites/${article.slug}`,
           locale,
+          datePublished: article.publishedAt,
+          image: article.imageSrc,
         })}
       />
       <header className="hero-grid border-b border-[var(--line)]">

@@ -19,6 +19,8 @@ import {
   products,
 } from "@/data/products";
 
+export const revalidate = 600;
+
 export function generateStaticParams() {
   return products.flatMap((product) => {
     const categorySlug = product.category;
