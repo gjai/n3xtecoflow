@@ -16,6 +16,30 @@ export function buildAmazonSearchUrl(query: string, tag?: string): string {
   return `https://www.amazon.fr/s?${params.toString()}`;
 }
 
+export function buildAmazonProductUrl(asin: string, tag?: string): string {
+  const associateTag = tag ?? getAmazonTag();
+  const params = new URLSearchParams({
+    language: "fr_FR",
+    th: "1",
+  });
+  if (associateTag) {
+    params.set("tag", associateTag);
+    params.set("linkCode", "ogi");
+  }
+  return `https://www.amazon.fr/dp/${asin}?${params.toString()}`;
+}
+
+/** Prefer ASIN deep-link when known; otherwise Amazon search. */
+export function amazonHrefForProduct(product: {
+  amazonAsin?: string;
+  amazonQuery: string;
+}): string {
+  if (product.amazonAsin) {
+    return buildAmazonProductUrl(product.amazonAsin);
+  }
+  return buildAmazonSearchUrl(product.amazonQuery);
+}
+
 export function buildAmazonProductSearchUrl(
   keywords: string,
   options?: { tag?: string },

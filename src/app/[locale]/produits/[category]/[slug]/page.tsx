@@ -7,7 +7,7 @@ import { AmazonButton } from "@/components/AmazonButton";
 import { CoverImage } from "@/components/CoverImage";
 import { JsonLd, productJsonLd } from "@/components/JsonLd";
 import { getCategoryImage } from "@/data/images";
-import { buildAmazonSearchUrl } from "@/lib/amazon";
+import { amazonHrefForProduct } from "@/lib/amazon";
 import { getAmazonOffer } from "@/lib/amazon/price-store";
 import {
   getCategory,
@@ -77,7 +77,7 @@ export default async function ProductPage({
   const image = getCategoryImage(product.category);
   const offer = await getAmazonOffer(product.slug);
   const amazonHref =
-    offer?.detailUrl || buildAmazonSearchUrl(product.amazonQuery);
+    offer?.detailUrl || amazonHrefForProduct(product);
   const priceHint = offer?.price.display
     ? isEn
       ? `Amazon.fr price · updated ${new Date(offer.updatedAt).toLocaleString("en-GB")}`

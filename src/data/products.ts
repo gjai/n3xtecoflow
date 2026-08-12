@@ -197,6 +197,7 @@ export const products: Product[] = [
     cycles: 3000,
     weightKg: 3.5,
     amazonQuery: "EcoFlow RIVER 2",
+    amazonAsin: "B0BFQC1CNQ",
     specs: [
       { label: "Capacité", value: "256 Wh" },
       { label: "Sortie AC", value: "300 W (600 W surge)" },
@@ -246,6 +247,7 @@ export const products: Product[] = [
     cycles: 3000,
     weightKg: 6.0,
     amazonQuery: "EcoFlow RIVER 2 Max",
+    amazonAsin: "B0BFQB86ZL",
     specs: [
       { label: "Capacité", value: "512 Wh" },
       { label: "Sortie AC", value: "500 W (1 000 W surge)" },
@@ -294,6 +296,7 @@ export const products: Product[] = [
     cycles: 3000,
     weightKg: 7.8,
     amazonQuery: "EcoFlow RIVER 2 Pro",
+    amazonAsin: "B0BFQD5RMJ",
     specs: [
       { label: "Capacité", value: "768 Wh" },
       { label: "Sortie AC", value: "800 W (1 600 W surge)" },
@@ -341,6 +344,7 @@ export const products: Product[] = [
     cycles: 3000,
     weightKg: 3.5,
     amazonQuery: "EcoFlow RIVER 3",
+    amazonAsin: "B0DJY2R42F",
     specs: [
       { label: "Capacité", value: "245 Wh" },
       { label: "Sortie AC", value: "300 W" },
@@ -437,6 +441,7 @@ export const products: Product[] = [
     weightKg: 12,
     expandable: true,
     amazonQuery: "EcoFlow DELTA 2",
+    amazonAsin: "B0BBLV8WJH",
     specs: [
       { label: "Capacité", value: "1 024 Wh" },
       { label: "Sortie AC", value: "1 800 W" },
@@ -485,6 +490,7 @@ export const products: Product[] = [
     weightKg: 23,
     expandable: true,
     amazonQuery: "EcoFlow DELTA 2 Max",
+    amazonAsin: "B0C4F83WTX",
     specs: [
       { label: "Capacité", value: "2 048 Wh" },
       { label: "Sortie AC", value: "2 400 W" },
@@ -531,6 +537,7 @@ export const products: Product[] = [
     cycles: 4000,
     expandable: true,
     amazonQuery: "EcoFlow DELTA 3 Classic",
+    amazonAsin: "B0GMCHYHQR",
     specs: [
       { label: "Capacité", value: "≈ 1 kWh classe" },
       { label: "Sortie AC", value: "≈ 1 800 W" },
@@ -575,6 +582,7 @@ export const products: Product[] = [
     cycles: 4000,
     expandable: true,
     amazonQuery: "EcoFlow DELTA 3 Plus",
+    amazonAsin: "B0DFPW2Y2C",
     specs: [
       { label: "Capacité", value: "≈ 1 024 Wh (expansible)" },
       { label: "Sortie AC", value: "jusqu’à ≈ 2 600 W" },
@@ -665,6 +673,7 @@ export const products: Product[] = [
     cycles: 4000,
     expandable: true,
     amazonQuery: "EcoFlow DELTA 3 Max Plus",
+    amazonAsin: "B0FXFLZHVD",
     specs: [
       { label: "Capacité", value: "2 048 Wh" },
       { label: "Sortie AC", value: "≈ 3 000 W (6 000 W surge)" },
@@ -801,6 +810,7 @@ export const products: Product[] = [
     cycles: 4000,
     expandable: true,
     amazonQuery: "EcoFlow DELTA Pro 3",
+    amazonAsin: "B0DDKP47PY",
     specs: [
       { label: "Capacité", value: "4 096 Wh" },
       { label: "Sortie AC", value: "≈ 4 000 W" },
@@ -1287,6 +1297,7 @@ export const products: Product[] = [
     outputW: 800,
     battery: "N/A",
     amazonQuery: "EcoFlow STREAM micro onduleur",
+    amazonAsin: "B0F2FTSZKG",
     specs: [
       { label: "Type", value: "Micro-onduleur" },
       { label: "Puissance", value: "≈ 800 W" },
@@ -1402,6 +1413,7 @@ export const products: Product[] = [
     name: "EcoFlow GLACIER Classic",
     battery: "Compatible stations EcoFlow",
     amazonQuery: "EcoFlow GLACIER",
+    amazonAsin: "B0F98GYQDH",
     specs: [
       { label: "Type", value: "Réfrigérateur-congélateur portable" },
       { label: "Autonomie", value: "jusqu’à ≈ 43 h (selon config)" },
