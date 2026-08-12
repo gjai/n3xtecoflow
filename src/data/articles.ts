@@ -1,3 +1,5 @@
+import { tumblerGuides } from "./tumbler-guides";
+
 export type ArticleSection = {
   heading: string;
   paragraphs: string[];
@@ -10,7 +12,7 @@ export type GuideArticle = {
   en: { title: string; subtitle: string; sections: ArticleSection[] };
 };
 
-export const guides: GuideArticle[] = [
+const ecoflowGuides: GuideArticle[] = [
   {
     slug: "choisir-station",
     fr: {
@@ -717,6 +719,8 @@ export const comparisons: GuideArticle[] = [
     },
   },
 ];
+
+export const guides: GuideArticle[] = [...ecoflowGuides, ...tumblerGuides];
 
 export function getGuide(slug: string) {
   return guides.find((g) => g.slug === slug);

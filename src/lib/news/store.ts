@@ -2,9 +2,9 @@ import { createHash } from "crypto";
 import { promises as fs } from "fs";
 import path from "path";
 import type { SiteId } from "@/sites/types";
-import type { NewsArticle, NewsStore } from "./types";
+import { pricesToEuroText } from "@/lib/money";
+import type { NewsArticle, NewsLocaleCopy, NewsStore } from "./types";
 import { MAX_NEWS_ARTICLES, newsSiteId } from "./types";
-
 
 const SEED: NewsStore = {
   updatedAt: new Date().toISOString(),
@@ -18,20 +18,43 @@ function dataPath() {
   );
 }
 
+function sanitizeLocaleCopy(copy: NewsLocaleCopy): NewsLocaleCopy {
+  return {
+    title: pricesToEuroText(copy.title || ""),
+    excerpt: pricesToEuroText(copy.excerpt || ""),
+    body: (copy.body || []).map((p) => pricesToEuroText(p)),
+  };
+}
+
+function sanitizeArticle(article: NewsArticle): NewsArticle {
+  return {
+    ...article,
+    fr: sanitizeLocaleCopy(article.fr),
+    en: sanitizeLocaleCopy(article.en),
+  };
+}
+
 export async function readNewsStore(): Promise<NewsStore> {
   const file = dataPath();
   try {
     const raw = await fs.readFile(file, "utf8");
     const parsed = JSON.parse(raw) as NewsStore;
     if (!parsed?.articles || !Array.isArray(parsed.articles)) return SEED;
-    return parsed;
+    return {
+      ...parsed,
+      articles: parsed.articles.map(sanitizeArticle),
+    };
   } catch {
     // Fallback to bundled seed next to source (build-time copy)
     try {
       const bundled = path.join(process.cwd(), "data", "news.json");
       if (bundled !== file) {
         const raw = await fs.readFile(bundled, "utf8");
-        return JSON.parse(raw) as NewsStore;
+        const parsed = JSON.parse(raw) as NewsStore;
+        return {
+          ...parsed,
+          articles: (parsed.articles || []).map(sanitizeArticle),
+        };
       }
     } catch {
       /* empty */
@@ -45,7 +68,7 @@ export async function writeNewsStore(store: NewsStore): Promise<void> {
   await fs.mkdir(path.dirname(file), { recursive: true });
   const next: NewsStore = {
     updatedAt: new Date().toISOString(),
-    articles: store.articles.slice(0, MAX_NEWS_ARTICLES),
+    articles: store.articles.map(sanitizeArticle).slice(0, MAX_NEWS_ARTICLES),
   };
   await fs.writeFile(file, JSON.stringify(next, null, 2) + "\n", "utf8");
 }

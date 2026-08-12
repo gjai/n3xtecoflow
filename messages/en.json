@@ -243,7 +243,6 @@
     "pageOf": "Page {page} / {total}"
   },
   "network": {
-    "title": "Site network",
-    "hint": "Same editorial ecosystem — different themes and angles, shared structure."
+    "title": "Site network"
   }
 }

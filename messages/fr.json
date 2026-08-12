@@ -243,7 +243,6 @@
     "pageOf": "Page {page} / {total}"
   },
   "network": {
-    "title": "Réseau de sites",
-    "hint": "Même écosystème éditorial — thèmes et angles différents, structure partagée."
+    "title": "Réseau de sites"
   }
 }

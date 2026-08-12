@@ -1,4 +1,5 @@
 import type { SiteId } from "@/sites/types";
+import { pricesToEuroText } from "@/lib/money";
 import type { NewsArticle, NewsLocaleCopy } from "./types";
 import type { RssItem } from "./rss";
 import { isOnTopicArticle, isRelevantItem } from "./rss";
@@ -99,6 +100,7 @@ Périmètre STRICT:
 Règles rédaction:
 - Contenu ORIGINAL (reformulation totale)
 - Ne pas inventer de chiffres, promos, dates ou specs absents de la source
+- Prix UNIQUEMENT en euros (€) — jamais de dollars ($ / USD). Si la source cite un prix US, convertis approximativement en € ou oriente vers « prix du jour sur Amazon.fr »
 - Citer clairement la source (${item.sourceName})
 - Structure par langue: titre, excerpt, body = 7 à 10 paragraphes utiles
 - Développer: contexte, faits, critères d’achat (volume, isolation, bouchon, entretien), limites, conclusion actionable
@@ -132,6 +134,7 @@ Périmètre STRICT:
 Règles rédaction:
 - Contenu ORIGINAL (reformulation totale) — interdiction de copier-coller des phrases de la source
 - Ne pas inventer de chiffres, promos, dates ou specs absents de la source
+- Prix UNIQUEMENT en euros (€) — jamais de dollars ($ / USD). Si la source cite un prix US, convertis approximativement en € ou oriente vers « prix du jour sur Amazon.fr »
 - Citer clairement la source (${item.sourceName})
 - Structure par langue: titre accrocheur, excerpt (1-2 phrases), body = 7 à 10 paragraphes utiles
 - Développer: contexte, faits, enjeux pour l’acheteur (Wh, W, usage camping/backup/solaire balcon, STREAM/DELTA/PowerStream si pertinent), limites / points de vigilance, conclusion actionable
@@ -277,10 +280,10 @@ function guessTags(
 
 function normalizeCopy(copy: NewsLocaleCopy): NewsLocaleCopy {
   return {
-    title: copy.title.slice(0, 180),
-    excerpt: (copy.excerpt || "").slice(0, 320),
+    title: pricesToEuroText(copy.title).slice(0, 180),
+    excerpt: pricesToEuroText(copy.excerpt || "").slice(0, 320),
     body: copy.body
-      .map((p) => p.trim())
+      .map((p) => pricesToEuroText(p.trim()))
       .filter(Boolean)
       .map((p) => p.slice(0, 2200))
       .slice(0, 12),

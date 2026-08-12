@@ -19,12 +19,16 @@ export async function POST(request: Request) {
   }
   const url = new URL(request.url);
   try {
+    const siteRaw = url.searchParams.get("siteId");
+    const siteId =
+      siteRaw === "tumbler" || siteRaw === "ecoflow" ? siteRaw : undefined;
     const result = await refreshGuides({
       limit: url.searchParams.get("limit")
         ? Number(url.searchParams.get("limit"))
         : undefined,
       force: url.searchParams.get("force") === "1",
       imagesOnly: url.searchParams.get("imagesOnly") === "1",
+      siteId,
     });
     if (result.ok) {
       await markCronOk(

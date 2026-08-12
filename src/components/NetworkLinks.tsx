@@ -32,7 +32,6 @@ export function NetworkLinks() {
             </li>
           ))}
         </ul>
-        <p className="mt-2 text-xs text-[var(--muted)]">{t("hint")}</p>
       </div>
     </div>
   );

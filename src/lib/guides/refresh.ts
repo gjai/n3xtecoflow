@@ -1,5 +1,6 @@
 import type { ArticleSection } from "@/data/articles";
 import { guides as staticGuides } from "@/data/articles";
+import { tumblerGuideCovers } from "@/data/tumbler-guides";
 import type { SiteId } from "@/sites/types";
 import { generateGuideCoverAi } from "./images";
 import { readGuidesStore, writeGuidesStore } from "./store";
@@ -82,6 +83,7 @@ ${existing ? `Base existante FR (à enrichir, ne pas copier coller):\n${JSON.str
 Règles:
 - Contenu ORIGINAL, concret, honnête (limites + erreurs fréquentes)
 - Ne pas inventer de prix chiffrés Amazon
+- Prix UNIQUEMENT en euros (€) si un montant est cité — jamais de dollars ($ / USD)
 - Chaque langue: title, subtitle, sections = 7 à 10 sections
 - Chaque section: heading + 2 à 4 paragraphs utiles (+ bullets optionnels)
 - Couvrir: contexte, méthode, cas d'usage, critères, pièges, checklist, conclusion actionable
@@ -251,6 +253,7 @@ function fromStatic(slug: string): GuideEntry | null {
   if (!g) {
     return topic ? fromTopic(topic) : null;
   }
+  const cover = tumblerGuideCovers[slug];
   return {
     slug,
     siteId: guideSiteId(topic),
@@ -266,6 +269,9 @@ function fromStatic(slug: string): GuideEntry | null {
     },
     model: "static",
     updatedAt: new Date().toISOString(),
+    ...(cover
+      ? { imageSrc: cover.src, imageCredit: cover.credit }
+      : {}),
   };
 }
 
@@ -385,7 +391,7 @@ export async function refreshGuides(options?: {
   };
 }
 
-/** Resolve guide for pages: AI store first, then static seed. */
+/** Resolve guide for pages: AI store first (if rich), then static seed. */
 export async function resolveGuide(
   slug: string,
   siteId?: SiteId,
@@ -393,10 +399,24 @@ export async function resolveGuide(
   const topic = GUIDE_TOPICS.find((t) => t.slug === slug);
   if (siteId && topic && guideSiteId(topic) !== siteId) return null;
   const stored = (await readGuidesStore()).entries[slug];
-  const entry = stored || fromStatic(slug);
+  const staticEntry = fromStatic(slug);
+  const storedRich =
+    stored &&
+    stored.model !== "stub" &&
+    (stored.fr?.sections?.length || 0) >= 6;
+  const entry = storedRich ? stored : staticEntry || stored || null;
   if (!entry) return null;
   const owner = topic ? guideSiteId(topic) : guideSiteId(entry);
   if (siteId && owner !== siteId) return null;
+  // Keep static cover when store entry has no image
+  if (!entry.imageSrc && staticEntry?.imageSrc) {
+    return {
+      ...entry,
+      siteId: owner,
+      imageSrc: staticEntry.imageSrc,
+      imageCredit: staticEntry.imageCredit,
+    };
+  }
   return { ...entry, siteId: owner };
 }
 
@@ -406,8 +426,18 @@ export async function resolveAllGuides(siteId?: SiteId): Promise<GuideEntry[]> {
   const bySlug = new Map<string, GuideEntry>();
   for (const topic of topics) {
     const stored = store.entries[topic.slug];
-    const entry = stored || fromStatic(topic.slug)!;
-    bySlug.set(topic.slug, { ...entry, siteId: guideSiteId(topic) });
+    const staticEntry = fromStatic(topic.slug)!;
+    const storedRich =
+      stored &&
+      stored.model !== "stub" &&
+      (stored.fr?.sections?.length || 0) >= 6;
+    const entry = storedRich ? stored : staticEntry;
+    bySlug.set(topic.slug, {
+      ...entry,
+      siteId: guideSiteId(topic),
+      imageSrc: entry.imageSrc || staticEntry.imageSrc,
+      imageCredit: entry.imageCredit || staticEntry.imageCredit,
+    });
   }
   for (const [slug, e] of Object.entries(store.entries)) {
     if (bySlug.has(slug)) continue;

@@ -52,38 +52,38 @@ export const tumblerProducts: Product[] = [
     slug: "super-sparrow-500",
     category: "gourdes",
     siteId: "tumbler",
-    name: "Super Sparrow Gourde Isotherme 500 ml",
+    name: "Super Sparrow FlipFlow Isotherme 500 ml",
     battery: "Inox double paroi",
     weightKg: 0.31,
-    amazonQuery: "Super Sparrow gourde isotherme 500ml",
-    amazonAsin: "B01MY09LEL",
+    amazonQuery: "Super Sparrow FlipFlow gourde isotherme",
+    amazonAsin: "B0CRZ1V1LQ",
     specs: [
-      { label: "Capacité", value: "500 ml" },
-      { label: "Isolation", value: "Froid ~24 h / chaud ~12 h" },
+      { label: "Capacité", value: "500 ml (aussi 350–1,2 L)" },
+      { label: "Isolation", value: "Froid / chaud (double paroi)" },
       { label: "Matière", value: "Inox 18/8 sans BPA" },
-      { label: "Points forts", value: "2 bouchons, étanche" },
+      { label: "Points forts", value: "Paille FlipFlow, poignée, lave-vaisselle" },
     ],
     ...copy(
       {
-        tagline: "Best-seller polyvalent",
+        tagline: "Best-seller avec paille rabattable",
         summary:
-          "Gourde inox très demandée : formats multiples, isolation solide, usage sport / bureau / école.",
+          "Gourde inox FlipFlow : poignée + paille pour sport, école et quotidien. Formats multiples sur la fiche Amazon.",
         bestFor: "Quotidien & sport",
-        pros: ["Excellent rapport qualité/prix", "Étanche", "Formats 350 ml → 1,2 L"],
-        cons: ["Finition variable selon couleur", "Paille en option selon lot"],
+        pros: ["Paille + poignée", "Étanche", "Formats 350 ml → 1,2 L"],
+        cons: ["Finition variable selon couleur", "Paille à brosser"],
         body: [
-          "Récurrente en tête des ventes Amazon.fr. Vérifiez bien « Expédié et vendu par Amazon » sur la fiche du jour.",
+          "Lien Affiliates vers l’offre FlipFlow Expédié et vendu par Amazon quand disponible — vérifiez le volume sélectionné.",
         ],
       },
       {
-        tagline: "Versatile bestseller",
+        tagline: "Bestseller with flip straw",
         summary:
-          "Popular stainless bottle: multiple sizes, solid insulation, sport / office / school use.",
+          "FlipFlow stainless bottle: handle + straw for sport, school and daily use. Multiple sizes on the Amazon listing.",
         bestFor: "Daily & sport",
-        pros: ["Strong value", "Leak-proof", "Sizes 350 ml → 1.2 L"],
-        cons: ["Finish varies by color", "Straw depends on SKU"],
+        pros: ["Straw + handle", "Leak-proof", "Sizes 350 ml → 1.2 L"],
+        cons: ["Finish varies by color", "Straw needs brushing"],
         body: [
-          "Frequently tops Amazon.fr charts. Confirm “Ships and sold by Amazon” on the live listing.",
+          "Affiliate link to the FlipFlow offer Ships and sold by Amazon when available — confirm the selected size.",
         ],
       },
     ),
@@ -298,7 +298,7 @@ export const tumblerProducts: Product[] = [
     name: "Stanley Quencher H2.0 1,2 L",
     battery: "Inox double paroi",
     amazonQuery: "Stanley Quencher H2.0 FlowState 1.2L",
-    amazonAsin: "B0FCYS4TBH",
+    amazonAsin: "B0DFWW8JZN",
     specs: [
       { label: "Capacité", value: "1,2 L" },
       { label: "Isolation", value: "Froid 11 h / glacé 48 h" },
@@ -394,6 +394,123 @@ export const tumblerProducts: Product[] = [
         cons: ["Premium price", "Verify Amazon seller"],
         body: [
           "Good compromise if the 1.2 L Quencher is too wide for your cup holder.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "air-up-click-600",
+    category: "gourdes",
+    siteId: "tumbler",
+    name: "air up Click 600 ml (pack 5 pods)",
+    battery: "Tritan (non isotherme inox)",
+    amazonQuery: "air up Click Green 600 ml pods",
+    amazonAsin: "B0G6755KD6",
+    specs: [
+      { label: "Capacité", value: "600 ml" },
+      { label: "Principe", value: "Arôme par odeur (pods)" },
+      { label: "Matière", value: "Tritan sans BPA" },
+      { label: "Inclus", value: "5 pods (variety pack)" },
+    ],
+    ...copy(
+      {
+        tagline: "Eau aromatisée sans sucre",
+        summary:
+          "Pack de démarrage air up Click : gourde 600 ml + 5 pods. L’eau reste pure ; le goût vient de l’odeur du pod.",
+        bestFor: "École / hydratation ludique",
+        pros: ["Sans sucre / calories", "Pods inclus", "Lave-vaisselle"],
+        cons: ["Pas une gourde inox isotherme", "Coût des pods à long terme"],
+        body: [
+          "À distinguer des isothermes inox : ici l’intérêt est l’aromatisation, pas la tenue chaud/froid. Vérifiez Expédié et vendu par Amazon.",
+        ],
+      },
+      {
+        tagline: "Flavored water without sugar",
+        summary:
+          "air up Click starter: 600 ml bottle + 5 pods. Water stays pure; flavor comes from the pod scent.",
+        bestFor: "School / fun hydration",
+        pros: ["Sugar/calorie free", "Pods included", "Dishwasher safe"],
+        cons: ["Not a vacuum steel bottle", "Ongoing pod cost"],
+        body: [
+          "Different job than stainless isothermals: aroma, not hot/cold hold. Prefer Ships and sold by Amazon.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "owala-smoothsip-355",
+    category: "tumblers",
+    siteId: "tumbler",
+    name: "Owala SmoothSip Slider 355 ml",
+    battery: "Inox double paroi",
+    amazonQuery: "Owala SmoothSip Slider 355 ml",
+    amazonAsin: "B0DF472VMZ",
+    specs: [
+      { label: "Capacité", value: "355 ml" },
+      { label: "Isolation", value: "Chaud ~6 h / froid ~24 h" },
+      { label: "Matière", value: "Inox + couvercle coulissant" },
+      { label: "Points forts", value: "Bec SmoothSip, étanche, café" },
+    ],
+    ...copy(
+      {
+        tagline: "Mug café compact Owala",
+        summary:
+          "Tumbler 355 ml avec bec coulissant SmoothSip : café chaud ou boisson froide, format voyage / bureau.",
+        bestFor: "Café & trajets",
+        pros: ["Format café", "Couvercle coulissant", "Souvent vendu par Amazon"],
+        cons: ["Petit volume", "Lavage main recommandé pour le corps"],
+        body: [
+          "Complément du FreeSip 710 ml : ici l’angle est mug isotherme compact, pas hydratation XXL.",
+        ],
+      },
+      {
+        tagline: "Compact Owala coffee mug",
+        summary:
+          "355 ml tumbler with SmoothSip slider: hot coffee or cold drinks for commute / desk.",
+        bestFor: "Coffee & commute",
+        pros: ["Coffee size", "Sliding lid", "Often sold by Amazon"],
+        cons: ["Small volume", "Hand-wash body recommended"],
+        body: [
+          "Pairs with the 710 ml FreeSip: this one is a compact insulated mug, not XXL hydration.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "simple-modern-trek-1180",
+    category: "tumblers",
+    siteId: "tumbler",
+    name: "Simple Modern Trek 1,18 L",
+    battery: "Inox double paroi",
+    amazonQuery: "Simple Modern Trek tumbler handle straw 1180ml",
+    amazonAsin: "B0BHC1C93P",
+    specs: [
+      { label: "Capacité", value: "1,18 L" },
+      { label: "Isolation", value: "Inox isotherme" },
+      { label: "Matière", value: "Inox + paille + anse" },
+      { label: "Points forts", value: "Anse, paille, grand volume" },
+    ],
+    ...copy(
+      {
+        tagline: "Alternative XXL au Quencher",
+        summary:
+          "Tumbler Trek avec poignée et paille : hydratation journée entière, bureau et voiture.",
+        bestFor: "Hydratation XXL",
+        pros: ["~1,2 L", "Anse + paille", "Souvent bien noté"],
+        cons: ["Encombrant", "Vérifier porte-gobelet"],
+        body: [
+          "Concurrent direct des tumblers Stanley/Owala en grand format — confirmez Expédié et vendu par Amazon.",
+        ],
+      },
+      {
+        tagline: "XXL Quencher alternative",
+        summary:
+          "Trek tumbler with handle and straw: all-day hydration for desk and car.",
+        bestFor: "XXL hydration",
+        pros: ["~1.2 L", "Handle + straw", "Often well rated"],
+        cons: ["Bulky", "Check cup holder fit"],
+        body: [
+          "Direct rival to large Stanley/Owala tumblers — confirm Ships and sold by Amazon.",
         ],
       },
     ),

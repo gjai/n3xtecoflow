@@ -170,4 +170,28 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     angleFr: "Budget, volume, vendeur Amazon, accessoires utiles",
     angleEn: "Budget, volume, Amazon seller, useful accessories",
   },
+  {
+    slug: "volume-capacite-gourde",
+    siteId: "tumbler",
+    topicFr: "Quelle capacité de gourde choisir ?",
+    topicEn: "What bottle capacity should you pick?",
+    angleFr: "350 ml à 1,2 L : poids, recharge, usages",
+    angleEn: "350 ml to 1.2 L: weight, refills, use cases",
+  },
+  {
+    slug: "bouchon-paille-etancheite",
+    siteId: "tumbler",
+    topicFr: "Bouchon, paille et étanchéité",
+    topicEn: "Lids, straws and leak-proofing",
+    angleFr: "Sport lid, straw, fuite, entretien des pièces",
+    angleEn: "Sport lid, straw, leaks, cleaning parts",
+  },
+  {
+    slug: "gourde-au-quotidien",
+    siteId: "tumbler",
+    topicFr: "Gourde isotherme au quotidien",
+    topicEn: "Insulated bottles in daily life",
+    angleFr: "Sport, bureau, école, voyage : adapter le matériel",
+    angleEn: "Sport, desk, school, travel: match gear to life",
+  },
 ];

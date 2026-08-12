@@ -306,34 +306,83 @@ export default async function HomePage({
       ) : null}
 
       <section className="mx-auto max-w-6xl px-5 pb-14 md:px-8 md:pb-20">
-        <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
-          {isEn ? "Shop by category" : "Parcourir par catégorie"}
-        </h2>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {orderedCategories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/produits/${cat.slug}`}
-              className="group overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
-            >
-              <CoverImage
-                image={categoryImages[cat.id]}
-                locale={locale}
-                className="aspect-[16/9] w-full"
-                sizes="(max-width: 768px) 100vw, 33vw"
-              />
-              <div className="p-5">
-                <div className="mb-4 h-1 w-10 bg-[var(--accent)] transition group-hover:w-16" />
-                <h3 className="text-lg font-semibold text-[var(--heading)]">
-                  {isEn ? cat.en.title : cat.fr.title}
-                </h3>
-                <p className="mt-3 text-sm text-[var(--muted)]">
-                  {isEn ? cat.en.intro : cat.fr.intro}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {site.id === "tumbler" ? (
+          <>
+            <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
+              {isEn ? "Top picks" : "Sélection"}
+            </h2>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {siteProducts.map((product) => {
+                const media = resolveProductMedia(product, null);
+                const copy = resolveProductCopy(product, locale, null);
+                return (
+                  <Link
+                    key={product.slug}
+                    href={`/produits/${product.category}/${product.slug}`}
+                    className="group overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
+                  >
+                    <CoverImage
+                      image={{
+                        src: media.src,
+                        altFr: media.altFr,
+                        altEn: media.altEn,
+                        credit: media.credit,
+                        creditUrl: media.creditUrl,
+                      }}
+                      locale={locale}
+                      className="aspect-square w-full"
+                      packshot={media.source !== "category"}
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                    <div className="p-5">
+                      <div className="mb-4 h-1 w-10 bg-[var(--accent)] transition group-hover:w-16" />
+                      <h3 className="text-lg font-semibold text-[var(--heading)]">
+                        {product.name}
+                      </h3>
+                      <p className="mt-2 text-sm text-[var(--muted)]">
+                        {copy.tagline}
+                      </p>
+                      <p className="mt-2 text-xs text-[var(--accent)]">
+                        {product.specs?.[0]?.value || product.battery}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
+              {isEn ? "Shop by category" : "Parcourir par catégorie"}
+            </h2>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {orderedCategories.map((cat) => (
+                <Link
+                  key={cat.id}
+                  href={`/produits/${cat.slug}`}
+                  className="group overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
+                >
+                  <CoverImage
+                    image={categoryImages[cat.id]}
+                    locale={locale}
+                    className="aspect-[16/9] w-full"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="p-5">
+                    <div className="mb-4 h-1 w-10 bg-[var(--accent)] transition group-hover:w-16" />
+                    <h3 className="text-lg font-semibold text-[var(--heading)]">
+                      {isEn ? cat.en.title : cat.fr.title}
+                    </h3>
+                    <p className="mt-3 text-sm text-[var(--muted)]">
+                      {isEn ? cat.en.intro : cat.fr.intro}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </>
+        )}
         <p className="mt-8 text-sm text-[var(--muted)]">
           {siteProducts.length} {isEn ? "product sheets" : "fiches produits"} ·{" "}
           {allGuides.length} {isEn ? "guides" : "guides"} ·{" "}
@@ -345,53 +394,6 @@ export default async function HomePage({
             {isEn ? "comparisons" : "comparatifs"}
           </Link>
         </p>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
-        <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
-          {t("featuresTitle")}
-        </h2>
-        <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("editorialLead")}</p>
-        <div className="mt-8 grid gap-5 md:grid-cols-3">
-          {[
-            { title: t("feature1Title"), text: t("feature1Text") },
-            { title: t("feature2Title"), text: t("feature2Text") },
-            { title: t("feature3Title"), text: t("feature3Text") },
-          ].map((f) => (
-            <div
-              key={f.title}
-              className="border border-[var(--line)] bg-[var(--surface)] p-5"
-            >
-              <h3 className="font-semibold text-[var(--heading)]">{f.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">
-                {f.text}
-              </p>
-            </div>
-          ))}
-        </div>
-        <p className="mt-6 text-sm text-[var(--muted)]">
-          {t("aboutTeaser")}{" "}
-          <Link
-            href="/a-propos"
-            className="text-[var(--accent)] underline-offset-2 hover:underline"
-          >
-            {t("aboutLink")}
-          </Link>
-          .
-        </p>
-      </section>
-
-      <section className="border-y border-[var(--line)] bg-[var(--surface)]">
-        <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
-          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
-            {t("howTitle")}
-          </h2>
-          <div className="mt-6 space-y-4 text-[var(--fog)] leading-relaxed md:columns-2 md:gap-10">
-            <p>{t("howBody1")}</p>
-            <p>{t("howBody2")}</p>
-            <p>{t("howBody3")}</p>
-          </div>
-        </div>
       </section>
 
       {site.id === "ecoflow" ? (

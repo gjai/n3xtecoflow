@@ -2,6 +2,7 @@ import type { Product } from "@/data/products";
 import { getCategoryImage } from "@/data/images";
 import type { AmazonOffer } from "@/lib/amazon/types";
 import type { EcoflowCatalogEntry } from "@/lib/ecoflow/types";
+import { toEuroMoney } from "@/lib/money";
 
 export type ProductMedia = {
   src: string;
@@ -77,7 +78,7 @@ export function resolveProductMedia(
 }
 
 /**
- * Prix affiché :
+ * Prix affiché (toujours €) :
  * 1) Amazon Creators (live) si dispo
  * 2) sinon prix catalogue EcoFlow.fr (indicatif — pas Amazon)
  */
@@ -86,29 +87,43 @@ export function resolveDisplayPrice(
   ecoflow: EcoflowCatalogEntry | null | undefined,
 ): DisplayPrice | null {
   if (amazon?.price?.display && amazon.price.amount != null) {
-    return {
-      display: amazon.price.display,
+    const euro = toEuroMoney({
       amount: amazon.price.amount,
       currency: amazon.price.currency,
-      source: "amazon",
-      hintFr: `Prix Amazon.fr · maj. ${new Date(amazon.updatedAt).toLocaleString("fr-FR")}`,
-      hintEn: `Amazon.fr price · updated ${new Date(amazon.updatedAt).toLocaleString("en-GB")}`,
-      updatedAt: amazon.updatedAt,
-    };
+      display: amazon.price.display,
+    });
+    if (euro) {
+      return {
+        display: euro.display,
+        amount: euro.amount,
+        currency: euro.currency,
+        source: "amazon",
+        hintFr: `Prix Amazon.fr · maj. ${new Date(amazon.updatedAt).toLocaleString("fr-FR")}`,
+        hintEn: `Amazon.fr price · updated ${new Date(amazon.updatedAt).toLocaleString("en-GB")}`,
+        updatedAt: amazon.updatedAt,
+      };
+    }
   }
 
   if (ecoflow?.priceDisplay && ecoflow.priceAmount != null) {
-    return {
-      display: ecoflow.priceDisplay,
+    const euro = toEuroMoney({
       amount: ecoflow.priceAmount,
-      currency: ecoflow.priceCurrency,
-      source: "ecoflow",
-      hintFr:
-        "Prix catalogue EcoFlow.fr (indicatif — le prix Amazon peut différer)",
-      hintEn:
-        "EcoFlow.fr catalog price (indicative — Amazon price may differ)",
-      updatedAt: ecoflow.updatedAt,
-    };
+      currency: ecoflow.priceCurrency || "EUR",
+      display: ecoflow.priceDisplay,
+    });
+    if (euro) {
+      return {
+        display: euro.display,
+        amount: euro.amount,
+        currency: euro.currency,
+        source: "ecoflow",
+        hintFr:
+          "Prix catalogue EcoFlow.fr (indicatif — le prix Amazon peut différer)",
+        hintEn:
+          "EcoFlow.fr catalog price (indicative — Amazon price may differ)",
+        updatedAt: ecoflow.updatedAt,
+      };
+    }
   }
 
   return null;
