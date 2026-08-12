@@ -2,16 +2,16 @@
 
 import Script from "next/script";
 
-export function AdSenseScript() {
-  const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim();
-  if (!client) return null;
+const ADSENSE_CLIENT =
+  process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() || "ca-pub-4733644127583822";
 
+export function AdSenseScript() {
   return (
     <Script
       id="adsense-loader"
       async
       strategy="afterInteractive"
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${client}`}
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
       crossOrigin="anonymous"
     />
   );

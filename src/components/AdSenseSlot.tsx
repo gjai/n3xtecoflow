@@ -2,6 +2,9 @@
 
 import { useEffect } from "react";
 
+const ADSENSE_CLIENT =
+  process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() || "ca-pub-4733644127583822";
+
 type AdSenseSlotProps = {
   slot?: string;
   label: string;
@@ -9,10 +12,10 @@ type AdSenseSlotProps = {
 };
 
 export function AdSenseSlot({ slot, label, className = "" }: AdSenseSlotProps) {
-  const client = process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim();
+  const client = ADSENSE_CLIENT;
 
   useEffect(() => {
-    if (!client || !slot) return;
+    if (!slot) return;
     try {
       const w = window as Window & { adsbygoogle?: unknown[] };
       w.adsbygoogle = w.adsbygoogle || [];
@@ -20,21 +23,7 @@ export function AdSenseSlot({ slot, label, className = "" }: AdSenseSlotProps) {
     } catch {
       // Ad blocker or script not ready
     }
-  }, [client, slot]);
-
-  if (!client) {
-    return (
-      <aside
-        className={`rounded-sm border border-dashed border-[var(--line)] bg-[var(--surface)] px-4 py-8 text-center text-sm text-[var(--muted)] ${className}`}
-        aria-label={label}
-      >
-        <p className="mb-1 text-xs uppercase tracking-[0.16em] text-[var(--accent)]">
-          {label}
-        </p>
-        <p>Emplacement AdSense (configurez NEXT_PUBLIC_ADSENSE_CLIENT)</p>
-      </aside>
-    );
-  }
+  }, [slot]);
 
   return (
     <aside className={`overflow-hidden ${className}`} aria-label={label}>
@@ -43,7 +32,7 @@ export function AdSenseSlot({ slot, label, className = "" }: AdSenseSlotProps) {
       </p>
       <ins
         className="adsbygoogle"
-        style={{ display: "block" }}
+        style={{ display: "block", minHeight: 90 }}
         data-ad-client={client}
         data-ad-slot={slot || "0000000000"}
         data-ad-format="auto"
