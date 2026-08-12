@@ -49,7 +49,11 @@ export const massageGunGuides: GuideArticle[] = [
             "Les embouts (balle, fourche, coussin, balle…) changent la sensation plus que la marque. Une bonne brosse / housse aide à transporter le kit.",
             "Le bruit varie énormément : les moteurs brushless premium sont plus supportables en open-space. Batterie USB-C et/ou amovible = vrai plus pour le voyage.",
           ],
-          productSlugs: ["hypervolt-2-pro", "toloco-massage-gun"],
+          productSlugs: [
+            "aerlang-massage-gun",
+            "brelley-masseur-cervical",
+            "hypervolt-2-pro",
+          ],
         },
         {
           heading: "5. Budget : bien commencer",
@@ -118,7 +122,11 @@ export const massageGunGuides: GuideArticle[] = [
             "Heads (ball, fork, cushion, bullet…) change feel more than brand. A good case helps carry the kit.",
             "Noise varies widely: premium brushless motors are more office-friendly. USB-C and/or swappable batteries help for travel.",
           ],
-          productSlugs: ["hypervolt-2-pro", "toloco-massage-gun"],
+          productSlugs: [
+            "aerlang-massage-gun",
+            "brelley-masseur-cervical",
+            "hypervolt-2-pro",
+          ],
         },
         {
           heading: "5. Budget: start smart",

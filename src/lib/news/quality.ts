@@ -33,6 +33,9 @@ const BRANDS_BY_SITE: Record<string, BrandRule[]> = {
     { id: "bobbrad", pattern: /\bbob\s*(and|&)\s*brad\b/i },
     { id: "opove", pattern: /\bopove\b/i },
     { id: "ekrin", pattern: /\bekrin\b/i },
+    { id: "brelley", pattern: /\bbrelley\b/i },
+    { id: "aerlang", pattern: /\baerlang\b/i },
+    { id: "shiatsu", pattern: /\bshiatsu\b|\bcervical\b|\bneck\s*massager\b/i },
   ],
   ecoflow: [
     { id: "ecoflow", pattern: /\becoflow\b/i },

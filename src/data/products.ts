@@ -18,7 +18,8 @@ export type CategoryId =
   | "gourdes"
   | "tumblers"
   | "pistolets"
-  | "mini";
+  | "mini"
+  | "masseurs";
 
 export type LocaleCopy = {
   tagline: string;

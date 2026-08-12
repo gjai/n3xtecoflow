@@ -32,6 +32,21 @@ export const massageGunCategories: CategoryMeta[] = [
         "Compact formats for desk, travel and delicate areas (neck, calves).",
     },
   },
+  {
+    id: "masseurs",
+    slug: "masseurs",
+    siteId: "massage-gun",
+    fr: {
+      title: "Masseurs cou & dos",
+      intro:
+        "Coussins shiatsu, masseurs cervicaux et pistolets chauffants — top ventes Amazon.fr (vendu par Amazon quand possible).",
+    },
+    en: {
+      title: "Neck & back massagers",
+      intro:
+        "Shiatsu cushions, neck massagers and heated guns — Amazon.fr bestsellers (sold by Amazon when possible).",
+    },
+  },
 ];
 
 function copy(
@@ -513,6 +528,178 @@ export const massageGunProducts: Product[] = [
         cons: ["Lesser-known brand", "Confirm FR stock"],
         body: [
           "ASIN B07ZWK2YSF — open Amazon.fr for today’s price and seller.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "aerlang-massage-gun",
+    category: "masseurs",
+    siteId: "massage-gun",
+    name: "AERLANG Pistolet de massage (chaleur)",
+    battery: "Li-ion USB-C",
+    weightKg: 0.55,
+    amazonQuery: "AERLANG pistolet de massage chaleur",
+    amazonAsin: "B0F21LFFBG",
+    imageSrc: "/images/products/massage-gun/aerlang-massage-gun.jpg",
+    indicativePriceEur: 37.99,
+    specs: [
+      { label: "Amplitude", value: "Percussion + chaleur" },
+      { label: "Force", value: "20 niveaux" },
+      { label: "Vitesses", value: "20 niveaux réglables" },
+      { label: "Embouts", value: "Têtes chauffantes" },
+      { label: "Autonomie", value: "Protection auto ~10 min" },
+    ],
+    ...copy(
+      {
+        tagline: "Percussion chauffante abordable",
+        summary:
+          "Pistolet AERLANG avec têtes chauffantes et 20 niveaux — format compact pour dos et cervicales. Top vente Amazon.fr.",
+        bestFor: "Budget + chaleur",
+        pros: ["Chaleur réglable", "20 niveaux", "USB-C", "Prix contenu"],
+        cons: ["Marque moins connue", "Moins profond qu’un Theragun"],
+        body: [
+          "ASIN B0F21LFFBG — prix indicatif ~37,99 € (Amazon.fr). Vérifiez vendeur Expédié et vendu par Amazon.",
+        ],
+      },
+      {
+        tagline: "Affordable heated percussion",
+        summary:
+          "AERLANG gun with heated heads and 20 levels — compact for back and neck. Amazon.fr bestseller.",
+        bestFor: "Budget + heat",
+        pros: ["Adjustable heat", "20 levels", "USB-C", "Contained price"],
+        cons: ["Lesser-known brand", "Less depth than Theragun"],
+        body: [
+          "ASIN B0F21LFFBG — indicative ~€37.99 (Amazon.fr). Confirm Ships and sold by Amazon.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "brelley-masseur-cervical",
+    category: "masseurs",
+    siteId: "massage-gun",
+    name: "Brelley Masseur dos & cervicales",
+    battery: "Secteur (adaptateur)",
+    weightKg: 1.1,
+    amazonQuery: "Brelley masseur cervical",
+    amazonAsin: "B0DYJ5M8F6",
+    imageSrc: "/images/products/massage-gun/brelley-masseur-cervical.jpg",
+    indicativePriceEur: 37.99,
+    specs: [
+      { label: "Type", value: "Shiatsu pétrissage + chaleur" },
+      { label: "Intensités", value: "3 niveaux" },
+      { label: "Zones", value: "Cou, épaules, dos" },
+      { label: "Matière", value: "Cuir PU" },
+      { label: "Sécurité", value: "Arrêt auto / anti-surchauffe" },
+    ],
+    ...copy(
+      {
+        tagline: "Shiatsu cou / épaules avec chaleur",
+        summary:
+          "Masseur cervical Brelley : pétrissage bidirectionnel, 3 intensités et thermothérapie. Idéal bureau / canapé.",
+        bestFor: "Tensions nuque",
+        pros: ["3 intensités", "Chaleur", "Rotation réversible", "Cuir PU"],
+        cons: ["Filaire (secteur)", "Pas de percussion"],
+        body: [
+          "ASIN B0DYJ5M8F6 — prix indicatif ~37,99 €. Coussin / collier shiatsu, pas un pistolet à percussion.",
+        ],
+      },
+      {
+        tagline: "Heated neck / shoulder shiatsu",
+        summary:
+          "Brelley neck massager: bidirectional kneading, 3 intensities and heat. Ideal desk / sofa.",
+        bestFor: "Neck tension",
+        pros: ["3 intensities", "Heat", "Reversible rotation", "PU leather"],
+        cons: ["Plugged-in", "Not percussion"],
+        body: [
+          "ASIN B0DYJ5M8F6 — indicative ~€37.99. Shiatsu collar, not a percussion gun.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "brelley-coussin-shiatsu",
+    category: "masseurs",
+    siteId: "massage-gun",
+    name: "Brelley Coussin massage shiatsu",
+    battery: "Secteur (adaptateur)",
+    weightKg: 1.4,
+    amazonQuery: "Brelley coussin shiatsu chauffant",
+    amazonAsin: "B0BLSSKW2S",
+    imageSrc: "/images/products/massage-gun/brelley-coussin-shiatsu.jpg",
+    indicativePriceEur: 35.99,
+    specs: [
+      { label: "Type", value: "Coussin shiatsu 4 nœuds" },
+      { label: "Intensités", value: "Réglables + rotation 2 sens" },
+      { label: "Zones", value: "Dos, cou, jambes" },
+      { label: "Matière", value: "Textile + nœuds rotatifs" },
+      { label: "Chauffage", value: "Infrarouge" },
+    ],
+    ...copy(
+      {
+        tagline: "Coussin chauffant polyvalent",
+        summary:
+          "Coussin Brelley à 4 nœuds shiatsu, rotation bidirectionnelle et chaleur infrarouge. Sangle pour le maintien.",
+        bestFor: "Maison / canapé",
+        pros: ["4 nœuds", "Chaleur", "Sangle réglable", "Prix doux"],
+        cons: ["Filaire", "Encombrement coussin"],
+        body: [
+          "ASIN B0BLSSKW2S — prix indicatif ~35,99 € (Amazon.fr). Vérifiez stock et vendeur du jour.",
+        ],
+      },
+      {
+        tagline: "Versatile heated cushion",
+        summary:
+          "Brelley 4-node shiatsu cushion, bidirectional rotation and infrared heat. Strap for placement.",
+        bestFor: "Home / sofa",
+        pros: ["4 nodes", "Heat", "Adjustable strap", "Soft price"],
+        cons: ["Plugged-in", "Cushion bulk"],
+        body: [
+          "ASIN B0BLSSKW2S — indicative ~€35.99 (Amazon.fr). Confirm today’s stock and seller.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "masseur-cervical-bionique",
+    category: "masseurs",
+    siteId: "massage-gun",
+    name: "Masseur cervical bionique 4D",
+    battery: "2000 mAh USB",
+    weightKg: 0.35,
+    amazonQuery: "masseur cervical bionique 4D",
+    amazonAsin: "B0GVBJC98Z",
+    imageSrc: "/images/products/massage-gun/masseur-cervical-bionique.jpg",
+    indicativePriceEur: 39.99,
+    specs: [
+      { label: "Type", value: "Masseur cervical 4D mains libres" },
+      { label: "Intensités", value: "Multi-points / pétrissage" },
+      { label: "Zones", value: "Nuque & épaules" },
+      { label: "Matière", value: "Silicone souple" },
+      { label: "Autonomie", value: "Batterie 2000 mAh" },
+    ],
+    ...copy(
+      {
+        tagline: "Cervical sans fil, format main",
+        summary:
+          "Masseur cervical 4D rechargeable (2000 mAh), points type acupuncture et silicone souple. Cadeau / usage quotidien.",
+        bestFor: "Nuque sans fil",
+        pros: ["Sans fil", "2000 mAh", "Silicone souple", "Compact"],
+        cons: ["Moins de « punch » qu’un pistolet", "Marque générique"],
+        body: [
+          "ASIN B0GVBJC98Z — prix indicatif ~39,99 €. Pas un pistolet à percussion : ciblage cervical.",
+        ],
+      },
+      {
+        tagline: "Wireless handheld neck massager",
+        summary:
+          "Rechargeable 4D neck massager (2000 mAh), acupuncture-style points and soft silicone. Gift / daily use.",
+        bestFor: "Wireless neck",
+        pros: ["Wireless", "2000 mAh", "Soft silicone", "Compact"],
+        cons: ["Less punch than a gun", "Generic brand"],
+        body: [
+          "ASIN B0GVBJC98Z — indicative ~€39.99. Not a percussion gun: neck-focused.",
         ],
       },
     ),

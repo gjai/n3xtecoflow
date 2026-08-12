@@ -101,6 +101,13 @@ export const categoryImages: Record<CategoryId, SiteImage> = {
     altEn: "Mini massage gun — travel and desk",
     ...UNSplash,
   },
+  masseurs: {
+    src: "/images/massage-gun/masseurs.jpg",
+    altFr: "Masseur cou et dos — shiatsu et chaleur",
+    altEn: "Neck and back massager — shiatsu and heat",
+    credit: "Amazon product image",
+    creditUrl: "https://www.amazon.fr/",
+  },
 };
 
 export const editorialImages = {

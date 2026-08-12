@@ -66,14 +66,16 @@ export const massageGunSite: SiteConfig = {
     },
   },
   heroImage: "/images/massage-gun/hero.jpg",
-  featuredCategoryIds: ["pistolets", "mini"],
+  featuredCategoryIds: ["masseurs", "pistolets", "mini"],
   catalogLayout: "flat",
   featuredProductSlugs: [
+    "aerlang-massage-gun",
+    "brelley-masseur-cervical",
+    "brelley-coussin-shiatsu",
+    "masseur-cervical-bionique",
     "theragun-elite",
-    "theragun-mini",
     "renpho-extend",
     "hypervolt-2-pro",
-    "toloco-massage-gun",
     "bob-brad-t2",
   ],
   network: [
@@ -94,7 +96,7 @@ export const massageGunSite: SiteConfig = {
     },
   ],
   focusFr:
-    "Top ventes Amazon de pistolets de massage (vendu par Amazon quand possible).",
+    "Top ventes Amazon : pistolets, masseurs cervicaux et coussins shiatsu (vendu par Amazon quand possible).",
   focusEn:
-    "Amazon bestsellers for percussion massage guns (sold by Amazon when possible).",
+    "Amazon bestsellers: massage guns, neck massagers and shiatsu cushions (sold by Amazon when possible).",
 };
