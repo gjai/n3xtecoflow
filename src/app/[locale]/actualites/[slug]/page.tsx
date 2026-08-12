@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { articleJsonLd, JsonLd } from "@/components/JsonLd";
+import { SmartCover } from "@/components/SmartCover";
+import { editorialImages } from "@/data/images";
 import { getNewsBySlug, readNewsStore } from "@/lib/news/store";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +20,13 @@ export async function generateMetadata({
   const article = getNewsBySlug(slug, store);
   if (!article) return {};
   const copy = locale === "en" ? article.en : article.fr;
-  return { title: copy.title, description: copy.excerpt };
+  return {
+    title: copy.title,
+    description: copy.excerpt,
+    openGraph: article.imageSrc
+      ? { images: [{ url: article.imageSrc }] }
+      : undefined,
+  };
 }
 
 export default async function NewsArticlePage({
@@ -60,7 +68,16 @@ export default async function NewsArticlePage({
           >
             ← {t("back")}
           </Link>
-          <h1 className="mt-4 font-[family-name:var(--font-display)] text-4xl font-semibold text-[var(--heading)] md:text-5xl">
+          <SmartCover
+            src={article.imageSrc}
+            fallback={editorialImages.news}
+            locale={locale}
+            credit={article.imageCredit}
+            className="mt-6 aspect-[16/9] w-full border border-[var(--line)]"
+            sizes="(max-width: 768px) 100vw, 768px"
+            priority
+          />
+          <h1 className="mt-6 font-[family-name:var(--font-display)] text-4xl font-semibold text-[var(--heading)] md:text-5xl">
             {copy.title}
           </h1>
           <p className="mt-4 text-lg text-[var(--muted)]">{copy.excerpt}</p>

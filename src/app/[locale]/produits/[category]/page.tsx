@@ -78,7 +78,17 @@ export default async function CategoryPage({
               className="grid gap-4 border border-[var(--line)] bg-[var(--surface)] p-4 transition hover:border-[var(--accent)] md:grid-cols-[140px_1fr_auto] md:items-center"
             >
               <CoverImage
-                image={image}
+                image={
+                  product.imageSrc
+                    ? {
+                        src: product.imageSrc,
+                        altFr: product.name,
+                        altEn: product.name,
+                        credit: "Produit",
+                        creditUrl: "#",
+                      }
+                    : image
+                }
                 locale={locale}
                 className="aspect-square w-full border border-[var(--line)] md:aspect-[4/3]"
                 sizes="140px"

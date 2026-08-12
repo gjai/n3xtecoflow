@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
-import { CoverImage } from "@/components/CoverImage";
+import { SmartCover } from "@/components/SmartCover";
 import { editorialImages } from "@/data/images";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 
@@ -59,9 +59,11 @@ export default async function NewsIndexPage({
                 href={`/actualites/${article.slug}`}
                 className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
               >
-                <CoverImage
-                  image={editorialImages.news}
+                <SmartCover
+                  src={article.imageSrc}
+                  fallback={editorialImages.news}
                   locale={locale}
+                  credit={article.imageCredit}
                   className="aspect-[16/9] w-full"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />

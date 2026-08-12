@@ -21,9 +21,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 ENV NEWS_DATA_PATH=/app/data/news.json
+ENV NEWS_MEDIA_PATH=/app/data/news-images
 
 RUN addgroup -S nodejs && adduser -S nextjs -G nodejs \
-  && mkdir -p /app/data \
+  && mkdir -p /app/data /app/data/news-images \
   && chown -R nextjs:nodejs /app/data
 
 COPY --from=builder /app/public ./public

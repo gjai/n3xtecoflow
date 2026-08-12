@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AmazonButton } from "@/components/AmazonButton";
 import { CoverImage } from "@/components/CoverImage";
+import { SmartCover } from "@/components/SmartCover";
 import { HeroVisual } from "@/components/HeroVisual";
 import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/JsonLd";
 import { AMAZON_QUERIES, buildAmazonSearchUrl } from "@/lib/amazon";
@@ -151,9 +152,11 @@ export default async function HomePage({
                     href={`/actualites/${article.slug}`}
                     className="overflow-hidden border border-[var(--line)] bg-[var(--bg)] transition hover:border-[var(--accent)]"
                   >
-                    <CoverImage
-                      image={editorialImages.news}
+                    <SmartCover
+                      src={article.imageSrc}
+                      fallback={editorialImages.news}
                       locale={locale}
+                      credit={article.imageCredit}
                       className="aspect-[16/9] w-full"
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />

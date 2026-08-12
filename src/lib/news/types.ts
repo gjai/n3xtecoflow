@@ -13,6 +13,10 @@ export type NewsArticle = {
   ingestedAt: string;
   rewrittenBy: "ai" | "template";
   tags: string[];
+  /** Local path like /api/media/news/... or static /images/... */
+  imageSrc?: string;
+  imageCredit?: string;
+  imageKind?: "source" | "fallback" | "ai";
   fr: NewsLocaleCopy;
   en: NewsLocaleCopy;
 };

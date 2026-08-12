@@ -1,6 +1,7 @@
 import { NEWS_FEEDS, MAX_NEW_PER_RUN } from "./types";
 import { fetchFeedItems, type RssItem } from "./rss";
 import { buildArticleFromRss } from "./rewrite";
+import { resolveNewsCover } from "./images";
 import { readNewsStore, writeNewsStore } from "./store";
 
 export type IngestResult = {
@@ -8,6 +9,7 @@ export type IngestResult = {
   fetched: number;
   created: number;
   skipped: number;
+  backfilled: number;
   slugs: string[];
   aiUsed: boolean;
 };
@@ -29,7 +31,6 @@ export async function ingestNews(options?: {
     }
   }
 
-  // Prefer freshest unique guids
   const byGuid = new Map<string, RssItem>();
   for (const item of collected) {
     if (!byGuid.has(item.guid)) byGuid.set(item.guid, item);
@@ -50,7 +51,23 @@ export async function ingestNews(options?: {
     created.push(article);
   }
 
-  if (created.length) {
+  let backfilled = 0;
+  for (const article of store.articles) {
+    if (backfilled >= 3) break;
+    if (article.imageSrc) continue;
+    const cover = await resolveNewsCover({
+      sourceUrl: article.sourceUrl,
+      sourceName: article.sourceName,
+      slug: article.slug,
+    });
+    if (!cover) continue;
+    article.imageSrc = cover.imageSrc;
+    article.imageCredit = cover.imageCredit;
+    article.imageKind = cover.imageKind;
+    backfilled += 1;
+  }
+
+  if (created.length || backfilled) {
     store.articles = [...created, ...store.articles];
     await writeNewsStore(store);
   }
@@ -60,6 +77,7 @@ export async function ingestNews(options?: {
     fetched: collected.length,
     created: created.length,
     skipped: Math.max(0, byGuid.size - created.length),
+    backfilled,
     slugs: created.map((a) => a.slug),
     aiUsed,
   };

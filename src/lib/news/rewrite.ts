@@ -1,6 +1,7 @@
 import type { NewsArticle, NewsLocaleCopy } from "./types";
 import type { RssItem } from "./rss";
 import { makeSlug } from "./store";
+import { resolveNewsCover } from "./images";
 
 function cleanTitle(title: string) {
   return title.replace(/\s+-\s+[^-]+$/, "").trim();
@@ -148,9 +149,15 @@ export async function buildArticleFromRss(
   const fr = ai?.fr || templateCopy("fr", item);
   const en = ai?.en || templateCopy("en", item);
   const tags = ai?.tags?.length ? ai.tags : guessTags(item);
+  const slug = makeSlug(fr.title || item.title, item.publishedAt, item.guid);
+  const cover = await resolveNewsCover({
+    sourceUrl: item.link,
+    sourceName: item.sourceName,
+    slug,
+  });
 
   return {
-    slug: makeSlug(fr.title || item.title, item.publishedAt, item.guid),
+    slug,
     sourceUrl: item.link,
     sourceName: item.sourceName,
     sourceGuid: item.guid,
@@ -158,6 +165,13 @@ export async function buildArticleFromRss(
     ingestedAt: new Date().toISOString(),
     rewrittenBy,
     tags,
+    ...(cover
+      ? {
+          imageSrc: cover.imageSrc,
+          imageCredit: cover.imageCredit,
+          imageKind: cover.imageKind,
+        }
+      : {}),
     fr: {
       title: fr.title.slice(0, 160),
       excerpt: (fr.excerpt || "").slice(0, 280),
