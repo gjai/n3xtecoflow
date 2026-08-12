@@ -33,11 +33,13 @@ export function RelatedReading({
   news: RelatedLink[];
 }) {
   const isEn = locale === "en";
-  const groups: { key: GroupKey; items: RelatedLink[] }[] = [
-    { key: "news", items: news },
-    { key: "guide", items: guides },
-    { key: "comparison", items: comparisons },
-  ].filter((g) => g.items.length > 0);
+  const groups: { key: GroupKey; items: RelatedLink[] }[] = (
+    [
+      { key: "news" as const, items: news },
+      { key: "guide" as const, items: guides },
+      { key: "comparison" as const, items: comparisons },
+    ] as const
+  ).filter((g) => g.items.length > 0);
 
   if (groups.length === 0) return null;
 
