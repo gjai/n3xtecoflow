@@ -141,9 +141,9 @@ export const ecoflowSite: SiteConfig = {
     preferAiNewsCovers: false,
     allowWeakPackshotDefault: true,
     topicBrandPattern:
-      /\becoflow\b|\bpowerstream\b|\bpower\s*stream\b/i,
+      String.raw`\becoflow\b|\bpowerstream\b|\bpower\s*stream\b`,
     topicProductPattern:
-      /\bdelta(\s|-)?(2|3|pro|max|ultra)?\b|\briver(\s|-)?(2|3|pro|max|plus)?\b|\bstream(\s|-)?(ultra|pro|max|x)?\b|\bocean\b|\bglacier\b|\bwave(\s|-)?\d?\b|\brapid(\s|-)?pro\b/i,
+      String.raw`\bdelta(\s|-)?(2|3|pro|max|ultra)?\b|\briver(\s|-)?(2|3|pro|max|plus)?\b|\bstream(\s|-)?(ultra|pro|max|x)?\b|\bocean\b|\bglacier\b|\bwave(\s|-)?\d?\b|\brapid(\s|-)?pro\b`,
   },
 
   focusFr:

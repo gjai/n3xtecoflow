@@ -132,13 +132,16 @@ export type SiteEditorialProfile = {
   preferAiNewsCovers: boolean;
   /** Packshot faible autorisé en dernier recours (catalogue riche type EcoFlow) */
   allowWeakPackshotDefault: boolean;
-  /** Regex pertinence RSS / on-topic (titre + description) */
-  topicBrandPattern: RegExp;
+  /**
+   * Source regex pertinence RSS / on-topic (flags `i` appliqués à l’usage).
+   * String sérialisable (SiteConfig passe au client via SiteProvider).
+   */
+  topicBrandPattern: string;
   /**
    * Produits spécifiques requis si `rssLenientAfterBrand` est false
    * (ex. DELTA / RIVER pour EcoFlow).
    */
-  topicProductPattern?: RegExp;
+  topicProductPattern?: string;
 };
 
 export type SiteConfig = {

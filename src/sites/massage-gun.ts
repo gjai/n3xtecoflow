@@ -149,7 +149,7 @@ export const massageGunSite: SiteConfig = {
     preferAiNewsCovers: true,
     allowWeakPackshotDefault: false,
     topicBrandPattern:
-      /\bpistolet\s+de\s+massage\b|\bmassage\s+gun\b|\btheragun\b|\btherabody\b|\bhypervolt\b|\bhyperice\b|\brenpho\b|\btoloco\b|\bbob\s+and\s*brad\b|\bopove\b|\bbrelley\b|\baerlang\b|\bjolt\b|\bpercussion\s+(massage|massager|therapy)\b|\bmasseur\s+(musculaire|cervical|dos|shiatsu)\b|\bcoussin\s+(de\s+)?massage\b|\bneck\s+massager\b|\bshiatsu\s+massager\b/i,
+      String.raw`\bpistolet\s+de\s+massage\b|\bmassage\s+gun\b|\btheragun\b|\btherabody\b|\bhypervolt\b|\bhyperice\b|\brenpho\b|\btoloco\b|\bbob\s+and\s*brad\b|\bopove\b|\bbrelley\b|\baerlang\b|\bjolt\b|\bpercussion\s+(massage|massager|therapy)\b|\bmasseur\s+(musculaire|cervical|dos|shiatsu)\b|\bcoussin\s+(de\s+)?massage\b|\bneck\s+massager\b|\bshiatsu\s+massager\b`,
   },
 
   focusFr:

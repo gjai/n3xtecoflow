@@ -1,4 +1,8 @@
-import { getEditorial } from "@/sites/editorial";
+import {
+  getEditorial,
+  topicBrandRegex,
+  topicProductRegex,
+} from "@/sites/editorial";
 import type { SiteId } from "@/sites/types";
 
 export type RssItem = {
@@ -92,12 +96,12 @@ function brandPrimary(title: string, brand: RegExp) {
 }
 
 function topicBrand(siteId: SiteId) {
-  return getEditorial(siteId).topicBrandPattern;
+  return topicBrandRegex(siteId);
 }
 
 export function isRelevantItem(item: RssItem, siteId: SiteId = "ecoflow") {
   const ed = getEditorial(siteId);
-  const brand = ed.topicBrandPattern;
+  const brand = topicBrand(siteId);
   const hay = `${item.title} ${item.description}`;
   if (OFF_TOPIC_HARD.test(hay)) return false;
   if (!brand.test(hay)) return false;
@@ -106,7 +110,7 @@ export function isRelevantItem(item: RssItem, siteId: SiteId = "ecoflow") {
   }
   if (brand.test(item.title)) return brandPrimary(item.title, brand);
   if (ed.rssLenientAfterBrand) return true;
-  return ed.topicProductPattern?.test(hay) ?? false;
+  return topicProductRegex(siteId)?.test(hay) ?? false;
 }
 
 /** Post-rewrite / store guard — article must stay on the site topic. */

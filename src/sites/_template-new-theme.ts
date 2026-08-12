@@ -119,7 +119,7 @@ export const templateNewThemeSite = {
     rssLenientAfterBrand: true,
     preferAiNewsCovers: true,
     allowWeakPackshotDefault: false,
-    topicBrandPattern: /\bexemple\b|\bmarque\b/i,
+    topicBrandPattern: String.raw`\bexemple\b|\bmarque\b`,
   },
 
   focusFr: "…",

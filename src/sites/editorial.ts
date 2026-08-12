@@ -6,6 +6,16 @@ export function getEditorial(siteId: SiteId): SiteEditorialProfile {
   return getSiteById(siteId).editorial;
 }
 
+/** Compile les patterns string du profil (sérialisables Client Components). */
+export function topicBrandRegex(siteId: SiteId): RegExp {
+  return new RegExp(getEditorial(siteId).topicBrandPattern, "i");
+}
+
+export function topicProductRegex(siteId: SiteId): RegExp | null {
+  const src = getEditorial(siteId).topicProductPattern;
+  return src ? new RegExp(src, "i") : null;
+}
+
 export function siteUsesStaticBuyingGuide(siteId: SiteId): boolean {
   const site = getSiteById(siteId);
   return Boolean(

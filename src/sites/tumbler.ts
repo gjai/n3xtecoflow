@@ -146,7 +146,7 @@ export const tumblerSite: SiteConfig = {
     preferAiNewsCovers: true,
     allowWeakPackshotDefault: false,
     topicBrandPattern:
-      /\bgourde\b|\btumbler\b|\bmug\s+isotherme\b|\binsulated\s+(bottle|tumbler|mug|flask)\b|\bhydro\s*flask\b|\bstanley\b|\bqwetch\b|\bowala\b|\bthermos\b|\bsuper\s*sparrow\b|\bisotherme\b|\bwater\s*bottle\b/i,
+      String.raw`\bgourde\b|\btumbler\b|\bmug\s+isotherme\b|\binsulated\s+(bottle|tumbler|mug|flask)\b|\bhydro\s*flask\b|\bstanley\b|\bqwetch\b|\bowala\b|\bthermos\b|\bsuper\s*sparrow\b|\bisotherme\b|\bwater\s*bottle\b`,
   },
 
   focusFr: "Top ventes Amazon de gourdes isothermes (vendu par Amazon).",
