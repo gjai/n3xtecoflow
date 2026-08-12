@@ -17,8 +17,9 @@ import {
 import { categories, products, type CategoryId } from "@/data/products";
 import { comparisons, guides } from "@/data/articles";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
-import { getEcoflowEntry } from "@/lib/ecoflow/catalog-store";
+import { getEcoflowEntriesMap, getEcoflowEntry } from "@/lib/ecoflow/catalog-store";
 import { getEcoflowEditorial } from "@/lib/ecoflow/editorial-store";
+import { resolveArticlePrimaryImage } from "@/lib/article-images";
 import { resolveProductCopy } from "@/lib/product-copy";
 import { resolveProductMedia } from "@/lib/product-presentation";
 import { localeAlternates } from "@/lib/seo";
@@ -92,6 +93,18 @@ export default async function HomePage({
     ? latestComparison.en
     : latestComparison.fr;
 
+  const ecoflowMap = await getEcoflowEntriesMap();
+  const guideCover = resolveArticlePrimaryImage(
+    latestGuide.slug,
+    "guide",
+    ecoflowMap,
+  );
+  const comparisonCover = resolveArticlePrimaryImage(
+    latestComparison.slug,
+    "comparison",
+    ecoflowMap,
+  );
+
   const heroSlides: HeroSlide[] = [
     {
       id: latestNewsItem ? `news-${latestNewsItem.slug}` : "news-fallback",
@@ -120,10 +133,8 @@ export default async function HomePage({
       excerpt: guideCopy.subtitle,
       href: `/guides/${latestGuide.slug}`,
       cta: t("slideGuideCta"),
-      imageSrc: editorialImages.guides.src,
-      imageAlt: isEn
-        ? editorialImages.guides.altEn
-        : editorialImages.guides.altFr,
+      imageSrc: guideCover.src,
+      imageAlt: isEn ? guideCover.altEn : guideCover.altFr,
     },
     {
       id: `comparison-${latestComparison.slug}`,
@@ -132,10 +143,8 @@ export default async function HomePage({
       excerpt: comparisonCopy.subtitle,
       href: `/comparatifs/${latestComparison.slug}`,
       cta: t("slideComparisonCta"),
-      imageSrc: editorialImages.comparatifs.src,
-      imageAlt: isEn
-        ? editorialImages.comparatifs.altEn
-        : editorialImages.comparatifs.altFr,
+      imageSrc: comparisonCover.src,
+      imageAlt: isEn ? comparisonCover.altEn : comparisonCover.altFr,
     },
     {
       id: `product-${latestProduct.slug}`,

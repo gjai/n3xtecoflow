@@ -1,20 +1,12 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
-import { CoverImage } from "@/components/CoverImage";
+import { ArticleCover } from "@/components/ArticleCover";
 import { guides } from "@/data/articles";
 import { editorialImages } from "@/data/images";
+import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
+import { resolveArticleProductImages } from "@/lib/article-images";
 import { localeAlternates } from "@/lib/seo";
-
-function guideImage(slug: string) {
-  if (slug.includes("camping") || slug.includes("van")) {
-    return editorialImages.camping;
-  }
-  if (slug.includes("backup") || slug.includes("maison")) {
-    return editorialImages.backup;
-  }
-  return editorialImages.guides;
-}
 
 export async function generateMetadata({
   params,
@@ -40,6 +32,7 @@ export default async function GuidesIndexPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const isEn = locale === "en";
+  const ecoflowMap = await getEcoflowEntriesMap();
 
   return (
     <div className="pt-6">
@@ -56,14 +49,16 @@ export default async function GuidesIndexPage({
       <div className="mx-auto grid max-w-6xl gap-6 px-5 pb-16 md:grid-cols-2 md:px-8">
         {guides.map((guide) => {
           const copy = isEn ? guide.en : guide.fr;
+          const images = resolveArticleProductImages(guide.slug, ecoflowMap);
           return (
             <Link
               key={guide.slug}
               href={`/guides/${guide.slug}`}
               className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
             >
-              <CoverImage
-                image={guideImage(guide.slug)}
+              <ArticleCover
+                images={images}
+                fallback={editorialImages.guides}
                 locale={locale}
                 className="aspect-[16/9] w-full"
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -81,8 +76,9 @@ export default async function GuidesIndexPage({
           href="/produits"
           className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
         >
-          <CoverImage
-            image={editorialImages.comparatifs}
+          <ArticleCover
+            images={resolveArticleProductImages("choisir-station", ecoflowMap)}
+            fallback={editorialImages.comparatifs}
             locale={locale}
             className="aspect-[16/9] w-full"
             sizes="(max-width: 768px) 100vw, 50vw"
