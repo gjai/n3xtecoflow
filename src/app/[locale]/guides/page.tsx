@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { CoverImage } from "@/components/CoverImage";
 import { guides } from "@/data/articles";
 import { editorialImages } from "@/data/images";
+import { localeAlternates } from "@/lib/seo";
 
 function guideImage(slug: string) {
   if (slug.includes("camping") || slug.includes("van")) {
@@ -27,6 +28,7 @@ export async function generateMetadata({
       locale === "en"
         ? "EcoFlow buying guides: stations, solar, home backup, camping."
         : "Guides d'achat EcoFlow : stations, solaire, backup maison, camping.",
+    alternates: localeAlternates(locale, "/guides"),
   };
 }
 
@@ -40,7 +42,7 @@ export default async function GuidesIndexPage({
   const isEn = locale === "en";
 
   return (
-    <div className="pt-24">
+    <div className="pt-6">
       <header className="mx-auto max-w-6xl px-5 py-12 md:px-8">
         <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold md:text-5xl">
           {isEn ? "Buying guides" : "Guides d'achat"}

@@ -6,9 +6,9 @@ import { SmartCover } from "@/components/SmartCover";
 import { editorialImages } from "@/data/images";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 import { paginate, parsePageParam } from "@/lib/pagination";
+import { localeAlternates } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 600;
 
 const PAGE_SIZE = 12;
 
@@ -25,7 +25,9 @@ export async function generateMetadata({
   const page = parsePageParam(pageRaw);
   return {
     title: page > 1 ? `${t("title")} · ${page}` : t("title"),
+    description: t("subtitle"),
     robots: page > 1 ? { index: false, follow: true } : undefined,
+    alternates: localeAlternates(locale, "/actualites"),
   };
 }
 
@@ -50,7 +52,7 @@ export default async function NewsIndexPage({
   const isEn = locale === "en";
 
   return (
-    <div className="mx-auto max-w-6xl px-5 pb-16 pt-28 md:px-8">
+    <div className="mx-auto max-w-6xl px-5 pb-16 pt-10 md:px-8">
       <header className="max-w-3xl">
         <p className="text-xs uppercase tracking-[0.22em] text-[var(--accent)]">
           {t("eyebrow")}

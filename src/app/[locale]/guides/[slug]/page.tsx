@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleBody } from "@/components/ArticleBody";
 import { getGuide, guides } from "@/data/articles";
+import { localeAlternates } from "@/lib/seo";
 
 export function generateStaticParams() {
   return guides.flatMap((g) =>
@@ -19,7 +20,11 @@ export async function generateMetadata({
   const guide = getGuide(slug);
   if (!guide) return {};
   const copy = locale === "en" ? guide.en : guide.fr;
-  return { title: copy.title, description: copy.subtitle };
+  return {
+    title: copy.title,
+    description: copy.subtitle,
+    alternates: localeAlternates(locale, `/guides/${slug}`),
+  };
 }
 
 export default async function GuideArticlePage({
@@ -36,7 +41,7 @@ export default async function GuideArticlePage({
 
   return (
     <article>
-      <header className="hero-grid border-b border-[var(--line)] pt-24">
+      <header className="hero-grid border-b border-[var(--line)]">
         <div className="mx-auto max-w-3xl px-5 py-14 md:px-8">
           <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold md:text-5xl">
             {copy.title}

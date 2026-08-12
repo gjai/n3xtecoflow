@@ -29,6 +29,11 @@ export function buildAmazonProductUrl(asin: string, tag?: string): string {
   return `https://www.amazon.fr/dp/${asin}?${params.toString()}`;
 }
 
+/** Affiliates-friendly product image (Amazon CDN). */
+export function amazonProductImageUrl(asin: string, size = 500): string {
+  return `https://m.media-amazon.com/images/P/${asin}.01._SCLZZZZZZZ_SX${size}_.jpg`;
+}
+
 /** Prefer ASIN deep-link when known; otherwise Amazon search. */
 export function amazonHrefForProduct(product: {
   amazonAsin?: string;

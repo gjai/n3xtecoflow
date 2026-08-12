@@ -86,7 +86,7 @@ export function HeroSlider({
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--hero-from)]/80 via-transparent to-[var(--hero-from)]/30" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[68svh] max-w-6xl flex-col justify-end px-5 pb-10 pt-24 md:min-h-[62svh] md:justify-center md:px-8 md:pb-14">
+      <div className="relative mx-auto flex min-h-[68svh] max-w-6xl flex-col justify-end px-5 pb-10 pt-10 md:min-h-[62svh] md:justify-center md:px-8 md:pb-14">
         <p className="reveal font-[family-name:var(--font-display)] text-sm uppercase tracking-[0.28em] text-[var(--accent)]">
           {brandName}
         </p>
@@ -116,7 +116,7 @@ export function HeroSlider({
         </div>
 
         {count > 1 ? (
-          <div className="mt-6 flex items-center gap-3">
+          <div className="mt-6 flex items-center gap-2">
             {slides.map((slide, i) => (
               <button
                 key={slide.id}
@@ -124,12 +124,16 @@ export function HeroSlider({
                 aria-label={`${slide.kind}: ${slide.title}`}
                 aria-current={i === index}
                 onClick={() => setIndex(i)}
-                className={`h-1.5 transition-all duration-300 ${
-                  i === index
-                    ? "w-10 bg-[var(--accent)]"
-                    : "w-4 bg-[var(--hero-border)] hover:bg-[var(--hero-muted)]"
-                }`}
-              />
+                className="flex min-h-11 min-w-11 items-center justify-center"
+              >
+                <span
+                  className={`block h-1.5 transition-all duration-300 ${
+                    i === index
+                      ? "w-10 bg-[var(--accent)]"
+                      : "w-4 bg-[var(--hero-border)]"
+                  }`}
+                />
+              </button>
             ))}
           </div>
         ) : null}

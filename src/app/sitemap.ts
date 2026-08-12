@@ -7,16 +7,27 @@ import { categories, products } from "@/data/products";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
 
+/** Refresh sitemap periodically so ingested news appear without full rebuild. */
+export const revalidate = 3600;
+
 function loadNewsSlugs(): { slug: string; publishedAt: string }[] {
-  try {
-    const raw = readFileSync(join(process.cwd(), "data", "news.json"), "utf8");
-    const store = JSON.parse(raw) as {
-      articles?: { slug: string; publishedAt: string }[];
-    };
-    return store.articles || [];
-  } catch {
-    return [];
+  const candidates = [
+    process.env.NEWS_DATA_PATH?.trim(),
+    join(process.cwd(), "data", "news.json"),
+  ].filter(Boolean) as string[];
+
+  for (const file of candidates) {
+    try {
+      const raw = readFileSync(file, "utf8");
+      const store = JSON.parse(raw) as {
+        articles?: { slug: string; publishedAt: string }[];
+      };
+      return store.articles || [];
+    } catch {
+      /* try next */
+    }
   }
+  return [];
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {

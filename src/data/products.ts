@@ -198,6 +198,7 @@ export const products: Product[] = [
     weightKg: 3.5,
     amazonQuery: "EcoFlow RIVER 2",
     amazonAsin: "B0BFQC1CNQ",
+    imageSrc: "https://m.media-amazon.com/images/P/B0BFQC1CNQ.01._SCLZZZZZZZ_SX500_.jpg",
     specs: [
       { label: "Capacité", value: "256 Wh" },
       { label: "Sortie AC", value: "300 W (600 W surge)" },
@@ -248,6 +249,7 @@ export const products: Product[] = [
     weightKg: 6.0,
     amazonQuery: "EcoFlow RIVER 2 Max",
     amazonAsin: "B0BFQB86ZL",
+    imageSrc: "https://m.media-amazon.com/images/P/B0BFQB86ZL.01._SCLZZZZZZZ_SX500_.jpg",
     specs: [
       { label: "Capacité", value: "512 Wh" },
       { label: "Sortie AC", value: "500 W (1 000 W surge)" },
@@ -297,6 +299,7 @@ export const products: Product[] = [
     weightKg: 7.8,
     amazonQuery: "EcoFlow RIVER 2 Pro",
     amazonAsin: "B0BFQD5RMJ",
+    imageSrc: "https://m.media-amazon.com/images/P/B0BFQD5RMJ.01._SCLZZZZZZZ_SX500_.jpg",
     specs: [
       { label: "Capacité", value: "768 Wh" },
       { label: "Sortie AC", value: "800 W (1 600 W surge)" },
@@ -345,6 +348,7 @@ export const products: Product[] = [
     weightKg: 3.5,
     amazonQuery: "EcoFlow RIVER 3",
     amazonAsin: "B0DJY2R42F",
+    imageSrc: "https://m.media-amazon.com/images/P/B0DJY2R42F.01._SCLZZZZZZZ_SX500_.jpg",
     specs: [
       { label: "Capacité", value: "245 Wh" },
       { label: "Sortie AC", value: "300 W" },
@@ -442,6 +446,7 @@ export const products: Product[] = [
     expandable: true,
     amazonQuery: "EcoFlow DELTA 2",
     amazonAsin: "B0BBLV8WJH",
+    imageSrc: "https://m.media-amazon.com/images/P/B0BBLV8WJH.01._SCLZZZZZZZ_SX500_.jpg",
     specs: [
       { label: "Capacité", value: "1 024 Wh" },
       { label: "Sortie AC", value: "1 800 W" },
@@ -491,6 +496,7 @@ export const products: Product[] = [
     expandable: true,
     amazonQuery: "EcoFlow DELTA 2 Max",
     amazonAsin: "B0C4F83WTX",
+    imageSrc: "https://m.media-amazon.com/images/P/B0C4F83WTX.01._SCLZZZZZZZ_SX500_.jpg",
     specs: [
       { label: "Capacité", value: "2 048 Wh" },
       { label: "Sortie AC", value: "2 400 W" },
@@ -538,6 +544,7 @@ export const products: Product[] = [
     expandable: true,
     amazonQuery: "EcoFlow DELTA 3 Classic",
     amazonAsin: "B0GMCHYHQR",
+    imageSrc: "https://m.media-amazon.com/images/P/B0GMCHYHQR.01._SCLZZZZZZZ_SX500_.jpg",
     specs: [
       { label: "Capacité", value: "≈ 1 kWh classe" },
       { label: "Sortie AC", value: "≈ 1 800 W" },
@@ -583,6 +590,7 @@ export const products: Product[] = [
     expandable: true,
     amazonQuery: "EcoFlow DELTA 3 Plus",
     amazonAsin: "B0DFPW2Y2C",
+    imageSrc: "https://m.media-amazon.com/images/P/B0DFPW2Y2C.01._SCLZZZZZZZ_SX500_.jpg",
     specs: [
       { label: "Capacité", value: "≈ 1 024 Wh (expansible)" },
       { label: "Sortie AC", value: "jusqu’à ≈ 2 600 W" },
@@ -674,6 +682,7 @@ export const products: Product[] = [
     expandable: true,
     amazonQuery: "EcoFlow DELTA 3 Max Plus",
     amazonAsin: "B0FXFLZHVD",
+    imageSrc: "https://m.media-amazon.com/images/P/B0FXFLZHVD.01._SCLZZZZZZZ_SX500_.jpg",
     specs: [
       { label: "Capacité", value: "2 048 Wh" },
       { label: "Sortie AC", value: "≈ 3 000 W (6 000 W surge)" },
@@ -811,6 +820,7 @@ export const products: Product[] = [
     expandable: true,
     amazonQuery: "EcoFlow DELTA Pro 3",
     amazonAsin: "B0DDKP47PY",
+    imageSrc: "https://m.media-amazon.com/images/P/B0DDKP47PY.01._SCLZZZZZZZ_SX500_.jpg",
     specs: [
       { label: "Capacité", value: "4 096 Wh" },
       { label: "Sortie AC", value: "≈ 4 000 W" },
@@ -1298,6 +1308,7 @@ export const products: Product[] = [
     battery: "N/A",
     amazonQuery: "EcoFlow STREAM micro onduleur",
     amazonAsin: "B0F2FTSZKG",
+    imageSrc: "https://m.media-amazon.com/images/P/B0F2FTSZKG.01._SCLZZZZZZZ_SX500_.jpg",
     specs: [
       { label: "Type", value: "Micro-onduleur" },
       { label: "Puissance", value: "≈ 800 W" },
@@ -1414,6 +1425,7 @@ export const products: Product[] = [
     battery: "Compatible stations EcoFlow",
     amazonQuery: "EcoFlow GLACIER",
     amazonAsin: "B0F98GYQDH",
+    imageSrc: "https://m.media-amazon.com/images/P/B0F98GYQDH.01._SCLZZZZZZZ_SX500_.jpg",
     specs: [
       { label: "Type", value: "Réfrigérateur-congélateur portable" },
       { label: "Autonomie", value: "jusqu’à ≈ 43 h (selon config)" },

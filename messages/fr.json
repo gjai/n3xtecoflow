@@ -13,7 +13,9 @@
     "contact": "Contact",
     "language": "Langue",
     "about": "À propos",
-    "news": "Actualités"
+    "news": "Actualités",
+    "openMenu": "Menu",
+    "closeMenu": "Fermer"
   },
   "notFound": {
     "title": "Page introuvable",
@@ -132,9 +134,13 @@
     "affiliateTitle": "Affiliation & publicité",
     "independent": "EcoFlow Stream est un site éditorial indépendant. Il n'est pas exploité par EcoFlow Inc. ni par Amazon.",
     "publisherTitle": "Éditeur du site",
+    "publisherName": "Julien Gauthier — entrepreneur individuel (enseigne N3XT)",
+    "publisherAddress": "28 chemin des Crozeaux, 38690 Bizonnes, France",
+    "publisherDirector": "Directeur de la publication : Julien Gauthier",
+    "publisherTva": "TVA intracommunautaire : FR48 799 239 660",
     "siren": "SIREN : 799 239 660",
     "hostTitle": "Hébergeur",
-    "hostBody": "OVH SAS\n2 rue Kellermann\n59100 Roubaix\nFrance\nhttps://www.ovhcloud.com",
+    "hostBody": "Serveur VPS géré via Coolify, hébergé chez OVH SAS\n2 rue Kellermann\n59100 Roubaix\nFrance\nhttps://www.ovhcloud.com",
     "amazon": "En tant que Partenaire Amazon, nous réalisons un bénéfice sur les achats remplissant les conditions requises.",
     "adsense": "Ce site peut afficher des annonces Google AdSense. Google peut utiliser des cookies pour personnaliser les pubs, uniquement après votre consentement.",
     "contactViaForm": "Pour nous contacter, utilisez le",
@@ -175,7 +181,11 @@
     "cookies": "Cookies",
     "manageCookies": "Gérer les cookies",
     "rights": "© {year} EcoFlow Stream",
-    "news": "Actualités"
+    "news": "Actualités",
+    "products": "Produits",
+    "guides": "Guides",
+    "comparisons": "Comparatifs",
+    "powerstream": "PowerStream"
   },
   "amazon": {
     "badge": "Lien affilié Amazon",
@@ -215,6 +225,7 @@
   "news": {
     "eyebrow": "Revue de presse",
     "title": "Actualités EcoFlow",
+    "subtitle": "Synthèses éditoriales sur l’écosystème EcoFlow : stations, STREAM, solaire et outdoor.",
     "empty": "Aucune actu pour le moment — le prochain passage automatique va peupler cette section.",
     "read": "Lire l’article",
     "back": "Toutes les actualités",

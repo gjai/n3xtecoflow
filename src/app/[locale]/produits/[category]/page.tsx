@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { CoverImage } from "@/components/CoverImage";
 import { getCategoryImage } from "@/data/images";
 import { getAmazonOffersMap } from "@/lib/amazon/price-store";
+import { localeAlternates } from "@/lib/seo";
 import {
   categories,
   getCategory,
@@ -28,7 +29,11 @@ export async function generateMetadata({
   const cat = getCategory(category);
   if (!cat) return {};
   const copy = getLocalizedCategory(cat, locale);
-  return { title: copy.title, description: copy.intro };
+  return {
+    title: copy.title,
+    description: copy.intro,
+    alternates: localeAlternates(locale, `/produits/${category}`),
+  };
 }
 
 export default async function CategoryPage({
@@ -47,7 +52,7 @@ export default async function CategoryPage({
   const offers = await getAmazonOffersMap();
 
   return (
-    <div className="pt-24">
+    <div className="pt-6">
       <header className="mx-auto max-w-6xl px-5 py-12 md:px-8">
         <p className="text-sm text-[var(--muted)]">
           <Link href="/produits" className="hover:text-[var(--heading)]">

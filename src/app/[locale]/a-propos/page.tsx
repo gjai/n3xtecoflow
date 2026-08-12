@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { JsonLd, organizationJsonLd } from "@/components/JsonLd";
+import { localeAlternates } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -13,6 +14,7 @@ export async function generateMetadata({
   return {
     title: t("title"),
     description: t("meta"),
+    alternates: localeAlternates(locale, "/a-propos"),
   };
 }
 
@@ -28,7 +30,7 @@ export default async function AboutPage({
     process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
 
   return (
-    <article className="mx-auto max-w-3xl px-5 pb-16 pt-28 md:px-8">
+    <article className="mx-auto max-w-3xl px-5 pb-16 pt-10 md:px-8">
       <JsonLd
         data={{
           ...organizationJsonLd(siteUrl),

@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { CoverImage } from "@/components/CoverImage";
 import { comparisons } from "@/data/articles";
 import { editorialImages } from "@/data/images";
+import { localeAlternates } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -17,6 +18,7 @@ export async function generateMetadata({
       locale === "en"
         ? "EcoFlow comparisons: RIVER vs DELTA, DELTA 2 vs 3, PowerStream vs station."
         : "Comparatifs EcoFlow : RIVER vs DELTA, DELTA 2 vs 3, PowerStream vs station.",
+    alternates: localeAlternates(locale, "/comparatifs"),
   };
 }
 
@@ -30,7 +32,7 @@ export default async function ComparisonsIndexPage({
   const isEn = locale === "en";
 
   return (
-    <div className="pt-24">
+    <div className="pt-6">
       <header className="mx-auto max-w-6xl px-5 py-12 md:px-8">
         <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold md:text-5xl">
           {isEn ? "Comparisons" : "Comparatifs"}

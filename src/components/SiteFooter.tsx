@@ -27,6 +27,18 @@ export function SiteFooter() {
           <p className="mt-2 max-w-md text-sm text-[var(--muted)]">{blurb}</p>
         </div>
         <div className="flex flex-wrap gap-4 text-sm">
+          <Link href="/produits" className="hover:text-[var(--heading)]">
+            {t("products")}
+          </Link>
+          <Link href="/guides" className="hover:text-[var(--heading)]">
+            {t("guides")}
+          </Link>
+          <Link href="/comparatifs" className="hover:text-[var(--heading)]">
+            {t("comparisons")}
+          </Link>
+          <Link href="/powerstream" className="hover:text-[var(--heading)]">
+            {t("powerstream")}
+          </Link>
           <Link href="/actualites" className="hover:text-[var(--heading)]">
             {t("news")}
           </Link>

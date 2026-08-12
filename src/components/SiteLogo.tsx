@@ -12,10 +12,7 @@ type SiteLogoProps = {
 export function SiteLogo({ variant = "header", className = "" }: SiteLogoProps) {
   const site = useSite();
   const mark = site.brand.logoMark || site.brand.icons.favicon;
-  const textClass =
-    variant === "header"
-      ? "text-[var(--hero-fg)]"
-      : "text-[var(--heading)]";
+  const textClass = "text-[var(--heading)]";
 
   return (
     <span

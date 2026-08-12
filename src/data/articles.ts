@@ -62,6 +62,13 @@ export const guides: GuideArticle[] = [
             "Vérifiez la compatibilité exacte des extras (câbles, série).",
           ],
         },
+        {
+          heading: "6. STREAM / PowerStream : cas à part",
+          paragraphs: [
+            "Ces produits ciblent l’autoconsommation balcon/maison (injection + éventuellement stockage), pas le camping.",
+            "Ne les comparez pas à une RIVER sur le critère “Wh nomades” : le job est de réduire la facture, pas de déplacer 2 kWh dans un sac.",
+          ],
+        },
       ],
     },
     en: {
@@ -72,19 +79,21 @@ export const guides: GuideArticle[] = [
           heading: "1. Split capacity (Wh) and power (W)",
           paragraphs: [
             "Wh is stored energy (how long). W is instantaneous power (what can start).",
-            "Example: a 120 W fridge for 10 h ≈ 1,200 Wh theoretical. Add 20–30% margin.",
+            "Example: a 120 W fridge for 10 h ≈ 1,200 Wh theoretical. Add 20–30% margin (cold starts, inverter losses).",
             "A 1,200 W microwave needs enough AC output even if used briefly.",
           ],
         },
         {
           heading: "2. List critical loads",
           paragraphs: [
-            "Group into must-have, comfort, and excluded loads. Measure with a wattmeter when possible.",
+            "Group into must-have (router, fridge, lights, phone), comfort (TV, kettle), and excluded (oven, dryer).",
+            "Measure with a wattmeter when possible—nameplate ratings are often optimistic.",
           ],
           bullets: [
             "Router + Wi-Fi: 10–30 W",
             "Efficient fridge: 50–150 W average cycling",
             "Laptop: 40–90 W",
+            "Boiler pump: check the plate",
           ],
         },
         {
@@ -93,19 +102,28 @@ export const guides: GuideArticle[] = [
             "RIVER: mobility and small devices.",
             "DELTA: light home / van / DIY versatility.",
             "DELTA Pro: serious backup and multi-kWh.",
-            "PowerStream: balcony solar / self-consumption, not a station replacement.",
+            "PowerStream / STREAM: balcony solar / self-consumption—not a camping station replacement.",
           ],
         },
         {
           heading: "4. Solar and recharge time",
           paragraphs: [
-            "Match panel watts to the station’s solar input and real sun conditions.",
+            "Match panel watts to the station’s solar input and real sun (orientation, season, shade).",
+            "A DELTA with 500 W solar input stays slow with a single 100 W panel—align panels to the input.",
           ],
         },
         {
           heading: "5. Expansion vs stepping up a model",
           paragraphs: [
             "Sometimes station + extra battery beats jumping tiers while keeping the same inverter output.",
+            "Confirm exact extra-battery compatibility (cables, series).",
+          ],
+        },
+        {
+          heading: "6. STREAM / PowerStream: a different job",
+          paragraphs: [
+            "These target home/balcony self-consumption (grid injection ± storage), not camping.",
+            "Do not compare them to a RIVER on “nomadic Wh”—the goal is bill reduction, not carrying 2 kWh in a bag.",
           ],
         },
       ],
@@ -333,6 +351,90 @@ export const guides: GuideArticle[] = [
       ],
     },
   },
+  {
+    slug: "stream-balcon",
+    fr: {
+      title: "Guide STREAM balcon : Ultra X, Pro, Max",
+      subtitle:
+        "Choisir un kit plug-in EcoFlow STREAM pour réduire la facture sans chantier lourd.",
+      sections: [
+        {
+          heading: "Ce que STREAM fait (et ne fait pas)",
+          paragraphs: [
+            "STREAM combine production solaire (panneaux + micro-onduleur) et, selon le modèle, stockage batterie pour consommer plus tard.",
+            "Ce n’est pas une station camping : l’objectif est l’autoconsommation maison/balcon, avec contraintes de puissance injectée et règles locales.",
+          ],
+        },
+        {
+          heading: "Ultra X vs Pro vs Max",
+          paragraphs: [
+            "Ultra X : flagship stockage (~3,84 kWh) + multi-MPPT, pour foyers ambitieux.",
+            "Pro / Max : entrée plus progressive (~1,92 kWh classe), utiles pour tester puis scaler.",
+            "Micro-onduleur seul : pertinent si vous voulez d’abord injecter sans batterie.",
+          ],
+        },
+        {
+          heading: "Checklist avant achat",
+          paragraphs: [
+            "Exposition réelle (ombre, orientation), puissance déclarable (souvent ≤ 800 W injectés en FR sans formalités lourdes — vérifiez Enedis/consuel selon config).",
+            "Fixation balcon/toit, longueur de câble, et politique de la copropriété.",
+            "Décidez si vous voulez stocker (nuit / heures creuses) ou seulement injecter en journée.",
+          ],
+          bullets: [
+            "Estimer kWh/jour utiles vs facture",
+            "Vérifier limites d’injection locales",
+            "Prévoir évolution (2ᵉ batterie / panneaux)",
+          ],
+        },
+        {
+          heading: "STREAM vs PowerStream",
+          paragraphs: [
+            "Pour un setup neuf en France, STREAM est la gamme poussée actuellement. PowerStream reste intéressant en occasion ou pour coupler une station DELTA déjà possédée.",
+          ],
+        },
+      ],
+    },
+    en: {
+      title: "STREAM balcony guide: Ultra X, Pro, Max",
+      subtitle:
+        "Pick an EcoFlow STREAM plug-in kit to cut bills without heavy works.",
+      sections: [
+        {
+          heading: "What STREAM does (and doesn’t)",
+          paragraphs: [
+            "STREAM combines solar production (panels + micro-inverter) and, depending on model, battery storage for later use.",
+            "It is not a camping station: the job is home/balcony self-consumption under local injection rules.",
+          ],
+        },
+        {
+          heading: "Ultra X vs Pro vs Max",
+          paragraphs: [
+            "Ultra X: flagship storage (~3.84 kWh) + multi-MPPT for ambitious homes.",
+            "Pro / Max: more gradual entry (~1.92 kWh class) to trial then scale.",
+            "Micro-inverter only: useful if you want daytime injection first, without a battery.",
+          ],
+        },
+        {
+          heading: "Pre-buy checklist",
+          paragraphs: [
+            "Real sun (shade, orientation), declarable injection power, balcony/roof mounting, cable runs, and landlord/HOA rules.",
+            "Decide whether you need storage (night / off-peak) or daytime injection only.",
+          ],
+          bullets: [
+            "Estimate useful kWh/day vs your bill",
+            "Check local injection limits",
+            "Plan expansion (2nd battery / panels)",
+          ],
+        },
+        {
+          heading: "STREAM vs PowerStream",
+          paragraphs: [
+            "For a new FR setup, STREAM is the current push. PowerStream still fits used gear or pairing with an existing DELTA station.",
+          ],
+        },
+      ],
+    },
+  },
 ];
 
 export const comparisons: GuideArticle[] = [
@@ -360,6 +462,13 @@ export const comparisons: GuideArticle[] = [
           heading: "Erreur fréquente",
           paragraphs: [
             "Acheter une RIVER “parce que moins cher” puis constater qu’elle ne démarre pas l’appareil principal. Dimensionnez d’abord les W.",
+            "Deuxième piège : oublier le pic de démarrage (compresseur, pompe). Une sortie 300 W nominale peut échouer sur un moteur 200 W au démarrage.",
+          ],
+        },
+        {
+          heading: "Règle rapide",
+          paragraphs: [
+            "Si votre charge critique dépasse ~500 W ou 1 kWh/jour, partez DELTA. Sinon une RIVER 2/3 reste souvent le meilleur rapport mobilité/prix.",
           ],
         },
       ],
@@ -371,19 +480,30 @@ export const comparisons: GuideArticle[] = [
         {
           heading: "Pick RIVER if…",
           paragraphs: [
-            "You prioritize weight, short weekends, and electronics.",
+            "You prioritize weight (< 8 kg), short weekends, and electronics.",
+            "RIVER 2 / 3 excel as ultralight packs; RIVER 3 Plus is the better portable AC option in the line.",
           ],
+          bullets: ["RIVER 2 / 3: ultralight", "RIVER 3 Plus: stronger portable AC"],
         },
         {
           heading: "Pick DELTA if…",
           paragraphs: [
             "You run a 230 V fridge, tools, or multi-hour router+fridge backup.",
+            "DELTA 2 remains a strong entry; DELTA 3 Max is the practical 2 kWh sweet spot for many homes/vans.",
           ],
+          bullets: ["DELTA 2: proven entry", "DELTA 3 Max: ~2 kWh sweet spot"],
         },
         {
           heading: "Common mistake",
           paragraphs: [
             "Buying RIVER for price then discovering it cannot start the main appliance. Size watts first.",
+            "Also watch surge/startup: a 300 W continuous outlet can fail on a 200 W motor at startup.",
+          ],
+        },
+        {
+          heading: "Quick rule",
+          paragraphs: [
+            "If your critical load exceeds ~500 W or ~1 kWh/day, start with DELTA. Otherwise RIVER 2/3 is often the best mobility/price trade-off.",
           ],
         },
       ],
@@ -456,6 +576,13 @@ export const comparisons: GuideArticle[] = [
           heading: "Passer Pro si…",
           paragraphs: [
             "Vous visez multi-kWh, intégration tableau, charges simultanées élevées, ou autonomie multi-jours.",
+            "Le Smart Home Panel (ou équivalent) change la nature du système : ce n’est plus une multiprise géante, c’est un vrai secours de circuits.",
+          ],
+        },
+        {
+          heading: "Budget & complexité",
+          paragraphs: [
+            "DELTA Pro implique plus de poids, plus d’espace, et souvent un installateur. Si vous bougez la station chaque week-end, restez DELTA “classique”.",
           ],
         },
       ],
@@ -468,12 +595,20 @@ export const comparisons: GuideArticle[] = [
           heading: "DELTA is enough if…",
           paragraphs: [
             "You need hours to ~48 h on priority loads and move the station often.",
+            "DELTA 2 / 3 cover most van + light-home scenarios without panel integration.",
           ],
         },
         {
           heading: "Go Pro if…",
           paragraphs: [
             "You need multi-kWh, panel integration, high simultaneous loads, or multi-day autonomy.",
+            "A Smart Home Panel turns the system into circuit-level backup—not just a giant power strip.",
+          ],
+        },
+        {
+          heading: "Budget & complexity",
+          paragraphs: [
+            "DELTA Pro means more weight, more space, and often a pro installer. If you move the station every weekend, stay with classic DELTA.",
           ],
         },
       ],

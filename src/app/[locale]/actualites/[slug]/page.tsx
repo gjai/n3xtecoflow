@@ -3,12 +3,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { articleJsonLd, JsonLd } from "@/components/JsonLd";
+import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { SmartCover } from "@/components/SmartCover";
 import { editorialImages } from "@/data/images";
 import { getNewsBySlug, readNewsStore } from "@/lib/news/store";
+import { localeAlternates } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 600;
 
 export async function generateMetadata({
   params,
@@ -23,6 +24,7 @@ export async function generateMetadata({
   return {
     title: copy.title,
     description: copy.excerpt,
+    alternates: localeAlternates(locale, `/actualites/${slug}`),
     openGraph: article.imageSrc
       ? { images: [{ url: article.imageSrc }] }
       : undefined,
@@ -60,7 +62,7 @@ export default async function NewsArticlePage({
           locale,
         })}
       />
-      <header className="hero-grid border-b border-[var(--line)] pt-24">
+      <header className="hero-grid border-b border-[var(--line)]">
         <div className="mx-auto max-w-3xl px-5 py-14 md:px-8">
           <Link
             href="/actualites"
@@ -102,6 +104,7 @@ export default async function NewsArticlePage({
         {copy.body.map((p) => (
           <p key={p.slice(0, 48)}>{p}</p>
         ))}
+        <AffiliateDisclosure compact />
         <p className="border-t border-[var(--line)] pt-6">
           <a
             href={article.sourceUrl}

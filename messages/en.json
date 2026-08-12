@@ -13,7 +13,9 @@
     "contact": "Contact",
     "language": "Language",
     "about": "About",
-    "news": "News"
+    "news": "News",
+    "openMenu": "Menu",
+    "closeMenu": "Close"
   },
   "notFound": {
     "title": "Page not found",
@@ -132,9 +134,13 @@
     "affiliateTitle": "Affiliate & advertising",
     "independent": "EcoFlow Stream is an independent editorial site. It is not operated by EcoFlow Inc. or Amazon.",
     "publisherTitle": "Publisher",
+    "publisherName": "Julien Gauthier — sole trader (trade name N3XT)",
+    "publisherAddress": "28 chemin des Crozeaux, 38690 Bizonnes, France",
+    "publisherDirector": "Publication director: Julien Gauthier",
+    "publisherTva": "EU VAT: FR48 799 239 660",
     "siren": "SIREN: 799 239 660",
     "hostTitle": "Hosting provider",
-    "hostBody": "OVH SAS\n2 rue Kellermann\n59100 Roubaix\nFrance\nhttps://www.ovhcloud.com",
+    "hostBody": "VPS managed with Coolify, hosted by OVH SAS\n2 rue Kellermann\n59100 Roubaix\nFrance\nhttps://www.ovhcloud.com",
     "amazon": "As an Amazon Associate, we earn from qualifying purchases.",
     "adsense": "This site may show Google AdSense ads. Google may use cookies to personalize ads, only after your consent.",
     "contactViaForm": "To reach us, use the",
@@ -175,7 +181,11 @@
     "manageCookies": "Manage cookies",
     "rights": "© {year} EcoFlow Stream",
     "about": "About",
-    "news": "News"
+    "news": "News",
+    "products": "Products",
+    "guides": "Guides",
+    "comparisons": "Comparisons",
+    "powerstream": "PowerStream"
   },
   "amazon": {
     "badge": "Amazon affiliate link",
@@ -215,6 +225,7 @@
   "news": {
     "eyebrow": "Press roundup",
     "title": "EcoFlow news",
+    "subtitle": "Editorial roundups on the EcoFlow ecosystem: stations, STREAM, solar and outdoor.",
     "empty": "No news yet — the next automated run will fill this section.",
     "read": "Read article",
     "back": "All news",

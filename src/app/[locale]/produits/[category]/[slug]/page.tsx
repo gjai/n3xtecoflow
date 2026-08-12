@@ -9,11 +9,13 @@ import { JsonLd, productJsonLd } from "@/components/JsonLd";
 import { getCategoryImage } from "@/data/images";
 import { amazonHrefForProduct } from "@/lib/amazon";
 import { getAmazonOffer } from "@/lib/amazon/price-store";
+import { localeAlternates, localizeSpecs } from "@/lib/seo";
 import {
   getCategory,
   getLocalizedCategory,
   getLocalizedProduct,
   getProduct,
+  getProductsByCategory,
   products,
 } from "@/data/products";
 
@@ -41,13 +43,7 @@ export async function generateMetadata({
   return {
     title: `${product.name} — ${copy.tagline}`,
     description: copy.summary,
-    alternates: {
-      canonical: `/${locale}/produits/${category}/${slug}`,
-      languages: {
-        fr: `/fr/produits/${category}/${slug}`,
-        en: `/en/produits/${category}/${slug}`,
-      },
-    },
+    alternates: localeAlternates(locale, `/produits/${category}/${slug}`),
     openGraph: {
       title: product.name,
       description: copy.summary,
@@ -83,9 +79,13 @@ export default async function ProductPage({
       ? `Amazon.fr price · updated ${new Date(offer.updatedAt).toLocaleString("en-GB")}`
       : `Prix Amazon.fr · maj. ${new Date(offer.updatedAt).toLocaleString("fr-FR")}`
     : undefined;
+  const specs = localizeSpecs(product.specs, locale);
+  const related = getProductsByCategory(product.category)
+    .filter((p) => p.slug !== product.slug)
+    .slice(0, 4);
 
   return (
-    <article className="pt-24">
+    <article>
       <JsonLd
         data={productJsonLd({
           siteUrl,
@@ -133,7 +133,7 @@ export default async function ProductPage({
                     altFr: product.name,
                     altEn: product.name,
                     credit: "Produit",
-                    creditUrl: "#",
+                    creditUrl: amazonHref,
                   }
                 : image
             }
@@ -189,6 +189,25 @@ export default async function ProductPage({
             priceHint={priceHint}
             availability={offer?.availability}
           />
+          {related.length > 0 ? (
+            <section>
+              <h2 className="font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">
+                {isEn ? "Related in this range" : "Dans la même gamme"}
+              </h2>
+              <ul className="mt-4 space-y-2">
+                {related.map((item) => (
+                  <li key={item.slug}>
+                    <Link
+                      href={`/produits/${item.category}/${item.slug}`}
+                      className="text-[var(--accent)] underline-offset-2 hover:underline"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
         </div>
 
         <aside className="h-fit border border-[var(--line)] bg-[var(--surface)] p-5">
@@ -196,13 +215,13 @@ export default async function ProductPage({
             {isEn ? "Technical specs" : "Caractéristiques techniques"}
           </h2>
           <dl className="mt-4 space-y-3 text-sm">
-            {product.specs.map((spec) => (
+            {specs.map((spec) => (
               <div
                 key={spec.label}
-                className="flex items-start justify-between gap-4 border-b border-[var(--line)] pb-2"
+                className="flex flex-col gap-1 border-b border-[var(--line)] pb-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4"
               >
                 <dt className="text-[var(--muted)]">{spec.label}</dt>
-                <dd className="text-right text-[var(--heading)]">{spec.value}</dd>
+                <dd className="text-[var(--heading)] sm:text-right">{spec.value}</dd>
               </div>
             ))}
           </dl>

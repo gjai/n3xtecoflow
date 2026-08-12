@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { LegalScroll } from "@/components/LegalScroll";
+import { localeAlternates } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -13,6 +14,7 @@ export async function generateMetadata({
   return {
     title: t("hubTitle"),
     description: t("hubMeta"),
+    alternates: localeAlternates(locale, "/mentions-legales"),
   };
 }
 
@@ -35,7 +37,7 @@ export default async function MentionsPage({
   ] as const;
 
   return (
-    <article className="mx-auto max-w-3xl px-5 pb-16 pt-28 md:px-8">
+    <article className="mx-auto max-w-3xl px-5 pb-16 pt-10 md:px-8">
       <LegalScroll />
       <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold text-[var(--heading)]">
         {t("hubTitle")}
@@ -66,7 +68,11 @@ export default async function MentionsPage({
             {t("publisherTitle")}
           </h2>
           <p className="mt-4">{t("independent")}</p>
+          <p className="mt-2 font-medium text-[var(--heading)]">{t("publisherName")}</p>
+          <p className="mt-2 whitespace-pre-line">{t("publisherAddress")}</p>
+          <p className="mt-2">{t("publisherDirector")}</p>
           <p className="mt-2">{t("siren")}</p>
+          <p className="mt-2">{t("publisherTva")}</p>
           <p className="mt-2">
             <Link
               href="/a-propos"

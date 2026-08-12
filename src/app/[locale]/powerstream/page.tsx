@@ -1,8 +1,10 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
+import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AmazonButton } from "@/components/AmazonButton";
 import { AMAZON_QUERIES, buildAmazonSearchUrl } from "@/lib/amazon";
+import { localeAlternates } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -11,7 +13,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "powerstream" });
-  return { title: t("title"), description: t("subtitle") };
+  return {
+    title: t("title"),
+    description: t("subtitle"),
+    alternates: localeAlternates(locale, "/powerstream"),
+  };
 }
 
 export default async function PowerStreamPage({
@@ -23,9 +29,10 @@ export default async function PowerStreamPage({
   setRequestLocale(locale);
   const t = await getTranslations("powerstream");
   const a = await getTranslations("amazon");
+  const isEn = locale === "en";
 
   return (
-    <article className="pt-24">
+    <article>
       <header className="hero-grid border-b border-[var(--line)]">
         <div className="mx-auto max-w-3xl px-5 py-16 md:px-8 md:py-20">
           <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold tracking-tight md:text-5xl">
@@ -60,11 +67,14 @@ export default async function PowerStreamPage({
             <li>{t("check4")}</li>
           </ul>
         </section>
-        <AmazonButton
-          href={buildAmazonSearchUrl(AMAZON_QUERIES.powerstream)}
-          label={t("ctaAmazon")}
-          badge={a("badge")}
-        />
+        <div className="space-y-3">
+          <AffiliateDisclosure compact />
+          <AmazonButton
+            href={buildAmazonSearchUrl(AMAZON_QUERIES.powerstream)}
+            label={t("ctaAmazon")}
+            badge={a("badge")}
+          />
+        </div>
         <section className="space-y-3">
           <h2 className="font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">
             {t("relatedTitle")}
@@ -73,7 +83,7 @@ export default async function PowerStreamPage({
             href="/produits/powerstream/powerstream"
             className="block text-[var(--accent)] underline-offset-4 hover:underline"
           >
-            Fiche technique PowerStream
+            {isEn ? "PowerStream product sheet" : "Fiche technique PowerStream"}
           </Link>
           <Link
             href="/comparatifs/powerstream-vs-station"
@@ -85,7 +95,7 @@ export default async function PowerStreamPage({
             href="/guides/solaire-portable"
             className="block text-[var(--accent)] underline-offset-4 hover:underline"
           >
-            Guide solaire portable
+            {isEn ? "Portable solar guide" : "Guide solaire portable"}
           </Link>
         </section>
       </div>

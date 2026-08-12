@@ -4,8 +4,9 @@ Site éditorial indépendant (guides EcoFlow / PowerStream), monétisé via Amaz
 
 ## Domaines
 
-- https://ecoflow-stream.com
-- https://powerstream.fr
+- https://ecoflow-stream.com (**canonique SEO**)
+- https://powerstream.fr (même thème / contenu ; canonical → ecoflow-stream.com)
+- `www.*` redirige vers l’apex (308)
 
 ## Stack
 
@@ -15,15 +16,26 @@ Site éditorial indépendant (guides EcoFlow / PowerStream), monétisé via Amaz
 
 ## Variables d'environnement
 
-Voir `.env.example` :
+Voir `.env.example` (extrait) :
 
-- `NEXT_PUBLIC_SITE_URL`
+- `NEXT_PUBLIC_SITE_URL=https://ecoflow-stream.com`
 - `AMAZON_ASSOCIATE_TAG`
-- `NEXT_PUBLIC_ADSENSE_CLIENT`
+- `NEWS_CRON_SECRET` (+ workflows GitHub)
+- `GEMINI_API_KEY` / `OPENAI_*` (rewrite actu)
+- `AMAZON_CREATORS_*` (prix live — dès éligibilité Associates)
+- `NEXT_PUBLIC_ADSENSE_CLIENT` + `NEXT_PUBLIC_ADSENSE_SLOTS=1` + slot IDs
 
 ## Déploiement Coolify
 
-1. DNS A `@` et `www` → `51.254.142.58` (déjà en place)
+1. DNS A `@` et `www` → `51.254.142.58`
 2. App Coolify : Dockerfile, port `3000`
-3. FQDN : `ecoflow-stream.com,www.ecoflow-stream.com,powerstream.fr,www.powerstream.fr`
-4. Activer Let's Encrypt
+3. **Volume persistant** monté sur `/app/data` (news, images, analytics, prix)
+4. FQDN : `ecoflow-stream.com,www.ecoflow-stream.com,powerstream.fr,www.powerstream.fr`
+5. Let's Encrypt
+6. Healthcheck : `GET /api/health`
+
+## Crons (GitHub Actions)
+
+- `news-ingest.yml` → `POST /api/news/ingest`
+- `amazon-prices.yml` → `POST /api/amazon/prices/refresh`
+- `daily-stats.yml` → `POST /api/stats/daily`

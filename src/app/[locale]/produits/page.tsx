@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { CoverImage } from "@/components/CoverImage";
 import { categoryImages } from "@/data/images";
+import { localeAlternates } from "@/lib/seo";
 import {
   categories,
   getLocalizedCategory,
@@ -21,6 +22,7 @@ export async function generateMetadata({
       locale === "en"
         ? "RIVER, DELTA, DELTA Pro, PowerStream, solar panels and accessories."
         : "RIVER, DELTA, DELTA Pro, PowerStream, panneaux solaires et accessoires.",
+    alternates: localeAlternates(locale, "/produits"),
   };
 }
 
@@ -34,7 +36,7 @@ export default async function ProductsIndexPage({
   const isEn = locale === "en";
 
   return (
-    <div className="pt-24">
+    <div className="pt-6">
       <header className="mx-auto max-w-6xl px-5 py-12 md:px-8">
         <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold md:text-5xl">
           {isEn ? "EcoFlow catalog by category" : "Catalogue EcoFlow par catégorie"}

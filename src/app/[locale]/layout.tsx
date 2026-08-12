@@ -64,12 +64,6 @@ export async function generateMetadata({
       shortcut: icons.icon32 || icons.favicon,
       apple: icons.apple || icons.favicon,
     },
-    alternates: {
-      languages: {
-        fr: "/fr",
-        en: "/en",
-      },
-    },
     robots: {
       index: true,
       follow: true,
@@ -133,11 +127,14 @@ export default async function LocaleLayout({
           dangerouslySetInnerHTML={{ __html: siteThemeCss(site) }}
         />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
-          crossOrigin="anonymous"
-        />
+        {/* AdSense loader only when inventaire/slots are enabled — meta account stays for verification */}
+        {process.env.NEXT_PUBLIC_ADSENSE_SLOTS === "1" ? (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+            crossOrigin="anonymous"
+          />
+        ) : null}
       </head>
       <body className="min-h-full antialiased">
         <NextIntlClientProvider messages={messages}>

@@ -1,6 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
+import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { AmazonButton } from "@/components/AmazonButton";
 import { CoverImage } from "@/components/CoverImage";
 import { SmartCover } from "@/components/SmartCover";
@@ -15,9 +17,25 @@ import {
 import { categories, products, type CategoryId } from "@/data/products";
 import { comparisons, guides } from "@/data/articles";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
+import { localeAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 
-export const dynamic = "force-dynamic";
+/** Fresh news without blocking CDN cache on every request. */
+export const revalidate = 600;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "home" });
+  return {
+    title: { absolute: t("brand") },
+    description: t("subhead"),
+    alternates: localeAlternates(locale, ""),
+  };
+}
 
 export default async function HomePage({
   params,
@@ -163,6 +181,13 @@ export default async function HomePage({
           .
         </p>
       </section>
+
+      <div className="mx-auto max-w-6xl px-5 md:px-8">
+        <AdSenseUnit
+          slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_HOME}
+          label={t("adsLabel")}
+        />
+      </div>
 
       {latestNews.length > 0 ? (
         <section className="border-y border-[var(--line)] bg-[var(--surface)]">
