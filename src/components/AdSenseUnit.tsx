@@ -16,6 +16,7 @@ type AdSenseUnitProps = {
  * - NEXT_PUBLIC_ADSENSE_SLOTS=1
  * - a slot id is provided (prop or NEXT_PUBLIC_ADSENSE_SLOT_DEFAULT)
  * - user accepted advertising cookies
+ * - site does not disable AdSense
  */
 export function AdSenseUnit({
   slot,
@@ -25,6 +26,7 @@ export function AdSenseUnit({
   const { consent } = useConsent();
   const site = useSite();
   const slotsEnabled = process.env.NEXT_PUBLIC_ADSENSE_SLOTS === "1";
+  const adsDisabled = site.monetization?.disableAdsense === true;
   const client =
     site.monetization?.adsenseClient?.trim() ||
     process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() ||
@@ -35,16 +37,16 @@ export function AdSenseUnit({
     "";
 
   useEffect(() => {
-    if (!slotsEnabled || !consent.advertising || !adSlot) return;
+    if (adsDisabled || !slotsEnabled || !consent.advertising || !adSlot) return;
     try {
       // @ts-expect-error adsbygoogle global
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch {
       /* ignore */
     }
-  }, [slotsEnabled, consent.advertising, adSlot]);
+  }, [adsDisabled, slotsEnabled, consent.advertising, adSlot]);
 
-  if (!slotsEnabled || !consent.advertising || !adSlot) {
+  if (adsDisabled || !slotsEnabled || !consent.advertising || !adSlot) {
     return null;
   }
 

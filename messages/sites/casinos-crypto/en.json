@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "siteName": "Casinos Crypto",
+    "tagline": "Independent guides to crypto casinos: Stake, secure access and best practices.",
+    "disclaimerShort": "Independent editorial site. Contains Stake and NordVPN affiliate links. 18+."
+  },
+  "nav": {
+    "products": "Guides",
+    "powerstream": "Stake",
+    "comparisons": "VPN",
+    "news": "About"
+  },
+  "notFound": {
+    "body": "This URL doesn’t exist — or the content was moved. Back to Casinos Crypto guides."
+  },
+  "home": {
+    "brand": "Casinos Crypto",
+    "headline": "Crypto casino, without the noise.",
+    "subhead": "Stake explained, how to get started, responsible play — and why a VPN helps for a calmer connection.",
+    "ctaPrimary": "Stake guide",
+    "ctaSecondary": "VPN guide",
+    "featuresTitle": "Why these guides",
+    "feature1Title": "Independent",
+    "feature1Text": "Editorial analysis — we are not the Stake or NordVPN operator.",
+    "feature2Title": "Decision-focused",
+    "feature2Text": "Why Stake, how to start, limits and responsible gambling.",
+    "feature3Title": "Transparency",
+    "feature3Text": "Stake / NordVPN affiliate links clearly labelled. No Amazon, no AdSense.",
+    "editorialLead": "We explain Stake and the VPN setup so you can start clearly — with no promise of profits.",
+    "howTitle": "How to read our content",
+    "howBody1": "The Stake guide covers the why, the start, and the limits.",
+    "howBody2": "The VPN guide details a cautious setup (e.g. NordVPN).",
+    "howBody3": "Gambling involves a risk of loss. 18+ only."
+  },
+  "guides": {
+    "subtitle": "Stake and VPN: two guides to start clearly.",
+    "buyersTitle": "Stake guide",
+    "buyersText": "Why Stake, crypto deposits, KYC and responsible gambling."
+  },
+  "powerstream": {
+    "title": "Guides",
+    "subtitle": "Stake and secure access.",
+    "intro": "Browse the guides to get started.",
+    "whatTitle": "The topic",
+    "whatText": "Crypto casino, Stake and companion VPN.",
+    "forWhoTitle": "Who is it for?",
+    "forWhoText": "Adults 18+ who want clarity before playing.",
+    "checklistTitle": "Before you play",
+    "check1": "Fixed leisure budget",
+    "check2": "18+ and your own legal framework",
+    "check3": "Controlled connection (VPN)",
+    "check4": "Bonus terms read",
+    "ctaAmazon": "Open Stake",
+    "relatedTitle": "Go further",
+    "relatedGuide": "Stake guide",
+    "adsLabel": "Advertisement"
+  },
+  "comparisons": {
+    "subtitle": "Useful reads around crypto casinos.",
+    "card1Title": "Stake",
+    "card1Text": "Why and how to start.",
+    "card2Title": "VPN",
+    "card2Text": "Cautious setup for a stable session.",
+    "card3Title": "Responsible play",
+    "card3Text": "Budget, breaks, help if needed."
+  },
+  "amazon": {
+    "disclosure": "This site contains Stake and NordVPN affiliate links. We may earn a commission at no extra cost to you.",
+    "disclosureShort": "Stake / NordVPN affiliate links.",
+    "badge": "Affiliate",
+    "cta": "Open"
+  },
+  "legal": {
+    "hubMeta": "Publisher, host, privacy, cookies and affiliation — Casinos Crypto legal information.",
+    "cookiesIntro": "This section explains cookies used on Casinos Crypto. No AdSense advertising on this site.",
+    "independent": "Casinos Crypto is an independent editorial site. It is not operated by Stake, NordVPN or Amazon.",
+    "amazon": "Affiliation: this site may contain Stake and NordVPN affiliate links. We may be paid if you use those links.",
+    "adsense": "No Google AdSense advertising on Casinos Crypto.",
+    "affiliateBody": "Stake and NordVPN links are affiliate links. Amazon Associates is not used on this site."
+  },
+  "footer": {
+    "independent": "Independent site — crypto casinos",
+    "rights": "© {year} Casinos Crypto",
+    "products": "Guides",
+    "comparisons": "VPN",
+    "news": "About",
+    "powerstream": "Stake"
+  },
+  "about": {
+    "title": "About Casinos Crypto",
+    "meta": "Who we are, editorial method, independence, and transparency on Stake / NordVPN affiliates.",
+    "lead": "Casinos Crypto is an independent editorial site focused on crypto casinos, with a clear Stake presentation and a companion VPN guide.",
+    "missionBody": "Explain Stake, crypto onboarding and a cautious VPN setup — without promising profits.",
+    "methodBody": "We build pages from public information and an editorial method (why, how, limits).",
+    "method1": "Stake guide: overview, onboarding, KYC, responsible gambling.",
+    "method2": "VPN guide: stable private connection (NordVPN).",
+    "method3": "Transparency: identifiable affiliate links.",
+    "method4": "No Amazon catalogue and no AdSense display ads.",
+    "independenceBody": "This site is not operated by Stake or NordVPN. Brands belong to their owners.",
+    "monetizationTitle": "Monetization",
+    "monetizationBody": "Stake and NordVPN affiliates only. No Amazon Associates or AdSense on this domain."
+  },
+  "news": {
+    "eyebrow": "Guides",
+    "empty": "No news feed on this site — see the Stake and VPN guides."
+  }
+}

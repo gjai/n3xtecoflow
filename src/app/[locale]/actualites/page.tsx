@@ -7,7 +7,9 @@ import { getEditorialImages } from "@/data/images";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 import { paginate, parsePageParam } from "@/lib/pagination";
 import { siteLocaleAlternates } from "@/lib/seo";
+import { siteShowsNews } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
+import { redirect } from "@/i18n/navigation";
 
 export const revalidate = 600;
 
@@ -42,6 +44,9 @@ export default async function NewsIndexPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const site = await getCurrentSite();
+  if (!siteShowsNews(site)) {
+    redirect({ href: "/guides", locale });
+  }
   const { page: pageRaw } = await searchParams;
   const t = await getTranslations("news");
   const store = await readNewsStore();

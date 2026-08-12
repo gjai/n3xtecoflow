@@ -36,6 +36,12 @@ import { resolveProductMedia } from "@/lib/product-presentation";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteAmazonFallbackQuery } from "@/sites/copy";
+import { affiliateOffer } from "@/lib/affiliates";
+import { CasinosCryptoHome } from "@/components/CasinosCryptoHome";
+import {
+  siteAllowsAmazon,
+  siteUsesEditorialHome,
+} from "@/sites/features";
 /** Fresh news without blocking CDN cache on every request. */
 export const revalidate = 600;
 
@@ -68,6 +74,22 @@ export default async function HomePage({
   const isEn = locale === "en";
   const siteUrl = `https://${site.primaryHost}`;
   const brandName = site.brand.name;
+
+  if (siteUsesEditorialHome(site)) {
+    return (
+      <>
+        <JsonLd data={organizationJsonLd(site)} />
+        <JsonLd data={websiteJsonLd(site)} />
+        <CasinosCryptoHome
+          site={site}
+          locale={locale}
+          stake={affiliateOffer(site, "stake")}
+          nordvpn={affiliateOffer(site, "nordvpn")}
+        />
+      </>
+    );
+  }
+
   const editorialImages = getEditorialImages(site.id);
   const heroImage = getHeroImage(site.id);
 
@@ -91,7 +113,23 @@ export default async function HomePage({
         site.featuredCategoryIds.includes(p.category),
       );
   const latestProduct =
-    featuredProducts.at(-1) ?? siteProducts.at(-1)!;
+    featuredProducts.at(-1) ?? siteProducts.at(-1);
+  if (!latestProduct) {
+    return (
+      <>
+        <JsonLd data={organizationJsonLd(site)} />
+        <JsonLd data={websiteJsonLd(site)} />
+        <section className="mx-auto max-w-6xl px-5 py-20 md:px-8">
+          <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold">
+            {brandName}
+          </h1>
+          <p className="mt-4 text-[var(--muted)]">
+            {isEn ? site.brand.taglineEn : site.brand.taglineFr}
+          </p>
+        </section>
+      </>
+    );
+  }
   const siteCats = getCategoriesForSite(site.id);
   const featured = site.featuredCategoryIds
     .map((id) => siteCats.find((c) => c.id === (id as CategoryId)))
@@ -469,13 +507,15 @@ export default async function HomePage({
                 >
                   {isEn ? "Browse catalog" : "Voir le catalogue"}
                 </Link>
-                <AmazonButton
-                  href={buildAmazonSearchUrl(siteAmazonFallbackQuery(site.id))}
-                  label={a("cta")}
-                />
+                {siteAllowsAmazon(site) ? (
+                  <AmazonButton
+                    href={buildAmazonSearchUrl(siteAmazonFallbackQuery(site.id))}
+                    label={a("cta")}
+                  />
+                ) : null}
               </div>
             </div>
-            <AffiliateDisclosure />
+            {siteAllowsAmazon(site) ? <AffiliateDisclosure /> : null}
           </div>
         </section>
       )}

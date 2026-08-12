@@ -1,5 +1,6 @@
 import { tumblerGuides } from "./tumbler-guides";
 import { massageGunGuides } from "./massage-gun-guides";
+import { casinosCryptoGuides } from "./casinos-crypto-guides";
 
 export type ArticleSection = {
   heading: string;
@@ -727,6 +728,7 @@ export const guides: GuideArticle[] = [
   ...ecoflowGuides,
   ...tumblerGuides,
   ...massageGunGuides,
+  ...casinosCryptoGuides,
 ];
 
 export function getGuide(slug: string) {

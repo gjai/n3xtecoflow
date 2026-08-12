@@ -216,9 +216,48 @@ const massageGunEditorial = {
   },
 } as const satisfies Record<string, SiteImage>;
 
+const casinosCryptoCredit = {
+  credit: "Casinos Crypto",
+  creditUrl: "https://casinos-crypto.fr",
+} as const;
+
+const casinosCryptoEditorial = {
+  guides: {
+    src: "/images/casinos-crypto/hero.svg",
+    altFr: "Guides casinos crypto",
+    altEn: "Crypto casino guides",
+    ...casinosCryptoCredit,
+  },
+  news: {
+    src: "/images/casinos-crypto/hero.svg",
+    altFr: "Casinos crypto",
+    altEn: "Crypto casinos",
+    ...casinosCryptoCredit,
+  },
+  camping: {
+    src: "/images/casinos-crypto/hero.svg",
+    altFr: "Casino crypto",
+    altEn: "Crypto casino",
+    ...casinosCryptoCredit,
+  },
+  backup: {
+    src: "/images/casinos-crypto/hero.svg",
+    altFr: "Casino crypto",
+    altEn: "Crypto casino",
+    ...casinosCryptoCredit,
+  },
+  comparatifs: {
+    src: "/images/casinos-crypto/hero.svg",
+    altFr: "Casino crypto",
+    altEn: "Crypto casino",
+    ...casinosCryptoCredit,
+  },
+} as const satisfies Record<string, SiteImage>;
+
 export function getEditorialImages(siteId: SiteId = "ecoflow") {
   if (siteId === "tumbler") return tumblerEditorial;
   if (siteId === "massage-gun") return massageGunEditorial;
+  if (siteId === "casinos-crypto") return casinosCryptoEditorial;
   return editorialImages;
 }
 
@@ -238,6 +277,15 @@ export function getHeroImage(siteId: SiteId = "ecoflow"): SiteImage {
       altEn: "Massage gun — recovery",
       credit: "Le pistolet de massage (IA)",
       creditUrl: "https://massage-gun.fr",
+    };
+  }
+  if (siteId === "casinos-crypto") {
+    return {
+      src: "/images/casinos-crypto/hero.svg",
+      altFr: "Casinos crypto — Stake & accès sécurisé",
+      altEn: "Crypto casinos — Stake & secure access",
+      credit: "Casinos Crypto",
+      creditUrl: "https://casinos-crypto.fr",
     };
   }
   return heroImage;

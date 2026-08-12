@@ -23,7 +23,9 @@ import {
   getProductsByCategory,
   getProductsForSite,
 } from "@/data/products";
+import { siteShowsProducts } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
+import { redirect } from "@/i18n/navigation";
 
 export const revalidate = 600;
 
@@ -34,6 +36,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const site = await getCurrentSite();
+  if (!siteShowsProducts(site)) {
+    return { alternates: await siteLocaleAlternates(locale, "/guides") };
+  }
   const isEn = locale === "en";
   const flat = usesFlatCatalog(site);
   return {
@@ -64,6 +69,9 @@ export default async function ProductsIndexPage({
   setRequestLocale(locale);
   const isEn = locale === "en";
   const site = await getCurrentSite();
+  if (!siteShowsProducts(site)) {
+    redirect({ href: "/guides", locale });
+  }
 
   if (usesFlatCatalog(site)) {
     const products = getProductsForSite(site.id);

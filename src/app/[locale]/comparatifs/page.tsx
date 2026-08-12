@@ -16,7 +16,9 @@ import { getAmazonOffersMap } from "@/lib/amazon/price-store";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import { resolveDisplayPrice, resolveProductMedia } from "@/lib/product-presentation";
 import { siteLocaleAlternates } from "@/lib/seo";
+import { siteShowsComparisons } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
+import { redirect } from "@/i18n/navigation";
 
 export async function generateMetadata({
   params,
@@ -25,6 +27,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const site = await getCurrentSite();
+  if (!siteShowsComparisons(site)) {
+    return { alternates: await siteLocaleAlternates(locale, "/guides") };
+  }
   const isEn = locale === "en";
   const flat = usesFlatCatalog(site);
   return {
@@ -51,6 +56,9 @@ export default async function ComparisonsIndexPage({
   const sp = await searchParams;
   setRequestLocale(locale);
   const site = await getCurrentSite();
+  if (!siteShowsComparisons(site)) {
+    redirect({ href: "/guides", locale });
+  }
   const isEn = locale === "en";
 
   if (usesFlatCatalog(site)) {

@@ -3,19 +3,52 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Link } from "@/i18n/navigation";
+import {
+  siteShowsComparisons,
+  siteShowsNews,
+  siteShowsProducts,
+  siteUsesEditorialHome,
+} from "@/sites/features";
+import {
+  CASINOS_CRYPTO_STAKE_GUIDE_SLUG,
+  CASINOS_CRYPTO_VPN_GUIDE_SLUG,
+} from "@/data/casinos-crypto-guides";
 import { SiteLogo } from "./SiteLogo";
+import { useSite } from "./SiteProvider";
 
 export function SiteHeader() {
   const t = useTranslations("nav");
+  const site = useSite();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  const links = [
-    { href: "/produits", label: t("products") },
-    { href: "/guides", label: t("guides") },
-    { href: "/comparatifs", label: t("comparisons") },
-    { href: "/actualites", label: t("news") },
-  ] as const;
+  const links = siteUsesEditorialHome(site)
+    ? [
+        { href: "/guides", label: t("guides") },
+        {
+          href: `/guides/${CASINOS_CRYPTO_STAKE_GUIDE_SLUG}`,
+          label: "Stake",
+        },
+        {
+          href: `/guides/${CASINOS_CRYPTO_VPN_GUIDE_SLUG}`,
+          label: "VPN",
+        },
+        { href: "/a-propos", label: t("about") },
+      ]
+    : (
+        [
+          siteShowsProducts(site)
+            ? { href: "/produits", label: t("products") }
+            : null,
+          { href: "/guides", label: t("guides") },
+          siteShowsComparisons(site)
+            ? { href: "/comparatifs", label: t("comparisons") }
+            : null,
+          siteShowsNews(site)
+            ? { href: "/actualites", label: t("news") }
+            : null,
+        ] as const
+      ).filter(Boolean) as { href: string; label: string }[];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);

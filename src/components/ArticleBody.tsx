@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
@@ -21,12 +22,16 @@ export function ArticleBody({
   amazonQuery,
   amazonLabel,
   productCards,
+  hideCatalogLink,
+  footerActions,
 }: {
   sections: ArticleSection[];
   amazonQuery?: string;
   amazonLabel?: string;
   /** Packshots résolus côté serveur (clés = product slug) */
   productCards?: Record<string, ArticleProductCard>;
+  hideCatalogLink?: boolean;
+  footerActions?: ReactNode;
 }) {
   const t = useTranslations("amazon");
   const tHome = useTranslations("home");
@@ -103,7 +108,9 @@ export function ArticleBody({
           </section>
         );
       })}
-      {amazonQuery && amazonLabel ? (
+      {footerActions ? (
+        <div className="space-y-3">{footerActions}</div>
+      ) : amazonQuery && amazonLabel ? (
         <div className="space-y-3">
           <AmazonButton
             href={buildAmazonSearchUrl(amazonQuery)}
@@ -113,15 +120,22 @@ export function ArticleBody({
         </div>
       ) : null}
       <p className="text-sm text-[var(--muted)]">
-        <Link href="/produits" className="text-[var(--accent)] hover:underline">
-          {catalogLabel}
-        </Link>
-        {" · "}
+        {!hideCatalogLink ? (
+          <>
+            <Link
+              href="/produits"
+              className="text-[var(--accent)] hover:underline"
+            >
+              {catalogLabel}
+            </Link>
+            {" · "}
+          </>
+        ) : null}
         <Link href="/guides" className="text-[var(--accent)] hover:underline">
           {tHome("ctaPrimary")}
         </Link>
       </p>
-      {!amazonQuery ? (
+      {!amazonQuery && !footerActions ? (
         <p className="text-xs text-[var(--muted)]">{t("disclosureShort")}</p>
       ) : null}
     </div>

@@ -13,6 +13,11 @@ import { comparisonHubCategories } from "@/lib/comparisons/hub";
 import { GUIDE_TOPICS, guideSiteId } from "@/lib/guides/types";
 import { newsSiteId } from "@/lib/news/types";
 import { getSiteByHost } from "@/sites";
+import {
+  siteShowsComparisons,
+  siteShowsNews,
+  siteShowsProducts,
+} from "@/sites/features";
 import type { SiteConfig, SiteId } from "@/sites/types";
 
 /** Refresh sitemap periodically so ingested news appear without full rebuild. */
@@ -57,11 +62,11 @@ export function buildSitemapForSite(
   const prods = getProductsForSite(site.id);
   const staticPaths = [
     "",
-    "/produits",
+    ...(siteShowsProducts(site) ? ["/produits"] : []),
     ...(site.id === "ecoflow" ? ["/powerstream"] : []),
     "/guides",
-    "/comparatifs",
-    "/actualites",
+    ...(siteShowsComparisons(site) ? ["/comparatifs"] : []),
+    ...(siteShowsNews(site) ? ["/actualites"] : []),
     "/a-propos",
     "/mentions-legales",
     "/contact",

@@ -1,4 +1,4 @@
-export type SiteId = "ecoflow" | "tumbler" | "massage-gun";
+export type SiteId = "ecoflow" | "tumbler" | "massage-gun" | "casinos-crypto";
 
 export type SiteTheme = {
   /** Accent / CTA (dark surfaces) */
@@ -73,6 +73,32 @@ export type SiteMonetization = {
   amazonTag?: string;
   /** Override AdSense client; falls back to NEXT_PUBLIC_ADSENSE_CLIENT */
   adsenseClient?: string;
+  /** Désactive AdSense (pas de fallback env / meta pub) */
+  disableAdsense?: boolean;
+  /** Désactive CTAs / disclosures Amazon */
+  disableAmazon?: boolean;
+  /**
+   * Offres d’affiliation hors Amazon (Stake, NordVPN…).
+   * `url` peut être surchargée par la variable d’env indiquée.
+   */
+  offers?: {
+    id: "stake" | "nordvpn" | string;
+    labelFr: string;
+    labelEn: string;
+    /** URL de secours si env absente */
+    url: string;
+    /** Ex. STAKE_AFFILIATE_URL */
+    envKey?: string;
+  }[];
+};
+
+/** Flags UI / SEO — défauts orientés catalogue Amazon sauf opt-out. */
+export type SiteFeatures = {
+  products?: boolean;
+  comparisons?: boolean;
+  news?: boolean;
+  /** Home éditoriale (pas de hero produit / grille catalogue) */
+  editorialHome?: boolean;
 };
 
 /**
@@ -167,6 +193,8 @@ export type SiteConfig = {
    * Si omis : premiers produits du catalogue (max 6).
    */
   featuredProductSlugs?: string[];
+  /** Opt-in/out navigation & home (défaut = catalogue Amazon) */
+  features?: SiteFeatures;
   /**
    * Sister / network sites in the footer.
    * - Internal theme: set `siteId` (resolved to primaryHost)

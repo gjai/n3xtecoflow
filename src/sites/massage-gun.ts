@@ -90,6 +90,11 @@ export const massageGunSite: SiteConfig = {
       labelEn: "La gourde isotherme",
     },
     {
+      siteId: "casinos-crypto",
+      labelFr: "Casinos Crypto",
+      labelEn: "Casinos Crypto",
+    },
+    {
       href: "https://elections2027.com",
       labelFr: "Élections 2027",
       labelEn: "Élections 2027",

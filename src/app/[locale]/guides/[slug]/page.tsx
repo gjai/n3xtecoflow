@@ -18,7 +18,10 @@ import { GUIDE_TOPICS } from "@/lib/guides/types";
 import { resolveGuide } from "@/lib/guides/refresh";
 import { resolveProductMedia } from "@/lib/product-presentation";
 import { siteLocaleAlternates } from "@/lib/seo";
+import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
+import { affiliateOffer, resolveAffiliateOffers } from "@/lib/affiliates";
 import { siteAmazonFallbackQuery } from "@/sites/copy";
+import { siteAllowsAmazon, siteShowsProducts } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
 import { redirect } from "@/i18n/navigation";
 
@@ -155,9 +158,43 @@ export default async function GuideArticlePage({
       </header>
       <ArticleBody
         sections={copy.sections}
-        amazonQuery={siteAmazonFallbackQuery(site.id)}
-        amazonLabel={isEn ? "Browse on Amazon" : "Voir sur Amazon"}
+        amazonQuery={
+          siteAllowsAmazon(site)
+            ? siteAmazonFallbackQuery(site.id)
+            : undefined
+        }
+        amazonLabel={
+          siteAllowsAmazon(site)
+            ? isEn
+              ? "Browse on Amazon"
+              : "Voir sur Amazon"
+            : undefined
+        }
         productCards={productCards}
+        hideCatalogLink={!siteShowsProducts(site)}
+        footerActions={
+          !siteAllowsAmazon(site) && resolveAffiliateOffers(site).length ? (
+            <div className="flex flex-wrap gap-3">
+              {(["stake", "nordvpn"] as const).map((id) => {
+                const offer = affiliateOffer(site, id);
+                if (!offer) return null;
+                return (
+                  <AffiliateOfferButton
+                    key={id}
+                    href={offer.href}
+                    label={isEn ? offer.labelEn : offer.labelFr}
+                    variant={id === "stake" ? "primary" : "secondary"}
+                  />
+                );
+              })}
+              <p className="basis-full text-xs text-[var(--muted)]">
+                {isEn
+                  ? "Affiliate links · 18+ · Play responsibly"
+                  : "Liens d’affiliation · 18+ · Jouez responsable"}
+              </p>
+            </div>
+          ) : undefined
+        }
       />
     </article>
   );

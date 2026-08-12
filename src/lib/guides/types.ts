@@ -150,4 +150,20 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     angleEn:
       "Amplitude, force, noise, heads, battery, Amazon product picks",
   },
+  {
+    slug: "guide-stake-casino-crypto",
+    siteId: "casinos-crypto",
+    topicFr: "Guide Stake : casino crypto",
+    topicEn: "Stake guide: crypto casino",
+    angleFr: "Pourquoi Stake, démarrage, KYC, jeu responsable",
+    angleEn: "Why Stake, onboarding, KYC, responsible gambling",
+  },
+  {
+    slug: "vpn-acces-casino",
+    siteId: "casinos-crypto",
+    topicFr: "VPN pour casino crypto",
+    topicEn: "VPN for crypto casinos",
+    angleFr: "Connexion stable, NordVPN, kill-switch, erreurs fréquentes",
+    angleEn: "Stable connection, NordVPN, kill-switch, common mistakes",
+  },
 ];

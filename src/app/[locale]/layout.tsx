@@ -16,6 +16,7 @@ import {
   themeInitScript,
 } from "@/components/ThemeProvider";
 import { getCurrentSite } from "@/sites/server";
+import { siteAllowsAdsense, siteAllowsAmazon } from "@/sites/features";
 import { siteThemeCss } from "@/sites/theme-css";
 import "../globals.css";
 
@@ -43,10 +44,12 @@ export async function generateMetadata({
   const { locale } = await params;
   const site = await getCurrentSite();
   const isEn = locale === "en";
-  const adsenseClient =
-    site.monetization?.adsenseClient?.trim() ||
-    process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() ||
-    "ca-pub-4733644127583822";
+  const allowAds = siteAllowsAdsense(site);
+  const adsenseClient = allowAds
+    ? site.monetization?.adsenseClient?.trim() ||
+      process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() ||
+      "ca-pub-4733644127583822"
+    : "";
   const title = site.brand.name;
   const description = isEn ? site.brand.taglineEn : site.brand.taglineFr;
 
@@ -69,9 +72,9 @@ export async function generateMetadata({
       follow: true,
       googleBot: { index: true, follow: true },
     },
-    other: {
-      "google-adsense-account": adsenseClient,
-    },
+    ...(adsenseClient
+      ? { other: { "google-adsense-account": adsenseClient } }
+      : {}),
     openGraph: {
       title,
       description,
@@ -105,14 +108,19 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
   const messages = await getMessages();
   const site = await getCurrentSite();
-  const adsenseClient =
-    site.monetization?.adsenseClient?.trim() ||
-    process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() ||
-    "ca-pub-4733644127583822";
-  const disclaimer =
-    locale === "en"
+  const allowAds = siteAllowsAdsense(site);
+  const adsenseClient = allowAds
+    ? site.monetization?.adsenseClient?.trim() ||
+      process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() ||
+      "ca-pub-4733644127583822"
+    : "";
+  const disclaimer = siteAllowsAmazon(site)
+    ? locale === "en"
       ? "Independent editorial site. Contains Amazon affiliate links."
-      : "Site éditorial indépendant. Contient des liens d'affiliation Amazon.";
+      : "Site éditorial indépendant. Contient des liens d'affiliation Amazon."
+    : locale === "en"
+      ? "Independent editorial site. May contain Stake and NordVPN affiliate links. 18+."
+      : "Site éditorial indépendant. Peut contenir des liens d'affiliation Stake et NordVPN. 18+.";
 
   return (
     <html
@@ -128,7 +136,9 @@ export default async function LocaleLayout({
         />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         {/* AdSense loader only when inventaire/slots are enabled — meta account stays for verification */}
-        {process.env.NEXT_PUBLIC_ADSENSE_SLOTS === "1" ? (
+        {allowAds &&
+        adsenseClient &&
+        process.env.NEXT_PUBLIC_ADSENSE_SLOTS === "1" ? (
           <script
             async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
