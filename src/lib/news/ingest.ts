@@ -14,6 +14,8 @@ export type IngestOptions = {
   forceRefresh?: boolean;
   /** Max existing articles to refresh in one run. */
   refreshLimit?: number;
+  /** Skip first N refresh candidates (batching). */
+  refreshOffset?: number;
 };
 
 export type IngestResult = {
@@ -69,6 +71,7 @@ export async function ingestNews(
   const refreshedSlugs: string[] = [];
   if (options?.refreshExisting) {
     const refreshLimit = options.refreshLimit ?? store.articles.length;
+    const refreshOffset = options.refreshOffset ?? 0;
     const feedByGuid = byGuid;
     const needsRefresh = (a: (typeof store.articles)[number]) =>
       options.forceRefresh ||
@@ -82,7 +85,7 @@ export async function ingestNews(
     const targets = store.articles
       .map((article, index) => ({ article, index }))
       .filter(({ article }) => needsRefresh(article))
-      .slice(0, refreshLimit);
+      .slice(refreshOffset, refreshOffset + refreshLimit);
     for (const { article, index } of targets) {
       try {
         const feedItem = feedByGuid.get(article.sourceGuid) || null;
