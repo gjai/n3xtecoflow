@@ -212,14 +212,14 @@
     "eyebrow": "Press roundup",
     "title": "EcoFlow news",
     "subtitle": "Editorial summaries from recent announcements and articles — updated automatically.",
-    "disclaimer": "We do not republish original articles: each piece is an independent summary with a link to the source.",
+    "disclaimer": "We do not republish the original article: each piece is an independent editorial article written from the cited source.",
     "empty": "No news yet — the next automated run will fill this section.",
-    "read": "Read summary",
+    "read": "Read article",
     "back": "All news",
     "source": "Source",
     "readSource": "Open source article",
     "catalogCta": "Compare EcoFlow products →",
-    "aiBadge": "AI rewritten"
+    "aiBadge": "Editorial article"
   },
   "network": {
     "title": "Site network",
