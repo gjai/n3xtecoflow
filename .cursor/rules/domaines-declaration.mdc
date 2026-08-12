@@ -23,6 +23,11 @@ Ajouter le host (apex + www) dans `src/sites/ecoflow.ts` → `hosts[]`, puis DNS
 3. Registry `src/sites/index.ts` + `public/brands/<id>/`
 4. DNS + Coolify FQDN (même app) + SSL
 5. `network[]` croisé si besoin
+6. **Catalogue produits (bloquant)** — chaque SKU avant mise en ligne :
+   - `amazonAsin` (lien `/dp/` Affiliates)
+   - `imageSrc` packshot (préférer fichier local `public/images/products/<id>/`)
+   - `indicativePriceEur` (fallback UI tant que Creators API est off)
+   - Ne pas s’appuyer sur le catalogue Shopify EcoFlow (spécifique thème ecoflow)
 
 Quand on ajoute un domaine ou un thème, **rappeler explicitement cette checklist** à l’utilisateur.
 

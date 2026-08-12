@@ -2,7 +2,7 @@ import type { Product } from "@/data/products";
 import { getCategoryImage } from "@/data/images";
 import type { AmazonOffer } from "@/lib/amazon/types";
 import type { EcoflowCatalogEntry } from "@/lib/ecoflow/types";
-import { toEuroMoney } from "@/lib/money";
+import { formatEuro, toEuroMoney } from "@/lib/money";
 
 export type ProductMedia = {
   src: string;
@@ -18,7 +18,7 @@ export type DisplayPrice = {
   amount: number | null;
   currency: string | null;
   /** Where the number comes from */
-  source: "amazon" | "ecoflow";
+  source: "amazon" | "ecoflow" | "indicative";
   hintFr: string;
   hintEn: string;
   updatedAt?: string;
@@ -81,10 +81,13 @@ export function resolveProductMedia(
  * Prix affiché (toujours €) :
  * 1) Amazon Creators (live) si dispo
  * 2) sinon prix catalogue EcoFlow.fr (indicatif — pas Amazon)
+ * 3) sinon `product.indicativePriceEur` (éditorial — obligatoire hors EcoFlow
+ *    tant que Creators est off ; évite les fiches « sans prix » sur les nouveaux thèmes)
  */
 export function resolveDisplayPrice(
   amazon: AmazonOffer | null | undefined,
   ecoflow: EcoflowCatalogEntry | null | undefined,
+  product?: Pick<Product, "indicativePriceEur"> | null,
 ): DisplayPrice | null {
   if (amazon?.price?.display && amazon.price.amount != null) {
     const euro = toEuroMoney({
@@ -124,6 +127,20 @@ export function resolveDisplayPrice(
         updatedAt: ecoflow.updatedAt,
       };
     }
+  }
+
+  const indicative = product?.indicativePriceEur;
+  if (indicative != null && Number.isFinite(indicative) && indicative > 0) {
+    return {
+      display: formatEuro(indicative),
+      amount: indicative,
+      currency: "EUR",
+      source: "indicative",
+      hintFr:
+        "Prix indicatif Amazon.fr (le montant live peut différer — vérifiez sur Amazon)",
+      hintEn:
+        "Indicative Amazon.fr price (live amount may differ — confirm on Amazon)",
+    };
   }
 
   return null;

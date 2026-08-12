@@ -6,6 +6,7 @@ import {
   getLocalizedCategory,
   getLocalizedProduct,
   getProductsByCategory,
+  getProductsForSite,
   products,
   type CategoryId,
   type Product,
@@ -15,10 +16,24 @@ import type { EcoflowCatalogEntry } from "@/lib/ecoflow/types";
 import { resolveDisplayPrice, resolveProductMedia } from "@/lib/product-presentation";
 import type { SiteId } from "@/sites/types";
 
-/** Categories that make sense as comparison hubs (≥2 products). */
+/**
+ * EcoFlow = hubs par gamme (RIVER, DELTA…).
+ * Tumbler (et futurs thèmes « catalogue plat ») = un seul comparateur sur /comparatifs.
+ */
+export function usesFlatComparison(siteId: SiteId): boolean {
+  return siteId !== "ecoflow";
+}
+
+/** Categories that make sense as comparison hubs (≥2 products). Empty when flat. */
 export function comparisonHubCategories(siteId?: SiteId) {
+  if (siteId && usesFlatComparison(siteId)) return [];
   const pool = siteId ? getCategoriesForSite(siteId) : categories;
   return pool.filter((c) => getProductsByCategory(c.id).length >= 2);
+}
+
+/** All products selectable in the flat site comparator. */
+export function productsForSiteCompare(siteId: SiteId): Product[] {
+  return getProductsForSite(siteId);
 }
 
 export function comparisonHubBelongsToSite(
@@ -49,7 +64,7 @@ export type CompareProductView = {
   amazonHref: string;
   imageSrc: string;
   priceDisplay: string | null;
-  priceSource: "amazon" | "ecoflow" | null;
+  priceSource: "amazon" | "ecoflow" | "indicative" | null;
   tagline: string;
   capacityWh?: number;
   outputW?: number;
@@ -84,6 +99,7 @@ export function toCompareProductView(
         }
       : null,
     ecoflow,
+    product,
   );
 
   return {

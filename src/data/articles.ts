@@ -4,6 +4,8 @@ export type ArticleSection = {
   heading: string;
   paragraphs: string[];
   bullets?: string[];
+  /** Product slugs to show as linked packshot cards under the section */
+  productSlugs?: string[];
 };
 
 export type GuideArticle = {

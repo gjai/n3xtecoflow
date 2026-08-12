@@ -1,7 +1,9 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
+import { redirect } from "@/i18n/navigation";
 import { ArticleCover } from "@/components/ArticleCover";
+import { TUMBLER_MAIN_GUIDE_SLUG } from "@/data/tumbler-guides";
 import { getEditorialImages } from "@/data/images";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import { resolveArticleProductImages } from "@/lib/article-images";
@@ -38,8 +40,13 @@ export default async function GuidesIndexPage({
   setRequestLocale(locale);
   const site = await getCurrentSite();
   const isEn = locale === "en";
-  const ecoflowMap =
-    site.id === "ecoflow" ? await getEcoflowEntriesMap() : {};
+
+  // Tumbler : un seul guide → page guide directement
+  if (site.id === "tumbler") {
+    redirect({ href: `/guides/${TUMBLER_MAIN_GUIDE_SLUG}`, locale });
+  }
+
+  const ecoflowMap = await getEcoflowEntriesMap();
   const allGuides = await resolveAllGuides(site.id);
   const editorialImages = getEditorialImages(site.id);
 
@@ -65,10 +72,10 @@ export default async function GuidesIndexPage({
         ) : (
           allGuides.map((guide) => {
             const copy = isEn ? guide.en : guide.fr;
-            const productImages =
-              site.id === "ecoflow"
-                ? resolveArticleProductImages(guide.slug, ecoflowMap)
-                : [];
+            const productImages = resolveArticleProductImages(
+              guide.slug,
+              ecoflowMap,
+            );
             const coverImages = guide.imageSrc
               ? [
                   {
@@ -92,7 +99,9 @@ export default async function GuidesIndexPage({
                   locale={locale}
                   className="aspect-[16/9] w-full"
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  packshot={Boolean(guide.imageSrc) === false && coverImages.length > 0}
+                  packshot={
+                    Boolean(guide.imageSrc) === false && coverImages.length > 0
+                  }
                 />
                 <div className="p-6">
                   <h2 className="text-xl font-semibold text-[var(--heading)]">

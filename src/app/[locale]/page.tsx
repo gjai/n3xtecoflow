@@ -386,12 +386,15 @@ export default async function HomePage({
         <p className="mt-8 text-sm text-[var(--muted)]">
           {siteProducts.length} {isEn ? "product sheets" : "fiches produits"} ·{" "}
           {allGuides.length} {isEn ? "guides" : "guides"} ·{" "}
-          {comparisonHubs.length}{" "}
           <Link
             href="/comparatifs"
             className="text-[var(--accent)] hover:underline"
           >
-            {isEn ? "comparisons" : "comparatifs"}
+            {site.id === "tumbler"
+              ? isEn
+                ? "compare products"
+                : "comparer les produits"
+              : `${comparisonHubs.length} ${isEn ? "comparisons" : "comparatifs"}`}
           </Link>
         </p>
       </section>

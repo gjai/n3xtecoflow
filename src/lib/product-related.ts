@@ -166,23 +166,12 @@ const MANUAL: Record<string, { guides?: string[]; comparisons?: string[] }> = {
     comparisons: [],
   },
   gourdes: {
-    guides: [
-      "choisir-gourde-isotherme",
-      "gourde-vs-tumbler",
-      "entretien-gourde",
-      "isolation-froid-chaud",
-      "premier-achat-gourde",
-    ],
-    comparisons: ["gourdes", "tumblers"],
+    guides: ["choisir-gourde-isotherme"],
+    comparisons: [],
   },
   tumblers: {
-    guides: [
-      "gourde-vs-tumbler",
-      "choisir-gourde-isotherme",
-      "entretien-gourde",
-      "isolation-froid-chaud",
-    ],
-    comparisons: ["tumblers", "gourdes"],
+    guides: ["choisir-gourde-isotherme"],
+    comparisons: [],
   },
 };
 
@@ -251,6 +240,23 @@ export function getRelatedEditorial(options: {
     .sort((a, b) => b.s - a.s)
     .slice(0, cmpLimit);
 
+  const comparisons =
+    cmpScores.length > 0
+      ? cmpScores.map(({ cat }) => ({
+          href: `/comparatifs/${cat.slug}`,
+          title: hubTitle(cat.id, locale),
+          kind: "comparison" as const,
+        }))
+      : siteId !== "ecoflow"
+        ? [
+            {
+              href: "/comparatifs",
+              title: locale === "en" ? "Compare products" : "Comparer les produits",
+              kind: "comparison" as const,
+            },
+          ]
+        : [];
+
   const newsScores = news
     .map((n) => ({ n, s: scoreNews(n, tokens, locale) }))
     .filter((x) => x.s >= 3)
@@ -263,11 +269,7 @@ export function getRelatedEditorial(options: {
       title: guideTitle(slug, locale),
       kind: "guide" as const,
     })),
-    comparisons: cmpScores.map(({ cat }) => ({
-      href: `/comparatifs/${cat.slug}`,
-      title: hubTitle(cat.id, locale),
-      kind: "comparison" as const,
-    })),
+    comparisons,
     news: newsScores.map(({ n }) => {
       const copy = locale === "en" ? n.en : n.fr;
       return {

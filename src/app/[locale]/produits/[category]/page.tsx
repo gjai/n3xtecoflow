@@ -72,7 +72,7 @@ export default async function CategoryPage({
     const p = resolveProductCopy(product, locale, editorial);
     const eco = ecoflowMap[product.slug];
     const media = resolveProductMedia(product, eco);
-    const displayPrice = resolveDisplayPrice(offers[product.slug], eco);
+    const displayPrice = resolveDisplayPrice(offers[product.slug], eco, product);
     return { product, p, media, displayPrice };
   });
 

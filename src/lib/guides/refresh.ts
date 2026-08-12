@@ -398,8 +398,14 @@ export async function resolveGuide(
 ): Promise<GuideEntry | null> {
   const topic = GUIDE_TOPICS.find((t) => t.slug === slug);
   if (siteId && topic && guideSiteId(topic) !== siteId) return null;
-  const stored = (await readGuidesStore()).entries[slug];
   const staticEntry = fromStatic(slug);
+
+  // Tumbler : guide éditorial unique avec productSlugs — toujours le seed static
+  if (siteId === "tumbler" && staticEntry) {
+    return { ...staticEntry, siteId: "tumbler" };
+  }
+
+  const stored = (await readGuidesStore()).entries[slug];
   const storedRich =
     stored &&
     stored.model !== "stub" &&
@@ -425,6 +431,13 @@ export async function resolveAllGuides(siteId?: SiteId): Promise<GuideEntry[]> {
   const topics = siteId ? guidesForSite(GUIDE_TOPICS, siteId) : GUIDE_TOPICS;
   const bySlug = new Map<string, GuideEntry>();
   for (const topic of topics) {
+    if (siteId === "tumbler") {
+      const staticEntry = fromStatic(topic.slug);
+      if (staticEntry) {
+        bySlug.set(topic.slug, { ...staticEntry, siteId: "tumbler" });
+      }
+      continue;
+    }
     const stored = store.entries[topic.slug];
     const staticEntry = fromStatic(topic.slug)!;
     const storedRich =
@@ -439,10 +452,13 @@ export async function resolveAllGuides(siteId?: SiteId): Promise<GuideEntry[]> {
       imageCredit: entry.imageCredit || staticEntry.imageCredit,
     });
   }
-  for (const [slug, e] of Object.entries(store.entries)) {
-    if (bySlug.has(slug)) continue;
-    if (siteId && guideSiteId(e) !== siteId) continue;
-    bySlug.set(slug, e);
+  // EcoFlow only: keep orphan AI store entries not in GUIDE_TOPICS
+  if (!siteId || siteId === "ecoflow") {
+    for (const [slug, e] of Object.entries(store.entries)) {
+      if (bySlug.has(slug)) continue;
+      if (siteId && guideSiteId(e) !== siteId) continue;
+      bySlug.set(slug, e);
+    }
   }
   return [...bySlug.values()].sort((a, b) => a.slug.localeCompare(b.slug));
 }

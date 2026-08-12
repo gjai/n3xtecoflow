@@ -57,6 +57,8 @@ export const tumblerProducts: Product[] = [
     weightKg: 0.31,
     amazonQuery: "Super Sparrow FlipFlow gourde isotherme",
     amazonAsin: "B0CRZ1V1LQ",
+    imageSrc: "/images/products/tumbler/super-sparrow-500.jpg",
+    indicativePriceEur: 16.2,
     specs: [
       { label: "Capacité", value: "500 ml (aussi 350–1,2 L)" },
       { label: "Isolation", value: "Froid / chaud (double paroi)" },
@@ -95,6 +97,9 @@ export const tumblerProducts: Product[] = [
     name: "Amazon Basics Gourde Isotherme",
     battery: "Inox double paroi",
     amazonQuery: "Amazon Basics gourde isotherme inox",
+    amazonAsin: "B0F2SH7WKL",
+    imageSrc: "/images/products/tumbler/amazon-basics-isotherme.jpg",
+    indicativePriceEur: 12.09,
     specs: [
       { label: "Capacité", value: "~590 ml" },
       { label: "Isolation", value: "Froid / chaud (double paroi)" },
@@ -130,6 +135,9 @@ export const tumblerProducts: Product[] = [
     name: "OTTO KONING Gourde 500 ml",
     battery: "Inox double paroi",
     amazonQuery: "OTTO KONING gourde isotherme 500 ml",
+    amazonAsin: "B0BK98QDGP",
+    imageSrc: "/images/products/tumbler/otto-koning-500.jpg",
+    indicativePriceEur: 12.99,
     specs: [
       { label: "Capacité", value: "500 ml" },
       { label: "Isolation", value: "Froid 24 h / chaud 12 h" },
@@ -162,6 +170,9 @@ export const tumblerProducts: Product[] = [
     name: "Qwetch Originals 500 ml",
     battery: "Inox double paroi",
     amazonQuery: "Qwetch Originals gourde isotherme 500ml",
+    amazonAsin: "B0FR8WMSVQ",
+    imageSrc: "/images/products/tumbler/qwetch-originals-500.jpg",
+    indicativePriceEur: 27.1,
     specs: [
       { label: "Capacité", value: "500 ml" },
       { label: "Isolation", value: "Froid 24 h / chaud 12 h" },
@@ -198,6 +209,9 @@ export const tumblerProducts: Product[] = [
     name: "Qwetch Active 1 L",
     battery: "Inox double paroi",
     amazonQuery: "Qwetch Active gourde isotherme 1L",
+    amazonAsin: "B0C6B2Y5CN",
+    imageSrc: "/images/products/tumbler/qwetch-active-1l.jpg",
+    indicativePriceEur: 29.33,
     specs: [
       { label: "Capacité", value: "1 L" },
       { label: "Isolation", value: "Froid 24 h / chaud 12 h" },
@@ -230,6 +244,9 @@ export const tumblerProducts: Product[] = [
     name: "THERMOS Ultralight 0,75 L",
     battery: "Inox double paroi",
     amazonQuery: "THERMOS Ultralight gourde 0.75L",
+    amazonAsin: "B075V4229Z",
+    imageSrc: "/images/products/tumbler/thermos-ultralight-750.jpg",
+    indicativePriceEur: 37.9,
     specs: [
       { label: "Capacité", value: "750 ml" },
       { label: "Isolation", value: "Chaud 10 h / froid 20 h" },
@@ -262,6 +279,9 @@ export const tumblerProducts: Product[] = [
     name: "Hydro Flask 710 ml (24 oz)",
     battery: "Inox double paroi",
     amazonQuery: "Hydro Flask gourde 710 ml standard mouth",
+    amazonAsin: "B0BTFZ31KR",
+    imageSrc: "/images/products/tumbler/hydro-flask-710.jpg",
+    indicativePriceEur: 29.37,
     specs: [
       { label: "Capacité", value: "710 ml" },
       { label: "Isolation", value: "Tempkeep double paroi" },
@@ -299,6 +319,8 @@ export const tumblerProducts: Product[] = [
     battery: "Inox double paroi",
     amazonQuery: "Stanley Quencher H2.0 FlowState 1.2L",
     amazonAsin: "B0DFWW8JZN",
+    imageSrc: "/images/products/tumbler/stanley-quencher-12l.jpg",
+    indicativePriceEur: 36.9,
     specs: [
       { label: "Capacité", value: "1,2 L" },
       { label: "Isolation", value: "Froid 11 h / glacé 48 h" },
@@ -334,6 +356,9 @@ export const tumblerProducts: Product[] = [
     name: "Owala FreeSip 710 ml",
     battery: "Inox double paroi",
     amazonQuery: "Owala FreeSip 710 ml gourde paille",
+    amazonAsin: "B0C59BYVTQ",
+    imageSrc: "/images/products/tumbler/owala-freesip-710.jpg",
+    indicativePriceEur: 36.99,
     specs: [
       { label: "Capacité", value: "710 ml" },
       { label: "Isolation", value: "Inox isotherme" },
@@ -364,33 +389,36 @@ export const tumblerProducts: Product[] = [
     slug: "stanley-flip-straw-1l",
     category: "tumblers",
     siteId: "tumbler",
-    name: "Stanley Flip Straw 1,06 L",
+    name: "Stanley IceFlow Flip Straw 0,89 L",
     battery: "Inox double paroi",
-    amazonQuery: "Stanley Flip Straw gourde 1.06L",
+    amazonQuery: "Stanley IceFlow Flip Straw 887 ml",
+    amazonAsin: "B0DR9NZMYJ",
+    imageSrc: "/images/products/tumbler/stanley-flip-straw-1l.jpg",
+    indicativePriceEur: 42.5,
     specs: [
-      { label: "Capacité", value: "1,06 L" },
-      { label: "Isolation", value: "Froid 15 h / glace 3 j" },
+      { label: "Capacité", value: "0,89 L (887 ml)" },
+      { label: "Isolation", value: "Froid 12 h / glacé 48 h" },
       { label: "Matière", value: "Inox + paille rabattable" },
       { label: "Points forts", value: "Paille flip, étanche" },
     ],
     ...copy(
       {
-        tagline: "Stanley plus compact que le Quencher",
+        tagline: "Stanley IceFlow Flip Straw",
         summary:
-          "Gourde à paille rabattable : moins « mug », plus bouteille, toujours grand volume.",
+          "Gobelet IceFlow à paille rabattable (~0,89 L) : moins « mug Quencher », plus compact pour sport et voiture.",
         bestFor: "Sport & voyage",
-        pros: ["Marque Stanley", "Paille pratique", "Bonne isolation"],
+        pros: ["Marque Stanley", "Paille flip", "Bonne isolation"],
         cons: ["Prix premium", "Vérifier vendeur Amazon"],
         body: [
           "Bon compromis si le Quencher 1,2 L est trop large pour votre porte-gobelet.",
         ],
       },
       {
-        tagline: "Stanley, less mug-shaped",
+        tagline: "Stanley IceFlow Flip Straw",
         summary:
-          "Flip-straw bottle: less mug, more bottle, still large volume.",
+          "IceFlow flip-straw tumbler (~0.89 L): less Quencher-mug, more compact for sport and car.",
         bestFor: "Sport & travel",
-        pros: ["Stanley brand", "Handy straw", "Strong insulation"],
+        pros: ["Stanley brand", "Flip straw", "Strong insulation"],
         cons: ["Premium price", "Verify Amazon seller"],
         body: [
           "Good compromise if the 1.2 L Quencher is too wide for your cup holder.",
@@ -406,6 +434,8 @@ export const tumblerProducts: Product[] = [
     battery: "Tritan (non isotherme inox)",
     amazonQuery: "air up Click Green 600 ml pods",
     amazonAsin: "B0G6755KD6",
+    imageSrc: "/images/products/tumbler/air-up-click-600.jpg",
+    indicativePriceEur: 49.99,
     specs: [
       { label: "Capacité", value: "600 ml" },
       { label: "Principe", value: "Arôme par odeur (pods)" },
@@ -445,6 +475,8 @@ export const tumblerProducts: Product[] = [
     battery: "Inox double paroi",
     amazonQuery: "Owala SmoothSip Slider 355 ml",
     amazonAsin: "B0DF472VMZ",
+    imageSrc: "/images/products/tumbler/owala-smoothsip-355.jpg",
+    indicativePriceEur: 29.99,
     specs: [
       { label: "Capacité", value: "355 ml" },
       { label: "Isolation", value: "Chaud ~6 h / froid ~24 h" },
@@ -484,6 +516,8 @@ export const tumblerProducts: Product[] = [
     battery: "Inox double paroi",
     amazonQuery: "Simple Modern Trek tumbler handle straw 1180ml",
     amazonAsin: "B0BHC1C93P",
+    imageSrc: "/images/products/tumbler/simple-modern-trek-1180.jpg",
+    indicativePriceEur: 21.0,
     specs: [
       { label: "Capacité", value: "1,18 L" },
       { label: "Isolation", value: "Inox isotherme" },

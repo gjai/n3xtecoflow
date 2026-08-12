@@ -30,43 +30,48 @@ export function ComparisonPicker({
 
   const rows: CompareRow[] = useMemo(() => {
     if (!left || !right) return [];
-    const base = [
-      {
+    const base: CompareRow[] = [];
+    if (left.capacityWh || right.capacityWh) {
+      base.push({
         key: "capacity",
         labelFr: "Capacité",
         labelEn: "Capacity",
         left: left.capacityWh ? `${left.capacityWh} Wh` : "—",
         right: right.capacityWh ? `${right.capacityWh} Wh` : "—",
-      },
-      {
+      });
+    }
+    if (left.outputW || right.outputW) {
+      base.push({
         key: "output",
         labelFr: "Sortie AC",
         labelEn: "AC output",
         left: left.outputW ? `${left.outputW} W` : "—",
         right: right.outputW ? `${right.outputW} W` : "—",
-      },
-      {
+      });
+    }
+    if (left.weightKg != null || right.weightKg != null) {
+      base.push({
         key: "weight",
         labelFr: "Poids",
         labelEn: "Weight",
         left: left.weightKg != null ? `${left.weightKg} kg` : "—",
         right: right.weightKg != null ? `${right.weightKg} kg` : "—",
-      },
-      {
-        key: "battery",
-        labelFr: "Batterie",
-        labelEn: "Battery",
-        left: left.battery,
-        right: right.battery,
-      },
-      {
-        key: "price",
-        labelFr: "Prix indicatif",
-        labelEn: "Indicative price",
-        left: left.priceDisplay || (isEn ? "See Amazon" : "Voir Amazon"),
-        right: right.priceDisplay || (isEn ? "See Amazon" : "Voir Amazon"),
-      },
-    ];
+      });
+    }
+    base.push({
+      key: "battery",
+      labelFr: "Batterie / matière",
+      labelEn: "Battery / material",
+      left: left.battery,
+      right: right.battery,
+    });
+    base.push({
+      key: "price",
+      labelFr: "Prix indicatif",
+      labelEn: "Indicative price",
+      left: left.priceDisplay || (isEn ? "See Amazon" : "Voir Amazon"),
+      right: right.priceDisplay || (isEn ? "See Amazon" : "Voir Amazon"),
+    });
     const labels = new Set<string>();
     for (const s of [...left.specs, ...right.specs]) labels.add(s.label);
     for (const label of labels) {

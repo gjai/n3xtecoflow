@@ -25,15 +25,12 @@ export const ARTICLE_PRODUCT_SLUGS: Record<string, string[]> = {
   "recharge-rapide": ["delta-3-classic", "river-3-plus"],
   "ups-coupures": ["delta-2", "delta-pro-3"],
   "premier-achat": ["river-2", "delta-2"],
-  // Tumbler guides (packshot fallbacks)
-  "choisir-gourde-isotherme": ["super-sparrow-500", "owala-freesip-710"],
-  "gourde-vs-tumbler": ["stanley-quencher-12l", "super-sparrow-500"],
-  "entretien-gourde": ["qwetch-originals-500", "amazon-basics-isotherme"],
-  "isolation-froid-chaud": ["hydro-flask-710", "thermos-ultralight-750"],
-  "premier-achat-gourde": ["super-sparrow-500", "amazon-basics-isotherme"],
-  "volume-capacite-gourde": ["super-sparrow-500", "stanley-quencher-12l"],
-  "bouchon-paille-etancheite": ["owala-smoothsip-355", "stanley-flip-straw-1l"],
-  "gourde-au-quotidien": ["air-up-click-600", "simple-modern-trek-1180"],
+  // Tumbler — guide unique
+  "choisir-gourde-isotherme": [
+    "super-sparrow-500",
+    "stanley-quencher-12l",
+    "owala-freesip-710",
+  ],
   // Hubs comparatifs (cover)
   river: ["river-2", "river-3-plus"],
   delta: ["delta-2", "delta-3-classic"],

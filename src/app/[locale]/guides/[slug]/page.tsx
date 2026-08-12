@@ -1,8 +1,13 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArticleBody } from "@/components/ArticleBody";
+import { ArticleBody, type ArticleProductCard } from "@/components/ArticleBody";
 import { ArticleCover } from "@/components/ArticleCover";
+import {
+  LEGACY_TUMBLER_GUIDE_SLUGS,
+  TUMBLER_MAIN_GUIDE_SLUG,
+} from "@/data/tumbler-guides";
+import { products, getLocalizedProduct } from "@/data/products";
 import { getEditorialImages } from "@/data/images";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import {
@@ -11,14 +16,19 @@ import {
 } from "@/lib/article-images";
 import { GUIDE_TOPICS } from "@/lib/guides/types";
 import { resolveGuide } from "@/lib/guides/refresh";
+import { resolveProductMedia } from "@/lib/product-presentation";
 import { localeAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
+import { redirect } from "@/i18n/navigation";
 
 export const revalidate = 600;
 
 export function generateStaticParams() {
-  return GUIDE_TOPICS.flatMap((g) =>
-    ["fr", "en"].map((locale) => ({ locale, slug: g.slug })),
+  const tumblerLegacy = LEGACY_TUMBLER_GUIDE_SLUGS.map((slug) => ({ slug }));
+  const topics = GUIDE_TOPICS.map((g) => ({ slug: g.slug }));
+  const slugs = [...new Set([...topics, ...tumblerLegacy].map((x) => x.slug))];
+  return slugs.flatMap((slug) =>
+    ["fr", "en"].map((locale) => ({ locale, slug })),
   );
 }
 
@@ -29,6 +39,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, slug } = await params;
   const site = await getCurrentSite();
+  if (
+    site.id === "tumbler" &&
+    (LEGACY_TUMBLER_GUIDE_SLUGS as readonly string[]).includes(slug)
+  ) {
+    return {
+      alternates: localeAlternates(locale, `/guides/${TUMBLER_MAIN_GUIDE_SLUG}`),
+    };
+  }
   const guide = await resolveGuide(slug, site.id);
   if (!guide) return {};
   const copy = locale === "en" ? guide.en : guide.fr;
@@ -45,6 +63,31 @@ export async function generateMetadata({
   };
 }
 
+function buildProductCards(
+  sections: { productSlugs?: string[] }[],
+  locale: string,
+): Record<string, ArticleProductCard> {
+  const slugs = new Set<string>();
+  for (const s of sections) {
+    for (const slug of s.productSlugs || []) slugs.add(slug);
+  }
+  const out: Record<string, ArticleProductCard> = {};
+  for (const slug of slugs) {
+    const product = products.find((p) => p.slug === slug);
+    if (!product) continue;
+    const media = resolveProductMedia(product, null);
+    const copy = getLocalizedProduct(product, locale);
+    out[slug] = {
+      slug,
+      name: product.name,
+      href: `/produits/${product.category}/${product.slug}`,
+      imageSrc: media.src,
+      tagline: copy.tagline,
+    };
+  }
+  return out;
+}
+
 export default async function GuideArticlePage({
   params,
 }: {
@@ -53,6 +96,14 @@ export default async function GuideArticlePage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const site = await getCurrentSite();
+
+  if (
+    site.id === "tumbler" &&
+    (LEGACY_TUMBLER_GUIDE_SLUGS as readonly string[]).includes(slug)
+  ) {
+    redirect({ href: `/guides/${TUMBLER_MAIN_GUIDE_SLUG}`, locale });
+  }
+
   const guide = await resolveGuide(slug, site.id);
   if (!guide) notFound();
   const copy = locale === "en" ? guide.en : guide.fr;
@@ -75,6 +126,7 @@ export default async function GuideArticlePage({
       ]
     : productImages;
   const editorialImages = getEditorialImages(site.id);
+  const productCards = buildProductCards(copy.sections, locale);
 
   return (
     <article>
@@ -103,6 +155,7 @@ export default async function GuideArticlePage({
           site.id === "tumbler" ? "gourde isotherme" : "EcoFlow station électrique"
         }
         amazonLabel={isEn ? "Browse on Amazon" : "Voir sur Amazon"}
+        productCards={productCards}
       />
     </article>
   );

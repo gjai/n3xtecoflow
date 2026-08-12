@@ -101,7 +101,7 @@ export default async function ProductPage({
   const offer = await getAmazonOffer(product.slug);
   const ecoflow = await getEcoflowEntry(product.slug);
   const media = resolveProductMedia(product, ecoflow);
-  const displayPrice = resolveDisplayPrice(offer, ecoflow);
+  const displayPrice = resolveDisplayPrice(offer, ecoflow, product);
   const amazonHref =
     offer?.detailUrl || amazonHrefForProduct(product);
   const specs = localizeSpecs(product.specs, locale);

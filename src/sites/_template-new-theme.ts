@@ -12,8 +12,12 @@
  * 5. DNS apex + www → VPS
  * 6. Coolify FQDN sur la MÊME app n3xtecoflow
  * 7. network[] croisé avec les sites sœurs si besoin
+ * 8. Catalogue produits (OBLIGATOIRE avant ship — sinon fiches sans photo/prix) :
+ *    - chaque produit : `amazonAsin` + `imageSrc` (packshot local ou Amazon) + `indicativePriceEur`
+ *    - ne pas compter sur Creators API ni sur un catalogue Shopify (spécifique EcoFlow)
+ *    - Creators API = prix live plus tard (≥ 10 ventes / 30 j)
  *
- * Voir .cursor/rules/domaines-declaration.mdc
+ * Voir .cursor/rules/domaines-declaration.mdc et amazon-creators-api.mdc
  */
 import type { SiteConfig } from "./types";
 

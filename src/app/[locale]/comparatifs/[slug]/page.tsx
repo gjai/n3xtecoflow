@@ -25,6 +25,7 @@ import {
   LEGACY_COMPARISON_REDIRECTS,
   productsForHub,
   toCompareProductView,
+  usesFlatComparison,
 } from "@/lib/comparisons/hub";
 import { resolveDisplayPrice, resolveProductMedia } from "@/lib/product-presentation";
 import { localeAlternates } from "@/lib/seo";
@@ -94,6 +95,17 @@ export default async function ComparisonSlugPage({
   const cat = getCategory(slug);
   if (cat) {
     if (!comparisonHubBelongsToSite(cat.id, site.id)) notFound();
+    // Tumbler (et thèmes plats) : pas de hubs par catégorie — tout sur /comparatifs
+    if (usesFlatComparison(site.id)) {
+      const qs = new URLSearchParams();
+      if (sp.a) qs.set("a", sp.a);
+      if (sp.b) qs.set("b", sp.b);
+      const q = qs.toString();
+      redirect({
+        href: q ? `/comparatifs?${q}` : "/comparatifs",
+        locale,
+      });
+    }
     const list = productsForHub(cat.id);
     if (list.length < 2) notFound();
     const ecoflowMap = await getEcoflowEntriesMap();
@@ -104,7 +116,7 @@ export default async function ComparisonSlugPage({
     for (const p of list) {
       const eco = ecoflowMap[p.slug];
       const amazon = amazonMap[p.slug];
-      const display = resolveDisplayPrice(amazon, eco);
+      const display = resolveDisplayPrice(amazon, eco, p);
       // Build view with resolved price
       const view = toCompareProductView(p, locale, eco);
       if (display?.display) {

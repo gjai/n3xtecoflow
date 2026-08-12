@@ -2,9 +2,14 @@ import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { CoverImage } from "@/components/CoverImage";
+import {
+  TumblerProductCatalog,
+  type TumblerCatalogItem,
+} from "@/components/TumblerProductCatalog";
 import { categoryImages } from "@/data/images";
 import { getAmazonOffersMap } from "@/lib/amazon/price-store";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
+import { formatCapacityMl, parseCapacityMl } from "@/lib/product-capacity";
 import { resolveProductCopy } from "@/lib/product-copy";
 import {
   resolveDisplayPrice,
@@ -68,79 +73,55 @@ export default async function ProductsIndexPage({
         m.readEcoflowEditorialStore(),
       ),
     ]);
-    const rows = products.map((product) => {
+    const items: TumblerCatalogItem[] = products.map((product) => {
       const editorial = editorialStore.entries[product.slug];
       const p = resolveProductCopy(product, locale, editorial);
       const eco = ecoflowMap[product.slug];
       const media = resolveProductMedia(product, eco);
-      const displayPrice = resolveDisplayPrice(offers[product.slug], eco);
-      return { product, p, media, displayPrice };
+      const displayPrice = resolveDisplayPrice(
+        offers[product.slug],
+        eco,
+        product,
+      );
+      const capacityMl = parseCapacityMl(product);
+      return {
+        slug: product.slug,
+        href: `/produits/${product.category}/${product.slug}`,
+        name: product.name,
+        tagline: p.tagline,
+        summary: p.summary,
+        category: product.category as "gourdes" | "tumblers",
+        priceAmount: displayPrice?.amount ?? product.indicativePriceEur ?? null,
+        priceDisplay: displayPrice?.display ?? null,
+        capacityMl,
+        capacityLabel: formatCapacityMl(capacityMl, locale),
+        weightKg: product.weightKg ?? null,
+        media: {
+          src: media.src,
+          altFr: media.altFr,
+          altEn: media.altEn,
+          credit: media.credit,
+          creditUrl: media.creditUrl,
+          packshot: media.source !== "category",
+        },
+      };
     });
 
     return (
       <div className="pt-6">
         <header className="mx-auto max-w-6xl px-5 py-12 md:px-8">
           <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold md:text-5xl">
-            {isEn ? "Insulated bottles & tumblers" : "Gourdes & tumblers isothermes"}
+            {isEn
+              ? "Insulated bottles & tumblers"
+              : "Gourdes & tumblers isothermes"}
           </h1>
           <p className="mt-4 max-w-3xl text-[var(--muted)]">
             {isEn
-              ? "Buying notes and Amazon links for bestsellers — prefer listings Ships and sold by Amazon."
-              : "Conseils d’achat et liens Amazon vers les best-sellers — préférez Expédié et vendu par Amazon."}
+              ? "Sort by price or capacity, filter by format — prefer listings Ships and sold by Amazon."
+              : "Triez par prix ou capacité, filtrez par format — préférez Expédié et vendu par Amazon."}
           </p>
         </header>
-        <div className="mx-auto grid max-w-6xl gap-4 px-5 pb-16 md:px-8">
-          {rows.map(({ product, p, media, displayPrice }) => (
-            <Link
-              key={product.slug}
-              href={`/produits/${product.category}/${product.slug}`}
-              className="grid gap-4 border border-[var(--line)] bg-[var(--surface)] p-4 transition hover:border-[var(--accent)] md:grid-cols-[140px_1fr_auto] md:items-center"
-            >
-              <CoverImage
-                image={{
-                  src: media.src,
-                  altFr: media.altFr,
-                  altEn: media.altEn,
-                  credit: media.credit,
-                  creditUrl: media.creditUrl,
-                }}
-                locale={locale}
-                className="aspect-square w-full border border-[var(--line)] bg-[var(--surface)] md:aspect-[4/3]"
-                packshot={media.source !== "category"}
-                sizes="140px"
-              />
-              <div>
-                <h2 className="text-lg font-semibold text-[var(--heading)]">
-                  {product.name}
-                </h2>
-                <p className="mt-1 text-sm text-[var(--muted)]">{p.tagline}</p>
-                <p className="mt-2 text-sm text-[var(--fog)]">{p.summary}</p>
-              </div>
-              <div className="text-sm md:text-right">
-                {displayPrice ? (
-                  <>
-                    <p className="font-semibold text-[var(--heading)]">
-                      {displayPrice.display}
-                    </p>
-                    <p className="mt-1 text-[10px] text-[var(--muted)]">
-                      Amazon.fr
-                    </p>
-                  </>
-                ) : (
-                  <p className="text-xs font-medium text-[var(--accent)]">
-                    {isEn ? "Price on Amazon →" : "Prix sur Amazon →"}
-                  </p>
-                )}
-                <p className="mt-1 text-[var(--muted)]">
-                  {product.specs?.[0]?.value || product.battery}
-                </p>
-                <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-[var(--heading)]">
-                  {isEn ? "View sheet" : "Voir la fiche"}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <TumblerProductCatalog locale={locale} items={items} />
       </div>
     );
   }

@@ -25,4 +25,9 @@ Les **prix Amazon live** sont codés (`/api/amazon/prices/refresh`, cache, UI fi
 
 Tag Associates déjà en place : `ecoflown3xt-21` / `AMAZON_ASSOCIATE_TAG`.
 
-Ne pas scraper Amazon ; pas de prix inventés en dur.
+## Prix sans Creators (obligatoire multi-thème)
+
+Tant que Creators est off, **chaque produit hors EcoFlow** doit avoir `indicativePriceEur` + `amazonAsin` + `imageSrc` packshot.
+`resolveDisplayPrice` priorise : Creators → catalogue EcoFlow Shopify → `indicativePriceEur`.
+Ne pas inventer de prix fictifs ; l’indicatif doit coller à une offre Amazon.fr réelle (revalidée périodiquement).
+Ne pas scraper Amazon en prod ; pas de prix inventés « au hasard ».

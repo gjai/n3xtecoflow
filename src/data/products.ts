@@ -42,6 +42,11 @@ export type Product = {
   amazonAsin?: string;
   /** Optional real product photo (Amazon Associates / licensed). Prefer over category stock. */
   imageSrc?: string;
+  /**
+   * Prix indicatif éditorial (€) tant que Creators API / catalogue boutique sont absents.
+   * Toujours affiché avec hint « indicatif » — remplacé dès qu’un prix live existe.
+   */
+  indicativePriceEur?: number;
   specs: { label: string; value: string }[];
   fr: LocaleCopy;
   en: LocaleCopy;
