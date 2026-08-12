@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { Outfit, Sora } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { AdSenseScript } from "@/components/AdSenseScript";
+import { ConsentProvider } from "@/components/ConsentProvider";
+import { CookieBanner } from "@/components/CookieBanner";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import "../globals.css";
@@ -76,13 +78,16 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${display.variable} ${body.variable} h-full`}>
       <body className="min-h-full antialiased">
         <NextIntlClientProvider messages={messages}>
-          <AdSenseScript />
-          <div className="flex min-h-full flex-col">
-            <SiteHeader />
-            <main className="flex-1">{children}</main>
-            <SiteFooter />
-          </div>
-          <p className="sr-only">{t("disclaimerShort")}</p>
+          <ConsentProvider>
+            <AdSenseScript />
+            <div className="flex min-h-full flex-col">
+              <SiteHeader />
+              <main className="flex-1">{children}</main>
+              <SiteFooter />
+            </div>
+            <CookieBanner />
+            <p className="sr-only">{t("disclaimerShort")}</p>
+          </ConsentProvider>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { CookieSettingsButton } from "./CookieSettingsButton";
 
 export function SiteFooter() {
   const t = useTranslations("footer");
@@ -26,6 +27,10 @@ export function SiteFooter() {
           <Link href="/affiliation" className="hover:text-white">
             {t("affiliate")}
           </Link>
+          <Link href="/contact" className="hover:text-white">
+            {t("contact")}
+          </Link>
+          <CookieSettingsButton label={t("cookies")} />
         </div>
       </div>
       <div className="border-t border-white/10 px-5 py-4 text-center text-xs text-[var(--muted)] md:px-8">

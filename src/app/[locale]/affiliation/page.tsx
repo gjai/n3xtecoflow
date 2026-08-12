@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
+import { Link } from "@/i18n/navigation";
 
 export async function generateMetadata({
   params,
@@ -30,6 +31,16 @@ export default async function AffiliatePage({
         <p>{t("amazon")}</p>
         <p>{t("affiliateBody")}</p>
         <p>{t("adsense")}</p>
+        <p>
+          {t("contactViaForm")}{" "}
+          <Link
+            href="/contact"
+            className="text-[var(--accent)] underline-offset-2 hover:underline"
+          >
+            {t("contactLink")}
+          </Link>
+          .
+        </p>
       </div>
     </article>
   );

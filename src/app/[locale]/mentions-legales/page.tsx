@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
+import { Link } from "@/i18n/navigation";
 
 export async function generateMetadata({
   params,
@@ -25,10 +26,37 @@ export default async function MentionsPage({
       <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold">
         {t("mentionsTitle")}
       </h1>
-      <div className="mt-8 space-y-4 leading-relaxed text-[var(--fog)]">
-        <p>{t("independent")}</p>
-        <p>{t("contact")}</p>
-        <p>{t("amazon")}</p>
+      <div className="mt-8 space-y-8 leading-relaxed text-[var(--fog)]">
+        <section>
+          <h2 className="font-[family-name:var(--font-display)] text-xl text-white">
+            {t("publisherTitle")}
+          </h2>
+          <p className="mt-3">{t("independent")}</p>
+          <p className="mt-2">{t("siren")}</p>
+          <p className="mt-2">
+            {t("contactViaForm")}{" "}
+            <Link
+              href="/contact"
+              className="text-[var(--accent)] underline-offset-2 hover:underline"
+            >
+              {t("contactLink")}
+            </Link>
+            .
+          </p>
+        </section>
+        <section>
+          <h2 className="font-[family-name:var(--font-display)] text-xl text-white">
+            {t("hostTitle")}
+          </h2>
+          <p className="mt-3 whitespace-pre-line">{t("hostBody")}</p>
+        </section>
+        <section>
+          <h2 className="font-[family-name:var(--font-display)] text-xl text-white">
+            {t("affiliateTitle")}
+          </h2>
+          <p className="mt-3">{t("amazon")}</p>
+          <p className="mt-2">{t("adsense")}</p>
+        </section>
       </div>
     </article>
   );

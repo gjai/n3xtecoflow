@@ -13,6 +13,7 @@ const paths = [
   "/mentions-legales",
   "/confidentialite",
   "/affiliation",
+  "/contact",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

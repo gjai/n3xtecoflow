@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
+import { Link } from "@/i18n/navigation";
 
 export async function generateMetadata({
   params,
@@ -28,7 +29,17 @@ export default async function PrivacyPage({
       <div className="mt-8 space-y-4 leading-relaxed text-[var(--fog)]">
         <p>{t("privacyBody")}</p>
         <p>{t("adsense")}</p>
-        <p>{t("contact")}</p>
+        <p>{t("privacyConsent")}</p>
+        <p>
+          {t("contactViaForm")}{" "}
+          <Link
+            href="/contact"
+            className="text-[var(--accent)] underline-offset-2 hover:underline"
+          >
+            {t("contactLink")}
+          </Link>
+          .
+        </p>
       </div>
     </article>
   );
