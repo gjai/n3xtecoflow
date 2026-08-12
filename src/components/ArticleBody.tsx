@@ -18,7 +18,7 @@ export function ArticleBody({
     <div className="mx-auto max-w-3xl space-y-10 px-5 pb-16 pt-28 text-base leading-relaxed text-[var(--fog)] md:px-8">
       {sections.map((section) => (
         <section key={section.heading}>
-          <h2 className="font-[family-name:var(--font-display)] text-2xl text-white">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">
             {section.heading}
           </h2>
           {section.paragraphs.map((p) => (

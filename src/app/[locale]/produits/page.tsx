@@ -53,7 +53,7 @@ export default async function ProductsIndexPage({
               href={`/produits/${cat.slug}`}
               className="border border-[var(--line)] bg-[var(--surface)] p-6 transition hover:border-[var(--accent)]"
             >
-              <h2 className="text-xl font-semibold text-white">{copy.title}</h2>
+              <h2 className="text-xl font-semibold text-[var(--heading)]">{copy.title}</h2>
               <p className="mt-3 text-sm text-[var(--muted)]">{copy.intro}</p>
               <p className="mt-4 text-xs uppercase tracking-[0.16em] text-[var(--accent)]">
                 {count} {isEn ? "products" : "produits"}

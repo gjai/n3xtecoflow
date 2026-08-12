@@ -1,20 +1,22 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function SiteHeader() {
   const t = useTranslations("nav");
   const brand = useTranslations("home");
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
 
   const links = [
     { href: "/produits", label: t("products") },
     { href: "/guides", label: t("guides") },
     { href: "/comparatifs", label: t("comparisons") },
-    { href: "/powerstream", label: t("powerstream") },
+    { href: "/a-propos", label: t("about") },
     { href: "/contact", label: t("contact") },
   ] as const;
 
@@ -23,22 +25,27 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 md:px-8">
         <Link
           href="/"
-          className="font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight text-white md:text-xl"
+          className="font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight text-[var(--hero-fg)] md:text-xl"
           onClick={() => setOpen(false)}
         >
           {brand("brand")}
         </Link>
-        <nav className="hidden items-center gap-5 text-sm text-white/85 lg:flex">
+        <nav className="hidden items-center gap-4 text-sm text-[var(--hero-muted)] xl:flex">
           {links.map((l) => (
-            <Link key={l.href} href={l.href} className="hover:text-white">
+            <Link
+              key={l.href}
+              href={l.href}
+              className="hover:text-[var(--hero-fg)]"
+            >
               {l.label}
             </Link>
           ))}
+          <ThemeToggle locale={locale} />
           <LanguageSwitcher label={t("language")} />
         </nav>
         <button
           type="button"
-          className="inline-flex items-center justify-center border border-white/25 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-white lg:hidden"
+          className="inline-flex items-center justify-center border border-[var(--hero-border)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--hero-fg)] xl:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           onClick={() => setOpen((v) => !v)}
@@ -49,9 +56,9 @@ export function SiteHeader() {
       {open ? (
         <div
           id="mobile-nav"
-          className="border-t border-white/10 bg-[var(--ink)]/95 px-5 py-4 backdrop-blur lg:hidden"
+          className="border-t border-[var(--line)] bg-[var(--surface)]/95 px-5 py-4 backdrop-blur xl:hidden"
         >
-          <div className="flex flex-col gap-3 text-sm text-white">
+          <div className="flex flex-col gap-3 text-sm text-[var(--fg)]">
             {links.map((l) => (
               <Link
                 key={l.href}
@@ -62,7 +69,10 @@ export function SiteHeader() {
                 {l.label}
               </Link>
             ))}
-            <LanguageSwitcher label={t("language")} />
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <ThemeToggle locale={locale} />
+              <LanguageSwitcher label={t("language")} />
+            </div>
           </div>
         </div>
       ) : null}

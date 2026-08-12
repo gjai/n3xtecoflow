@@ -11,7 +11,8 @@
     "guides": "Guides",
     "comparisons": "Comparatifs",
     "contact": "Contact",
-    "language": "Langue"
+    "language": "Langue",
+    "about": "À propos"
   },
   "home": {
     "brand": "EcoFlow Stream",
@@ -21,16 +22,23 @@
     "ctaSecondary": "Voir les comparatifs",
     "featuresTitle": "Pourquoi ces guides",
     "feature1Title": "Indépendant",
-    "feature1Text": "Analyses éditoriales, pas un site officiel EcoFlow.",
+    "feature1Text": "Analyses éditoriales, pas un site officiel EcoFlow. Nous ne revendons pas les produits.",
     "feature2Title": "Orienté décision",
-    "feature2Text": "Capacité, usage, budget : on va droit au choix.",
+    "feature2Text": "Capacité, usage, budget : on va droit au choix, avec limites et compromis affichés.",
     "feature3Title": "Transparence",
-    "feature3Text": "Liens Amazon Affiliates et publicités clairement indiqués.",
+    "feature3Text": "Liens Amazon Affiliates et publicités clairement indiqués, avec consentement cookies.",
     "spotlightTitle": "Focus produit",
     "spotlightName": "Série EcoFlow STREAM",
     "spotlightText": "La gamme solaire plug-in FR (Ultra X, Pro, Max, micro-onduleur) pour autoconsommation balcon/maison — avec ou sans stockage.",
     "spotlightCta": "Voir la série STREAM",
-    "adsLabel": "Publicité"
+    "adsLabel": "Publicité",
+    "editorialLead": "Nous publions des fiches et des guides pour aider à décider : capacité (Wh), puissance (W), usage réel et budget — sans jargon inutile.",
+    "aboutTeaser": "Qui rédige, comment on travaille, et comment le site est financé :",
+    "aboutLink": "lire la page À propos",
+    "howTitle": "Comment lire nos contenus",
+    "howBody1": "Chaque fiche produit résume les specs utiles (Wh, W, poids, cycles, expansibilité) et un avis d’usage : camping, backup maison, solaire balcon, etc. Ce n’est pas un catalogue marchand : c’est un outil de comparaison.",
+    "howBody2": "Les guides expliquent la méthode (estimer sa conso, choisir une capacité, comprendre STREAM vs PowerStream). Les comparatifs tranchent entre deux logiques d’achat pour éviter les erreurs classiques.",
+    "howBody3": "Les prix et stocks changent vite : nos liens Amazon ouvrent une recherche à jour. Vérifiez toujours compatibilité électrique et règles locales avant d’installer du solaire."
   },
   "powerstream": {
     "title": "Guide EcoFlow PowerStream",
@@ -137,6 +145,7 @@
   },
   "footer": {
     "independent": "Site indépendant — guides EcoFlow & PowerStream",
+    "about": "À propos",
     "mentions": "Mentions légales",
     "privacy": "Confidentialité",
     "affiliate": "Affiliation",
@@ -151,5 +160,33 @@
     "disclosure": "En tant que Partenaire Amazon, nous réalisons un bénéfice sur les achats éligibles via nos liens. Le prix reste identique pour vous.",
     "disclosureShort": "Liens affiliés Amazon.",
     "disclosureLink": "En savoir plus"
+  },
+  "theme": {
+    "aria": "Changer le thème d’affichage",
+    "title": "Thème : {mode} (cliquer pour changer)"
+  },
+  "about": {
+    "eyebrow": "Éditorial",
+    "title": "À propos d’EcoFlow Stream",
+    "meta": "Qui sommes-nous, méthode éditoriale, indépendance et transparence sur l’affiliation Amazon et AdSense.",
+    "lead": "EcoFlow Stream est un site éditorial indépendant dédié à l’écosystème EcoFlow (stations portables, STREAM, PowerStream, OCEAN, solaire et outdoor). Notre but : aider à choisir avec des infos claires, pas vendre à votre place.",
+    "missionTitle": "Notre mission",
+    "missionBody": "Rendre accessibles les critères techniques qui comptent vraiment (Wh, watts, recharge, poids, expansibilité) et les traduire en cas d’usage concrets : camping, van, backup, solaire balcon. Nous privilégions l’explication et la comparaison plutôt que les slogans marketing.",
+    "methodTitle": "Méthode éditoriale",
+    "methodBody": "Nous construisons nos pages à partir de specs publiques, de documentation constructeur et de scénarios d’usage réalistes. Nous mettons à jour le catalogue quand de nouvelles gammes apparaissent (ex. STREAM, DELTA 3).",
+    "method1": "Fiches structurées : points forts / limites, specs et cas d’usage.",
+    "method2": "Guides pratiques : dimensionnement Wh, camping, backup maison.",
+    "method3": "Comparatifs : trancher entre modèles ou familles (ex. STREAM vs PowerStream).",
+    "method4": "Transparence : chaque lien d’achat affilié et chaque pub sont identifiables.",
+    "independenceTitle": "Indépendance",
+    "independenceBody": "Ce site n’est pas exploité par EcoFlow Inc. ni par Amazon. Les marques citées appartiennent à leurs propriétaires. Nos textes sont rédigés pour le lecteur ; un lien affilié ne change pas le prix que vous payez.",
+    "monetizationTitle": "Financement du site",
+    "monetizationBody": "Le site peut afficher des publicités Google AdSense (après consentement) et des liens d’affiliation Amazon Associates. Ces revenus financent l’hébergement, la maintenance et la rédaction. Ils n’achètent pas un avis favorable.",
+    "seeAlso": "Détails :",
+    "affiliateLink": "Affiliation & publicité",
+    "cookiesLink": "politique des cookies",
+    "contactTitle": "Nous contacter",
+    "contactBody": "Pour une question éditoriale, une correction ou un signalement, utilisez le",
+    "contactLink": "formulaire de contact"
   }
 }

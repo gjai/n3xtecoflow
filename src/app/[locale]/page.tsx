@@ -6,6 +6,7 @@ import { HeroVisual } from "@/components/HeroVisual";
 import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/JsonLd";
 import { AMAZON_QUERIES, buildAmazonSearchUrl } from "@/lib/amazon";
 import { categories, products } from "@/data/products";
+import { comparisons, guides } from "@/data/articles";
 
 export default async function HomePage({
   params,
@@ -31,10 +32,10 @@ export default async function HomePage({
           <p className="reveal font-[family-name:var(--font-display)] text-sm uppercase tracking-[0.28em] text-[var(--accent)]">
             {t("brand")}
           </p>
-          <h1 className="reveal-delay mt-4 max-w-2xl font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="reveal-delay mt-4 max-w-2xl font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] tracking-tight text-[var(--hero-fg)] sm:text-5xl md:text-6xl lg:text-7xl">
             {t("headline")}
           </h1>
-          <p className="reveal-delay-2 mt-6 max-w-xl text-base text-white/80 md:text-lg">
+          <p className="reveal-delay-2 mt-6 max-w-xl text-base text-[var(--hero-muted)] md:text-lg">
             {t("subhead")}
           </p>
           <div className="reveal-delay-2 mt-10 flex flex-wrap gap-3 sm:gap-4">
@@ -46,7 +47,7 @@ export default async function HomePage({
             </Link>
             <Link
               href="/guides/choisir-station"
-              className="border border-white/30 px-5 py-3 text-sm font-semibold tracking-wide text-white transition hover:border-white"
+              className="border border-[var(--hero-border)] px-5 py-3 text-sm font-semibold tracking-wide text-[var(--hero-fg)] transition hover:border-[var(--accent)]"
             >
               {t("ctaPrimary")}
             </Link>
@@ -57,8 +58,42 @@ export default async function HomePage({
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-20">
-        <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold md:text-3xl">
+      <section className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
+        <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
+          {t("featuresTitle")}
+        </h2>
+        <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("editorialLead")}</p>
+        <div className="mt-8 grid gap-5 md:grid-cols-3">
+          {[
+            { title: t("feature1Title"), text: t("feature1Text") },
+            { title: t("feature2Title"), text: t("feature2Text") },
+            { title: t("feature3Title"), text: t("feature3Text") },
+          ].map((f) => (
+            <div
+              key={f.title}
+              className="border border-[var(--line)] bg-[var(--surface)] p-5"
+            >
+              <h3 className="font-semibold text-[var(--heading)]">{f.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">
+                {f.text}
+              </p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-6 text-sm text-[var(--muted)]">
+          {t("aboutTeaser")}{" "}
+          <Link
+            href="/a-propos"
+            className="text-[var(--accent)] underline-offset-2 hover:underline"
+          >
+            {t("aboutLink")}
+          </Link>
+          .
+        </p>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-5 pb-14 md:px-8 md:pb-20">
+        <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
           {isEn ? "Shop by category" : "Parcourir par catégorie"}
         </h2>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -69,7 +104,7 @@ export default async function HomePage({
               className="group border border-[var(--line)] bg-[var(--surface)] p-5 transition hover:border-[var(--accent)]"
             >
               <div className="mb-4 h-1 w-10 bg-[var(--accent)] transition group-hover:w-16" />
-              <h3 className="text-lg font-semibold text-white">
+              <h3 className="text-lg font-semibold text-[var(--heading)]">
                 {isEn ? cat.en.title : cat.fr.title}
               </h3>
               <p className="mt-3 text-sm text-[var(--muted)]">
@@ -80,22 +115,42 @@ export default async function HomePage({
         </div>
         <p className="mt-8 text-sm text-[var(--muted)]">
           {products.length} {isEn ? "product sheets" : "fiches produits"} ·{" "}
-          <Link href="/comparatifs" className="text-[var(--accent)] hover:underline">
-            {isEn ? "Comparisons" : "Comparatifs"}
+          {guides.length} {isEn ? "guides" : "guides"} ·{" "}
+          {comparisons.length}{" "}
+          <Link
+            href="/comparatifs"
+            className="text-[var(--accent)] hover:underline"
+          >
+            {isEn ? "comparisons" : "comparatifs"}
           </Link>
         </p>
       </section>
 
       <section className="border-y border-[var(--line)] bg-[var(--surface)]">
+        <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
+            {t("howTitle")}
+          </h2>
+          <div className="mt-6 space-y-4 text-[var(--fog)] leading-relaxed md:columns-2 md:gap-10">
+            <p>{t("howBody1")}</p>
+            <p>{t("howBody2")}</p>
+            <p>{t("howBody3")}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-[var(--line)] bg-[var(--surface)]">
         <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-[1.2fr_0.8fr] md:items-end md:px-8 md:py-18">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-[var(--solar)]">
               {t("spotlightTitle")}
             </p>
-            <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-semibold md:text-4xl">
+            <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
               {t("spotlightName")}
             </h2>
-            <p className="mt-4 max-w-xl text-[var(--muted)]">{t("spotlightText")}</p>
+            <p className="mt-4 max-w-xl text-[var(--muted)]">
+              {t("spotlightText")}
+            </p>
             <div className="mt-8 flex flex-wrap items-center gap-6">
               <Link
                 href="/produits/stream"

@@ -38,19 +38,19 @@ export default async function PowerStreamPage({
       <div className="mx-auto max-w-3xl space-y-10 px-5 py-14 text-base leading-relaxed text-[var(--fog)] md:px-8">
         <p>{t("intro")}</p>
         <section>
-          <h2 className="font-[family-name:var(--font-display)] text-2xl text-white">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">
             {t("whatTitle")}
           </h2>
           <p className="mt-3">{t("whatText")}</p>
         </section>
         <section>
-          <h2 className="font-[family-name:var(--font-display)] text-2xl text-white">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">
             {t("forWhoTitle")}
           </h2>
           <p className="mt-3">{t("forWhoText")}</p>
         </section>
         <section>
-          <h2 className="font-[family-name:var(--font-display)] text-2xl text-white">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">
             {t("checklistTitle")}
           </h2>
           <ul className="mt-4 list-disc space-y-2 pl-5">
@@ -66,7 +66,7 @@ export default async function PowerStreamPage({
           badge={a("badge")}
         />
         <section className="space-y-3">
-          <h2 className="font-[family-name:var(--font-display)] text-2xl text-white">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">
             {t("relatedTitle")}
           </h2>
           <Link

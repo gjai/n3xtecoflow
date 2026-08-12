@@ -31,11 +31,11 @@ export default async function CookiesPage({
       </h1>
       <div className="mt-8 space-y-4 leading-relaxed text-[var(--fog)]">
         <p>{t("cookiesIntro")}</p>
-        <h2 className="pt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-white">
+        <h2 className="pt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
           {t("cookiesNecessaryTitle")}
         </h2>
         <p>{t("cookiesNecessaryBody")}</p>
-        <h2 className="pt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-white">
+        <h2 className="pt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
           {t("cookiesAdsTitle")}
         </h2>
         <p>{t("cookiesAdsBody")}</p>

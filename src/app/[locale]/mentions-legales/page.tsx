@@ -28,11 +28,19 @@ export default async function MentionsPage({
       </h1>
       <div className="mt-8 space-y-8 leading-relaxed text-[var(--fog)]">
         <section>
-          <h2 className="font-[family-name:var(--font-display)] text-xl text-white">
+          <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--heading)]">
             {t("publisherTitle")}
           </h2>
           <p className="mt-3">{t("independent")}</p>
           <p className="mt-2">{t("siren")}</p>
+          <p className="mt-2">
+            <Link
+              href="/a-propos"
+              className="text-[var(--accent)] underline-offset-2 hover:underline"
+            >
+              {locale === "en" ? "About this editorial site" : "À propos de ce site éditorial"}
+            </Link>
+          </p>
           <p className="mt-2">
             {t("contactViaForm")}{" "}
             <Link
@@ -45,13 +53,13 @@ export default async function MentionsPage({
           </p>
         </section>
         <section>
-          <h2 className="font-[family-name:var(--font-display)] text-xl text-white">
+          <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--heading)]">
             {t("hostTitle")}
           </h2>
           <p className="mt-3 whitespace-pre-line">{t("hostBody")}</p>
         </section>
         <section>
-          <h2 className="font-[family-name:var(--font-display)] text-xl text-white">
+          <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--heading)]">
             {t("affiliateTitle")}
           </h2>
           <p className="mt-3">{t("amazon")}</p>

@@ -48,7 +48,7 @@ export default async function GuidesIndexPage({
               href={`/guides/${guide.slug}`}
               className="border border-[var(--line)] bg-[var(--surface)] p-6 transition hover:border-[var(--accent)]"
             >
-              <h2 className="text-xl font-semibold text-white">{copy.title}</h2>
+              <h2 className="text-xl font-semibold text-[var(--heading)]">{copy.title}</h2>
               <p className="mt-3 text-sm text-[var(--muted)]">{copy.subtitle}</p>
             </Link>
           );
@@ -57,7 +57,7 @@ export default async function GuidesIndexPage({
           href="/produits"
           className="border border-[var(--line)] bg-[var(--surface)] p-6 transition hover:border-[var(--accent)]"
         >
-          <h2 className="text-xl font-semibold text-white">
+          <h2 className="text-xl font-semibold text-[var(--heading)]">
             {isEn ? "Full product catalog" : "Catalogue produits complet"}
           </h2>
           <p className="mt-3 text-sm text-[var(--muted)]">

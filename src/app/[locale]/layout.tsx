@@ -8,6 +8,10 @@ import { ConsentProvider } from "@/components/ConsentProvider";
 import { CookieBanner } from "@/components/CookieBanner";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import {
+  ThemeProvider,
+  themeInitScript,
+} from "@/components/ThemeProvider";
 import "../globals.css";
 
 const display = Sora({
@@ -92,19 +96,28 @@ export default async function LocaleLayout({
   const t = await getTranslations("meta");
 
   return (
-    <html lang={locale} className={`${display.variable} ${body.variable} h-full`}>
+    <html
+      lang={locale}
+      className={`${display.variable} ${body.variable} h-full`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="min-h-full antialiased">
         <NextIntlClientProvider messages={messages}>
-          <ConsentProvider>
-            <AdSenseScript />
-            <div className="flex min-h-full flex-col">
-              <SiteHeader />
-              <main className="flex-1">{children}</main>
-              <SiteFooter />
-            </div>
-            <CookieBanner />
-            <p className="sr-only">{t("disclaimerShort")}</p>
-          </ConsentProvider>
+          <ThemeProvider>
+            <ConsentProvider>
+              <AdSenseScript />
+              <div className="flex min-h-full flex-col">
+                <SiteHeader />
+                <main className="flex-1">{children}</main>
+                <SiteFooter />
+              </div>
+              <CookieBanner />
+              <p className="sr-only">{t("disclaimerShort")}</p>
+            </ConsentProvider>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

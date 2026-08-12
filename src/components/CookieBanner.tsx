@@ -27,7 +27,7 @@ export function CookieBanner() {
         <div className="max-w-2xl">
           <h2
             id="cookie-title"
-            className="font-[family-name:var(--font-display)] text-base font-semibold text-white"
+            className="font-[family-name:var(--font-display)] text-base font-semibold text-[var(--heading)]"
           >
             {t("title")}
           </h2>
@@ -52,7 +52,7 @@ export function CookieBanner() {
           <button
             type="button"
             onClick={rejectAds}
-            className="border border-white/25 px-4 py-2 text-sm font-semibold text-white transition hover:border-white"
+            className="border border-[var(--line)] px-4 py-2 text-sm font-semibold text-[var(--heading)] transition hover:border-[var(--accent)]"
           >
             {t("reject")}
           </button>
@@ -60,7 +60,7 @@ export function CookieBanner() {
             <button
               type="button"
               onClick={() => setPreferencesOpen(true)}
-              className="border border-white/25 px-4 py-2 text-sm font-semibold text-white transition hover:border-white"
+              className="border border-[var(--line)] px-4 py-2 text-sm font-semibold text-[var(--heading)] transition hover:border-[var(--accent)]"
             >
               {t("customize")}
             </button>

@@ -9,7 +9,7 @@ export function CookieSettingsButton({ label }: { label: string }) {
     <button
       type="button"
       onClick={openPreferences}
-      className="hover:text-white"
+      className="hover:text-[var(--heading)]"
     >
       {label}
     </button>

@@ -1,17 +1,74 @@
 @import "tailwindcss";
 
-:root {
+/* Default + dark preference / explicit dark */
+:root,
+html.dark {
+  color-scheme: dark;
   --bg: #0b1210;
   --ink: #07100d;
   --surface: #121c18;
   --fg: #e8f0eb;
   --fog: #d5e0d9;
+  --heading: #ffffff;
   --muted: #8fa397;
   --line: rgba(232, 240, 235, 0.14);
   --accent: #c8f04d;
   --accent-ink: #102008;
   --solar: #f0a202;
   --glow: rgba(200, 240, 77, 0.22);
+  --hero-from: #0b1210;
+  --hero-mid: #10241c;
+  --hero-to: #0a1612;
+  --hero-fg: #ffffff;
+  --hero-muted: rgba(255, 255, 255, 0.8);
+  --hero-border: rgba(255, 255, 255, 0.28);
+}
+
+/* System light preference when no explicit theme class yet */
+@media (prefers-color-scheme: light) {
+  :root:not(.dark) {
+    color-scheme: light;
+    --bg: #f3f6f2;
+    --ink: #e8eee8;
+    --surface: #ffffff;
+    --fg: #12201a;
+    --fog: #2a3b33;
+    --heading: #0c1813;
+    --muted: #5c7267;
+    --line: rgba(12, 24, 19, 0.12);
+    --accent: #5a8f12;
+    --accent-ink: #f7ffe8;
+    --solar: #c47a00;
+    --glow: rgba(90, 143, 18, 0.18);
+    --hero-from: #e7f0e4;
+    --hero-mid: #d5e8d6;
+    --hero-to: #f3f6f2;
+    --hero-fg: #0c1813;
+    --hero-muted: rgba(12, 24, 19, 0.72);
+    --hero-border: rgba(12, 24, 19, 0.18);
+  }
+}
+
+html.light {
+  color-scheme: light;
+  --bg: #f3f6f2;
+  --ink: #e8eee8;
+  --surface: #ffffff;
+  --fg: #12201a;
+  --fog: #2a3b33;
+  --heading: #0c1813;
+  --muted: #5c7267;
+  --line: rgba(12, 24, 19, 0.12);
+  --accent: #5a8f12;
+  --accent-ink: #f7ffe8;
+  --solar: #c47a00;
+  --glow: rgba(90, 143, 18, 0.18);
+  --hero-from: #e7f0e4;
+  --hero-mid: #d5e8d6;
+  --hero-to: #f3f6f2;
+  --hero-fg: #0c1813;
+  --hero-muted: rgba(12, 24, 19, 0.72);
+  --hero-border: rgba(12, 24, 19, 0.18);
 }
 
 @theme inline {
@@ -35,6 +92,7 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-body), system-ui, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 a {
@@ -51,13 +109,13 @@ a {
   background:
     radial-gradient(ellipse 80% 60% at 70% 20%, var(--glow), transparent 55%),
     radial-gradient(circle at 20% 80%, rgba(240, 162, 2, 0.12), transparent 40%),
-    linear-gradient(160deg, #0b1210 0%, #10241c 45%, #0a1612 100%),
+    linear-gradient(160deg, var(--hero-from) 0%, var(--hero-mid) 45%, var(--hero-to) 100%),
     repeating-linear-gradient(
       -12deg,
       transparent 0,
       transparent 18px,
-      rgba(200, 240, 77, 0.03) 18px,
-      rgba(200, 240, 77, 0.03) 19px
+      color-mix(in srgb, var(--accent) 8%, transparent) 18px,
+      color-mix(in srgb, var(--accent) 8%, transparent) 19px
     );
 }
 
@@ -125,10 +183,10 @@ a {
 @keyframes softPulse {
   0%,
   100% {
-    filter: drop-shadow(0 0 0 rgba(200, 240, 77, 0));
+    filter: drop-shadow(0 0 0 transparent);
   }
   50% {
-    filter: drop-shadow(0 0 18px rgba(200, 240, 77, 0.25));
+    filter: drop-shadow(0 0 18px var(--glow));
   }
 }
 
@@ -195,5 +253,9 @@ a {
   .hero-ray,
   .hero-panel {
     animation: none;
+  }
+
+  body {
+    transition: none;
   }
 }

@@ -45,7 +45,7 @@ export default async function CategoryPage({
     <div className="pt-24">
       <header className="mx-auto max-w-6xl px-5 py-12 md:px-8">
         <p className="text-sm text-[var(--muted)]">
-          <Link href="/produits" className="hover:text-white">
+          <Link href="/produits" className="hover:text-[var(--heading)]">
             {isEn ? "Catalog" : "Catalogue"}
           </Link>
         </p>
@@ -64,7 +64,7 @@ export default async function CategoryPage({
               className="grid gap-2 border border-[var(--line)] bg-[var(--surface)] p-5 transition hover:border-[var(--accent)] md:grid-cols-[1fr_auto] md:items-center"
             >
               <div>
-                <h2 className="text-lg font-semibold text-white">{product.name}</h2>
+                <h2 className="text-lg font-semibold text-[var(--heading)]">{product.name}</h2>
                 <p className="mt-1 text-sm text-[var(--muted)]">{p.tagline}</p>
                 <p className="mt-2 text-sm text-[var(--fog)]">{p.summary}</p>
               </div>

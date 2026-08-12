@@ -15,8 +15,21 @@ export function organizationJsonLd(siteUrl: string) {
     url: siteUrl,
     description:
       "Site éditorial indépendant de guides et fiches techniques EcoFlow (affiliation Amazon).",
-    disclaimer:
-      "Non affilié officiellement à EcoFlow Inc. Contenu indépendant.",
+    foundingDate: "2026",
+    knowsAbout: [
+      "EcoFlow",
+      "portable power stations",
+      "balcony solar",
+      "PowerStream",
+      "STREAM",
+    ],
+    sameAs: [],
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "editorial",
+      url: `${siteUrl}/fr/contact`,
+      availableLanguage: ["French", "English"],
+    },
   };
 }
 

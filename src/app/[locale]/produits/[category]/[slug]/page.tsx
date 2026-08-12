@@ -87,11 +87,11 @@ export default async function ProductPage({
       <header className="hero-grid border-b border-[var(--line)]">
         <div className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-16">
           <p className="text-sm text-[var(--muted)]">
-            <Link href="/produits" className="hover:text-white">
+            <Link href="/produits" className="hover:text-[var(--heading)]">
               {isEn ? "Catalog" : "Catalogue"}
             </Link>
             {" / "}
-            <Link href={`/produits/${cat.slug}`} className="hover:text-white">
+            <Link href={`/produits/${cat.slug}`} className="hover:text-[var(--heading)]">
               {catCopy.title}
             </Link>
           </p>
@@ -109,7 +109,7 @@ export default async function ProductPage({
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-12 md:grid-cols-[1.2fr_0.8fr] md:px-8">
         <div className="space-y-8 text-[var(--fog)]">
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-2xl text-white">
+            <h2 className="font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">
               {isEn ? "Best for" : "Idéal pour"}
             </h2>
             <p className="mt-3">{copy.bestFor}</p>
@@ -149,7 +149,7 @@ export default async function ProductPage({
         </div>
 
         <aside className="h-fit border border-[var(--line)] bg-[var(--surface)] p-5">
-          <h2 className="font-[family-name:var(--font-display)] text-xl text-white">
+          <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--heading)]">
             {isEn ? "Technical specs" : "Caractéristiques techniques"}
           </h2>
           <dl className="mt-4 space-y-3 text-sm">
@@ -159,7 +159,7 @@ export default async function ProductPage({
                 className="flex items-start justify-between gap-4 border-b border-[var(--line)] pb-2"
               >
                 <dt className="text-[var(--muted)]">{spec.label}</dt>
-                <dd className="text-right text-white">{spec.value}</dd>
+                <dd className="text-right text-[var(--heading)]">{spec.value}</dd>
               </div>
             ))}
           </dl>
