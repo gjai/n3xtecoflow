@@ -1,0 +1,36 @@
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+
+export function SiteFooter() {
+  const t = useTranslations("footer");
+  const year = new Date().getFullYear();
+
+  return (
+    <footer className="border-t border-[var(--line)] bg-[var(--ink)] text-[var(--fog)]">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 md:flex-row md:items-end md:justify-between md:px-8">
+        <div>
+          <p className="font-[family-name:var(--font-display)] text-lg text-white">
+            EcoFlow Stream
+          </p>
+          <p className="mt-2 max-w-md text-sm text-[var(--muted)]">
+            {t("independent")}
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-4 text-sm">
+          <Link href="/mentions-legales" className="hover:text-white">
+            {t("mentions")}
+          </Link>
+          <Link href="/confidentialite" className="hover:text-white">
+            {t("privacy")}
+          </Link>
+          <Link href="/affiliation" className="hover:text-white">
+            {t("affiliate")}
+          </Link>
+        </div>
+      </div>
+      <div className="border-t border-white/10 px-5 py-4 text-center text-xs text-[var(--muted)] md:px-8">
+        {t("rights", { year })}
+      </div>
+    </footer>
+  );
+}

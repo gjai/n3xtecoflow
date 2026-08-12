@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "siteName": "EcoFlow Stream",
+    "tagline": "Independent guides to EcoFlow portable power",
+    "disclaimerShort": "Independent editorial site. Contains Amazon affiliate links."
+  },
+  "nav": {
+    "home": "Home",
+    "powerstream": "PowerStream",
+    "guides": "Guides",
+    "comparisons": "Comparisons",
+    "language": "Language"
+  },
+  "home": {
+    "brand": "EcoFlow Stream",
+    "headline": "Portable power, made clear.",
+    "subhead": "Straightforward guides to pick an EcoFlow station, PowerStream, or solar kit — without the fluff.",
+    "ctaPrimary": "PowerStream guide",
+    "ctaSecondary": "Browse comparisons",
+    "featuresTitle": "Why these guides",
+    "feature1Title": "Independent",
+    "feature1Text": "Editorial analysis — not an official EcoFlow website.",
+    "feature2Title": "Decision-first",
+    "feature2Text": "Capacity, use case, budget: straight to the choice.",
+    "feature3Title": "Transparent",
+    "feature3Text": "Amazon affiliate links and ads are clearly disclosed.",
+    "spotlightTitle": "Product focus",
+    "spotlightName": "EcoFlow PowerStream",
+    "spotlightText": "A connected micro-inverter for plug-and-play solar. Ideal to start home self-consumption.",
+    "spotlightCta": "Read the guide",
+    "adsLabel": "Advertisement"
+  },
+  "powerstream": {
+    "title": "EcoFlow PowerStream guide",
+    "subtitle": "What the PowerStream micro-inverter does, who it's for, and what to check first.",
+    "intro": "EcoFlow's PowerStream turns a solar panel into household electricity with app monitoring. This guide covers the basics, limits, and buying questions.",
+    "whatTitle": "What is it?",
+    "whatText": "A micro-inverter that feeds solar power into your home circuit. Plugged into an outlet, it aims for simple self-consumption setup.",
+    "forWhoTitle": "Who is it for?",
+    "forWhoText": "Renters or homeowners who want to try solar without heavy works, on a controlled budget with app monitoring.",
+    "checklistTitle": "Before you buy",
+    "check1": "Real sun exposure on your facade / balcony / roof",
+    "check2": "Panel wattage compatible with PowerStream",
+    "check3": "Local rules (condo, grid, insurance)",
+    "check4": "Goal: bills, backup, or experimentation",
+    "ctaAmazon": "See on Amazon",
+    "relatedTitle": "Go further",
+    "relatedGuide": "Buying guide: stations & solar",
+    "adsLabel": "Advertisement"
+  },
+  "guides": {
+    "title": "Buying guides",
+    "subtitle": "Pick a portable station or solar kit for your real usage.",
+    "buyersTitle": "EcoFlow buying guide",
+    "buyersText": "River, Delta, panels: size capacity (Wh), output (W), and recharge.",
+    "campingTitle": "Camping & vanlife",
+    "campingText": "Power a fridge, lights, and devices without a noisy gas generator.",
+    "backupTitle": "Home backup",
+    "backupText": "Outages, remote work, router: what you actually need to size.",
+    "cta": "Read",
+    "adsLabel": "Advertisement"
+  },
+  "guideBuyers": {
+    "title": "Buying guide: EcoFlow stations",
+    "subtitle": "Capacity, power, and recharge — the 3 numbers that matter.",
+    "body1": "Too small and it dies early; too big and it's pricey and heavy. Start from your devices (watts) and runtime (hours) to estimate Wh needed.",
+    "body2": "Also check outlets (AC, USB-C, car), AC/solar recharge speed, and expandability with extra batteries.",
+    "ctaAmazon": "Browse stations on Amazon",
+    "adsLabel": "Advertisement"
+  },
+  "guideCamping": {
+    "title": "EcoFlow for camping & vans",
+    "subtitle": "From 12V fridge to laptop: size without overbuying.",
+    "body1": "List critical devices (fridge, lights, pump, phone charging). Multiply watts × hours for a daily Wh estimate.",
+    "body2": "A foldable panel speeds daytime recharge. Prefer lighter units if you move often.",
+    "ctaAmazon": "See camping kits on Amazon",
+    "adsLabel": "Advertisement"
+  },
+  "comparisons": {
+    "title": "Comparisons",
+    "subtitle": "Quick reads to decide between models and use cases.",
+    "card1Title": "PowerStream vs portable kit",
+    "card1Text": "Home micro-inverter vs portable station: different logics.",
+    "card2Title": "Small vs large capacity",
+    "card2Text": "When a River is enough, and when to go Delta.",
+    "card3Title": "Balcony solar",
+    "card3Text": "Exposure, mounting, and electrical safety basics.",
+    "cta": "Explore",
+    "adsLabel": "Advertisement"
+  },
+  "legal": {
+    "mentionsTitle": "Legal notice",
+    "privacyTitle": "Privacy policy",
+    "affiliateTitle": "Affiliate & advertising",
+    "independent": "EcoFlow Stream is an independent editorial site. It is not operated by EcoFlow Inc. or Amazon.",
+    "amazon": "As an Amazon Associate, we earn from qualifying purchases.",
+    "adsense": "This site may show Google AdSense ads. Google may use cookies to personalize ads.",
+    "contact": "Contact: contact@ecoflow-stream.com",
+    "privacyBody": "We collect minimal technical data (server logs, optional analytics, ad cookies). We do not sell personal data. You can block non-essential cookies in your browser.",
+    "affiliateBody": "Product links may be Amazon affiliate links. Your price does not change. AdSense units are labeled “Advertisement”."
+  },
+  "footer": {
+    "independent": "Independent site — EcoFlow & PowerStream guides",
+    "mentions": "Legal notice",
+    "privacy": "Privacy",
+    "affiliate": "Affiliate",
+    "rights": "© {year} EcoFlow Stream"
+  },
+  "amazon": {
+    "badge": "Amazon affiliate link",
+    "cta": "See on Amazon"
+  }
+}

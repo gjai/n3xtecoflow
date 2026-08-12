@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "siteName": "EcoFlow Stream",
+    "tagline": "Guides indépendants sur l'énergie portable EcoFlow",
+    "disclaimerShort": "Site éditorial indépendant. Contient des liens d'affiliation Amazon."
+  },
+  "nav": {
+    "home": "Accueil",
+    "powerstream": "PowerStream",
+    "guides": "Guides",
+    "comparisons": "Comparatifs",
+    "language": "Langue"
+  },
+  "home": {
+    "brand": "EcoFlow Stream",
+    "headline": "L'énergie portable, démystifiée.",
+    "subhead": "Guides clairs pour choisir une station EcoFlow, un PowerStream ou un kit solaire — sans jargon inutile.",
+    "ctaPrimary": "Guide PowerStream",
+    "ctaSecondary": "Voir les comparatifs",
+    "featuresTitle": "Pourquoi ces guides",
+    "feature1Title": "Indépendant",
+    "feature1Text": "Analyses éditoriales, pas un site officiel EcoFlow.",
+    "feature2Title": "Orienté décision",
+    "feature2Text": "Capacité, usage, budget : on va droit au choix.",
+    "feature3Title": "Transparence",
+    "feature3Text": "Liens Amazon Affiliates et publicités clairement indiqués.",
+    "spotlightTitle": "Focus produit",
+    "spotlightName": "EcoFlow PowerStream",
+    "spotlightText": "Micro-onduleur connecté pour panneau solaire plug-and-play. Idéal pour démarrer l'autoconsommation.",
+    "spotlightCta": "Lire le guide",
+    "adsLabel": "Publicité"
+  },
+  "powerstream": {
+    "title": "Guide EcoFlow PowerStream",
+    "subtitle": "Comprendre le micro-onduleur PowerStream, ses usages et pour qui il est fait.",
+    "intro": "Le PowerStream d'EcoFlow transforme un panneau solaire en source d'électricité pour la maison, avec suivi via application. Ce guide résume le principe, les limites et les questions à se poser avant d'acheter.",
+    "whatTitle": "C'est quoi ?",
+    "whatText": "Un micro-onduleur qui injecte l'énergie solaire dans le circuit domestique. Branché sur une prise, il vise une installation simple pour l'autoconsommation.",
+    "forWhoTitle": "Pour qui ?",
+    "forWhoText": "Locataires ou propriétaires qui veulent tester le solaire sans chantier lourd, avec un budget maîtrisé et un suivi app.",
+    "checklistTitle": "Avant d'acheter",
+    "check1": "Exposition solaire réelle de votre façade / balcon / toit",
+    "check2": "Puissance du panneau compatible avec le PowerStream",
+    "check3": "Règles locales (copropriété, raccordement, assurance)",
+    "check4": "Objectif : facture, backup, ou expérimentation",
+    "ctaAmazon": "Voir sur Amazon",
+    "relatedTitle": "Aller plus loin",
+    "relatedGuide": "Guide d'achat stations & solaire",
+    "adsLabel": "Publicité"
+  },
+  "guides": {
+    "title": "Guides d'achat",
+    "subtitle": "Choisir une station portable ou un kit solaire selon votre usage.",
+    "buyersTitle": "Guide d'achat EcoFlow",
+    "buyersText": "River, Delta, panneaux : comment dimensionner capacité (Wh), sortie (W) et recharge.",
+    "campingTitle": "Camping & vanlife",
+    "campingText": "Alimenter frigo, éclairage et appareils sans générateur thermique bruyant.",
+    "backupTitle": "Backup maison",
+    "backupText": "Coupures, télétravail, box internet : ce qu'il faut vraiment dimensionner.",
+    "cta": "Lire",
+    "adsLabel": "Publicité"
+  },
+  "guideBuyers": {
+    "title": "Guide d'achat : stations EcoFlow",
+    "subtitle": "Capacité, puissance et recharge — les 3 chiffres qui comptent.",
+    "body1": "Une station trop petite se vide vite ; une trop grosse coûte cher et reste lourde. Partez de vos appareils (watts) et de la durée souhaitée (heures) pour estimer les Wh nécessaires.",
+    "body2": "Vérifiez aussi les prises (AC, USB-C, allume-cigare), la vitesse de recharge AC/solaire, et la possibilité d'ajouter des batteries extras.",
+    "ctaAmazon": "Voir des stations sur Amazon",
+    "adsLabel": "Publicité"
+  },
+  "guideCamping": {
+    "title": "EcoFlow en camping & van",
+    "subtitle": "Du frigo 12V au laptop : dimensionner sans suracheter.",
+    "body1": "Listez les appareils critiques (frigo, éclairage, pompe, charge téléphone). Multipliez watts × heures d'usage pour obtenir une estimation Wh journalière.",
+    "body2": "Un panneau pliable accélère la recharge en journée. Privilégiez un modèle léger si vous bougez souvent.",
+    "ctaAmazon": "Voir kits camping sur Amazon",
+    "adsLabel": "Publicité"
+  },
+  "comparisons": {
+    "title": "Comparatifs",
+    "subtitle": "Des lectures rapides pour trancher entre modèles et usages.",
+    "card1Title": "PowerStream vs kit plug-and-play",
+    "card1Text": "Micro-onduleur maison vs station portable : deux logiques différentes.",
+    "card2Title": "Petite vs grande capacité",
+    "card2Text": "Quand une River suffit, et quand passer sur Delta.",
+    "card3Title": "Solaire balcon",
+    "card3Text": "Critères d'exposition, fixation et sécurité électrique.",
+    "cta": "Explorer",
+    "adsLabel": "Publicité"
+  },
+  "legal": {
+    "mentionsTitle": "Mentions légales",
+    "privacyTitle": "Politique de confidentialité",
+    "affiliateTitle": "Affiliation & publicité",
+    "independent": "EcoFlow Stream est un site éditorial indépendant. Il n'est pas exploité par EcoFlow Inc. ni par Amazon.",
+    "amazon": "En tant que Partenaire Amazon, nous réalisons un bénéfice sur les achats remplissant les conditions requises.",
+    "adsense": "Ce site peut afficher des annonces Google AdSense. Google peut utiliser des cookies pour personnaliser les pubs.",
+    "contact": "Contact : contact@ecoflow-stream.com",
+    "privacyBody": "Nous collectons des données techniques minimales (logs serveur, analytics éventuels, cookies pubs). Aucune revente de données personnelles. Vous pouvez refuser les cookies non essentiels via votre navigateur.",
+    "affiliateBody": "Les liens produits peuvent être des liens d'affiliation Amazon. Le prix payé ne change pas pour vous. Les publicités AdSense sont marquées « Publicité »."
+  },
+  "footer": {
+    "independent": "Site indépendant — guides EcoFlow & PowerStream",
+    "mentions": "Mentions légales",
+    "privacy": "Confidentialité",
+    "affiliate": "Affiliation",
+    "rights": "© {year} EcoFlow Stream"
+  },
+  "amazon": {
+    "badge": "Lien affilié Amazon",
+    "cta": "Voir sur Amazon"
+  }
+}
