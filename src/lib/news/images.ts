@@ -192,6 +192,47 @@ export async function downloadNewsImage(
   }
 }
 
+function newsAiCoverPrompt(
+  siteId: SiteId,
+  title: string,
+  excerpt?: string,
+): string {
+  const common = `No text, no logos, no watermarks, no Google branding, no UI chrome.
+Subject inspired by: "${title}".
+STRICT: do not mix themes — never show portable power stations, solar panels, EcoFlow-like gear, insulated bottles/tumblers, or unrelated products unless they match this theme.`;
+
+  if (siteId === "tumbler") {
+    return `Create a photorealistic editorial cover image (16:9) for insulated bottles / tumblers news.
+${common}
+Context: ${excerpt || "insulated water bottle, tumbler, daily hydration"}.
+Style: premium product photography, natural light, lifestyle desk/outdoor, shallow depth of field.
+Show ONLY generic unbranded stainless steel bottles or tumblers.`;
+  }
+  if (siteId === "massage-gun") {
+    return `Create a photorealistic editorial cover image (16:9) for percussion massage gun / muscle recovery news.
+${common}
+Context: ${excerpt || "massage gun, percussion therapy, muscle recovery, neck or back massager"}.
+Style: premium product photography, natural light, sport/wellness setting, shallow depth of field.
+Show ONLY a massage gun, mini massage gun, neck massager, or shiatsu cushion — no energy/solar products.`;
+  }
+  return `Create a photorealistic editorial cover image (16:9) for an energy / EcoFlow news article.
+${common}
+Context: ${excerpt || "portable power station, solar energy, battery backup"}.
+Style: premium product photography, natural light, outdoor or home energy setting, shallow depth of field.
+Show EcoFlow-like portable power gear or solar panels if relevant — generic unbranded if unsure.`;
+}
+
+function newsAiCoverCredit(siteId: SiteId): string {
+  if (siteId === "tumbler") return "La gourde isotherme (IA)";
+  if (siteId === "massage-gun") return "Le pistolet de massage (IA)";
+  return "EcoFlow Stream (IA)";
+}
+
+function newsPackshotCredit(siteId: SiteId): string {
+  if (siteId === "tumbler" || siteId === "massage-gun") return "Amazon";
+  return "EcoFlow";
+}
+
 async function generateCoverWithGemini(args: {
   title: string;
   excerpt?: string;
@@ -203,21 +244,8 @@ async function generateCoverWithGemini(args: {
 
   const model =
     process.env.NEWS_IMAGE_MODEL?.trim() || "gemini-2.5-flash-image";
-
-  const prompt =
-    args.siteId === "tumbler"
-      ? `Create a photorealistic editorial cover image (16:9) for insulated bottles / tumblers news.
-No text, no logos, no watermarks, no Google branding, no UI chrome.
-Subject inspired by: "${args.title}".
-Context: ${args.excerpt || "insulated water bottle, tumbler, daily hydration"}.
-Style: premium product photography, natural light, lifestyle desk/outdoor, shallow depth of field.
-Show generic unbranded stainless steel bottles or tumblers if unsure.`
-      : `Create a photorealistic editorial cover image (16:9) for an energy / EcoFlow news article.
-No text, no logos, no watermarks, no Google branding, no UI chrome.
-Subject inspired by: "${args.title}".
-Context: ${args.excerpt || "portable power station, solar energy, battery backup"}.
-Style: premium product photography, natural light, outdoor or home energy setting, shallow depth of field.
-Show EcoFlow-like portable power gear or solar panels if relevant — generic unbranded if unsure.`;
+  const siteId = args.siteId || "ecoflow";
+  const prompt = newsAiCoverPrompt(siteId, args.title, args.excerpt);
 
   try {
     const res = await fetch(
@@ -273,7 +301,34 @@ Show EcoFlow-like portable power gear or solar panels if relevant — generic un
   }
 }
 
-/** Fallback: packshot produit lié au titre / tags. */
+/** Copy a local public asset into the news media store. */
+async function materializeLocalCover(
+  src: string,
+  slug: string,
+): Promise<string | null> {
+  if (!src.startsWith("/images/") && !src.startsWith("/brands/")) return null;
+  const abs = path.join(process.cwd(), "public", src.replace(/^\//, ""));
+  try {
+    const buf = await fs.readFile(abs);
+    if (buf.length < 4_000) return null;
+    const ext = path.extname(abs).replace(".", "") || "jpg";
+    return saveImageBuffer(buf, slug, ext, `local:${src}`);
+  } catch {
+    return null;
+  }
+}
+
+async function materializeCoverFromSrc(
+  src: string,
+  slug: string,
+): Promise<string | null> {
+  if (src.startsWith("http://") || src.startsWith("https://")) {
+    return downloadNewsImage(src, slug);
+  }
+  return materializeLocalCover(src, slug);
+}
+
+/** Fallback: packshot produit lié au titre / tags (catalogue du thème uniquement). */
 async function resolveProductPackshotCover(args: {
   title: string;
   tags?: string[];
@@ -322,7 +377,7 @@ async function resolveProductPackshotCover(args: {
   const media = resolveProductMedia(pick, eco[pick.slug]);
   if (media.source === "category") return null;
 
-  return downloadNewsImage(media.src, args.slug);
+  return materializeCoverFromSrc(media.src, args.slug);
 }
 
 export type NewsCoverResult = {
@@ -364,6 +419,24 @@ export async function resolveNewsCover(args: {
   }
 
   const title = args.title || args.slug;
+
+  // Hors EcoFlow : packshot du thème avant IA, pour éviter toute fuite visuelle.
+  if (siteId !== "ecoflow") {
+    const packFirst = await resolveProductPackshotCover({
+      title,
+      tags: args.tags,
+      slug: args.slug,
+      siteId,
+    });
+    if (packFirst) {
+      return {
+        imageSrc: packFirst,
+        imageCredit: newsPackshotCredit(siteId),
+        imageKind: "fallback",
+      };
+    }
+  }
+
   const ai = await generateCoverWithGemini({
     title,
     excerpt: args.excerpt,
@@ -373,8 +446,7 @@ export async function resolveNewsCover(args: {
   if (ai) {
     return {
       imageSrc: ai,
-      imageCredit:
-        siteId === "tumbler" ? "La gourde isotherme (IA)" : "EcoFlow Stream (IA)",
+      imageCredit: newsAiCoverCredit(siteId),
       imageKind: "ai",
     };
   }
@@ -388,7 +460,7 @@ export async function resolveNewsCover(args: {
   if (pack) {
     return {
       imageSrc: pack,
-      imageCredit: siteId === "tumbler" ? "Amazon" : "EcoFlow",
+      imageCredit: newsPackshotCredit(siteId),
       imageKind: "fallback",
     };
   }

@@ -28,17 +28,24 @@ export async function generateGuideCoverAi(args: {
     process.env.NEWS_IMAGE_MODEL?.trim() || "gemini-2.5-flash-image";
 
   const siteId = args.siteId || "ecoflow";
+  const common = `No text, no logos, no watermarks, no UI chrome.
+Guide title: "${args.title}".
+STRICT: do not mix themes — never show products from another brand vertical.`;
   const prompt =
     siteId === "tumbler"
       ? `Create a photorealistic editorial cover image (16:9) for an insulated bottle / tumbler buying guide.
-No text, no logos, no watermarks, no UI chrome.
-Guide title: "${args.title}".
+${common}
 Context: ${args.subtitle || "insulated water bottle, tumbler, daily hydration"}.
 Style: premium lifestyle / product photography, natural light, shallow depth of field.
-Show generic unbranded stainless steel bottles or tumblers.`
-      : `Create a photorealistic editorial cover image (16:9) for an EcoFlow buying guide.
-No text, no logos, no watermarks, no UI chrome.
-Guide title: "${args.title}".
+Show ONLY generic unbranded stainless steel bottles or tumblers.`
+      : siteId === "massage-gun"
+        ? `Create a photorealistic editorial cover image (16:9) for a massage gun / muscle recovery buying guide.
+${common}
+Context: ${args.subtitle || "massage gun, percussion therapy, neck massager, recovery"}.
+Style: premium lifestyle / product photography, natural light, shallow depth of field.
+Show ONLY a massage gun, mini gun, neck massager or shiatsu cushion — never power stations or solar panels.`
+        : `Create a photorealistic editorial cover image (16:9) for an EcoFlow buying guide.
+${common}
 Context: ${args.subtitle || "portable power, solar energy, home backup"}.
 Style: premium lifestyle / product photography, natural light, shallow depth of field.
 Show relevant EcoFlow-like gear (power station, solar panel, balcony kit, camping fridge) without readable branding.`;
@@ -96,7 +103,9 @@ Show relevant EcoFlow-like gear (power station, solar panel, balcony kit, campin
         imageCredit:
           siteId === "tumbler"
             ? "La gourde isotherme (IA)"
-            : "EcoFlow Stream (IA)",
+            : siteId === "massage-gun"
+              ? "Le pistolet de massage (IA)"
+              : "EcoFlow Stream (IA)",
       };
     }
     return null;
