@@ -454,8 +454,25 @@ export async function resolveNewsCover(args: {
 
   const title = args.title || args.slug;
 
-  // Marque nette dans titre/tags (ex. Theragun) → packshot ; sinon IA pour
-  // des couvertures distinctes (évite le même JPG Amazon sur toutes les actus).
+  // Massage-gun / tumbler : IA d’abord pour des couvertures uniques par article
+  // (les packshots Amazon se répétaient via des mots génériques type « massage »).
+  if (siteId === "massage-gun" || siteId === "tumbler") {
+    const aiFirst = await generateCoverWithGemini({
+      title,
+      excerpt: args.excerpt,
+      slug: args.slug,
+      siteId,
+    });
+    if (aiFirst) {
+      return {
+        imageSrc: aiFirst,
+        imageCredit: newsAiCoverCredit(siteId),
+        imageKind: "ai",
+      };
+    }
+  }
+
+  // Marque nette → packshot catalogue du thème
   const packBrand = await resolveProductPackshotCover({
     title,
     tags: args.tags,
@@ -486,7 +503,6 @@ export async function resolveNewsCover(args: {
     };
   }
 
-  // Dernier recours : packshot scoré (hors EcoFlow : pas de catalog[0] aveugle).
   const pack = await resolveProductPackshotCover({
     title,
     tags: args.tags,
