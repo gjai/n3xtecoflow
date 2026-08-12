@@ -15,6 +15,13 @@
     "about": "À propos",
     "news": "Actualités"
   },
+  "notFound": {
+    "title": "Page introuvable",
+    "body": "Cette adresse n’existe pas — ou le contenu a été déplacé. Retour aux guides et au catalogue EcoFlow.",
+    "home": "Retour à l’accueil",
+    "products": "Produits",
+    "guides": "Guides"
+  },
   "home": {
     "brand": "EcoFlow Stream",
     "headline": "Tout l’écosystème EcoFlow, expliqué.",
