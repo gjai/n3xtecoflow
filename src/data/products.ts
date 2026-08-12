@@ -2,8 +2,11 @@ export type CategoryId =
   | "river"
   | "delta"
   | "delta-pro"
+  | "stream"
   | "powerstream"
+  | "ocean"
   | "solaire"
+  | "outdoor"
   | "accessoires";
 
 export type LocaleCopy = {
@@ -85,17 +88,45 @@ export const categories: CategoryMeta[] = [
     },
   },
   {
+    id: "stream",
+    slug: "stream",
+    fr: {
+      title: "Série STREAM (solaire plug-in)",
+      intro:
+        "Nouvelle gamme FR EcoFlow pour solaire balcon / plug-in avec batterie : STREAM Ultra X, Pro, Max, micro-onduleur et kits solaires.",
+    },
+    en: {
+      title: "STREAM series (plug-in solar)",
+      intro:
+        "EcoFlow’s plug-in balcony solar line with battery: STREAM Ultra X, Pro, Max, micro-inverter and solar kits.",
+    },
+  },
+  {
     id: "powerstream",
     slug: "powerstream",
     fr: {
-      title: "PowerStream & solaire balcon",
+      title: "PowerStream (micro-onduleur)",
       intro:
-        "Micro-onduleur plug-and-play pour injecter du solaire dans le circuit domestique, avec suivi app et compatibilité stations EcoFlow.",
+        "Micro-onduleur historique EcoFlow pour injection domestique et couplage stations. Complémentaire de la série STREAM.",
     },
     en: {
-      title: "PowerStream & balcony solar",
+      title: "PowerStream (micro-inverter)",
       intro:
-        "Plug-and-play micro-inverter to feed solar into your home circuit, with app monitoring and EcoFlow station compatibility.",
+        "EcoFlow’s classic micro-inverter for home injection and station pairing. Complements the STREAM series.",
+    },
+  },
+  {
+    id: "ocean",
+    slug: "ocean",
+    fr: {
+      title: "OCEAN (batterie domestique)",
+      intro:
+        "Solutions résidentielles tout-en-un haute capacité pour autonomie maison et stockage longue durée.",
+    },
+    en: {
+      title: "OCEAN (home battery)",
+      intro:
+        "All-in-one residential high-capacity solutions for home autonomy and long-duration storage.",
     },
   },
   {
@@ -104,12 +135,26 @@ export const categories: CategoryMeta[] = [
     fr: {
       title: "Panneaux solaires EcoFlow",
       intro:
-        "Panneaux portables et rigides pour recharger stations et kits balcon. Puissance, rendement et format selon usage outdoor ou fixe.",
+        "Panneaux portables, bifaciaux et rigides (dont RV) pour recharger stations et kits STREAM/PowerStream.",
     },
     en: {
       title: "EcoFlow solar panels",
       intro:
-        "Portable and rigid panels to recharge stations and balcony kits. Power, efficiency, and form factor depend on outdoor vs fixed use.",
+        "Portable, bifacial and rigid panels (including RV) to recharge stations and STREAM/PowerStream kits.",
+    },
+  },
+  {
+    id: "outdoor",
+    slug: "outdoor",
+    fr: {
+      title: "Outdoor & mobilité",
+      intro:
+        "GLACIER (frigo), WAVE (clim), power banks et chargeurs alternateur pour vanlife et outdoor.",
+    },
+    en: {
+      title: "Outdoor & mobility",
+      intro:
+        "GLACIER (fridge), WAVE (AC), power banks and alternator chargers for vanlife and outdoor use.",
     },
   },
   {
@@ -118,12 +163,12 @@ export const categories: CategoryMeta[] = [
     fr: {
       title: "Batteries & accessoires",
       intro:
-        "Batteries extras, panneaux intelligents, générateurs compagnons : l’écosystème qui étend autonomie et intégration maison.",
+        "Batteries extras, Smart Home Panel et accessoires qui étendent autonomie et intégration maison.",
     },
     en: {
       title: "Batteries & accessories",
       intro:
-        "Extra batteries, smart panels, companion generators: the ecosystem that extends runtime and home integration.",
+        "Extra batteries, Smart Home Panel and accessories that extend runtime and home integration.",
     },
   },
 ];
@@ -1101,6 +1146,517 @@ export const products: Product[] = [
         body: [
           "A smart panel turns a Pro station into a more “home-like” backup brick.",
           "Have a professional handle installation.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "stream-ultra-x",
+    category: "stream",
+    name: "EcoFlow STREAM Ultra X",
+    capacityWh: 3840,
+    outputW: 2300,
+    solarInputW: 8000,
+    battery: "LFP",
+    expandable: true,
+    amazonQuery: "EcoFlow STREAM Ultra X",
+    specs: [
+      { label: "Capacité", value: "3,84 kWh" },
+      { label: "Sortie CA max", value: "≈ 2 300 W" },
+      { label: "MPPT", value: "4 × MPPT (entrée solaire élevée)" },
+      { label: "Usage", value: "Kit solaire balcon / plug-in + stockage" },
+    ],
+    ...copy(
+      {
+        tagline: "Flagship STREAM plug-in + batterie",
+        summary:
+          "Système solaire plug-in avec gros stockage (3,84 kWh) et sortie CA élevée pour appareils domestiques gourmands.",
+        bestFor: "Autoconsommation maison / balcon ambitieux",
+        pros: ["3,84 kWh", "Multi-MPPT", "Sortie CA forte"],
+        cons: ["Investissement", "Installation à planifier"],
+        body: [
+          "STREAM Ultra X représente la montée en gamme du solaire balcon EcoFlow FR : plus qu’un micro-onduleur, c’est un duo production + stockage.",
+          "Les 4 MPPT aident à gérer plusieurs orientations de panneaux.",
+          "Vérifiez la réglementation locale (puissance injectée, déclaration) avant déploiement.",
+        ],
+      },
+      {
+        tagline: "Flagship STREAM plug-in + battery",
+        summary:
+          "Plug-in solar system with large storage (3.84 kWh) and strong AC output for hungry home loads.",
+        bestFor: "Ambitious home/balcony self-consumption",
+        pros: ["3.84 kWh", "Multi-MPPT", "Strong AC output"],
+        cons: ["Investment", "Plan installation"],
+        body: [
+          "STREAM Ultra X is EcoFlow’s higher-end balcony solar approach: production plus storage.",
+          "Four MPPT inputs help with mixed panel orientations.",
+          "Check local injection rules before deploying.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "stream-pro",
+    category: "stream",
+    name: "EcoFlow STREAM Pro",
+    capacityWh: 1920,
+    battery: "LFP",
+    expandable: true,
+    amazonQuery: "EcoFlow STREAM Pro",
+    specs: [
+      { label: "Capacité", value: "1,92 kWh (expansible)" },
+      { label: "Expansion", value: "jusqu’à ≈ 11,52 kWh" },
+      { label: "MPPT", value: "jusqu’à 3 × MPPT" },
+      { label: "Compatibilité", value: "Série STREAM" },
+    ],
+    ...copy(
+      {
+        tagline: "Stockage STREAM modulable",
+        summary:
+          "Batterie plug-in modulable pour monter en kWh selon votre toiture/balcon.",
+        bestFor: "Évolution progressive du stockage",
+        pros: ["Modulaire", "Plug-in", "Écosystème STREAM"],
+        cons: ["Besoin de panneaux/onduleur compatibles"],
+        body: [
+          "STREAM Pro mise sur l’évolutivité : partez petit, ajoutez de la capacité.",
+          "Idéal si vous testez le solaire balcon avant d’investir dans Ultra X.",
+        ],
+      },
+      {
+        tagline: "Modular STREAM storage",
+        summary:
+          "Modular plug-in battery to scale kWh with your balcony/roof setup.",
+        bestFor: "Progressive storage growth",
+        pros: ["Modular", "Plug-in", "STREAM ecosystem"],
+        cons: ["Needs compatible panels/inverter"],
+        body: [
+          "STREAM Pro focuses on scalability: start smaller, add capacity later.",
+          "Ideal if you trial balcony solar before Ultra X.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "stream-max",
+    category: "stream",
+    name: "EcoFlow STREAM Max",
+    capacityWh: 1920,
+    solarInputW: 1000,
+    battery: "LFP",
+    amazonQuery: "EcoFlow STREAM Max",
+    specs: [
+      { label: "Capacité", value: "1,92 kWh" },
+      { label: "Entrée solaire", value: "≈ 1 000 W / 2 MPPT" },
+      { label: "Usage", value: "Solaire balcon + stockage" },
+    ],
+    ...copy(
+      {
+        tagline: "STREAM équilibré 1,92 kWh",
+        summary:
+          "Bon point d’entrée stockage STREAM avec entrée solaire généreuse.",
+        bestFor: "Autoconsommation résidentielle légère",
+        pros: ["1 000 W solaire", "2 MPPT", "Plug-in"],
+        cons: ["Moins de kWh qu’Ultra X"],
+        body: [
+          "STREAM Max cible le rapport simplicité / économies sur facture.",
+          "Couplez-le à des panneaux adaptés et surveillez l’ombre saisonnière.",
+        ],
+      },
+      {
+        tagline: "Balanced STREAM at 1.92 kWh",
+        summary:
+          "Solid STREAM storage entry with generous solar input.",
+        bestFor: "Light residential self-consumption",
+        pros: ["~1,000 W solar", "2 MPPT", "Plug-in"],
+        cons: ["Fewer kWh than Ultra X"],
+        body: [
+          "STREAM Max targets simplicity vs bill savings.",
+          "Pair with suitable panels and watch seasonal shade.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "stream-micro-onduleur",
+    category: "stream",
+    name: "EcoFlow STREAM Micro-onduleur",
+    outputW: 800,
+    battery: "N/A",
+    amazonQuery: "EcoFlow STREAM micro onduleur",
+    specs: [
+      { label: "Type", value: "Micro-onduleur" },
+      { label: "Puissance", value: "≈ 800 W" },
+      { label: "MPPT", value: "Oui" },
+    ],
+    ...copy(
+      {
+        tagline: "Cœur d’injection STREAM",
+        summary:
+          "Convertit le DC panneau en AC pour injection domestique dans l’écosystème STREAM.",
+        bestFor: "Kits solaires balcon plug-and-play",
+        pros: ["800 W classe", "MPPT", "Écosystème STREAM"],
+        cons: ["Pas de stockage intégré"],
+        body: [
+          "Le micro-onduleur STREAM remplace/complète l’approche PowerStream sur le marché FR actuel.",
+          "Sans batterie, l’énergie est consommée en journée. Ajoutez STREAM Pro/Max/Ultra pour la nuit.",
+        ],
+      },
+      {
+        tagline: "STREAM injection core",
+        summary:
+          "Converts panel DC to AC for home injection in the STREAM ecosystem.",
+        bestFor: "Plug-and-play balcony solar kits",
+        pros: ["~800 W class", "MPPT", "STREAM ecosystem"],
+        cons: ["No built-in storage"],
+        body: [
+          "STREAM micro-inverter is the current FR balcony path alongside classic PowerStream.",
+          "Without a battery, energy is daytime-only. Add STREAM storage for nights.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "kit-solaire-stream-800",
+    category: "stream",
+    name: "Kit solaire STREAM 800W",
+    solarInputW: 800,
+    battery: "N/A",
+    amazonQuery: "EcoFlow kit solaire balcon 800W",
+    specs: [
+      { label: "Entrée solaire", value: "jusqu’à ≈ 800 W" },
+      { label: "Usage", value: "Journée / plug-and-play" },
+    ],
+    ...copy(
+      {
+        tagline: "Kit balcon journée",
+        summary: "Pack plug-and-play pour production diurne sans forcément stocker.",
+        bestFor: "Test solaire / économies diurnes",
+        pros: ["Simple", "DIY", "Compatible écosystème"],
+        cons: ["Peu utile la nuit sans batterie"],
+        body: [
+          "Les kits 800–1000 W STREAM visent l’installation sans électricien (selon règles locales).",
+          "Mesurez votre conso diurne avant d’acheter : le ROI dépend de votre courbe de charge.",
+        ],
+      },
+      {
+        tagline: "Daytime balcony kit",
+        summary: "Plug-and-play pack for daytime production without mandatory storage.",
+        bestFor: "Solar trial / daytime savings",
+        pros: ["Simple", "DIY", "Ecosystem compatible"],
+        cons: ["Limited at night without battery"],
+        body: [
+          "STREAM 800–1000 W kits target DIY installs (local rules apply).",
+          "Measure daytime consumption first: ROI follows your load curve.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "ocean-2-plus",
+    category: "ocean",
+    name: "EcoFlow OCEAN 2 Plus",
+    capacityWh: 60000,
+    outputW: 12000,
+    battery: "LFP (écosystème maison)",
+    expandable: true,
+    amazonQuery: "EcoFlow OCEAN 2",
+    specs: [
+      { label: "Capacité", value: "jusqu’à ≈ 60 kWh (config)" },
+      { label: "Sortie", value: "classe 12 kW" },
+      { label: "Type", value: "Batterie domestique tout-en-un" },
+    ],
+    ...copy(
+      {
+        tagline: "Batterie maison nouvelle génération",
+        summary:
+          "Solution résidentielle haute capacité pour autonomie et secours, au-delà des stations portables.",
+        bestFor: "Maison / projet énergie fixe",
+        pros: ["Très haute capacité", "Haute puissance", "Résidentiel"],
+        cons: ["Projet d’installation", "Budget premium"],
+        body: [
+          "OCEAN 2 Plus n’est pas une station portable : c’est une brique énergie maison.",
+          "Faites chiffrer l’installation et comparez avec DELTA Pro Ultra selon mobilité souhaitée.",
+        ],
+      },
+      {
+        tagline: "Next-gen home battery",
+        summary:
+          "High-capacity residential solution for autonomy and backup beyond portable stations.",
+        bestFor: "Home / fixed energy project",
+        pros: ["Very high capacity", "High power", "Residential"],
+        cons: ["Install project", "Premium budget"],
+        body: [
+          "OCEAN 2 Plus is not a portable station—it is a home energy brick.",
+          "Quote installation and compare with DELTA Pro Ultra depending on mobility needs.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "glacier-classic",
+    category: "outdoor",
+    name: "EcoFlow GLACIER Classic",
+    battery: "Compatible stations EcoFlow",
+    amazonQuery: "EcoFlow GLACIER",
+    specs: [
+      { label: "Type", value: "Réfrigérateur-congélateur portable" },
+      { label: "Autonomie", value: "jusqu’à ≈ 43 h (selon config)" },
+      { label: "Zones", value: "Double zone (selon version)" },
+    ],
+    ...copy(
+      {
+        tagline: "Froid portable EcoFlow",
+        summary:
+          "Glacière à compression pour camping/van, conçue pour s’intégrer à l’écosystème EcoFlow.",
+        bestFor: "Vanlife, camping, road-trip",
+        pros: ["Compression", "Double zone", "Écosystème"],
+        cons: ["Conso à dimensionner avec la station"],
+        body: [
+          "GLACIER est souvent le poste qui dicte la taille de votre station (RIVER vs DELTA).",
+          "Mesurez les cycles réels : isolation et température ambiante changent tout.",
+        ],
+      },
+      {
+        tagline: "EcoFlow portable cooling",
+        summary:
+          "Compressor cooler for camping/vans, designed around the EcoFlow ecosystem.",
+        bestFor: "Vanlife, camping, road trips",
+        pros: ["Compressor", "Dual zone", "Ecosystem"],
+        cons: ["Size your station for draw"],
+        body: [
+          "GLACIER often dictates station size (RIVER vs DELTA).",
+          "Measure real cycles: insulation and ambient temperature matter.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "wave-3",
+    category: "outdoor",
+    name: "EcoFlow WAVE 3",
+    outputW: 1800,
+    battery: "Compatible stations EcoFlow",
+    amazonQuery: "EcoFlow WAVE 3",
+    specs: [
+      { label: "Refroidissement", value: "≈ 1,8 kW" },
+      { label: "Chauffage", value: "≈ 2 kW" },
+      { label: "Type", value: "Climatiseur portable" },
+    ],
+    ...copy(
+      {
+        tagline: "Clim portable haute puissance",
+        summary:
+          "Refroidit/chauffe en mobilité ; nécessite une station DELTA/Pro dimensionnée.",
+        bestFor: "Tente, van, pièce temporaire",
+        pros: ["Froid + chaud", "Outdoor", "Écosystème"],
+        cons: ["Très gourmand en Wh", "Bruit/condensation à gérer"],
+        body: [
+          "WAVE 3 demande une lecture honnête des Wh : quelques heures peuvent vider 2 kWh.",
+          "Couplez à DELTA Max / Pro et du solaire si usage prolongé.",
+        ],
+      },
+      {
+        tagline: "High-power portable AC",
+        summary:
+          "Cools/heats on the move; needs a properly sized DELTA/Pro station.",
+        bestFor: "Tent, van, temporary rooms",
+        pros: ["Cool + heat", "Outdoor", "Ecosystem"],
+        cons: ["Wh hungry", "Noise/condensation"],
+        body: [
+          "WAVE 3 needs honest Wh planning: a few hours can empty 2 kWh.",
+          "Pair with DELTA Max/Pro and solar for longer sessions.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "rapid-pro",
+    category: "outdoor",
+    name: "EcoFlow RAPID Pro",
+    capacityWh: 72,
+    battery: "Li-ion power bank",
+    amazonQuery: "EcoFlow RAPID Pro",
+    specs: [
+      { label: "Capacité", value: "20 000 mAh / ≈ 72 Wh" },
+      { label: "USB-C", value: "jusqu’à 100 W" },
+      { label: "Charge multi", value: "jusqu’à ≈ 230 W total (selon ports)" },
+    ],
+    ...copy(
+      {
+        tagline: "Power bank voyage rapide",
+        summary: "Charge rapide multi-appareils pour mobilité quotidienne.",
+        bestFor: "Voyage, bureau nomade",
+        pros: ["USB-C 100 W", "Compact", "Multi-ports"],
+        cons: ["Pas un backup maison"],
+        body: [
+          "RAPID Pro complète les stations : idéal téléphone/laptop en déplacement léger.",
+        ],
+      },
+      {
+        tagline: "Fast travel power bank",
+        summary: "Fast multi-device charging for daily mobility.",
+        bestFor: "Travel, nomad work",
+        pros: ["USB-C 100 W", "Compact", "Multi-port"],
+        cons: ["Not home backup"],
+        body: [
+          "RAPID Pro complements stations: phones/laptops on light travel days.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "chargeur-alternateur-600",
+    category: "outdoor",
+    name: "EcoFlow Chargeur d'alternateur 600W",
+    outputW: 600,
+    battery: "N/A",
+    amazonQuery: "EcoFlow chargeur alternateur 600W",
+    specs: [
+      { label: "Puissance", value: "≈ 600 W" },
+      { label: "Usage", value: "Recharge en roulant" },
+    ],
+    ...copy(
+      {
+        tagline: "Recharge pendant la route",
+        summary:
+          "Alimente votre station via l’alternateur pour arriver avec des Wh déjà rechargés.",
+        bestFor: "Van / road-trip",
+        pros: ["Recharge en roulant", "Complément solaire"],
+        cons: ["Installation véhicule", "Dépend de l’alternateur"],
+        body: [
+          "Utile quand le solaire est insuffisant (forêt, hiver). Vérifiez la compatibilité véhicule/station.",
+        ],
+      },
+      {
+        tagline: "Charge while driving",
+        summary:
+          "Feeds your station from the alternator so you arrive with Wh topped up.",
+        bestFor: "Van / road trips",
+        pros: ["Drive-time recharge", "Solar complement"],
+        cons: ["Vehicle install", "Alternator dependent"],
+        body: [
+          "Useful when solar is weak (forest, winter). Check vehicle/station compatibility.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "delta-3-1500",
+    category: "delta",
+    name: "EcoFlow DELTA 3 1500",
+    capacityWh: 1500,
+    outputW: 1800,
+    surgeW: 2400,
+    battery: "LFP",
+    cycles: 4000,
+    expandable: true,
+    amazonQuery: "EcoFlow DELTA 3 1500",
+    specs: [
+      { label: "Capacité", value: "≈ 1,5 kWh (expansible)" },
+      { label: "Sortie AC", value: "1 800 W (X-Boost ≈ 2 400 W)" },
+      { label: "Chimie", value: "LFP" },
+    ],
+    ...copy(
+      {
+        tagline: "DELTA 3 milieu de gamme 1,5 kWh",
+        summary:
+          "Entre Classic 1 kWh et Max 2 kWh : bon compromis backup léger + outdoor.",
+        bestFor: "Maison légère / van",
+        pros: ["1,5 kWh", "Expansible", "X-Boost"],
+        cons: ["Moins connu que Max"],
+        body: [
+          "La DELTA 3 1500 (gamme FR) comble le trou entre 1 et 2 kWh.",
+          "Vérifiez bundles solaires (220/400 W) souvent proposés sur fr.ecoflow.com.",
+        ],
+      },
+      {
+        tagline: "Mid DELTA 3 at 1.5 kWh",
+        summary:
+          "Between Classic 1 kWh and Max 2 kWh: solid light backup + outdoor compromise.",
+        bestFor: "Light home / van",
+        pros: ["1.5 kWh", "Expandable", "X-Boost"],
+        cons: ["Less visible than Max"],
+        body: [
+          "DELTA 3 1500 fills the 1–2 kWh gap on FR catalogs.",
+          "Check solar bundles (220/400 W) often listed on EcoFlow FR.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "river-3-plus-wireless",
+    category: "river",
+    name: "EcoFlow RIVER 3 Plus Wireless",
+    capacityWh: 286,
+    outputW: 600,
+    battery: "LFP",
+    cycles: 4000,
+    expandable: true,
+    amazonQuery: "EcoFlow RIVER 3 Plus Wireless",
+    specs: [
+      { label: "Capacité", value: "286 Wh" },
+      { label: "Sortie AC", value: "600 W" },
+      { label: "Particularité", value: "Édition sans fil / power banks" },
+    ],
+    ...copy(
+      {
+        tagline: "RIVER 3 Plus version sans fil",
+        summary:
+          "Variante avec options de charge sans fil / batteries amovibles selon bundle.",
+        bestFor: "Créatifs nomades, camping tech",
+        pros: ["600 W", "Modularité", "LFP"],
+        cons: ["Prix vs version standard"],
+        body: [
+          "Utile si vous fractionnez l’énergie (power bank + station).",
+          "Comparez le prix total avec DELTA 2 avant d’empiler les accessoires.",
+        ],
+      },
+      {
+        tagline: "RIVER 3 Plus wireless edition",
+        summary:
+          "Variant with wireless/removable battery options depending on bundle.",
+        bestFor: "Creators, tech camping",
+        pros: ["600 W", "Modularity", "LFP"],
+        cons: ["Price vs standard"],
+        body: [
+          "Useful if you split energy (power bank + station).",
+          "Compare total cost with DELTA 2 before stacking accessories.",
+        ],
+      },
+    ),
+  },
+  {
+    slug: "panneau-rvmax-130",
+    category: "solaire",
+    name: "EcoFlow RVMax 130W (x2)",
+    solarInputW: 260,
+    battery: "N/A",
+    amazonQuery: "EcoFlow RVMax 130W",
+    specs: [
+      { label: "Puissance", value: "130 W × 2" },
+      { label: "Rendement", value: "jusqu’à ≈ 25 %" },
+      { label: "Usage", value: "Camping-car / fixe léger" },
+      { label: "Protection", value: "IP68" },
+    ],
+    ...copy(
+      {
+        tagline: "Solaire rigide camping-car",
+        summary: "Panneaux fins adaptés aux toits de van/camping-car.",
+        bestFor: "Vanlife / RV",
+        pros: ["Fin", "IP68", "Haut rendement"],
+        cons: ["Installation toit", "Moins nomade qu’un pliable"],
+        body: [
+          "Les RVMax ciblent la fixation permanente : moins de prise au vent, meilleur quotidien van.",
+        ],
+      },
+      {
+        tagline: "Rigid RV solar",
+        summary: "Slim panels suited to van/RV roofs.",
+        bestFor: "Vanlife / RV",
+        pros: ["Slim", "IP68", "High efficiency"],
+        cons: ["Roof install", "Less nomadic than foldable"],
+        body: [
+          "RVMax targets permanent mounts: less wind load, better daily van use.",
         ],
       },
     ),

@@ -2,7 +2,9 @@ import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
+import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AmazonButton } from "@/components/AmazonButton";
+import { JsonLd, productJsonLd } from "@/components/JsonLd";
 import { buildAmazonSearchUrl } from "@/lib/amazon";
 import {
   getCategory,
@@ -14,14 +16,7 @@ import {
 
 export function generateStaticParams() {
   return products.flatMap((product) => {
-    const cat = getCategory(
-      product.category === "delta-pro" ? "delta-pro" : product.category,
-    );
-    // map category id to slug
-    const categorySlug =
-      product.category === "delta-pro"
-        ? "delta-pro"
-        : product.category;
+    const categorySlug = product.category;
     return ["fr", "en"].map((locale) => ({
       locale,
       category: categorySlug,
@@ -42,6 +37,18 @@ export async function generateMetadata({
   return {
     title: `${product.name} — ${copy.tagline}`,
     description: copy.summary,
+    alternates: {
+      canonical: `/${locale}/produits/${category}/${slug}`,
+      languages: {
+        fr: `/fr/produits/${category}/${slug}`,
+        en: `/en/produits/${category}/${slug}`,
+      },
+    },
+    openGraph: {
+      title: product.name,
+      description: copy.summary,
+      type: "website",
+    },
   };
 }
 
@@ -59,9 +66,24 @@ export default async function ProductPage({
   const copy = getLocalizedProduct(product, locale);
   const catCopy = getLocalizedCategory(cat, locale);
   const isEn = locale === "en";
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
+  const productUrl = `${siteUrl}/${locale}/produits/${cat.slug}/${product.slug}`;
 
   return (
     <article className="pt-24">
+      <JsonLd
+        data={productJsonLd({
+          siteUrl,
+          locale,
+          name: product.name,
+          description: copy.summary,
+          category: catCopy.title,
+          url: productUrl,
+          capacityWh: product.capacityWh,
+          outputW: product.outputW,
+        })}
+      />
       <header className="hero-grid border-b border-[var(--line)]">
         <div className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-16">
           <p className="text-sm text-[var(--muted)]">
@@ -78,6 +100,9 @@ export default async function ProductPage({
           </h1>
           <p className="mt-3 text-lg text-[var(--accent)]">{copy.tagline}</p>
           <p className="mt-4 text-[var(--muted)]">{copy.summary}</p>
+          <div className="mt-6">
+            <AffiliateDisclosure compact />
+          </div>
         </div>
       </header>
 

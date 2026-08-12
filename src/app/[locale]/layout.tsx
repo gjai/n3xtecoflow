@@ -46,6 +46,17 @@ export async function generateMetadata({
     metadataBase: new URL(
       process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com",
     ),
+    alternates: {
+      languages: {
+        fr: "/fr",
+        en: "/en",
+      },
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true },
+    },
     other: {
       "google-adsense-account": adsenseClient,
     },
@@ -54,6 +65,12 @@ export async function generateMetadata({
       description: t("tagline"),
       locale: locale === "fr" ? "fr_FR" : "en_US",
       type: "website",
+      siteName: t("siteName"),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("siteName"),
+      description: t("tagline"),
     },
   };
 }

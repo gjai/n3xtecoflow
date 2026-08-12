@@ -50,6 +50,7 @@ a {
 .hero-grid {
   background:
     radial-gradient(ellipse 80% 60% at 70% 20%, var(--glow), transparent 55%),
+    radial-gradient(circle at 20% 80%, rgba(240, 162, 2, 0.12), transparent 40%),
     linear-gradient(160deg, #0b1210 0%, #10241c 45%, #0a1612 100%),
     repeating-linear-gradient(
       -12deg,
@@ -72,6 +73,34 @@ a {
   animation: rise 1.2s ease 0.28s both;
 }
 
+.hero-float {
+  animation: floaty 8s ease-in-out infinite;
+}
+
+.hero-pulse {
+  animation: softPulse 3.2s ease-in-out infinite;
+}
+
+.hero-bar {
+  transform-origin: bottom;
+  animation: barGrow 1.6s ease both;
+}
+
+.hero-bolt {
+  animation: boltFlash 2.4s ease-in-out infinite;
+}
+
+.hero-ray {
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  animation: rayDraw 2.8s ease-in-out infinite;
+}
+
+.hero-panel {
+  animation: panelTilt 6s ease-in-out infinite;
+  transform-origin: center;
+}
+
 @keyframes rise {
   from {
     opacity: 0;
@@ -83,10 +112,88 @@ a {
   }
 }
 
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes softPulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgba(200, 240, 77, 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 18px rgba(200, 240, 77, 0.25));
+  }
+}
+
+@keyframes barGrow {
+  from {
+    transform: scaleY(0.2);
+    opacity: 0.4;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes boltFlash {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes rayDraw {
+  0% {
+    stroke-dashoffset: 220;
+    opacity: 0.2;
+  }
+  40% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -220;
+    opacity: 0.2;
+  }
+}
+
+@keyframes panelTilt {
+  0%,
+  100% {
+    transform: rotate(12deg) translateY(0);
+  }
+  50% {
+    transform: rotate(10deg) translateY(-6px);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-grid {
+    min-height: 100svh;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal-delay,
-  .reveal-delay-2 {
+  .reveal-delay-2,
+  .hero-float,
+  .hero-pulse,
+  .hero-bar,
+  .hero-bolt,
+  .hero-ray,
+  .hero-panel {
     animation: none;
   }
 }

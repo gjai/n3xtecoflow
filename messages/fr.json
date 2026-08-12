@@ -1,7 +1,7 @@
 {
   "meta": {
     "siteName": "EcoFlow Stream",
-    "tagline": "Guides indépendants sur l'énergie portable EcoFlow",
+    "tagline": "Guides indépendants sur tout l'écosystème EcoFlow : stations, STREAM, OCEAN, solaire et outdoor",
     "disclaimerShort": "Site éditorial indépendant. Contient des liens d'affiliation Amazon."
   },
   "nav": {
@@ -10,13 +10,14 @@
     "powerstream": "PowerStream",
     "guides": "Guides",
     "comparisons": "Comparatifs",
+    "contact": "Contact",
     "language": "Langue"
   },
   "home": {
     "brand": "EcoFlow Stream",
-    "headline": "L'énergie portable, démystifiée.",
-    "subhead": "Guides clairs pour choisir une station EcoFlow, un PowerStream ou un kit solaire — sans jargon inutile.",
-    "ctaPrimary": "Guide PowerStream",
+    "headline": "Tout l’écosystème EcoFlow, expliqué.",
+    "subhead": "Stations RIVER & DELTA, série STREAM, OCEAN, solaire, GLACIER, WAVE : guides, specs et comparatifs indépendants pour choisir sans vous tromper.",
+    "ctaPrimary": "Guide d’achat",
     "ctaSecondary": "Voir les comparatifs",
     "featuresTitle": "Pourquoi ces guides",
     "feature1Title": "Indépendant",
@@ -26,9 +27,9 @@
     "feature3Title": "Transparence",
     "feature3Text": "Liens Amazon Affiliates et publicités clairement indiqués.",
     "spotlightTitle": "Focus produit",
-    "spotlightName": "EcoFlow PowerStream",
-    "spotlightText": "Micro-onduleur connecté pour panneau solaire plug-and-play. Idéal pour démarrer l'autoconsommation.",
-    "spotlightCta": "Lire le guide",
+    "spotlightName": "Série EcoFlow STREAM",
+    "spotlightText": "La gamme solaire plug-in FR (Ultra X, Pro, Max, micro-onduleur) pour autoconsommation balcon/maison — avec ou sans stockage.",
+    "spotlightCta": "Voir la série STREAM",
     "adsLabel": "Publicité"
   },
   "powerstream": {
@@ -102,8 +103,8 @@
     "adsense": "Ce site peut afficher des annonces Google AdSense. Google peut utiliser des cookies pour personnaliser les pubs, uniquement après votre consentement.",
     "contactViaForm": "Pour nous contacter, utilisez le",
     "contactLink": "formulaire de contact",
-    "privacyBody": "Nous collectons des données techniques minimales (logs serveur) et, si vous acceptez, des cookies publicitaires Google AdSense. Aucune revente de données personnelles.",
-    "privacyConsent": "Vous pouvez accepter ou refuser les cookies publicitaires via le bandeau cookies. Les cookies strictement nécessaires au fonctionnement du site restent actifs.",
+    "privacyBody": "Nous collectons des données techniques minimales (logs serveur) et, si vous acceptez, des cookies publicitaires Google AdSense. Le formulaire de contact transmet nom, email et message uniquement pour vous répondre. Aucune revente de données personnelles.",
+    "privacyConsent": "Vous pouvez accepter ou refuser les cookies publicitaires via le bandeau cookies. Les cookies strictement nécessaires au fonctionnement du site restent actifs. Mesures techniques : HTTPS, en-têtes de sécurité, limitation du spam sur le formulaire.",
     "affiliateBody": "Les liens produits peuvent être des liens d'affiliation Amazon. Le prix payé ne change pas pour vous. Les publicités AdSense sont marquées « Publicité »."
   },
   "contact": {
@@ -138,6 +139,9 @@
   },
   "amazon": {
     "badge": "Lien affilié Amazon",
-    "cta": "Voir sur Amazon"
+    "cta": "Voir sur Amazon",
+    "disclosure": "En tant que Partenaire Amazon, nous réalisons un bénéfice sur les achats éligibles via nos liens. Le prix reste identique pour vous.",
+    "disclosureShort": "Liens affiliés Amazon.",
+    "disclosureLink": "En savoir plus"
   }
 }

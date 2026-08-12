@@ -530,6 +530,57 @@ export const comparisons: GuideArticle[] = [
       ],
     },
   },
+  {
+    slug: "stream-vs-powerstream",
+    fr: {
+      title: "STREAM vs PowerStream",
+      subtitle: "Nouvelle gamme plug-in FR face au micro-onduleur historique.",
+      sections: [
+        {
+          heading: "PowerStream",
+          paragraphs: [
+            "Micro-onduleur classique EcoFlow, souvent couplé à une station portable pour stocker/restituer.",
+          ],
+        },
+        {
+          heading: "Série STREAM",
+          paragraphs: [
+            "Gamme actuelle mise en avant sur fr.ecoflow.com : micro-onduleur + batteries STREAM (Max/Pro/Ultra X) + kits solaires balcon.",
+          ],
+        },
+        {
+          heading: "Comment choisir",
+          paragraphs: [
+            "Pour un setup balcon neuf en France, partez plutôt STREAM. PowerStream reste pertinent en occasion/compatibilité station existante.",
+          ],
+        },
+      ],
+    },
+    en: {
+      title: "STREAM vs PowerStream",
+      subtitle: "New FR plug-in line versus the classic micro-inverter.",
+      sections: [
+        {
+          heading: "PowerStream",
+          paragraphs: [
+            "Classic EcoFlow micro-inverter, often paired with a portable station for store/release.",
+          ],
+        },
+        {
+          heading: "STREAM series",
+          paragraphs: [
+            "Current line on EcoFlow FR: micro-inverter + STREAM batteries (Max/Pro/Ultra X) + balcony kits.",
+          ],
+        },
+        {
+          heading: "How to choose",
+          paragraphs: [
+            "For a new FR balcony setup, lean STREAM. PowerStream still fits used gear or existing station pairing.",
+          ],
+        },
+      ],
+    },
+  },
 ];
 
 export function getGuide(slug: string) {

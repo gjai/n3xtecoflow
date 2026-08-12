@@ -1,7 +1,7 @@
 {
   "meta": {
     "siteName": "EcoFlow Stream",
-    "tagline": "Independent guides to EcoFlow portable power",
+    "tagline": "Independent guides to the full EcoFlow ecosystem: stations, STREAM, OCEAN, solar and outdoor",
     "disclaimerShort": "Independent editorial site. Contains Amazon affiliate links."
   },
   "nav": {
@@ -10,13 +10,14 @@
     "powerstream": "PowerStream",
     "guides": "Guides",
     "comparisons": "Comparisons",
+    "contact": "Contact",
     "language": "Language"
   },
   "home": {
     "brand": "EcoFlow Stream",
-    "headline": "Portable power, made clear.",
-    "subhead": "Straightforward guides to pick an EcoFlow station, PowerStream, or solar kit — without the fluff.",
-    "ctaPrimary": "PowerStream guide",
+    "headline": "The full EcoFlow ecosystem, explained.",
+    "subhead": "RIVER & DELTA stations, STREAM series, OCEAN, solar, GLACIER, WAVE: independent guides, specs and comparisons to choose with confidence.",
+    "ctaPrimary": "Buying guide",
     "ctaSecondary": "Browse comparisons",
     "featuresTitle": "Why these guides",
     "feature1Title": "Independent",
@@ -26,9 +27,9 @@
     "feature3Title": "Transparent",
     "feature3Text": "Amazon affiliate links and ads are clearly disclosed.",
     "spotlightTitle": "Product focus",
-    "spotlightName": "EcoFlow PowerStream",
-    "spotlightText": "A connected micro-inverter for plug-and-play solar. Ideal to start home self-consumption.",
-    "spotlightCta": "Read the guide",
+    "spotlightName": "EcoFlow STREAM series",
+    "spotlightText": "FR plug-in solar line (Ultra X, Pro, Max, micro-inverter) for balcony/home self-consumption — with or without storage.",
+    "spotlightCta": "Explore STREAM",
     "adsLabel": "Advertisement"
   },
   "powerstream": {
@@ -102,8 +103,8 @@
     "adsense": "This site may show Google AdSense ads. Google may use cookies to personalize ads, only after your consent.",
     "contactViaForm": "To reach us, use the",
     "contactLink": "contact form",
-    "privacyBody": "We collect minimal technical data (server logs) and, if you accept, Google AdSense advertising cookies. We do not sell personal data.",
-    "privacyConsent": "You can accept or reject advertising cookies via the cookie banner. Strictly necessary cookies remain active.",
+    "privacyBody": "We collect minimal technical data (server logs) and, if you accept, Google AdSense advertising cookies. The contact form transmits name, email and message only to reply to you. We do not sell personal data.",
+    "privacyConsent": "You can accept or reject advertising cookies via the cookie banner. Strictly necessary cookies remain active. Technical measures: HTTPS, security headers, contact form spam throttling.",
     "affiliateBody": "Product links may be Amazon affiliate links. Your price does not change. AdSense units are labeled “Advertisement”."
   },
   "contact": {
@@ -138,6 +139,9 @@
   },
   "amazon": {
     "badge": "Amazon affiliate link",
-    "cta": "See on Amazon"
+    "cta": "See on Amazon",
+    "disclosure": "As an Amazon Associate, we earn from qualifying purchases through our links. Your price does not change.",
+    "disclosureShort": "Amazon affiliate links.",
+    "disclosureLink": "Learn more"
   }
 }
