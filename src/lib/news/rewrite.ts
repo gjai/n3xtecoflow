@@ -319,6 +319,7 @@ function guessTags(
     if (/toloco/.test(hay)) tags.add("toloco");
     if (/bob\s*(and|&)\s*brad/.test(hay)) tags.add("bob-brad");
     if (/opove/.test(hay)) tags.add("opove");
+    if (/jolt/.test(hay)) tags.add("jolt");
     if (/brelley/.test(hay)) tags.add("brelley");
     if (/aerlang/.test(hay)) tags.add("aerlang");
     if (/shiatsu|cervical|neck\s*massager|coussin/.test(hay)) tags.add("masseur");
