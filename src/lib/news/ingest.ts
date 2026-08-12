@@ -67,16 +67,23 @@ export async function ingestNews(
   const refreshedSlugs: string[] = [];
   if (options?.refreshExisting) {
     const refreshLimit = options.refreshLimit ?? store.articles.length;
-    const targets = store.articles.slice(0, refreshLimit);
-    for (let i = 0; i < targets.length; i++) {
+    const needsRefresh = (a: (typeof store.articles)[number]) =>
+      (a.fr?.body?.length || 0) < 6 ||
+      (a.en?.body?.length || 0) < 6 ||
+      a.rewrittenBy === "template";
+    const targets = store.articles
+      .map((article, index) => ({ article, index }))
+      .filter(({ article }) => needsRefresh(article))
+      .slice(0, refreshLimit);
+    for (const { article, index } of targets) {
       try {
-        const next = await refreshArticle(targets[i]);
+        const next = await refreshArticle(article);
         if (next.rewrittenBy === "ai") aiUsed = true;
-        store.articles[i] = next;
+        store.articles[index] = next;
         refreshed += 1;
         refreshedSlugs.push(next.slug);
       } catch (err) {
-        console.error("refresh_failed", targets[i].slug, err);
+        console.error("refresh_failed", article.slug, err);
       }
     }
   }

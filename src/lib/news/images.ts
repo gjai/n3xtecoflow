@@ -11,7 +11,7 @@ function mediaDir() {
 }
 
 const UA =
-  "EcoFlowStreamBot/1.0 (+https://ecoflow-stream.com; editorial thumbnail)";
+  "Mozilla/5.0 (compatible; EcoFlowStreamBot/1.1; +https://ecoflow-stream.com; editorial thumbnail)";
 
 export async function downloadNewsImage(
   imageUrl: string,

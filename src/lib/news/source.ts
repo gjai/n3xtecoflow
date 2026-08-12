@@ -1,7 +1,7 @@
 /** Fetch publisher page content (resolve Google News redirects when needed). */
 
 const UA =
-  "EcoFlowStreamBot/1.0 (+https://ecoflow-stream.com; editorial research)";
+  "Mozilla/5.0 (compatible; EcoFlowStreamBot/1.1; +https://ecoflow-stream.com; editorial research)";
 
 export type SourcePage = {
   finalUrl: string;
@@ -60,18 +60,50 @@ function extractTitle(html: string) {
 }
 
 function extractOgImage(html: string, baseUrl: string): string | null {
-  const raw =
-    extractMeta(html, "og:image") ||
-    extractMeta(html, "og:image:url") ||
-    extractMeta(html, "twitter:image") ||
-    extractMeta(html, "twitter:image:src");
-  if (!raw) return null;
-  try {
-    const absolute = new URL(raw, baseUrl).toString();
-    return /^https?:\/\//i.test(absolute) ? absolute : null;
-  } catch {
-    return null;
+  const metas = [
+    extractMeta(html, "og:image"),
+    extractMeta(html, "og:image:secure_url"),
+    extractMeta(html, "og:image:url"),
+    extractMeta(html, "twitter:image"),
+    extractMeta(html, "twitter:image:src"),
+    extractMeta(html, "thumbnail"),
+  ];
+
+  const linkImage = html.match(
+    /<link[^>]+rel=["']image_src["'][^>]+href=["']([^"']+)["']/i,
+  )?.[1];
+  if (linkImage) metas.push(linkImage);
+
+  const jsonLdImages = [
+    ...html.matchAll(
+      /"image"\s*:\s*(?:\[\s*")?https?:\/\/[^"\\]+/gi,
+    ),
+  ].map((m) => m[0].replace(/^"image"\s*:\s*(?:\[\s*")?/i, "").replace(/^"/, ""));
+  metas.push(...jsonLdImages);
+
+  // Largest-looking <img> in content as last resort
+  const imgs = [...html.matchAll(/<img[^>]+src=["']([^"']+)["'][^>]*>/gi)];
+  for (const m of imgs) {
+    const src = m[1];
+    if (/logo|icon|sprite|pixel|1x1|avatar|emoji/i.test(src)) continue;
+    if (!/\.(jpe?g|png|webp|avif)(\?|$)/i.test(src) && !/\/images?\//i.test(src)) {
+      continue;
+    }
+    metas.push(src);
   }
+
+  for (const raw of metas) {
+    if (!raw) continue;
+    try {
+      const absolute = new URL(raw, baseUrl).toString();
+      if (!/^https?:\/\//i.test(absolute)) continue;
+      if (/logo|favicon|sprite|1x1/i.test(absolute)) continue;
+      return absolute;
+    } catch {
+      /* skip */
+    }
+  }
+  return null;
 }
 
 /** Best-effort main text extraction without a full HTML parser. */
