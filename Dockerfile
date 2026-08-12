@@ -25,7 +25,8 @@ ENV NEWS_MEDIA_PATH=/app/data/news-images
 
 RUN addgroup -S nodejs && adduser -S nextjs -G nodejs \
   && mkdir -p /app/data /app/data/news-images /app/data-seed \
-  && chown -R nextjs:nodejs /app/data /app/data-seed
+  && chown -R nextjs:nodejs /app/data /app/data-seed \
+  && apk add --no-cache su-exec
 
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
@@ -33,6 +34,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/data ./data-seed
 COPY --chmod=755 docker-entrypoint.sh /app/docker-entrypoint.sh
 
-USER nextjs
 EXPOSE 3000
+USER root
 CMD ["/app/docker-entrypoint.sh"]
