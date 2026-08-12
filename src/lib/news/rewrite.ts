@@ -205,7 +205,10 @@ export async function buildArticleFromRss(
   item: RssItem,
   options?: { keepSlug?: string },
 ): Promise<NewsArticle> {
-  const source = await fetchSourcePage(item.link);
+  const source = await fetchSourcePage(item.link, {
+    title: item.title,
+    sourceHomepage: item.sourceHomepage,
+  });
   const ai = await rewriteWithAi(item, source);
   const rewrittenBy = ai ? "ai" : "template";
   const fr = normalizeCopy(ai?.fr || templateCopy("fr", item, source));
@@ -270,6 +273,7 @@ export async function refreshArticle(
     guid: article.sourceGuid,
     publishedAt: article.publishedAt,
     sourceName: feedItem?.sourceName || article.sourceName,
+    sourceHomepage: feedItem?.sourceHomepage,
     description:
       feedItem?.description ||
       article.fr.excerpt ||

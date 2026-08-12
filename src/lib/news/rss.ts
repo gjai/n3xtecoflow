@@ -4,6 +4,8 @@ export type RssItem = {
   guid: string;
   publishedAt: string;
   sourceName: string;
+  /** Publisher homepage from <source url="..."> when present (Google News). */
+  sourceHomepage?: string;
   description: string;
 };
 
@@ -50,6 +52,7 @@ export function parseRssItems(xml: string): RssItem[] {
         stripTags(tag(block, "source")) ||
         attr(block, "source", "url") ||
         "Source";
+      const sourceHomepage = attr(block, "source", "url") || undefined;
       const publishedAt = pubDate
         ? new Date(pubDate).toISOString()
         : new Date().toISOString();
@@ -59,6 +62,7 @@ export function parseRssItems(xml: string): RssItem[] {
         guid,
         publishedAt,
         sourceName,
+        sourceHomepage,
         description,
       };
     })

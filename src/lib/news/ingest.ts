@@ -76,7 +76,9 @@ export async function ingestNews(
       (a.en?.body?.length || 0) < 6 ||
       a.rewrittenBy === "template" ||
       !a.imageSrc ||
-      /googleusercontent|gstatic/i.test(a.sourceUrl || "");
+      /googleusercontent|gstatic|google-analytics|googletagmanager|\.js$/i.test(
+        a.sourceUrl || "",
+      );
     const targets = store.articles
       .map((article, index) => ({ article, index }))
       .filter(({ article }) => needsRefresh(article))

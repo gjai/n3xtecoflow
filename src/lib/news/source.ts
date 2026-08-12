@@ -140,18 +140,23 @@ function isLikelyArticleUrl(url: string): boolean {
     const u = new URL(url);
     if (!/^https?:$/i.test(u.protocol)) return false;
     if (
-      /googleusercontent|gstatic|googleapis|schema\.org|doubleclick|facebook\.com\/tr/i.test(
+      /googleusercontent|gstatic|googleapis|google-analytics|googletagmanager|schema\.org|doubleclick|facebook\.com\/tr|fonts\.google/i.test(
         u.hostname,
       )
     ) {
       return false;
     }
-    if (/\.(jpe?g|png|webp|gif|svg|ico|avif)(\?|$)/i.test(u.pathname)) {
+    if (/google\./i.test(u.hostname) && !/news\.google\.com/i.test(u.hostname)) {
       return false;
     }
-    // Tiny Google resize params
+    if (
+      /\.(jpe?g|png|webp|gif|svg|ico|avif|js|css|woff2?)(\?|$)/i.test(u.pathname)
+    ) {
+      return false;
+    }
     if (/=w\d+$/i.test(u.href) || /=s\d+$/i.test(u.href)) return false;
-    return u.hostname.includes(".") && u.pathname.length > 1;
+    if (u.pathname.length < 2) return false;
+    return u.hostname.includes(".");
   } catch {
     return false;
   }
@@ -200,6 +205,66 @@ async function fetchHtml(url: string): Promise<{ html: string; finalUrl: string 
   }
 }
 
+// silence unused if cleanTitle referenced wrong - use inline
+function cleanTitle(title: string) {
+  return title.replace(/\s+-\s+[^-]+$/, "").trim();
+}
+
+/** Find article URL on publisher site via ?s= search (WordPress-style). */
+export async function resolveViaPublisherSearch(
+  homepage: string,
+  title: string,
+): Promise<string | null> {
+  try {
+    const base = new URL(homepage);
+    const query = cleanTitle(title)
+      .split(/[:|–—]/)[0]
+      .trim()
+      .slice(0, 90);
+    if (query.length < 8) return null;
+
+    const search = new URL(base.origin);
+    search.pathname = base.pathname.replace(/\/$/, "") || "/";
+    search.searchParams.set("s", query);
+
+    const page = await fetchHtml(search.toString());
+    if (!page) return null;
+
+    const host = base.hostname.replace(/^www\./, "");
+    const hrefs = [...page.html.matchAll(/href=["']([^"']+)["']/gi)].map(
+      (m) => m[1],
+    );
+    const keywords = query
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((w) => w.length > 3)
+      .slice(0, 6);
+
+    for (const href of hrefs) {
+      try {
+        const abs = new URL(href, page.finalUrl);
+        if (!abs.hostname.replace(/^www\./, "").endsWith(host)) continue;
+        if (!isLikelyArticleUrl(abs.toString())) continue;
+        if (/\/(tag|category|author|page|search)\b/i.test(abs.pathname)) continue;
+        const path = abs.pathname.toLowerCase();
+        const hit = keywords.filter((k) => path.includes(k.replace(/[^a-z0-9]/gi, "")) || path.includes(k)).length;
+        // slug match OR path looks like a post
+        if (hit >= 2 || /\/(post|article|20\d{2})\//i.test(abs.pathname)) {
+          return abs.toString();
+        }
+        if (keywords.some((k) => path.includes(k.toLowerCase().slice(0, 6)))) {
+          return abs.toString();
+        }
+      } catch {
+        /* skip */
+      }
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export async function resolvePublisherUrl(url: string): Promise<string> {
   if (!/news\.google\.com/i.test(url)) return url;
 
@@ -214,28 +279,49 @@ export async function resolvePublisherUrl(url: string): Promise<string> {
   return hopped || url;
 }
 
-export async function fetchSourcePage(url: string): Promise<SourcePage | null> {
-  const publisherUrl = await resolvePublisherUrl(url);
-  const page = await fetchHtml(publisherUrl);
-  if (!page) return null;
+export async function fetchSourcePage(
+  url: string,
+  opts?: { title?: string; sourceHomepage?: string },
+): Promise<SourcePage | null> {
+  let target = url;
 
-  // If still on Google News after hop attempt, try once more from HTML pick
-  let { html, finalUrl } = page;
-  if (/news\.google\.com/i.test(finalUrl)) {
-    const hopped = pickPublisherFromGoogleHtml(html, finalUrl);
-    if (hopped) {
-      const second = await fetchHtml(hopped);
-      if (second) {
-        html = second.html;
-        finalUrl = second.finalUrl;
-      }
+  if (/news\.google\.com/i.test(url) && opts?.sourceHomepage && opts?.title) {
+    const found = await resolveViaPublisherSearch(
+      opts.sourceHomepage,
+      opts.title,
+    );
+    if (found) target = found;
+  } else {
+    target = await resolvePublisherUrl(url);
+  }
+
+  // Still on Google? try publisher search as last resort
+  if (/news\.google\.com/i.test(target) && opts?.sourceHomepage && opts?.title) {
+    const found = await resolveViaPublisherSearch(
+      opts.sourceHomepage,
+      opts.title,
+    );
+    if (found) target = found;
+  }
+
+  if (/news\.google\.com/i.test(target) || !isLikelyArticleUrl(target)) {
+    // Cannot resolve a readable publisher article
+    if (opts?.sourceHomepage && opts?.title) {
+      const found = await resolveViaPublisherSearch(
+        opts.sourceHomepage,
+        opts.title,
+      );
+      if (found) target = found;
     }
   }
 
-  if (!isLikelyArticleUrl(finalUrl)) {
-    finalUrl = publisherUrl;
-    if (!isLikelyArticleUrl(finalUrl)) finalUrl = url;
-  }
+  if (!isLikelyArticleUrl(target)) return null;
+
+  const page = await fetchHtml(target);
+  if (!page) return null;
+
+  let { html, finalUrl } = page;
+  if (!isLikelyArticleUrl(finalUrl)) finalUrl = target;
 
   const title = decodeHtml(extractTitle(html)).slice(0, 220);
   const text = extractArticleText(html);
@@ -244,20 +330,10 @@ export async function fetchSourcePage(url: string): Promise<SourcePage | null> {
     extractMeta(html, "og:site_name") ||
     extractMeta(html, "application-name");
 
-  if (!text || text.length < 120) {
-    return {
-      finalUrl,
-      title,
-      text: text || title,
-      ogImage,
-      sourceHint: siteName,
-    };
-  }
-
   return {
     finalUrl,
     title,
-    text,
+    text: text || title,
     ogImage,
     sourceHint: siteName,
   };
