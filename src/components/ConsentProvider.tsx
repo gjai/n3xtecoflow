@@ -34,6 +34,13 @@ const defaultConsent: ConsentState = {
 
 const ConsentContext = createContext<ConsentContextValue | null>(null);
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
+  }
+}
+
 function readStoredConsent(): ConsentState | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -60,6 +67,22 @@ function persistConsent(consent: ConsentState) {
   );
 }
 
+function pushConsentUpdate(advertising: boolean) {
+  if (typeof window === "undefined") return;
+  const state = advertising ? "granted" : "denied";
+  const payload = {
+    ad_storage: state,
+    ad_user_data: state,
+    ad_personalization: state,
+  };
+  if (typeof window.gtag === "function") {
+    window.gtag("consent", "update", payload);
+    return;
+  }
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push(["consent", "update", payload]);
+}
+
 export function ConsentProvider({ children }: { children: React.ReactNode }) {
   const [consent, setConsent] = useState<ConsentState>(defaultConsent);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
@@ -67,7 +90,10 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const stored = readStoredConsent();
-    if (stored) setConsent(stored);
+    if (stored) {
+      setConsent(stored);
+      pushConsentUpdate(stored.advertising);
+    }
     setHydrated(true);
   }, []);
 
@@ -79,6 +105,7 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
     };
     setConsent(next);
     persistConsent(next);
+    pushConsentUpdate(true);
     setPreferencesOpen(false);
   }, []);
 
@@ -90,6 +117,7 @@ export function ConsentProvider({ children }: { children: React.ReactNode }) {
     };
     setConsent(next);
     persistConsent(next);
+    pushConsentUpdate(false);
     setPreferencesOpen(false);
   }, []);
 

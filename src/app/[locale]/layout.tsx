@@ -103,6 +103,15 @@ export default async function LocaleLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        {/* Raw tag so AdSense crawler always finds the in-page code */}
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${
+            process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() ||
+            "ca-pub-4733644127583822"
+          }`}
+          crossOrigin="anonymous"
+        />
       </head>
       <body className="min-h-full antialiased">
         <NextIntlClientProvider messages={messages}>
