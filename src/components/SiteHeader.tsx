@@ -15,14 +15,17 @@ export function SiteHeader() {
         >
           {brand("brand")}
         </Link>
-        <nav className="flex items-center gap-4 text-sm text-white/85 md:gap-6">
-          <Link href="/powerstream" className="hover:text-white">
+        <nav className="flex items-center gap-3 text-sm text-white/85 md:gap-5">
+          <Link href="/produits" className="hover:text-white">
+            {t("products")}
+          </Link>
+          <Link href="/powerstream" className="hidden hover:text-white sm:inline">
             {t("powerstream")}
           </Link>
           <Link href="/guides" className="hidden hover:text-white sm:inline">
             {t("guides")}
           </Link>
-          <Link href="/comparatifs" className="hidden hover:text-white sm:inline">
+          <Link href="/comparatifs" className="hidden hover:text-white md:inline">
             {t("comparisons")}
           </Link>
           <LanguageSwitcher label={t("language")} />

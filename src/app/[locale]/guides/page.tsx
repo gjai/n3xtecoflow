@@ -1,7 +1,7 @@
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
-import { AdSenseSlot } from "@/components/AdSenseSlot";
+import { guides } from "@/data/articles";
 
 export async function generateMetadata({
   params,
@@ -9,50 +9,63 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "guides" });
-  return { title: t("title"), description: t("subtitle") };
+  return {
+    title: locale === "en" ? "Buying guides" : "Guides d'achat",
+    description:
+      locale === "en"
+        ? "EcoFlow buying guides: stations, solar, home backup, camping."
+        : "Guides d'achat EcoFlow : stations, solaire, backup maison, camping.",
+  };
 }
 
-export default async function GuidesPage({
+export default async function GuidesIndexPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations("guides");
-
-  const cards = [
-    { href: "/guides/achat", title: t("buyersTitle"), text: t("buyersText") },
-    { href: "/guides/camping", title: t("campingTitle"), text: t("campingText") },
-    { href: "/powerstream", title: t("backupTitle"), text: t("backupText") },
-  ];
+  const isEn = locale === "en";
 
   return (
     <div className="pt-24">
       <header className="mx-auto max-w-6xl px-5 py-12 md:px-8">
         <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold md:text-5xl">
-          {t("title")}
+          {isEn ? "Buying guides" : "Guides d'achat"}
         </h1>
-        <p className="mt-4 max-w-2xl text-[var(--muted)]">{t("subtitle")}</p>
+        <p className="mt-4 max-w-2xl text-[var(--muted)]">
+          {isEn
+            ? "Practical methods to size Wh/W and pick the right EcoFlow family."
+            : "Méthodes concrètes pour dimensionner Wh/W et choisir la bonne famille EcoFlow."}
+        </p>
       </header>
-      <div className="mx-auto grid max-w-6xl gap-6 px-5 pb-16 md:grid-cols-3 md:px-8">
-        {cards.map((card) => (
-          <Link
-            key={card.href}
-            href={card.href}
-            className="border border-[var(--line)] bg-[var(--surface)] p-6 transition hover:border-[var(--accent)]"
-          >
-            <h2 className="text-xl font-semibold text-white">{card.title}</h2>
-            <p className="mt-3 text-sm text-[var(--muted)]">{card.text}</p>
-            <span className="mt-6 inline-block text-sm font-semibold text-[var(--accent)]">
-              {t("cta")} →
-            </span>
-          </Link>
-        ))}
-      </div>
-      <div className="mx-auto max-w-6xl px-5 pb-16 md:px-8">
-        <AdSenseSlot label={t("adsLabel")} />
+      <div className="mx-auto grid max-w-6xl gap-6 px-5 pb-16 md:grid-cols-2 md:px-8">
+        {guides.map((guide) => {
+          const copy = isEn ? guide.en : guide.fr;
+          return (
+            <Link
+              key={guide.slug}
+              href={`/guides/${guide.slug}`}
+              className="border border-[var(--line)] bg-[var(--surface)] p-6 transition hover:border-[var(--accent)]"
+            >
+              <h2 className="text-xl font-semibold text-white">{copy.title}</h2>
+              <p className="mt-3 text-sm text-[var(--muted)]">{copy.subtitle}</p>
+            </Link>
+          );
+        })}
+        <Link
+          href="/produits"
+          className="border border-[var(--line)] bg-[var(--surface)] p-6 transition hover:border-[var(--accent)]"
+        >
+          <h2 className="text-xl font-semibold text-white">
+            {isEn ? "Full product catalog" : "Catalogue produits complet"}
+          </h2>
+          <p className="mt-3 text-sm text-[var(--muted)]">
+            {isEn
+              ? "Specs and notes for RIVER, DELTA, Pro, PowerStream, solar."
+              : "Fiches et specs RIVER, DELTA, Pro, PowerStream, solaire."}
+          </p>
+        </Link>
       </div>
     </div>
   );

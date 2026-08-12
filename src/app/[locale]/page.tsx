@@ -1,8 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { AdSenseSlot } from "@/components/AdSenseSlot";
 import { AmazonButton } from "@/components/AmazonButton";
 import { AMAZON_QUERIES, buildAmazonSearchUrl } from "@/lib/amazon";
+import { categories, products } from "@/data/products";
 
 export default async function HomePage({
   params,
@@ -13,6 +13,7 @@ export default async function HomePage({
   setRequestLocale(locale);
   const t = await getTranslations("home");
   const a = await getTranslations("amazon");
+  const isEn = locale === "en";
 
   return (
     <>
@@ -36,16 +37,16 @@ export default async function HomePage({
           </p>
           <div className="reveal-delay-2 mt-10 flex flex-wrap gap-4">
             <Link
-              href="/powerstream"
+              href="/produits"
               className="bg-[var(--accent)] px-5 py-3 text-sm font-semibold tracking-wide text-[var(--accent-ink)] transition hover:brightness-110"
             >
-              {t("ctaPrimary")}
+              {isEn ? "Browse catalog" : "Voir le catalogue"}
             </Link>
             <Link
-              href="/comparatifs"
+              href="/guides/choisir-station"
               className="border border-white/30 px-5 py-3 text-sm font-semibold tracking-wide text-white transition hover:border-white"
             >
-              {t("ctaSecondary")}
+              {t("ctaPrimary")}
             </Link>
           </div>
         </div>
@@ -53,45 +54,54 @@ export default async function HomePage({
 
       <section className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-24">
         <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold md:text-3xl">
-          {t("featuresTitle")}
+          {isEn ? "Shop by category" : "Parcourir par catégorie"}
         </h2>
-        <div className="mt-10 grid gap-8 md:grid-cols-3">
-          {[1, 2, 3].map((n) => (
-            <div key={n} className="border-t border-[var(--line)] pt-5">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {categories.map((cat) => (
+            <Link
+              key={cat.id}
+              href={`/produits/${cat.slug}`}
+              className="border-t border-[var(--line)] pt-5 transition hover:border-[var(--accent)]"
+            >
               <h3 className="text-lg font-semibold text-[var(--accent)]">
-                {t(`feature${n}Title`)}
+                {isEn ? cat.en.title : cat.fr.title}
               </h3>
-              <p className="mt-3 text-[var(--muted)]">{t(`feature${n}Text`)}</p>
-            </div>
+              <p className="mt-3 text-sm text-[var(--muted)]">
+                {isEn ? cat.en.intro : cat.fr.intro}
+              </p>
+            </Link>
           ))}
         </div>
+        <p className="mt-8 text-sm text-[var(--muted)]">
+          {products.length} {isEn ? "product sheets" : "fiches produits"} ·{" "}
+          <Link href="/comparatifs" className="text-[var(--accent)] hover:underline">
+            {isEn ? "Comparisons" : "Comparatifs"}
+          </Link>
+        </p>
       </section>
 
       <section className="border-y border-[var(--line)] bg-[var(--surface)]">
-        <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-[1.2fr_0.8fr] md:px-8 md:py-20">
-          <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[var(--solar)]">
-              {t("spotlightTitle")}
-            </p>
-            <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-semibold md:text-4xl">
-              {t("spotlightName")}
-            </h2>
-            <p className="mt-4 max-w-xl text-[var(--muted)]">{t("spotlightText")}</p>
-            <div className="mt-8 flex flex-wrap items-center gap-6">
-              <Link
-                href="/powerstream"
-                className="text-sm font-semibold text-[var(--accent)] underline-offset-4 hover:underline"
-              >
-                {t("spotlightCta")}
-              </Link>
-              <AmazonButton
-                href={buildAmazonSearchUrl(AMAZON_QUERIES.powerstream)}
-                label={a("cta")}
-                badge={a("badge")}
-              />
-            </div>
+        <div className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-20">
+          <p className="text-xs uppercase tracking-[0.2em] text-[var(--solar)]">
+            {t("spotlightTitle")}
+          </p>
+          <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-semibold md:text-4xl">
+            {t("spotlightName")}
+          </h2>
+          <p className="mt-4 max-w-xl text-[var(--muted)]">{t("spotlightText")}</p>
+          <div className="mt-8 flex flex-wrap items-center gap-6">
+            <Link
+              href="/produits/powerstream/powerstream"
+              className="text-sm font-semibold text-[var(--accent)] underline-offset-4 hover:underline"
+            >
+              {t("spotlightCta")}
+            </Link>
+            <AmazonButton
+              href={buildAmazonSearchUrl(AMAZON_QUERIES.powerstream)}
+              label={a("cta")}
+              badge={a("badge")}
+            />
           </div>
-          <AdSenseSlot label={t("adsLabel")} className="min-h-[180px]" />
         </div>
       </section>
     </>
