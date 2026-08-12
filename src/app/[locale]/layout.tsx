@@ -1,17 +1,21 @@
 import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Outfit, Sora } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { AdSenseScript } from "@/components/AdSenseScript";
 import { ConsentProvider } from "@/components/ConsentProvider";
 import { CookieBanner } from "@/components/CookieBanner";
+import { NetworkLinks } from "@/components/NetworkLinks";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SiteProvider } from "@/components/SiteProvider";
 import {
   ThemeProvider,
   themeInitScript,
 } from "@/components/ThemeProvider";
+import { getCurrentSite } from "@/sites/server";
+import { siteThemeCss } from "@/sites/theme-css";
 import "../globals.css";
 
 const display = Sora({
@@ -36,20 +40,22 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "meta" });
+  const site = await getCurrentSite();
+  const isEn = locale === "en";
   const adsenseClient =
+    site.monetization?.adsenseClient?.trim() ||
     process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() ||
     "ca-pub-4733644127583822";
+  const title = site.brand.name;
+  const description = isEn ? site.brand.taglineEn : site.brand.taglineFr;
 
   return {
     title: {
-      default: t("siteName"),
-      template: `%s · ${t("siteName")}`,
+      default: title,
+      template: `%s · ${title}`,
     },
-    description: t("tagline"),
-    metadataBase: new URL(
-      process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com",
-    ),
+    description,
+    metadataBase: new URL(`https://${site.primaryHost}`),
     alternates: {
       languages: {
         fr: "/fr",
@@ -65,16 +71,17 @@ export async function generateMetadata({
       "google-adsense-account": adsenseClient,
     },
     openGraph: {
-      title: t("siteName"),
-      description: t("tagline"),
+      title,
+      description,
       locale: locale === "fr" ? "fr_FR" : "en_US",
       type: "website",
-      siteName: t("siteName"),
+      siteName: title,
+      url: `https://${site.primaryHost}`,
     },
     twitter: {
       card: "summary_large_image",
-      title: t("siteName"),
-      description: t("tagline"),
+      title,
+      description,
     },
   };
 }
@@ -93,40 +100,52 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale);
   const messages = await getMessages();
-  const t = await getTranslations("meta");
+  const site = await getCurrentSite();
+  const adsenseClient =
+    site.monetization?.adsenseClient?.trim() ||
+    process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() ||
+    "ca-pub-4733644127583822";
+  const disclaimer =
+    locale === "en"
+      ? "Independent editorial site. Contains Amazon affiliate links."
+      : "Site éditorial indépendant. Contient des liens d'affiliation Amazon.";
 
   return (
     <html
       lang={locale}
+      data-site={site.id}
       className={`${display.variable} ${body.variable} h-full`}
       suppressHydrationWarning
     >
       <head>
+        <style
+          id="site-theme"
+          dangerouslySetInnerHTML={{ __html: siteThemeCss(site) }}
+        />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        {/* Raw tag so AdSense crawler always finds the in-page code */}
         <script
           async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${
-            process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() ||
-            "ca-pub-4733644127583822"
-          }`}
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
           crossOrigin="anonymous"
         />
       </head>
       <body className="min-h-full antialiased">
         <NextIntlClientProvider messages={messages}>
-          <ThemeProvider>
-            <ConsentProvider>
-              <AdSenseScript />
-              <div className="flex min-h-full flex-col">
-                <SiteHeader />
-                <main className="flex-1">{children}</main>
-                <SiteFooter />
-              </div>
-              <CookieBanner />
-              <p className="sr-only">{t("disclaimerShort")}</p>
-            </ConsentProvider>
-          </ThemeProvider>
+          <SiteProvider site={site}>
+            <ThemeProvider>
+              <ConsentProvider>
+                <AdSenseScript />
+                <div className="flex min-h-full flex-col">
+                  <SiteHeader />
+                  <main className="flex-1">{children}</main>
+                  <NetworkLinks />
+                  <SiteFooter />
+                </div>
+                <CookieBanner />
+                <p className="sr-only">{disclaimer}</p>
+              </ConsentProvider>
+            </ThemeProvider>
+          </SiteProvider>
         </NextIntlClientProvider>
       </body>
     </html>

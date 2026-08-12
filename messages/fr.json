@@ -203,5 +203,9 @@
     "readSource": "Voir l’article source",
     "catalogCta": "Comparer les produits EcoFlow →",
     "aiBadge": "Réécrit IA"
+  },
+  "network": {
+    "title": "Réseau de sites",
+    "hint": "Même écosystème éditorial — thèmes et angles différents, structure partagée."
   }
 }

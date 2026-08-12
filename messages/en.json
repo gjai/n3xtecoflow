@@ -203,5 +203,9 @@
     "readSource": "Open source article",
     "catalogCta": "Compare EcoFlow products →",
     "aiBadge": "AI rewritten"
+  },
+  "network": {
+    "title": "Site network",
+    "hint": "Same editorial ecosystem — different themes and angles, shared structure."
   }
 }

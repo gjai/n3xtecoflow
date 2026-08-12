@@ -5,10 +5,11 @@ import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
+import { useSite } from "./SiteProvider";
 
 export function SiteHeader() {
   const t = useTranslations("nav");
-  const brand = useTranslations("home");
+  const site = useSite();
   const locale = useLocale();
   const [open, setOpen] = useState(false);
 
@@ -29,7 +30,7 @@ export function SiteHeader() {
           className="font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight text-[var(--hero-fg)] md:text-xl"
           onClick={() => setOpen(false)}
         >
-          {brand("brand")}
+          {site.brand.name}
         </Link>
         <nav className="hidden items-center gap-4 text-sm text-[var(--hero-muted)] xl:flex">
           {links.map((l) => (

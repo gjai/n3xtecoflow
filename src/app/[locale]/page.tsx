@@ -8,9 +8,10 @@ import { HeroVisual } from "@/components/HeroVisual";
 import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/JsonLd";
 import { AMAZON_QUERIES, buildAmazonSearchUrl } from "@/lib/amazon";
 import { categoryImages, editorialImages, heroImage } from "@/data/images";
-import { categories, products } from "@/data/products";
+import { categories, products, type CategoryId } from "@/data/products";
 import { comparisons, guides } from "@/data/articles";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
+import { getCurrentSite } from "@/sites/server";
 
 export const dynamic = "force-dynamic";
 
@@ -24,10 +25,21 @@ export default async function HomePage({
   const t = await getTranslations("home");
   const newsT = await getTranslations("news");
   const a = await getTranslations("amazon");
+  const site = await getCurrentSite();
   const isEn = locale === "en";
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
+  const siteUrl = `https://${site.primaryHost}`;
   const latestNews = getNewsArticles(await readNewsStore()).slice(0, 3);
+  const featured = site.featuredCategoryIds
+    .map((id) => categories.find((c) => c.id === (id as CategoryId)))
+    .filter(Boolean) as typeof categories;
+  const orderedCategories = [
+    ...featured,
+    ...categories.filter((c) => !site.featuredCategoryIds.includes(c.id)),
+  ];
+  const heroSrc = site.heroImage || heroImage.src;
+  const brandName = site.brand.name;
+  const headline = isEn ? site.brand.headlineEn : site.brand.headlineFr;
+  const subhead = isEn ? site.brand.subheadEn : site.brand.subheadFr;
 
   return (
     <>
@@ -37,7 +49,7 @@ export default async function HomePage({
       <section className="hero-grid relative min-h-[100svh] overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src={heroImage.src}
+            src={heroSrc}
             alt={isEn ? heroImage.altEn : heroImage.altFr}
             fill
             priority
@@ -49,13 +61,13 @@ export default async function HomePage({
         <HeroVisual />
         <div className="relative mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-5 pb-16 pt-28 md:justify-center md:px-8 md:pb-24">
           <p className="reveal font-[family-name:var(--font-display)] text-sm uppercase tracking-[0.28em] text-[var(--accent)]">
-            {t("brand")}
+            {brandName}
           </p>
           <h1 className="reveal-delay mt-4 max-w-2xl font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] tracking-tight text-[var(--hero-fg)] sm:text-5xl md:text-6xl lg:text-7xl">
-            {t("headline")}
+            {headline}
           </h1>
           <p className="reveal-delay-2 mt-6 max-w-xl text-base text-[var(--hero-muted)] md:text-lg">
-            {t("subhead")}
+            {subhead}
           </p>
           <div className="reveal-delay-2 mt-10 flex flex-wrap gap-3 sm:gap-4">
             <Link
@@ -169,7 +181,7 @@ export default async function HomePage({
           {isEn ? "Shop by category" : "Parcourir par catégorie"}
         </h2>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {categories.map((cat) => (
+          {orderedCategories.map((cat) => (
             <Link
               key={cat.id}
               href={`/produits/${cat.slug}`}
