@@ -338,7 +338,6 @@ export default async function HomePage({
               <AmazonButton
                 href={buildAmazonSearchUrl(AMAZON_QUERIES.stream)}
                 label={a("cta")}
-                badge={a("badge")}
               />
             </div>
           </div>

@@ -75,7 +75,6 @@ export default async function ComparisonArticlePage({
         sections={copy.sections}
         amazonQuery="EcoFlow"
         amazonLabel={isEn ? "Compare on Amazon" : "Comparer sur Amazon"}
-        amazonBadge={isEn ? "Amazon affiliate link" : "Lien affilié Amazon"}
       />
     </article>
   );

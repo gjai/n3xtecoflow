@@ -11,12 +11,10 @@ export function ArticleBody({
   sections,
   amazonQuery,
   amazonLabel,
-  amazonBadge,
 }: {
   sections: ArticleSection[];
   amazonQuery?: string;
   amazonLabel?: string;
-  amazonBadge?: string;
 }) {
   const t = useTranslations("amazon");
   const tHome = useTranslations("home");
@@ -45,14 +43,13 @@ export function ArticleBody({
           ) : null}
         </section>
       ))}
-      {amazonQuery && amazonLabel && amazonBadge ? (
+      {amazonQuery && amazonLabel ? (
         <div className="space-y-3">
-          <AffiliateDisclosure compact />
           <AmazonButton
             href={buildAmazonSearchUrl(amazonQuery)}
             label={amazonLabel}
-            badge={amazonBadge}
           />
+          <AffiliateDisclosure compact />
         </div>
       ) : null}
       <p className="text-sm text-[var(--muted)]">

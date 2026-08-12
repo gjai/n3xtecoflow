@@ -104,7 +104,6 @@ export default async function ProductPage({
   });
 
   const buyLabel = isEn ? "Buy on Amazon.fr" : "Acheter sur Amazon.fr";
-  const buyBadge = isEn ? "Amazon affiliate link" : "Lien affilié Amazon";
   const priceFallback = isEn
     ? "See current price on Amazon.fr →"
     : "Voir le prix actuel sur Amazon.fr →";
@@ -114,7 +113,6 @@ export default async function ProductPage({
       <AmazonButton
         href={amazonHref}
         label={buyLabel}
-        badge={buyBadge}
         priceDisplay={displayPrice?.display}
         priceHint={
           displayPrice

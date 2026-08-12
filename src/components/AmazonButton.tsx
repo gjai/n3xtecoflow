@@ -1,7 +1,8 @@
 type AmazonButtonProps = {
   href: string;
   label: string;
-  badge: string;
+  /** Optional short note under the button. Omit when AffiliateDisclosure is shown nearby. */
+  badge?: string;
   className?: string;
   /** Formatted Amazon price, e.g. "549,00 €" */
   priceDisplay?: string | null;
@@ -61,7 +62,9 @@ export function AmazonButton({
       >
         {label}
       </a>
-      <span className="text-xs text-[var(--muted)]">{badge}</span>
+      {badge ? (
+        <span className="text-xs text-[var(--muted)]">{badge}</span>
+      ) : null}
     </div>
   );
 }

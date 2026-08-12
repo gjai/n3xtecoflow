@@ -56,7 +56,6 @@ export default async function NewsArticlePage({
   );
   const cta = amazonCtaForNews(article);
   const buyLabel = isEn ? "Buy on Amazon.fr" : "Acheter sur Amazon.fr";
-  const buyBadge = isEn ? "Amazon affiliate link" : "Lien affilié Amazon";
   const mid = Math.max(2, Math.floor(copy.body.length / 2));
 
   function AmazonCtaBlock() {
@@ -74,7 +73,6 @@ export default async function NewsArticlePage({
         <AmazonButton
           href={cta.href}
           label={buyLabel}
-          badge={buyBadge}
           size="lg"
           priceFallback={
             isEn

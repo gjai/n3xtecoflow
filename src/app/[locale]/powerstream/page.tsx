@@ -68,12 +68,11 @@ export default async function PowerStreamPage({
           </ul>
         </section>
         <div className="space-y-3">
-          <AffiliateDisclosure compact />
           <AmazonButton
             href={buildAmazonSearchUrl(AMAZON_QUERIES.powerstream)}
             label={t("ctaAmazon")}
-            badge={a("badge")}
           />
+          <AffiliateDisclosure compact />
         </div>
         <section className="space-y-3">
           <h2 className="font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">

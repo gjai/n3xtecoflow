@@ -75,7 +75,6 @@ export default async function GuideArticlePage({
         sections={copy.sections}
         amazonQuery="EcoFlow station électrique"
         amazonLabel={isEn ? "Browse on Amazon" : "Voir sur Amazon"}
-        amazonBadge={isEn ? "Amazon affiliate link" : "Lien affilié Amazon"}
       />
     </article>
   );
