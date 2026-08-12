@@ -6,14 +6,21 @@ import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AmazonButton } from "@/components/AmazonButton";
 import { CoverImage } from "@/components/CoverImage";
 import { JsonLd, productJsonLd } from "@/components/JsonLd";
-import { getCategoryImage } from "@/data/images";
 import { amazonHrefForProduct } from "@/lib/amazon";
 import { getAmazonOffer } from "@/lib/amazon/price-store";
+import { getEcoflowEntry } from "@/lib/ecoflow/catalog-store";
+import { getEcoflowEditorial } from "@/lib/ecoflow/editorial-store";
+import { resolveProductCopy } from "@/lib/product-copy";
+import {
+  resolveDisplayPrice,
+  resolveProductMedia,
+} from "@/lib/product-presentation";
+import { getRelatedEditorial } from "@/lib/product-related";
+import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 import { localeAlternates, localizeSpecs } from "@/lib/seo";
 import {
   getCategory,
   getLocalizedCategory,
-  getLocalizedProduct,
   getProduct,
   getProductsByCategory,
   products,
@@ -40,8 +47,10 @@ export async function generateMetadata({
   const { locale, category, slug } = await params;
   const product = getProduct(category, slug);
   if (!product) return {};
-  const copy = getLocalizedProduct(product, locale);
-  const image = getCategoryImage(product.category);
+  const editorial = await getEcoflowEditorial(product.slug);
+  const copy = resolveProductCopy(product, locale, editorial);
+  const ecoflow = await getEcoflowEntry(product.slug);
+  const media = resolveProductMedia(product, ecoflow);
   return {
     title: `${product.name} — ${copy.tagline}`,
     description: copy.summary,
@@ -50,7 +59,7 @@ export async function generateMetadata({
       title: product.name,
       description: copy.summary,
       type: "website",
-      images: [{ url: image.src }],
+      images: [{ url: media.src }],
     },
   };
 }
@@ -66,25 +75,60 @@ export default async function ProductPage({
   const cat = getCategory(category);
   if (!product || !cat) notFound();
 
-  const copy = getLocalizedProduct(product, locale);
+  const copy = resolveProductCopy(
+    product,
+    locale,
+    await getEcoflowEditorial(product.slug),
+  );
   const catCopy = getLocalizedCategory(cat, locale);
   const isEn = locale === "en";
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
   const productUrl = `${siteUrl}/${locale}/produits/${cat.slug}/${product.slug}`;
-  const image = getCategoryImage(product.category);
   const offer = await getAmazonOffer(product.slug);
+  const ecoflow = await getEcoflowEntry(product.slug);
+  const media = resolveProductMedia(product, ecoflow);
+  const displayPrice = resolveDisplayPrice(offer, ecoflow);
   const amazonHref =
     offer?.detailUrl || amazonHrefForProduct(product);
-  const priceHint = offer?.price.display
-    ? isEn
-      ? `Amazon.fr price · updated ${new Date(offer.updatedAt).toLocaleString("en-GB")}`
-      : `Prix Amazon.fr · maj. ${new Date(offer.updatedAt).toLocaleString("fr-FR")}`
-    : undefined;
   const specs = localizeSpecs(product.specs, locale);
   const related = getProductsByCategory(product.category)
     .filter((p) => p.slug !== product.slug)
     .slice(0, 4);
+
+  const newsStore = await readNewsStore();
+  const editorial = getRelatedEditorial({
+    product,
+    locale,
+    news: getNewsArticles(newsStore),
+  });
+
+  const buyLabel = isEn ? "Buy on Amazon.fr" : "Acheter sur Amazon.fr";
+  const buyBadge = isEn ? "Amazon affiliate link" : "Lien affilié Amazon";
+  const priceFallback = isEn
+    ? "See current price on Amazon.fr →"
+    : "Voir le prix actuel sur Amazon.fr →";
+
+  const amazonBlock = (
+    <AmazonButton
+      href={amazonHref}
+      label={buyLabel}
+      badge={buyBadge}
+      priceDisplay={displayPrice?.display}
+      priceHint={
+        displayPrice
+          ? isEn
+            ? displayPrice.hintEn
+            : displayPrice.hintFr
+          : undefined
+      }
+      availability={
+        displayPrice?.source === "amazon" ? offer?.availability : undefined
+      }
+      priceFallback={displayPrice ? undefined : priceFallback}
+      size="lg"
+    />
+  );
 
   return (
     <article>
@@ -98,8 +142,8 @@ export default async function ProductPage({
           url: productUrl,
           capacityWh: product.capacityWh,
           outputW: product.outputW,
-          priceAmount: offer?.price.amount,
-          priceCurrency: offer?.price.currency,
+          priceAmount: displayPrice?.amount,
+          priceCurrency: displayPrice?.currency,
           offerUrl: amazonHref,
         })}
       />
@@ -123,27 +167,25 @@ export default async function ProductPage({
             </h1>
             <p className="mt-3 text-lg text-[var(--accent)]">{copy.tagline}</p>
             <p className="mt-4 text-[var(--muted)]">{copy.summary}</p>
-            <div className="mt-6">
+            <div className="mt-6 max-w-md space-y-3">
+              {amazonBlock}
               <AffiliateDisclosure compact />
             </div>
           </div>
           <CoverImage
-            image={
-              product.imageSrc
-                ? {
-                    src: product.imageSrc,
-                    altFr: product.name,
-                    altEn: product.name,
-                    credit: "Produit",
-                    creditUrl: amazonHref,
-                  }
-                : image
-            }
+            image={{
+              src: media.src,
+              altFr: media.altFr,
+              altEn: media.altEn,
+              credit: media.credit,
+              creditUrl:
+                media.creditUrl === "#" ? amazonHref : media.creditUrl,
+            }}
             locale={locale}
-            className="aspect-[4/3] w-full border border-[var(--line)]"
+            className="aspect-[4/3] w-full border border-[var(--line)] bg-[var(--surface)]"
             sizes="(max-width: 768px) 100vw, 40vw"
             priority
-            showCredit={!product.imageSrc}
+            showCredit
           />
         </div>
       </header>
@@ -183,14 +225,74 @@ export default async function ProductPage({
               </ul>
             </div>
           </section>
-          <AmazonButton
-            href={amazonHref}
-            label={isEn ? "See on Amazon" : "Voir sur Amazon"}
-            badge={isEn ? "Amazon affiliate link" : "Lien affilié Amazon"}
-            priceDisplay={offer?.price.display}
-            priceHint={priceHint}
-            availability={offer?.availability}
-          />
+
+          {(editorial.guides.length > 0 ||
+            editorial.comparisons.length > 0 ||
+            editorial.news.length > 0) && (
+            <section className="space-y-8 border-t border-[var(--line)] pt-8">
+              <h2 className="font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">
+                {isEn ? "Related reading" : "À lire aussi"}
+              </h2>
+              {editorial.guides.length > 0 ? (
+                <div>
+                  <h3 className="text-sm uppercase tracking-[0.16em] text-[var(--muted)]">
+                    {isEn ? "Guides" : "Guides"}
+                  </h3>
+                  <ul className="mt-3 space-y-2">
+                    {editorial.guides.map((item) => (
+                      <li key={item.href}>
+                        <Link
+                          href={item.href}
+                          className="text-[var(--accent)] underline-offset-2 hover:underline"
+                        >
+                          {item.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+              {editorial.comparisons.length > 0 ? (
+                <div>
+                  <h3 className="text-sm uppercase tracking-[0.16em] text-[var(--muted)]">
+                    {isEn ? "Comparisons" : "Comparatifs"}
+                  </h3>
+                  <ul className="mt-3 space-y-2">
+                    {editorial.comparisons.map((item) => (
+                      <li key={item.href}>
+                        <Link
+                          href={item.href}
+                          className="text-[var(--accent)] underline-offset-2 hover:underline"
+                        >
+                          {item.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+              {editorial.news.length > 0 ? (
+                <div>
+                  <h3 className="text-sm uppercase tracking-[0.16em] text-[var(--muted)]">
+                    {isEn ? "News" : "Actualités"}
+                  </h3>
+                  <ul className="mt-3 space-y-2">
+                    {editorial.news.map((item) => (
+                      <li key={item.href}>
+                        <Link
+                          href={item.href}
+                          className="text-[var(--accent)] underline-offset-2 hover:underline"
+                        >
+                          {item.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </section>
+          )}
+
           {related.length > 0 ? (
             <section>
               <h2 className="font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">
@@ -212,28 +314,60 @@ export default async function ProductPage({
           ) : null}
         </div>
 
-        <aside className="h-fit border border-[var(--line)] bg-[var(--surface)] p-5">
-          <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--heading)]">
-            {isEn ? "Technical specs" : "Caractéristiques techniques"}
-          </h2>
-          <dl className="mt-4 space-y-3 text-sm">
-            {specs.map((spec) => (
-              <div
-                key={spec.label}
-                className="flex flex-col gap-1 border-b border-[var(--line)] pb-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4"
-              >
-                <dt className="text-[var(--muted)]">{spec.label}</dt>
-                <dd className="text-[var(--heading)] sm:text-right">{spec.value}</dd>
-              </div>
-            ))}
-          </dl>
-          <p className="mt-4 text-xs text-[var(--muted)]">
-            {isEn
-              ? "Indicative specs — always confirm on the official/regional sheet before purchase."
-              : "Specs indicatives — vérifiez la fiche officielle/régionale avant achat."}
-          </p>
+        <aside className="space-y-6 md:sticky md:top-24 md:self-start">
+          <div className="border border-[var(--accent)] bg-[var(--surface)] p-5 shadow-[0_0_0_1px_color-mix(in_srgb,var(--accent)_25%,transparent)]">
+            <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+              Amazon.fr
+            </p>
+            <p className="mt-2 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)]">
+              {product.name}
+            </p>
+            <div className="mt-4">{amazonBlock}</div>
+            <div className="mt-4">
+              <AffiliateDisclosure compact />
+            </div>
+          </div>
+
+          <div className="border border-[var(--line)] bg-[var(--surface)] p-5">
+            <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--heading)]">
+              {isEn ? "Technical specs" : "Caractéristiques techniques"}
+            </h2>
+            <dl className="mt-4 space-y-3 text-sm">
+              {specs.map((spec) => (
+                <div
+                  key={spec.label}
+                  className="flex flex-col gap-1 border-b border-[var(--line)] pb-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4"
+                >
+                  <dt className="text-[var(--muted)]">{spec.label}</dt>
+                  <dd className="text-[var(--heading)] sm:text-right">
+                    {spec.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-4 text-xs text-[var(--muted)]">
+              {isEn
+                ? "Indicative specs — always confirm on the official/regional sheet before purchase."
+                : "Specs indicatives — vérifiez la fiche officielle/régionale avant achat."}
+            </p>
+          </div>
         </aside>
       </div>
+
+      {/* Mobile sticky buy bar */}
+      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-[var(--line)] bg-[var(--bg)]/95 p-3 backdrop-blur md:hidden">
+        <a
+          href={amazonHref}
+          target="_blank"
+          rel="nofollow sponsored noopener noreferrer"
+          className="flex min-h-12 items-center justify-center bg-[var(--accent)] px-4 text-sm font-semibold text-[var(--accent-ink)]"
+        >
+          {displayPrice?.display
+            ? `${buyLabel} · ${displayPrice.display}`
+            : buyLabel}
+        </a>
+      </div>
+      <div className="h-16 md:hidden" aria-hidden />
     </article>
   );
 }

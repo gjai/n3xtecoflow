@@ -46,6 +46,11 @@ const nextConfig: NextConfig = {
         hostname: "images-eu.ssl-images-amazon.com",
         pathname: "/images/**",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.shopify.com",
+        pathname: "/s/files/**",
+      },
     ],
   },
   async headers() {

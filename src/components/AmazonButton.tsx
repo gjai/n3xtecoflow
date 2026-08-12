@@ -7,6 +7,10 @@ type AmazonButtonProps = {
   priceDisplay?: string | null;
   priceHint?: string;
   availability?: string | null;
+  /** When no live price, still show a strong price CTA line */
+  priceFallback?: string;
+  /** larger = full-width buy block */
+  size?: "default" | "lg";
 };
 
 export function AmazonButton({
@@ -17,12 +21,22 @@ export function AmazonButton({
   priceDisplay,
   priceHint,
   availability,
+  priceFallback,
+  size = "default",
 }: AmazonButtonProps) {
+  const large = size === "lg";
+
   return (
-    <div className={`inline-flex flex-col gap-2 ${className}`}>
+    <div
+      className={`flex flex-col gap-2 ${large ? "w-full" : "inline-flex"} ${className}`}
+    >
       {priceDisplay ? (
         <div>
-          <p className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
+          <p
+            className={`font-[family-name:var(--font-display)] font-semibold text-[var(--heading)] ${
+              large ? "text-3xl" : "text-2xl"
+            }`}
+          >
             {priceDisplay}
           </p>
           {priceHint ? (
@@ -32,12 +46,18 @@ export function AmazonButton({
             <p className="mt-1 text-xs text-[var(--fog)]">{availability}</p>
           ) : null}
         </div>
+      ) : priceFallback ? (
+        <p className="text-sm font-medium text-[var(--heading)]">{priceFallback}</p>
       ) : null}
       <a
         href={href}
         target="_blank"
         rel="nofollow sponsored noopener noreferrer"
-        className="inline-flex items-center justify-center bg-[var(--accent)] px-5 py-3 text-sm font-semibold tracking-wide text-[var(--accent-ink)] transition hover:brightness-110"
+        className={`inline-flex items-center justify-center bg-[var(--accent)] font-semibold tracking-wide text-[var(--accent-ink)] transition hover:brightness-110 ${
+          large
+            ? "min-h-12 w-full px-6 py-3.5 text-base"
+            : "px-5 py-3 text-sm"
+        }`}
       >
         {label}
       </a>

@@ -38,4 +38,5 @@ Voir `.env.example` (extrait) :
 
 - `news-ingest.yml` → `POST /api/news/ingest`
 - `amazon-prices.yml` → `POST /api/amazon/prices/refresh`
+- `ecoflow-catalog.yml` → `POST /api/ecoflow/catalog/refresh` (packshots + prix catalogue EcoFlow.fr + éditorial IA)
 - `daily-stats.yml` → `POST /api/stats/daily`

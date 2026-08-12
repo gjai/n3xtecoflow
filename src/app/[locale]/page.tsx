@@ -17,6 +17,10 @@ import {
 import { categories, products, type CategoryId } from "@/data/products";
 import { comparisons, guides } from "@/data/articles";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
+import { getEcoflowEntry } from "@/lib/ecoflow/catalog-store";
+import { getEcoflowEditorial } from "@/lib/ecoflow/editorial-store";
+import { resolveProductCopy } from "@/lib/product-copy";
+import { resolveProductMedia } from "@/lib/product-presentation";
 import { localeAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 
@@ -69,10 +73,15 @@ export default async function HomePage({
   ];
   const brandName = site.brand.name;
 
-  const productImage =
-    latestProduct.imageSrc ||
-    categoryImages[latestProduct.category]?.src ||
-    heroImage.src;
+  const productImage = resolveProductMedia(
+    latestProduct,
+    await getEcoflowEntry(latestProduct.slug),
+  ).src;
+  const productCopy = resolveProductCopy(
+    latestProduct,
+    locale,
+    await getEcoflowEditorial(latestProduct.slug),
+  );
   const newsCopy = latestNewsItem
     ? isEn
       ? latestNewsItem.en
@@ -82,7 +91,6 @@ export default async function HomePage({
   const comparisonCopy = isEn
     ? latestComparison.en
     : latestComparison.fr;
-  const productCopy = isEn ? latestProduct.en : latestProduct.fr;
 
   const heroSlides: HeroSlide[] = [
     {

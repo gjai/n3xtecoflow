@@ -1,0 +1,23 @@
+name: Refresh EcoFlow catalog
+
+on:
+  schedule:
+    - cron: "20 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger production EcoFlow catalog refresh
+        env:
+          NEWS_CRON_SECRET: ${{ secrets.NEWS_CRON_SECRET }}
+          SITE_URL: https://ecoflow-stream.com
+        run: |
+          if [ -z "$NEWS_CRON_SECRET" ]; then
+            echo "NEWS_CRON_SECRET missing"
+            exit 1
+          fi
+          curl -fsS -X POST \
+            -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
+            "${SITE_URL}/api/ecoflow/catalog/refresh?forceEditorial=0"
