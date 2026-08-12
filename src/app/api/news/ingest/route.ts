@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ingestNews, type IngestOptions } from "@/lib/news/ingest";
+import { markCronFail, markCronOk } from "@/lib/cron/status";
 
 export const maxDuration = 300;
 
@@ -52,9 +53,26 @@ export async function POST(request: Request) {
       /* no JSON body */
     }
     const result = await ingestNews(options);
+    const ok =
+      result &&
+      typeof result === "object" &&
+      (!("ok" in result) || (result as { ok?: boolean }).ok !== false);
+    if (ok) {
+      const created =
+        result && typeof result === "object" && "created" in result
+          ? String((result as { created?: number }).created ?? "?")
+          : "?";
+      await markCronOk("news", `created=${created}`);
+    } else {
+      await markCronFail("news", "ingest_ok_false");
+    }
     return NextResponse.json(result);
   } catch (err) {
     console.error(err);
+    await markCronFail(
+      "news",
+      err instanceof Error ? err.message : "ingest_failed",
+    );
     return NextResponse.json({ error: "ingest_failed" }, { status: 500 });
   }
 }

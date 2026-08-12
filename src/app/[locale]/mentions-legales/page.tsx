@@ -32,6 +32,7 @@ export default async function MentionsPage({
     { id: "editeur", label: t("publisherTitle") },
     { id: "hebergeur", label: t("hostTitle") },
     { id: "confidentialite", label: t("privacyTitle") },
+    { id: "droits", label: t("privacyRightsTitle") },
     { id: "cookies", label: t("cookiesTitle") },
     { id: "affiliation", label: t("affiliateTitle") },
   ] as const;
@@ -109,6 +110,27 @@ export default async function MentionsPage({
           <p className="mt-4">{t("privacyBody")}</p>
           <p className="mt-3">{t("adsense")}</p>
           <p className="mt-3">{t("privacyConsent")}</p>
+          <h3 className="mt-6 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)]">
+            {t("privacyBasisTitle")}
+          </h3>
+          <p className="mt-2">{t("privacyBasisBody")}</p>
+        </section>
+
+        <section id="droits" className="scroll-mt-28">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
+            {t("privacyRightsTitle")}
+          </h2>
+          <p className="mt-4">{t("privacyRightsBody")}</p>
+          <p className="mt-3">
+            {t("contactViaForm")}{" "}
+            <Link
+              href="/contact"
+              className="text-[var(--accent)] underline-offset-2 hover:underline"
+            >
+              {t("contactLink")}
+            </Link>
+            .
+          </p>
         </section>
 
         <section id="cookies" className="scroll-mt-28">

@@ -18,6 +18,27 @@ jobs:
             echo "NEWS_CRON_SECRET missing"
             exit 1
           fi
+          # 503 = Creators API not configured yet — treat as soft skip
+          code=$(curl -sS -o /tmp/amazon-refresh.json -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
+            "${SITE_URL}/api/amazon/prices/refresh" || true)
+          echo "http=$code"
+          cat /tmp/amazon-refresh.json || true
+          if [ "$code" = "503" ]; then
+            echo "Creators API inactive — OK for now"
+            exit 0
+          fi
+          if [ "$code" != "200" ]; then
+            exit 1
+          fi
+      - name: Alert on failure
+        if: failure()
+        env:
+          NEWS_CRON_SECRET: ${{ secrets.NEWS_CRON_SECRET }}
+          SITE_URL: https://ecoflow-stream.com
+        run: |
           curl -fsS -X POST \
             -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
-            "${SITE_URL}/api/amazon/prices/refresh"
+            -H "Content-Type: application/json" \
+            -d "{\"job\":\"amazon\",\"workflow\":\"${{ github.workflow }}\",\"runUrl\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\",\"error\":\"workflow_failed\"}" \
+            "${SITE_URL}/api/cron/alert" || true

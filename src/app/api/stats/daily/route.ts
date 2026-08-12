@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { buildDailyDigest, sendDigestEmail } from "@/lib/analytics/digest";
+import { markCronFail, markCronOk } from "@/lib/cron/status";
 import { shiftParisDateKey, parisDateKey } from "@/lib/analytics/store";
 
 export const maxDuration = 60;
@@ -23,8 +24,7 @@ export async function POST(request: Request) {
   const url = new URL(request.url);
   const dayParam = url.searchParams.get("day");
   const dryRun = url.searchParams.get("dryRun") === "1";
-  const dayKey =
-    dayParam || shiftParisDateKey(parisDateKey(), -1);
+  const dayKey = dayParam || shiftParisDateKey(parisDateKey(), -1);
 
   try {
     const digest = await buildDailyDigest({ dayKey });
@@ -33,19 +33,33 @@ export async function POST(request: Request) {
     }
     const sent = await sendDigestEmail(digest);
     if (!sent.ok) {
+      await markCronFail("stats", sent.error || "email_failed");
       return NextResponse.json(
-        { ok: false, error: sent.error, digest: { subject: digest.subject, dayKey } },
+        {
+          ok: false,
+          error: sent.error,
+          digest: { subject: digest.subject, dayKey },
+        },
         { status: 502 },
       );
     }
+    await markCronOk(
+      "stats",
+      digest.cronHealth?.ok ? "health_ok" : "health_alert",
+    );
     return NextResponse.json({
       ok: true,
       dayKey: digest.dayKey,
       subject: digest.subject,
       totals: digest.totals,
+      cronHealthOk: digest.cronHealth?.ok ?? true,
     });
   } catch (err) {
     console.error(err);
+    await markCronFail(
+      "stats",
+      err instanceof Error ? err.message : "digest_failed",
+    );
     return NextResponse.json({ error: "digest_failed" }, { status: 500 });
   }
 }

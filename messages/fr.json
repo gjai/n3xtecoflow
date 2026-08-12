@@ -145,8 +145,12 @@
     "adsense": "Ce site peut afficher des annonces Google AdSense. Google peut utiliser des cookies pour personnaliser les pubs, uniquement après votre consentement.",
     "contactViaForm": "Pour nous contacter, utilisez le",
     "contactLink": "formulaire de contact",
-    "privacyBody": "Nous collectons des données techniques minimales (logs serveur) et, si vous acceptez, des cookies publicitaires Google AdSense. Le formulaire de contact transmet nom, email et message uniquement pour vous répondre. Aucune revente de données personnelles.",
+    "privacyBody": "Nous collectons des données techniques minimales (logs serveur, mesure d’audience anonymisée sans cookie publicitaire) et, si vous acceptez, des cookies publicitaires Google AdSense. Le formulaire de contact transmet nom, email et message uniquement pour vous répondre. Aucune revente de données personnelles.",
     "privacyConsent": "Vous pouvez accepter ou refuser les cookies publicitaires via le bandeau cookies. Les cookies strictement nécessaires au fonctionnement du site restent actifs. Mesures techniques : HTTPS, en-têtes de sécurité, limitation du spam sur le formulaire.",
+    "privacyBasisTitle": "Base légale & conservation",
+    "privacyBasisBody": "Bases légales : intérêt légitime (sécurité, logs techniques, audience anonymisée), exécution de mesures précontractuelles / réponse à votre demande (formulaire), et consentement (cookies publicitaires AdSense). Conservation : logs techniques pour une durée limitée (ordre de quelques semaines), messages de contact le temps du traitement, choix de consentement stocké localement sur votre appareil jusqu’à suppression.",
+    "privacyRightsTitle": "Vos droits (RGPD)",
+    "privacyRightsBody": "Conformément au RGPD, vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité lorsque applicable, ainsi que du droit de retirer votre consentement aux cookies publicitaires à tout moment. Pour exercer ces droits, utilisez le formulaire de contact en précisant votre demande. Vous pouvez aussi introduire une réclamation auprès de la CNIL (www.cnil.fr).",
     "affiliateBody": "Les liens produits peuvent être des liens d'affiliation Amazon. Le prix payé ne change pas pour vous. Les publicités AdSense sont marquées « Publicité »."
   },
   "contact": {

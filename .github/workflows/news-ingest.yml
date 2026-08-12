@@ -21,3 +21,14 @@ jobs:
           curl -fsS -X POST \
             -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
             "${SITE_URL}/api/news/ingest"
+      - name: Alert on failure
+        if: failure()
+        env:
+          NEWS_CRON_SECRET: ${{ secrets.NEWS_CRON_SECRET }}
+          SITE_URL: https://ecoflow-stream.com
+        run: |
+          curl -fsS -X POST \
+            -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
+            -H "Content-Type: application/json" \
+            -d "{\"job\":\"news\",\"workflow\":\"${{ github.workflow }}\",\"runUrl\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\",\"error\":\"workflow_failed\"}" \
+            "${SITE_URL}/api/cron/alert" || true

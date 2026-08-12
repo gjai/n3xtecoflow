@@ -1,6 +1,7 @@
 import { products } from "@/data/products";
 import { sites } from "@/sites";
 import { readAmazonPriceStore } from "@/lib/amazon/price-store";
+import { evaluateCronHealth } from "@/lib/cron/status";
 import { readNewsStore } from "@/lib/news/store";
 import {
   parisDateKey,
@@ -150,7 +151,11 @@ export async function buildDailyDigest(options?: { dayKey?: string }) {
     return Number.isFinite(t) && Date.now() - t < 48 * 3600_000;
   }).length;
 
-  const subject = `[n3xtecoflow] Stats du ${dayKey} — ${totals.views} vues · ${domainRows.length} domaines`;
+  const subjectBase = `[n3xtecoflow] Stats du ${dayKey} — ${totals.views} vues · ${domainRows.length} domaines`;
+  const cronHealth = await evaluateCronHealth();
+  const subject = cronHealth.ok
+    ? subjectBase
+    : `[ALERTE CRON] ${subjectBase}`;
 
   const lines: string[] = [
     `Rapport journalier n3xtecoflow`,
@@ -182,6 +187,22 @@ export async function buildDailyDigest(options?: { dayKey?: string }) {
     lines.push("");
   }
 
+  lines.push(`=== Santé des crons ===`);
+  lines.push(cronHealth.ok ? `Statut : OK` : `Statut : ALERTE`);
+  for (const row of cronHealth.rows) {
+    const age =
+      row.hours == null ? "jamais" : `${row.hours.toFixed(1)} h`;
+    lines.push(
+      `${row.ok ? "OK" : "KO"} · ${row.label} · âge=${age} · dernier OK=${row.lastOkAt || "—"}` +
+        (row.note ? ` · ${row.note}` : ""),
+    );
+  }
+  if (cronHealth.alerts.length) {
+    lines.push(`Alertes :`);
+    for (const a of cronHealth.alerts) lines.push(`  - ${a}`);
+  }
+  lines.push("");
+
   lines.push(`=== Contenu & ops ===`);
   lines.push(
     `Articles actu : ${news.articles.length} (maj. ${news.updatedAt || "—"})`,
@@ -209,6 +230,7 @@ export async function buildDailyDigest(options?: { dayKey?: string }) {
     newsCount: news.articles.length,
     pricedCount: priced,
     productCount: products.length,
+    cronHealth,
   };
 }
 
