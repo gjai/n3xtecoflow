@@ -31,6 +31,10 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
+  const adsenseClient =
+    process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() ||
+    "ca-pub-4733644127583822";
+
   return {
     title: {
       default: t("siteName"),
@@ -40,6 +44,9 @@ export async function generateMetadata({
     metadataBase: new URL(
       process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com",
     ),
+    other: {
+      "google-adsense-account": adsenseClient,
+    },
     openGraph: {
       title: t("siteName"),
       description: t("tagline"),

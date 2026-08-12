@@ -1,5 +1,5 @@
 export function getAmazonTag(): string {
-  return process.env.AMAZON_ASSOCIATE_TAG?.trim() || "";
+  return process.env.AMAZON_ASSOCIATE_TAG?.trim() || "ecoflown3xt-21";
 }
 
 export function buildAmazonSearchUrl(query: string, tag?: string): string {
