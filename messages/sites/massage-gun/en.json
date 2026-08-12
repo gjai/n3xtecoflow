@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "siteName": "Le pistolet de massage",
+    "tagline": "Independent guides and picks to choose a percussion massage gun.",
+    "disclaimerShort": "Independent editorial site. Contains Amazon affiliate links."
+  },
+  "nav": {
+    "powerstream": "Catalog"
+  },
+  "notFound": {
+    "body": "This URL doesn’t exist — or the content was moved. Back to the guides and catalog."
+  },
+  "home": {
+    "brand": "Le pistolet de massage",
+    "headline": "The right massage gun, chosen with clarity.",
+    "subhead": "Comparisons, buying criteria (amplitude, force, noise, heads, battery) and Amazon links to bestsellers — Ships and sold by Amazon.",
+    "ctaPrimary": "Buying guide",
+    "ctaSecondary": "See comparisons",
+    "slideNewsFallback": "Massage gun updates",
+    "slideNewsExcerpt": "Picks and notes to follow the percussion market.",
+    "featuresTitle": "Why these guides",
+    "feature1Title": "Independent",
+    "feature1Text": "Independent editorial analysis — not a brand site. We do not resell products.",
+    "feature2Title": "Decision-focused",
+    "feature2Text": "Amplitude, force, noise, heads: straight to the choice, with limits and trade-offs shown.",
+    "feature3Title": "Transparency",
+    "feature3Text": "Amazon Affiliate links and ads clearly labeled, with cookie consent.",
+    "spotlightName": "Percussion picks",
+    "spotlightText": "Bestselling massage guns — Ships and sold by Amazon.",
+    "spotlightCta": "Browse the catalog",
+    "editorialLead": "We publish sheets and guides to help you decide: amplitude, force, heads and use case — without fluff.",
+    "howTitle": "How to read our content",
+    "howBody1": "Each product sheet summarizes useful criteria (amplitude, force, heads, battery) and a use-case take: sport, desk, travel.",
+    "howBody2": "Guides explain the method (mini vs full-size, depth, noise). Comparisons help pick between two models.",
+    "howBody3": "Prices and stock move fast: our Amazon links open an up-to-date listing or search."
+  },
+  "guides": {
+    "subtitle": "Choose a massage gun for your use case.",
+    "buyersTitle": "Buying guide: massage guns",
+    "buyersText": "Amplitude, force, heads and battery: how to choose with confidence."
+  },
+  "guideBuyers": {
+    "title": "Buying guide: massage guns",
+    "subtitle": "Amplitude, force and heads — the criteria that matter."
+  },
+  "guideCamping": {
+    "title": "Massage guns for daily use",
+    "subtitle": "Sport, desk, travel: size without overbuying."
+  },
+  "powerstream": {
+    "title": "Catalog",
+    "subtitle": "Percussion massage guns shortlist.",
+    "intro": "Browse the catalog to compare models."
+  },
+  "comparisons": {
+    "subtitle": "Quick reads to decide between models.",
+    "card1Title": "Mini vs full-size",
+    "card1Text": "Portability versus depth and battery life.",
+    "card2Title": "Budget vs premium",
+    "card2Text": "When Renpho/TOLOCO is enough, and when to go Theragun.",
+    "card3Title": "Amplitude & noise",
+    "card3Text": "Real depth versus everyday comfort."
+  },
+  "legal": {
+    "hubMeta": "Publisher, host, privacy, cookies, affiliate and advertising — Le pistolet de massage legal information.",
+    "cookiesIntro": "This section explains cookies used on Le pistolet de massage. You can accept or reject advertising cookies anytime via the cookie banner (footer link).",
+    "independent": "Le pistolet de massage is an independent editorial site. It is not operated by the cited brands or Amazon."
+  },
+  "footer": {
+    "independent": "Independent site — percussion massage guns",
+    "rights": "© {year} Le pistolet de massage",
+    "powerstream": "Catalog"
+  },
+  "about": {
+    "title": "About Le pistolet de massage",
+    "meta": "Who we are, editorial method, independence, and transparency on Amazon affiliates and AdSense.",
+    "lead": "Le pistolet de massage is an independent editorial site focused on percussion massage guns. Our goal is to help you choose with clear information — not to sell in your place.",
+    "missionBody": "Make the criteria that matter accessible (amplitude, force, noise, heads, battery) and map them to real use cases: sport, desk, travel.",
+    "methodBody": "We build pages from public specs, usage feedback and Amazon bestsellers.",
+    "method1": "Structured sheets: strengths / limits and use cases.",
+    "method2": "Practical guides: choosing amplitude, mini vs full-size.",
+    "method3": "Comparisons: decide between models.",
+    "method4": "Transparency: every affiliate purchase link and every ad is identifiable.",
+    "independenceBody": "This site is not operated by the cited brands or Amazon. Brands belong to their owners."
+  },
+  "news": {
+    "eyebrow": "Picks",
+    "title": "News",
+    "subtitle": "Editorial picks and notes around massage guns.",
+    "empty": "No massage-gun news yet — the next automated run will fill this section.",
+    "catalogCta": "Browse the catalog →"
+  }
+}

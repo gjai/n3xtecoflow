@@ -1,4 +1,4 @@
-export type SiteId = "ecoflow" | "tumbler";
+export type SiteId = "ecoflow" | "tumbler" | "massage-gun";
 
 export type SiteTheme = {
   /** Accent / CTA (dark surfaces) */

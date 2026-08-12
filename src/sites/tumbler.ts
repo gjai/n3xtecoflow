@@ -83,6 +83,11 @@ export const tumblerSite: SiteConfig = {
       labelEn: "EcoFlow Stream",
     },
     {
+      siteId: "massage-gun",
+      labelFr: "Le pistolet de massage",
+      labelEn: "Le pistolet de massage",
+    },
+    {
       href: "https://elections2027.com",
       labelFr: "Élections 2027",
       labelEn: "Élections 2027",

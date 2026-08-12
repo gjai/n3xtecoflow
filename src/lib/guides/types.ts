@@ -140,4 +140,14 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     angleEn:
       "Use case, capacity, insulation, lid, care, Amazon product picks",
   },
+  {
+    slug: "choisir-pistolet-massage",
+    siteId: "massage-gun",
+    topicFr: "Guide complet pistolet de massage musculaire",
+    topicEn: "Complete percussion massage gun guide",
+    angleFr:
+      "Amplitude, force, bruit, embouts, autonomie, sélections produits Amazon",
+    angleEn:
+      "Amplitude, force, noise, heads, battery, Amazon product picks",
+  },
 ];

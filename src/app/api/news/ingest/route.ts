@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ingestNews, type IngestOptions } from "@/lib/news/ingest";
 import { markCronFail, markCronOk } from "@/lib/cron/status";
+import { parseSiteIdParam } from "@/sites/copy";
 
 export const maxDuration = 300;
 
@@ -29,8 +30,7 @@ function parseOptions(request: Request): IngestOptions {
   const refreshOffsetRaw = url.searchParams.get("refreshOffset");
   const limitRaw = url.searchParams.get("limit");
   const siteRaw = url.searchParams.get("siteId");
-  const siteId =
-    siteRaw === "tumbler" || siteRaw === "ecoflow" ? siteRaw : undefined;
+  const siteId = parseSiteIdParam(siteRaw);
   return {
     refreshExisting,
     forceRefresh,

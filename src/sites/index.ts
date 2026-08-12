@@ -1,21 +1,24 @@
 import { ecoflowSite } from "./ecoflow";
 import { tumblerSite } from "./tumbler";
+import { massageGunSite } from "./massage-gun";
 import type { SiteConfig, SiteId } from "./types";
 
 /**
  * Thèmes actifs :
  * - ecoflow → ecoflow-stream.com + powerstream.fr
  * - tumbler → mon-tumbler.fr (La gourde isotherme)
+ * - massage-gun → massage-gun.fr (Le pistolet de massage)
  *
  * Nouveau DOMAINE même thème → hosts[] du site.
  * Nouveau THÈME → fichier + SiteId + registry + brands/ + Coolify FQDN.
  */
 
-export const sites: SiteConfig[] = [ecoflowSite, tumblerSite];
+export const sites: SiteConfig[] = [ecoflowSite, tumblerSite, massageGunSite];
 
 export const sitesById: Record<SiteId, SiteConfig> = {
   ecoflow: ecoflowSite,
   tumbler: tumblerSite,
+  "massage-gun": massageGunSite,
 };
 
 export const DEFAULT_SITE_ID: SiteId = "ecoflow";

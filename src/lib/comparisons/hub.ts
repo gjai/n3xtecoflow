@@ -222,50 +222,105 @@ export function buildCompareRows(
     skipLabels.add("battery");
     skipLabels.add("chimie");
   } else {
-    const leftCap =
-      left.capacityLabel && left.capacityLabel !== "—"
-        ? left.capacityLabel
-        : specOf(left, "Capacité", "Capacity") || "—";
-    const rightCap =
-      right.capacityLabel && right.capacityLabel !== "—"
-        ? right.capacityLabel
-        : specOf(right, "Capacité", "Capacity") || "—";
-    rows.push({
-      key: "capacity-ml",
-      labelFr: "Capacité",
-      labelEn: "Capacity",
-      left: leftCap,
-      right: rightCap,
-    });
-    skipLabels.add("capacité");
-    skipLabels.add("capacity");
+    const leftAmp = specOf(left, "Amplitude");
+    const rightAmp = specOf(right, "Amplitude");
+    const isPercussion = Boolean(leftAmp || rightAmp);
 
-    const leftIso = specOf(left, "Isolation", "Insulation");
-    const rightIso = specOf(right, "Isolation", "Insulation");
-    if (leftIso || rightIso) {
+    if (isPercussion) {
       rows.push({
-        key: "insulation",
-        labelFr: "Isolation",
-        labelEn: "Insulation",
-        left: leftIso || "—",
-        right: rightIso || "—",
+        key: "amplitude",
+        labelFr: "Amplitude",
+        labelEn: "Amplitude",
+        left: leftAmp || "—",
+        right: rightAmp || "—",
       });
-      skipLabels.add("isolation");
-      skipLabels.add("insulation");
-    }
+      skipLabels.add("amplitude");
 
-    rows.push({
-      key: "material",
-      labelFr: "Matière",
-      labelEn: "Material",
-      left:
-        specOf(left, "Matière", "Material") || left.battery || "—",
-      right:
-        specOf(right, "Matière", "Material") || right.battery || "—",
-    });
-    skipLabels.add("matière");
-    skipLabels.add("material");
-    skipLabels.add("batterie");
+      const leftForce = specOf(left, "Force", "Stall");
+      const rightForce = specOf(right, "Force", "Stall");
+      if (leftForce || rightForce) {
+        rows.push({
+          key: "force",
+          labelFr: "Force",
+          labelEn: "Stall force",
+          left: leftForce || "—",
+          right: rightForce || "—",
+        });
+        skipLabels.add("force");
+        skipLabels.add("stall");
+      }
+
+      const leftSpeed = specOf(left, "Vitesses", "Speed", "Speeds");
+      const rightSpeed = specOf(right, "Vitesses", "Speed", "Speeds");
+      if (leftSpeed || rightSpeed) {
+        rows.push({
+          key: "speeds",
+          labelFr: "Vitesses",
+          labelEn: "Speeds",
+          left: leftSpeed || "—",
+          right: rightSpeed || "—",
+        });
+        skipLabels.add("vitesses");
+        skipLabels.add("speed");
+        skipLabels.add("speeds");
+      }
+
+      rows.push({
+        key: "battery",
+        labelFr: "Batterie",
+        labelEn: "Battery",
+        left: left.battery || "—",
+        right: right.battery || "—",
+      });
+      skipLabels.add("batterie");
+      skipLabels.add("battery");
+      skipLabels.add("autonomie");
+    } else {
+      const leftCap =
+        left.capacityLabel && left.capacityLabel !== "—"
+          ? left.capacityLabel
+          : specOf(left, "Capacité", "Capacity") || "—";
+      const rightCap =
+        right.capacityLabel && right.capacityLabel !== "—"
+          ? right.capacityLabel
+          : specOf(right, "Capacité", "Capacity") || "—";
+      rows.push({
+        key: "capacity-ml",
+        labelFr: "Capacité",
+        labelEn: "Capacity",
+        left: leftCap,
+        right: rightCap,
+      });
+      skipLabels.add("capacité");
+      skipLabels.add("capacity");
+
+      const leftIso = specOf(left, "Isolation", "Insulation");
+      const rightIso = specOf(right, "Isolation", "Insulation");
+      if (leftIso || rightIso) {
+        rows.push({
+          key: "insulation",
+          labelFr: "Isolation",
+          labelEn: "Insulation",
+          left: leftIso || "—",
+          right: rightIso || "—",
+        });
+        skipLabels.add("isolation");
+        skipLabels.add("insulation");
+      }
+
+      rows.push({
+        key: "material",
+        labelFr: "Matière",
+        labelEn: "Material",
+        left:
+          specOf(left, "Matière", "Material") || left.battery || "—",
+        right:
+          specOf(right, "Matière", "Material") || right.battery || "—",
+      });
+      skipLabels.add("matière");
+      skipLabels.add("material");
+      skipLabels.add("batterie");
+    }
   }
 
   if (left.weightKg != null || right.weightKg != null) {

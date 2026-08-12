@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "siteName": "Le pistolet de massage",
+    "tagline": "Guides et sélections indépendantes pour choisir un pistolet de massage musculaire.",
+    "disclaimerShort": "Site éditorial indépendant. Contient des liens d'affiliation Amazon."
+  },
+  "nav": {
+    "powerstream": "Catalogue"
+  },
+  "notFound": {
+    "body": "Cette adresse n’existe pas — ou le contenu a été déplacé. Retour aux guides et au catalogue."
+  },
+  "home": {
+    "brand": "Le pistolet de massage",
+    "headline": "Le bon pistolet de massage, sans se tromper.",
+    "subhead": "Comparatifs, critères (amplitude, force, bruit, embouts, autonomie) et liens Amazon vers les meilleures ventes — Expédié et vendu par Amazon.",
+    "ctaPrimary": "Guide d’achat",
+    "ctaSecondary": "Voir les comparatifs",
+    "slideNewsFallback": "Actualités pistolets de massage",
+    "slideNewsExcerpt": "Sélections et conseils pour suivre le marché de la percussion.",
+    "featuresTitle": "Pourquoi ces guides",
+    "feature1Title": "Indépendant",
+    "feature1Text": "Analyses éditoriales indépendantes — pas un site de marque. Nous ne revendons pas les produits.",
+    "feature2Title": "Orienté décision",
+    "feature2Text": "Amplitude, force, bruit, embouts : on va droit au choix, avec limites et compromis affichés.",
+    "feature3Title": "Transparence",
+    "feature3Text": "Liens Amazon Affiliates et publicités clairement indiqués, avec consentement cookies.",
+    "spotlightName": "Sélection percussion",
+    "spotlightText": "Pistolets de massage best-sellers — Expédié et vendu par Amazon.",
+    "spotlightCta": "Voir le catalogue",
+    "editorialLead": "Nous publions des fiches et des guides pour aider à décider : amplitude, force, embouts et usage — sans jargon inutile.",
+    "howTitle": "Comment lire nos contenus",
+    "howBody1": "Chaque fiche produit résume les critères utiles (amplitude, force, embouts, autonomie) et un avis d’usage : sport, bureau, voyage.",
+    "howBody2": "Les guides expliquent la méthode (mini vs plein format, profondeur, bruit). Les comparatifs aident à trancher entre deux modèles.",
+    "howBody3": "Les prix et stocks changent vite : nos liens Amazon ouvrent une fiche ou une recherche à jour."
+  },
+  "guides": {
+    "subtitle": "Choisir un pistolet de massage selon votre usage.",
+    "buyersTitle": "Guide d'achat pistolets de massage",
+    "buyersText": "Amplitude, force, embouts et autonomie : comment choisir sans se tromper."
+  },
+  "guideBuyers": {
+    "title": "Guide d'achat : pistolets de massage",
+    "subtitle": "Amplitude, force et embouts — les critères qui comptent."
+  },
+  "guideCamping": {
+    "title": "Pistolet de massage au quotidien",
+    "subtitle": "Sport, bureau, voyage : dimensionner sans suracheter."
+  },
+  "powerstream": {
+    "title": "Catalogue",
+    "subtitle": "Sélection de pistolets de massage musculaire.",
+    "intro": "Parcourez le catalogue pour comparer les modèles."
+  },
+  "comparisons": {
+    "subtitle": "Des lectures rapides pour trancher entre modèles.",
+    "card1Title": "Mini vs plein format",
+    "card1Text": "Portabilité contre profondeur et autonomie.",
+    "card2Title": "Budget vs premium",
+    "card2Text": "Quand Renpho/TOLOCO suffisent, et quand passer Theragun.",
+    "card3Title": "Amplitude & bruit",
+    "card3Text": "Profondeur réelle vs confort d’usage."
+  },
+  "legal": {
+    "hubMeta": "Éditeur, hébergeur, confidentialité, cookies, affiliation et publicité — informations légales Le pistolet de massage.",
+    "cookiesIntro": "Cette section décrit les cookies utilisés sur Le pistolet de massage. Vous pouvez accepter ou refuser les cookies publicitaires à tout moment via le bandeau cookies (lien en bas de page).",
+    "independent": "Le pistolet de massage est un site éditorial indépendant. Il n'est pas exploité par les marques citées ni par Amazon."
+  },
+  "footer": {
+    "independent": "Site indépendant — pistolets de massage musculaire",
+    "rights": "© {year} Le pistolet de massage",
+    "powerstream": "Catalogue"
+  },
+  "about": {
+    "title": "À propos de Le pistolet de massage",
+    "meta": "Qui sommes-nous, méthode éditoriale, indépendance et transparence sur l’affiliation Amazon et AdSense.",
+    "lead": "Le pistolet de massage est un site éditorial indépendant dédié aux pistolets de massage musculaire (thérapie par percussion). Notre but : aider à choisir avec des infos claires, pas vendre à votre place.",
+    "missionBody": "Rendre accessibles les critères qui comptent (amplitude, force, bruit, embouts, autonomie) et les traduire en cas d’usage : sport, bureau, voyage.",
+    "methodBody": "Nous construisons nos pages à partir de specs publiques, de retours d’usage et de best-sellers Amazon.",
+    "method1": "Fiches structurées : points forts / limites et cas d’usage.",
+    "method2": "Guides pratiques : choisir amplitude, mini vs plein format.",
+    "method3": "Comparatifs : trancher entre modèles.",
+    "method4": "Transparence : chaque lien d’achat affilié et chaque pub sont identifiables.",
+    "independenceBody": "Ce site n’est pas exploité par les marques citées ni par Amazon. Les marques appartiennent à leurs propriétaires."
+  },
+  "news": {
+    "eyebrow": "Sélections",
+    "title": "Actualités",
+    "subtitle": "Sélections et notes éditoriales autour des pistolets de massage.",
+    "empty": "Aucune actu pistolets de massage pour le moment — le prochain passage automatique va peupler cette section.",
+    "catalogCta": "Voir le catalogue →"
+  }
+}

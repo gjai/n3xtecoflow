@@ -79,6 +79,9 @@ const ECOFLOW_PRODUCT =
 const TUMBLER_BRAND =
   /\bgourde\b|\btumbler\b|\bmug\s+isotherme\b|\binsulated\s+(bottle|tumbler|mug|flask)\b|\bhydro\s*flask\b|\bstanley\b|\bqwetch\b|\bowala\b|\bthermos\b|\bsuper\s*sparrow\b|\bisotherme\b|\bwater\s*bottle\b/i;
 
+const MASSAGE_GUN_BRAND =
+  /\bpistolet\s+de\s+massage\b|\bmassage\s+gun\b|\btheragun\b|\btherabody\b|\bhypervolt\b|\bhyperice\b|\brenpho\b|\btoloco\b|\bbob\s+and\s+brad\b|\bopove\b|\bpercussion\s+(massage|massager|therapy)\b|\bmasseur\s+musculaire\b/i;
+
 const OFF_TOPIC =
   /\bsegway\b|\bxyber\b|\be-?bike\b|\btesla\b|\biphone\b|\bsamsung\b|\bplaystation\b|\bxbox\b|\bnintendo\b|\bdyson\b|\broborock\b|\becovacs\b/i;
 
@@ -95,7 +98,9 @@ function brandPrimary(title: string, brand: RegExp) {
 }
 
 function topicBrand(siteId: SiteId) {
-  return siteId === "tumbler" ? TUMBLER_BRAND : ECOFLOW_BRAND;
+  if (siteId === "tumbler") return TUMBLER_BRAND;
+  if (siteId === "massage-gun") return MASSAGE_GUN_BRAND;
+  return ECOFLOW_BRAND;
 }
 
 export function isRelevantItem(item: RssItem, siteId: SiteId = "ecoflow") {
@@ -106,7 +111,7 @@ export function isRelevantItem(item: RssItem, siteId: SiteId = "ecoflow") {
     return false;
   }
   if (brand.test(item.title)) return brandPrimary(item.title, brand);
-  if (siteId === "tumbler") return true;
+  if (siteId === "tumbler" || siteId === "massage-gun") return true;
   return ECOFLOW_PRODUCT.test(hay);
 }
 
@@ -145,7 +150,9 @@ export async function fetchFeedItems(
   const ua =
     siteId === "tumbler"
       ? "LaGourdeIsothermeBot/1.0 (+https://mon-tumbler.fr; editorial aggregator)"
-      : "EcoFlowStreamBot/1.0 (+https://ecoflow-stream.com; editorial aggregator)";
+      : siteId === "massage-gun"
+        ? "LePistoletDeMassageBot/1.0 (+https://massage-gun.fr; editorial aggregator)"
+        : "EcoFlowStreamBot/1.0 (+https://ecoflow-stream.com; editorial aggregator)";
   const res = await fetch(url, {
     headers: {
       "User-Agent": ua,

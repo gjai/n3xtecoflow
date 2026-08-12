@@ -35,28 +35,19 @@ export async function generateMetadata({
   const { locale } = await params;
   const site = await getCurrentSite();
   const isEn = locale === "en";
-  const isTumbler = site.id === "tumbler";
   const flat = usesFlatCatalog(site);
   return {
     title: flat
-      ? isTumbler
-        ? isEn
-          ? "Insulated bottle catalog"
-          : "Catalogue gourdes isothermes"
-        : isEn
-          ? `${site.brand.name} catalog`
-          : `Catalogue ${site.brand.name}`
+      ? isEn
+        ? `${site.brand.name} catalog`
+        : `Catalogue ${site.brand.name}`
       : isEn
         ? "EcoFlow product catalog"
         : "Catalogue produits EcoFlow",
     description: flat
-      ? isTumbler
-        ? isEn
-          ? "Top Amazon insulated bottles and tumblers — ships and sold by Amazon."
-          : "Meilleures ventes Amazon de gourdes et tumblers isothermes — Expédié et vendu par Amazon."
-        : isEn
-          ? `Product catalog for ${site.brand.name}.`
-          : `Catalogue produits ${site.brand.name}.`
+      ? isEn
+        ? `Product catalog for ${site.brand.name}.`
+        : `Catalogue produits ${site.brand.name}.`
       : isEn
         ? "RIVER, DELTA, DELTA Pro, PowerStream, solar panels and accessories."
         : "RIVER, DELTA, DELTA Pro, PowerStream, panneaux solaires et accessoires.",
@@ -130,18 +121,14 @@ export default async function ProductsIndexPage({
       <div className="pt-6">
         <header className="mx-auto max-w-6xl px-5 py-12 md:px-8">
           <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold md:text-5xl">
-            {site.id === "tumbler"
-              ? isEn
-                ? "Insulated bottles & tumblers"
-                : "Gourdes & tumblers isothermes"
-              : isEn
-                ? `${site.brand.name} catalog`
-                : `Catalogue ${site.brand.name}`}
+            {isEn
+              ? `${site.brand.name} catalog`
+              : `Catalogue ${site.brand.name}`}
           </h1>
           <p className="mt-4 max-w-3xl text-[var(--muted)]">
             {isEn
-              ? "Sort by price or capacity, filter by format — prefer listings Ships and sold by Amazon."
-              : "Triez par prix ou capacité, filtrez par format — préférez Expédié et vendu par Amazon."}
+              ? "Sort by price or weight, filter by format — prefer listings Ships and sold by Amazon."
+              : "Triez par prix ou poids, filtrez par format — préférez Expédié et vendu par Amazon."}
           </p>
         </header>
         <TumblerProductCatalog locale={locale} items={items} />

@@ -1,4 +1,9 @@
 import { tumblerCategories, tumblerProducts } from "./tumbler-products";
+import {
+  massageGunCategories,
+  massageGunProducts,
+} from "./massage-gun-products";
+import type { SiteId } from "@/sites/types";
 
 export type CategoryId =
   | "river"
@@ -11,7 +16,9 @@ export type CategoryId =
   | "outdoor"
   | "accessoires"
   | "gourdes"
-  | "tumblers";
+  | "tumblers"
+  | "pistolets"
+  | "mini";
 
 export type LocaleCopy = {
   tagline: string;
@@ -26,7 +33,7 @@ export type Product = {
   slug: string;
   category: CategoryId;
   /** Theme that owns this product. Defaults to ecoflow when omitted. */
-  siteId?: "ecoflow" | "tumbler";
+  siteId?: SiteId;
   name: string;
   capacityWh?: number;
   outputW?: number;
@@ -56,7 +63,7 @@ export type CategoryMeta = {
   id: CategoryId;
   slug: string;
   /** Theme that owns this category. Defaults to ecoflow when omitted. */
-  siteId?: "ecoflow" | "tumbler";
+  siteId?: SiteId;
   fr: { title: string; intro: string };
   en: { title: string; intro: string };
 };
@@ -1715,20 +1722,22 @@ export const products: Product[] = [
 
 categories.push(...tumblerCategories);
 products.push(...tumblerProducts);
+categories.push(...massageGunCategories);
+products.push(...massageGunProducts);
 
-export function productSiteId(product: Product): "ecoflow" | "tumbler" {
+export function productSiteId(product: Product): SiteId {
   return product.siteId || "ecoflow";
 }
 
-export function categorySiteId(cat: CategoryMeta): "ecoflow" | "tumbler" {
+export function categorySiteId(cat: CategoryMeta): SiteId {
   return cat.siteId || "ecoflow";
 }
 
-export function getCategoriesForSite(siteId: "ecoflow" | "tumbler") {
+export function getCategoriesForSite(siteId: SiteId) {
   return categories.filter((c) => categorySiteId(c) === siteId);
 }
 
-export function getProductsForSite(siteId: "ecoflow" | "tumbler") {
+export function getProductsForSite(siteId: SiteId) {
   return products.filter((p) => productSiteId(p) === siteId);
 }
 

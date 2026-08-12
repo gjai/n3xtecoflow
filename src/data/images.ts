@@ -89,6 +89,18 @@ export const categoryImages: Record<CategoryId, SiteImage> = {
     altEn: "Insulated tumbler — office and commute",
     ...UNSplash,
   },
+  pistolets: {
+    src: "/images/massage-gun/pistolets.jpg",
+    altFr: "Pistolet de massage — récupération musculaire",
+    altEn: "Massage gun — muscle recovery",
+    ...UNSplash,
+  },
+  mini: {
+    src: "/images/massage-gun/mini.jpg",
+    altFr: "Mini pistolet de massage — voyage et bureau",
+    altEn: "Mini massage gun — travel and desk",
+    ...UNSplash,
+  },
 };
 
 export const editorialImages = {
@@ -157,8 +169,43 @@ const tumblerEditorial = {
   },
 } as const satisfies Record<string, SiteImage>;
 
+const massageGunEditorial = {
+  guides: {
+    src: "/images/massage-gun/guides.jpg",
+    altFr: "Récupération — guides pistolets de massage",
+    altEn: "Recovery — massage gun buying guides",
+    ...UNSplash,
+  },
+  news: {
+    src: "/images/massage-gun/news.jpg",
+    altFr: "Bien-être — actualités percussion",
+    altEn: "Wellness — percussion massage news",
+    ...UNSplash,
+  },
+  camping: {
+    src: "/images/massage-gun/pistolets.jpg",
+    altFr: "Sport — usage pistolet de massage",
+    altEn: "Sport — massage gun use",
+    ...UNSplash,
+  },
+  backup: {
+    src: "/images/massage-gun/hero.jpg",
+    altFr: "Récupération musculaire — lifestyle",
+    altEn: "Muscle recovery — lifestyle",
+    ...UNSplash,
+  },
+  comparatifs: {
+    src: "/images/massage-gun/comparatifs.jpg",
+    altFr: "Comparaison de pistolets de massage",
+    altEn: "Comparing massage guns",
+    ...UNSplash,
+  },
+} as const satisfies Record<string, SiteImage>;
+
 export function getEditorialImages(siteId: SiteId = "ecoflow") {
-  return siteId === "tumbler" ? tumblerEditorial : editorialImages;
+  if (siteId === "tumbler") return tumblerEditorial;
+  if (siteId === "massage-gun") return massageGunEditorial;
+  return editorialImages;
 }
 
 export function getHeroImage(siteId: SiteId = "ecoflow"): SiteImage {
@@ -167,6 +214,14 @@ export function getHeroImage(siteId: SiteId = "ecoflow"): SiteImage {
       src: "/images/tumbler/hero.jpg",
       altFr: "Gourde isotherme — hydratation",
       altEn: "Insulated bottle — hydration",
+      ...UNSplash,
+    };
+  }
+  if (siteId === "massage-gun") {
+    return {
+      src: "/images/massage-gun/hero.jpg",
+      altFr: "Pistolet de massage — récupération",
+      altEn: "Massage gun — recovery",
       ...UNSplash,
     };
   }

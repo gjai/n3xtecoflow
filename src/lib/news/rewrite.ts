@@ -32,19 +32,27 @@ function templateCopy(
   const tipFr =
     siteId === "tumbler"
       ? "Pour les lecteurs de La gourde isotherme : croisez volume, isolation, type de bouchon et le prix du jour avant d’acheter."
-      : "Pour les lecteurs EcoFlow Stream : croisez toujours capacité (Wh), puissance (W), compatibilité STREAM / stations et le prix du jour avant d’acheter.";
+      : siteId === "massage-gun"
+        ? "Pour les lecteurs du pistolet de massage : croisez amplitude, force, bruit, embouts et le prix du jour avant d’acheter."
+        : "Pour les lecteurs EcoFlow Stream : croisez toujours capacité (Wh), puissance (W), compatibilité STREAM / stations et le prix du jour avant d’acheter.";
   const tipEn =
     siteId === "tumbler"
       ? "For La gourde isotherme readers: always cross-check volume, insulation, lid type, and live pricing before buying."
-      : "For EcoFlow Stream readers: always cross-check capacity (Wh), output (W), STREAM / station compatibility, and live pricing before buying.";
+      : siteId === "massage-gun"
+        ? "For Le pistolet de massage readers: always cross-check amplitude, force, noise, heads, and live pricing before buying."
+        : "For EcoFlow Stream readers: always cross-check capacity (Wh), output (W), STREAM / station compatibility, and live pricing before buying.";
   const excerptFallbackFr =
     siteId === "tumbler"
       ? `Couverture ${item.sourceName} du ${when} sur les gourdes et tumblers isothermes.`
-      : `Couverture ${item.sourceName} du ${when} sur l’écosystème EcoFlow.`;
+      : siteId === "massage-gun"
+        ? `Couverture ${item.sourceName} du ${when} sur les pistolets de massage.`
+        : `Couverture ${item.sourceName} du ${when} sur l’écosystème EcoFlow.`;
   const excerptFallbackEn =
     siteId === "tumbler"
       ? `${item.sourceName} coverage on ${when} about insulated bottles and tumblers.`
-      : `${item.sourceName} coverage on ${when} about the EcoFlow ecosystem.`;
+      : siteId === "massage-gun"
+        ? `${item.sourceName} coverage on ${when} about massage guns.`
+        : `${item.sourceName} coverage on ${when} about the EcoFlow ecosystem.`;
 
   if (locale === "fr") {
     const body = [
@@ -120,6 +128,42 @@ ${sourceText}
 
 Format JSON:
 {"fr":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"en":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"tags":["gourde","tumbler"]}
+ou {"skip":true}`;
+  }
+
+  if (siteId === "massage-gun") {
+    return `Tu es journaliste / rédacteur senior pour Le pistolet de massage (site éditorial indépendant FR/EN).
+
+Mission: rédiger un VRAI ARTICLE complet (pas un résumé de 3 lignes), bilingue, à partir de la source fournie.
+
+Périmètre STRICT:
+- Sujet UNIQUEMENT pistolets de massage / massage guns / thérapie par percussion (Theragun, Hypervolt, Renpho, TOLOCO, Bob and Brad, etc.)
+- Si la source n'est PAS centrée sur ce sujet → réponds exactement {"skip":true}
+- Interdiction d'inventer un angle "massage gun" si la source en parle à peine
+- Les titres FR/EN doivent mentionner clairement pistolet de massage, massage gun ou une marque du périmètre
+- Si la source est une pure promo / deal / coupon / soldes sans angle éditorial utile → {"skip":true}
+
+Règles rédaction:
+- Contenu ORIGINAL (reformulation totale)
+- Ne pas inventer de chiffres, promos, dates ou specs absents de la source
+- Prix UNIQUEMENT en euros (€)
+- Citer clairement la source (${item.sourceName})
+- Structure par langue: titre, excerpt, body = 7 à 10 paragraphes utiles
+- Développer: contexte, faits, critères d’achat (amplitude, force, bruit, embouts, autonomie), limites, conclusion actionable
+- JSON strict uniquement, sans markdown
+
+Entrée:
+sourceName=${item.sourceName}
+date=${item.publishedAt}
+rssTitle=${item.title}
+publisherTitle=${source?.title || ""}
+publisherUrl=${source?.finalUrl || item.link}
+sourceText=<<
+${sourceText}
+>>
+
+Format JSON:
+{"fr":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"en":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"tags":["massage-gun","theragun"]}
 ou {"skip":true}`;
   }
 
@@ -266,6 +310,17 @@ function guessTags(
     if (/thermos/.test(hay)) tags.add("thermos");
     if (/promo|prix|deal|amazon/.test(hay)) tags.add("promo");
     if (tags.size === 0) tags.add("gourde");
+    return [...tags];
+  }
+  if (siteId === "massage-gun") {
+    if (/theragun|therabody/.test(hay)) tags.add("theragun");
+    if (/hypervolt|hyperice/.test(hay)) tags.add("hyperice");
+    if (/renpho/.test(hay)) tags.add("renpho");
+    if (/toloco/.test(hay)) tags.add("toloco");
+    if (/bob\s*(and|&)\s*brad/.test(hay)) tags.add("bob-brad");
+    if (/opove/.test(hay)) tags.add("opove");
+    if (/promo|prix|deal|amazon/.test(hay)) tags.add("promo");
+    if (tags.size === 0) tags.add("massage-gun");
     return [...tags];
   }
   if (/ecoflow/.test(hay)) tags.add("ecoflow");

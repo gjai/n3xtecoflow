@@ -68,14 +68,10 @@ export default async function NewsArticlePage({
           {isEn
             ? cta.product
               ? `See ${cta.product.name} on Amazon`
-              : site.id === "tumbler"
-                ? "See picks on Amazon"
-                : "See EcoFlow on Amazon"
+              : `See picks on Amazon`
             : cta.product
               ? `Voir ${cta.product.name} sur Amazon`
-              : site.id === "tumbler"
-                ? "Voir la sélection sur Amazon"
-                : "Voir EcoFlow sur Amazon"}
+              : `Voir la sélection sur Amazon`}
         </p>
         <AmazonButton
           href={cta.href}

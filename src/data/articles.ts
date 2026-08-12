@@ -1,4 +1,5 @@
 import { tumblerGuides } from "./tumbler-guides";
+import { massageGunGuides } from "./massage-gun-guides";
 
 export type ArticleSection = {
   heading: string;
@@ -722,7 +723,11 @@ export const comparisons: GuideArticle[] = [
   },
 ];
 
-export const guides: GuideArticle[] = [...ecoflowGuides, ...tumblerGuides];
+export const guides: GuideArticle[] = [
+  ...ecoflowGuides,
+  ...tumblerGuides,
+  ...massageGunGuides,
+];
 
 export function getGuide(slug: string) {
   return guides.find((g) => g.slug === slug);

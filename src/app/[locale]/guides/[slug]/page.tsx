@@ -18,6 +18,7 @@ import { GUIDE_TOPICS } from "@/lib/guides/types";
 import { resolveGuide } from "@/lib/guides/refresh";
 import { resolveProductMedia } from "@/lib/product-presentation";
 import { siteLocaleAlternates } from "@/lib/seo";
+import { siteAmazonFallbackQuery } from "@/sites/copy";
 import { getCurrentSite } from "@/sites/server";
 import { redirect } from "@/i18n/navigation";
 
@@ -154,9 +155,7 @@ export default async function GuideArticlePage({
       </header>
       <ArticleBody
         sections={copy.sections}
-        amazonQuery={
-          site.id === "tumbler" ? "gourde isotherme" : "EcoFlow station électrique"
-        }
+        amazonQuery={siteAmazonFallbackQuery(site.id)}
         amazonLabel={isEn ? "Browse on Amazon" : "Voir sur Amazon"}
         productCards={productCards}
       />

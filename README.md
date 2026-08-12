@@ -8,6 +8,7 @@ App Next.js multi-domaine : thèmes EcoFlow + La gourde isotherme (et futurs th�
 |-------|--------|-----------|
 | `ecoflow-stream.com`, `www.*`, `powerstream.fr`, `www.*` | **ecoflow** | `ecoflow-stream.com` |
 | `mon-tumbler.fr`, `www.*` | **tumbler** | `mon-tumbler.fr` |
+| `massage-gun.fr`, `www.*` | **massage-gun** | `massage-gun.fr` |
 
 - `www.*` → apex (308)
 - Canonical / hreflang / `robots.txt` / **sitemap** suivent le **Host** (un thème = ses URLs seulement)
@@ -35,7 +36,7 @@ Voir `.env.example` (extrait) :
 2. App Coolify : Dockerfile, port `3000`
 3. **Volume persistant** monté sur `/app/data` (news, images, analytics, prix)
 4. FQDN (même app) :
-   `ecoflow-stream.com,www.ecoflow-stream.com,powerstream.fr,www.powerstream.fr,mon-tumbler.fr,www.mon-tumbler.fr`
+   `ecoflow-stream.com,www.ecoflow-stream.com,powerstream.fr,www.powerstream.fr,mon-tumbler.fr,www.mon-tumbler.fr,massage-gun.fr,www.massage-gun.fr`
 5. Let's Encrypt
 6. Healthcheck : `GET /api/health`
 

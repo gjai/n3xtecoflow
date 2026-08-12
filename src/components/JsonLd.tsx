@@ -1,4 +1,5 @@
 import type { SiteConfig } from "@/sites/types";
+import { siteKnowsAbout } from "@/sites/copy";
 
 export function JsonLd({ data }: { data: Record<string, unknown> }) {
   return (
@@ -21,22 +22,15 @@ export function organizationJsonLd(siteOrUrl: SiteConfig | string) {
   const description =
     site?.brand.taglineFr ||
     "Site éditorial indépendant de guides et fiches techniques EcoFlow (affiliation Amazon).";
-  const knowsAbout =
-    site?.id === "tumbler"
-      ? [
-          "gourde isotherme",
-          "tumbler",
-          "mug isotherme",
-          "bouteille inox",
-          "isolation thermique",
-        ]
-      : [
-          "EcoFlow",
-          "portable power stations",
-          "balcony solar",
-          "PowerStream",
-          "STREAM",
-        ];
+  const knowsAbout = site
+    ? siteKnowsAbout(site.id)
+    : [
+        "EcoFlow",
+        "portable power stations",
+        "balcony solar",
+        "PowerStream",
+        "STREAM",
+      ];
 
   return {
     "@context": "https://schema.org",

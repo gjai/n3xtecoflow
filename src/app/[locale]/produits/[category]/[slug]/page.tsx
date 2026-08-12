@@ -154,7 +154,7 @@ export default async function ProductPage({
           description: copy.summary,
           category: catCopy.title,
           url: productUrl,
-          brandName: site.id === "tumbler" ? undefined : "EcoFlow",
+          brandName: site.id === "ecoflow" ? "EcoFlow" : undefined,
           capacityWh: product.capacityWh,
           outputW: product.outputW,
           priceAmount: displayPrice?.amount,

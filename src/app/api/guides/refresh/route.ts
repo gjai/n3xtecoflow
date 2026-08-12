@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { refreshGuides } from "@/lib/guides/refresh";
 import { markCronFail, markCronOk } from "@/lib/cron/status";
+import { parseSiteIdParam } from "@/sites/copy";
 
 export const maxDuration = 300;
 
@@ -19,9 +20,7 @@ export async function POST(request: Request) {
   }
   const url = new URL(request.url);
   try {
-    const siteRaw = url.searchParams.get("siteId");
-    const siteId =
-      siteRaw === "tumbler" || siteRaw === "ecoflow" ? siteRaw : undefined;
+    const siteId = parseSiteIdParam(url.searchParams.get("siteId"));
     const result = await refreshGuides({
       limit: url.searchParams.get("limit")
         ? Number(url.searchParams.get("limit"))

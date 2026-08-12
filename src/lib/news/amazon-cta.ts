@@ -1,3 +1,4 @@
+import { siteAmazonFallbackQuery } from "@/sites/copy";
 import { getProductsForSite, type Product } from "@/data/products";
 import { amazonHrefForProduct, buildAmazonSearchUrl } from "@/lib/amazon";
 import type { NewsArticle } from "@/lib/news/types";
@@ -59,8 +60,7 @@ export function amazonCtaForNews(article: NewsArticle): {
     };
   }
 
-  const query =
-    siteId === "tumbler" ? "gourde isotherme" : "EcoFlow station électrique";
+  const query = siteAmazonFallbackQuery(siteId);
   return {
     href: buildAmazonSearchUrl(query),
     queryLabel: query,

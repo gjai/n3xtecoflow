@@ -63,6 +63,16 @@ export const NEWS_FEEDS: NewsFeed[] = [
     siteId: "tumbler",
     url: "https://news.google.com/rss/search?q=(%22insulated+bottle%22+OR+%22insulated+tumbler%22+OR+%22Hydro+Flask%22+OR+%22Stanley+Quencher%22+OR+Thermos+OR+%22Super+Sparrow%22+OR+Yeti+OR+Qwetch+OR+Owala)+when:14d&hl=en-US&gl=US&ceid=US:en",
   },
+  {
+    id: "massage-gun-gnews-fr",
+    siteId: "massage-gun",
+    url: "https://news.google.com/rss/search?q=(%22pistolet+de+massage%22+OR+%22massage+gun%22+OR+Theragun+OR+Hypervolt+OR+Renpho+OR+TOLOCO+OR+%22Bob+and+Brad%22)+when:14d&hl=fr&gl=FR&ceid=FR:fr",
+  },
+  {
+    id: "massage-gun-gnews-en",
+    siteId: "massage-gun",
+    url: "https://news.google.com/rss/search?q=(%22massage+gun%22+OR+Theragun+OR+Hypervolt+OR+Renpho+OR+TOLOCO+OR+%22Bob+and+Brad%22+OR+percussion+massager)+when:14d&hl=en-US&gl=US&ceid=US:en",
+  },
 ];
 
 export const MAX_NEWS_ARTICLES = 80;

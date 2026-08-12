@@ -25,6 +25,15 @@ const BRANDS_BY_SITE: Record<string, BrandRule[]> = {
     { id: "simplemodern", pattern: /\bsimple\s*modern\b/i },
     { id: "airup", pattern: /\bair\s*up\b/i },
   ],
+  "massage-gun": [
+    { id: "theragun", pattern: /\btheragun\b|\btherabody\b/i },
+    { id: "hyperice", pattern: /\bhyperice\b|\bhypervolt\b/i },
+    { id: "renpho", pattern: /\brenpho\b/i },
+    { id: "toloco", pattern: /\btoloco\b/i },
+    { id: "bobbrad", pattern: /\bbob\s*(and|&)\s*brad\b/i },
+    { id: "opove", pattern: /\bopove\b/i },
+    { id: "ekrin", pattern: /\bekrin\b/i },
+  ],
   ecoflow: [
     { id: "ecoflow", pattern: /\becoflow\b/i },
     { id: "delta", pattern: /\bdelta\b/i },

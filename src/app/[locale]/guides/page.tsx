@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
 import { ArticleCover } from "@/components/ArticleCover";
 import { TUMBLER_MAIN_GUIDE_SLUG } from "@/data/tumbler-guides";
+import { MASSAGE_GUN_MAIN_GUIDE_SLUG } from "@/data/massage-gun-guides";
 import { getEditorialImages } from "@/data/images";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import { resolveArticleProductImages } from "@/lib/article-images";
@@ -41,9 +42,12 @@ export default async function GuidesIndexPage({
   const site = await getCurrentSite();
   const isEn = locale === "en";
 
-  // Tumbler : un seul guide → page guide directement
+  // Thèmes flat : un seul guide → page guide directement
   if (site.id === "tumbler") {
     redirect({ href: `/guides/${TUMBLER_MAIN_GUIDE_SLUG}`, locale });
+  }
+  if (site.id === "massage-gun") {
+    redirect({ href: `/guides/${MASSAGE_GUN_MAIN_GUIDE_SLUG}`, locale });
   }
 
   const ecoflowMap = await getEcoflowEntriesMap();
