@@ -137,8 +137,8 @@ export default async function CategoryPage({
                       {displayPrice.source === "amazon"
                         ? "Amazon.fr"
                         : isEn
-                          ? "EcoFlow catalog"
-                          : "Catalogue EcoFlow"}
+                          ? "Catalog price"
+                          : "Prix catalogue"}
                     </p>
                   </>
                 ) : (

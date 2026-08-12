@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "siteName": "La gourde isotherme",
+    "tagline": "Guides et sélections indépendantes pour choisir une gourde ou un tumbler isotherme."
+  },
+  "notFound": {
+    "body": "Cette adresse n’existe pas — ou le contenu a été déplacé. Retour aux guides et au catalogue."
+  },
+  "home": {
+    "brand": "La gourde isotherme",
+    "headline": "La bonne gourde, sans se tromper.",
+    "subhead": "Comparatifs, critères (capacité, isolation, paille, entretien) et liens Amazon vers les meilleures ventes — Expédié et vendu par Amazon.",
+    "slideNewsFallback": "Actualités gourdes & tumblers",
+    "slideNewsExcerpt": "Sélections et conseils pour suivre le marché des isothermes.",
+    "feature1Text": "Analyses éditoriales indépendantes — pas un site de marque. Nous ne revendons pas les produits.",
+    "feature2Text": "Capacité, isolation, bouchon, entretien : on va droit au choix, avec limites et compromis affichés.",
+    "howBody1": "Chaque fiche produit résume les critères utiles (volume, isolation, bouchon, entretien) et un avis d’usage : sport, bureau, voyage. Ce n’est pas un catalogue marchand : c’est un outil de comparaison.",
+    "howBody2": "Les guides expliquent la méthode (gourde vs tumbler, isolation froid/chaud, entretien inox). Les comparatifs aident à trancher entre deux modèles.",
+    "howBody3": "Les prix et stocks changent vite : nos liens Amazon ouvrent une fiche ou une recherche à jour. Préférez Expédié et vendu par Amazon quand c’est possible."
+  },
+  "guides": {
+    "subtitle": "Choisir une gourde ou un tumbler isotherme selon votre usage."
+  },
+  "legal": {
+    "hubMeta": "Éditeur, hébergeur, confidentialité, cookies, affiliation et publicité — informations légales La gourde isotherme.",
+    "cookiesIntro": "Cette section décrit les cookies utilisés sur La gourde isotherme. Vous pouvez accepter ou refuser les cookies publicitaires à tout moment via le bandeau cookies (lien en bas de page).",
+    "independent": "La gourde isotherme est un site éditorial indépendant. Il n'est pas exploité par les marques citées ni par Amazon."
+  },
+  "footer": {
+    "independent": "Site indépendant — gourdes & tumblers isothermes",
+    "rights": "© {year} La gourde isotherme"
+  },
+  "about": {
+    "title": "À propos de La gourde isotherme",
+    "meta": "Qui sommes-nous, méthode éditoriale, indépendance et transparence sur l’affiliation Amazon et AdSense.",
+    "lead": "La gourde isotherme est un site éditorial indépendant dédié aux gourdes, mugs et tumblers isothermes. Notre but : aider à choisir avec des infos claires, pas vendre à votre place.",
+    "missionBody": "Rendre accessibles les critères qui comptent vraiment (volume, isolation, bouchon, entretien, fuite) et les traduire en cas d’usage concrets : sport, bureau, voyage. Nous privilégions l’explication et la comparaison plutôt que les slogans marketing.",
+    "methodBody": "Nous construisons nos pages à partir de specs publiques, de retours d’usage et de best-sellers Amazon (Expédié et vendu par Amazon quand c’est possible).",
+    "method1": "Fiches structurées : points forts / limites et cas d’usage.",
+    "method2": "Guides pratiques : choisir, entretenir, gourde vs tumbler.",
+    "method3": "Comparatifs : trancher entre modèles ou formats.",
+    "method4": "Transparence : chaque lien d’achat affilié et chaque pub sont identifiables.",
+    "independenceBody": "Ce site n’est pas exploité par les marques citées ni par Amazon. Les marques appartiennent à leurs propriétaires. Nos textes sont rédigés pour le lecteur ; un lien affilié ne change pas le prix que vous payez."
+  },
+  "news": {
+    "title": "Actualités",
+    "subtitle": "Sélections et notes éditoriales autour des gourdes et tumblers isothermes.",
+    "catalogCta": "Voir le catalogue →"
+  }
+}

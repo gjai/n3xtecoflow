@@ -67,10 +67,14 @@ export default async function NewsArticlePage({
           {isEn
             ? cta.product
               ? `See ${cta.product.name} on Amazon`
-              : "See EcoFlow on Amazon"
+              : site.id === "tumbler"
+                ? "See picks on Amazon"
+                : "See EcoFlow on Amazon"
             : cta.product
               ? `Voir ${cta.product.name} sur Amazon`
-              : "Voir EcoFlow sur Amazon"}
+              : site.id === "tumbler"
+                ? "Voir la sélection sur Amazon"
+                : "Voir EcoFlow sur Amazon"}
         </p>
         <AmazonButton
           href={cta.href}
@@ -97,6 +101,7 @@ export default async function NewsArticlePage({
           locale,
           datePublished: article.publishedAt,
           image: article.imageSrc,
+          publisherName: site.brand.name,
         })}
       />
       <header className="hero-grid border-b border-[var(--line)]">

@@ -2,7 +2,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { JsonLd, organizationJsonLd } from "@/components/JsonLd";
-import { localeAlternates } from "@/lib/seo";
+import { siteLocaleAlternates } from "@/lib/seo";
+import { getCurrentSite } from "@/sites/server";
 
 export async function generateMetadata({
   params,
@@ -14,7 +15,7 @@ export async function generateMetadata({
   return {
     title: t("title"),
     description: t("meta"),
-    alternates: localeAlternates(locale, "/a-propos"),
+    alternates: await siteLocaleAlternates(locale, "/a-propos"),
   };
 }
 
@@ -26,14 +27,14 @@ export default async function AboutPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("about");
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
+  const site = await getCurrentSite();
+  const siteUrl = `https://${site.primaryHost}`;
 
   return (
     <article className="mx-auto max-w-3xl px-5 pb-16 pt-10 md:px-8">
       <JsonLd
         data={{
-          ...organizationJsonLd(siteUrl),
+          ...organizationJsonLd(site),
           "@type": ["Organization", "NewsMediaOrganization"],
           url: `${siteUrl}/${locale}/a-propos`,
           publishingPrinciples: `${siteUrl}/${locale}/a-propos`,

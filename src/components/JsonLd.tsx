@@ -1,3 +1,5 @@
+import type { SiteConfig } from "@/sites/types";
+
 export function JsonLd({ data }: { data: Record<string, unknown> }) {
   return (
     <script
@@ -7,22 +9,43 @@ export function JsonLd({ data }: { data: Record<string, unknown> }) {
   );
 }
 
-export function organizationJsonLd(siteUrl: string) {
+function siteUrlOf(site: SiteConfig | string) {
+  return typeof site === "string" ? site : `https://${site.primaryHost}`;
+}
+
+export function organizationJsonLd(siteOrUrl: SiteConfig | string) {
+  const isConfig = typeof siteOrUrl !== "string";
+  const site = isConfig ? siteOrUrl : null;
+  const siteUrl = siteUrlOf(siteOrUrl);
+  const name = site?.brand.name || "EcoFlow Stream";
+  const description =
+    site?.brand.taglineFr ||
+    "Site éditorial indépendant de guides et fiches techniques EcoFlow (affiliation Amazon).";
+  const knowsAbout =
+    site?.id === "tumbler"
+      ? [
+          "gourde isotherme",
+          "tumbler",
+          "mug isotherme",
+          "bouteille inox",
+          "isolation thermique",
+        ]
+      : [
+          "EcoFlow",
+          "portable power stations",
+          "balcony solar",
+          "PowerStream",
+          "STREAM",
+        ];
+
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "EcoFlow Stream",
+    name,
     url: siteUrl,
-    description:
-      "Site éditorial indépendant de guides et fiches techniques EcoFlow (affiliation Amazon).",
+    description,
     foundingDate: "2026",
-    knowsAbout: [
-      "EcoFlow",
-      "portable power stations",
-      "balcony solar",
-      "PowerStream",
-      "STREAM",
-    ],
+    knowsAbout,
     sameAs: [],
     contactPoint: {
       "@type": "ContactPoint",
@@ -33,11 +56,14 @@ export function organizationJsonLd(siteUrl: string) {
   };
 }
 
-export function websiteJsonLd(siteUrl: string) {
+export function websiteJsonLd(siteOrUrl: SiteConfig | string) {
+  const isConfig = typeof siteOrUrl !== "string";
+  const site = isConfig ? siteOrUrl : null;
+  const siteUrl = siteUrlOf(siteOrUrl);
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "EcoFlow Stream",
+    name: site?.brand.name || "EcoFlow Stream",
     url: siteUrl,
     inLanguage: ["fr-FR", "en"],
     potentialAction: {
@@ -55,6 +81,7 @@ export function productJsonLd(args: {
   description: string;
   category: string;
   url: string;
+  brandName?: string;
   capacityWh?: number;
   outputW?: number;
   priceAmount?: number | null;
@@ -79,7 +106,9 @@ export function productJsonLd(args: {
     name: args.name,
     description: args.description,
     category: args.category,
-    brand: { "@type": "Brand", name: "EcoFlow" },
+    brand: args.brandName
+      ? { "@type": "Brand", name: args.brandName }
+      : undefined,
     url: args.url,
     ...(offers ? { offers } : {}),
     additionalProperty: [
@@ -100,7 +129,9 @@ export function articleJsonLd(args: {
   locale: string;
   datePublished?: string;
   image?: string;
+  publisherName?: string;
 }) {
+  const publisher = args.publisherName || "EcoFlow Stream";
   return {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -110,7 +141,7 @@ export function articleJsonLd(args: {
     mainEntityOfPage: args.url,
     datePublished: args.datePublished,
     image: args.image ? [args.image] : undefined,
-    author: { "@type": "Organization", name: "EcoFlow Stream" },
-    publisher: { "@type": "Organization", name: "EcoFlow Stream" },
+    author: { "@type": "Organization", name: publisher },
+    publisher: { "@type": "Organization", name: publisher },
   };
 }

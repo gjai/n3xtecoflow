@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "siteName": "La gourde isotherme",
+    "tagline": "Independent guides and picks to choose an insulated bottle or tumbler."
+  },
+  "notFound": {
+    "body": "This URL doesn’t exist — or the content was moved. Back to the guides and catalog."
+  },
+  "home": {
+    "brand": "La gourde isotherme",
+    "headline": "The right bottle, chosen with clarity.",
+    "subhead": "Comparisons, buying criteria (capacity, insulation, straw, care) and Amazon links to bestsellers — Ships and sold by Amazon.",
+    "slideNewsFallback": "Bottle & tumbler updates",
+    "slideNewsExcerpt": "Picks and notes to follow the insulated drinkware market.",
+    "feature1Text": "Independent editorial analysis — not a brand site. We do not resell products.",
+    "feature2Text": "Capacity, insulation, lid, care: straight to the choice, with limits and trade-offs shown.",
+    "howBody1": "Each product sheet summarizes useful criteria (volume, insulation, lid, care) and a use-case take: sport, desk, travel. This is a comparison tool, not a merchant catalog.",
+    "howBody2": "Guides explain the method (bottle vs tumbler, hot/cold insulation, stainless care). Comparisons help pick between two models.",
+    "howBody3": "Prices and stock move fast: our Amazon links open an up-to-date listing or search. Prefer Ships and sold by Amazon when possible."
+  },
+  "guides": {
+    "subtitle": "Choose an insulated bottle or tumbler for your use case."
+  },
+  "legal": {
+    "hubMeta": "Publisher, host, privacy, cookies, affiliate and advertising — La gourde isotherme legal information.",
+    "cookiesIntro": "This section explains cookies used on La gourde isotherme. You can accept or reject advertising cookies anytime via the cookie banner (footer link).",
+    "independent": "La gourde isotherme is an independent editorial site. It is not operated by the cited brands or Amazon."
+  },
+  "footer": {
+    "independent": "Independent site — insulated bottles & tumblers",
+    "rights": "© {year} La gourde isotherme"
+  },
+  "about": {
+    "title": "About La gourde isotherme",
+    "meta": "Who we are, editorial method, independence, and transparency on Amazon affiliates and AdSense.",
+    "lead": "La gourde isotherme is an independent editorial site focused on insulated bottles, mugs and tumblers. Our goal is to help you choose with clear information — not to sell in your place.",
+    "missionBody": "Make the criteria that matter accessible (volume, insulation, lid, care, leak-proofing) and map them to real use cases: sport, desk, travel. We prefer explanation and comparison over marketing slogans.",
+    "methodBody": "We build pages from public specs, usage feedback and Amazon bestsellers (Ships and sold by Amazon when possible).",
+    "method1": "Structured sheets: strengths / limits and use cases.",
+    "method2": "Practical guides: choosing, care, bottle vs tumbler.",
+    "method3": "Comparisons: decide between models or formats.",
+    "method4": "Transparency: every affiliate purchase link and every ad is identifiable.",
+    "independenceBody": "This site is not operated by the cited brands or Amazon. Brands belong to their owners. Our copy is written for readers; an affiliate link does not change the price you pay."
+  },
+  "news": {
+    "title": "News",
+    "subtitle": "Editorial picks and notes around insulated bottles and tumblers.",
+    "catalogCta": "Browse the catalog →"
+  }
+}

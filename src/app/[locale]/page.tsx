@@ -230,8 +230,8 @@ export default async function HomePage({
 
   return (
     <>
-      <JsonLd data={organizationJsonLd(siteUrl)} />
-      <JsonLd data={websiteJsonLd(siteUrl)} />
+      <JsonLd data={organizationJsonLd(site)} />
+      <JsonLd data={websiteJsonLd(site)} />
 
       <HeroSlider brandName={brandName} slides={heroSlides} />
 

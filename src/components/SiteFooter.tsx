@@ -54,7 +54,7 @@ export function SiteFooter() {
       <div className="border-t border-[var(--line)] px-5 py-4 md:px-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-center text-xs text-[var(--muted)] sm:text-left">
-            {t("rights", { year }).replace("EcoFlow Stream", site.brand.name)}
+            {t("rights", { year })}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <ThemeToggle locale={locale} />

@@ -98,7 +98,9 @@ export default async function GuideArticlePage({
       </header>
       <ArticleBody
         sections={copy.sections}
-        amazonQuery="EcoFlow station électrique"
+        amazonQuery={
+          site.id === "tumbler" ? "gourde isotherme" : "EcoFlow station électrique"
+        }
         amazonLabel={isEn ? "Browse on Amazon" : "Voir sur Amazon"}
       />
     </article>
