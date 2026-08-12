@@ -16,6 +16,7 @@ import {
   resolveProductMedia,
 } from "@/lib/product-presentation";
 import { getRelatedEditorial } from "@/lib/product-related";
+import { RelatedReading } from "@/components/RelatedReading";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 import { localeAlternates, localizeSpecs } from "@/lib/seo";
 import {
@@ -227,72 +228,12 @@ export default async function ProductPage({
             </div>
           </section>
 
-          {(editorial.guides.length > 0 ||
-            editorial.comparisons.length > 0 ||
-            editorial.news.length > 0) && (
-            <section className="space-y-8 border-t border-[var(--line)] pt-8">
-              <h2 className="font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">
-                {isEn ? "Related reading" : "À lire aussi"}
-              </h2>
-              {editorial.guides.length > 0 ? (
-                <div>
-                  <h3 className="text-sm uppercase tracking-[0.16em] text-[var(--muted)]">
-                    {isEn ? "Guides" : "Guides"}
-                  </h3>
-                  <ul className="mt-3 space-y-2">
-                    {editorial.guides.map((item) => (
-                      <li key={item.href}>
-                        <Link
-                          href={item.href}
-                          className="text-[var(--accent)] underline-offset-2 hover:underline"
-                        >
-                          {item.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-              {editorial.comparisons.length > 0 ? (
-                <div>
-                  <h3 className="text-sm uppercase tracking-[0.16em] text-[var(--muted)]">
-                    {isEn ? "Comparisons" : "Comparatifs"}
-                  </h3>
-                  <ul className="mt-3 space-y-2">
-                    {editorial.comparisons.map((item) => (
-                      <li key={item.href}>
-                        <Link
-                          href={item.href}
-                          className="text-[var(--accent)] underline-offset-2 hover:underline"
-                        >
-                          {item.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-              {editorial.news.length > 0 ? (
-                <div>
-                  <h3 className="text-sm uppercase tracking-[0.16em] text-[var(--muted)]">
-                    {isEn ? "News" : "Actualités"}
-                  </h3>
-                  <ul className="mt-3 space-y-2">
-                    {editorial.news.map((item) => (
-                      <li key={item.href}>
-                        <Link
-                          href={item.href}
-                          className="text-[var(--accent)] underline-offset-2 hover:underline"
-                        >
-                          {item.title}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-            </section>
-          )}
+          <RelatedReading
+            locale={locale}
+            guides={editorial.guides}
+            comparisons={editorial.comparisons}
+            news={editorial.news}
+          />
 
           {related.length > 0 ? (
             <section>
