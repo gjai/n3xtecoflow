@@ -1,0 +1,23 @@
+name: Refresh EcoFlow guides
+
+on:
+  schedule:
+    - cron: "30 4 * * 1"
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger production guides AI refresh
+        env:
+          NEWS_CRON_SECRET: ${{ secrets.NEWS_CRON_SECRET }}
+          SITE_URL: https://ecoflow-stream.com
+        run: |
+          if [ -z "$NEWS_CRON_SECRET" ]; then
+            echo "NEWS_CRON_SECRET missing"
+            exit 1
+          fi
+          curl -fsS -m 290 -X POST \
+            -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
+            "${SITE_URL}/api/guides/refresh?force=0"

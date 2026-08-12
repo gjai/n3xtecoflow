@@ -15,7 +15,22 @@ export const ARTICLE_PRODUCT_SLUGS: Record<string, string[]> = {
   "backup-maison": ["delta-pro-3", "smart-home-panel"],
   "camping-van": ["river-2-pro", "glacier-classic"],
   "stream-balcon": ["stream-ultra-x", "stream-micro-onduleur"],
-  // Comparatifs
+  "delta-pro-autonomie": ["delta-pro-3", "delta-pro-ultra"],
+  "glacier-froid": ["glacier-classic", "river-2-pro"],
+  "wave-clim": ["wave-3", "delta-2"],
+  "recharge-rapide": ["delta-3-classic", "river-3-plus"],
+  "ups-coupures": ["delta-2", "delta-pro-3"],
+  "premier-achat": ["river-2", "delta-2"],
+  // Hubs comparatifs (cover)
+  river: ["river-2", "river-3-plus"],
+  delta: ["delta-2", "delta-3-classic"],
+  "delta-pro": ["delta-pro-3", "delta-2-max"],
+  stream: ["stream-ultra-x", "stream-micro-onduleur"],
+  powerstream: ["powerstream", "stream-micro-onduleur"],
+  solaire: ["panneau-220w-bifacial", "panneau-400w"],
+  outdoor: ["glacier-classic", "wave-3"],
+  ocean: ["ocean-2-plus", "delta-pro-3"],
+  // Comparatifs legacy (redirects)
   "river-vs-delta": ["river-2", "delta-2"],
   "delta-2-vs-delta-3": ["delta-2", "delta-3-classic"],
   "delta-vs-delta-pro": ["delta-2-max", "delta-pro-3"],

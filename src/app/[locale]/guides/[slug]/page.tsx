@@ -3,17 +3,20 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleBody } from "@/components/ArticleBody";
 import { ArticleCover } from "@/components/ArticleCover";
-import { getGuide, guides } from "@/data/articles";
 import { editorialImages } from "@/data/images";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import {
   resolveArticlePrimaryImage,
   resolveArticleProductImages,
 } from "@/lib/article-images";
+import { GUIDE_TOPICS } from "@/lib/guides/types";
+import { resolveGuide } from "@/lib/guides/refresh";
 import { localeAlternates } from "@/lib/seo";
 
+export const revalidate = 600;
+
 export function generateStaticParams() {
-  return guides.flatMap((g) =>
+  return GUIDE_TOPICS.flatMap((g) =>
     ["fr", "en"].map((locale) => ({ locale, slug: g.slug })),
   );
 }
@@ -24,11 +27,13 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const guide = getGuide(slug);
+  const guide = await resolveGuide(slug);
   if (!guide) return {};
   const copy = locale === "en" ? guide.en : guide.fr;
   const ecoflowMap = await getEcoflowEntriesMap();
-  const og = resolveArticlePrimaryImage(slug, "guide", ecoflowMap);
+  const og = guide.imageSrc
+    ? { src: guide.imageSrc }
+    : resolveArticlePrimaryImage(slug, "guide", ecoflowMap);
   return {
     title: copy.title,
     description: copy.subtitle,
@@ -44,12 +49,23 @@ export default async function GuideArticlePage({
 }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const guide = getGuide(slug);
+  const guide = await resolveGuide(slug);
   if (!guide) notFound();
   const copy = locale === "en" ? guide.en : guide.fr;
   const isEn = locale === "en";
   const ecoflowMap = await getEcoflowEntriesMap();
-  const images = resolveArticleProductImages(slug, ecoflowMap);
+  const productImages = resolveArticleProductImages(slug, ecoflowMap);
+  const coverImages = guide.imageSrc
+    ? [
+        {
+          src: guide.imageSrc,
+          altFr: copy.title,
+          altEn: copy.title,
+          credit: guide.imageCredit || "EcoFlow Stream",
+          creditUrl: "#",
+        },
+      ]
+    : productImages;
 
   return (
     <article>
@@ -62,12 +78,13 @@ export default async function GuideArticlePage({
             <p className="mt-4 text-lg text-[var(--muted)]">{copy.subtitle}</p>
           </div>
           <ArticleCover
-            images={images}
+            images={coverImages}
             fallback={editorialImages.guides}
             locale={locale}
             className="aspect-[4/3] w-full border border-[var(--line)]"
             sizes="(max-width: 768px) 100vw, 40vw"
             priority
+            packshot={!guide.imageSrc}
           />
         </div>
       </header>

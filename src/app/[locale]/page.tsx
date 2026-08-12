@@ -14,12 +14,16 @@ import {
   editorialImages,
   heroImage,
 } from "@/data/images";
-import { categories, products, type CategoryId } from "@/data/products";
-import { comparisons, guides } from "@/data/articles";
+import { categories, products, getLocalizedCategory, type CategoryId } from "@/data/products";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 import { getEcoflowEntriesMap, getEcoflowEntry } from "@/lib/ecoflow/catalog-store";
 import { getEcoflowEditorial } from "@/lib/ecoflow/editorial-store";
 import { resolveArticlePrimaryImage } from "@/lib/article-images";
+import {
+  comparisonHubCategories,
+  hubTitle,
+} from "@/lib/comparisons/hub";
+import { resolveAllGuides } from "@/lib/guides/refresh";
 import { resolveProductCopy } from "@/lib/product-copy";
 import { resolveProductMedia } from "@/lib/product-presentation";
 import { localeAlternates } from "@/lib/seo";
@@ -58,8 +62,10 @@ export default async function HomePage({
   const newsArticles = getNewsArticles(await readNewsStore());
   const latestNews = newsArticles.slice(0, 3);
   const latestNewsItem = newsArticles[0];
-  const latestGuide = guides.at(-1)!;
-  const latestComparison = comparisons.at(-1)!;
+  const allGuides = await resolveAllGuides();
+  const latestGuide = allGuides.at(-1)!;
+  const comparisonHubs = comparisonHubCategories();
+  const latestComparisonHub = comparisonHubs[0]!;
   const featuredProducts = products.filter((p) =>
     site.featuredCategoryIds.includes(p.category),
   );
@@ -89,18 +95,22 @@ export default async function HomePage({
       : latestNewsItem.fr
     : null;
   const guideCopy = isEn ? latestGuide.en : latestGuide.fr;
-  const comparisonCopy = isEn
-    ? latestComparison.en
-    : latestComparison.fr;
+  const comparisonTitle = hubTitle(latestComparisonHub.id, locale);
+  const comparisonIntro = getLocalizedCategory(
+    latestComparisonHub,
+    locale,
+  ).intro;
 
   const ecoflowMap = await getEcoflowEntriesMap();
-  const guideCover = resolveArticlePrimaryImage(
-    latestGuide.slug,
-    "guide",
-    ecoflowMap,
-  );
+  const guideCover = latestGuide.imageSrc
+    ? {
+        src: latestGuide.imageSrc,
+        altFr: guideCopy.title,
+        altEn: guideCopy.title,
+      }
+    : resolveArticlePrimaryImage(latestGuide.slug, "guide", ecoflowMap);
   const comparisonCover = resolveArticlePrimaryImage(
-    latestComparison.slug,
+    latestComparisonHub.slug,
     "comparison",
     ecoflowMap,
   );
@@ -137,11 +147,11 @@ export default async function HomePage({
       imageAlt: isEn ? guideCover.altEn : guideCover.altFr,
     },
     {
-      id: `comparison-${latestComparison.slug}`,
+      id: `comparison-${latestComparisonHub.slug}`,
       kind: t("slideComparison"),
-      title: comparisonCopy.title,
-      excerpt: comparisonCopy.subtitle,
-      href: `/comparatifs/${latestComparison.slug}`,
+      title: comparisonTitle,
+      excerpt: comparisonIntro,
+      href: `/comparatifs/${latestComparisonHub.slug}`,
       cta: t("slideComparisonCta"),
       imageSrc: comparisonCover.src,
       imageAlt: isEn ? comparisonCover.altEn : comparisonCover.altFr,
@@ -292,8 +302,8 @@ export default async function HomePage({
         </div>
         <p className="mt-8 text-sm text-[var(--muted)]">
           {products.length} {isEn ? "product sheets" : "fiches produits"} ·{" "}
-          {guides.length} {isEn ? "guides" : "guides"} ·{" "}
-          {comparisons.length}{" "}
+          {allGuides.length} {isEn ? "guides" : "guides"} ·{" "}
+          {comparisonHubs.length}{" "}
           <Link
             href="/comparatifs"
             className="text-[var(--accent)] hover:underline"

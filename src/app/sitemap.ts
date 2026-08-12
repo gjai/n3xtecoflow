@@ -2,8 +2,9 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
-import { guides, comparisons } from "@/data/articles";
 import { categories, products } from "@/data/products";
+import { comparisonHubCategories } from "@/lib/comparisons/hub";
+import { GUIDE_TOPICS } from "@/lib/guides/types";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
 
@@ -33,6 +34,7 @@ function loadNewsSlugs(): { slug: string; publishedAt: string }[] {
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
   const news = loadNewsSlugs();
+  const hubs = comparisonHubCategories();
   const staticPaths = [
     "",
     "/produits",
@@ -82,20 +84,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       });
     }
 
-    for (const guide of guides) {
+    for (const guide of GUIDE_TOPICS) {
       entries.push({
         url: `${siteUrl}/${locale}/guides/${guide.slug}`,
         lastModified: new Date(),
-        changeFrequency: "monthly",
+        changeFrequency: "weekly",
         priority: 0.75,
       });
     }
 
-    for (const cmp of comparisons) {
+    for (const hub of hubs) {
       entries.push({
-        url: `${siteUrl}/${locale}/comparatifs/${cmp.slug}`,
+        url: `${siteUrl}/${locale}/comparatifs/${hub.slug}`,
         lastModified: new Date(),
-        changeFrequency: "monthly",
+        changeFrequency: "weekly",
         priority: 0.75,
       });
     }

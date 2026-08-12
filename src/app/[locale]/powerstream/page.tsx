@@ -28,7 +28,6 @@ export default async function PowerStreamPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("powerstream");
-  const a = await getTranslations("amazon");
   const isEn = locale === "en";
 
   return (

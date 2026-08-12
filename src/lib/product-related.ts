@@ -1,5 +1,11 @@
-import { comparisons, guides, type GuideArticle } from "@/data/articles";
+import { guides as staticGuides, type GuideArticle } from "@/data/articles";
 import type { Product } from "@/data/products";
+import {
+  comparisonHubCategories,
+  hubTitle,
+  LEGACY_COMPARISON_REDIRECTS,
+} from "@/lib/comparisons/hub";
+import { GUIDE_TOPICS } from "@/lib/guides/types";
 import type { NewsArticle } from "@/lib/news/types";
 
 export type RelatedLink = {
@@ -31,7 +37,6 @@ export function productMatchTokens(product: Product): string[] {
     }
   }
 
-  // Family aliases
   if (product.category === "river" || product.slug.includes("river")) {
     tokens.add("river");
   }
@@ -85,6 +90,19 @@ function scoreArticle(article: GuideArticle, tokens: string[], locale: string): 
   );
 }
 
+function scoreGuideTopic(
+  topic: (typeof GUIDE_TOPICS)[number],
+  tokens: string[],
+): number {
+  return (
+    scoreText(topic.slug, tokens) * 2 +
+    scoreText(topic.topicFr, tokens) +
+    scoreText(topic.topicEn, tokens) +
+    scoreText(topic.angleFr, tokens) +
+    scoreText(topic.angleEn, tokens)
+  );
+}
+
 function scoreNews(article: NewsArticle, tokens: string[], locale: string): number {
   const copy = locale === "en" ? article.en : article.fr;
   const tags = (article.tags || []).join(" ");
@@ -99,42 +117,63 @@ function scoreNews(article: NewsArticle, tokens: string[], locale: string): numb
 /** Manual strong links by product family / slug. */
 const MANUAL: Record<string, { guides?: string[]; comparisons?: string[] }> = {
   river: {
-    guides: ["choisir-station", "camping-van", "dimensionnement-wh"],
-    comparisons: ["river-vs-delta"],
+    guides: [
+      "choisir-station",
+      "camping-van",
+      "dimensionnement-wh",
+      "premier-achat",
+    ],
+    comparisons: ["delta", "river"],
   },
   delta: {
-    guides: ["choisir-station", "backup-maison", "dimensionnement-wh"],
-    comparisons: ["river-vs-delta", "delta-2-vs-delta-3", "delta-vs-delta-pro"],
+    guides: [
+      "choisir-station",
+      "backup-maison",
+      "dimensionnement-wh",
+      "ups-coupures",
+      "recharge-rapide",
+    ],
+    comparisons: ["delta", "delta-pro"],
   },
   "delta-pro": {
-    guides: ["backup-maison", "choisir-station"],
-    comparisons: ["delta-vs-delta-pro"],
+    guides: ["backup-maison", "choisir-station", "delta-pro-autonomie"],
+    comparisons: ["delta-pro", "delta"],
   },
   stream: {
-    guides: ["stream-balcon", "solaire-portable"],
-    comparisons: ["stream-vs-powerstream", "powerstream-vs-station"],
+    guides: ["stream-balcon", "solaire-portable", "premier-achat"],
+    comparisons: ["stream"],
   },
   powerstream: {
     guides: ["stream-balcon", "solaire-portable"],
-    comparisons: ["stream-vs-powerstream", "powerstream-vs-station"],
+    comparisons: ["stream", "powerstream"],
   },
   solaire: {
     guides: ["solaire-portable", "stream-balcon", "dimensionnement-wh"],
-    comparisons: ["powerstream-vs-station"],
+    comparisons: ["solaire", "stream"],
   },
   outdoor: {
-    guides: ["camping-van", "choisir-station"],
-    comparisons: ["river-vs-delta"],
+    guides: ["camping-van", "choisir-station", "glacier-froid", "wave-clim"],
+    comparisons: ["outdoor", "river"],
   },
   ocean: {
-    guides: ["backup-maison", "choisir-station"],
-    comparisons: ["delta-vs-delta-pro"],
+    guides: ["backup-maison", "choisir-station", "delta-pro-autonomie"],
+    comparisons: ["delta-pro"],
   },
   accessoires: {
-    guides: ["choisir-station", "camping-van"],
+    guides: ["choisir-station", "camping-van", "recharge-rapide"],
     comparisons: [],
   },
 };
+
+function guideTitle(slug: string, locale: string): string {
+  const topic = GUIDE_TOPICS.find((t) => t.slug === slug);
+  if (topic) return locale === "en" ? topic.topicEn : topic.topicFr;
+  const staticG = staticGuides.find((g) => g.slug === slug);
+  if (staticG) {
+    return locale === "en" ? staticG.en.title : staticG.fr.title;
+  }
+  return slug;
+}
 
 export function getRelatedEditorial(options: {
   product: Product;
@@ -153,21 +192,36 @@ export function getRelatedEditorial(options: {
   const cmpLimit = options.limit?.comparisons ?? 3;
   const newsLimit = options.limit?.news ?? 3;
 
-  const guideScores = guides
-    .map((g) => {
-      let s = scoreArticle(g, tokens, locale);
-      if (manual.guides?.includes(g.slug)) s += 10;
-      return { g, s };
-    })
+  const guideScores = GUIDE_TOPICS.map((topic) => {
+    let s = scoreGuideTopic(topic, tokens);
+    if (manual.guides?.includes(topic.slug)) s += 10;
+    const staticG = staticGuides.find((g) => g.slug === topic.slug);
+    if (staticG) s += scoreArticle(staticG, tokens, locale) * 0.25;
+    return { slug: topic.slug, s };
+  })
     .filter((x) => x.s > 0)
     .sort((a, b) => b.s - a.s)
     .slice(0, guideLimit);
 
-  const cmpScores = comparisons
-    .map((g) => {
-      let s = scoreArticle(g, tokens, locale);
-      if (manual.comparisons?.includes(g.slug)) s += 10;
-      return { g, s };
+  const hubs = comparisonHubCategories();
+  const cmpScores = hubs
+    .map((cat) => {
+      let s = scoreText(cat.id, tokens) * 3 + scoreText(cat.slug, tokens);
+      if (cat.id === product.category) s += 12;
+      if (manual.comparisons?.includes(cat.id) || manual.comparisons?.includes(cat.slug)) {
+        s += 10;
+      }
+      // Legacy pair that pointed into this hub
+      for (const [legacySlug, target] of Object.entries(LEGACY_COMPARISON_REDIRECTS)) {
+        if (
+          target.category === cat.id &&
+          (legacySlug.includes(product.slug.split("-")[0] || "") ||
+            scoreText(legacySlug, tokens) > 0)
+        ) {
+          s += 2;
+        }
+      }
+      return { cat, s };
     })
     .filter((x) => x.s > 0)
     .sort((a, b) => b.s - a.s)
@@ -180,22 +234,16 @@ export function getRelatedEditorial(options: {
     .slice(0, newsLimit);
 
   return {
-    guides: guideScores.map(({ g }) => {
-      const copy = locale === "en" ? g.en : g.fr;
-      return {
-        href: `/guides/${g.slug}`,
-        title: copy.title,
-        kind: "guide" as const,
-      };
-    }),
-    comparisons: cmpScores.map(({ g }) => {
-      const copy = locale === "en" ? g.en : g.fr;
-      return {
-        href: `/comparatifs/${g.slug}`,
-        title: copy.title,
-        kind: "comparison" as const,
-      };
-    }),
+    guides: guideScores.map(({ slug }) => ({
+      href: `/guides/${slug}`,
+      title: guideTitle(slug, locale),
+      kind: "guide" as const,
+    })),
+    comparisons: cmpScores.map(({ cat }) => ({
+      href: `/comparatifs/${cat.slug}`,
+      title: hubTitle(cat.id, locale),
+      kind: "comparison" as const,
+    })),
     news: newsScores.map(({ n }) => {
       const copy = locale === "en" ? n.en : n.fr;
       return {

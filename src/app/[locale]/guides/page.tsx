@@ -2,11 +2,13 @@ import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { ArticleCover } from "@/components/ArticleCover";
-import { guides } from "@/data/articles";
 import { editorialImages } from "@/data/images";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import { resolveArticleProductImages } from "@/lib/article-images";
+import { resolveAllGuides } from "@/lib/guides/refresh";
 import { localeAlternates } from "@/lib/seo";
+
+export const revalidate = 600;
 
 export async function generateMetadata({
   params,
@@ -18,8 +20,8 @@ export async function generateMetadata({
     title: locale === "en" ? "Buying guides" : "Guides d'achat",
     description:
       locale === "en"
-        ? "EcoFlow buying guides: stations, solar, home backup, camping."
-        : "Guides d'achat EcoFlow : stations, solaire, backup maison, camping.",
+        ? "EcoFlow buying guides: stations, solar, home backup, camping, STREAM."
+        : "Guides d'achat EcoFlow : stations, solaire, backup maison, camping, STREAM.",
     alternates: localeAlternates(locale, "/guides"),
   };
 }
@@ -33,6 +35,7 @@ export default async function GuidesIndexPage({
   setRequestLocale(locale);
   const isEn = locale === "en";
   const ecoflowMap = await getEcoflowEntriesMap();
+  const allGuides = await resolveAllGuides();
 
   return (
     <div className="pt-6">
@@ -42,14 +45,28 @@ export default async function GuidesIndexPage({
         </h1>
         <p className="mt-4 max-w-2xl text-[var(--muted)]">
           {isEn
-            ? "Practical methods to size Wh/W and pick the right EcoFlow family."
-            : "Méthodes concrètes pour dimensionner Wh/W et choisir la bonne famille EcoFlow."}
+            ? "Practical methods to size Wh/W and pick the right EcoFlow setup — regularly enriched."
+            : "Méthodes concrètes pour dimensionner Wh/W et choisir le bon setup EcoFlow — enrichis régulièrement."}
         </p>
       </header>
       <div className="mx-auto grid max-w-6xl gap-6 px-5 pb-16 md:grid-cols-2 md:px-8">
-        {guides.map((guide) => {
+        {allGuides.map((guide) => {
           const copy = isEn ? guide.en : guide.fr;
-          const images = resolveArticleProductImages(guide.slug, ecoflowMap);
+          const productImages = resolveArticleProductImages(
+            guide.slug,
+            ecoflowMap,
+          );
+          const coverImages = guide.imageSrc
+            ? [
+                {
+                  src: guide.imageSrc,
+                  altFr: copy.title,
+                  altEn: copy.title,
+                  credit: guide.imageCredit || "EcoFlow Stream",
+                  creditUrl: "#",
+                },
+              ]
+            : productImages;
           return (
             <Link
               key={guide.slug}
@@ -57,11 +74,12 @@ export default async function GuidesIndexPage({
               className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
             >
               <ArticleCover
-                images={images}
+                images={coverImages}
                 fallback={editorialImages.guides}
                 locale={locale}
                 className="aspect-[16/9] w-full"
                 sizes="(max-width: 768px) 100vw, 50vw"
+                packshot={!guide.imageSrc}
               />
               <div className="p-6">
                 <h2 className="text-xl font-semibold text-[var(--heading)]">
@@ -72,28 +90,6 @@ export default async function GuidesIndexPage({
             </Link>
           );
         })}
-        <Link
-          href="/produits"
-          className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
-        >
-          <ArticleCover
-            images={resolveArticleProductImages("choisir-station", ecoflowMap)}
-            fallback={editorialImages.comparatifs}
-            locale={locale}
-            className="aspect-[16/9] w-full"
-            sizes="(max-width: 768px) 100vw, 50vw"
-          />
-          <div className="p-6">
-            <h2 className="text-xl font-semibold text-[var(--heading)]">
-              {isEn ? "Full product catalog" : "Catalogue produits complet"}
-            </h2>
-            <p className="mt-3 text-sm text-[var(--muted)]">
-              {isEn
-                ? "Specs and notes for RIVER, DELTA, Pro, PowerStream, solar."
-                : "Fiches et specs RIVER, DELTA, Pro, PowerStream, solaire."}
-            </p>
-          </div>
-        </Link>
       </div>
     </div>
   );
