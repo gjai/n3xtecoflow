@@ -3,10 +3,13 @@
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { CookieSettingsButton } from "./CookieSettingsButton";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 import { useSite } from "./SiteProvider";
 
 export function SiteFooter() {
   const t = useTranslations("footer");
+  const tNav = useTranslations("nav");
   const site = useSite();
   const locale = useLocale();
   const year = new Date().getFullYear();
@@ -47,8 +50,16 @@ export function SiteFooter() {
           <CookieSettingsButton label={t("manageCookies")} />
         </div>
       </div>
-      <div className="border-t border-[var(--line)] px-5 py-4 text-center text-xs text-[var(--muted)] md:px-8">
-        {t("rights", { year }).replace("EcoFlow Stream", site.brand.name)}
+      <div className="border-t border-[var(--line)] px-5 py-4 md:px-8">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 sm:flex-row">
+          <p className="text-center text-xs text-[var(--muted)] sm:text-left">
+            {t("rights", { year }).replace("EcoFlow Stream", site.brand.name)}
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <ThemeToggle locale={locale} />
+            <LanguageSwitcher label={tNav("language")} />
+          </div>
+        </div>
       </div>
     </footer>
   );

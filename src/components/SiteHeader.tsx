@@ -1,16 +1,13 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
-import { LanguageSwitcher } from "./LanguageSwitcher";
-import { ThemeToggle } from "./ThemeToggle";
 import { useSite } from "./SiteProvider";
 
 export function SiteHeader() {
   const t = useTranslations("nav");
   const site = useSite();
-  const locale = useLocale();
   const [open, setOpen] = useState(false);
 
   const links = [
@@ -32,7 +29,7 @@ export function SiteHeader() {
         >
           {site.brand.name}
         </Link>
-        <nav className="hidden items-center gap-4 text-sm text-[var(--hero-muted)] xl:flex">
+        <nav className="hidden items-center gap-5 text-sm text-[var(--hero-muted)] xl:flex">
           {links.map((l) => (
             <Link
               key={l.href}
@@ -42,8 +39,6 @@ export function SiteHeader() {
               {l.label}
             </Link>
           ))}
-          <ThemeToggle locale={locale} />
-          <LanguageSwitcher label={t("language")} />
         </nav>
         <button
           type="button"
@@ -71,10 +66,6 @@ export function SiteHeader() {
                 {l.label}
               </Link>
             ))}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <ThemeToggle locale={locale} />
-              <LanguageSwitcher label={t("language")} />
-            </div>
           </div>
         </div>
       ) : null}
