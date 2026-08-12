@@ -12,7 +12,6 @@ export function SiteHeader() {
 
   const links = [
     { href: "/produits", label: t("products") },
-    { href: "/powerstream", label: t("powerstream") },
     { href: "/guides", label: t("guides") },
     { href: "/comparatifs", label: t("comparisons") },
     { href: "/actualites", label: t("news") },

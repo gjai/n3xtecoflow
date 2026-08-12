@@ -36,9 +36,6 @@ export function SiteFooter() {
           <Link href="/comparatifs" className="hover:text-[var(--heading)]">
             {t("comparisons")}
           </Link>
-          <Link href="/powerstream" className="hover:text-[var(--heading)]">
-            {t("powerstream")}
-          </Link>
           <Link href="/actualites" className="hover:text-[var(--heading)]">
             {t("news")}
           </Link>
