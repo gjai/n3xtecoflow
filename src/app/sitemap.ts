@@ -1,3 +1,5 @@
+import { readFileSync } from "fs";
+import { join } from "path";
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 import { guides, comparisons } from "@/data/articles";
@@ -5,14 +7,28 @@ import { categories, products } from "@/data/products";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
 
+function loadNewsSlugs(): { slug: string; publishedAt: string }[] {
+  try {
+    const raw = readFileSync(join(process.cwd(), "data", "news.json"), "utf8");
+    const store = JSON.parse(raw) as {
+      articles?: { slug: string; publishedAt: string }[];
+    };
+    return store.articles || [];
+  } catch {
+    return [];
+  }
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
+  const news = loadNewsSlugs();
   const staticPaths = [
     "",
     "/produits",
     "/powerstream",
     "/guides",
     "/comparatifs",
+    "/actualites",
     "/a-propos",
     "/mentions-legales",
     "/confidentialite",
@@ -26,8 +42,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       entries.push({
         url: `${siteUrl}/${locale}${path}`,
         lastModified: new Date(),
-        changeFrequency: path === "" ? "weekly" : "monthly",
-        priority: path === "" ? 1 : 0.7,
+        changeFrequency: path === "" || path === "/actualites" ? "daily" : "monthly",
+        priority: path === "" ? 1 : path === "/actualites" ? 0.85 : 0.7,
+      });
+    }
+
+    for (const article of news) {
+      entries.push({
+        url: `${siteUrl}/${locale}/actualites/${article.slug}`,
+        lastModified: new Date(article.publishedAt),
+        changeFrequency: "weekly",
+        priority: 0.7,
       });
     }
 

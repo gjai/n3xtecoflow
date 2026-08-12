@@ -20,6 +20,9 @@ export function SiteFooter() {
           </p>
         </div>
         <div className="flex flex-wrap gap-4 text-sm">
+          <Link href="/actualites" className="hover:text-[var(--heading)]">
+            {t("news")}
+          </Link>
           <Link href="/a-propos" className="hover:text-[var(--heading)]">
             {t("about")}
           </Link>

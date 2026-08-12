@@ -12,7 +12,8 @@
     "comparisons": "Comparatifs",
     "contact": "Contact",
     "language": "Langue",
-    "about": "À propos"
+    "about": "À propos",
+    "news": "Actualités"
   },
   "home": {
     "brand": "EcoFlow Stream",
@@ -152,7 +153,8 @@
     "contact": "Contact",
     "cookies": "Cookies",
     "manageCookies": "Gérer les cookies",
-    "rights": "© {year} EcoFlow Stream"
+    "rights": "© {year} EcoFlow Stream",
+    "news": "Actualités"
   },
   "amazon": {
     "badge": "Lien affilié Amazon",
@@ -188,5 +190,18 @@
     "contactTitle": "Nous contacter",
     "contactBody": "Pour une question éditoriale, une correction ou un signalement, utilisez le",
     "contactLink": "formulaire de contact"
+  },
+  "news": {
+    "eyebrow": "Revue de presse",
+    "title": "Actualités EcoFlow",
+    "subtitle": "Synthèses éditoriales à partir d’annonces et articles récents — mises à jour automatiquement.",
+    "disclaimer": "Nous ne republions pas les articles d’origine : chaque texte est une synthèse indépendante avec lien vers la source.",
+    "empty": "Aucune actu pour le moment — le prochain passage automatique va peupler cette section.",
+    "read": "Lire la synthèse",
+    "back": "Toutes les actualités",
+    "source": "Source",
+    "readSource": "Voir l’article source",
+    "catalogCta": "Comparer les produits EcoFlow →",
+    "aiBadge": "Réécrit IA"
   }
 }

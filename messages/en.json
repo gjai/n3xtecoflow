@@ -12,7 +12,8 @@
     "comparisons": "Comparisons",
     "contact": "Contact",
     "language": "Language",
-    "about": "About"
+    "about": "About",
+    "news": "News"
   },
   "home": {
     "brand": "EcoFlow Stream",
@@ -152,7 +153,8 @@
     "cookies": "Cookies",
     "manageCookies": "Manage cookies",
     "rights": "© {year} EcoFlow Stream",
-    "about": "About"
+    "about": "About",
+    "news": "News"
   },
   "amazon": {
     "badge": "Amazon affiliate link",
@@ -188,5 +190,18 @@
     "contactTitle": "Contact us",
     "contactBody": "For an editorial question, correction or report, use the",
     "contactLink": "contact form"
+  },
+  "news": {
+    "eyebrow": "Press roundup",
+    "title": "EcoFlow news",
+    "subtitle": "Editorial summaries from recent announcements and articles — updated automatically.",
+    "disclaimer": "We do not republish original articles: each piece is an independent summary with a link to the source.",
+    "empty": "No news yet — the next automated run will fill this section.",
+    "read": "Read summary",
+    "back": "All news",
+    "source": "Source",
+    "readSource": "Open source article",
+    "catalogCta": "Compare EcoFlow products →",
+    "aiBadge": "AI rewritten"
   }
 }

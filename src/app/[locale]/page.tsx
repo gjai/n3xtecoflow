@@ -7,6 +7,9 @@ import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/JsonLd";
 import { AMAZON_QUERIES, buildAmazonSearchUrl } from "@/lib/amazon";
 import { categories, products } from "@/data/products";
 import { comparisons, guides } from "@/data/articles";
+import { getNewsArticles, readNewsStore } from "@/lib/news/store";
+
+export const dynamic = "force-dynamic";
 
 export default async function HomePage({
   params,
@@ -16,10 +19,12 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("home");
+  const newsT = await getTranslations("news");
   const a = await getTranslations("amazon");
   const isEn = locale === "en";
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
+  const latestNews = getNewsArticles(await readNewsStore()).slice(0, 3);
 
   return (
     <>
@@ -91,6 +96,51 @@ export default async function HomePage({
           .
         </p>
       </section>
+
+      {latestNews.length > 0 ? (
+        <section className="border-y border-[var(--line)] bg-[var(--surface)]">
+          <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
+                  {newsT("eyebrow")}
+                </p>
+                <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
+                  {newsT("title")}
+                </h2>
+              </div>
+              <Link
+                href="/actualites"
+                className="text-sm font-semibold text-[var(--accent)] hover:underline"
+              >
+                {newsT("back")} →
+              </Link>
+            </div>
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {latestNews.map((article) => {
+                const copy = isEn ? article.en : article.fr;
+                return (
+                  <Link
+                    key={article.slug}
+                    href={`/actualites/${article.slug}`}
+                    className="border border-[var(--line)] bg-[var(--bg)] p-4 transition hover:border-[var(--accent)]"
+                  >
+                    <p className="text-xs text-[var(--muted)]">
+                      {article.sourceName}
+                    </p>
+                    <h3 className="mt-2 font-semibold text-[var(--heading)]">
+                      {copy.title}
+                    </h3>
+                    <p className="mt-2 line-clamp-3 text-sm text-[var(--muted)]">
+                      {copy.excerpt}
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <section className="mx-auto max-w-6xl px-5 pb-14 md:px-8 md:pb-20">
         <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">

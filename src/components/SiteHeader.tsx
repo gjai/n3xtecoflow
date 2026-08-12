@@ -16,6 +16,7 @@ export function SiteHeader() {
     { href: "/produits", label: t("products") },
     { href: "/guides", label: t("guides") },
     { href: "/comparatifs", label: t("comparisons") },
+    { href: "/actualites", label: t("news") },
     { href: "/a-propos", label: t("about") },
     { href: "/contact", label: t("contact") },
   ] as const;
