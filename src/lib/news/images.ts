@@ -454,20 +454,19 @@ export async function resolveNewsCover(args: {
 
   const title = args.title || args.slug;
 
-  // Strong catalog match only (Theragun in title → Theragun packshot).
-  // Never reuse catalog[0] as a generic cover — that made every massage-gun
-  // article share the same Amazon JPG.
-  const packStrong = await resolveProductPackshotCover({
+  // Marque nette dans titre/tags (ex. Theragun) → packshot ; sinon IA pour
+  // des couvertures distinctes (évite le même JPG Amazon sur toutes les actus).
+  const packBrand = await resolveProductPackshotCover({
     title,
     tags: args.tags,
     slug: args.slug,
     siteId,
-    minScore: 8,
+    minScore: 12,
     allowWeakDefault: false,
   });
-  if (packStrong) {
+  if (packBrand) {
     return {
-      imageSrc: packStrong,
+      imageSrc: packBrand,
       imageCredit: newsPackshotCredit(siteId),
       imageKind: "fallback",
     };
@@ -487,7 +486,7 @@ export async function resolveNewsCover(args: {
     };
   }
 
-  // Last resort: any scored packshot (still no weak catalog[0] hors EcoFlow).
+  // Dernier recours : packshot scoré (hors EcoFlow : pas de catalog[0] aveugle).
   const pack = await resolveProductPackshotCover({
     title,
     tags: args.tags,
