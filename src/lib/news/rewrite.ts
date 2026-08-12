@@ -260,6 +260,9 @@ export async function buildArticleFromRss(
     sourceUrl: publisherUrl,
     sourceName: source?.sourceHint || item.sourceName,
     slug,
+    title: fr.title || item.title,
+    excerpt: fr.excerpt,
+    tags,
     ogImageHint: source?.ogImage,
   });
 

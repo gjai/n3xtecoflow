@@ -1,13 +1,15 @@
 import { NEWS_FEEDS, MAX_NEW_PER_RUN } from "./types";
 import { fetchFeedItems, isOnTopicArticle, type RssItem } from "./rss";
 import { buildArticleFromRss, refreshArticle } from "./rewrite";
-import { resolveNewsCover } from "./images";
+import { isStoredNewsImageJunk, resolveNewsCover } from "./images";
 import { readNewsStore, writeNewsStore } from "./store";
 
 export type IngestOptions = {
   limit?: number;
   /** Backfill covers for every article missing an image (one-shot). */
   backfillImagesAll?: boolean;
+  /** Replace Google News logos / junk thumbs with real or AI covers. */
+  fixJunkImages?: boolean;
   /** Rewrite existing articles as full pieces from source (one-shot). */
   refreshExisting?: boolean;
   /** Force refresh even if bodies are already long (e.g. fix images/URLs). */
@@ -132,16 +134,22 @@ export async function ingestNews(
   const purged = beforePurge - store.articles.length;
 
   let backfilled = 0;
-  const backfillCap = options?.backfillImagesAll
-    ? store.articles.length + created.length
-    : 3;
+  const fixAll =
+    Boolean(options?.backfillImagesAll) || Boolean(options?.fixJunkImages);
+  const backfillCap = fixAll ? store.articles.length + created.length : 6;
   for (const article of [...created, ...store.articles]) {
     if (backfilled >= backfillCap) break;
-    if (article.imageSrc) continue;
+    const junk = await isStoredNewsImageJunk(article.imageSrc);
+    const needsCover = !article.imageSrc || junk;
+    if (!needsCover) continue;
+
     const cover = await resolveNewsCover({
       sourceUrl: article.sourceUrl,
       sourceName: article.sourceName,
       slug: article.slug,
+      title: article.fr?.title || article.en?.title,
+      excerpt: article.fr?.excerpt || article.en?.excerpt,
+      tags: article.tags,
     });
     if (!cover) continue;
     article.imageSrc = cover.imageSrc;

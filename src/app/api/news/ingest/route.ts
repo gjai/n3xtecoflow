@@ -21,6 +21,9 @@ function parseOptions(request: Request): IngestOptions {
   const backfillImagesAll =
     url.searchParams.get("backfillImages") === "1" ||
     url.searchParams.get("backfillImagesAll") === "1";
+  const fixJunkImages =
+    url.searchParams.get("fixJunkImages") === "1" ||
+    url.searchParams.get("fixImages") === "1";
   const refreshLimitRaw = url.searchParams.get("refreshLimit");
   const refreshOffsetRaw = url.searchParams.get("refreshOffset");
   const limitRaw = url.searchParams.get("limit");
@@ -28,6 +31,7 @@ function parseOptions(request: Request): IngestOptions {
     refreshExisting,
     forceRefresh,
     backfillImagesAll,
+    fixJunkImages,
     refreshLimit: refreshLimitRaw ? Number(refreshLimitRaw) : undefined,
     refreshOffset: refreshOffsetRaw ? Number(refreshOffsetRaw) : undefined,
     limit: limitRaw ? Number(limitRaw) : undefined,

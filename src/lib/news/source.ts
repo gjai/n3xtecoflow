@@ -98,6 +98,13 @@ function extractOgImage(html: string, baseUrl: string): string | null {
       const absolute = new URL(raw, baseUrl).toString();
       if (!/^https?:\/\//i.test(absolute)) continue;
       if (/logo|favicon|sprite|1x1/i.test(absolute)) continue;
+      if (
+        /(?:gstatic|googleusercontent|ggpht)\.com|news\.google\.com|encrypted-tbn/i.test(
+          absolute,
+        )
+      ) {
+        continue;
+      }
       return absolute;
     } catch {
       /* skip */
