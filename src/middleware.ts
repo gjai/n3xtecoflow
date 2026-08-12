@@ -14,6 +14,7 @@ export default function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.hostname = apex;
     url.protocol = "https";
+    url.port = "";
     return NextResponse.redirect(url, 308);
   }
 
