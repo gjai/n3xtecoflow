@@ -234,32 +234,49 @@ export async function resolveViaPublisherSearch(
     const hrefs = [...page.html.matchAll(/href=["']([^"']+)["']/gi)].map(
       (m) => m[1],
     );
+    const titleLower = title.toLowerCase();
+    const mustTokens = [
+      /ecoflow/i.test(titleLower) ? "ecoflow" : null,
+      /delta/i.test(titleLower) ? "delta" : null,
+      /river/i.test(titleLower) ? "river" : null,
+      /stream/i.test(titleLower) ? "stream" : null,
+      /powerstream/i.test(titleLower) ? "powerstream" : null,
+      /glacier/i.test(titleLower) ? "glacier" : null,
+      /ocean/i.test(titleLower) ? "ocean" : null,
+    ].filter(Boolean) as string[];
+
     const keywords = query
       .toLowerCase()
       .split(/\s+/)
+      .map((w) => w.replace(/[^a-z0-9àâäéèêëïîôùûüç-]/gi, ""))
       .filter((w) => w.length > 3)
-      .slice(0, 6);
+      .slice(0, 8);
 
+    const scored: { url: string; score: number }[] = [];
     for (const href of hrefs) {
       try {
         const abs = new URL(href, page.finalUrl);
         if (!abs.hostname.replace(/^www\./, "").endsWith(host)) continue;
         if (!isLikelyArticleUrl(abs.toString())) continue;
-        if (/\/(tag|category|author|page|search)\b/i.test(abs.pathname)) continue;
-        const path = abs.pathname.toLowerCase();
-        const hit = keywords.filter((k) => path.includes(k.replace(/[^a-z0-9]/gi, "")) || path.includes(k)).length;
-        // slug match OR path looks like a post
-        if (hit >= 2 || /\/(post|article|20\d{2})\//i.test(abs.pathname)) {
-          return abs.toString();
+        if (/\/(tag|category|author|page|search|tag)\b/i.test(abs.pathname)) {
+          continue;
         }
-        if (keywords.some((k) => path.includes(k.toLowerCase().slice(0, 6)))) {
-          return abs.toString();
+        const hay = `${abs.pathname} ${abs.href}`.toLowerCase();
+        if (mustTokens.length && !mustTokens.every((t) => hay.includes(t))) {
+          continue;
         }
+        let score = 0;
+        for (const k of keywords) {
+          if (hay.includes(k)) score += 2;
+        }
+        if (/\/(post|article|20\d{2})\//i.test(abs.pathname)) score += 3;
+        if (score >= 4) scored.push({ url: abs.toString(), score });
       } catch {
         /* skip */
       }
     }
-    return null;
+    scored.sort((a, b) => b.score - a.score);
+    return scored[0]?.url || null;
   } catch {
     return null;
   }
