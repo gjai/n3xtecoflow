@@ -44,6 +44,7 @@ export type IngestResult = {
 
 function articleOnTopic(article: {
   siteId?: SiteId;
+  slug?: string;
   fr?: { title?: string; excerpt?: string };
   en?: { title?: string; excerpt?: string };
 }) {
@@ -51,8 +52,9 @@ function articleOnTopic(article: {
     {
       titleFr: article.fr?.title,
       titleEn: article.en?.title,
-      excerptFr: article.fr?.excerpt,
+      excerptFr: `${article.fr?.excerpt || ""} ${article.slug || ""}`,
       excerptEn: article.en?.excerpt,
+      sourceTitle: article.slug,
     },
     newsSiteId(article),
   );
