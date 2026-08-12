@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 const CONTACT_TO = process.env.CONTACT_TO_EMAIL?.trim() || "djgjai@gmail.com";
+const recent = new Map<string, number>();
 
 type Body = {
   name?: string;
@@ -9,7 +10,23 @@ type Body = {
   website?: string;
 };
 
+function clientIp(request: Request) {
+  return (
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown"
+  );
+}
+
 export async function POST(request: Request) {
+  const ip = clientIp(request);
+  const now = Date.now();
+  const last = recent.get(ip) || 0;
+  if (now - last < 15_000) {
+    return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+  }
+  recent.set(ip, now);
+
   let body: Body;
   try {
     body = (await request.json()) as Body;
@@ -17,7 +34,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  // Honeypot
   if (body.website) {
     return NextResponse.json({ ok: true });
   }

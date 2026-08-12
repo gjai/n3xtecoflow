@@ -93,6 +93,13 @@
   "legal": {
     "mentionsTitle": "Mentions légales",
     "privacyTitle": "Politique de confidentialité",
+    "cookiesTitle": "Politique des cookies",
+    "cookiesMeta": "Cookies nécessaires et cookies publicitaires Google AdSense : finalités, consentement et gestion.",
+    "cookiesIntro": "Cette page décrit les cookies utilisés sur EcoFlow Stream. Vous pouvez accepter ou refuser les cookies publicitaires à tout moment via le bandeau cookies (lien Cookies en bas de page).",
+    "cookiesNecessaryTitle": "Cookies nécessaires",
+    "cookiesNecessaryBody": "Toujours actifs : langue (NEXT_LOCALE), choix de consentement stocké localement, et cookies techniques liés à la sécurité / fonctionnement du site. Ils ne servent pas à de la publicité ciblée.",
+    "cookiesAdsTitle": "Cookies publicitaires (optionnels)",
+    "cookiesAdsBody": "Uniquement après votre accord : Google AdSense peut déposer des cookies pour mesurer et personnaliser les annonces. Si vous refusez, le site reste utilisable sans pubs personnalisées.",
     "affiliateTitle": "Affiliation & publicité",
     "independent": "EcoFlow Stream est un site éditorial indépendant. Il n'est pas exploité par EcoFlow Inc. ni par Amazon.",
     "publisherTitle": "Éditeur du site",
@@ -121,7 +128,7 @@
   "cookies": {
     "title": "Cookies & publicité",
     "body": "Nous utilisons des cookies nécessaires au site et, avec votre accord, des cookies Google AdSense pour afficher des publicités. Plus d'infos dans notre",
-    "privacyLink": "politique de confidentialité",
+    "privacyLink": "politique des cookies",
     "necessary": "Nécessaires : toujours actifs (fonctionnement, langue, sécurité).",
     "advertising": "Publicité : Google AdSense (désactivable).",
     "accept": "Tout accepter",
@@ -135,6 +142,7 @@
     "affiliate": "Affiliation",
     "contact": "Contact",
     "cookies": "Cookies",
+    "manageCookies": "Gérer les cookies",
     "rights": "© {year} EcoFlow Stream"
   },
   "amazon": {

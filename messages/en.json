@@ -93,6 +93,13 @@
   "legal": {
     "mentionsTitle": "Legal notice",
     "privacyTitle": "Privacy policy",
+    "cookiesTitle": "Cookie policy",
+    "cookiesMeta": "Necessary cookies and optional Google AdSense advertising cookies: purposes, consent and controls.",
+    "cookiesIntro": "This page explains cookies used on EcoFlow Stream. You can accept or reject advertising cookies anytime via the cookie banner (Cookies link in the footer).",
+    "cookiesNecessaryTitle": "Necessary cookies",
+    "cookiesNecessaryBody": "Always on: language (NEXT_LOCALE), locally stored consent choice, and technical cookies for security / site operation. They are not used for targeted advertising.",
+    "cookiesAdsTitle": "Advertising cookies (optional)",
+    "cookiesAdsBody": "Only after your consent: Google AdSense may set cookies to measure and personalize ads. If you reject them, the site remains usable without personalized ads.",
     "affiliateTitle": "Affiliate & advertising",
     "independent": "EcoFlow Stream is an independent editorial site. It is not operated by EcoFlow Inc. or Amazon.",
     "publisherTitle": "Publisher",
@@ -121,7 +128,7 @@
   "cookies": {
     "title": "Cookies & ads",
     "body": "We use necessary cookies and, with your consent, Google AdSense cookies to show ads. More details in our",
-    "privacyLink": "privacy policy",
+    "privacyLink": "cookie policy",
     "necessary": "Necessary: always on (site operation, language, security).",
     "advertising": "Advertising: Google AdSense (optional).",
     "accept": "Accept all",
@@ -135,6 +142,7 @@
     "affiliate": "Affiliate",
     "contact": "Contact",
     "cookies": "Cookies",
+    "manageCookies": "Manage cookies",
     "rights": "© {year} EcoFlow Stream"
   },
   "amazon": {
