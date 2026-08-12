@@ -59,31 +59,33 @@ export default async function NewsArticlePage({
   const buyBadge = isEn ? "Amazon affiliate link" : "Lien affilié Amazon";
   const mid = Math.max(2, Math.floor(copy.body.length / 2));
 
-  const amazonBlock = (
-    <div className="space-y-3 rounded-none border border-[var(--accent)] bg-[var(--surface)] p-5">
-      <p className="text-sm font-medium text-[var(--heading)]">
-        {isEn
-          ? cta.product
-            ? `See ${cta.product.name} on Amazon`
-            : "See EcoFlow on Amazon"
-          : cta.product
-            ? `Voir ${cta.product.name} sur Amazon`
-            : "Voir EcoFlow sur Amazon"}
-      </p>
-      <AmazonButton
-        href={cta.href}
-        label={buyLabel}
-        badge={buyBadge}
-        size="lg"
-        priceFallback={
-          isEn
-            ? "See current price on Amazon.fr →"
-            : "Voir le prix actuel sur Amazon.fr →"
-        }
-      />
-      <AffiliateDisclosure compact />
-    </div>
-  );
+  function AmazonCtaBlock() {
+    return (
+      <div className="space-y-3 border border-[var(--accent)] bg-[var(--surface)] p-5">
+        <p className="text-sm font-medium text-[var(--heading)]">
+          {isEn
+            ? cta.product
+              ? `See ${cta.product.name} on Amazon`
+              : "See EcoFlow on Amazon"
+            : cta.product
+              ? `Voir ${cta.product.name} sur Amazon`
+              : "Voir EcoFlow sur Amazon"}
+        </p>
+        <AmazonButton
+          href={cta.href}
+          label={buyLabel}
+          badge={buyBadge}
+          size="lg"
+          priceFallback={
+            isEn
+              ? "See current price on Amazon.fr →"
+              : "Voir le prix actuel sur Amazon.fr →"
+          }
+        />
+        <AffiliateDisclosure compact />
+      </div>
+    );
+  }
 
   return (
     <article>
@@ -132,7 +134,9 @@ export default async function NewsArticlePage({
             </a>
             {article.rewrittenBy === "ai" ? ` · ${t("aiBadge")}` : null}
           </p>
-          <div className="mt-6">{amazonBlock}</div>
+          <div className="mt-6">
+            <AmazonCtaBlock />
+          </div>
         </div>
       </header>
 
@@ -140,7 +144,7 @@ export default async function NewsArticlePage({
         {copy.body.slice(0, mid).map((p) => (
           <p key={p.slice(0, 48)}>{p}</p>
         ))}
-        {amazonBlock}
+        <AmazonCtaBlock />
         {copy.body.slice(mid).map((p) => (
           <p key={p.slice(0, 48)}>{p}</p>
         ))}

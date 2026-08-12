@@ -113,7 +113,8 @@ export default async function CategoryPage({
                   creditUrl: media.creditUrl,
                 }}
                 locale={locale}
-                className="aspect-square w-full border border-[var(--line)] md:aspect-[4/3]"
+                className="aspect-square w-full border border-[var(--line)] bg-[var(--surface)] md:aspect-[4/3]"
+                packshot={media.source !== "category"}
                 sizes="140px"
               />
               <div>

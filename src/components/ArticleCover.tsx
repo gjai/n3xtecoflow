@@ -36,14 +36,20 @@ export function ArticleCover({
       <figure
         className={`relative overflow-hidden bg-[var(--surface)] ${className}`}
       >
-        <Image
-          src={image.src}
-          alt={alt}
-          fill
-          sizes={sizes}
-          priority={priority}
-          className={packshot ? "object-contain p-4" : "object-cover"}
-        />
+        <div
+          className={
+            packshot ? "absolute inset-3 md:inset-5" : "absolute inset-0"
+          }
+        >
+          <Image
+            src={image.src}
+            alt={alt}
+            fill
+            sizes={sizes}
+            priority={priority}
+            className={packshot ? "object-contain" : "object-cover"}
+          />
+        </div>
       </figure>
     );
   }
@@ -57,16 +63,18 @@ export function ArticleCover({
         return (
           <div
             key={`${image.productSlug || image.src}-${idx}`}
-            className="relative border-r border-[var(--line)] last:border-r-0"
+            className="relative h-full min-h-[10rem] border-r border-[var(--line)] last:border-r-0"
           >
-            <Image
-              src={image.src}
-              alt={alt}
-              fill
-              sizes={sizes}
-              priority={priority}
-              className="object-contain p-3 md:p-5"
-            />
+            <div className="absolute inset-3 md:inset-5">
+              <Image
+                src={image.src}
+                alt={alt}
+                fill
+                sizes={sizes}
+                priority={priority}
+                className="object-contain"
+              />
+            </div>
           </div>
         );
       })}

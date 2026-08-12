@@ -109,26 +109,28 @@ export default async function ProductPage({
     ? "See current price on Amazon.fr →"
     : "Voir le prix actuel sur Amazon.fr →";
 
-  const amazonBlock = (
-    <AmazonButton
-      href={amazonHref}
-      label={buyLabel}
-      badge={buyBadge}
-      priceDisplay={displayPrice?.display}
-      priceHint={
-        displayPrice
-          ? isEn
-            ? displayPrice.hintEn
-            : displayPrice.hintFr
-          : undefined
-      }
-      availability={
-        displayPrice?.source === "amazon" ? offer?.availability : undefined
-      }
-      priceFallback={displayPrice ? undefined : priceFallback}
-      size="lg"
-    />
-  );
+  function AmazonCta() {
+    return (
+      <AmazonButton
+        href={amazonHref}
+        label={buyLabel}
+        badge={buyBadge}
+        priceDisplay={displayPrice?.display}
+        priceHint={
+          displayPrice
+            ? isEn
+              ? displayPrice.hintEn
+              : displayPrice.hintFr
+            : undefined
+        }
+        availability={
+          displayPrice?.source === "amazon" ? offer?.availability : undefined
+        }
+        priceFallback={displayPrice ? undefined : priceFallback}
+        size="lg"
+      />
+    );
+  }
 
   return (
     <article>
@@ -168,7 +170,7 @@ export default async function ProductPage({
             <p className="mt-3 text-lg text-[var(--accent)]">{copy.tagline}</p>
             <p className="mt-4 text-[var(--muted)]">{copy.summary}</p>
             <div className="mt-6 max-w-md space-y-3">
-              {amazonBlock}
+              <AmazonCta />
               <AffiliateDisclosure compact />
             </div>
           </div>
@@ -183,6 +185,7 @@ export default async function ProductPage({
             }}
             locale={locale}
             className="aspect-[4/3] w-full border border-[var(--line)] bg-[var(--surface)]"
+            packshot={media.source !== "category"}
             sizes="(max-width: 768px) 100vw, 40vw"
             priority
             showCredit
@@ -322,7 +325,9 @@ export default async function ProductPage({
             <p className="mt-2 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)]">
               {product.name}
             </p>
-            <div className="mt-4">{amazonBlock}</div>
+            <div className="mt-4">
+              <AmazonCta />
+            </div>
             <div className="mt-4">
               <AffiliateDisclosure compact />
             </div>

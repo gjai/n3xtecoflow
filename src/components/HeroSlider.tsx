@@ -68,6 +68,16 @@ export function HeroSlider({
                   i === index ? "hero-kenburns" : ""
                 }`}
               />
+            ) : slide.imageSrc.includes("cdn.shopify.com") ||
+              slide.imageSrc.includes("media-amazon.com") ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={slide.imageSrc}
+                alt={slide.imageAlt}
+                className={`absolute inset-0 h-full w-full object-contain bg-[var(--surface)] opacity-80 ${
+                  i === index ? "hero-kenburns" : ""
+                }`}
+              />
             ) : (
               <Image
                 src={slide.imageSrc}
