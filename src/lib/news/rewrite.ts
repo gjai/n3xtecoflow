@@ -363,14 +363,17 @@ export async function buildArticleFromRss(
     sourceHomepage: item.sourceHomepage,
   });
   const ai = await rewriteWithAi(item, source, siteId);
-  if (ai?.skip) return null;
+  // Soft skip: keep an on-topic template article instead of dropping the item
+  // (massage-gun / tumbler feeds are thin — hard skip starved the news pages).
+  const aiSkipped = Boolean(ai?.skip);
+  if (aiSkipped && !isRelevantItem(item, siteId)) return null;
 
-  const rewrittenBy = ai && ai.fr && ai.en ? "ai" : "template";
+  const rewrittenBy = !aiSkipped && ai && ai.fr && ai.en ? "ai" : "template";
   const fr = normalizeCopy(
-    ai?.fr && !ai.skip ? ai.fr : templateCopy("fr", item, source, siteId),
+    !aiSkipped && ai?.fr ? ai.fr : templateCopy("fr", item, source, siteId),
   );
   const en = normalizeCopy(
-    ai?.en && !ai.skip ? ai.en : templateCopy("en", item, source, siteId),
+    !aiSkipped && ai?.en ? ai.en : templateCopy("en", item, source, siteId),
   );
 
   if (
