@@ -184,7 +184,13 @@ export async function ingestNews(
   const fixAll =
     Boolean(options?.backfillImagesAll) || Boolean(options?.fixJunkImages);
   const forceWrongThemeCovers = Boolean(options?.fixJunkImages);
-  const backfillCap = fixAll ? store.articles.length + created.length : 6;
+  const forceSiteCovers =
+    Boolean(options?.fixJunkImages) &&
+    Boolean(options?.forceRefresh) &&
+    Boolean(options?.siteId);
+  const backfillCap = fixAll || forceSiteCovers
+    ? store.articles.length + created.length
+    : 6;
   for (const article of [...created, ...store.articles]) {
     if (options?.siteId && newsSiteId(article) !== options.siteId) continue;
     if (backfilled >= backfillCap) break;
@@ -196,7 +202,8 @@ export async function ingestNews(
       sid !== "ecoflow" &&
       (credit.includes("ecoflow") ||
         (article.imageKind === "ai" && credit.includes("stream")));
-    const needsCover = !article.imageSrc || junk || wrongTheme;
+    const needsCover =
+      !article.imageSrc || junk || wrongTheme || forceSiteCovers;
     if (!needsCover) continue;
 
     const cover = await resolveNewsCover({

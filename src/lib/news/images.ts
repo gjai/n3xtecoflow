@@ -342,6 +342,15 @@ async function resolveProductPackshotCover(args: {
     .toLowerCase();
 
   const catalog = getProductsForSite(siteId);
+  const tagNorms = (args.tags || [])
+    .map((t) =>
+      t
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, ""),
+    )
+    .filter((t) => t.length >= 3);
   const scored = catalog
     .map((p) => {
       const tokens = [
@@ -359,6 +368,15 @@ async function resolveProductPackshotCover(args: {
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, "");
         if (n.length >= 3 && hay.includes(n)) score += n.length >= 5 ? 3 : 1;
+      }
+      const slugFlat = p.slug.replace(/-/g, "");
+      const nameFlat = p.name
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "");
+      for (const tag of tagNorms) {
+        if (slugFlat.includes(tag) || nameFlat.includes(tag)) score += 10;
       }
       return { p, score };
     })
