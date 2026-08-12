@@ -1,10 +1,13 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AmazonButton } from "@/components/AmazonButton";
+import { CoverImage } from "@/components/CoverImage";
 import { HeroVisual } from "@/components/HeroVisual";
 import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/JsonLd";
 import { AMAZON_QUERIES, buildAmazonSearchUrl } from "@/lib/amazon";
+import { categoryImages, editorialImages, heroImage } from "@/data/images";
 import { categories, products } from "@/data/products";
 import { comparisons, guides } from "@/data/articles";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
@@ -32,6 +35,17 @@ export default async function HomePage({
       <JsonLd data={websiteJsonLd(siteUrl)} />
 
       <section className="hero-grid relative min-h-[100svh] overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src={heroImage.src}
+            alt={isEn ? heroImage.altEn : heroImage.altFr}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-45 dark:opacity-35"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--hero-from)] via-[color-mix(in_srgb,var(--hero-from)_75%,transparent)] to-transparent" />
+        </div>
         <HeroVisual />
         <div className="relative mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-5 pb-16 pt-28 md:justify-center md:px-8 md:pb-24">
           <p className="reveal font-[family-name:var(--font-display)] text-sm uppercase tracking-[0.28em] text-[var(--accent)]">
@@ -123,17 +137,25 @@ export default async function HomePage({
                   <Link
                     key={article.slug}
                     href={`/actualites/${article.slug}`}
-                    className="border border-[var(--line)] bg-[var(--bg)] p-4 transition hover:border-[var(--accent)]"
+                    className="overflow-hidden border border-[var(--line)] bg-[var(--bg)] transition hover:border-[var(--accent)]"
                   >
-                    <p className="text-xs text-[var(--muted)]">
-                      {article.sourceName}
-                    </p>
-                    <h3 className="mt-2 font-semibold text-[var(--heading)]">
-                      {copy.title}
-                    </h3>
-                    <p className="mt-2 line-clamp-3 text-sm text-[var(--muted)]">
-                      {copy.excerpt}
-                    </p>
+                    <CoverImage
+                      image={editorialImages.news}
+                      locale={locale}
+                      className="aspect-[16/9] w-full"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                    <div className="p-4">
+                      <p className="text-xs text-[var(--muted)]">
+                        {article.sourceName}
+                      </p>
+                      <h3 className="mt-2 font-semibold text-[var(--heading)]">
+                        {copy.title}
+                      </h3>
+                      <p className="mt-2 line-clamp-3 text-sm text-[var(--muted)]">
+                        {copy.excerpt}
+                      </p>
+                    </div>
                   </Link>
                 );
               })}
@@ -151,15 +173,23 @@ export default async function HomePage({
             <Link
               key={cat.id}
               href={`/produits/${cat.slug}`}
-              className="group border border-[var(--line)] bg-[var(--surface)] p-5 transition hover:border-[var(--accent)]"
+              className="group overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
             >
-              <div className="mb-4 h-1 w-10 bg-[var(--accent)] transition group-hover:w-16" />
-              <h3 className="text-lg font-semibold text-[var(--heading)]">
-                {isEn ? cat.en.title : cat.fr.title}
-              </h3>
-              <p className="mt-3 text-sm text-[var(--muted)]">
-                {isEn ? cat.en.intro : cat.fr.intro}
-              </p>
+              <CoverImage
+                image={categoryImages[cat.id]}
+                locale={locale}
+                className="aspect-[16/9] w-full"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+              <div className="p-5">
+                <div className="mb-4 h-1 w-10 bg-[var(--accent)] transition group-hover:w-16" />
+                <h3 className="text-lg font-semibold text-[var(--heading)]">
+                  {isEn ? cat.en.title : cat.fr.title}
+                </h3>
+                <p className="mt-3 text-sm text-[var(--muted)]">
+                  {isEn ? cat.en.intro : cat.fr.intro}
+                </p>
+              </div>
             </Link>
           ))}
         </div>

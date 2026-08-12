@@ -1,7 +1,9 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
+import { CoverImage } from "@/components/CoverImage";
 import { comparisons } from "@/data/articles";
+import { editorialImages } from "@/data/images";
 
 export async function generateMetadata({
   params,
@@ -46,10 +48,20 @@ export default async function ComparisonsIndexPage({
             <Link
               key={item.slug}
               href={`/comparatifs/${item.slug}`}
-              className="border border-[var(--line)] bg-[var(--surface)] p-6 transition hover:border-[var(--accent)]"
+              className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
             >
-              <h2 className="text-xl font-semibold text-[var(--heading)]">{copy.title}</h2>
-              <p className="mt-3 text-sm text-[var(--muted)]">{copy.subtitle}</p>
+              <CoverImage
+                image={editorialImages.comparatifs}
+                locale={locale}
+                className="aspect-[16/9] w-full"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              <div className="p-6">
+                <h2 className="text-xl font-semibold text-[var(--heading)]">
+                  {copy.title}
+                </h2>
+                <p className="mt-3 text-sm text-[var(--muted)]">{copy.subtitle}</p>
+              </div>
             </Link>
           );
         })}

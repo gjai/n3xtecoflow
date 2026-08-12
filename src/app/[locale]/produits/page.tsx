@@ -1,6 +1,8 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
+import { CoverImage } from "@/components/CoverImage";
+import { categoryImages } from "@/data/images";
 import {
   categories,
   getLocalizedCategory,
@@ -51,13 +53,23 @@ export default async function ProductsIndexPage({
             <Link
               key={cat.id}
               href={`/produits/${cat.slug}`}
-              className="border border-[var(--line)] bg-[var(--surface)] p-6 transition hover:border-[var(--accent)]"
+              className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
             >
-              <h2 className="text-xl font-semibold text-[var(--heading)]">{copy.title}</h2>
-              <p className="mt-3 text-sm text-[var(--muted)]">{copy.intro}</p>
-              <p className="mt-4 text-xs uppercase tracking-[0.16em] text-[var(--accent)]">
-                {count} {isEn ? "products" : "produits"}
-              </p>
+              <CoverImage
+                image={categoryImages[cat.id]}
+                locale={locale}
+                className="aspect-[16/10] w-full"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+              <div className="p-6">
+                <h2 className="text-xl font-semibold text-[var(--heading)]">
+                  {copy.title}
+                </h2>
+                <p className="mt-3 text-sm text-[var(--muted)]">{copy.intro}</p>
+                <p className="mt-4 text-xs uppercase tracking-[0.16em] text-[var(--accent)]">
+                  {count} {isEn ? "products" : "produits"}
+                </p>
+              </div>
             </Link>
           );
         })}

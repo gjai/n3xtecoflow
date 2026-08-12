@@ -1,7 +1,19 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
+import { CoverImage } from "@/components/CoverImage";
 import { guides } from "@/data/articles";
+import { editorialImages } from "@/data/images";
+
+function guideImage(slug: string) {
+  if (slug.includes("camping") || slug.includes("van")) {
+    return editorialImages.camping;
+  }
+  if (slug.includes("backup") || slug.includes("maison")) {
+    return editorialImages.backup;
+  }
+  return editorialImages.guides;
+}
 
 export async function generateMetadata({
   params,
@@ -46,25 +58,43 @@ export default async function GuidesIndexPage({
             <Link
               key={guide.slug}
               href={`/guides/${guide.slug}`}
-              className="border border-[var(--line)] bg-[var(--surface)] p-6 transition hover:border-[var(--accent)]"
+              className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
             >
-              <h2 className="text-xl font-semibold text-[var(--heading)]">{copy.title}</h2>
-              <p className="mt-3 text-sm text-[var(--muted)]">{copy.subtitle}</p>
+              <CoverImage
+                image={guideImage(guide.slug)}
+                locale={locale}
+                className="aspect-[16/9] w-full"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              <div className="p-6">
+                <h2 className="text-xl font-semibold text-[var(--heading)]">
+                  {copy.title}
+                </h2>
+                <p className="mt-3 text-sm text-[var(--muted)]">{copy.subtitle}</p>
+              </div>
             </Link>
           );
         })}
         <Link
           href="/produits"
-          className="border border-[var(--line)] bg-[var(--surface)] p-6 transition hover:border-[var(--accent)]"
+          className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
         >
-          <h2 className="text-xl font-semibold text-[var(--heading)]">
-            {isEn ? "Full product catalog" : "Catalogue produits complet"}
-          </h2>
-          <p className="mt-3 text-sm text-[var(--muted)]">
-            {isEn
-              ? "Specs and notes for RIVER, DELTA, Pro, PowerStream, solar."
-              : "Fiches et specs RIVER, DELTA, Pro, PowerStream, solaire."}
-          </p>
+          <CoverImage
+            image={editorialImages.comparatifs}
+            locale={locale}
+            className="aspect-[16/9] w-full"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+          <div className="p-6">
+            <h2 className="text-xl font-semibold text-[var(--heading)]">
+              {isEn ? "Full product catalog" : "Catalogue produits complet"}
+            </h2>
+            <p className="mt-3 text-sm text-[var(--muted)]">
+              {isEn
+                ? "Specs and notes for RIVER, DELTA, Pro, PowerStream, solar."
+                : "Fiches et specs RIVER, DELTA, Pro, PowerStream, solaire."}
+            </p>
+          </div>
         </Link>
       </div>
     </div>

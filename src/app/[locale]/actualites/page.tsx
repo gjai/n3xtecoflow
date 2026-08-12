@@ -1,6 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
+import { CoverImage } from "@/components/CoverImage";
+import { editorialImages } from "@/data/images";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 
 export const dynamic = "force-dynamic";
@@ -55,25 +57,33 @@ export default async function NewsIndexPage({
               <Link
                 key={article.slug}
                 href={`/actualites/${article.slug}`}
-                className="border border-[var(--line)] bg-[var(--surface)] p-5 transition hover:border-[var(--accent)]"
+                className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
               >
-                <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
-                  <time dateTime={article.publishedAt}>{date}</time>
-                  <span>·</span>
-                  <span>{article.sourceName}</span>
-                  {article.rewrittenBy === "ai" ? (
-                    <span className="text-[var(--accent)]">{t("aiBadge")}</span>
-                  ) : null}
+                <CoverImage
+                  image={editorialImages.news}
+                  locale={locale}
+                  className="aspect-[16/9] w-full"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="p-5">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
+                    <time dateTime={article.publishedAt}>{date}</time>
+                    <span>·</span>
+                    <span>{article.sourceName}</span>
+                    {article.rewrittenBy === "ai" ? (
+                      <span className="text-[var(--accent)]">{t("aiBadge")}</span>
+                    ) : null}
+                  </div>
+                  <h2 className="mt-3 text-xl font-semibold text-[var(--heading)]">
+                    {copy.title}
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">
+                    {copy.excerpt}
+                  </p>
+                  <span className="mt-4 inline-block text-sm font-semibold text-[var(--accent)]">
+                    {t("read")}
+                  </span>
                 </div>
-                <h2 className="mt-3 text-xl font-semibold text-[var(--heading)]">
-                  {copy.title}
-                </h2>
-                <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">
-                  {copy.excerpt}
-                </p>
-                <span className="mt-4 inline-block text-sm font-semibold text-[var(--accent)]">
-                  {t("read")}
-                </span>
               </Link>
             );
           })

@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AmazonButton } from "@/components/AmazonButton";
+import { CoverImage } from "@/components/CoverImage";
 import { JsonLd, productJsonLd } from "@/components/JsonLd";
+import { getCategoryImage } from "@/data/images";
 import { buildAmazonSearchUrl } from "@/lib/amazon";
 import {
   getCategory,
@@ -34,6 +36,7 @@ export async function generateMetadata({
   const product = getProduct(category, slug);
   if (!product) return {};
   const copy = getLocalizedProduct(product, locale);
+  const image = getCategoryImage(product.category);
   return {
     title: `${product.name} — ${copy.tagline}`,
     description: copy.summary,
@@ -48,6 +51,7 @@ export async function generateMetadata({
       title: product.name,
       description: copy.summary,
       type: "website",
+      images: [{ url: image.src }],
     },
   };
 }
@@ -69,6 +73,7 @@ export default async function ProductPage({
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
   const productUrl = `${siteUrl}/${locale}/produits/${cat.slug}/${product.slug}`;
+  const image = getCategoryImage(product.category);
 
   return (
     <article className="pt-24">
@@ -85,24 +90,37 @@ export default async function ProductPage({
         })}
       />
       <header className="hero-grid border-b border-[var(--line)]">
-        <div className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-16">
-          <p className="text-sm text-[var(--muted)]">
-            <Link href="/produits" className="hover:text-[var(--heading)]">
-              {isEn ? "Catalog" : "Catalogue"}
-            </Link>
-            {" / "}
-            <Link href={`/produits/${cat.slug}`} className="hover:text-[var(--heading)]">
-              {catCopy.title}
-            </Link>
-          </p>
-          <h1 className="mt-4 font-[family-name:var(--font-display)] text-4xl font-semibold tracking-tight md:text-5xl">
-            {product.name}
-          </h1>
-          <p className="mt-3 text-lg text-[var(--accent)]">{copy.tagline}</p>
-          <p className="mt-4 text-[var(--muted)]">{copy.summary}</p>
-          <div className="mt-6">
-            <AffiliateDisclosure compact />
+        <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-[1.1fr_0.9fr] md:items-center md:px-8 md:py-16">
+          <div>
+            <p className="text-sm text-[var(--muted)]">
+              <Link href="/produits" className="hover:text-[var(--heading)]">
+                {isEn ? "Catalog" : "Catalogue"}
+              </Link>
+              {" / "}
+              <Link
+                href={`/produits/${cat.slug}`}
+                className="hover:text-[var(--heading)]"
+              >
+                {catCopy.title}
+              </Link>
+            </p>
+            <h1 className="mt-4 font-[family-name:var(--font-display)] text-4xl font-semibold tracking-tight md:text-5xl">
+              {product.name}
+            </h1>
+            <p className="mt-3 text-lg text-[var(--accent)]">{copy.tagline}</p>
+            <p className="mt-4 text-[var(--muted)]">{copy.summary}</p>
+            <div className="mt-6">
+              <AffiliateDisclosure compact />
+            </div>
           </div>
+          <CoverImage
+            image={image}
+            locale={locale}
+            className="aspect-[4/3] w-full border border-[var(--line)]"
+            sizes="(max-width: 768px) 100vw, 40vw"
+            priority
+            showCredit
+          />
         </div>
       </header>
 
