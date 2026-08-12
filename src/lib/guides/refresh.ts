@@ -134,9 +134,94 @@ function expandStatic(sections: ArticleSection[]): ArticleSection[] {
   ];
 }
 
+function fromTopic(topic: (typeof GUIDE_TOPICS)[number]): GuideEntry {
+  return {
+    slug: topic.slug,
+    fr: {
+      title: topic.topicFr,
+      subtitle: topic.angleFr,
+      sections: [
+        {
+          heading: "Guide en cours d’enrichissement",
+          paragraphs: [
+            `Ce guide couvre : ${topic.angleFr}.`,
+            "Le contenu détaillé est généré et mis à jour automatiquement — revenez bientôt pour la version complète.",
+          ],
+        },
+        {
+          heading: "En attendant",
+          paragraphs: [
+            "Parcourez les fiches produits et les hubs comparatifs pour comparer les modèles EcoFlow disponibles.",
+          ],
+        },
+        {
+          heading: "Checklist rapide",
+          paragraphs: [
+            "Notez vos besoins en Wh/W, le mode de recharge (secteur / solaire), et le budget avant d’acheter.",
+          ],
+        },
+        {
+          heading: "Affiliation",
+          paragraphs: [
+            "Les liens Amazon de ce site sont affiliés : un achat via ces liens peut nous soutenir sans surcoût.",
+          ],
+        },
+        {
+          heading: "Suite",
+          paragraphs: [
+            "Consultez aussi les autres guides d’achat et les comparatifs par gamme.",
+          ],
+        },
+      ],
+    },
+    en: {
+      title: topic.topicEn,
+      subtitle: topic.angleEn,
+      sections: [
+        {
+          heading: "Guide being enriched",
+          paragraphs: [
+            `This guide covers: ${topic.angleEn}.`,
+            "Detailed content is generated and updated automatically — check back soon for the full version.",
+          ],
+        },
+        {
+          heading: "Meanwhile",
+          paragraphs: [
+            "Browse product sheets and comparison hubs to compare available EcoFlow models.",
+          ],
+        },
+        {
+          heading: "Quick checklist",
+          paragraphs: [
+            "Note your Wh/W needs, charging mode (AC / solar), and budget before buying.",
+          ],
+        },
+        {
+          heading: "Affiliation",
+          paragraphs: [
+            "Amazon links on this site are affiliate links and may support us at no extra cost to you.",
+          ],
+        },
+        {
+          heading: "Next steps",
+          paragraphs: [
+            "Also explore the other buying guides and category comparison hubs.",
+          ],
+        },
+      ],
+    },
+    model: "stub",
+    updatedAt: new Date().toISOString(),
+  };
+}
+
 function fromStatic(slug: string): GuideEntry | null {
   const g = staticGuides.find((x) => x.slug === slug);
-  if (!g) return null;
+  if (!g) {
+    const topic = GUIDE_TOPICS.find((t) => t.slug === slug);
+    return topic ? fromTopic(topic) : null;
+  }
   return {
     slug,
     fr: {
@@ -271,18 +356,13 @@ export async function resolveGuide(slug: string): Promise<GuideEntry | null> {
 export async function resolveAllGuides(): Promise<GuideEntry[]> {
   const store = await readGuidesStore();
   const bySlug = new Map<string, GuideEntry>();
-  for (const g of staticGuides) {
-    const e = fromStatic(g.slug);
-    if (e) bySlug.set(g.slug, e);
+  for (const topic of GUIDE_TOPICS) {
+    const stored = store.entries[topic.slug];
+    bySlug.set(topic.slug, stored || fromStatic(topic.slug)!);
   }
+  // Keep any extra store entries not in GUIDE_TOPICS
   for (const [slug, e] of Object.entries(store.entries)) {
-    bySlug.set(slug, e);
-  }
-  // Include AI-only topics even without static
-  for (const t of GUIDE_TOPICS) {
-    if (!bySlug.has(t.slug) && store.entries[t.slug]) {
-      bySlug.set(t.slug, store.entries[t.slug]);
-    }
+    if (!bySlug.has(slug)) bySlug.set(slug, e);
   }
   return [...bySlug.values()].sort((a, b) => a.slug.localeCompare(b.slug));
 }
