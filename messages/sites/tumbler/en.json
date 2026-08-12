@@ -14,12 +14,30 @@
     "slideNewsExcerpt": "Picks and notes to follow the insulated drinkware market.",
     "feature1Text": "Independent editorial analysis — not a brand site. We do not resell products.",
     "feature2Text": "Capacity, insulation, lid, care: straight to the choice, with limits and trade-offs shown.",
+    "spotlightName": "Insulated picks",
+    "spotlightText": "Bestselling bottles and tumblers — Ships and sold by Amazon.",
+    "spotlightCta": "Browse the catalog",
     "howBody1": "Each product sheet summarizes useful criteria (volume, insulation, lid, care) and a use-case take: sport, desk, travel. This is a comparison tool, not a merchant catalog.",
     "howBody2": "Guides explain the method (bottle vs tumbler, hot/cold insulation, stainless care). Comparisons help pick between two models.",
     "howBody3": "Prices and stock move fast: our Amazon links open an up-to-date listing or search. Prefer Ships and sold by Amazon when possible."
   },
   "guides": {
-    "subtitle": "Choose an insulated bottle or tumbler for your use case."
+    "subtitle": "Choose an insulated bottle or tumbler for your use case.",
+    "buyersTitle": "Buying guide: bottles & tumblers",
+    "buyersText": "Volume, insulation, lid and care: how to choose with confidence."
+  },
+  "guideBuyers": {
+    "title": "Buying guide: insulated bottles",
+    "subtitle": "Volume, insulation and lid — the criteria that matter."
+  },
+  "guideCamping": {
+    "title": "Insulated bottles for daily use",
+    "subtitle": "Sport, desk, travel: size without overbuying."
+  },
+  "powerstream": {
+    "title": "Catalog",
+    "subtitle": "Insulated bottles and tumblers shortlist.",
+    "intro": "Browse the catalog to compare models."
   },
   "legal": {
     "hubMeta": "Publisher, host, privacy, cookies, affiliate and advertising — La gourde isotherme legal information.",
