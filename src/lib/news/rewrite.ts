@@ -54,12 +54,22 @@ type AiPayload = {
 
 async function rewriteWithAi(item: RssItem): Promise<AiPayload | null> {
   const apiKey =
-    process.env.OPENAI_API_KEY?.trim() || process.env.AI_API_KEY?.trim();
+    process.env.GEMINI_API_KEY?.trim() ||
+    process.env.OPENAI_API_KEY?.trim() ||
+    process.env.AI_API_KEY?.trim();
   if (!apiKey) return null;
 
+  const usingGemini = Boolean(process.env.GEMINI_API_KEY?.trim()) ||
+    (process.env.OPENAI_BASE_URL || "").includes("generativelanguage.googleapis.com");
+
   const base =
-    process.env.OPENAI_BASE_URL?.trim() || "https://api.openai.com/v1";
-  const model = process.env.OPENAI_MODEL?.trim() || "gpt-4o-mini";
+    process.env.OPENAI_BASE_URL?.trim() ||
+    (usingGemini
+      ? "https://generativelanguage.googleapis.com/v1beta/openai/"
+      : "https://api.openai.com/v1");
+  const model =
+    process.env.OPENAI_MODEL?.trim() ||
+    (usingGemini ? "gemini-2.0-flash" : "gpt-4o-mini");
 
   const prompt = `Tu es rédacteur pour EcoFlow Stream, site éditorial indépendant FR/EN.
 À partir d'un titre/description d'actualité réelle, écris une SYNTHÈSE ORIGINALE (pas de copier-coller).
@@ -80,25 +90,30 @@ url=${item.link}
 Format JSON:
 {"fr":{"title":"...","excerpt":"...","body":["..."]},"en":{"title":"...","excerpt":"...","body":["..."]},"tags":["ecoflow","delta"]}`;
 
+  const payload: Record<string, unknown> = {
+    model,
+    temperature: 0.4,
+    messages: [
+      {
+        role: "system",
+        content:
+          "You write original bilingual editorial news summaries as strict JSON only. No markdown fences.",
+      },
+      { role: "user", content: prompt },
+    ],
+  };
+  // Gemini OpenAI-compat may ignore response_format; keep for OpenAI
+  if (!usingGemini) {
+    payload.response_format = { type: "json_object" };
+  }
+
   const res = await fetch(`${base.replace(/\/$/, "")}/chat/completions`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      model,
-      temperature: 0.4,
-      response_format: { type: "json_object" },
-      messages: [
-        {
-          role: "system",
-          content:
-            "You write original bilingual editorial news summaries as strict JSON.",
-        },
-        { role: "user", content: prompt },
-      ],
-    }),
+    body: JSON.stringify(payload),
   });
 
   if (!res.ok) {
@@ -109,8 +124,9 @@ Format JSON:
   const json = (await res.json()) as {
     choices?: { message?: { content?: string } }[];
   };
-  const content = json.choices?.[0]?.message?.content;
+  let content = json.choices?.[0]?.message?.content;
   if (!content) return null;
+  content = content.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/i, "").trim();
 
   try {
     const parsed = JSON.parse(content) as AiPayload;
