@@ -44,7 +44,7 @@ export function HeroSlider({
 
   return (
     <section
-      className="hero-grid relative min-h-[100svh] overflow-hidden"
+      className="hero-grid relative min-h-[68svh] overflow-hidden md:min-h-[62svh]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-roledescription="carousel"
@@ -86,22 +86,22 @@ export function HeroSlider({
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--hero-from)]/80 via-transparent to-[var(--hero-from)]/30" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-5 pb-16 pt-28 md:justify-center md:px-8 md:pb-24">
+      <div className="relative mx-auto flex min-h-[68svh] max-w-6xl flex-col justify-end px-5 pb-10 pt-24 md:min-h-[62svh] md:justify-center md:px-8 md:pb-14">
         <p className="reveal font-[family-name:var(--font-display)] text-sm uppercase tracking-[0.28em] text-[var(--accent)]">
           {brandName}
         </p>
 
-        <div key={active.id} className="hero-slide-copy mt-4 max-w-2xl">
+        <div key={active.id} className="hero-slide-copy mt-3 max-w-2xl">
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--hero-muted)]">
             {active.kind}
           </p>
-          <h1 className="mt-3 font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.05] tracking-tight text-[var(--hero-fg)] sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold leading-[1.05] tracking-tight text-[var(--hero-fg)] sm:text-4xl md:text-5xl lg:text-6xl">
             {active.title}
           </h1>
-          <p className="mt-6 max-w-xl text-base text-[var(--hero-muted)] md:text-lg">
+          <p className="mt-4 max-w-xl text-sm text-[var(--hero-muted)] md:text-base">
             {active.excerpt}
           </p>
-          <div className="mt-10 flex flex-wrap gap-3 sm:gap-4">
+          <div className="mt-7 flex flex-wrap gap-3 sm:gap-4">
             <Link
               href={active.href}
               className="bg-[var(--accent)] px-5 py-3 text-sm font-semibold tracking-wide text-[var(--accent-ink)] transition hover:brightness-110"
@@ -111,12 +111,12 @@ export function HeroSlider({
           </div>
         </div>
 
-        <div className="reveal-delay-2 mt-8 max-w-xl">
+        <div className="reveal-delay-2 mt-5 max-w-xl">
           <AffiliateDisclosure compact />
         </div>
 
         {count > 1 ? (
-          <div className="mt-10 flex items-center gap-3">
+          <div className="mt-6 flex items-center gap-3">
             {slides.map((slide, i) => (
               <button
                 key={slide.id}

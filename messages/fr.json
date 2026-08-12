@@ -212,14 +212,14 @@
     "eyebrow": "Revue de presse",
     "title": "Actualités EcoFlow",
     "subtitle": "Synthèses éditoriales à partir d’annonces et articles récents — mises à jour automatiquement.",
-    "disclaimer": "Nous ne republions pas les articles d’origine : chaque texte est une synthèse indépendante avec lien vers la source.",
+    "disclaimer": "Nous ne republions pas l’article d’origine : chaque texte est un article éditorial indépendant, rédigé à partir de la source citée.",
     "empty": "Aucune actu pour le moment — le prochain passage automatique va peupler cette section.",
-    "read": "Lire la synthèse",
+    "read": "Lire l’article",
     "back": "Toutes les actualités",
     "source": "Source",
     "readSource": "Voir l’article source",
     "catalogCta": "Comparer les produits EcoFlow →",
-    "aiBadge": "Réécrit IA"
+    "aiBadge": "Article éditorial"
   },
   "network": {
     "title": "Réseau de sites",

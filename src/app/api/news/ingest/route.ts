@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { ingestNews } from "@/lib/news/ingest";
+import { ingestNews, type IngestOptions } from "@/lib/news/ingest";
+
+export const maxDuration = 300;
 
 function authorized(request: Request) {
   const secret = process.env.NEWS_CRON_SECRET?.trim();
@@ -10,13 +12,38 @@ function authorized(request: Request) {
   return bearer === secret || query === secret;
 }
 
+function parseOptions(request: Request): IngestOptions {
+  const url = new URL(request.url);
+  const refreshExisting =
+    url.searchParams.get("refresh") === "1" ||
+    url.searchParams.get("refreshExisting") === "1";
+  const backfillImagesAll =
+    url.searchParams.get("backfillImages") === "1" ||
+    url.searchParams.get("backfillImagesAll") === "1";
+  const refreshLimitRaw = url.searchParams.get("refreshLimit");
+  const limitRaw = url.searchParams.get("limit");
+  return {
+    refreshExisting,
+    backfillImagesAll,
+    refreshLimit: refreshLimitRaw ? Number(refreshLimitRaw) : undefined,
+    limit: limitRaw ? Number(limitRaw) : undefined,
+  };
+}
+
 export async function POST(request: Request) {
   if (!authorized(request)) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
   try {
-    const result = await ingestNews();
+    let options = parseOptions(request);
+    try {
+      const body = (await request.json()) as IngestOptions;
+      options = { ...options, ...body };
+    } catch {
+      /* no JSON body */
+    }
+    const result = await ingestNews(options);
     return NextResponse.json(result);
   } catch (err) {
     console.error(err);
@@ -25,6 +52,5 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
-  // Allow GET for simple cron wget/curl
   return POST(request);
 }

@@ -1,8 +1,18 @@
 import { NEWS_FEEDS, MAX_NEW_PER_RUN } from "./types";
 import { fetchFeedItems, type RssItem } from "./rss";
-import { buildArticleFromRss } from "./rewrite";
+import { buildArticleFromRss, refreshArticle } from "./rewrite";
 import { resolveNewsCover } from "./images";
 import { readNewsStore, writeNewsStore } from "./store";
+
+export type IngestOptions = {
+  limit?: number;
+  /** Backfill covers for every article missing an image (one-shot). */
+  backfillImagesAll?: boolean;
+  /** Rewrite existing articles as full pieces from source (one-shot). */
+  refreshExisting?: boolean;
+  /** Max existing articles to refresh in one run. */
+  refreshLimit?: number;
+};
 
 export type IngestResult = {
   ok: true;
@@ -10,13 +20,15 @@ export type IngestResult = {
   created: number;
   skipped: number;
   backfilled: number;
+  refreshed: number;
   slugs: string[];
+  refreshedSlugs: string[];
   aiUsed: boolean;
 };
 
-export async function ingestNews(options?: {
-  limit?: number;
-}): Promise<IngestResult> {
+export async function ingestNews(
+  options?: IngestOptions,
+): Promise<IngestResult> {
   const limit = options?.limit ?? MAX_NEW_PER_RUN;
   const store = await readNewsStore();
   const known = new Set(store.articles.map((a) => a.sourceGuid));
@@ -51,9 +63,30 @@ export async function ingestNews(options?: {
     created.push(article);
   }
 
+  let refreshed = 0;
+  const refreshedSlugs: string[] = [];
+  if (options?.refreshExisting) {
+    const refreshLimit = options.refreshLimit ?? store.articles.length;
+    const targets = store.articles.slice(0, refreshLimit);
+    for (let i = 0; i < targets.length; i++) {
+      try {
+        const next = await refreshArticle(targets[i]);
+        if (next.rewrittenBy === "ai") aiUsed = true;
+        store.articles[i] = next;
+        refreshed += 1;
+        refreshedSlugs.push(next.slug);
+      } catch (err) {
+        console.error("refresh_failed", targets[i].slug, err);
+      }
+    }
+  }
+
   let backfilled = 0;
-  for (const article of store.articles) {
-    if (backfilled >= 3) break;
+  const backfillCap = options?.backfillImagesAll
+    ? store.articles.length + created.length
+    : 3;
+  for (const article of [...created, ...store.articles]) {
+    if (backfilled >= backfillCap) break;
     if (article.imageSrc) continue;
     const cover = await resolveNewsCover({
       sourceUrl: article.sourceUrl,
@@ -67,7 +100,7 @@ export async function ingestNews(options?: {
     backfilled += 1;
   }
 
-  if (created.length || backfilled) {
+  if (created.length || backfilled || refreshed) {
     store.articles = [...created, ...store.articles];
     await writeNewsStore(store);
   }
@@ -78,7 +111,9 @@ export async function ingestNews(options?: {
     created: created.length,
     skipped: Math.max(0, byGuid.size - created.length),
     backfilled,
+    refreshed,
     slugs: created.map((a) => a.slug),
+    refreshedSlugs,
     aiUsed,
   };
 }

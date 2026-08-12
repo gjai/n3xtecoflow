@@ -159,12 +159,6 @@ a {
   }
 }
 
-@media (max-width: 640px) {
-  .hero-grid {
-    min-height: 100svh;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal-delay,

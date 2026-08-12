@@ -2,6 +2,7 @@ import type { NewsArticle, NewsLocaleCopy } from "./types";
 import type { RssItem } from "./rss";
 import { makeSlug } from "./store";
 import { resolveNewsCover } from "./images";
+import { fetchSourcePage, type SourcePage } from "./source";
 
 function cleanTitle(title: string) {
   return title.replace(/\s+-\s+[^-]+$/, "").trim();
@@ -10,39 +11,48 @@ function cleanTitle(title: string) {
 function templateCopy(
   locale: "fr" | "en",
   item: RssItem,
+  source: SourcePage | null,
 ): NewsLocaleCopy {
-  const title = cleanTitle(item.title);
+  const title = cleanTitle(source?.title || item.title);
   const when = new Date(item.publishedAt).toLocaleDateString(
     locale === "fr" ? "fr-FR" : "en-US",
     { year: "numeric", month: "long", day: "numeric" },
   );
+  const raw = (source?.text || item.description || "").trim();
+  const chunks = raw
+    .split(/\n{2,}|(?<=\.)\s+(?=[A-ZÀ-Ü])/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 40)
+    .slice(0, 8);
 
   if (locale === "fr") {
+    const body = [
+      `Selon ${item.sourceName} (${when}), l’actualité porte sur : ${title}.`,
+      ...chunks.slice(0, 5),
+      `Pour les lecteurs EcoFlow Stream : croisez toujours capacité (Wh), puissance (W), compatibilité STREAM / stations et le prix du jour avant d’acheter.`,
+      `Article rédigé à partir de la source citée — vérifiez le texte d’origine pour les détails primaires.`,
+    ].filter(Boolean);
     return {
       title,
-      excerpt: `Revue de presse (${item.sourceName}, ${when}) : points clés pour les lecteurs EcoFlow Stream.`,
-      body: [
-        `Une information relayée par ${item.sourceName} le ${when} attire l’attention sur l’écosystème EcoFlow.`,
-        item.description
-          ? `Contexte signalé par la source : ${item.description.slice(0, 280)}${item.description.length > 280 ? "…" : ""}`
-          : `Le titre mis en avant concerne : « ${title} ».`,
-        `Notre lecture éditoriale : vérifiez toujours les specs (Wh, W, compatibilité STREAM / stations) et le prix du jour avant d’acheter. Les promos et stocks bougent vite.`,
-        `Cet article est une synthèse indépendante, pas une reprise intégrale. Pour le détail d’origine, consultez la source citée.`,
-      ],
+      excerpt:
+        chunks[0]?.slice(0, 220) ||
+        `Couverture ${item.sourceName} du ${when} sur l’écosystème EcoFlow.`,
+      body,
     };
   }
 
+  const body = [
+    `According to ${item.sourceName} (${when}), the story focuses on: ${title}.`,
+    ...chunks.slice(0, 5),
+    `For EcoFlow Stream readers: always cross-check capacity (Wh), output (W), STREAM / station compatibility, and live pricing before buying.`,
+    `Written from the cited source — check the original for primary details.`,
+  ].filter(Boolean);
   return {
     title,
-    excerpt: `Press roundup (${item.sourceName}, ${when}): key points for EcoFlow Stream readers.`,
-    body: [
-      `Coverage from ${item.sourceName} on ${when} highlights a development around the EcoFlow ecosystem.`,
-      item.description
-        ? `Source context: ${item.description.slice(0, 280)}${item.description.length > 280 ? "…" : ""}`
-        : `Headline focus: “${title}”.`,
-      `Editorial takeaway: always double-check specs (Wh, W, STREAM / station compatibility) and live pricing before buying. Promos and stock move quickly.`,
-      `This is an independent summary, not a full republication. Read the original source for primary details.`,
-    ],
+    excerpt:
+      chunks[0]?.slice(0, 220) ||
+      `${item.sourceName} coverage on ${when} about the EcoFlow ecosystem.`,
+    body,
   };
 }
 
@@ -52,15 +62,21 @@ type AiPayload = {
   tags?: string[];
 };
 
-async function rewriteWithAi(item: RssItem): Promise<AiPayload | null> {
+async function rewriteWithAi(
+  item: RssItem,
+  source: SourcePage | null,
+): Promise<AiPayload | null> {
   const apiKey =
     process.env.GEMINI_API_KEY?.trim() ||
     process.env.OPENAI_API_KEY?.trim() ||
     process.env.AI_API_KEY?.trim();
   if (!apiKey) return null;
 
-  const usingGemini = Boolean(process.env.GEMINI_API_KEY?.trim()) ||
-    (process.env.OPENAI_BASE_URL || "").includes("generativelanguage.googleapis.com");
+  const usingGemini =
+    Boolean(process.env.GEMINI_API_KEY?.trim()) ||
+    (process.env.OPENAI_BASE_URL || "").includes(
+      "generativelanguage.googleapis.com",
+    );
 
   const base =
     process.env.OPENAI_BASE_URL?.trim() ||
@@ -71,38 +87,47 @@ async function rewriteWithAi(item: RssItem): Promise<AiPayload | null> {
     process.env.OPENAI_MODEL?.trim() ||
     (usingGemini ? "gemini-2.5-flash-lite" : "gpt-4o-mini");
 
-  const prompt = `Tu es rédacteur pour EcoFlow Stream, site éditorial indépendant FR/EN.
-À partir d'un titre/description d'actualité réelle, écris une SYNTHÈSE ORIGINALE (pas de copier-coller).
-Règles:
-- 3 à 5 courts paragraphes par langue
-- citer la source sans inventer de faits
-- ajouter un angle utile (Wh, usage, STREAM/DELTA/PowerStream si pertinent)
-- pas de langage marketing mensonger
-- JSON strict uniquement
+  const sourceText = (source?.text || item.description || "").slice(0, 5500);
+
+  const prompt = `Tu es journaliste / rédacteur senior pour EcoFlow Stream (site éditorial indépendant FR/EN).
+
+Mission: rédiger un VRAI ARTICLE complet (pas un résumé de 3 lignes), bilingue, à partir de la source fournie.
+
+Règles strictes:
+- Contenu ORIGINAL (reformulation totale) — interdiction de copier-coller des phrases de la source
+- Ne pas inventer de chiffres, promos, dates ou specs absents de la source
+- Citer clairement la source (${item.sourceName})
+- Structure par langue: titre accrocheur, excerpt (1-2 phrases), body = 7 à 10 paragraphes utiles
+- Développer: contexte, faits, enjeux pour l’acheteur (Wh, W, usage camping/backup/solaire balcon, STREAM/DELTA/PowerStream si pertinent), limites / points de vigilance, conclusion actionable
+- Ton clair, concret, non marketing mensonger
+- JSON strict uniquement, sans markdown
 
 Entrée:
-source=${item.sourceName}
+sourceName=${item.sourceName}
 date=${item.publishedAt}
-title=${item.title}
-description=${item.description}
-url=${item.link}
+rssTitle=${item.title}
+publisherTitle=${source?.title || ""}
+publisherUrl=${source?.finalUrl || item.link}
+sourceText=<<
+${sourceText}
+>>
 
 Format JSON:
-{"fr":{"title":"...","excerpt":"...","body":["..."]},"en":{"title":"...","excerpt":"...","body":["..."]},"tags":["ecoflow","delta"]}`;
+{"fr":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"en":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"tags":["ecoflow","delta"]}`;
 
   const payload: Record<string, unknown> = {
     model,
-    temperature: 0.4,
+    temperature: 0.45,
+    max_tokens: 8192,
     messages: [
       {
         role: "system",
         content:
-          "You write original bilingual editorial news summaries as strict JSON only. No markdown fences.",
+          "You write full original bilingual news articles as strict JSON only. No markdown fences. Substantial paragraphs, not short blurbs.",
       },
       { role: "user", content: prompt },
     ],
   };
-  // Gemini OpenAI-compat may ignore response_format; keep for OpenAI
   if (!usingGemini) {
     payload.response_format = { type: "json_object" };
   }
@@ -126,7 +151,11 @@ Format JSON:
   };
   let content = json.choices?.[0]?.message?.content;
   if (!content) return null;
-  content = content.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/\s*```$/i, "").trim();
+  content = content
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
 
   try {
     const parsed = JSON.parse(content) as AiPayload;
@@ -134,7 +163,9 @@ Format JSON:
       !parsed?.fr?.title ||
       !parsed?.en?.title ||
       !Array.isArray(parsed.fr.body) ||
-      !Array.isArray(parsed.en.body)
+      !Array.isArray(parsed.en.body) ||
+      parsed.fr.body.length < 4 ||
+      parsed.en.body.length < 4
     ) {
       return null;
     }
@@ -144,8 +175,9 @@ Format JSON:
   }
 }
 
-function guessTags(item: RssItem): string[] {
-  const hay = `${item.title} ${item.description}`.toLowerCase();
+function guessTags(item: RssItem, source: SourcePage | null): string[] {
+  const hay =
+    `${item.title} ${item.description} ${source?.title || ""} ${source?.text || ""}`.toLowerCase();
   const tags = new Set<string>(["ecoflow"]);
   if (/delta/.test(hay)) tags.add("delta");
   if (/river/.test(hay)) tags.add("river");
@@ -157,25 +189,43 @@ function guessTags(item: RssItem): string[] {
   return [...tags];
 }
 
+function normalizeCopy(copy: NewsLocaleCopy): NewsLocaleCopy {
+  return {
+    title: copy.title.slice(0, 180),
+    excerpt: (copy.excerpt || "").slice(0, 320),
+    body: copy.body
+      .map((p) => p.trim())
+      .filter(Boolean)
+      .map((p) => p.slice(0, 2200))
+      .slice(0, 12),
+  };
+}
+
 export async function buildArticleFromRss(
   item: RssItem,
+  options?: { keepSlug?: string },
 ): Promise<NewsArticle> {
-  const ai = await rewriteWithAi(item);
+  const source = await fetchSourcePage(item.link);
+  const ai = await rewriteWithAi(item, source);
   const rewrittenBy = ai ? "ai" : "template";
-  const fr = ai?.fr || templateCopy("fr", item);
-  const en = ai?.en || templateCopy("en", item);
-  const tags = ai?.tags?.length ? ai.tags : guessTags(item);
-  const slug = makeSlug(fr.title || item.title, item.publishedAt, item.guid);
+  const fr = normalizeCopy(ai?.fr || templateCopy("fr", item, source));
+  const en = normalizeCopy(ai?.en || templateCopy("en", item, source));
+  const tags = ai?.tags?.length ? ai.tags : guessTags(item, source);
+  const slug =
+    options?.keepSlug ||
+    makeSlug(fr.title || item.title, item.publishedAt, item.guid);
+
   const cover = await resolveNewsCover({
-    sourceUrl: item.link,
-    sourceName: item.sourceName,
+    sourceUrl: source?.finalUrl || item.link,
+    sourceName: source?.sourceHint || item.sourceName,
     slug,
+    ogImageHint: source?.ogImage,
   });
 
   return {
     slug,
-    sourceUrl: item.link,
-    sourceName: item.sourceName,
+    sourceUrl: source?.finalUrl || item.link,
+    sourceName: source?.sourceHint || item.sourceName,
     sourceGuid: item.guid,
     publishedAt: item.publishedAt,
     ingestedAt: new Date().toISOString(),
@@ -188,15 +238,28 @@ export async function buildArticleFromRss(
           imageKind: cover.imageKind,
         }
       : {}),
-    fr: {
-      title: fr.title.slice(0, 160),
-      excerpt: (fr.excerpt || "").slice(0, 280),
-      body: fr.body.map((p) => p.slice(0, 1200)).slice(0, 8),
-    },
-    en: {
-      title: en.title.slice(0, 160),
-      excerpt: (en.excerpt || "").slice(0, 280),
-      body: en.body.map((p) => p.slice(0, 1200)).slice(0, 8),
-    },
+    fr,
+    en,
+  };
+}
+
+/** Rebuild an existing article from its source URL (full text + image). */
+export async function refreshArticle(
+  article: NewsArticle,
+): Promise<NewsArticle> {
+  const item: RssItem = {
+    title: article.fr.title || article.en.title,
+    link: article.sourceUrl,
+    guid: article.sourceGuid,
+    publishedAt: article.publishedAt,
+    sourceName: article.sourceName,
+    description: article.fr.excerpt || article.en.excerpt || "",
+  };
+  const next = await buildArticleFromRss(item, { keepSlug: article.slug });
+  return {
+    ...next,
+    sourceGuid: article.sourceGuid,
+    publishedAt: article.publishedAt,
+    ingestedAt: article.ingestedAt,
   };
 }

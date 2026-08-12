@@ -1,0 +1,215 @@
+/** Fetch publisher page content (resolve Google News redirects when needed). */
+
+const UA =
+  "EcoFlowStreamBot/1.0 (+https://ecoflow-stream.com; editorial research)";
+
+export type SourcePage = {
+  finalUrl: string;
+  title: string;
+  text: string;
+  ogImage: string | null;
+  sourceHint: string | null;
+};
+
+function extractMeta(html: string, prop: string) {
+  const patterns = [
+    new RegExp(
+      `<meta[^>]+(?:property|name)=["']${prop}["'][^>]+content=["']([^"']+)["']`,
+      "i",
+    ),
+    new RegExp(
+      `<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']${prop}["']`,
+      "i",
+    ),
+  ];
+  for (const re of patterns) {
+    const m = html.match(re);
+    if (m?.[1]) return decodeHtml(m[1].trim());
+  }
+  return null;
+}
+
+function decodeHtml(value: string) {
+  return value
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)));
+}
+
+function stripNoise(html: string) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<noscript[\s\S]*?<\/noscript>/gi, " ")
+    .replace(/<!--[\s\S]*?-->/g, " ");
+}
+
+function extractTitle(html: string) {
+  return (
+    extractMeta(html, "og:title") ||
+    extractMeta(html, "twitter:title") ||
+    (html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || "")
+      .replace(/\s+/g, " ")
+      .trim() ||
+    ""
+  );
+}
+
+function extractOgImage(html: string, baseUrl: string): string | null {
+  const raw =
+    extractMeta(html, "og:image") ||
+    extractMeta(html, "og:image:url") ||
+    extractMeta(html, "twitter:image") ||
+    extractMeta(html, "twitter:image:src");
+  if (!raw) return null;
+  try {
+    const absolute = new URL(raw, baseUrl).toString();
+    return /^https?:\/\//i.test(absolute) ? absolute : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Best-effort main text extraction without a full HTML parser. */
+function extractArticleText(html: string): string {
+  const clean = stripNoise(html);
+  const chunks: string[] = [];
+
+  const articleMatch = clean.match(/<article[\s\S]*?<\/article>/i);
+  const scope = articleMatch?.[0] || clean;
+
+  const paras = scope.match(/<p\b[^>]*>[\s\S]*?<\/p>/gi) || [];
+  for (const p of paras) {
+    const text = decodeHtml(p.replace(/<[^>]+>/g, " "))
+      .replace(/\s+/g, " ")
+      .trim();
+    if (text.length < 60) continue;
+    if (/cookie|newsletter|subscribe|javascript|publicit/i.test(text)) continue;
+    chunks.push(text);
+    if (chunks.join(" ").length > 6500) break;
+  }
+
+  if (chunks.length < 2) {
+    const text = decodeHtml(scope.replace(/<[^>]+>/g, " "))
+      .replace(/\s+/g, " ")
+      .trim();
+    return text.slice(0, 6500);
+  }
+
+  return chunks.join("\n\n").slice(0, 6500);
+}
+
+function pickPublisherFromGoogleHtml(html: string, pageUrl: string): string | null {
+  // data-n-au / c-wiz sometimes embeds publisher URLs
+  const candidates = [
+    ...html.matchAll(/https?:\/\/(?!(?:[\w.-]+\.)?google\.com|news\.google)[^\s"'<>]+/gi),
+  ].map((m) => m[0].replace(/[),.;]+$/, ""));
+
+  for (const c of candidates) {
+    try {
+      const u = new URL(c);
+      if (u.protocol !== "http:" && u.protocol !== "https:") continue;
+      if (/google\./i.test(u.hostname)) continue;
+      if (/gstatic|googleapis|schema\.org/i.test(u.hostname)) continue;
+      // Prefer article-looking paths
+      if (u.pathname.length > 1) return u.toString();
+    } catch {
+      /* skip */
+    }
+  }
+
+  // Relative article hop sometimes in <a href=
+  const hrefs = [...html.matchAll(/href=["']([^"']+)["']/gi)].map((m) => m[1]);
+  for (const href of hrefs) {
+    try {
+      const u = new URL(href, pageUrl);
+      if (/news\.google\.com/i.test(u.hostname)) continue;
+      if (/google\./i.test(u.hostname)) continue;
+      if (u.pathname.length > 1) return u.toString();
+    } catch {
+      /* skip */
+    }
+  }
+  return null;
+}
+
+async function fetchHtml(url: string): Promise<{ html: string; finalUrl: string } | null> {
+  try {
+    const res = await fetch(url, {
+      redirect: "follow",
+      headers: {
+        "User-Agent": UA,
+        Accept: "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "fr-FR,fr;q=0.9,en;q=0.8",
+      },
+      signal: AbortSignal.timeout(15_000),
+    });
+    if (!res.ok) return null;
+    const html = await res.text();
+    return { html, finalUrl: res.url || url };
+  } catch {
+    return null;
+  }
+}
+
+export async function resolvePublisherUrl(url: string): Promise<string> {
+  if (!/news\.google\.com/i.test(url)) return url;
+
+  const first = await fetchHtml(url);
+  if (!first) return url;
+
+  if (!/news\.google\.com/i.test(first.finalUrl)) {
+    return first.finalUrl;
+  }
+
+  const hopped = pickPublisherFromGoogleHtml(first.html, first.finalUrl);
+  return hopped || first.finalUrl;
+}
+
+export async function fetchSourcePage(url: string): Promise<SourcePage | null> {
+  const publisherUrl = await resolvePublisherUrl(url);
+  const page = await fetchHtml(publisherUrl);
+  if (!page) return null;
+
+  // If still on Google News after hop attempt, try once more from HTML pick
+  let { html, finalUrl } = page;
+  if (/news\.google\.com/i.test(finalUrl)) {
+    const hopped = pickPublisherFromGoogleHtml(html, finalUrl);
+    if (hopped) {
+      const second = await fetchHtml(hopped);
+      if (second) {
+        html = second.html;
+        finalUrl = second.finalUrl;
+      }
+    }
+  }
+
+  const title = decodeHtml(extractTitle(html)).slice(0, 220);
+  const text = extractArticleText(html);
+  const ogImage = extractOgImage(html, finalUrl);
+  const siteName =
+    extractMeta(html, "og:site_name") ||
+    extractMeta(html, "application-name");
+
+  if (!text || text.length < 120) {
+    return {
+      finalUrl,
+      title,
+      text: text || title,
+      ogImage,
+      sourceHint: siteName,
+    };
+  }
+
+  return {
+    finalUrl,
+    title,
+    text,
+    ogImage,
+    sourceHint: siteName,
+  };
+}
