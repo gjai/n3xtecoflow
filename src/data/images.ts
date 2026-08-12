@@ -93,13 +93,15 @@ export const categoryImages: Record<CategoryId, SiteImage> = {
     src: "/images/massage-gun/pistolets.jpg",
     altFr: "Pistolet de massage — récupération musculaire",
     altEn: "Massage gun — muscle recovery",
-    ...UNSplash,
+    credit: "Le pistolet de massage (IA)",
+    creditUrl: "https://massage-gun.fr",
   },
   mini: {
     src: "/images/massage-gun/mini.jpg",
     altFr: "Mini pistolet de massage — voyage et bureau",
     altEn: "Mini massage gun — travel and desk",
-    ...UNSplash,
+    credit: "Le pistolet de massage (IA)",
+    creditUrl: "https://massage-gun.fr",
   },
   masseurs: {
     src: "/images/massage-gun/masseurs.jpg",
@@ -176,36 +178,41 @@ const tumblerEditorial = {
   },
 } as const satisfies Record<string, SiteImage>;
 
+const AI_CREDIT = {
+  credit: "Le pistolet de massage (IA)",
+  creditUrl: "https://massage-gun.fr",
+} as const;
+
 const massageGunEditorial = {
   guides: {
     src: "/images/massage-gun/guides.jpg",
     altFr: "Récupération — guides pistolets de massage",
     altEn: "Recovery — massage gun buying guides",
-    ...UNSplash,
+    ...AI_CREDIT,
   },
   news: {
     src: "/images/massage-gun/news.jpg",
     altFr: "Bien-être — actualités percussion",
     altEn: "Wellness — percussion massage news",
-    ...UNSplash,
+    ...AI_CREDIT,
   },
   camping: {
     src: "/images/massage-gun/pistolets.jpg",
     altFr: "Sport — usage pistolet de massage",
     altEn: "Sport — massage gun use",
-    ...UNSplash,
+    ...AI_CREDIT,
   },
   backup: {
     src: "/images/massage-gun/hero.jpg",
     altFr: "Récupération musculaire — lifestyle",
     altEn: "Muscle recovery — lifestyle",
-    ...UNSplash,
+    ...AI_CREDIT,
   },
   comparatifs: {
     src: "/images/massage-gun/comparatifs.jpg",
     altFr: "Comparaison de pistolets de massage",
     altEn: "Comparing massage guns",
-    ...UNSplash,
+    ...AI_CREDIT,
   },
 } as const satisfies Record<string, SiteImage>;
 
@@ -229,7 +236,8 @@ export function getHeroImage(siteId: SiteId = "ecoflow"): SiteImage {
       src: "/images/massage-gun/hero.jpg",
       altFr: "Pistolet de massage — récupération",
       altEn: "Massage gun — recovery",
-      ...UNSplash,
+      credit: "Le pistolet de massage (IA)",
+      creditUrl: "https://massage-gun.fr",
     };
   }
   return heroImage;

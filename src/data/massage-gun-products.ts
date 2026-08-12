@@ -191,48 +191,6 @@ export const massageGunProducts: Product[] = [
     ),
   },
   {
-    slug: "theragun-relief",
-    category: "mini",
-    siteId: "massage-gun",
-    name: "Theragun Relief",
-    battery: "Li-ion",
-    weightKg: 0.55,
-    amazonQuery: "Theragun Relief pistolet massage",
-    imageSrc: "/images/products/massage-gun/theragun-relief.jpg",
-    indicativePriceEur: 149,
-    specs: [
-      { label: "Amplitude", value: "Entrée de gamme Therabody" },
-      { label: "Force", value: "Confort quotidien" },
-      { label: "Vitesses", value: "Simplifiées" },
-      { label: "Embouts", value: "Essentiels" },
-      { label: "Autonomie", value: "Usage maison" },
-    ],
-    ...copy(
-      {
-        tagline: "Therabody accessible",
-        summary:
-          "Positionnement confort / entrée de gamme Therabody. Vérifiez l’ASIN et le titre exact sur Amazon (gamme évolutive).",
-        bestFor: "Premier Theragun",
-        pros: ["Écosystème Therabody", "Plus abordable", "Simple"],
-        cons: ["Moins de punch", "Gamme souvent renommée"],
-        body: [
-          "Les références Relief / Prime évoluent : ouvrez la fiche Amazon du jour avant d’acheter.",
-        ],
-      },
-      {
-        tagline: "Accessible Therabody",
-        summary:
-          "Comfort / entry Therabody positioning. Confirm exact ASIN and title on Amazon (lineup changes).",
-        bestFor: "First Theragun",
-        pros: ["Therabody ecosystem", "More affordable", "Simple"],
-        cons: ["Less punch", "SKUs rename often"],
-        body: [
-          "Relief / Prime references evolve: open today’s Amazon listing before buying.",
-        ],
-      },
-    ),
-  },
-  {
     slug: "hypervolt-2-pro",
     category: "pistolets",
     siteId: "massage-gun",
@@ -285,7 +243,7 @@ export const massageGunProducts: Product[] = [
     amazonQuery: "RENPHO Extend pistolet massage",
     amazonAsin: "B0BJPV92Q7",
     imageSrc: "/images/products/massage-gun/renpho-extend.jpg",
-    indicativePriceEur: 69.99,
+    indicativePriceEur: 79.49,
     specs: [
       { label: "Amplitude", value: "8 mm" },
       { label: "Force", value: "Jusqu’à ~13,6 kg" },
@@ -328,7 +286,7 @@ export const massageGunProducts: Product[] = [
     amazonQuery: "RENPHO Active pistolet de massage",
     amazonAsin: "B085NTR26K",
     imageSrc: "/images/products/massage-gun/renpho-active.jpg",
-    indicativePriceEur: 79.99,
+    indicativePriceEur: 93.23,
     specs: [
       { label: "Amplitude", value: "~10 mm (série Active)" },
       { label: "Force", value: "Usage sport / quotidien" },
@@ -369,9 +327,9 @@ export const massageGunProducts: Product[] = [
     battery: "Li-ion USB-C",
     weightKg: 0.85,
     amazonQuery: "TOLOCO pistolet de massage 10 têtes",
-    amazonAsin: "B08DFP3S9H",
+    amazonAsin: "B0B2Z5JHN4",
     imageSrc: "/images/products/massage-gun/toloco-massage-gun.jpg",
-    indicativePriceEur: 39.99,
+    indicativePriceEur: 40.13,
     specs: [
       { label: "Amplitude", value: "~10–12 mm (selon version)" },
       { label: "Force", value: "Entrée de gamme" },
@@ -388,7 +346,7 @@ export const massageGunProducts: Product[] = [
         pros: ["Très abordable", "Beaucoup d’embouts", "USB-C"],
         cons: ["Finition basique", "Bruyant / profondeur limitée"],
         body: [
-          "ASIN indicatif — les packs TOLOCO changent souvent ; validez titre et vendeur Amazon.fr.",
+          "ASIN B0B2Z5JHN4 — packs TOLOCO évoluent : validez titre, vendeur et stock Amazon.fr.",
         ],
       },
       {
@@ -399,7 +357,7 @@ export const massageGunProducts: Product[] = [
         pros: ["Very affordable", "Many heads", "USB-C"],
         cons: ["Basic finish", "Noisy / limited depth"],
         body: [
-          "Indicative ASIN — TOLOCO packs change often; confirm title and Amazon.fr seller.",
+          "ASIN B0B2Z5JHN4 — TOLOCO packs change often; confirm title, seller and stock on Amazon.fr.",
         ],
       },
     ),
@@ -414,7 +372,7 @@ export const massageGunProducts: Product[] = [
     amazonQuery: "Bob and Brad T2 massage gun",
     amazonAsin: "B09BB51M19",
     imageSrc: "/images/products/massage-gun/bob-brad-t2.jpg",
-    indicativePriceEur: 79.99,
+    indicativePriceEur: 109.99,
     specs: [
       { label: "Amplitude", value: "~10 mm" },
       { label: "Force", value: "Milieu de gamme" },
@@ -448,60 +406,18 @@ export const massageGunProducts: Product[] = [
     ),
   },
   {
-    slug: "bob-brad-c2",
-    category: "mini",
-    siteId: "massage-gun",
-    name: "Bob and Brad C2",
-    battery: "2500 mAh USB-C",
-    weightKg: 0.66,
-    amazonQuery: "Bob and Brad C2 massage gun",
-    imageSrc: "/images/products/massage-gun/bob-brad-c2.jpg",
-    indicativePriceEur: 69.99,
-    specs: [
-      { label: "Amplitude", value: "~10 mm" },
-      { label: "Force", value: "Compact" },
-      { label: "Vitesses", value: "Multi-niveaux" },
-      { label: "Embouts", value: "5 têtes" },
-      { label: "Autonomie", value: "Plus légère que T2" },
-    ],
-    ...copy(
-      {
-        tagline: "Version plus compacte du T2",
-        summary:
-          "Plus léger / un peu plus silencieux que le T2, batterie plus petite. Cherchez « C2 » sur Amazon.fr.",
-        bestFor: "Compact quotidien",
-        pros: ["Plus compact", "Souvent plus silencieux", "Prix contenu"],
-        cons: ["Moins d’autonomie", "ASIN parfois partagé"],
-        body: [
-          "Les listings C2/T2 se ressemblent : lisez le titre et les specs batterie avant d’acheter.",
-        ],
-      },
-      {
-        tagline: "More compact T2 sibling",
-        summary:
-          "Lighter / often quieter than T2, smaller battery. Search “C2” on Amazon.fr.",
-        bestFor: "Compact daily",
-        pros: ["More compact", "Often quieter", "Contained price"],
-        cons: ["Less battery", "ASINs sometimes shared"],
-        body: [
-          "C2/T2 listings look alike: read title and battery specs before buying.",
-        ],
-      },
-    ),
-  },
-  {
     slug: "opove-m3-pro",
     category: "pistolets",
     siteId: "massage-gun",
-    name: "OPOVE M3 Pro",
+    name: "OPOVE massage gun",
     battery: "Li-ion",
     weightKg: 0.9,
-    amazonQuery: "OPOVE M3 Pro pistolet massage",
-    amazonAsin: "B07ZWK2YSF",
+    amazonQuery: "OPOVE pistolet de massage",
+    amazonAsin: "B07TWFK7JW",
     imageSrc: "/images/products/massage-gun/opove-m3-pro.jpg",
-    indicativePriceEur: 99.99,
+    indicativePriceEur: 129.99,
     specs: [
-      { label: "Amplitude", value: "~12–14 mm (annonce)" },
+      { label: "Amplitude", value: "Percussion tissus profonds" },
       { label: "Force", value: "Milieu / sport" },
       { label: "Vitesses", value: "Multi-niveaux" },
       { label: "Embouts", value: "Kit multi-têtes" },
@@ -511,23 +427,23 @@ export const massageGunProducts: Product[] = [
       {
         tagline: "Milieu de gamme sport",
         summary:
-          "Souvent cité dans les comparatifs « meilleur rapport profondeur / prix ». Vérifiez dispo FR.",
+          "OPOVE : percussion tissus profonds, souvent cité pour le rapport profondeur / prix. Offre FR disponible.",
         bestFor: "Sport régulier",
-        pros: ["Bonne profondeur annoncée", "Prix médian", "Avis volume"],
-        cons: ["Marque moins connue", "Stock FR à confirmer"],
+        pros: ["Percussion profonde", "Prix médian", "Avis volume"],
+        cons: ["Marque moins connue", "Moins « premium » qu’un Theragun"],
         body: [
-          "ASIN B07ZWK2YSF — ouvrez la fiche Amazon.fr pour le prix et le vendeur du jour.",
+          "ASIN B07TWFK7JW — prix indicatif ~129,99 €. Vérifiez vendeur Expédié et vendu par Amazon.",
         ],
       },
       {
         tagline: "Mid-range sports pick",
         summary:
-          "Often cited in “depth / price” roundups. Confirm FR availability.",
+          "OPOVE deep-tissue percussion, often cited for depth / price. FR listing available.",
         bestFor: "Regular sport",
-        pros: ["Claimed depth", "Mid price", "Review volume"],
-        cons: ["Lesser-known brand", "Confirm FR stock"],
+        pros: ["Deep percussion", "Mid price", "Review volume"],
+        cons: ["Lesser-known brand", "Less premium than Theragun"],
         body: [
-          "ASIN B07ZWK2YSF — open Amazon.fr for today’s price and seller.",
+          "ASIN B07TWFK7JW — indicative ~€129.99. Confirm Ships and sold by Amazon.",
         ],
       },
     ),
