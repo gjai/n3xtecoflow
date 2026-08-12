@@ -213,7 +213,8 @@ Show ONLY generic unbranded stainless steel bottles or tumblers.`;
 ${common}
 Context: ${excerpt || "massage gun, percussion therapy, muscle recovery, neck or back massager"}.
 Style: premium product photography, natural light, sport/wellness setting, shallow depth of field.
-Show ONLY a massage gun, mini massage gun, neck massager, or shiatsu cushion — no energy/solar products.`;
+Show ONLY a massage gun, mini massage gun, neck massager, or shiatsu cushion — no energy/solar products.
+Make the composition unique for this article (angle, setting, and props can vary).`;
   }
   return `Create a photorealistic editorial cover image (16:9) for an energy / EcoFlow news article.
 ${common}
@@ -245,7 +246,8 @@ async function generateCoverWithGemini(args: {
   const model =
     process.env.NEWS_IMAGE_MODEL?.trim() || "gemini-2.5-flash-image";
   const siteId = args.siteId || "ecoflow";
-  const prompt = newsAiCoverPrompt(siteId, args.title, args.excerpt);
+  const prompt = `${newsAiCoverPrompt(siteId, args.title, args.excerpt)}
+Unique variation id: ${args.slug.slice(-18)}.`;
 
   try {
     const res = await fetch(
@@ -292,7 +294,12 @@ async function generateCoverWithGemini(args: {
       const sha1 = createHash("sha1").update(buf).digest("hex");
       if (KNOWN_JUNK_SHA1.has(sha1)) continue;
       const ext = mime.includes("jpeg") || mime.includes("jpg") ? "jpg" : "png";
-      return saveImageBuffer(buf, args.slug, ext, `ai:${model}`);
+      return saveImageBuffer(
+        buf,
+        args.slug,
+        ext,
+        `ai:${model}:${args.slug}:${Date.now()}`,
+      );
     }
     return null;
   } catch (err) {
@@ -334,8 +341,14 @@ async function resolveProductPackshotCover(args: {
   tags?: string[];
   slug: string;
   siteId?: SiteId;
+  /** Minimum score to accept a match (avoids the same default SKU on every article). */
+  minScore?: number;
+  /** If false, never fall back to catalog[0] / delta-2. */
+  allowWeakDefault?: boolean;
 }): Promise<string | null> {
   const siteId = args.siteId || "ecoflow";
+  const minScore = args.minScore ?? 1;
+  const allowWeakDefault = args.allowWeakDefault !== false;
   const hay = `${args.title} ${(args.tags || []).join(" ")}`
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -383,12 +396,15 @@ async function resolveProductPackshotCover(args: {
     .filter((x) => x.score > 0)
     .sort((a, b) => b.score - a.score);
 
+  const best = scored[0];
   const pick =
-    scored[0]?.p ||
-    (siteId === "ecoflow"
-      ? catalog.find((p) => p.slug === "delta-2")
-      : catalog[0]) ||
-    null;
+    best && best.score >= minScore
+      ? best.p
+      : allowWeakDefault
+        ? siteId === "ecoflow"
+          ? catalog.find((p) => p.slug === "delta-2") || catalog[0]
+          : null
+        : null;
   if (!pick) return null;
 
   const eco = siteId === "ecoflow" ? await getEcoflowEntriesMap() : {};
@@ -438,21 +454,23 @@ export async function resolveNewsCover(args: {
 
   const title = args.title || args.slug;
 
-  // Hors EcoFlow : packshot du thème avant IA, pour éviter toute fuite visuelle.
-  if (siteId !== "ecoflow") {
-    const packFirst = await resolveProductPackshotCover({
-      title,
-      tags: args.tags,
-      slug: args.slug,
-      siteId,
-    });
-    if (packFirst) {
-      return {
-        imageSrc: packFirst,
-        imageCredit: newsPackshotCredit(siteId),
-        imageKind: "fallback",
-      };
-    }
+  // Strong catalog match only (Theragun in title → Theragun packshot).
+  // Never reuse catalog[0] as a generic cover — that made every massage-gun
+  // article share the same Amazon JPG.
+  const packStrong = await resolveProductPackshotCover({
+    title,
+    tags: args.tags,
+    slug: args.slug,
+    siteId,
+    minScore: 8,
+    allowWeakDefault: false,
+  });
+  if (packStrong) {
+    return {
+      imageSrc: packStrong,
+      imageCredit: newsPackshotCredit(siteId),
+      imageKind: "fallback",
+    };
   }
 
   const ai = await generateCoverWithGemini({
@@ -469,11 +487,14 @@ export async function resolveNewsCover(args: {
     };
   }
 
+  // Last resort: any scored packshot (still no weak catalog[0] hors EcoFlow).
   const pack = await resolveProductPackshotCover({
     title,
     tags: args.tags,
     slug: args.slug,
     siteId,
+    minScore: 1,
+    allowWeakDefault: siteId === "ecoflow",
   });
   if (pack) {
     return {
