@@ -175,102 +175,6 @@ export default async function HomePage({
 
       <HeroSlider brandName={brandName} slides={heroSlides} />
 
-      <section className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
-        <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
-          {t("featuresTitle")}
-        </h2>
-        <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("editorialLead")}</p>
-        <div className="mt-8 grid gap-5 md:grid-cols-3">
-          {[
-            { title: t("feature1Title"), text: t("feature1Text") },
-            { title: t("feature2Title"), text: t("feature2Text") },
-            { title: t("feature3Title"), text: t("feature3Text") },
-          ].map((f) => (
-            <div
-              key={f.title}
-              className="border border-[var(--line)] bg-[var(--surface)] p-5"
-            >
-              <h3 className="font-semibold text-[var(--heading)]">{f.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">
-                {f.text}
-              </p>
-            </div>
-          ))}
-        </div>
-        <p className="mt-6 text-sm text-[var(--muted)]">
-          {t("aboutTeaser")}{" "}
-          <Link
-            href="/a-propos"
-            className="text-[var(--accent)] underline-offset-2 hover:underline"
-          >
-            {t("aboutLink")}
-          </Link>
-          .
-        </p>
-      </section>
-
-      <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <AdSenseUnit
-          slot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_HOME}
-          label={t("adsLabel")}
-        />
-      </div>
-
-      {latestNews.length > 0 ? (
-        <section className="border-y border-[var(--line)] bg-[var(--surface)]">
-          <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
-                  {newsT("eyebrow")}
-                </p>
-                <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
-                  {newsT("title")}
-                </h2>
-              </div>
-              <Link
-                href="/actualites"
-                className="text-sm font-semibold text-[var(--accent)] hover:underline"
-              >
-                {newsT("back")} →
-              </Link>
-            </div>
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
-              {latestNews.map((article) => {
-                const copy = isEn ? article.en : article.fr;
-                return (
-                  <Link
-                    key={article.slug}
-                    href={`/actualites/${article.slug}`}
-                    className="overflow-hidden border border-[var(--line)] bg-[var(--bg)] transition hover:border-[var(--accent)]"
-                  >
-                    <SmartCover
-                      src={article.imageSrc}
-                      fallback={editorialImages.news}
-                      locale={locale}
-                      credit={article.imageCredit}
-                      className="aspect-[16/9] w-full"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                    <div className="p-4">
-                      <p className="text-xs text-[var(--muted)]">
-                        {article.sourceName}
-                      </p>
-                      <h3 className="mt-2 font-semibold text-[var(--heading)]">
-                        {copy.title}
-                      </h3>
-                      <p className="mt-2 line-clamp-3 text-sm text-[var(--muted)]">
-                        {copy.excerpt}
-                      </p>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      ) : null}
-
       <section className="mx-auto max-w-6xl px-5 pb-14 md:px-8 md:pb-20">
         <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
           {isEn ? "Shop by category" : "Parcourir par catégorie"}
@@ -310,6 +214,40 @@ export default async function HomePage({
           >
             {isEn ? "comparisons" : "comparatifs"}
           </Link>
+        </p>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
+        <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
+          {t("featuresTitle")}
+        </h2>
+        <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("editorialLead")}</p>
+        <div className="mt-8 grid gap-5 md:grid-cols-3">
+          {[
+            { title: t("feature1Title"), text: t("feature1Text") },
+            { title: t("feature2Title"), text: t("feature2Text") },
+            { title: t("feature3Title"), text: t("feature3Text") },
+          ].map((f) => (
+            <div
+              key={f.title}
+              className="border border-[var(--line)] bg-[var(--surface)] p-5"
+            >
+              <h3 className="font-semibold text-[var(--heading)]">{f.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--muted)]">
+                {f.text}
+              </p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-6 text-sm text-[var(--muted)]">
+          {t("aboutTeaser")}{" "}
+          <Link
+            href="/a-propos"
+            className="text-[var(--accent)] underline-offset-2 hover:underline"
+          >
+            {t("aboutLink")}
+          </Link>
+          .
         </p>
       </section>
 
