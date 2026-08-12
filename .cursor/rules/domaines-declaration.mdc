@@ -8,7 +8,14 @@ alwaysApply: true
 ## Règle produit actuelle
 
 - `ecoflow-stream.com` **et** `powerstream.fr` = **même thème / site EcoFlow** (même marque, logos, couleurs).
-- Le multi-thème est **prêt pour de futurs domaines/thèmes**, pas pour différencier ces deux hosts.
+- `mon-tumbler.fr` = thème **tumbler** (La gourde isotherme).
+- Le multi-thème est prêt pour de **futurs** domaines/thèmes.
+
+## SEO multi-host (obligatoire)
+
+- Toujours `siteLocaleAlternates(locale, path)` — jamais `localeAlternates` sans origin Host.
+- `robots.ts` / sitemap suivent le Host courant (`getSiteByHost`).
+- Ne pas hard-coder `ecoflow-stream.com` comme canonique d’un autre thème.
 
 ## Deux cas d’ajout
 
@@ -27,7 +34,11 @@ Ajouter le host (apex + www) dans `src/sites/ecoflow.ts` → `hosts[]`, puis DNS
    - `amazonAsin` (lien `/dp/` Affiliates)
    - `imageSrc` packshot (préférer fichier local `public/images/products/<id>/`)
    - `indicativePriceEur` (fallback UI tant que Creators API est off)
+   - `weightKg` recommandé (tri + comparateur)
    - Ne pas s’appuyer sur le catalogue Shopify EcoFlow (spécifique thème ecoflow)
+7. `catalogLayout: "flat"` + `featuredProductSlugs` (sauf gammes type EcoFlow)
+8. Comparateur : rows auto via `buildCompareRows` (Wh/W vs ml/isolation)
+9. AdSense : autoriser le domaine
 
 Quand on ajoute un domaine ou un thème, **rappeler explicitement cette checklist** à l’utilisateur.
 

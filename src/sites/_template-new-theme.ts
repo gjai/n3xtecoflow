@@ -10,12 +10,17 @@
  * 3. Enregistrer dans index.ts (sites + sitesById)
  * 4. Assets : public/brands/<id>/ (logo, favicon, apple-touch)
  * 5. DNS apex + www → VPS
- * 6. Coolify FQDN sur la MÊME app n3xtecoflow
+ * 6. Coolify FQDN sur la MÊME app n3xtecoflow (+ SSL)
  * 7. network[] croisé avec les sites sœurs si besoin
  * 8. Catalogue produits (OBLIGATOIRE avant ship — sinon fiches sans photo/prix) :
- *    - chaque produit : `amazonAsin` + `imageSrc` (packshot local ou Amazon) + `indicativePriceEur`
- *    - ne pas compter sur Creators API ni sur un catalogue Shopify (spécifique EcoFlow)
- *    - Creators API = prix live plus tard (≥ 10 ventes / 30 j)
+ *    - chaque produit : `amazonAsin` + `imageSrc` (packshot local) + `indicativePriceEur`
+ *    - `weightKg` recommandé (tri / comparateur)
+ *    - ne pas compter sur Creators API ni catalogue Shopify EcoFlow
+ * 9. Layout : `catalogLayout: "flat"` (+ `featuredProductSlugs`) sauf gammes type EcoFlow
+ * 10. SEO : toujours `siteLocaleAlternates` (jamais d’origin hard-codé)
+ * 11. Comparateur : lignes auto (Wh/W si énergie, sinon ml / isolation / matière)
+ * 12. AdSense : autoriser le nouveau domaine dans le compte
+ * 13. Creators API = prix live plus tard (≥ 10 ventes / 30 j)
  *
  * Voir .cursor/rules/domaines-declaration.mdc et amazon-creators-api.mdc
  */
@@ -78,7 +83,9 @@ export const templateNewThemeSite = {
     },
   },
   heroImage: "/images/hero/station-solaire.jpg",
-  featuredCategoryIds: ["stream", "delta"],
+  featuredCategoryIds: [],
+  catalogLayout: "flat" as const,
+  featuredProductSlugs: [] as string[],
   network: [],
   focusFr: "…",
   focusEn: "…",

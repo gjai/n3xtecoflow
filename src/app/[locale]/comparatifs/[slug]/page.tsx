@@ -25,10 +25,10 @@ import {
   LEGACY_COMPARISON_REDIRECTS,
   productsForHub,
   toCompareProductView,
-  usesFlatComparison,
+  usesFlatCatalog,
 } from "@/lib/comparisons/hub";
 import { resolveDisplayPrice, resolveProductMedia } from "@/lib/product-presentation";
-import { localeAlternates } from "@/lib/seo";
+import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 
 export function generateStaticParams() {
@@ -53,7 +53,7 @@ export async function generateMetadata({
     return {
       title,
       description: copy.intro,
-      alternates: localeAlternates(locale, `/comparatifs/${slug}`),
+      alternates: await siteLocaleAlternates(locale, `/comparatifs/${slug}`),
     };
   }
   const item = getComparison(slug);
@@ -64,7 +64,7 @@ export async function generateMetadata({
   return {
     title: copy.title,
     description: copy.subtitle,
-    alternates: localeAlternates(locale, `/comparatifs/${slug}`),
+    alternates: await siteLocaleAlternates(locale, `/comparatifs/${slug}`),
     openGraph: { images: [{ url: og.src }] },
   };
 }
@@ -96,7 +96,7 @@ export default async function ComparisonSlugPage({
   if (cat) {
     if (!comparisonHubBelongsToSite(cat.id, site.id)) notFound();
     // Tumbler (et thèmes plats) : pas de hubs par catégorie — tout sur /comparatifs
-    if (usesFlatComparison(site.id)) {
+    if (usesFlatCatalog(site)) {
       const qs = new URLSearchParams();
       if (sp.a) qs.set("a", sp.a);
       if (sp.b) qs.set("b", sp.b);

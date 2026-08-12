@@ -2,7 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { LegalScroll } from "@/components/LegalScroll";
-import { localeAlternates } from "@/lib/seo";
+import { siteLocaleAlternates } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -14,7 +14,7 @@ export async function generateMetadata({
   return {
     title: t("hubTitle"),
     description: t("hubMeta"),
-    alternates: localeAlternates(locale, "/mentions-legales"),
+    alternates: await siteLocaleAlternates(locale, "/mentions-legales"),
   };
 }
 

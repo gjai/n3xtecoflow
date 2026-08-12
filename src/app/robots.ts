@@ -1,14 +1,19 @@
 import type { MetadataRoute } from "next";
+import { headers } from "next/headers";
+import { getSiteByHost } from "@/sites";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
+/** Sitemap URL follows the request Host (multi-thème / futurs domaines). */
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const host = (await headers()).get("host");
+  const site = getSiteByHost(host);
+  const base = `https://${site.primaryHost}`;
 
-export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
       allow: "/",
       disallow: ["/api/"],
     },
-    sitemap: `${siteUrl}/sitemap.xml`,
+    sitemap: `${base}/sitemap.xml`,
   };
 }

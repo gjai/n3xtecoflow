@@ -13,15 +13,46 @@ import {
 } from "@/data/products";
 import { amazonHrefForProduct } from "@/lib/amazon";
 import type { EcoflowCatalogEntry } from "@/lib/ecoflow/types";
+import {
+  formatCapacityMl,
+  parseCapacityMl,
+} from "@/lib/product-capacity";
 import { resolveDisplayPrice, resolveProductMedia } from "@/lib/product-presentation";
+import { sitesById } from "@/sites";
 import type { SiteId } from "@/sites/types";
 
 /**
  * EcoFlow = hubs par gamme (RIVER, DELTA…).
- * Tumbler (et futurs thèmes « catalogue plat ») = un seul comparateur sur /comparatifs.
+ * Catalogue plat = un seul comparateur sur /comparatifs (tumbler + futurs).
  */
 export function usesFlatComparison(siteId: SiteId): boolean {
-  return siteId !== "ecoflow";
+  return usesFlatCatalog(sitesById[siteId] ?? { id: siteId });
+}
+
+/** Layout catalogue : flat vs catégories (futurs thèmes). */
+export function usesFlatCatalog(site: {
+  id: SiteId;
+  catalogLayout?: "flat" | "categories";
+}): boolean {
+  if (site.catalogLayout) return site.catalogLayout === "flat";
+  return site.id !== "ecoflow";
+}
+
+/** Produits mis en avant sur la home (layout flat). */
+export function featuredProductsForHome(
+  site: {
+    featuredProductSlugs?: string[];
+  },
+  all: Product[],
+  limit = 6,
+): Product[] {
+  if (site.featuredProductSlugs?.length) {
+    const bySlug = new Map(all.map((p) => [p.slug, p]));
+    return site.featuredProductSlugs
+      .map((slug) => bySlug.get(slug))
+      .filter((p): p is Product => Boolean(p));
+  }
+  return all.slice(0, limit);
 }
 
 /** Categories that make sense as comparison hubs (≥2 products). Empty when flat. */
@@ -68,7 +99,11 @@ export type CompareProductView = {
   tagline: string;
   capacityWh?: number;
   outputW?: number;
+  /** Volume liquide (ml) — thèmes gourdes / tumblers / futurs hors énergie */
+  capacityMl?: number | null;
+  capacityLabel?: string | null;
   weightKg?: number;
+  /** Batterie (énergie) ou matière / construction (autres thèmes) */
   battery: string;
   specs: { label: string; value: string }[];
 };
@@ -101,6 +136,8 @@ export function toCompareProductView(
     ecoflow,
     product,
   );
+  const capacityMl =
+    product.capacityWh != null ? null : parseCapacityMl(product);
 
   return {
     slug: product.slug,
@@ -113,65 +150,149 @@ export function toCompareProductView(
     tagline: copy.tagline,
     capacityWh: product.capacityWh,
     outputW: product.outputW,
+    capacityMl,
+    capacityLabel: formatCapacityMl(capacityMl, locale),
     weightKg: product.weightKg,
     battery: product.battery,
     specs: product.specs,
   };
 }
 
+function specOf(
+  product: CompareProductView,
+  ...needles: string[]
+): string | null {
+  const found = product.specs.find((s) =>
+    needles.some((n) => s.label.toLowerCase().includes(n.toLowerCase())),
+  );
+  return found?.value || null;
+}
+
+/**
+ * Lignes de comparaison adaptatives :
+ * - énergie (Wh/W) si au moins un produit a capacityWh / outputW
+ * - sinon volume ml + isolation + matière (gourdes / futurs thèmes hors énergie)
+ */
 export function buildCompareRows(
   left: CompareProductView,
   right: CompareProductView,
   locale: string,
 ): CompareRow[] {
   const isEn = locale === "en";
-  const rows: CompareRow[] = [
-    {
-      key: "capacity",
+  const isPower = Boolean(
+    left.capacityWh ||
+      right.capacityWh ||
+      left.outputW ||
+      right.outputW,
+  );
+  const rows: CompareRow[] = [];
+  const skipLabels = new Set<string>();
+
+  if (isPower) {
+    if (left.capacityWh || right.capacityWh) {
+      rows.push({
+        key: "capacity-wh",
+        labelFr: "Capacité",
+        labelEn: "Capacity",
+        left: left.capacityWh ? `${left.capacityWh} Wh` : "—",
+        right: right.capacityWh ? `${right.capacityWh} Wh` : "—",
+      });
+      skipLabels.add("capacité");
+      skipLabels.add("capacity");
+    }
+    if (left.outputW || right.outputW) {
+      rows.push({
+        key: "output",
+        labelFr: "Sortie AC",
+        labelEn: "AC output",
+        left: left.outputW ? `${left.outputW} W` : "—",
+        right: right.outputW ? `${right.outputW} W` : "—",
+      });
+      skipLabels.add("sortie");
+      skipLabels.add("output");
+    }
+    rows.push({
+      key: "battery",
+      labelFr: "Batterie",
+      labelEn: "Battery",
+      left: left.battery || "—",
+      right: right.battery || "—",
+    });
+    skipLabels.add("batterie");
+    skipLabels.add("battery");
+    skipLabels.add("chimie");
+  } else {
+    const leftCap =
+      left.capacityLabel && left.capacityLabel !== "—"
+        ? left.capacityLabel
+        : specOf(left, "Capacité", "Capacity") || "—";
+    const rightCap =
+      right.capacityLabel && right.capacityLabel !== "—"
+        ? right.capacityLabel
+        : specOf(right, "Capacité", "Capacity") || "—";
+    rows.push({
+      key: "capacity-ml",
       labelFr: "Capacité",
       labelEn: "Capacity",
-      left: left.capacityWh ? `${left.capacityWh} Wh` : "—",
-      right: right.capacityWh ? `${right.capacityWh} Wh` : "—",
-    },
-    {
-      key: "output",
-      labelFr: "Sortie AC",
-      labelEn: "AC output",
-      left: left.outputW ? `${left.outputW} W` : "—",
-      right: right.outputW ? `${right.outputW} W` : "—",
-    },
-    {
+      left: leftCap,
+      right: rightCap,
+    });
+    skipLabels.add("capacité");
+    skipLabels.add("capacity");
+
+    const leftIso = specOf(left, "Isolation", "Insulation");
+    const rightIso = specOf(right, "Isolation", "Insulation");
+    if (leftIso || rightIso) {
+      rows.push({
+        key: "insulation",
+        labelFr: "Isolation",
+        labelEn: "Insulation",
+        left: leftIso || "—",
+        right: rightIso || "—",
+      });
+      skipLabels.add("isolation");
+      skipLabels.add("insulation");
+    }
+
+    rows.push({
+      key: "material",
+      labelFr: "Matière",
+      labelEn: "Material",
+      left:
+        specOf(left, "Matière", "Material") || left.battery || "—",
+      right:
+        specOf(right, "Matière", "Material") || right.battery || "—",
+    });
+    skipLabels.add("matière");
+    skipLabels.add("material");
+    skipLabels.add("batterie");
+  }
+
+  if (left.weightKg != null || right.weightKg != null) {
+    rows.push({
       key: "weight",
       labelFr: "Poids",
       labelEn: "Weight",
       left: left.weightKg != null ? `${left.weightKg} kg` : "—",
       right: right.weightKg != null ? `${right.weightKg} kg` : "—",
-    },
-    {
-      key: "battery",
-      labelFr: "Batterie",
-      labelEn: "Battery",
-      left: left.battery,
-      right: right.battery,
-    },
-    {
-      key: "price",
-      labelFr: "Prix indicatif",
-      labelEn: "Indicative price",
-      left: left.priceDisplay || (isEn ? "See Amazon" : "Voir Amazon"),
-      right: right.priceDisplay || (isEn ? "See Amazon" : "Voir Amazon"),
-    },
-  ];
+    });
+    skipLabels.add("poids");
+    skipLabels.add("weight");
+  }
 
-  // Merge unique spec labels
+  rows.push({
+    key: "price",
+    labelFr: "Prix indicatif",
+    labelEn: "Indicative price",
+    left: left.priceDisplay || (isEn ? "See Amazon" : "Voir Amazon"),
+    right: right.priceDisplay || (isEn ? "See Amazon" : "Voir Amazon"),
+  });
+
   const labels = new Set<string>();
   for (const s of [...left.specs, ...right.specs]) labels.add(s.label);
   for (const label of labels) {
-    if (["Capacité", "Capacity", "Sortie", "Poids", "Batterie"].some((x) =>
-      label.toLowerCase().includes(x.toLowerCase()),
-    )) {
-      continue;
-    }
+    const low = label.toLowerCase();
+    if ([...skipLabels].some((x) => low.includes(x))) continue;
     rows.push({
       key: `spec-${label}`,
       labelFr: label,

@@ -26,7 +26,9 @@ import { getEcoflowEditorial } from "@/lib/ecoflow/editorial-store";
 import { resolveArticlePrimaryImage } from "@/lib/article-images";
 import {
   comparisonHubCategories,
+  featuredProductsForHome,
   hubTitle,
+  usesFlatCatalog,
 } from "@/lib/comparisons/hub";
 import { resolveAllGuides } from "@/lib/guides/refresh";
 import { resolveProductCopy } from "@/lib/product-copy";
@@ -76,9 +78,17 @@ export default async function HomePage({
   const comparisonHubs = comparisonHubCategories(site.id);
   const latestComparisonHub = comparisonHubs[0];
   const siteProducts = getProductsForSite(site.id);
-  const featuredProducts = siteProducts.filter((p) =>
-    site.featuredCategoryIds.includes(p.category),
-  );
+  const flatCatalog = usesFlatCatalog(site);
+  const homePicks = flatCatalog
+    ? featuredProductsForHome(site, siteProducts, 6)
+    : siteProducts.filter((p) =>
+        site.featuredCategoryIds.includes(p.category),
+      );
+  const featuredProducts = flatCatalog
+    ? homePicks
+    : siteProducts.filter((p) =>
+        site.featuredCategoryIds.includes(p.category),
+      );
   const latestProduct =
     featuredProducts.at(-1) ?? siteProducts.at(-1)!;
   const siteCats = getCategoriesForSite(site.id);
@@ -306,13 +316,13 @@ export default async function HomePage({
       ) : null}
 
       <section className="mx-auto max-w-6xl px-5 pb-14 md:px-8 md:pb-20">
-        {site.id === "tumbler" ? (
+        {flatCatalog ? (
           <>
             <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
               {isEn ? "Top picks" : "Sélection"}
             </h2>
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {siteProducts.map((product) => {
+              {homePicks.map((product) => {
                 const media = resolveProductMedia(product, null);
                 const copy = resolveProductCopy(product, locale, null);
                 return (
@@ -350,6 +360,16 @@ export default async function HomePage({
                 );
               })}
             </div>
+            <p className="mt-6 text-sm">
+              <Link
+                href="/produits"
+                className="font-medium text-[var(--accent)] hover:underline"
+              >
+                {isEn
+                  ? "Browse full catalog →"
+                  : "Voir tout le catalogue →"}
+              </Link>
+            </p>
           </>
         ) : (
           <>
@@ -390,7 +410,7 @@ export default async function HomePage({
             href="/comparatifs"
             className="text-[var(--accent)] hover:underline"
           >
-            {site.id === "tumbler"
+            {flatCatalog
               ? isEn
                 ? "compare products"
                 : "comparer les produits"

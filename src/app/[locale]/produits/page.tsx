@@ -8,6 +8,7 @@ import {
 } from "@/components/TumblerProductCatalog";
 import { categoryImages } from "@/data/images";
 import { getAmazonOffersMap } from "@/lib/amazon/price-store";
+import { usesFlatCatalog } from "@/lib/comparisons/hub";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import { formatCapacityMl, parseCapacityMl } from "@/lib/product-capacity";
 import { resolveProductCopy } from "@/lib/product-copy";
@@ -35,18 +36,27 @@ export async function generateMetadata({
   const site = await getCurrentSite();
   const isEn = locale === "en";
   const isTumbler = site.id === "tumbler";
+  const flat = usesFlatCatalog(site);
   return {
-    title: isTumbler
-      ? isEn
-        ? "Insulated bottle catalog"
-        : "Catalogue gourdes isothermes"
+    title: flat
+      ? isTumbler
+        ? isEn
+          ? "Insulated bottle catalog"
+          : "Catalogue gourdes isothermes"
+        : isEn
+          ? `${site.brand.name} catalog`
+          : `Catalogue ${site.brand.name}`
       : isEn
         ? "EcoFlow product catalog"
         : "Catalogue produits EcoFlow",
-    description: isTumbler
-      ? isEn
-        ? "Top Amazon insulated bottles and tumblers — ships and sold by Amazon."
-        : "Meilleures ventes Amazon de gourdes et tumblers isothermes — Expédié et vendu par Amazon."
+    description: flat
+      ? isTumbler
+        ? isEn
+          ? "Top Amazon insulated bottles and tumblers — ships and sold by Amazon."
+          : "Meilleures ventes Amazon de gourdes et tumblers isothermes — Expédié et vendu par Amazon."
+        : isEn
+          ? `Product catalog for ${site.brand.name}.`
+          : `Catalogue produits ${site.brand.name}.`
       : isEn
         ? "RIVER, DELTA, DELTA Pro, PowerStream, solar panels and accessories."
         : "RIVER, DELTA, DELTA Pro, PowerStream, panneaux solaires et accessoires.",
@@ -64,8 +74,8 @@ export default async function ProductsIndexPage({
   const isEn = locale === "en";
   const site = await getCurrentSite();
 
-  if (site.id === "tumbler") {
-    const products = getProductsForSite("tumbler");
+  if (usesFlatCatalog(site)) {
+    const products = getProductsForSite(site.id);
     const [offers, ecoflowMap, editorialStore] = await Promise.all([
       getAmazonOffersMap(),
       getEcoflowEntriesMap(),
@@ -84,13 +94,22 @@ export default async function ProductsIndexPage({
         product,
       );
       const capacityMl = parseCapacityMl(product);
+      const catMeta = getCategoriesForSite(site.id).find(
+        (c) => c.id === product.category,
+      );
+      const catLabel = catMeta
+        ? locale === "en"
+          ? catMeta.en.title
+          : catMeta.fr.title
+        : product.category;
       return {
         slug: product.slug,
         href: `/produits/${product.category}/${product.slug}`,
         name: product.name,
         tagline: p.tagline,
         summary: p.summary,
-        category: product.category as "gourdes" | "tumblers",
+        category: product.category,
+        categoryLabel: catLabel,
         priceAmount: displayPrice?.amount ?? product.indicativePriceEur ?? null,
         priceDisplay: displayPrice?.display ?? null,
         capacityMl,
@@ -111,9 +130,13 @@ export default async function ProductsIndexPage({
       <div className="pt-6">
         <header className="mx-auto max-w-6xl px-5 py-12 md:px-8">
           <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold md:text-5xl">
-            {isEn
-              ? "Insulated bottles & tumblers"
-              : "Gourdes & tumblers isothermes"}
+            {site.id === "tumbler"
+              ? isEn
+                ? "Insulated bottles & tumblers"
+                : "Gourdes & tumblers isothermes"
+              : isEn
+                ? `${site.brand.name} catalog`
+                : `Catalogue ${site.brand.name}`}
           </h1>
           <p className="mt-4 max-w-3xl text-[var(--muted)]">
             {isEn

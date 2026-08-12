@@ -17,7 +17,7 @@ import {
 import { GUIDE_TOPICS } from "@/lib/guides/types";
 import { resolveGuide } from "@/lib/guides/refresh";
 import { resolveProductMedia } from "@/lib/product-presentation";
-import { localeAlternates } from "@/lib/seo";
+import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { redirect } from "@/i18n/navigation";
 
@@ -44,7 +44,10 @@ export async function generateMetadata({
     (LEGACY_TUMBLER_GUIDE_SLUGS as readonly string[]).includes(slug)
   ) {
     return {
-      alternates: localeAlternates(locale, `/guides/${TUMBLER_MAIN_GUIDE_SLUG}`),
+      alternates: await siteLocaleAlternates(
+        locale,
+        `/guides/${TUMBLER_MAIN_GUIDE_SLUG}`,
+      ),
     };
   }
   const guide = await resolveGuide(slug, site.id);
@@ -58,7 +61,7 @@ export async function generateMetadata({
   return {
     title: copy.title,
     description: copy.subtitle,
-    alternates: localeAlternates(locale, `/guides/${slug}`),
+    alternates: await siteLocaleAlternates(locale, `/guides/${slug}`),
     openGraph: { images: [{ url: og.src }] },
   };
 }

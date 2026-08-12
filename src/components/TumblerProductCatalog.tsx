@@ -10,7 +10,8 @@ export type TumblerCatalogItem = {
   name: string;
   tagline: string;
   summary: string;
-  category: "gourdes" | "tumblers";
+  category: string;
+  categoryLabel: string;
   priceAmount: number | null;
   priceDisplay: string | null;
   capacityMl: number | null;
@@ -36,7 +37,7 @@ type SortKey =
   | "name-desc"
   | "weight-asc";
 
-type CategoryFilter = "all" | "gourdes" | "tumblers";
+type CategoryFilter = "all" | string;
 
 function sortItems(items: TumblerCatalogItem[], sort: SortKey) {
   const list = [...items];
@@ -100,6 +101,16 @@ export function TumblerProductCatalog({
   const [sort, setSort] = useState<SortKey>("featured");
   const [category, setCategory] = useState<CategoryFilter>("all");
 
+  const categoryOptions = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const item of items) {
+      if (!map.has(item.category)) {
+        map.set(item.category, item.categoryLabel || item.category);
+      }
+    }
+    return [...map.entries()];
+  }, [items]);
+
   const visible = useMemo(() => {
     const filtered =
       category === "all"
@@ -160,12 +171,11 @@ export function TumblerProductCatalog({
               onChange={(e) => setCategory(e.target.value as CategoryFilter)}
             >
               <option value="all">{isEn ? "All" : "Tous"}</option>
-              <option value="gourdes">
-                {isEn ? "Bottles" : "Gourdes"}
-              </option>
-              <option value="tumblers">
-                {isEn ? "Tumblers" : "Tumblers"}
-              </option>
+              {categoryOptions.map(([id, label]) => (
+                <option key={id} value={id}>
+                  {label}
+                </option>
+              ))}
             </select>
           </label>
         </div>
@@ -216,13 +226,9 @@ export function TumblerProductCatalog({
                 <p className="mt-2 text-sm text-[var(--fog)]">{item.summary}</p>
                 <p className="mt-2 text-xs text-[var(--muted)]">
                   {isEn ? "Capacity" : "Capacité"} · {item.capacityLabel}
-                  {item.category === "tumblers"
-                    ? isEn
-                      ? " · Tumbler"
-                      : " · Tumbler"
-                    : isEn
-                      ? " · Bottle"
-                      : " · Gourde"}
+                  {item.categoryLabel
+                    ? ` · ${item.categoryLabel}`
+                    : ""}
                 </p>
               </div>
               <div className="text-sm md:text-right">

@@ -67,6 +67,15 @@ export const tumblerSite: SiteConfig = {
   },
   heroImage: "/images/tumbler/hero.jpg",
   featuredCategoryIds: ["gourdes", "tumblers"],
+  catalogLayout: "flat",
+  featuredProductSlugs: [
+    "super-sparrow-500",
+    "stanley-quencher-12l",
+    "owala-freesip-710",
+    "qwetch-originals-500",
+    "amazon-basics-isotherme",
+    "simple-modern-trek-1180",
+  ],
   network: [
     {
       siteId: "ecoflow",

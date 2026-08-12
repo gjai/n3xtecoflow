@@ -5,6 +5,7 @@ import {
   comparisonHubCategories,
   hubTitle,
   LEGACY_COMPARISON_REDIRECTS,
+  usesFlatCatalog,
 } from "@/lib/comparisons/hub";
 import { GUIDE_TOPICS, guideSiteId } from "@/lib/guides/types";
 import type { NewsArticle } from "@/lib/news/types";
@@ -247,7 +248,7 @@ export function getRelatedEditorial(options: {
           title: hubTitle(cat.id, locale),
           kind: "comparison" as const,
         }))
-      : siteId !== "ecoflow"
+      : usesFlatCatalog({ id: siteId })
         ? [
             {
               href: "/comparatifs",

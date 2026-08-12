@@ -84,8 +84,20 @@ export type SiteConfig = {
   brand: SiteBrand;
   theme: SiteTheme;
   heroImage: string;
-  /** Categories to highlight first on home */
+  /** Categories to highlight first on home (layout catégories) */
   featuredCategoryIds: string[];
+  /**
+   * Layout catalogue / home :
+   * - `categories` = grilles par gamme (EcoFlow)
+   * - `flat` = liste produits + sélection home (tumbler + futurs thèmes hors énergie)
+   * Défaut : categories si id=ecoflow, sinon flat.
+   */
+  catalogLayout?: "flat" | "categories";
+  /**
+   * Slugs mis en avant sur la home (layout flat). Ordre conservé.
+   * Si omis : premiers produits du catalogue (max 6).
+   */
+  featuredProductSlugs?: string[];
   /**
    * Sister / network sites in the footer.
    * - Internal theme: set `siteId` (resolved to primaryHost)

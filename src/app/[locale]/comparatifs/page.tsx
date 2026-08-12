@@ -9,7 +9,7 @@ import {
   hubTitle,
   productsForSiteCompare,
   toCompareProductView,
-  usesFlatComparison,
+  usesFlatCatalog,
 } from "@/lib/comparisons/hub";
 import { getLocalizedCategory } from "@/data/products";
 import { getAmazonOffersMap } from "@/lib/amazon/price-store";
@@ -26,7 +26,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const site = await getCurrentSite();
   const isEn = locale === "en";
-  const flat = usesFlatComparison(site.id);
+  const flat = usesFlatCatalog(site);
   return {
     title: isEn ? "Comparisons" : "Comparatifs",
     description: flat
@@ -53,7 +53,7 @@ export default async function ComparisonsIndexPage({
   const site = await getCurrentSite();
   const isEn = locale === "en";
 
-  if (usesFlatComparison(site.id)) {
+  if (usesFlatCatalog(site)) {
     const list = productsForSiteCompare(site.id);
     if (list.length < 2) {
       return (

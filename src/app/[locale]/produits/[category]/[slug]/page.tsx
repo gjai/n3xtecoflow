@@ -18,7 +18,7 @@ import {
 import { getRelatedEditorial } from "@/lib/product-related";
 import { RelatedReading } from "@/components/RelatedReading";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
-import { localeAlternates, localizeSpecs, siteLocaleAlternates } from "@/lib/seo";
+import { localizeSpecs, siteLocaleAlternates } from "@/lib/seo";
 import {
   categorySiteId,
   getCategory,

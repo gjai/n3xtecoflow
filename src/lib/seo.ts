@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { getCurrentSite } from "@/sites/server";
 
-/** Path without locale prefix, e.g. `/produits/river/river-2` or `` for home. */
+/**
+ * Path without locale prefix, e.g. `/produits/river/river-2` or `` for home.
+ * `origin` is required — never default to a hard-coded host (multi-thème).
+ * Prefer `siteLocaleAlternates()` in App Router pages.
+ */
 export function localeAlternates(
   locale: string,
   pathWithoutLocale = "",
-  origin?: string,
+  origin: string,
 ): NonNullable<Metadata["alternates"]> {
   const raw = pathWithoutLocale.trim();
   const path =
@@ -15,9 +19,7 @@ export function localeAlternates(
         ? raw.replace(/\/$/, "")
         : `/${raw.replace(/\/$/, "")}`;
 
-  const base =
-    (origin || process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com")
-      .replace(/\/$/, "");
+  const base = origin.replace(/\/$/, "");
 
   const fr = `${base}/fr${path}`;
   const en = `${base}/en${path}`;
@@ -33,13 +35,17 @@ export function localeAlternates(
   };
 }
 
-/** Canonical / hreflang for the current Host (multi-thème). */
+/** Canonical / hreflang for the current Host (tous thèmes actuels + futurs). */
 export async function siteLocaleAlternates(
   locale: string,
   pathWithoutLocale = "",
 ) {
   const site = await getCurrentSite();
-  return localeAlternates(locale, pathWithoutLocale, `https://${site.primaryHost}`);
+  return localeAlternates(
+    locale,
+    pathWithoutLocale,
+    `https://${site.primaryHost}`,
+  );
 }
 
 const SPEC_LABELS_EN: Record<string, string> = {

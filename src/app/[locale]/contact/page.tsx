@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
-import { localeAlternates } from "@/lib/seo";
+import { siteLocaleAlternates } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -10,7 +10,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "contact" });
-  return { title: t("title"), description: t("subtitle") , alternates: localeAlternates(locale, "/contact")};
+  return {
+    title: t("title"),
+    description: t("subtitle"),
+    alternates: await siteLocaleAlternates(locale, "/contact"),
+  };
 }
 
 export default async function ContactPage({

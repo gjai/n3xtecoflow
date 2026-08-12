@@ -4,7 +4,10 @@ import { useMemo, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AmazonButton } from "@/components/AmazonButton";
-import type { CompareProductView, CompareRow } from "@/lib/comparisons/hub";
+import {
+  buildCompareRows,
+  type CompareProductView,
+} from "@/lib/comparisons/hub";
 
 type Option = { slug: string; name: string };
 
@@ -28,63 +31,10 @@ export function ComparisonPicker({
   const left = products[leftSlug] || products[initialLeft];
   const right = products[rightSlug] || products[initialRight];
 
-  const rows: CompareRow[] = useMemo(() => {
+  const rows = useMemo(() => {
     if (!left || !right) return [];
-    const base: CompareRow[] = [];
-    if (left.capacityWh || right.capacityWh) {
-      base.push({
-        key: "capacity",
-        labelFr: "Capacité",
-        labelEn: "Capacity",
-        left: left.capacityWh ? `${left.capacityWh} Wh` : "—",
-        right: right.capacityWh ? `${right.capacityWh} Wh` : "—",
-      });
-    }
-    if (left.outputW || right.outputW) {
-      base.push({
-        key: "output",
-        labelFr: "Sortie AC",
-        labelEn: "AC output",
-        left: left.outputW ? `${left.outputW} W` : "—",
-        right: right.outputW ? `${right.outputW} W` : "—",
-      });
-    }
-    if (left.weightKg != null || right.weightKg != null) {
-      base.push({
-        key: "weight",
-        labelFr: "Poids",
-        labelEn: "Weight",
-        left: left.weightKg != null ? `${left.weightKg} kg` : "—",
-        right: right.weightKg != null ? `${right.weightKg} kg` : "—",
-      });
-    }
-    base.push({
-      key: "battery",
-      labelFr: "Batterie / matière",
-      labelEn: "Battery / material",
-      left: left.battery,
-      right: right.battery,
-    });
-    base.push({
-      key: "price",
-      labelFr: "Prix indicatif",
-      labelEn: "Indicative price",
-      left: left.priceDisplay || (isEn ? "See Amazon" : "Voir Amazon"),
-      right: right.priceDisplay || (isEn ? "See Amazon" : "Voir Amazon"),
-    });
-    const labels = new Set<string>();
-    for (const s of [...left.specs, ...right.specs]) labels.add(s.label);
-    for (const label of labels) {
-      base.push({
-        key: `spec-${label}`,
-        labelFr: label,
-        labelEn: label,
-        left: left.specs.find((s) => s.label === label)?.value || "—",
-        right: right.specs.find((s) => s.label === label)?.value || "—",
-      });
-    }
-    return base;
-  }, [left, right, isEn]);
+    return buildCompareRows(left, right, locale);
+  }, [left, right, locale]);
 
   if (!left || !right) return null;
 

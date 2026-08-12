@@ -9,7 +9,7 @@ import { SmartCover } from "@/components/SmartCover";
 import { getEditorialImages } from "@/data/images";
 import { amazonCtaForNews } from "@/lib/news/amazon-cta";
 import { getNewsBySlug, readNewsStore } from "@/lib/news/store";
-import { localeAlternates } from "@/lib/seo";
+import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 
 export const revalidate = 600;
@@ -28,7 +28,7 @@ export async function generateMetadata({
   return {
     title: copy.title,
     description: copy.excerpt,
-    alternates: localeAlternates(locale, `/actualites/${slug}`),
+    alternates: await siteLocaleAlternates(locale, `/actualites/${slug}`),
     openGraph: article.imageSrc
       ? { images: [{ url: article.imageSrc }] }
       : undefined,
