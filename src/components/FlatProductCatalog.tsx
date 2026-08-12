@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { CoverImage } from "@/components/CoverImage";
 
-export type TumblerCatalogItem = {
+export type FlatCatalogItem = {
   slug: string;
   href: string;
   name: string;
@@ -39,9 +39,9 @@ type SortKey =
 
 type CategoryFilter = "all" | string;
 
-function sortItems(items: TumblerCatalogItem[], sort: SortKey) {
+function sortItems(items: FlatCatalogItem[], sort: SortKey) {
   const list = [...items];
-  const byName = (a: TumblerCatalogItem, b: TumblerCatalogItem) =>
+  const byName = (a: FlatCatalogItem, b: FlatCatalogItem) =>
     a.name.localeCompare(b.name, "fr", { sensitivity: "base" });
 
   switch (sort) {
@@ -90,12 +90,12 @@ function sortItems(items: TumblerCatalogItem[], sort: SortKey) {
   }
 }
 
-export function TumblerProductCatalog({
+export function FlatProductCatalog({
   locale,
   items,
 }: {
   locale: string;
-  items: TumblerCatalogItem[];
+  items: FlatCatalogItem[];
 }) {
   const isEn = locale === "en";
   const [sort, setSort] = useState<SortKey>("featured");

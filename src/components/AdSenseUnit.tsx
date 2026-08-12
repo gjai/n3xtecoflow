@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useConsent } from "@/components/ConsentProvider";
+import { useSite } from "@/components/SiteProvider";
 
 type AdSenseUnitProps = {
   /** AdSense ad unit slot id */
@@ -22,8 +23,10 @@ export function AdSenseUnit({
   label = "Publicité",
 }: AdSenseUnitProps) {
   const { consent } = useConsent();
+  const site = useSite();
   const slotsEnabled = process.env.NEXT_PUBLIC_ADSENSE_SLOTS === "1";
   const client =
+    site.monetization?.adsenseClient?.trim() ||
     process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim() ||
     "ca-pub-4733644127583822";
   const adSlot =

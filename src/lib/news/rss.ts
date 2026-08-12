@@ -1,3 +1,4 @@
+import { getEditorial } from "@/sites/editorial";
 import type { SiteId } from "@/sites/types";
 
 export type RssItem = {
@@ -71,19 +72,8 @@ export function parseRssItems(xml: string): RssItem[] {
     .filter((i) => i.title && i.link && i.guid);
 }
 
-const ECOFLOW_BRAND =
-  /\becoflow\b|\bpowerstream\b|\bpower\s*stream\b/i;
-const ECOFLOW_PRODUCT =
-  /\bdelta(\s|-)?(2|3|pro|max|ultra)?\b|\briver(\s|-)?(2|3|pro|max|plus)?\b|\bstream(\s|-)?(ultra|pro|max|x)?\b|\bocean\b|\bglacier\b|\bwave(\s|-)?\d?\b|\brapid(\s|-)?pro\b/i;
-
-const TUMBLER_BRAND =
-  /\bgourde\b|\btumbler\b|\bmug\s+isotherme\b|\binsulated\s+(bottle|tumbler|mug|flask)\b|\bhydro\s*flask\b|\bstanley\b|\bqwetch\b|\bowala\b|\bthermos\b|\bsuper\s*sparrow\b|\bisotherme\b|\bwater\s*bottle\b/i;
-
 const OFF_TOPIC =
   /\bsegway\b|\bxyber\b|\be-?bike\b|\btesla\b|\biphone\b|\bsamsung\b|\bplaystation\b|\bxbox\b|\bnintendo\b|\bdyson\b|\broborock\b|\becovacs\b|\bbalances?\s+connect|\bmassage\s+(pour\s+)?les\s+pieds\b|\bfoot\s+massager\b|\bchaise\s+de\s+massage\b|\bpressoth[eé]rapie\b|\bbottes?\s+de\s+press|\bcompression\s+boots?\b|\beclipse\b/i;
-
-const MASSAGE_GUN_BRAND =
-  /\bpistolet\s+de\s+massage\b|\bmassage\s+gun\b|\btheragun\b|\btherabody\b|\bhypervolt\b|\bhyperice\b|\brenpho\b|\btoloco\b|\bbob\s+and\s*brad\b|\bopove\b|\bbrelley\b|\baerlang\b|\bjolt\b|\bpercussion\s+(massage|massager|therapy)\b|\bmasseur\s+(musculaire|cervical|dos|shiatsu)\b|\bcoussin\s+(de\s+)?massage\b|\bneck\s+massager\b|\bshiatsu\s+massager\b/i;
 
 const OFF_TOPIC_HARD =
   /\bpressoth[eé]rapie\b|\bbottes?\s+de\s+press|\bcompression\s+boots?\b|\bbalances?\s+connect|\bmassage\s+(pour\s+)?les\s+pieds\b|\bfoot\s+massager\b|\bchaise\s+de\s+massage\b|\bthermo[-\s]?pad\b|\bpad\s+chaud\b|\bchaud[-\s]?froid\b/i;
@@ -102,13 +92,12 @@ function brandPrimary(title: string, brand: RegExp) {
 }
 
 function topicBrand(siteId: SiteId) {
-  if (siteId === "tumbler") return TUMBLER_BRAND;
-  if (siteId === "massage-gun") return MASSAGE_GUN_BRAND;
-  return ECOFLOW_BRAND;
+  return getEditorial(siteId).topicBrandPattern;
 }
 
 export function isRelevantItem(item: RssItem, siteId: SiteId = "ecoflow") {
-  const brand = topicBrand(siteId);
+  const ed = getEditorial(siteId);
+  const brand = ed.topicBrandPattern;
   const hay = `${item.title} ${item.description}`;
   if (OFF_TOPIC_HARD.test(hay)) return false;
   if (!brand.test(hay)) return false;
@@ -116,8 +105,8 @@ export function isRelevantItem(item: RssItem, siteId: SiteId = "ecoflow") {
     return false;
   }
   if (brand.test(item.title)) return brandPrimary(item.title, brand);
-  if (siteId === "tumbler" || siteId === "massage-gun") return true;
-  return ECOFLOW_PRODUCT.test(hay);
+  if (ed.rssLenientAfterBrand) return true;
+  return ed.topicProductPattern?.test(hay) ?? false;
 }
 
 /** Post-rewrite / store guard — article must stay on the site topic. */
@@ -153,15 +142,9 @@ export async function fetchFeedItems(
   url: string,
   siteId: SiteId = "ecoflow",
 ): Promise<RssItem[]> {
-  const ua =
-    siteId === "tumbler"
-      ? "LaGourdeIsothermeBot/1.0 (+https://mon-tumbler.fr; editorial aggregator)"
-      : siteId === "massage-gun"
-        ? "LePistoletDeMassageBot/1.0 (+https://massage-gun.fr; editorial aggregator)"
-        : "EcoFlowStreamBot/1.0 (+https://ecoflow-stream.com; editorial aggregator)";
   const res = await fetch(url, {
     headers: {
-      "User-Agent": ua,
+      "User-Agent": getEditorial(siteId).feedUserAgent,
       Accept: "application/rss+xml, application/xml, text/xml, */*",
     },
     next: { revalidate: 0 },

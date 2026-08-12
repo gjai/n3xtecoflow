@@ -1,6 +1,8 @@
 import type { ArticleSection } from "@/data/articles";
 import { guides as staticGuides } from "@/data/articles";
 import { tumblerGuideCovers } from "@/data/tumbler-guides";
+import { getEditorial, siteUsesStaticBuyingGuide } from "@/sites/editorial";
+import { getSiteById } from "@/sites/index";
 import type { SiteId } from "@/sites/types";
 import { generateGuideCoverAi } from "./images";
 import { readGuidesStore, writeGuidesStore } from "./store";
@@ -61,12 +63,8 @@ async function rewriteGuideWithAi(topic: GuideTopic): Promise<{
   const existing = staticGuides.find((g) => g.slug === topic.slug);
 
   const site = guideSiteId(topic);
-  const brand =
-    site === "tumbler" ? "La gourde isotherme" : "EcoFlow Stream";
-  const scope =
-    site === "tumbler"
-      ? "gourdes / tumblers / mugs isothermes (Hydro Flask, Stanley, Qwetch, Owala, etc.)"
-      : "EcoFlow / PowerStream / stations DELTA-RIVER / solaire EcoFlow";
+  const brand = getSiteById(site).brand.name;
+  const scope = getEditorial(site).guideScope;
 
   const prompt = `Tu rédiges un GUIDE D'ACHAT long et utile pour ${brand} (site éditorial indépendant FR/EN, affiliation Amazon).
 
@@ -140,15 +138,19 @@ Format:
   }
 }
 
-function expandStatic(sections: ArticleSection[]): ArticleSection[] {
+function expandStatic(
+  sections: ArticleSection[],
+  siteId?: SiteId,
+): ArticleSection[] {
   if (sections.length >= 5) return sections;
+  const ed = siteId ? getEditorial(siteId) : getEditorial("ecoflow");
   return [
     ...sections,
     {
       heading: "Checklist avant achat",
       paragraphs: [
-        "Notez vos charges critiques (W), l’énergie journalière (Wh), et le mode de recharge (secteur / solaire / voiture).",
-        "Vérifiez la compatibilité accessoires et le prix du jour sur Amazon avant de commander.",
+        ed.checklistFr,
+        "Vérifiez le prix du jour sur Amazon avant de commander.",
       ],
     },
   ];
@@ -156,22 +158,11 @@ function expandStatic(sections: ArticleSection[]): ArticleSection[] {
 
 function fromTopic(topic: GuideTopic): GuideEntry {
   const site = guideSiteId(topic);
-  const productHintFr =
-    site === "tumbler"
-      ? "Parcourez les fiches produits et les hubs comparatifs pour comparer gourdes et tumblers."
-      : "Parcourez les fiches produits et les hubs comparatifs pour comparer les modèles EcoFlow disponibles.";
-  const productHintEn =
-    site === "tumbler"
-      ? "Browse product sheets and comparison hubs to compare bottles and tumblers."
-      : "Browse product sheets and comparison hubs to compare available EcoFlow models.";
-  const checklistFr =
-    site === "tumbler"
-      ? "Notez le volume souhaité, le type de bouchon (paille / sport), et le budget avant d’acheter."
-      : "Notez vos besoins en Wh/W, le mode de recharge (secteur / solaire), et le budget avant d’acheter.";
-  const checklistEn =
-    site === "tumbler"
-      ? "Note your preferred volume, lid type (straw / sport), and budget before buying."
-      : "Note your Wh/W needs, charging mode (AC / solar), and budget before buying.";
+  const ed = getEditorial(site);
+  const productHintFr = ed.productHintFr;
+  const productHintEn = ed.productHintEn;
+  const checklistFr = ed.checklistFr;
+  const checklistEn = ed.checklistEn;
 
   return {
     slug: topic.slug,
@@ -254,18 +245,19 @@ function fromStatic(slug: string): GuideEntry | null {
     return topic ? fromTopic(topic) : null;
   }
   const cover = tumblerGuideCovers[slug];
+  const site = guideSiteId(topic);
   return {
     slug,
-    siteId: guideSiteId(topic),
+    siteId: site,
     fr: {
       title: g.fr.title,
       subtitle: g.fr.subtitle,
-      sections: expandStatic(g.fr.sections),
+      sections: expandStatic(g.fr.sections, site),
     },
     en: {
       title: g.en.title,
       subtitle: g.en.subtitle,
-      sections: expandStatic(g.en.sections),
+      sections: expandStatic(g.en.sections, site),
     },
     model: "static",
     updatedAt: new Date().toISOString(),
@@ -400,10 +392,11 @@ export async function resolveGuide(
   if (siteId && topic && guideSiteId(topic) !== siteId) return null;
   const staticEntry = fromStatic(slug);
 
-  // Tumbler : guide éditorial unique avec productSlugs — toujours le seed static
-  if (siteId === "tumbler" && staticEntry) {
-    return { ...staticEntry, siteId: "tumbler" };
+  // Thèmes flat : guide éditorial unique avec productSlugs — toujours le seed static
+  if (siteId && siteUsesStaticBuyingGuide(siteId) && staticEntry) {
+    return { ...staticEntry, siteId };
   }
+
 
   const stored = (await readGuidesStore()).entries[slug];
   const storedRich =
@@ -431,10 +424,10 @@ export async function resolveAllGuides(siteId?: SiteId): Promise<GuideEntry[]> {
   const topics = siteId ? guidesForSite(GUIDE_TOPICS, siteId) : GUIDE_TOPICS;
   const bySlug = new Map<string, GuideEntry>();
   for (const topic of topics) {
-    if (siteId === "tumbler") {
+    if (siteId && siteUsesStaticBuyingGuide(siteId)) {
       const staticEntry = fromStatic(topic.slug);
       if (staticEntry) {
-        bySlug.set(topic.slug, { ...staticEntry, siteId: "tumbler" });
+        bySlug.set(topic.slug, { ...staticEntry, siteId });
       }
       continue;
     }

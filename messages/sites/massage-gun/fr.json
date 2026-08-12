@@ -50,7 +50,20 @@
   "powerstream": {
     "title": "Catalogue",
     "subtitle": "Sélection de pistolets de massage musculaire.",
-    "intro": "Parcourez le catalogue pour comparer les modèles."
+    "intro": "Parcourez le catalogue pour comparer les modèles.",
+    "whatTitle": "Le catalogue",
+    "whatText": "Fiches produits et critères utiles pour choisir un pistolet de massage.",
+    "forWhoTitle": "Pour qui ?",
+    "forWhoText": "Sport, bureau, voyage : trouver le format adapté à votre usage.",
+    "checklistTitle": "Avant d’acheter",
+    "check1": "Zones à masser (mollets, dos, nuque)",
+    "check2": "Amplitude / force nécessaires",
+    "check3": "Bruit et autonomie acceptables",
+    "check4": "Budget et vendeur Amazon",
+    "ctaAmazon": "Voir sur Amazon",
+    "relatedTitle": "Aller plus loin",
+    "relatedGuide": "Guide d’achat pistolets de massage",
+    "adsLabel": "Publicité"
   },
   "comparisons": {
     "subtitle": "Des lectures rapides pour trancher entre modèles.",

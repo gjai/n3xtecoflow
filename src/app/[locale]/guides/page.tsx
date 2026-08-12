@@ -3,13 +3,12 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { redirect } from "@/i18n/navigation";
 import { ArticleCover } from "@/components/ArticleCover";
-import { TUMBLER_MAIN_GUIDE_SLUG } from "@/data/tumbler-guides";
-import { MASSAGE_GUN_MAIN_GUIDE_SLUG } from "@/data/massage-gun-guides";
 import { getEditorialImages } from "@/data/images";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import { resolveArticleProductImages } from "@/lib/article-images";
 import { resolveAllGuides } from "@/lib/guides/refresh";
 import { siteLocaleAlternates } from "@/lib/seo";
+import { siteMainGuideSlug } from "@/sites/copy";
 import { getCurrentSite } from "@/sites/server";
 
 export const revalidate = 600;
@@ -43,11 +42,9 @@ export default async function GuidesIndexPage({
   const isEn = locale === "en";
 
   // Thèmes flat : un seul guide → page guide directement
-  if (site.id === "tumbler") {
-    redirect({ href: `/guides/${TUMBLER_MAIN_GUIDE_SLUG}`, locale });
-  }
-  if (site.id === "massage-gun") {
-    redirect({ href: `/guides/${MASSAGE_GUN_MAIN_GUIDE_SLUG}`, locale });
+  const mainGuide = siteMainGuideSlug(site.id);
+  if (mainGuide) {
+    redirect({ href: `/guides/${mainGuide}`, locale });
   }
 
   const ecoflowMap = await getEcoflowEntriesMap();

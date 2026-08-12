@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { CoverImage } from "@/components/CoverImage";
 import {
-  TumblerProductCatalog,
-  type TumblerCatalogItem,
-} from "@/components/TumblerProductCatalog";
+  FlatProductCatalog,
+  type FlatCatalogItem,
+} from "@/components/FlatProductCatalog";
 import { categoryImages } from "@/data/images";
 import { getAmazonOffersMap } from "@/lib/amazon/price-store";
 import { usesFlatCatalog } from "@/lib/comparisons/hub";
@@ -74,7 +74,7 @@ export default async function ProductsIndexPage({
         m.readEcoflowEditorialStore(),
       ),
     ]);
-    const items: TumblerCatalogItem[] = products.map((product) => {
+    const items: FlatCatalogItem[] = products.map((product) => {
       const editorial = editorialStore.entries[product.slug];
       const p = resolveProductCopy(product, locale, editorial);
       const eco = ecoflowMap[product.slug];
@@ -131,7 +131,7 @@ export default async function ProductsIndexPage({
               : "Triez par prix ou poids, filtrez par format — préférez Expédié et vendu par Amazon."}
           </p>
         </header>
-        <TumblerProductCatalog locale={locale} items={items} />
+        <FlatProductCatalog locale={locale} items={items} />
       </div>
     );
   }

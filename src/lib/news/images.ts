@@ -4,6 +4,7 @@ import path from "path";
 import { getProductsForSite } from "@/data/products";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import { resolveProductMedia } from "@/lib/product-presentation";
+import { buildNewsCoverPrompt, getEditorial } from "@/sites/editorial";
 import type { SiteId } from "@/sites/types";
 import { fetchSourcePage } from "./source";
 
@@ -197,41 +198,15 @@ function newsAiCoverPrompt(
   title: string,
   excerpt?: string,
 ): string {
-  const common = `No text, no logos, no watermarks, no Google branding, no UI chrome.
-Subject inspired by: "${title}".
-STRICT: do not mix themes — never show portable power stations, solar panels, EcoFlow-like gear, insulated bottles/tumblers, or unrelated products unless they match this theme.`;
-
-  if (siteId === "tumbler") {
-    return `Create a photorealistic editorial cover image (16:9) for insulated bottles / tumblers news.
-${common}
-Context: ${excerpt || "insulated water bottle, tumbler, daily hydration"}.
-Style: premium product photography, natural light, lifestyle desk/outdoor, shallow depth of field.
-Show ONLY generic unbranded stainless steel bottles or tumblers.`;
-  }
-  if (siteId === "massage-gun") {
-    return `Create a photorealistic editorial cover image (16:9) for percussion massage gun / muscle recovery news.
-${common}
-Context: ${excerpt || "massage gun, percussion therapy, muscle recovery, neck or back massager"}.
-Style: premium product photography, natural light, sport/wellness setting, shallow depth of field.
-Show ONLY a massage gun, mini massage gun, neck massager, or shiatsu cushion — no energy/solar products.
-Make the composition unique for this article (angle, setting, and props can vary).`;
-  }
-  return `Create a photorealistic editorial cover image (16:9) for an energy / EcoFlow news article.
-${common}
-Context: ${excerpt || "portable power station, solar energy, battery backup"}.
-Style: premium product photography, natural light, outdoor or home energy setting, shallow depth of field.
-Show EcoFlow-like portable power gear or solar panels if relevant — generic unbranded if unsure.`;
+  return buildNewsCoverPrompt(siteId, title, excerpt);
 }
 
 function newsAiCoverCredit(siteId: SiteId): string {
-  if (siteId === "tumbler") return "La gourde isotherme (IA)";
-  if (siteId === "massage-gun") return "Le pistolet de massage (IA)";
-  return "EcoFlow Stream (IA)";
+  return getEditorial(siteId).coverCreditAi;
 }
 
 function newsPackshotCredit(siteId: SiteId): string {
-  if (siteId === "tumbler" || siteId === "massage-gun") return "Amazon";
-  return "EcoFlow";
+  return getEditorial(siteId).packshotCredit;
 }
 
 async function generateCoverWithGemini(args: {
@@ -454,9 +429,9 @@ export async function resolveNewsCover(args: {
 
   const title = args.title || args.slug;
 
-  // Massage-gun / tumbler : IA d’abord pour des couvertures uniques par article
-  // (les packshots Amazon se répétaient via des mots génériques type « massage »).
-  if (siteId === "massage-gun" || siteId === "tumbler") {
+  // Thèmes flat : IA d’abord pour des couvertures uniques par article
+  // (les packshots Amazon se répétaient via des mots génériques).
+  if (getEditorial(siteId).preferAiNewsCovers) {
     const aiFirst = await generateCoverWithGemini({
       title,
       excerpt: args.excerpt,
@@ -509,7 +484,7 @@ export async function resolveNewsCover(args: {
     slug: args.slug,
     siteId,
     minScore: 1,
-    allowWeakDefault: siteId === "ecoflow",
+    allowWeakDefault: getEditorial(siteId).allowWeakPackshotDefault,
   });
   if (pack) {
     return {

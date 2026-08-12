@@ -96,6 +96,56 @@ export const ecoflowSite: SiteConfig = {
       labelEn: "Pipe marking",
     },
   ],
+  editorial: {
+    amazonQuery: "EcoFlow station électrique",
+    knowsAbout: [
+      "EcoFlow",
+      "Portable power stations",
+      "Balcony solar",
+      "PowerStream",
+    ],
+    feedUserAgent:
+      "EcoFlowStreamBot/1.0 (+https://ecoflow-stream.com; editorial aggregator)",
+    packshotCredit: "EcoFlow",
+    coverCreditAi: "EcoFlow Stream (IA)",
+    buyingTipFr:
+      "Pour les lecteurs EcoFlow Stream : croisez toujours capacité (Wh), puissance (W), compatibilité STREAM / stations et le prix du jour avant d’acheter.",
+    buyingTipEn:
+      "For EcoFlow Stream readers: always cross-check capacity (Wh), output (W), STREAM / station compatibility, and live pricing before buying.",
+    topicLabelFr: "l’écosystème EcoFlow",
+    topicLabelEn: "the EcoFlow ecosystem",
+    guideScope:
+      "EcoFlow / PowerStream / stations DELTA-RIVER / solaire EcoFlow",
+    productHintFr:
+      "Parcourez les fiches produits et les hubs comparatifs pour comparer les modèles EcoFlow disponibles.",
+    productHintEn:
+      "Browse product sheets and comparison hubs to compare available EcoFlow models.",
+    checklistFr:
+      "Notez vos besoins en Wh/W, le mode de recharge (secteur / solaire), et le budget avant d’acheter.",
+    checklistEn:
+      "Note your Wh/W needs, charging mode (AC / solar), and budget before buying.",
+    newsPerimeter:
+      "EcoFlow / PowerStream / STREAM / stations DELTA-RIVER / solaire EcoFlow",
+    newsTitleMustMention:
+      '"EcoFlow" ou "PowerStream" (ou un produit clairement EcoFlow: DELTA, RIVER, STREAM, GLACIER, WAVE, RAPID Pro)',
+    newsBuyingCriteria:
+      "Wh, W, usage camping/backup/solaire balcon, STREAM/DELTA/PowerStream si pertinent",
+    newsDefaultTags: ["ecoflow", "delta"],
+    coverSubject: "an energy / EcoFlow news article",
+    coverContextDefault: "portable power station, solar energy, battery backup",
+    coverStyle:
+      "premium product photography, natural light, outdoor or home energy setting, shallow depth of field",
+    coverShowOnly:
+      "Show EcoFlow-like portable power gear or solar panels if relevant — generic unbranded if unsure.",
+    rssLenientAfterBrand: false,
+    preferAiNewsCovers: false,
+    allowWeakPackshotDefault: true,
+    topicBrandPattern:
+      /\becoflow\b|\bpowerstream\b|\bpower\s*stream\b/i,
+    topicProductPattern:
+      /\bdelta(\s|-)?(2|3|pro|max|ultra)?\b|\briver(\s|-)?(2|3|pro|max|plus)?\b|\bstream(\s|-)?(ultra|pro|max|x)?\b|\bocean\b|\bglacier\b|\bwave(\s|-)?\d?\b|\brapid(\s|-)?pro\b/i,
+  },
+
   focusFr:
     "Catalogue large EcoFlow + guides d’achat (camping, backup, solaire balcon).",
   focusEn:

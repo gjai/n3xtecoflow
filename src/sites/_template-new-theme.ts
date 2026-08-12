@@ -20,10 +20,11 @@
  * 10. SEO : toujours `siteLocaleAlternates` (jamais d’origin hard-codé)
  * 11. Comparateur : lignes auto (Wh/W si énergie, sinon ml / isolation / matière)
  * 12. i18n : `messages/sites/<id>/{fr,en}.json` (loader générique — neutraliser fuites EcoFlow)
- * 13. Actus : `NEWS_FEEDS` + règles marque dans `rss.ts` / `quality.ts` (anti-promo / anti-doublons)
- * 14. Sitemap / robots : Host-aware auto si site déclaré (pas d’URLs d’autres thèmes)
- * 15. AdSense : autoriser le nouveau domaine dans le compte
- * 16. Creators API = prix live plus tard (≥ 10 ventes / 30 j)
+ * 13. Profil `editorial` OBLIGATOIRE (amazonQuery, prompts, covers, mainGuideSlug si flat)
+ * 14. Actus : `NEWS_FEEDS` + regex marque dans `rss.ts` / `quality.ts` (anti-promo / anti-doublons)
+ * 15. Sitemap / robots : Host-aware auto si site déclaré (pas d’URLs d’autres thèmes)
+ * 16. AdSense : autoriser le nouveau domaine + `monetization.adsenseClient` si besoin
+ * 17. Creators API = prix live plus tard (≥ 10 ventes / 30 j)
  *
  * Voir .cursor/rules/domaines-declaration.mdc et amazon-creators-api.mdc
  */
@@ -90,6 +91,37 @@ export const templateNewThemeSite = {
   catalogLayout: "flat" as const,
   featuredProductSlugs: [] as string[],
   network: [],
+  editorial: {
+    amazonQuery: "…",
+    knowsAbout: ["…"],
+    mainGuideSlug: "choisir-…",
+    feedUserAgent: "ExempleBot/1.0 (+https://exemple-futur.com; editorial aggregator)",
+    packshotCredit: "Amazon",
+    coverCreditAi: "Exemple Futur (IA)",
+    buyingTipFr: "…",
+    buyingTipEn: "…",
+    topicLabelFr: "…",
+    topicLabelEn: "…",
+    guideScope: "…",
+    productHintFr: "…",
+    productHintEn: "…",
+    checklistFr: "…",
+    checklistEn: "…",
+    newsPerimeter: "…",
+    newsTitleMustMention: "…",
+    newsBuyingCriteria: "…",
+    newsDefaultTags: ["…"],
+    coverSubject: "…",
+    coverContextDefault: "…",
+    coverStyle:
+      "premium product photography, natural light, shallow depth of field",
+    coverShowOnly: "Show ONLY products from this vertical — never mix themes.",
+    rssLenientAfterBrand: true,
+    preferAiNewsCovers: true,
+    allowWeakPackshotDefault: false,
+    topicBrandPattern: /\bexemple\b|\bmarque\b/i,
+  },
+
   focusFr: "…",
   focusEn: "…",
 } satisfies Omit<SiteConfig, "id"> & { id: string };

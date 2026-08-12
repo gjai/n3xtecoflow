@@ -35,6 +35,7 @@ import { resolveProductCopy } from "@/lib/product-copy";
 import { resolveProductMedia } from "@/lib/product-presentation";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
+import { siteAmazonFallbackQuery } from "@/sites/copy";
 /** Fresh news without blocking CDN cache on every request. */
 export const revalidate = 600;
 
@@ -469,7 +470,7 @@ export default async function HomePage({
                   {isEn ? "Browse catalog" : "Voir le catalogue"}
                 </Link>
                 <AmazonButton
-                  href={buildAmazonSearchUrl("gourde isotherme")}
+                  href={buildAmazonSearchUrl(siteAmazonFallbackQuery(site.id))}
                   label={a("cta")}
                 />
               </div>

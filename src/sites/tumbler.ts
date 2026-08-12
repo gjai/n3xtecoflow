@@ -98,6 +98,57 @@ export const tumblerSite: SiteConfig = {
       labelEn: "Pipe marking",
     },
   ],
+  editorial: {
+    amazonQuery: "gourde isotherme",
+    knowsAbout: [
+      "Insulated bottles",
+      "Tumblers",
+      "Hydration",
+      "Amazon bestsellers",
+    ],
+    mainGuideSlug: "choisir-gourde-isotherme",
+    feedUserAgent:
+      "LaGourdeIsothermeBot/1.0 (+https://mon-tumbler.fr; editorial aggregator)",
+    packshotCredit: "Amazon",
+    coverCreditAi: "La gourde isotherme (IA)",
+    buyingTipFr:
+      "Pour les lecteurs de La gourde isotherme : croisez volume, isolation, type de bouchon et le prix du jour avant d’acheter.",
+    buyingTipEn:
+      "For La gourde isotherme readers: always cross-check volume, insulation, lid type, and live pricing before buying.",
+    topicLabelFr: "les gourdes et tumblers isothermes",
+    topicLabelEn: "insulated bottles and tumblers",
+    guideScope:
+      "gourdes / tumblers / mugs isothermes (Hydro Flask, Stanley, Qwetch, Owala, etc.)",
+    productHintFr:
+      "Parcourez les fiches produits et les hubs comparatifs pour comparer gourdes et tumblers.",
+    productHintEn:
+      "Browse product sheets and comparison hubs to compare bottles and tumblers.",
+    checklistFr:
+      "Notez le volume souhaité, le type de bouchon (paille / sport), et le budget avant d’acheter.",
+    checklistEn:
+      "Note your preferred volume, lid type (straw / sport), and budget before buying.",
+    newsPerimeter:
+      "gourdes / tumblers / mugs isothermes (Hydro Flask, Stanley, Qwetch, Owala, Thermos, Super Sparrow, etc.)",
+    newsTitleMustMention:
+      "gourde, tumbler, mug isotherme ou une marque du périmètre",
+    newsBuyingCriteria: "volume, isolation, bouchon, entretien",
+    newsDefaultTags: ["gourde", "tumbler"],
+    newsExtraRules: [
+      "Éviter de recentrer tout sur Owala : diversifier les marques quand la source le permet",
+    ],
+    coverSubject: "insulated bottles / tumblers news",
+    coverContextDefault: "insulated water bottle, tumbler, daily hydration",
+    coverStyle:
+      "premium product photography, natural light, lifestyle desk/outdoor, shallow depth of field",
+    coverShowOnly:
+      "Show ONLY generic unbranded stainless steel bottles or tumblers.",
+    rssLenientAfterBrand: true,
+    preferAiNewsCovers: true,
+    allowWeakPackshotDefault: false,
+    topicBrandPattern:
+      /\bgourde\b|\btumbler\b|\bmug\s+isotherme\b|\binsulated\s+(bottle|tumbler|mug|flask)\b|\bhydro\s*flask\b|\bstanley\b|\bqwetch\b|\bowala\b|\bthermos\b|\bsuper\s*sparrow\b|\bisotherme\b|\bwater\s*bottle\b/i,
+  },
+
   focusFr: "Top ventes Amazon de gourdes isothermes (vendu par Amazon).",
   focusEn: "Amazon bestsellers for insulated bottles (sold by Amazon).",
 };

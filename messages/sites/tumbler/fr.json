@@ -59,8 +59,22 @@
   "powerstream": {
     "title": "Catalogue",
     "subtitle": "Sélection de gourdes et tumblers isothermes.",
-    "intro": "Parcourez le catalogue pour comparer les modèles."
+    "intro": "Parcourez le catalogue pour comparer les modèles.",
+    "whatTitle": "Le catalogue",
+    "whatText": "Fiches produits et critères utiles pour choisir une gourde isotherme.",
+    "forWhoTitle": "Pour qui ?",
+    "forWhoText": "Sport, bureau, voyage : trouver le format adapté à votre usage.",
+    "checklistTitle": "Avant d’acheter",
+    "check1": "Volume utile au quotidien",
+    "check2": "Type de bouchon (paille, sport, étanche)",
+    "check3": "Isolation chaud / froid souhaitée",
+    "check4": "Budget et vendeur Amazon",
+    "ctaAmazon": "Voir sur Amazon",
+    "relatedTitle": "Aller plus loin",
+    "relatedGuide": "Guide d’achat gourdes isothermes",
+    "adsLabel": "Publicité"
   },
+
   "comparisons": {
     "subtitle": "Des lectures rapides pour trancher entre modèles et formats.",
     "card1Title": "Gourde vs tumbler",

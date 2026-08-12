@@ -59,8 +59,22 @@
   "powerstream": {
     "title": "Catalog",
     "subtitle": "Insulated bottles and tumblers shortlist.",
-    "intro": "Browse the catalog to compare models."
+    "intro": "Browse the catalog to compare models.",
+    "whatTitle": "The catalog",
+    "whatText": "Product sheets and criteria to choose an insulated bottle.",
+    "forWhoTitle": "Who is it for?",
+    "forWhoText": "Sport, desk, travel: find the right format for your use case.",
+    "checklistTitle": "Before you buy",
+    "check1": "Daily useful volume",
+    "check2": "Lid type (straw, sport, leak-proof)",
+    "check3": "Hot / cold insulation needed",
+    "check4": "Budget and Amazon seller",
+    "ctaAmazon": "See on Amazon",
+    "relatedTitle": "Go further",
+    "relatedGuide": "Insulated bottle buying guide",
+    "adsLabel": "Advertisement"
   },
+
   "comparisons": {
     "subtitle": "Quick reads to decide between models and formats.",
     "card1Title": "Bottle vs tumbler",

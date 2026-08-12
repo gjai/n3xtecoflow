@@ -1,3 +1,4 @@
+import { buildNewsRewritePrompt, getEditorial } from "@/sites/editorial";
 import type { SiteId } from "@/sites/types";
 import { pricesToEuroText } from "@/lib/money";
 import type { NewsArticle, NewsLocaleCopy } from "./types";
@@ -29,30 +30,11 @@ function templateCopy(
     .filter((s) => s.length > 40)
     .slice(0, 8);
 
-  const tipFr =
-    siteId === "tumbler"
-      ? "Pour les lecteurs de La gourde isotherme : croisez volume, isolation, type de bouchon et le prix du jour avant d’acheter."
-      : siteId === "massage-gun"
-        ? "Pour les lecteurs du pistolet de massage : croisez amplitude, force, bruit, embouts et le prix du jour avant d’acheter."
-        : "Pour les lecteurs EcoFlow Stream : croisez toujours capacité (Wh), puissance (W), compatibilité STREAM / stations et le prix du jour avant d’acheter.";
-  const tipEn =
-    siteId === "tumbler"
-      ? "For La gourde isotherme readers: always cross-check volume, insulation, lid type, and live pricing before buying."
-      : siteId === "massage-gun"
-        ? "For Le pistolet de massage readers: always cross-check amplitude, force, noise, heads, and live pricing before buying."
-        : "For EcoFlow Stream readers: always cross-check capacity (Wh), output (W), STREAM / station compatibility, and live pricing before buying.";
-  const excerptFallbackFr =
-    siteId === "tumbler"
-      ? `Couverture ${item.sourceName} du ${when} sur les gourdes et tumblers isothermes.`
-      : siteId === "massage-gun"
-        ? `Couverture ${item.sourceName} du ${when} sur les pistolets de massage.`
-        : `Couverture ${item.sourceName} du ${when} sur l’écosystème EcoFlow.`;
-  const excerptFallbackEn =
-    siteId === "tumbler"
-      ? `${item.sourceName} coverage on ${when} about insulated bottles and tumblers.`
-      : siteId === "massage-gun"
-        ? `${item.sourceName} coverage on ${when} about massage guns.`
-        : `${item.sourceName} coverage on ${when} about the EcoFlow ecosystem.`;
+  const ed = getEditorial(siteId);
+  const tipFr = ed.buyingTipFr;
+  const tipEn = ed.buyingTipEn;
+  const excerptFallbackFr = `Couverture ${item.sourceName} du ${when} sur ${ed.topicLabelFr}.`;
+  const excerptFallbackEn = `${item.sourceName} coverage on ${when} about ${ed.topicLabelEn}.`;
 
   if (locale === "fr") {
     const body = [
@@ -94,112 +76,15 @@ function aiPromptForSite(
   source: SourcePage | null,
   sourceText: string,
 ) {
-  if (siteId === "tumbler") {
-    return `Tu es journaliste / rédacteur senior pour La gourde isotherme (site éditorial indépendant FR/EN).
-
-Mission: rédiger un VRAI ARTICLE complet (pas un résumé de 3 lignes), bilingue, à partir de la source fournie.
-
-Périmètre STRICT:
-- Sujet UNIQUEMENT gourdes / tumblers / mugs isothermes (Hydro Flask, Stanley, Qwetch, Owala, Thermos, Super Sparrow, etc.)
-- Si la source n'est PAS centrée sur ce sujet → réponds exactement {"skip":true}
-- Interdiction d'inventer un angle "gourde" si la source en parle à peine
-- Les titres FR/EN doivent mentionner clairement gourde, tumbler, mug isotherme ou une marque du périmètre
-- Si la source est une pure promo / deal / coupon / soldes sans angle éditorial utile → {"skip":true}
-- Éviter de recentrer tout sur Owala : diversifier les marques quand la source le permet
-
-Règles rédaction:
-- Contenu ORIGINAL (reformulation totale)
-- Ne pas inventer de chiffres, promos, dates ou specs absents de la source
-- Prix UNIQUEMENT en euros (€) — jamais de dollars ($ / USD). Si la source cite un prix US, convertis approximativement en € ou oriente vers « prix du jour sur Amazon.fr »
-- Citer clairement la source (${item.sourceName})
-- Structure par langue: titre, excerpt, body = 7 à 10 paragraphes utiles
-- Développer: contexte, faits, critères d’achat (volume, isolation, bouchon, entretien), limites, conclusion actionable — pas une fiche promo
-- JSON strict uniquement, sans markdown
-
-Entrée:
-sourceName=${item.sourceName}
-date=${item.publishedAt}
-rssTitle=${item.title}
-publisherTitle=${source?.title || ""}
-publisherUrl=${source?.finalUrl || item.link}
-sourceText=<<
-${sourceText}
->>
-
-Format JSON:
-{"fr":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"en":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"tags":["gourde","tumbler"]}
-ou {"skip":true}`;
-  }
-
-  if (siteId === "massage-gun") {
-    return `Tu es journaliste / rédacteur senior pour Le pistolet de massage (site éditorial indépendant FR/EN).
-
-Mission: rédiger un VRAI ARTICLE complet (pas un résumé de 3 lignes), bilingue, à partir de la source fournie.
-
-Périmètre STRICT:
-- Sujet UNIQUEMENT pistolets de massage / massage guns / thérapie par percussion / masseurs cervicaux & shiatsu (Theragun, Hypervolt, Renpho, TOLOCO, Bob and Brad, Brelley, AERLANG, etc.)
-- Si la source n'est PAS centrée sur ce sujet → réponds exactement {"skip":true}
-- Interdiction d'inventer un angle "massage gun" si la source en parle à peine
-- Les titres FR/EN doivent mentionner clairement pistolet de massage, massage gun, masseur cervical/shiatsu ou une marque du périmètre
-- Si la source est une pure promo / deal / coupon / soldes sans angle éditorial utile → {"skip":true}
-
-Règles rédaction:
-- Contenu ORIGINAL (reformulation totale)
-- Ne pas inventer de chiffres, promos, dates ou specs absents de la source
-- Prix UNIQUEMENT en euros (€)
-- Citer clairement la source (${item.sourceName})
-- Structure par langue: titre, excerpt, body = 7 à 10 paragraphes utiles
-- Développer: contexte, faits, critères d’achat (amplitude, force, bruit, embouts, autonomie), limites, conclusion actionable
-- JSON strict uniquement, sans markdown
-
-Entrée:
-sourceName=${item.sourceName}
-date=${item.publishedAt}
-rssTitle=${item.title}
-publisherTitle=${source?.title || ""}
-publisherUrl=${source?.finalUrl || item.link}
-sourceText=<<
-${sourceText}
->>
-
-Format JSON:
-{"fr":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"en":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"tags":["massage-gun","theragun"]}
-ou {"skip":true}`;
-  }
-
-  return `Tu es journaliste / rédacteur senior pour EcoFlow Stream (site éditorial indépendant FR/EN).
-
-Mission: rédiger un VRAI ARTICLE complet (pas un résumé de 3 lignes), bilingue, à partir de la source fournie.
-
-Périmètre STRICT:
-- Sujet UNIQUEMENT EcoFlow / PowerStream / STREAM / stations DELTA-RIVER / solaire EcoFlow
-- Si la source n'est PAS centrée sur EcoFlow (Segway, Tesla, vélo, promo Amazon générique sans EcoFlow, etc.) → réponds exactement {"skip":true}
-- Interdiction d'inventer un angle EcoFlow si la source en parle à peine ou pas du tout
-- Les titres FR et EN doivent contenir "EcoFlow" ou "PowerStream" (ou un produit clairement EcoFlow: DELTA, RIVER, STREAM, GLACIER, WAVE, RAPID Pro)
-
-Règles rédaction:
-- Contenu ORIGINAL (reformulation totale) — interdiction de copier-coller des phrases de la source
-- Ne pas inventer de chiffres, promos, dates ou specs absents de la source
-- Prix UNIQUEMENT en euros (€) — jamais de dollars ($ / USD). Si la source cite un prix US, convertis approximativement en € ou oriente vers « prix du jour sur Amazon.fr »
-- Citer clairement la source (${item.sourceName})
-- Structure par langue: titre accrocheur, excerpt (1-2 phrases), body = 7 à 10 paragraphes utiles
-- Développer: contexte, faits, enjeux pour l’acheteur (Wh, W, usage camping/backup/solaire balcon, STREAM/DELTA/PowerStream si pertinent), limites / points de vigilance, conclusion actionable
-- Ton clair, concret, non marketing mensonger
-- JSON strict uniquement, sans markdown
-
-Entrée:
-sourceName=${item.sourceName}
-date=${item.publishedAt}
-rssTitle=${item.title}
-publisherTitle=${source?.title || ""}
-publisherUrl=${source?.finalUrl || item.link}
-sourceText=<<
-${sourceText}
->>
-
-Format JSON:
-{"fr":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"en":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"tags":["ecoflow","delta"]}
-ou {"skip":true}`;
+  return buildNewsRewritePrompt({
+    siteId,
+    sourceName: item.sourceName,
+    publishedAt: item.publishedAt,
+    rssTitle: item.title,
+    publisherTitle: source?.title || "",
+    publisherUrl: source?.finalUrl || item.link,
+    sourceText,
+  });
 }
 
 async function rewriteWithAi(

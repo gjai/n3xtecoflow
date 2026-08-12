@@ -1,10 +1,5 @@
 import type { SiteId } from "./types";
-import { sitesById } from "./index";
-
-/** Sites with flat catalog + single long buying guide. */
-export function isFlatCatalogSite(siteId: SiteId): boolean {
-  return siteId !== "ecoflow";
-}
+import { getSiteById, sitesById } from "./index";
 
 export function parseSiteIdParam(
   raw: string | null | undefined,
@@ -14,36 +9,17 @@ export function parseSiteIdParam(
 }
 
 export function siteKnowsAbout(siteId: SiteId): string[] {
-  if (siteId === "tumbler") {
-    return [
-      "Insulated bottles",
-      "Tumblers",
-      "Hydration",
-      "Amazon bestsellers",
-    ];
-  }
-  if (siteId === "massage-gun") {
-    return [
-      "Massage guns",
-      "Percussion therapy",
-      "Muscle recovery",
-      "Amazon bestsellers",
-    ];
-  }
-  return [
-    "EcoFlow",
-    "Portable power stations",
-    "Balcony solar",
-    "PowerStream",
-  ];
+  return getSiteById(siteId).editorial.knowsAbout;
 }
 
 export function siteAmazonFallbackQuery(siteId: SiteId): string {
-  if (siteId === "tumbler") return "gourde isotherme";
-  if (siteId === "massage-gun") return "pistolet de massage";
-  return "EcoFlow station électrique";
+  return getSiteById(siteId).editorial.amazonQuery;
 }
 
 export function siteEditorialName(siteId: SiteId): string {
-  return sitesById[siteId]?.brand.name || "EcoFlow Stream";
+  return getSiteById(siteId).brand.name;
+}
+
+export function siteMainGuideSlug(siteId: SiteId): string | undefined {
+  return getSiteById(siteId).editorial.mainGuideSlug;
 }

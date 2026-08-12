@@ -50,8 +50,22 @@
   "powerstream": {
     "title": "Catalog",
     "subtitle": "Percussion massage guns shortlist.",
-    "intro": "Browse the catalog to compare models."
+    "intro": "Browse the catalog to compare models.",
+    "whatTitle": "The catalog",
+    "whatText": "Product sheets and criteria to choose a massage gun.",
+    "forWhoTitle": "Who is it for?",
+    "forWhoText": "Sport, desk, travel: find the right format for your use case.",
+    "checklistTitle": "Before you buy",
+    "check1": "Areas to massage (calves, back, neck)",
+    "check2": "Amplitude / force needed",
+    "check3": "Acceptable noise and battery life",
+    "check4": "Budget and Amazon seller",
+    "ctaAmazon": "See on Amazon",
+    "relatedTitle": "Go further",
+    "relatedGuide": "Massage gun buying guide",
+    "adsLabel": "Advertisement"
   },
+
   "comparisons": {
     "subtitle": "Quick reads to decide between models.",
     "card1Title": "Mini vs full-size",
