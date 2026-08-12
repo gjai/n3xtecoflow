@@ -14,12 +14,30 @@
     "slideNewsExcerpt": "Sélections et conseils pour suivre le marché des isothermes.",
     "feature1Text": "Analyses éditoriales indépendantes — pas un site de marque. Nous ne revendons pas les produits.",
     "feature2Text": "Capacité, isolation, bouchon, entretien : on va droit au choix, avec limites et compromis affichés.",
+    "spotlightName": "Sélection isothermes",
+    "spotlightText": "Gourdes et tumblers best-sellers — Expédié et vendu par Amazon.",
+    "spotlightCta": "Voir le catalogue",
     "howBody1": "Chaque fiche produit résume les critères utiles (volume, isolation, bouchon, entretien) et un avis d’usage : sport, bureau, voyage. Ce n’est pas un catalogue marchand : c’est un outil de comparaison.",
     "howBody2": "Les guides expliquent la méthode (gourde vs tumbler, isolation froid/chaud, entretien inox). Les comparatifs aident à trancher entre deux modèles.",
     "howBody3": "Les prix et stocks changent vite : nos liens Amazon ouvrent une fiche ou une recherche à jour. Préférez Expédié et vendu par Amazon quand c’est possible."
   },
   "guides": {
-    "subtitle": "Choisir une gourde ou un tumbler isotherme selon votre usage."
+    "subtitle": "Choisir une gourde ou un tumbler isotherme selon votre usage.",
+    "buyersTitle": "Guide d'achat gourdes & tumblers",
+    "buyersText": "Volume, isolation, bouchon et entretien : comment choisir sans se tromper."
+  },
+  "guideBuyers": {
+    "title": "Guide d'achat : gourdes isothermes",
+    "subtitle": "Volume, isolation et bouchon — les critères qui comptent."
+  },
+  "guideCamping": {
+    "title": "Gourde isotherme au quotidien",
+    "subtitle": "Sport, bureau, voyage : dimensionner sans suracheter."
+  },
+  "powerstream": {
+    "title": "Catalogue",
+    "subtitle": "Sélection de gourdes et tumblers isothermes.",
+    "intro": "Parcourez le catalogue pour comparer les modèles."
   },
   "legal": {
     "hubMeta": "Éditeur, hébergeur, confidentialité, cookies, affiliation et publicité — informations légales La gourde isotherme.",
