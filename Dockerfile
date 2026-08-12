@@ -22,6 +22,8 @@ ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 ENV NEWS_DATA_PATH=/app/data/news.json
 ENV NEWS_MEDIA_PATH=/app/data/news-images
+ENV AMAZON_PRICES_PATH=/app/data/amazon-prices.json
+ENV ANALYTICS_DATA_PATH=/app/data/analytics.json
 
 RUN addgroup -S nodejs && adduser -S nextjs -G nodejs \
   && mkdir -p /app/data /app/data/news-images /app/data-seed \

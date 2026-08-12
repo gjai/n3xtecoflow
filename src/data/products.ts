@@ -32,6 +32,8 @@ export type Product = {
   expandable?: boolean;
   upsMs?: number;
   amazonQuery: string;
+  /** Optional Amazon FR ASIN — speeds up price refresh via GetItems */
+  amazonAsin?: string;
   /** Optional real product photo (Amazon Associates / licensed). Prefer over category stock. */
   imageSrc?: string;
   specs: { label: string; value: string }[];

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" fill="none" role="img" aria-label="PowerStream">
+  <rect x="0" y="4" width="32" height="32" rx="8" fill="#3ec6ff"/>
+  <path d="M6 24c3-4.5 6-4.5 9 0s6 4.5 9 0" stroke="#041820" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M6 18c3-4.5 6-4.5 9 0s6 4.5 9 0" stroke="#041820" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+  <circle cx="23.5" cy="12" r="2.2" fill="#ffb020"/>
+  <text x="42" y="27" fill="currentColor" font-family="Sora, Outfit, system-ui, sans-serif" font-size="18" font-weight="600" letter-spacing="-0.02em">PowerStream</text>
+</svg>

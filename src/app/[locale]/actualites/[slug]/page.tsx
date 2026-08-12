@@ -102,10 +102,7 @@ export default async function NewsArticlePage({
         {copy.body.map((p) => (
           <p key={p.slice(0, 48)}>{p}</p>
         ))}
-        <p className="border-t border-[var(--line)] pt-6 text-sm text-[var(--muted)]">
-          {t("disclaimer")}
-        </p>
-        <p>
+        <p className="border-t border-[var(--line)] pt-6">
           <a
             href={article.sourceUrl}
             target="_blank"

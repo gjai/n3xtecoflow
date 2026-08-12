@@ -84,14 +84,14 @@ export default async function AboutPage({
           <p className="mt-3">
             {t("seeAlso")}{" "}
             <Link
-              href="/affiliation"
+              href="/mentions-legales#affiliation"
               className="text-[var(--accent)] underline-offset-2 hover:underline"
             >
               {t("affiliateLink")}
             </Link>
             {" · "}
             <Link
-              href="/cookies"
+              href="/mentions-legales#cookies"
               className="text-[var(--accent)] underline-offset-2 hover:underline"
             >
               {t("cookiesLink")}

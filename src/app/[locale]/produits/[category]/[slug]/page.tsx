@@ -8,6 +8,7 @@ import { CoverImage } from "@/components/CoverImage";
 import { JsonLd, productJsonLd } from "@/components/JsonLd";
 import { getCategoryImage } from "@/data/images";
 import { buildAmazonSearchUrl } from "@/lib/amazon";
+import { getAmazonOffer } from "@/lib/amazon/price-store";
 import {
   getCategory,
   getLocalizedCategory,
@@ -74,6 +75,14 @@ export default async function ProductPage({
     process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
   const productUrl = `${siteUrl}/${locale}/produits/${cat.slug}/${product.slug}`;
   const image = getCategoryImage(product.category);
+  const offer = await getAmazonOffer(product.slug);
+  const amazonHref =
+    offer?.detailUrl || buildAmazonSearchUrl(product.amazonQuery);
+  const priceHint = offer?.price.display
+    ? isEn
+      ? `Amazon.fr price · updated ${new Date(offer.updatedAt).toLocaleString("en-GB")}`
+      : `Prix Amazon.fr · maj. ${new Date(offer.updatedAt).toLocaleString("fr-FR")}`
+    : undefined;
 
   return (
     <article className="pt-24">
@@ -87,6 +96,9 @@ export default async function ProductPage({
           url: productUrl,
           capacityWh: product.capacityWh,
           outputW: product.outputW,
+          priceAmount: offer?.price.amount,
+          priceCurrency: offer?.price.currency,
+          offerUrl: amazonHref,
         })}
       />
       <header className="hero-grid border-b border-[var(--line)]">
@@ -170,9 +182,12 @@ export default async function ProductPage({
             </div>
           </section>
           <AmazonButton
-            href={buildAmazonSearchUrl(product.amazonQuery)}
+            href={amazonHref}
             label={isEn ? "See on Amazon" : "Voir sur Amazon"}
             badge={isEn ? "Amazon affiliate link" : "Lien affilié Amazon"}
+            priceDisplay={offer?.price.display}
+            priceHint={priceHint}
+            availability={offer?.availability}
           />
         </div>
 

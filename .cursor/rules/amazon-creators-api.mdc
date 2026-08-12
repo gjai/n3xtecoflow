@@ -1,0 +1,28 @@
+---
+description: Rappeler Amazon Creators API dès 10 ventes Associates
+alwaysApply: true
+---
+
+# Amazon Creators API — rappel récurrent
+
+Les **prix Amazon live** sont codés (`/api/amazon/prices/refresh`, cache, UI fiches) mais **inactifs** sans credentials Creators API.
+
+## Quand rappeler
+
+À chaque session qui touche monétisation, Amazon, produits, prix, deploy, ou stats — et **périodiquement** même hors sujet Amazon — rappeler à l’utilisateur :
+
+> Dès que le compte Associates a **≥ 10 ventes qualifiantes / 30 jours**, activer la Creators API.
+
+## Checklist activation (à rappeler)
+
+1. Associates Central → **Tools → Creators API** → créer app + credential  
+2. Coolify env :
+   - `AMAZON_CREATORS_CREDENTIAL_ID`
+   - `AMAZON_CREATORS_CREDENTIAL_SECRET`
+   - `AMAZON_CREATORS_VERSION=3.2` (EU / amazon.fr)
+3. Redéployer + `POST /api/amazon/prices/refresh` (secret cron)
+4. Vérifier prix sur une fiche produit
+
+Tag Associates déjà en place : `ecoflown3xt-21` / `AMAZON_ASSOCIATE_TAG`.
+
+Ne pas scraper Amazon ; pas de prix inventés en dur.

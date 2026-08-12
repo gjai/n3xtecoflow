@@ -34,7 +34,7 @@ export function CookieBanner() {
           <p id="cookie-desc" className="mt-2 text-sm text-[var(--muted)]">
             {t("body")}{" "}
             <Link
-              href="/cookies"
+              href="/mentions-legales#cookies"
               className="text-[var(--accent)] underline-offset-2 hover:underline"
             >
               {t("privacyLink")}

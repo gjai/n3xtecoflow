@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-12T11:46:56.547Z",
+  "updatedAt": "2026-08-12T13:16:59.851092Z",
   "articles": [
     {
       "slug": "2026-08-12-amazon-court-circuite-le-prix-de-l-ecoflow-delta-2-c-est-le-moment-ou-ja-1ac661",
@@ -266,39 +266,6 @@
       }
     },
     {
-      "slug": "2026-08-05-segway-xafari-e-bike-new-1-500-low-900-off-xyber-e-bike-new-2-300-low-1--d0dd48",
-      "sourceUrl": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNOUVmTklvZUdyUkpkaXNqOGkwY2RVX2VkZGhDVkhTN0VVNVNMdGFpbGdGaExhakhnOElsSnlPMF9OSXczdmFYRGh1NHRaN2llWms1Q2pFekJsWFp2X3p4VWIzcEx0cFBIZDZQdzJIRUhvUzRJNzJRVWcwZ2Nrbml6ZDhYR291WGFLd3hHNjFmRQ?oc=5",
-      "sourceName": "Electrek",
-      "sourceGuid": "CBMijwFBVV95cUxNOUVmTklvZUdyUkpkaXNqOGkwY2RVX2VkZGhDVkhTN0VVNVNMdGFpbGdGaExhakhnOElsSnlPMF9OSXczdmFYRGh1NHRaN2llWms1Q2pFekJsWFp2X3p4VWIzcEx0cFBIZDZQdzJIRUhvUzRJNzJRVWcwZ2Nrbml6ZDhYR291WGFLd3hHNjFmRQ",
-      "publishedAt": "2026-08-05T18:00:00.000Z",
-      "ingestedAt": "2026-08-12T11:46:56.546Z",
-      "rewrittenBy": "template",
-      "tags": [
-        "ecoflow",
-        "actualite"
-      ],
-      "fr": {
-        "title": "Segway Xafari e-bike new $1,500 low ($900 off) + Xyber e-bike new $2,300 low ($1,000 off), EcoFlow flash sale, ECOVACS, more",
-        "excerpt": "Revue de presse (Electrek, 5 août 2026).",
-        "body": [
-          "Une information relayée par Electrek le 5 août 2026 concerne l’écosystème EcoFlow.",
-          "Contexte source : Segway Xafari e-bike new $1,500 low ($900 off) + Xyber e-bike new $2,300 low ($1,000 off), EcoFlow flash sale, ECOVACS, more Electrek",
-          "Lecture EcoFlow Stream : comparez Wh/W, usage (camping, backup, solaire balcon) et le prix du jour avant d’acheter.",
-          "Synthèse indépendante — consultez la source pour l’article d’origine."
-        ]
-      },
-      "en": {
-        "title": "Segway Xafari e-bike new $1,500 low ($900 off) + Xyber e-bike new $2,300 low ($1,000 off), EcoFlow flash sale, ECOVACS, more",
-        "excerpt": "Press roundup (Electrek, August 5, 2026).",
-        "body": [
-          "Coverage from Electrek on August 5, 2026 relates to the EcoFlow ecosystem.",
-          "Source context: Segway Xafari e-bike new $1,500 low ($900 off) + Xyber e-bike new $2,300 low ($1,000 off), EcoFlow flash sale, ECOVACS, more Electrek",
-          "EcoFlow Stream takeaway: compare Wh/W, use case (camping, backup, balcony solar) and live pricing before buying.",
-          "Independent summary — see the source for the original article."
-        ]
-      }
-    },
-    {
       "slug": "2026-08-05-ecoflow-s-portable-power-stations-and-solar-bundles-are-up-to-32-off-rig-f85f01",
       "sourceUrl": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNS0lIcE8zSEpKM2Z4T0NEdHVGcWJobUpSRkpfZ2FOTm9CTk5jc2U1NnJ0YlpZQ2JKODNsc29BZm05aURnY2lRempjSHl0TE1rcFVhVlVHNjRwZEMtU1RZUnNxMnZNUS16SmNqaGpwUVk0UmEzalJRZEFuVWkyZFpFWDAzLTZad29fczg1V0hwSE9yUjVQQnd3TldDMHI?oc=5",
       "sourceName": "Yahoo Tech",
@@ -359,39 +326,6 @@
         "body": [
           "Coverage from 9to5Toys on August 5, 2026 relates to the EcoFlow ecosystem.",
           "Source context: Score EcoFlow's 3,600Wh DELTA Pro power station + 2x 220W solar panels with $1,240 flash savings to $2,049, more from $849 9to5Toys",
-          "EcoFlow Stream takeaway: compare Wh/W, use case (camping, backup, balcony solar) and live pricing before buying.",
-          "Independent summary — see the source for the original article."
-        ]
-      }
-    },
-    {
-      "slug": "2026-08-04-amazon-drops-generators-and-power-stations-up-to-42-off-b9d907",
-      "sourceUrl": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9aRE5HczZ5WFRma0dYREdKdGtzaTY2cDRMXzNTV3p0azl6VkJvZVRqR3NrZEN3U1Z1TjF4OUg4ZFNKLWhHanNJTnN1RGhYMEFWb1JTWG9SaE5ZSm1CU0VxN1RpQUVCUUoxSk5jZzdwZw?oc=5",
-      "sourceName": "bobvila.com",
-      "sourceGuid": "CBMib0FVX3lxTE9aRE5HczZ5WFRma0dYREdKdGtzaTY2cDRMXzNTV3p0azl6VkJvZVRqR3NrZEN3U1Z1TjF4OUg4ZFNKLWhHanNJTnN1RGhYMEFWb1JTWG9SaE5ZSm1CU0VxN1RpQUVCUUoxSk5jZzdwZw",
-      "publishedAt": "2026-08-04T15:59:01.000Z",
-      "ingestedAt": "2026-08-12T11:46:56.547Z",
-      "rewrittenBy": "template",
-      "tags": [
-        "ecoflow",
-        "actualite"
-      ],
-      "fr": {
-        "title": "Amazon Drops Generators and Power Stations Up to 42% Off",
-        "excerpt": "Revue de presse (bobvila.com, 4 août 2026).",
-        "body": [
-          "Une information relayée par bobvila.com le 4 août 2026 concerne l’écosystème EcoFlow.",
-          "Contexte source : Amazon Drops Generators and Power Stations Up to 42% Off bobvila.com",
-          "Lecture EcoFlow Stream : comparez Wh/W, usage (camping, backup, solaire balcon) et le prix du jour avant d’acheter.",
-          "Synthèse indépendante — consultez la source pour l’article d’origine."
-        ]
-      },
-      "en": {
-        "title": "Amazon Drops Generators and Power Stations Up to 42% Off",
-        "excerpt": "Press roundup (bobvila.com, August 4, 2026).",
-        "body": [
-          "Coverage from bobvila.com on August 4, 2026 relates to the EcoFlow ecosystem.",
-          "Source context: Amazon Drops Generators and Power Stations Up to 42% Off bobvila.com",
           "EcoFlow Stream takeaway: compare Wh/W, use case (camping, backup, balcony solar) and live pricing before buying.",
           "Independent summary — see the source for the original article."
         ]

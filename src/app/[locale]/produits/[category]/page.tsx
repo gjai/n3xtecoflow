@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { CoverImage } from "@/components/CoverImage";
 import { getCategoryImage } from "@/data/images";
+import { getAmazonOffersMap } from "@/lib/amazon/price-store";
 import {
   categories,
   getCategory,
@@ -43,6 +44,7 @@ export default async function CategoryPage({
   const items = getProductsByCategory(cat.id);
   const isEn = locale === "en";
   const image = getCategoryImage(cat.id);
+  const offers = await getAmazonOffersMap();
 
   return (
     <div className="pt-24">
@@ -71,6 +73,7 @@ export default async function CategoryPage({
       <div className="mx-auto grid max-w-6xl gap-4 px-5 pb-16 md:px-8">
         {items.map((product) => {
           const p = getLocalizedProduct(product, locale);
+          const price = offers[product.slug]?.price.display;
           return (
             <Link
               key={product.slug}
@@ -100,10 +103,20 @@ export default async function CategoryPage({
                 <p className="mt-1 text-sm text-[var(--muted)]">{p.tagline}</p>
                 <p className="mt-2 text-sm text-[var(--fog)]">{p.summary}</p>
               </div>
-              <div className="text-sm text-[var(--accent)] md:text-right">
-                {product.capacityWh ? `${product.capacityWh} Wh` : ""}
-                {product.capacityWh && product.outputW ? " · " : ""}
-                {product.outputW ? `${product.outputW} W` : ""}
+              <div className="text-sm md:text-right">
+                {price ? (
+                  <p className="font-semibold text-[var(--heading)]">{price}</p>
+                ) : null}
+                <p className="mt-1 text-[var(--accent)]">
+                  {product.capacityWh ? `${product.capacityWh} Wh` : ""}
+                  {product.capacityWh && product.outputW ? " · " : ""}
+                  {product.outputW ? `${product.outputW} W` : ""}
+                </p>
+                {price ? (
+                  <p className="mt-1 text-xs text-[var(--muted)]">
+                    {isEn ? "Amazon.fr" : "Amazon.fr"}
+                  </p>
+                ) : null}
               </div>
             </Link>
           );

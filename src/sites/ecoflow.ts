@@ -1,5 +1,9 @@
 import type { SiteConfig } from "./types";
 
+/**
+ * Univers EcoFlow : ecoflow-stream.com + powerstream.fr partagent CE thème.
+ * Un futur domaine avec un autre thème = nouveau fichier + SiteId (voir _template-new-theme.ts).
+ */
 export const ecoflowSite: SiteConfig = {
   id: "ecoflow",
   primaryHost: "ecoflow-stream.com",
@@ -25,6 +29,13 @@ export const ecoflowSite: SiteConfig = {
       "RIVER & DELTA stations, STREAM series, OCEAN, solar, GLACIER, WAVE: independent guides, specs and comparisons to choose with confidence.",
     footerBlurbFr: "Site indépendant — guides EcoFlow & énergie portable",
     footerBlurbEn: "Independent site — EcoFlow & portable power guides",
+    logo: "/brands/ecoflow/logo.svg",
+    logoMark: "/brands/ecoflow/mark.svg",
+    icons: {
+      favicon: "/brands/ecoflow/favicon.svg",
+      apple: "/brands/ecoflow/apple-touch-icon.svg",
+      icon32: "/brands/ecoflow/mark.svg",
+    },
   },
   theme: {
     accent: "#c8f04d",

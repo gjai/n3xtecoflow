@@ -1,5 +1,6 @@
 import type { NewsArticle, NewsLocaleCopy } from "./types";
 import type { RssItem } from "./rss";
+import { isOnTopicArticle, isRelevantItem } from "./rss";
 import { makeSlug } from "./store";
 import { resolveNewsCover } from "./images";
 import { fetchSourcePage, type SourcePage } from "./source";
@@ -60,6 +61,7 @@ type AiPayload = {
   fr: NewsLocaleCopy;
   en: NewsLocaleCopy;
   tags?: string[];
+  skip?: boolean;
 };
 
 async function rewriteWithAi(
@@ -93,7 +95,13 @@ async function rewriteWithAi(
 
 Mission: rédiger un VRAI ARTICLE complet (pas un résumé de 3 lignes), bilingue, à partir de la source fournie.
 
-Règles strictes:
+Périmètre STRICT:
+- Sujet UNIQUEMENT EcoFlow / PowerStream / STREAM / stations DELTA-RIVER / solaire EcoFlow
+- Si la source n'est PAS centrée sur EcoFlow (Segway, Tesla, vélo, promo Amazon générique sans EcoFlow, etc.) → réponds exactement {"skip":true}
+- Interdiction d'inventer un angle EcoFlow si la source en parle à peine ou pas du tout
+- Les titres FR et EN doivent contenir "EcoFlow" ou "PowerStream" (ou un produit clairement EcoFlow: DELTA, RIVER, STREAM, GLACIER, WAVE, RAPID Pro)
+
+Règles rédaction:
 - Contenu ORIGINAL (reformulation totale) — interdiction de copier-coller des phrases de la source
 - Ne pas inventer de chiffres, promos, dates ou specs absents de la source
 - Citer clairement la source (${item.sourceName})
@@ -113,7 +121,8 @@ ${sourceText}
 >>
 
 Format JSON:
-{"fr":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"en":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"tags":["ecoflow","delta"]}`;
+{"fr":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"en":{"title":"...","excerpt":"...","body":["p1","p2","..."]},"tags":["ecoflow","delta"]}
+ou {"skip":true}`;
 
   const payload: Record<string, unknown> = {
     model,
@@ -159,6 +168,7 @@ Format JSON:
 
   try {
     const parsed = JSON.parse(content) as AiPayload;
+    if (parsed?.skip) return { skip: true } as AiPayload;
     if (
       !parsed?.fr?.title ||
       !parsed?.en?.title ||
@@ -178,7 +188,8 @@ Format JSON:
 function guessTags(item: RssItem, source: SourcePage | null): string[] {
   const hay =
     `${item.title} ${item.description} ${source?.title || ""} ${source?.text || ""}`.toLowerCase();
-  const tags = new Set<string>(["ecoflow"]);
+  const tags = new Set<string>();
+  if (/ecoflow/.test(hay)) tags.add("ecoflow");
   if (/delta/.test(hay)) tags.add("delta");
   if (/river/.test(hay)) tags.add("river");
   if (/stream/.test(hay)) tags.add("stream");
@@ -186,6 +197,7 @@ function guessTags(item: RssItem, source: SourcePage | null): string[] {
   if (/ocean/.test(hay)) tags.add("ocean");
   if (/solaire|solar|panneau/.test(hay)) tags.add("solaire");
   if (/promo|prix|brade|deal|amazon/.test(hay)) tags.add("promo");
+  if (!tags.has("ecoflow") && !tags.has("powerstream")) tags.add("ecoflow");
   return [...tags];
 }
 
@@ -204,15 +216,36 @@ function normalizeCopy(copy: NewsLocaleCopy): NewsLocaleCopy {
 export async function buildArticleFromRss(
   item: RssItem,
   options?: { keepSlug?: string },
-): Promise<NewsArticle> {
+): Promise<NewsArticle | null> {
+  if (!isRelevantItem(item)) return null;
+
   const source = await fetchSourcePage(item.link, {
     title: item.title,
     sourceHomepage: item.sourceHomepage,
   });
   const ai = await rewriteWithAi(item, source);
-  const rewrittenBy = ai ? "ai" : "template";
-  const fr = normalizeCopy(ai?.fr || templateCopy("fr", item, source));
-  const en = normalizeCopy(ai?.en || templateCopy("en", item, source));
+  if (ai?.skip) return null;
+
+  const rewrittenBy = ai && ai.fr && ai.en ? "ai" : "template";
+  const fr = normalizeCopy(
+    ai?.fr && !ai.skip ? ai.fr : templateCopy("fr", item, source),
+  );
+  const en = normalizeCopy(
+    ai?.en && !ai.skip ? ai.en : templateCopy("en", item, source),
+  );
+
+  if (
+    !isOnTopicArticle({
+      titleFr: fr.title,
+      titleEn: en.title,
+      excerptFr: fr.excerpt,
+      excerptEn: en.excerpt,
+      sourceTitle: item.title,
+    })
+  ) {
+    return null;
+  }
+
   const tags = ai?.tags?.length ? ai.tags : guessTags(item, source);
   const slug =
     options?.keepSlug ||
@@ -281,6 +314,7 @@ export async function refreshArticle(
       "",
   };
   const next = await buildArticleFromRss(item, { keepSlug: article.slug });
+  if (!next) return article;
   return {
     ...next,
     sourceGuid: article.sourceGuid,

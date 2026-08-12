@@ -1,6 +1,5 @@
 export type SiteId = "ecoflow";
 
-
 export type SiteTheme = {
   /** Accent / CTA (dark surfaces) */
   accent: string;
@@ -41,6 +40,17 @@ export type SiteTheme = {
   };
 };
 
+export type SiteIcons = {
+  /** Browser tab favicon (SVG preferred) */
+  favicon: string;
+  /** Apple touch / PWA home screen */
+  apple?: string;
+  /** Optional 32×32 PNG/SVG */
+  icon32?: string;
+  /** Optional 192×192 for Android / PWA */
+  icon192?: string;
+};
+
 export type SiteBrand = {
   name: string;
   taglineFr: string;
@@ -51,6 +61,11 @@ export type SiteBrand = {
   subheadEn: string;
   footerBlurbFr: string;
   footerBlurbEn: string;
+  /** Header / footer wordmark (SVG or PNG) */
+  logo: string;
+  /** Compact mark only (favicon-like), optional */
+  logoMark?: string;
+  icons: SiteIcons;
 };
 
 export type SiteMonetization = {
@@ -64,14 +79,14 @@ export type SiteConfig = {
   id: SiteId;
   /** Primary canonical host (no protocol) */
   primaryHost: string;
-  /** All hostnames that resolve to this site */
+  /** All hostnames that resolve to this site/theme (apex + www, sister domains) */
   hosts: string[];
   brand: SiteBrand;
   theme: SiteTheme;
   heroImage: string;
   /** Categories to highlight first on home */
   featuredCategoryIds: string[];
-  /** Sister sites in the network (cross-links) */
+  /** Sister sites in the network (cross-links) — empty until a 2nd theme exists */
   network: { siteId: SiteId; labelFr: string; labelEn: string }[];
   monetization?: SiteMonetization;
   /** Legal publisher stays shared unless overridden later */

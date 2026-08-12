@@ -31,9 +31,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/actualites",
     "/a-propos",
     "/mentions-legales",
-    "/confidentialite",
-    "/cookies",
-    "/affiliation",
     "/contact",
   ];
 

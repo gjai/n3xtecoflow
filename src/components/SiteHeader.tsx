@@ -3,11 +3,10 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
-import { useSite } from "./SiteProvider";
+import { SiteLogo } from "./SiteLogo";
 
 export function SiteHeader() {
   const t = useTranslations("nav");
-  const site = useSite();
   const [open, setOpen] = useState(false);
 
   const links = [
@@ -20,12 +19,8 @@ export function SiteHeader() {
   return (
     <header className="absolute inset-x-0 top-0 z-30">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 md:px-8">
-        <Link
-          href="/"
-          className="font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight text-[var(--hero-fg)] md:text-xl"
-          onClick={() => setOpen(false)}
-        >
-          {site.brand.name}
+        <Link href="/" onClick={() => setOpen(false)} aria-label="Home">
+          <SiteLogo variant="header" />
         </Link>
         <nav className="hidden items-center gap-5 text-sm text-[var(--hero-muted)] xl:flex">
           {links.map((l) => (

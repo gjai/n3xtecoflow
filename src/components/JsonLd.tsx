@@ -57,7 +57,22 @@ export function productJsonLd(args: {
   url: string;
   capacityWh?: number;
   outputW?: number;
+  priceAmount?: number | null;
+  priceCurrency?: string | null;
+  offerUrl?: string | null;
 }) {
+  const offers =
+    args.priceAmount != null && args.priceCurrency
+      ? {
+          "@type": "Offer",
+          price: args.priceAmount,
+          priceCurrency: args.priceCurrency,
+          availability: "https://schema.org/InStock",
+          url: args.offerUrl || args.url,
+          seller: { "@type": "Organization", name: "Amazon.fr" },
+        }
+      : undefined;
+
   return {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -66,6 +81,7 @@ export function productJsonLd(args: {
     category: args.category,
     brand: { "@type": "Brand", name: "EcoFlow" },
     url: args.url,
+    ...(offers ? { offers } : {}),
     additionalProperty: [
       args.capacityWh
         ? { "@type": "PropertyValue", name: "capacityWh", value: args.capacityWh }

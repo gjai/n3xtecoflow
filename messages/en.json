@@ -117,11 +117,14 @@
     "adsLabel": "Advertisement"
   },
   "legal": {
+    "hubTitle": "Legal notice",
+    "hubMeta": "Publisher, host, privacy, cookies, affiliate and advertising — EcoFlow Stream legal information.",
+    "hubIntro": "All legal information for this site (publisher, host, privacy, cookies, affiliate) is gathered on this page.",
     "mentionsTitle": "Legal notice",
     "privacyTitle": "Privacy policy",
     "cookiesTitle": "Cookie policy",
     "cookiesMeta": "Necessary cookies and optional Google AdSense advertising cookies: purposes, consent and controls.",
-    "cookiesIntro": "This page explains cookies used on EcoFlow Stream. You can accept or reject advertising cookies anytime via the cookie banner (Cookies link in the footer).",
+    "cookiesIntro": "This section explains cookies used on EcoFlow Stream. You can accept or reject advertising cookies anytime via the cookie banner (footer link).",
     "cookiesNecessaryTitle": "Necessary cookies",
     "cookiesNecessaryBody": "Always on: language (NEXT_LOCALE), locally stored consent choice, and technical cookies for security / site operation. They are not used for targeted advertising.",
     "cookiesAdsTitle": "Advertising cookies (optional)",
@@ -163,6 +166,7 @@
   },
   "footer": {
     "independent": "Independent site — EcoFlow & PowerStream guides",
+    "legal": "Legal notice",
     "mentions": "Legal notice",
     "privacy": "Privacy",
     "affiliate": "Affiliate",
@@ -211,15 +215,17 @@
   "news": {
     "eyebrow": "Press roundup",
     "title": "EcoFlow news",
-    "subtitle": "Editorial summaries from recent announcements and articles — updated automatically.",
-    "disclaimer": "We do not republish the original article: each piece is an independent editorial article written from the cited source.",
     "empty": "No news yet — the next automated run will fill this section.",
     "read": "Read article",
     "back": "All news",
     "source": "Source",
     "readSource": "Open source article",
     "catalogCta": "Compare EcoFlow products →",
-    "aiBadge": "Editorial article"
+    "aiBadge": "Editorial article",
+    "count": "{count} articles",
+    "prev": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} / {total}"
   },
   "network": {
     "title": "Site network",

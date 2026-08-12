@@ -1,5 +1,5 @@
 import { NEWS_FEEDS, MAX_NEW_PER_RUN } from "./types";
-import { fetchFeedItems, type RssItem } from "./rss";
+import { fetchFeedItems, isOnTopicArticle, type RssItem } from "./rss";
 import { buildArticleFromRss, refreshArticle } from "./rewrite";
 import { resolveNewsCover } from "./images";
 import { readNewsStore, writeNewsStore } from "./store";
@@ -23,12 +23,27 @@ export type IngestResult = {
   fetched: number;
   created: number;
   skipped: number;
+  rejected: number;
+  purged: number;
   backfilled: number;
   refreshed: number;
   slugs: string[];
   refreshedSlugs: string[];
+  purgedSlugs: string[];
   aiUsed: boolean;
 };
+
+function articleOnTopic(article: {
+  fr?: { title?: string; excerpt?: string };
+  en?: { title?: string; excerpt?: string };
+}) {
+  return isOnTopicArticle({
+    titleFr: article.fr?.title,
+    titleEn: article.en?.title,
+    excerptFr: article.fr?.excerpt,
+    excerptEn: article.en?.excerpt,
+  });
+}
 
 export async function ingestNews(
   options?: IngestOptions,
@@ -60,9 +75,14 @@ export async function ingestNews(
     .slice(0, limit);
 
   const created = [];
+  let rejected = 0;
   let aiUsed = false;
   for (const item of candidates) {
     const article = await buildArticleFromRss(item);
+    if (!article) {
+      rejected += 1;
+      continue;
+    }
     if (article.rewrittenBy === "ai") aiUsed = true;
     created.push(article);
   }
@@ -90,6 +110,10 @@ export async function ingestNews(
       try {
         const feedItem = feedByGuid.get(article.sourceGuid) || null;
         const next = await refreshArticle(article, feedItem);
+        if (!articleOnTopic(next)) {
+          // Keep slot empty — purge below will drop off-topic.
+          continue;
+        }
         if (next.rewrittenBy === "ai") aiUsed = true;
         store.articles[index] = next;
         refreshed += 1;
@@ -99,6 +123,13 @@ export async function ingestNews(
       }
     }
   }
+
+  const beforePurge = store.articles.length;
+  const purgedSlugs = store.articles
+    .filter((a) => !articleOnTopic(a))
+    .map((a) => a.slug);
+  store.articles = store.articles.filter(articleOnTopic);
+  const purged = beforePurge - store.articles.length;
 
   let backfilled = 0;
   const backfillCap = options?.backfillImagesAll
@@ -119,7 +150,7 @@ export async function ingestNews(
     backfilled += 1;
   }
 
-  if (created.length || backfilled || refreshed) {
+  if (created.length || backfilled || refreshed || purged) {
     store.articles = [...created, ...store.articles];
     await writeNewsStore(store);
   }
@@ -128,11 +159,14 @@ export async function ingestNews(
     ok: true,
     fetched: collected.length,
     created: created.length,
-    skipped: Math.max(0, byGuid.size - created.length),
+    skipped: Math.max(0, byGuid.size - created.length - rejected),
+    rejected,
+    purged,
     backfilled,
     refreshed,
     slugs: created.map((a) => a.slug),
     refreshedSlugs,
+    purgedSlugs,
     aiUsed,
   };
 }

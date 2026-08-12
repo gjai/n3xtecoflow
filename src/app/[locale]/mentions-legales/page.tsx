@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
+import { LegalScroll } from "@/components/LegalScroll";
 
 export async function generateMetadata({
   params,
@@ -9,7 +10,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "legal" });
-  return { title: t("mentionsTitle") };
+  return {
+    title: t("hubTitle"),
+    description: t("hubMeta"),
+  };
 }
 
 export default async function MentionsPage({
@@ -20,25 +24,57 @@ export default async function MentionsPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("legal");
+  const isEn = locale === "en";
+
+  const toc = [
+    { id: "editeur", label: t("publisherTitle") },
+    { id: "hebergeur", label: t("hostTitle") },
+    { id: "confidentialite", label: t("privacyTitle") },
+    { id: "cookies", label: t("cookiesTitle") },
+    { id: "affiliation", label: t("affiliateTitle") },
+  ] as const;
 
   return (
     <article className="mx-auto max-w-3xl px-5 pb-16 pt-28 md:px-8">
-      <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold">
-        {t("mentionsTitle")}
+      <LegalScroll />
+      <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold text-[var(--heading)]">
+        {t("hubTitle")}
       </h1>
-      <div className="mt-8 space-y-8 leading-relaxed text-[var(--fog)]">
-        <section>
-          <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--heading)]">
+      <p className="mt-4 text-[var(--muted)]">{t("hubIntro")}</p>
+
+      <nav
+        aria-label={isEn ? "Legal sections" : "Sections légales"}
+        className="mt-8 border border-[var(--line)] bg-[var(--surface)] p-4"
+      >
+        <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+          {toc.map((item) => (
+            <li key={item.id}>
+              <a
+                href={`#${item.id}`}
+                className="text-[var(--accent)] underline-offset-2 hover:underline"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="mt-12 space-y-14 leading-relaxed text-[var(--fog)]">
+        <section id="editeur" className="scroll-mt-28">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
             {t("publisherTitle")}
           </h2>
-          <p className="mt-3">{t("independent")}</p>
+          <p className="mt-4">{t("independent")}</p>
           <p className="mt-2">{t("siren")}</p>
           <p className="mt-2">
             <Link
               href="/a-propos"
               className="text-[var(--accent)] underline-offset-2 hover:underline"
             >
-              {locale === "en" ? "About this editorial site" : "À propos de ce site éditorial"}
+              {isEn
+                ? "About this editorial site"
+                : "À propos de ce site éditorial"}
             </Link>
           </p>
           <p className="mt-2">
@@ -52,19 +88,59 @@ export default async function MentionsPage({
             .
           </p>
         </section>
-        <section>
-          <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--heading)]">
+
+        <section id="hebergeur" className="scroll-mt-28">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
             {t("hostTitle")}
           </h2>
-          <p className="mt-3 whitespace-pre-line">{t("hostBody")}</p>
+          <p className="mt-4 whitespace-pre-line">{t("hostBody")}</p>
         </section>
-        <section>
-          <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--heading)]">
+
+        <section id="confidentialite" className="scroll-mt-28">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
+            {t("privacyTitle")}
+          </h2>
+          <p className="mt-4">{t("privacyBody")}</p>
+          <p className="mt-3">{t("adsense")}</p>
+          <p className="mt-3">{t("privacyConsent")}</p>
+        </section>
+
+        <section id="cookies" className="scroll-mt-28">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
+            {t("cookiesTitle")}
+          </h2>
+          <p className="mt-4">{t("cookiesIntro")}</p>
+          <h3 className="mt-6 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)]">
+            {t("cookiesNecessaryTitle")}
+          </h3>
+          <p className="mt-2">{t("cookiesNecessaryBody")}</p>
+          <h3 className="mt-6 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)]">
+            {t("cookiesAdsTitle")}
+          </h3>
+          <p className="mt-2">{t("cookiesAdsBody")}</p>
+          <p className="mt-3">{t("adsense")}</p>
+        </section>
+
+        <section id="affiliation" className="scroll-mt-28">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
             {t("affiliateTitle")}
           </h2>
+          <p className="mt-4">{t("independent")}</p>
           <p className="mt-3">{t("amazon")}</p>
-          <p className="mt-2">{t("adsense")}</p>
+          <p className="mt-3">{t("affiliateBody")}</p>
+          <p className="mt-3">{t("adsense")}</p>
         </section>
+
+        <p className="border-t border-[var(--line)] pt-8 text-sm text-[var(--muted)]">
+          {t("contactViaForm")}{" "}
+          <Link
+            href="/contact"
+            className="text-[var(--accent)] underline-offset-2 hover:underline"
+          >
+            {t("contactLink")}
+          </Link>
+          .
+        </p>
       </div>
     </article>
   );

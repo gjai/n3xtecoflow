@@ -1,33 +1,52 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
+import { Pagination } from "@/components/Pagination";
 import { SmartCover } from "@/components/SmartCover";
 import { editorialImages } from "@/data/images";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
+import { paginate, parsePageParam } from "@/lib/pagination";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+const PAGE_SIZE = 12;
+
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ page?: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const { page: pageRaw } = await searchParams;
   const t = await getTranslations({ locale, namespace: "news" });
-  return { title: t("title"), description: t("subtitle") };
+  const page = parsePageParam(pageRaw);
+  return {
+    title: page > 1 ? `${t("title")} · ${page}` : t("title"),
+    robots: page > 1 ? { index: false, follow: true } : undefined,
+  };
 }
 
 export default async function NewsIndexPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const { locale } = await params;
+  const { page: pageRaw } = await searchParams;
   setRequestLocale(locale);
   const t = await getTranslations("news");
   const store = await readNewsStore();
-  const articles = getNewsArticles(store);
+  const all = getNewsArticles(store);
+  const { items, page, totalPages, total } = paginate(
+    all,
+    parsePageParam(pageRaw),
+    PAGE_SIZE,
+  );
   const isEn = locale === "en";
 
   return (
@@ -39,15 +58,18 @@ export default async function NewsIndexPage({
         <h1 className="mt-3 font-[family-name:var(--font-display)] text-4xl font-semibold text-[var(--heading)] md:text-5xl">
           {t("title")}
         </h1>
-        <p className="mt-4 text-lg text-[var(--muted)]">{t("subtitle")}</p>
-        <p className="mt-3 text-sm text-[var(--muted)]">{t("disclaimer")}</p>
+        {total > 0 ? (
+          <p className="mt-3 text-sm text-[var(--muted)]">
+            {t("count", { count: total })}
+          </p>
+        ) : null}
       </header>
 
       <div className="mt-12 grid gap-5 md:grid-cols-2">
-        {articles.length === 0 ? (
+        {items.length === 0 ? (
           <p className="text-[var(--muted)]">{t("empty")}</p>
         ) : (
-          articles.map((article) => {
+          items.map((article) => {
             const copy = isEn ? article.en : article.fr;
             const date = new Date(article.publishedAt).toLocaleDateString(
               isEn ? "en-US" : "fr-FR",
@@ -91,6 +113,15 @@ export default async function NewsIndexPage({
           })
         )}
       </div>
+
+      <Pagination
+        pathname="/actualites"
+        page={page}
+        totalPages={totalPages}
+        prevLabel={t("prev")}
+        nextLabel={t("next")}
+        pageLabel={t("pageOf")}
+      />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Outfit, Sora } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { AdSenseScript } from "@/components/AdSenseScript";
+import { AnalyticsBeacon } from "@/components/AnalyticsBeacon";
 import { ConsentProvider } from "@/components/ConsentProvider";
 import { CookieBanner } from "@/components/CookieBanner";
 import { NetworkLinks } from "@/components/NetworkLinks";
@@ -49,6 +50,8 @@ export async function generateMetadata({
   const title = site.brand.name;
   const description = isEn ? site.brand.taglineEn : site.brand.taglineFr;
 
+  const { icons } = site.brand;
+
   return {
     title: {
       default: title,
@@ -56,6 +59,11 @@ export async function generateMetadata({
     },
     description,
     metadataBase: new URL(`https://${site.primaryHost}`),
+    icons: {
+      icon: [{ url: icons.favicon, type: "image/svg+xml" }],
+      shortcut: icons.icon32 || icons.favicon,
+      apple: icons.apple || icons.favicon,
+    },
     alternates: {
       languages: {
         fr: "/fr",
@@ -77,11 +85,13 @@ export async function generateMetadata({
       type: "website",
       siteName: title,
       url: `https://${site.primaryHost}`,
+      images: [{ url: icons.apple || icons.favicon, width: 180, height: 180 }],
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary",
       title,
       description,
+      images: [icons.apple || icons.favicon],
     },
   };
 }
@@ -135,6 +145,7 @@ export default async function LocaleLayout({
             <ThemeProvider>
               <ConsentProvider>
                 <AdSenseScript />
+                <AnalyticsBeacon />
                 <div className="flex min-h-full flex-col">
                   <SiteHeader />
                   <main className="flex-1">{children}</main>

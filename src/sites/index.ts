@@ -1,16 +1,20 @@
 import { ecoflowSite } from "./ecoflow";
 import type { SiteConfig, SiteId } from "./types";
 
+/**
+ * Actif aujourd’hui : 1 thème EcoFlow, 2 domaines (ecoflow-stream.com + powerstream.fr).
+ *
+ * Nouveau DOMAINE même thème → ajouter dans ecoflowSite.hosts (+ DNS + Coolify).
+ * Nouveau THÈME / marque → nouveau fichier src/sites/<id>.ts + SiteId + registry
+ *   (voir _template-new-theme.ts et .cursor/rules/domaines-declaration.mdc).
+ * Rappeler TOUJOURS la checklist domaines à l’utilisateur.
+ */
+
 export const sites: SiteConfig[] = [ecoflowSite];
 
 export const sitesById: Record<SiteId, SiteConfig> = {
   ecoflow: ecoflowSite,
 };
-
-/**
- * Multi-host, one brand: ecoflow-stream.com + powerstream.fr → univers EcoFlow.
- * Add another brand later: new file in src/sites/, SiteId + registry, DNS + Coolify.
- */
 
 export const DEFAULT_SITE_ID: SiteId = "ecoflow";
 export const SITE_HEADER = "x-site-id";
@@ -43,7 +47,7 @@ export function absoluteSiteUrl(site: SiteConfig, path = "/"): string {
   return `https://${site.primaryHost}${clean}`;
 }
 
-/** Sister sites for cross-linking (excludes current). Empty while single-brand. */
+/** Sister sites for cross-linking (excludes current). Empty while single-theme. */
 export function getNetworkLinks(site: SiteConfig) {
   return site.network
     .map((n) => {

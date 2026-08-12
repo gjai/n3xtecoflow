@@ -10,7 +10,7 @@ export function AffiliateDisclosure({ compact = false }: { compact?: boolean }) 
     return (
       <p className="text-xs text-[var(--muted)]">
         {t("disclosureShort")}{" "}
-        <Link href="/affiliation" className="underline-offset-2 hover:underline">
+        <Link href="/mentions-legales#affiliation" className="underline-offset-2 hover:underline">
           {t("disclosureLink")}
         </Link>
       </p>
@@ -21,7 +21,7 @@ export function AffiliateDisclosure({ compact = false }: { compact?: boolean }) 
     <aside className="border border-[var(--line)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
       {t("disclosure")}{" "}
       <Link
-        href="/affiliation"
+        href="/mentions-legales#affiliation"
         className="text-[var(--accent)] underline-offset-2 hover:underline"
       >
         {t("disclosureLink")}

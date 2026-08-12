@@ -29,11 +29,12 @@ export type NewsStore = {
 export const NEWS_FEEDS = [
   {
     id: "gnews-fr",
-    url: "https://news.google.com/rss/search?q=EcoFlow%20OR%20%22DELTA%202%22%20OR%20%22STREAM%20Ultra%22&hl=fr&gl=FR&ceid=FR:fr",
+    // Always require EcoFlow in the query (no bare DELTA/STREAM).
+    url: "https://news.google.com/rss/search?q=EcoFlow+(DELTA+OR+RIVER+OR+STREAM+OR+PowerStream+OR+station+OR+solaire+OR+batterie)&hl=fr&gl=FR&ceid=FR:fr",
   },
   {
     id: "gnews-en",
-    url: "https://news.google.com/rss/search?q=EcoFlow%20(power%20OR%20solar%20OR%20battery%20OR%20STREAM%20OR%20DELTA)&hl=en-US&gl=US&ceid=US:en",
+    url: "https://news.google.com/rss/search?q=EcoFlow+(DELTA+OR+RIVER+OR+STREAM+OR+PowerStream+OR+%22power+station%22+OR+solar+OR+battery)&hl=en-US&gl=US&ceid=US:en",
   },
 ] as const;
 
