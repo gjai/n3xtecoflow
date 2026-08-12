@@ -85,9 +85,13 @@ const OFF_TOPIC =
 const MASSAGE_GUN_BRAND =
   /\bpistolet\s+de\s+massage\b|\bmassage\s+gun\b|\btheragun\b|\btherabody\b|\bhypervolt\b|\bhyperice\b|\brenpho\b|\btoloco\b|\bbob\s+and\s*brad\b|\bopove\b|\bbrelley\b|\baerlang\b|\bjolt\b|\bpercussion\s+(massage|massager|therapy)\b|\bmasseur\s+(musculaire|cervical|dos|shiatsu)\b|\bcoussin\s+(de\s+)?massage\b|\bneck\s+massager\b|\bshiatsu\s+massager\b/i;
 
+const OFF_TOPIC_HARD =
+  /\bpressoth[eé]rapie\b|\bbottes?\s+de\s+press|\bcompression\s+boots?\b|\bbalances?\s+connect|\bmassage\s+(pour\s+)?les\s+pieds\b|\bfoot\s+massager\b|\bchaise\s+de\s+massage\b/i;
+
 function brandPrimary(title: string, brand: RegExp) {
   const t = title.trim();
   if (!t || !brand.test(t)) return false;
+  if (OFF_TOPIC_HARD.test(t)) return false;
   if (OFF_TOPIC.test(t)) {
     const offIdx = t.search(OFF_TOPIC);
     const brandIdx = t.search(brand);
@@ -106,6 +110,7 @@ function topicBrand(siteId: SiteId) {
 export function isRelevantItem(item: RssItem, siteId: SiteId = "ecoflow") {
   const brand = topicBrand(siteId);
   const hay = `${item.title} ${item.description}`;
+  if (OFF_TOPIC_HARD.test(hay)) return false;
   if (!brand.test(hay)) return false;
   if (!brandPrimary(item.title, brand) && !brandPrimary(hay.slice(0, 160), brand)) {
     return false;
@@ -129,6 +134,7 @@ export function isOnTopicArticle(
   const brand = topicBrand(siteId);
   const titles = `${input.titleFr || ""} ${input.titleEn || ""} ${input.sourceTitle || ""}`;
   const excerpts = `${input.excerptFr || ""} ${input.excerptEn || ""}`;
+  if (OFF_TOPIC_HARD.test(titles) || OFF_TOPIC_HARD.test(excerpts)) return false;
   if (!brand.test(titles) && !brand.test(excerpts)) return false;
 
   const fr = input.titleFr || "";
