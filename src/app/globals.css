@@ -184,3 +184,28 @@ summary:focus-visible {
     transition: none;
   }
 }
+
+/*
+ * Packshot wells — Amazon / Shopify JPGs often bake a pure white background.
+ * Light: soft off-white plate. Dark: muted slate + multiply so white pixels
+ * dissolve into the plate instead of flashing as a bright square (all themes).
+ */
+.packshot-well {
+  background: color-mix(in srgb, var(--surface) 18%, #f2f4f6 82%) !important;
+}
+
+html.dark .packshot-well {
+  background: color-mix(in srgb, var(--surface) 72%, #c8d2dc 28%) !important;
+  isolation: isolate;
+}
+
+html.dark .packshot-well :is(img, [data-packshot-img]) {
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.dark .packshot-well :is(img, [data-packshot-img]) {
+    mix-blend-mode: normal;
+    opacity: 0.96;
+  }
+}

@@ -214,7 +214,7 @@ export function TumblerProductCatalog({
                   creditUrl: item.media.creditUrl,
                 }}
                 locale={locale}
-                className="aspect-square w-full border border-[var(--line)] bg-[var(--surface)] md:aspect-[4/3]"
+                className="aspect-square w-full border border-[var(--line)] md:aspect-[4/3]"
                 packshot={item.media.packshot}
                 sizes="140px"
               />

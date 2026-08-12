@@ -81,12 +81,15 @@ export function ComparisonPicker({
             key={p.slug}
             className="border border-[var(--line)] bg-[var(--surface)] p-4"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={p.imageSrc}
-              alt={p.name}
-              className="mx-auto h-40 w-full object-contain"
-            />
+            <div className="packshot-well mx-auto flex h-40 w-full items-center justify-center p-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={p.imageSrc}
+                alt={p.name}
+                data-packshot-img=""
+                className="mx-auto h-full max-h-40 w-full object-contain"
+              />
+            </div>
             <h2 className="mt-3 font-[family-name:var(--font-display)] text-xl text-[var(--heading)]">
               {p.name}
             </h2>

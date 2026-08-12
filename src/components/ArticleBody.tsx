@@ -75,11 +75,12 @@ export function ArticleBody({
                     href={card.href}
                     className="group overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
                   >
-                    <div className="relative aspect-square bg-white">
+                    <div className="relative aspect-square packshot-well">
                       <Image
                         src={card.imageSrc}
                         alt={card.name}
                         fill
+                        data-packshot-img=""
                         className="object-contain p-4 transition duration-300 group-hover:scale-[1.03]"
                         sizes="(max-width: 768px) 50vw, 200px"
                       />

@@ -34,7 +34,9 @@ export function ArticleCover({
     const alt = locale === "en" ? image.altEn : image.altFr;
     return (
       <figure
-        className={`relative overflow-hidden bg-[var(--surface)] ${className}`}
+        className={`relative overflow-hidden ${
+          packshot ? "packshot-well" : "bg-[var(--surface)]"
+        } ${className}`}
       >
         <div
           className={
@@ -47,6 +49,7 @@ export function ArticleCover({
             fill
             sizes={sizes}
             priority={priority}
+            data-packshot-img={packshot ? "" : undefined}
             className={packshot ? "object-contain" : "object-cover"}
           />
         </div>
@@ -56,7 +59,9 @@ export function ArticleCover({
 
   return (
     <figure
-      className={`grid grid-cols-2 overflow-hidden bg-[var(--surface)] ${className}`}
+      className={`grid grid-cols-2 overflow-hidden ${
+        packshot ? "packshot-well" : "bg-[var(--surface)]"
+      } ${className}`}
     >
       {list.slice(0, 2).map((image, idx) => {
         const alt = locale === "en" ? image.altEn : image.altFr;
@@ -72,6 +77,7 @@ export function ArticleCover({
                 fill
                 sizes={sizes}
                 priority={priority}
+                data-packshot-img={packshot ? "" : undefined}
                 className="object-contain"
               />
             </div>

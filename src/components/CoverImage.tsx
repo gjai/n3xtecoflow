@@ -28,7 +28,9 @@ export function CoverImage({
     imgClassName || (packshot ? "object-contain" : "object-cover");
 
   return (
-    <figure className={`relative overflow-hidden ${className}`}>
+    <figure
+      className={`relative overflow-hidden ${packshot ? "packshot-well" : ""} ${className}`}
+    >
       <div
         className={
           packshot ? "absolute inset-3 md:inset-5" : "absolute inset-0"
@@ -40,6 +42,7 @@ export function CoverImage({
           fill
           sizes={sizes}
           priority={priority}
+          data-packshot-img={packshot ? "" : undefined}
           className={fitClass}
         />
       </div>

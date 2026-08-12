@@ -197,7 +197,7 @@ export default async function ProductPage({
                 media.creditUrl === "#" ? amazonHref : media.creditUrl,
             }}
             locale={locale}
-            className="aspect-[4/3] w-full border border-[var(--line)] bg-[var(--surface)]"
+            className="aspect-[4/3] w-full border border-[var(--line)]"
             packshot={media.source !== "category"}
             sizes="(max-width: 768px) 100vw, 40vw"
             priority
