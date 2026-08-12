@@ -1,9 +1,9 @@
 import type { SiteId } from "@/sites/types";
 
 /** Max articles kept per brand cluster in the store (per site). */
-export const MAX_NEWS_PER_BRAND = 4;
+export const MAX_NEWS_PER_BRAND = 2;
 /** Max same-brand picks in one ingest selection. */
-export const MAX_BRAND_PER_INGEST = 2;
+export const MAX_BRAND_PER_INGEST = 1;
 
 const PROMO_HEAVY =
   /\b(promo(?:tion)?s?|r[ée]duction|%\s*off|deal|deals|coupon|code\s*promo|brad[ée]e?s?|soldes?|flash\s*sale|prix\s*cass[ée]|offre\s*rare|en\s*promo|discount|save\s*\$|save\s*€|academy\s*sports?)\b/i;
@@ -45,9 +45,12 @@ export function normalizeNewsTitle(title: string): string {
     .normalize("NFD")
     .replace(/\p{M}/gu, "")
     .toLowerCase()
+    .replace(/s['’]?\s*mores/g, "smores")
+    .replace(/gimme\s+s\s*more/g, "smores")
+    .replace(/free\s*sip/g, "freesip")
     .replace(/[^a-z0-9\s]/g, " ")
     .replace(
-      /\b(promo|promotion|reduction|deal|deals|offre|rare|nouveau|nouvelle|new|the|les|des|une|un|la|le|pour|avec|dans|sur|chez|off|save|vs)\b/g,
+      /\b(promo|promotion|reduction|deal|deals|offre|rare|nouveau|nouvelle|new|the|les|des|une|un|la|le|pour|avec|dans|sur|chez|off|save|vs|lance|devient|virale|succes|annonce|amateurs|amoureux|delice|collection)\b/g,
       " ",
     )
     .replace(
