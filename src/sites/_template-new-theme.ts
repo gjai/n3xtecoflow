@@ -21,7 +21,7 @@
  * 11. Comparateur : lignes auto (Wh/W si énergie, sinon ml / isolation / matière)
  * 12. i18n : `messages/sites/<id>/{fr,en}.json` (loader générique — neutraliser fuites EcoFlow)
  * 13. Profil `editorial` OBLIGATOIRE (amazonQuery, prompts, covers, mainGuideSlug si flat)
- * 14. Actus : `NEWS_FEEDS` + regex marque dans `rss.ts` / `quality.ts` (anti-promo / anti-doublons)
+ * 14. Actus : `NEWS_FEEDS` + `editorial.topicBrandPattern` (+ quality anti-promo / anti-doublons)
  * 15. Sitemap / robots : Host-aware auto si site déclaré (pas d’URLs d’autres thèmes)
  * 16. AdSense : autoriser le nouveau domaine + `monetization.adsenseClient` si besoin
  * 17. Creators API = prix live plus tard (≥ 10 ventes / 30 j)
