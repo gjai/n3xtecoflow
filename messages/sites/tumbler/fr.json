@@ -1,7 +1,11 @@
 {
   "meta": {
     "siteName": "La gourde isotherme",
-    "tagline": "Guides et sélections indépendantes pour choisir une gourde ou un tumbler isotherme."
+    "tagline": "Guides et sélections indépendantes pour choisir une gourde ou un tumbler isotherme.",
+    "disclaimerShort": "Site éditorial indépendant. Contient des liens d'affiliation Amazon."
+  },
+  "nav": {
+    "powerstream": "Catalogue"
   },
   "notFound": {
     "body": "Cette adresse n’existe pas — ou le contenu a été déplacé. Retour aux guides et au catalogue."
@@ -10,13 +14,23 @@
     "brand": "La gourde isotherme",
     "headline": "La bonne gourde, sans se tromper.",
     "subhead": "Comparatifs, critères (capacité, isolation, paille, entretien) et liens Amazon vers les meilleures ventes — Expédié et vendu par Amazon.",
+    "ctaPrimary": "Guide d’achat",
+    "ctaSecondary": "Voir les comparatifs",
     "slideNewsFallback": "Actualités gourdes & tumblers",
     "slideNewsExcerpt": "Sélections et conseils pour suivre le marché des isothermes.",
+    "featuresTitle": "Pourquoi ces guides",
+    "feature1Title": "Indépendant",
     "feature1Text": "Analyses éditoriales indépendantes — pas un site de marque. Nous ne revendons pas les produits.",
+    "feature2Title": "Orienté décision",
     "feature2Text": "Capacité, isolation, bouchon, entretien : on va droit au choix, avec limites et compromis affichés.",
+    "feature3Title": "Transparence",
+    "feature3Text": "Liens Amazon Affiliates et publicités clairement indiqués, avec consentement cookies.",
     "spotlightName": "Sélection isothermes",
     "spotlightText": "Gourdes et tumblers best-sellers — Expédié et vendu par Amazon.",
     "spotlightCta": "Voir le catalogue",
+    "editorialLead": "Nous publions des fiches et des guides pour aider à décider : volume (ml), isolation, bouchon et usage — sans jargon inutile.",
+    "aboutTeaser": "Qui rédige, comment on travaille, et comment le site est financé :",
+    "howTitle": "Comment lire nos contenus",
     "howBody1": "Chaque fiche produit résume les critères utiles (volume, isolation, bouchon, entretien) et un avis d’usage : sport, bureau, voyage. Ce n’est pas un catalogue marchand : c’est un outil de comparaison.",
     "howBody2": "Les guides expliquent la méthode (gourde vs tumbler, isolation froid/chaud, entretien inox). Les comparatifs aident à trancher entre deux modèles.",
     "howBody3": "Les prix et stocks changent vite : nos liens Amazon ouvrent une fiche ou une recherche à jour. Préférez Expédié et vendu par Amazon quand c’est possible."
@@ -24,20 +38,37 @@
   "guides": {
     "subtitle": "Choisir une gourde ou un tumbler isotherme selon votre usage.",
     "buyersTitle": "Guide d'achat gourdes & tumblers",
-    "buyersText": "Volume, isolation, bouchon et entretien : comment choisir sans se tromper."
+    "buyersText": "Volume, isolation, bouchon et entretien : comment choisir sans se tromper.",
+    "campingTitle": "Usage quotidien",
+    "campingText": "Sport, bureau, voyage : dimensionner sans suracheter.",
+    "backupTitle": "Entretien & hygiène",
+    "backupText": "Inox, joint, paille : ce qu’il faut vraiment vérifier."
   },
   "guideBuyers": {
     "title": "Guide d'achat : gourdes isothermes",
-    "subtitle": "Volume, isolation et bouchon — les critères qui comptent."
+    "subtitle": "Volume, isolation et bouchon — les critères qui comptent.",
+    "body1": "Une gourde trop petite impose des refill constants ; une trop grosse devient lourde. Partez de votre usage (sport, bureau, voyage) et du volume utile en ml.",
+    "body2": "Vérifiez aussi le type de bouchon (paille, sport, vissage), l’isolation froid/chaud, et la facilité de nettoyage (goulot, joint, lave-vaisselle)."
   },
   "guideCamping": {
     "title": "Gourde isotherme au quotidien",
-    "subtitle": "Sport, bureau, voyage : dimensionner sans suracheter."
+    "subtitle": "Sport, bureau, voyage : dimensionner sans suracheter.",
+    "body1": "Listez vos moments critiques (salle, trajet, randonnée). Un tumbler large convient au bureau ; une gourde étanche à la salle.",
+    "body2": "Privilégiez un format que vous transporterez vraiment. L’isolation compte moins que le confort d’usage au quotidien."
   },
   "powerstream": {
     "title": "Catalogue",
     "subtitle": "Sélection de gourdes et tumblers isothermes.",
     "intro": "Parcourez le catalogue pour comparer les modèles."
+  },
+  "comparisons": {
+    "subtitle": "Des lectures rapides pour trancher entre modèles et formats.",
+    "card1Title": "Gourde vs tumbler",
+    "card1Text": "Étanchéité et transport vs volume et confort de boisson.",
+    "card2Title": "Petit vs grand volume",
+    "card2Text": "Quand 500 ml suffit, et quand passer à 1 L+.",
+    "card3Title": "Isolation & entretien",
+    "card3Text": "Froid/chaud, joints, paille et nettoyage."
   },
   "legal": {
     "hubMeta": "Éditeur, hébergeur, confidentialité, cookies, affiliation et publicité — informations légales La gourde isotherme.",
@@ -46,7 +77,8 @@
   },
   "footer": {
     "independent": "Site indépendant — gourdes & tumblers isothermes",
-    "rights": "© {year} La gourde isotherme"
+    "rights": "© {year} La gourde isotherme",
+    "powerstream": "Catalogue"
   },
   "about": {
     "title": "À propos de La gourde isotherme",
@@ -61,6 +93,7 @@
     "independenceBody": "Ce site n’est pas exploité par les marques citées ni par Amazon. Les marques appartiennent à leurs propriétaires. Nos textes sont rédigés pour le lecteur ; un lien affilié ne change pas le prix que vous payez."
   },
   "news": {
+    "eyebrow": "Sélections",
     "title": "Actualités",
     "subtitle": "Sélections et notes éditoriales autour des gourdes et tumblers isothermes.",
     "empty": "Aucune actu gourdes/tumblers pour le moment — le prochain passage automatique va peupler cette section.",

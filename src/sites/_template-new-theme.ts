@@ -19,8 +19,11 @@
  * 9. Layout : `catalogLayout: "flat"` (+ `featuredProductSlugs`) sauf gammes type EcoFlow
  * 10. SEO : toujours `siteLocaleAlternates` (jamais d’origin hard-codé)
  * 11. Comparateur : lignes auto (Wh/W si énergie, sinon ml / isolation / matière)
- * 12. AdSense : autoriser le nouveau domaine dans le compte
- * 13. Creators API = prix live plus tard (≥ 10 ventes / 30 j)
+ * 12. i18n : `messages/sites/<id>/{fr,en}.json` (loader générique — neutraliser fuites EcoFlow)
+ * 13. Actus : `NEWS_FEEDS` + règles marque dans `rss.ts` / `quality.ts` (anti-promo / anti-doublons)
+ * 14. Sitemap / robots : Host-aware auto si site déclaré (pas d’URLs d’autres thèmes)
+ * 15. AdSense : autoriser le nouveau domaine dans le compte
+ * 16. Creators API = prix live plus tard (≥ 10 ventes / 30 j)
  *
  * Voir .cursor/rules/domaines-declaration.mdc et amazon-creators-api.mdc
  */

@@ -1,7 +1,11 @@
 {
   "meta": {
     "siteName": "La gourde isotherme",
-    "tagline": "Independent guides and picks to choose an insulated bottle or tumbler."
+    "tagline": "Independent guides and picks to choose an insulated bottle or tumbler.",
+    "disclaimerShort": "Independent editorial site. Contains Amazon affiliate links."
+  },
+  "nav": {
+    "powerstream": "Catalog"
   },
   "notFound": {
     "body": "This URL doesn’t exist — or the content was moved. Back to the guides and catalog."
@@ -10,13 +14,23 @@
     "brand": "La gourde isotherme",
     "headline": "The right bottle, chosen with clarity.",
     "subhead": "Comparisons, buying criteria (capacity, insulation, straw, care) and Amazon links to bestsellers — Ships and sold by Amazon.",
+    "ctaPrimary": "Buying guide",
+    "ctaSecondary": "See comparisons",
     "slideNewsFallback": "Bottle & tumbler updates",
     "slideNewsExcerpt": "Picks and notes to follow the insulated drinkware market.",
+    "featuresTitle": "Why these guides",
+    "feature1Title": "Independent",
     "feature1Text": "Independent editorial analysis — not a brand site. We do not resell products.",
+    "feature2Title": "Decision-focused",
     "feature2Text": "Capacity, insulation, lid, care: straight to the choice, with limits and trade-offs shown.",
+    "feature3Title": "Transparency",
+    "feature3Text": "Amazon Affiliate links and ads clearly labeled, with cookie consent.",
     "spotlightName": "Insulated picks",
     "spotlightText": "Bestselling bottles and tumblers — Ships and sold by Amazon.",
     "spotlightCta": "Browse the catalog",
+    "editorialLead": "We publish sheets and guides to help you decide: volume (ml), insulation, lid and use case — without fluff.",
+    "aboutTeaser": "Who writes, how we work, and how the site is funded:",
+    "howTitle": "How to read our content",
     "howBody1": "Each product sheet summarizes useful criteria (volume, insulation, lid, care) and a use-case take: sport, desk, travel. This is a comparison tool, not a merchant catalog.",
     "howBody2": "Guides explain the method (bottle vs tumbler, hot/cold insulation, stainless care). Comparisons help pick between two models.",
     "howBody3": "Prices and stock move fast: our Amazon links open an up-to-date listing or search. Prefer Ships and sold by Amazon when possible."
@@ -24,20 +38,37 @@
   "guides": {
     "subtitle": "Choose an insulated bottle or tumbler for your use case.",
     "buyersTitle": "Buying guide: bottles & tumblers",
-    "buyersText": "Volume, insulation, lid and care: how to choose with confidence."
+    "buyersText": "Volume, insulation, lid and care: how to choose with confidence.",
+    "campingTitle": "Everyday use",
+    "campingText": "Sport, desk, travel: size without overbuying.",
+    "backupTitle": "Care & hygiene",
+    "backupText": "Stainless, gasket, straw: what actually matters."
   },
   "guideBuyers": {
     "title": "Buying guide: insulated bottles",
-    "subtitle": "Volume, insulation and lid — the criteria that matter."
+    "subtitle": "Volume, insulation and lid — the criteria that matter.",
+    "body1": "A bottle that’s too small means constant refills; one that’s too big gets heavy. Start from your use case (sport, desk, travel) and useful volume in ml.",
+    "body2": "Also check lid type (straw, sport, screw), hot/cold insulation, and cleaning ease (mouth, gasket, dishwasher)."
   },
   "guideCamping": {
     "title": "Insulated bottles for daily use",
-    "subtitle": "Sport, desk, travel: size without overbuying."
+    "subtitle": "Sport, desk, travel: size without overbuying.",
+    "body1": "List your critical moments (gym, commute, hike). A wide tumbler suits the desk; a leak-proof bottle suits the gym.",
+    "body2": "Prefer a format you’ll actually carry. Comfort of use often beats peak insulation claims."
   },
   "powerstream": {
     "title": "Catalog",
     "subtitle": "Insulated bottles and tumblers shortlist.",
     "intro": "Browse the catalog to compare models."
+  },
+  "comparisons": {
+    "subtitle": "Quick reads to decide between models and formats.",
+    "card1Title": "Bottle vs tumbler",
+    "card1Text": "Leak-proof carry vs volume and drinking comfort.",
+    "card2Title": "Small vs large volume",
+    "card2Text": "When 500 ml is enough, and when to go 1 L+.",
+    "card3Title": "Insulation & care",
+    "card3Text": "Hot/cold performance, gaskets, straw and cleaning."
   },
   "legal": {
     "hubMeta": "Publisher, host, privacy, cookies, affiliate and advertising — La gourde isotherme legal information.",
@@ -46,7 +77,8 @@
   },
   "footer": {
     "independent": "Independent site — insulated bottles & tumblers",
-    "rights": "© {year} La gourde isotherme"
+    "rights": "© {year} La gourde isotherme",
+    "powerstream": "Catalog"
   },
   "about": {
     "title": "About La gourde isotherme",
@@ -61,6 +93,7 @@
     "independenceBody": "This site is not operated by the cited brands or Amazon. Brands belong to their owners. Our copy is written for readers; an affiliate link does not change the price you pay."
   },
   "news": {
+    "eyebrow": "Picks",
     "title": "News",
     "subtitle": "Editorial picks and notes around insulated bottles and tumblers.",
     "empty": "No bottle/tumbler news yet — the next automated run will fill this section.",

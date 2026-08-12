@@ -70,7 +70,16 @@ export default async function MentionsPage({
           </h2>
           <p className="mt-4">{t("independent")}</p>
           <p className="mt-2 font-medium text-[var(--heading)]">{t("publisherName")}</p>
-          <p className="mt-2 whitespace-pre-line">{t("publisherAddress")}</p>
+          <p className="mt-2">
+            <a
+              href="https://n3xt.fr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[var(--accent)] underline-offset-2 hover:underline"
+            >
+              n3xt.fr
+            </a>
+          </p>
           <p className="mt-2">{t("publisherDirector")}</p>
           <p className="mt-2">{t("siren")}</p>
           <p className="mt-2">{t("publisherTva")}</p>

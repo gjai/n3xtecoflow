@@ -10,7 +10,7 @@ App Next.js multi-domaine : thèmes EcoFlow + La gourde isotherme (et futurs th�
 | `mon-tumbler.fr`, `www.*` | **tumbler** | `mon-tumbler.fr` |
 
 - `www.*` → apex (308)
-- Canonical / hreflang / `robots.txt` sitemap suivent le **Host** (`siteLocaleAlternates` + `getSiteByHost`)
+- Canonical / hreflang / `robots.txt` / **sitemap** suivent le **Host** (un thème = ses URLs seulement)
 
 ## Stack
 

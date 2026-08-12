@@ -56,12 +56,12 @@ export const NEWS_FEEDS: NewsFeed[] = [
   {
     id: "tumbler-gnews-fr",
     siteId: "tumbler",
-    url: "https://news.google.com/rss/search?q=(%22gourde+isotherme%22+OR+%22tumbler+isotherme%22+OR+%22mug+isotherme%22+OR+Hydro+Flask+OR+Qwetch+OR+%22Stanley+Quencher%22+OR+Owala)+when:30d&hl=fr&gl=FR&ceid=FR:fr",
+    url: "https://news.google.com/rss/search?q=(%22gourde+isotherme%22+OR+%22tumbler+isotherme%22+OR+%22mug+isotherme%22+OR+%22Hydro+Flask%22+OR+Qwetch+OR+%22Stanley+Quencher%22+OR+Thermos+OR+%22Super+Sparrow%22+OR+Yeti+OR+Owala)+when:14d&hl=fr&gl=FR&ceid=FR:fr",
   },
   {
     id: "tumbler-gnews-en",
     siteId: "tumbler",
-    url: "https://news.google.com/rss/search?q=(%22insulated+bottle%22+OR+%22insulated+tumbler%22+OR+%22Hydro+Flask%22+OR+%22Stanley+Quencher%22+OR+Owala+OR+Qwetch)+when:30d&hl=en-US&gl=US&ceid=US:en",
+    url: "https://news.google.com/rss/search?q=(%22insulated+bottle%22+OR+%22insulated+tumbler%22+OR+%22Hydro+Flask%22+OR+%22Stanley+Quencher%22+OR+Thermos+OR+%22Super+Sparrow%22+OR+Yeti+OR+Qwetch+OR+Owala)+when:14d&hl=en-US&gl=US&ceid=US:en",
   },
 ];
 

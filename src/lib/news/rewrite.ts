@@ -96,6 +96,8 @@ Périmètre STRICT:
 - Si la source n'est PAS centrée sur ce sujet → réponds exactement {"skip":true}
 - Interdiction d'inventer un angle "gourde" si la source en parle à peine
 - Les titres FR/EN doivent mentionner clairement gourde, tumbler, mug isotherme ou une marque du périmètre
+- Si la source est une pure promo / deal / coupon / soldes sans angle éditorial utile → {"skip":true}
+- Éviter de recentrer tout sur Owala : diversifier les marques quand la source le permet
 
 Règles rédaction:
 - Contenu ORIGINAL (reformulation totale)
@@ -103,7 +105,7 @@ Règles rédaction:
 - Prix UNIQUEMENT en euros (€) — jamais de dollars ($ / USD). Si la source cite un prix US, convertis approximativement en € ou oriente vers « prix du jour sur Amazon.fr »
 - Citer clairement la source (${item.sourceName})
 - Structure par langue: titre, excerpt, body = 7 à 10 paragraphes utiles
-- Développer: contexte, faits, critères d’achat (volume, isolation, bouchon, entretien), limites, conclusion actionable
+- Développer: contexte, faits, critères d’achat (volume, isolation, bouchon, entretien), limites, conclusion actionable — pas une fiche promo
 - JSON strict uniquement, sans markdown
 
 Entrée:

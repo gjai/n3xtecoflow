@@ -14,8 +14,10 @@ alwaysApply: true
 ## SEO multi-host (obligatoire)
 
 - Toujours `siteLocaleAlternates(locale, path)` — jamais `localeAlternates` sans origin Host.
-- `robots.ts` / sitemap suivent le Host courant (`getSiteByHost`).
+- `robots.ts` / `sitemap.ts` suivent le Host courant (`getSiteByHost`) — **un thème = ses URLs seulement**.
 - Ne pas hard-coder `ecoflow-stream.com` comme canonique d’un autre thème.
+- Overlay i18n : `messages/sites/<id>/{fr,en}.json` (pas de fuites EcoFlow via merge base).
+- Actus : qualité via `src/lib/news/quality.ts` (dédup, cap marque, anti-promo) — brancher feeds + brands pour chaque nouveau thème.
 
 ## Deux cas d’ajout
 
@@ -38,7 +40,8 @@ Ajouter le host (apex + www) dans `src/sites/ecoflow.ts` → `hosts[]`, puis DNS
    - Ne pas s’appuyer sur le catalogue Shopify EcoFlow (spécifique thème ecoflow)
 7. `catalogLayout: "flat"` + `featuredProductSlugs` (sauf gammes type EcoFlow)
 8. Comparateur : rows auto via `buildCompareRows` (Wh/W vs ml/isolation)
-9. AdSense : autoriser le domaine
+9. `messages/sites/<id>/{fr,en}.json` + feeds actus (`NEWS_FEEDS` / `quality.ts`)
+10. AdSense : autoriser le domaine
 
 Quand on ajoute un domaine ou un thème, **rappeler explicitement cette checklist** à l’utilisateur.
 

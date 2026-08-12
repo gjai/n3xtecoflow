@@ -1,5 +1,7 @@
 import { getRequestConfig } from "next-intl/server";
 import { hasLocale } from "next-intl";
+import { existsSync, readFileSync } from "fs";
+import { join } from "path";
 import { headers } from "next/headers";
 import { routing } from "./routing";
 import { getSiteByHost, getSiteById, SITE_HEADER } from "@/sites";
@@ -23,15 +25,25 @@ export function mergeMessages(base: Messages, overlay: Messages): Messages {
   return out;
 }
 
-async function loadSiteOverlay(siteId: string, locale: string) {
-  if (siteId === "tumbler") {
-    return (
-      locale === "en"
-        ? await import("../../messages/sites/tumbler/en.json")
-        : await import("../../messages/sites/tumbler/fr.json")
-    ).default as Messages;
+/**
+ * Overlay générique : messages/sites/<siteId>/{locale}.json
+ * (ecoflow = base seule ; tumbler + futurs thèmes = overlay).
+ */
+function loadSiteOverlay(siteId: string, locale: string): Messages {
+  if (siteId === "ecoflow") return {};
+  const file = join(
+    process.cwd(),
+    "messages",
+    "sites",
+    siteId,
+    `${locale}.json`,
+  );
+  if (!existsSync(file)) return {};
+  try {
+    return JSON.parse(readFileSync(file, "utf8")) as Messages;
+  } catch {
+    return {};
   }
-  return {};
 }
 
 export default getRequestConfig(async ({ requestLocale }) => {
@@ -46,7 +58,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     : getSiteByHost(h.get("host"));
 
   const base = (await import(`../../messages/${locale}.json`)).default as Messages;
-  const overlay = await loadSiteOverlay(site.id, locale);
+  const overlay = loadSiteOverlay(site.id, locale);
 
   return {
     locale,

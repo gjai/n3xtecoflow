@@ -3,6 +3,10 @@ import { NEWS_FEEDS, MAX_NEW_PER_RUN, newsSiteId } from "./types";
 import { fetchFeedItems, isOnTopicArticle, type RssItem } from "./rss";
 import { buildArticleFromRss, refreshArticle } from "./rewrite";
 import { isStoredNewsImageJunk, resolveNewsCover } from "./images";
+import {
+  pruneLowQualityNewsArticles,
+  rankNewsCandidates,
+} from "./quality";
 import { readNewsStore, writeNewsStore } from "./store";
 
 export type IngestOptions = {
@@ -83,7 +87,7 @@ export async function ingestNews(
     if (!byGuid.has(item.guid)) byGuid.set(item.guid, item);
   }
 
-  // Prefer balanced intake across sites when ingesting everything.
+  // Prefer balanced intake + quality ranking (anti-promo / anti-doublons / diversité marques).
   const perSiteCap = Math.max(2, Math.ceil(limit / 2));
   const bySite = new Map<SiteId, Collected[]>();
   for (const item of byGuid.values()) {
@@ -93,14 +97,22 @@ export async function ingestNews(
     bySite.set(item.siteId, list);
   }
   const candidates: Collected[] = [];
-  for (const [, list] of bySite) {
-    list
-      .sort(
-        (a, b) =>
-          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
-      )
-      .slice(0, perSiteCap)
-      .forEach((i) => candidates.push(i));
+  for (const [siteId, list] of bySite) {
+    const existingTitles = store.articles
+      .filter((a) => newsSiteId(a) === siteId)
+      .map((a) => a.fr?.title || a.en?.title || "");
+    const ranked = rankNewsCandidates(
+      list.map((item) => ({
+        ...item,
+        siteId,
+        description: item.description,
+      })),
+      existingTitles,
+      perSiteCap,
+    );
+    for (const item of ranked) {
+      candidates.push(item);
+    }
   }
   candidates.sort(
     (a, b) =>
@@ -162,7 +174,7 @@ export async function ingestNews(
     .filter((a) => !articleOnTopic(a))
     .map((a) => a.slug);
   store.articles = store.articles.filter(articleOnTopic);
-  const purged = beforePurge - store.articles.length;
+  const topicPurged = beforePurge - store.articles.length;
 
   let backfilled = 0;
   const fixAll =
@@ -190,8 +202,13 @@ export async function ingestNews(
     backfilled += 1;
   }
 
+  store.articles = [...created, ...store.articles];
+  const quality = pruneLowQualityNewsArticles(store.articles);
+  store.articles = quality.kept;
+  purgedSlugs.push(...quality.removedSlugs);
+  const purged = topicPurged + quality.removedSlugs.length;
+
   if (created.length || backfilled || refreshed || purged) {
-    store.articles = [...created, ...store.articles];
     await writeNewsStore(store);
   }
 
