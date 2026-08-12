@@ -1,3 +1,5 @@
+import type { SiteId } from "@/sites/types";
+
 export type NewsLocaleCopy = {
   title: string;
   excerpt: string;
@@ -6,6 +8,8 @@ export type NewsLocaleCopy = {
 
 export type NewsArticle = {
   slug: string;
+  /** Theme that owns this article. Defaults to ecoflow when omitted. */
+  siteId?: SiteId;
   sourceUrl: string;
   sourceName: string;
   sourceGuid: string;
@@ -20,6 +24,13 @@ export type NewsArticle = {
   fr: NewsLocaleCopy;
   en: NewsLocaleCopy;
 };
+
+export function newsSiteId(
+  article: { siteId?: SiteId } | null | undefined,
+): SiteId {
+  return article?.siteId || "ecoflow";
+}
+
 
 export type NewsStore = {
   updatedAt: string;

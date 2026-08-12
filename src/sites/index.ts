@@ -49,23 +49,39 @@ export function absoluteSiteUrl(site: SiteConfig, path = "/"): string {
   return `https://${site.primaryHost}${clean}`;
 }
 
-/** Sister sites for cross-linking (excludes current). */
+/** Sister / external network links for the footer (skips current siteId). */
 export function getNetworkLinks(site: SiteConfig) {
   return site.network
     .map((n) => {
+      if (n.href) {
+        const href = n.href.replace(/\/$/, "");
+        return {
+          key: href,
+          labelFr: n.labelFr,
+          labelEn: n.labelEn,
+          href,
+          name: n.labelFr,
+          external: true,
+        };
+      }
+      if (!n.siteId || n.siteId === site.id) return null;
       const target = sitesById[n.siteId];
       if (!target) return null;
       return {
-        ...n,
+        key: n.siteId,
+        labelFr: n.labelFr,
+        labelEn: n.labelEn,
         href: `https://${target.primaryHost}/fr`,
         name: target.brand.name,
+        external: false,
       };
     })
     .filter(Boolean) as {
-    siteId: SiteId;
+    key: string;
     labelFr: string;
     labelEn: string;
     href: string;
     name: string;
+    external: boolean;
   }[];
 }

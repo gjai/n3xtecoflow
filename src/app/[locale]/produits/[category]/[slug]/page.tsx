@@ -110,14 +110,12 @@ export default async function ProductPage({
     .slice(0, 4);
 
   const newsStore = await readNewsStore();
-  const editorial =
-    site.id === "ecoflow"
-      ? getRelatedEditorial({
-          product,
-          locale,
-          news: getNewsArticles(newsStore),
-        })
-      : { guides: [], comparisons: [], news: [] };
+  const editorial = getRelatedEditorial({
+    product,
+    locale,
+    siteId: site.id,
+    news: getNewsArticles(newsStore, site.id),
+  });
 
   const buyLabel = isEn ? "Buy on Amazon.fr" : "Acheter sur Amazon.fr";
   const priceFallback = isEn

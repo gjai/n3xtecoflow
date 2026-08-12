@@ -1,6 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { Pagination } from "@/components/Pagination";
 import { SmartCover } from "@/components/SmartCover";
@@ -22,9 +21,6 @@ export async function generateMetadata({
   searchParams: Promise<{ page?: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  if ((await getCurrentSite()).id !== "ecoflow") {
-    return { robots: { index: false, follow: false } };
-  }
   const { page: pageRaw } = await searchParams;
   const t = await getTranslations({ locale, namespace: "news" });
   const page = parsePageParam(pageRaw);
@@ -45,11 +41,11 @@ export default async function NewsIndexPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  if ((await getCurrentSite()).id !== "ecoflow") notFound();
+  const site = await getCurrentSite();
   const { page: pageRaw } = await searchParams;
   const t = await getTranslations("news");
   const store = await readNewsStore();
-  const all = getNewsArticles(store);
+  const all = getNewsArticles(store, site.id);
   const { items, page, totalPages, total } = paginate(
     all,
     parsePageParam(pageRaw),

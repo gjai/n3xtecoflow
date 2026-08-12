@@ -1,12 +1,14 @@
 import { guides as staticGuides, type GuideArticle } from "@/data/articles";
 import type { Product } from "@/data/products";
+import { productSiteId } from "@/data/products";
 import {
   comparisonHubCategories,
   hubTitle,
   LEGACY_COMPARISON_REDIRECTS,
 } from "@/lib/comparisons/hub";
-import { GUIDE_TOPICS } from "@/lib/guides/types";
+import { GUIDE_TOPICS, guideSiteId } from "@/lib/guides/types";
 import type { NewsArticle } from "@/lib/news/types";
+import type { SiteId } from "@/sites/types";
 
 export type RelatedLink = {
   href: string;
@@ -163,6 +165,25 @@ const MANUAL: Record<string, { guides?: string[]; comparisons?: string[] }> = {
     guides: ["choisir-station", "camping-van", "recharge-rapide"],
     comparisons: [],
   },
+  gourdes: {
+    guides: [
+      "choisir-gourde-isotherme",
+      "gourde-vs-tumbler",
+      "entretien-gourde",
+      "isolation-froid-chaud",
+      "premier-achat-gourde",
+    ],
+    comparisons: ["gourdes", "tumblers"],
+  },
+  tumblers: {
+    guides: [
+      "gourde-vs-tumbler",
+      "choisir-gourde-isotherme",
+      "entretien-gourde",
+      "isolation-froid-chaud",
+    ],
+    comparisons: ["tumblers", "gourdes"],
+  },
 };
 
 function guideTitle(slug: string, locale: string): string {
@@ -179,6 +200,7 @@ export function getRelatedEditorial(options: {
   product: Product;
   locale: string;
   news: NewsArticle[];
+  siteId?: SiteId;
   limit?: { guides?: number; comparisons?: number; news?: number };
 }): {
   guides: RelatedLink[];
@@ -186,24 +208,26 @@ export function getRelatedEditorial(options: {
   news: RelatedLink[];
 } {
   const { product, locale, news } = options;
+  const siteId = options.siteId || productSiteId(product);
   const tokens = productMatchTokens(product);
   const manual = MANUAL[product.category] || {};
   const guideLimit = options.limit?.guides ?? 3;
   const cmpLimit = options.limit?.comparisons ?? 3;
   const newsLimit = options.limit?.news ?? 3;
 
-  const guideScores = GUIDE_TOPICS.map((topic) => {
-    let s = scoreGuideTopic(topic, tokens);
-    if (manual.guides?.includes(topic.slug)) s += 10;
-    const staticG = staticGuides.find((g) => g.slug === topic.slug);
-    if (staticG) s += scoreArticle(staticG, tokens, locale) * 0.25;
-    return { slug: topic.slug, s };
-  })
+  const guideScores = GUIDE_TOPICS.filter((t) => guideSiteId(t) === siteId)
+    .map((topic) => {
+      let s = scoreGuideTopic(topic, tokens);
+      if (manual.guides?.includes(topic.slug)) s += 10;
+      const staticG = staticGuides.find((g) => g.slug === topic.slug);
+      if (staticG) s += scoreArticle(staticG, tokens, locale) * 0.25;
+      return { slug: topic.slug, s };
+    })
     .filter((x) => x.s > 0)
     .sort((a, b) => b.s - a.s)
     .slice(0, guideLimit);
 
-  const hubs = comparisonHubCategories();
+  const hubs = comparisonHubCategories(siteId);
   const cmpScores = hubs
     .map((cat) => {
       let s = scoreText(cat.id, tokens) * 3 + scoreText(cat.slug, tokens);

@@ -1,8 +1,17 @@
 import type { ArticleSection } from "@/data/articles";
 import { guides as staticGuides } from "@/data/articles";
+import type { SiteId } from "@/sites/types";
 import { generateGuideCoverAi } from "./images";
 import { readGuidesStore, writeGuidesStore } from "./store";
-import { GUIDE_TOPICS, type GuideEntry, type GuideLocaleCopy } from "./types";
+import {
+  GUIDE_TOPICS,
+  guideSiteId,
+  guidesForSite,
+  type GuideEntry,
+  type GuideLocaleCopy,
+  type GuideTopic,
+} from "./types";
+
 
 function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
@@ -23,7 +32,7 @@ function isValidCopy(c: GuideLocaleCopy | undefined): c is GuideLocaleCopy {
   );
 }
 
-async function rewriteGuideWithAi(topic: (typeof GUIDE_TOPICS)[number]): Promise<{
+async function rewriteGuideWithAi(topic: GuideTopic): Promise<{
   fr: GuideLocaleCopy;
   en: GuideLocaleCopy;
   model: string;
@@ -134,9 +143,28 @@ function expandStatic(sections: ArticleSection[]): ArticleSection[] {
   ];
 }
 
-function fromTopic(topic: (typeof GUIDE_TOPICS)[number]): GuideEntry {
+function fromTopic(topic: GuideTopic): GuideEntry {
+  const site = guideSiteId(topic);
+  const productHintFr =
+    site === "tumbler"
+      ? "Parcourez les fiches produits et les hubs comparatifs pour comparer gourdes et tumblers."
+      : "Parcourez les fiches produits et les hubs comparatifs pour comparer les modèles EcoFlow disponibles.";
+  const productHintEn =
+    site === "tumbler"
+      ? "Browse product sheets and comparison hubs to compare bottles and tumblers."
+      : "Browse product sheets and comparison hubs to compare available EcoFlow models.";
+  const checklistFr =
+    site === "tumbler"
+      ? "Notez le volume souhaité, le type de bouchon (paille / sport), et le budget avant d’acheter."
+      : "Notez vos besoins en Wh/W, le mode de recharge (secteur / solaire), et le budget avant d’acheter.";
+  const checklistEn =
+    site === "tumbler"
+      ? "Note your preferred volume, lid type (straw / sport), and budget before buying."
+      : "Note your Wh/W needs, charging mode (AC / solar), and budget before buying.";
+
   return {
     slug: topic.slug,
+    siteId: site,
     fr: {
       title: topic.topicFr,
       subtitle: topic.angleFr,
@@ -150,15 +178,11 @@ function fromTopic(topic: (typeof GUIDE_TOPICS)[number]): GuideEntry {
         },
         {
           heading: "En attendant",
-          paragraphs: [
-            "Parcourez les fiches produits et les hubs comparatifs pour comparer les modèles EcoFlow disponibles.",
-          ],
+          paragraphs: [productHintFr],
         },
         {
           heading: "Checklist rapide",
-          paragraphs: [
-            "Notez vos besoins en Wh/W, le mode de recharge (secteur / solaire), et le budget avant d’acheter.",
-          ],
+          paragraphs: [checklistFr],
         },
         {
           heading: "Affiliation",
@@ -187,15 +211,11 @@ function fromTopic(topic: (typeof GUIDE_TOPICS)[number]): GuideEntry {
         },
         {
           heading: "Meanwhile",
-          paragraphs: [
-            "Browse product sheets and comparison hubs to compare available EcoFlow models.",
-          ],
+          paragraphs: [productHintEn],
         },
         {
           heading: "Quick checklist",
-          paragraphs: [
-            "Note your Wh/W needs, charging mode (AC / solar), and budget before buying.",
-          ],
+          paragraphs: [checklistEn],
         },
         {
           heading: "Affiliation",
@@ -217,13 +237,14 @@ function fromTopic(topic: (typeof GUIDE_TOPICS)[number]): GuideEntry {
 }
 
 function fromStatic(slug: string): GuideEntry | null {
+  const topic = GUIDE_TOPICS.find((t) => t.slug === slug);
   const g = staticGuides.find((x) => x.slug === slug);
   if (!g) {
-    const topic = GUIDE_TOPICS.find((t) => t.slug === slug);
     return topic ? fromTopic(topic) : null;
   }
   return {
     slug,
+    siteId: guideSiteId(topic),
     fr: {
       title: g.fr.title,
       subtitle: g.fr.subtitle,
@@ -238,6 +259,7 @@ function fromStatic(slug: string): GuideEntry | null {
     updatedAt: new Date().toISOString(),
   };
 }
+
 
 export type RefreshGuidesResult = {
   ok: boolean;
@@ -254,9 +276,15 @@ export async function refreshGuides(options?: {
   limit?: number;
   force?: boolean;
   imagesOnly?: boolean;
+  /** Defaults to ecoflow (cron / existing AI prompts). */
+  siteId?: SiteId;
 }): Promise<RefreshGuidesResult> {
   const store = await readGuidesStore();
-  const list = GUIDE_TOPICS.slice(0, options?.limit ?? GUIDE_TOPICS.length);
+  const siteId = options?.siteId ?? "ecoflow";
+  const list = guidesForSite(GUIDE_TOPICS, siteId).slice(
+    0,
+    options?.limit ?? GUIDE_TOPICS.length,
+  );
   const errors: string[] = [];
   let refreshed = 0;
   let images = 0;
@@ -286,6 +314,7 @@ export async function refreshGuides(options?: {
           usedAi = true;
           entry = {
             slug: topic.slug,
+            siteId: guideSiteId(topic),
             fr: ai.fr,
             en: ai.en,
             model: ai.model,
@@ -347,22 +376,33 @@ export async function refreshGuides(options?: {
 }
 
 /** Resolve guide for pages: AI store first, then static seed. */
-export async function resolveGuide(slug: string): Promise<GuideEntry | null> {
+export async function resolveGuide(
+  slug: string,
+  siteId?: SiteId,
+): Promise<GuideEntry | null> {
+  const topic = GUIDE_TOPICS.find((t) => t.slug === slug);
+  if (siteId && topic && guideSiteId(topic) !== siteId) return null;
   const stored = (await readGuidesStore()).entries[slug];
-  if (stored) return stored;
-  return fromStatic(slug);
+  const entry = stored || fromStatic(slug);
+  if (!entry) return null;
+  const owner = topic ? guideSiteId(topic) : guideSiteId(entry);
+  if (siteId && owner !== siteId) return null;
+  return { ...entry, siteId: owner };
 }
 
-export async function resolveAllGuides(): Promise<GuideEntry[]> {
+export async function resolveAllGuides(siteId?: SiteId): Promise<GuideEntry[]> {
   const store = await readGuidesStore();
+  const topics = siteId ? guidesForSite(GUIDE_TOPICS, siteId) : GUIDE_TOPICS;
   const bySlug = new Map<string, GuideEntry>();
-  for (const topic of GUIDE_TOPICS) {
+  for (const topic of topics) {
     const stored = store.entries[topic.slug];
-    bySlug.set(topic.slug, stored || fromStatic(topic.slug)!);
+    const entry = stored || fromStatic(topic.slug)!;
+    bySlug.set(topic.slug, { ...entry, siteId: guideSiteId(topic) });
   }
-  // Keep any extra store entries not in GUIDE_TOPICS
   for (const [slug, e] of Object.entries(store.entries)) {
-    if (!bySlug.has(slug)) bySlug.set(slug, e);
+    if (bySlug.has(slug)) continue;
+    if (siteId && guideSiteId(e) !== siteId) continue;
+    bySlug.set(slug, e);
   }
   return [...bySlug.values()].sort((a, b) => a.slug.localeCompare(b.slug));
 }

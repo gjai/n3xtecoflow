@@ -1,6 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { ArticleCover } from "@/components/ArticleCover";
 import { editorialImages } from "@/data/images";
@@ -19,13 +18,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const site = await getCurrentSite();
-  if (site.id !== "ecoflow") return { robots: { index: false, follow: false } };
+  const isEn = locale === "en";
+  const brand = site.brand.name;
   return {
-    title: locale === "en" ? "Buying guides" : "Guides d'achat",
-    description:
-      locale === "en"
-        ? "EcoFlow buying guides: stations, solar, home backup, camping, STREAM."
-        : "Guides d'achat EcoFlow : stations, solaire, backup maison, camping, STREAM.",
+    title: isEn ? "Buying guides" : "Guides d'achat",
+    description: isEn
+      ? `Buying guides for ${brand}: criteria, comparisons and practical checklists.`
+      : `Guides d'achat ${brand} : critères, comparatifs et checklists concrètes.`,
     alternates: await siteLocaleAlternates(locale, "/guides"),
   };
 }
@@ -37,10 +36,11 @@ export default async function GuidesIndexPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  if ((await getCurrentSite()).id !== "ecoflow") notFound();
+  const site = await getCurrentSite();
   const isEn = locale === "en";
-  const ecoflowMap = await getEcoflowEntriesMap();
-  const allGuides = await resolveAllGuides();
+  const ecoflowMap =
+    site.id === "ecoflow" ? await getEcoflowEntriesMap() : {};
+  const allGuides = await resolveAllGuides(site.id);
 
   return (
     <div className="pt-6">
@@ -50,51 +50,59 @@ export default async function GuidesIndexPage({
         </h1>
         <p className="mt-4 max-w-2xl text-[var(--muted)]">
           {isEn
-            ? "Practical methods to size Wh/W and pick the right EcoFlow setup — regularly enriched."
-            : "Méthodes concrètes pour dimensionner Wh/W et choisir le bon setup EcoFlow — enrichis régulièrement."}
+            ? `Practical methods to choose with confidence on ${site.brand.name} — regularly enriched.`
+            : `Méthodes concrètes pour choisir sans se tromper sur ${site.brand.name} — enrichis régulièrement.`}
         </p>
       </header>
       <div className="mx-auto grid max-w-6xl gap-6 px-5 pb-16 md:grid-cols-2 md:px-8">
-        {allGuides.map((guide) => {
-          const copy = isEn ? guide.en : guide.fr;
-          const productImages = resolveArticleProductImages(
-            guide.slug,
-            ecoflowMap,
-          );
-          const coverImages = guide.imageSrc
-            ? [
-                {
-                  src: guide.imageSrc,
-                  altFr: copy.title,
-                  altEn: copy.title,
-                  credit: guide.imageCredit || "EcoFlow Stream",
-                  creditUrl: "#",
-                },
-              ]
-            : productImages;
-          return (
-            <Link
-              key={guide.slug}
-              href={`/guides/${guide.slug}`}
-              className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
-            >
-              <ArticleCover
-                images={coverImages}
-                fallback={editorialImages.guides}
-                locale={locale}
-                className="aspect-[16/9] w-full"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                packshot={!guide.imageSrc}
-              />
-              <div className="p-6">
-                <h2 className="text-xl font-semibold text-[var(--heading)]">
-                  {copy.title}
-                </h2>
-                <p className="mt-3 text-sm text-[var(--muted)]">{copy.subtitle}</p>
-              </div>
-            </Link>
-          );
-        })}
+        {allGuides.length === 0 ? (
+          <p className="text-[var(--muted)] md:col-span-2">
+            {isEn
+              ? "Guides are being prepared for this site."
+              : "Les guides de ce site sont en préparation."}
+          </p>
+        ) : (
+          allGuides.map((guide) => {
+            const copy = isEn ? guide.en : guide.fr;
+            const productImages =
+              site.id === "ecoflow"
+                ? resolveArticleProductImages(guide.slug, ecoflowMap)
+                : [];
+            const coverImages = guide.imageSrc
+              ? [
+                  {
+                    src: guide.imageSrc,
+                    altFr: copy.title,
+                    altEn: copy.title,
+                    credit: guide.imageCredit || site.brand.name,
+                    creditUrl: "#",
+                  },
+                ]
+              : productImages;
+            return (
+              <Link
+                key={guide.slug}
+                href={`/guides/${guide.slug}`}
+                className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
+              >
+                <ArticleCover
+                  images={coverImages}
+                  fallback={editorialImages.guides}
+                  locale={locale}
+                  className="aspect-[16/9] w-full"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  packshot={Boolean(guide.imageSrc) === false && coverImages.length > 0}
+                />
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold text-[var(--heading)]">
+                    {copy.title}
+                  </h2>
+                  <p className="mt-3 text-sm text-[var(--muted)]">{copy.subtitle}</p>
+                </div>
+              </Link>
+            );
+          })
+        )}
       </div>
     </div>
   );

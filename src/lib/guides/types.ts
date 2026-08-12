@@ -1,4 +1,5 @@
 import type { ArticleSection } from "@/data/articles";
+import type { SiteId } from "@/sites/types";
 
 export type GuideLocaleCopy = {
   title: string;
@@ -8,6 +9,8 @@ export type GuideLocaleCopy = {
 
 export type GuideEntry = {
   slug: string;
+  /** Theme that owns this guide. Defaults to ecoflow when omitted. */
+  siteId?: SiteId;
   fr: GuideLocaleCopy;
   en: GuideLocaleCopy;
   imageSrc?: string;
@@ -21,14 +24,27 @@ export type GuidesStore = {
   entries: Record<string, GuideEntry>;
 };
 
-/** Seed topics for AI generation / enrichment. */
-export const GUIDE_TOPICS: {
+export type GuideTopic = {
   slug: string;
+  siteId?: SiteId;
   topicFr: string;
   topicEn: string;
   angleFr: string;
   angleEn: string;
-}[] = [
+};
+
+export function guideSiteId(
+  entry: { siteId?: SiteId } | null | undefined,
+): SiteId {
+  return entry?.siteId || "ecoflow";
+}
+
+export function guidesForSite(topics: GuideTopic[], siteId: SiteId) {
+  return topics.filter((t) => guideSiteId(t) === siteId);
+}
+
+/** Seed topics for AI generation / enrichment. */
+export const GUIDE_TOPICS: GuideTopic[] = [
   {
     slug: "choisir-station",
     topicFr: "Choisir une station électrique EcoFlow",
@@ -112,5 +128,46 @@ export const GUIDE_TOPICS: {
     topicEn: "First EcoFlow purchase: checklist before ordering",
     angleFr: "Budget, usage, ASIN Amazon, accessoires utiles",
     angleEn: "Budget, use case, Amazon listing, useful accessories",
+  },
+  // — tumbler / La gourde isotherme —
+  {
+    slug: "choisir-gourde-isotherme",
+    siteId: "tumbler",
+    topicFr: "Choisir une gourde isotherme",
+    topicEn: "Choosing an insulated water bottle",
+    angleFr: "Capacité, isolation, bouchon, entretien, erreurs d’achat",
+    angleEn: "Capacity, insulation, lid, care, buying mistakes",
+  },
+  {
+    slug: "gourde-vs-tumbler",
+    siteId: "tumbler",
+    topicFr: "Gourde vs tumbler : que choisir ?",
+    topicEn: "Bottle vs tumbler: which to choose?",
+    angleFr: "Usage bureau / sport / voyage, paille, volume, fuite",
+    angleEn: "Desk / sport / travel use, straw, volume, leak-proofing",
+  },
+  {
+    slug: "entretien-gourde",
+    siteId: "tumbler",
+    topicFr: "Entretenir une gourde ou un tumbler inox",
+    topicEn: "Caring for a stainless bottle or tumbler",
+    angleFr: "Lavage, odeurs, joints, lave-vaisselle, durée de vie",
+    angleEn: "Washing, smells, seals, dishwasher, lifespan",
+  },
+  {
+    slug: "isolation-froid-chaud",
+    siteId: "tumbler",
+    topicFr: "Isolation froid / chaud : ce qui compte vraiment",
+    topicEn: "Hot / cold insulation: what really matters",
+    angleFr: "Double paroi, vide, tests réalistes, attentes",
+    angleEn: "Double wall, vacuum, realistic tests, expectations",
+  },
+  {
+    slug: "premier-achat-gourde",
+    siteId: "tumbler",
+    topicFr: "Premier achat gourde isotherme : checklist",
+    topicEn: "First insulated bottle purchase: checklist",
+    angleFr: "Budget, volume, vendeur Amazon, accessoires utiles",
+    angleEn: "Budget, volume, Amazon seller, useful accessories",
   },
 ];

@@ -10,6 +10,7 @@ import { editorialImages } from "@/data/images";
 import { amazonCtaForNews } from "@/lib/news/amazon-cta";
 import { getNewsBySlug, readNewsStore } from "@/lib/news/store";
 import { localeAlternates } from "@/lib/seo";
+import { getCurrentSite } from "@/sites/server";
 
 export const revalidate = 600;
 
@@ -19,8 +20,9 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
+  const site = await getCurrentSite();
   const store = await readNewsStore();
-  const article = getNewsBySlug(slug, store);
+  const article = getNewsBySlug(slug, store, site.id);
   if (!article) return {};
   const copy = locale === "en" ? article.en : article.fr;
   return {
@@ -42,14 +44,14 @@ export default async function NewsArticlePage({
   setRequestLocale(locale);
   const t = await getTranslations("news");
   const a = await getTranslations("amazon");
+  const site = await getCurrentSite();
   const store = await readNewsStore();
-  const article = getNewsBySlug(slug, store);
+  const article = getNewsBySlug(slug, store, site.id);
   if (!article) notFound();
 
   const isEn = locale === "en";
   const copy = isEn ? article.en : article.fr;
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
+  const siteUrl = `https://${site.primaryHost}`;
   const date = new Date(article.publishedAt).toLocaleDateString(
     isEn ? "en-US" : "fr-FR",
     { year: "numeric", month: "long", day: "numeric" },

@@ -9,13 +9,19 @@ import {
   productSiteId,
 } from "@/data/products";
 import { comparisonHubCategories } from "@/lib/comparisons/hub";
-import { GUIDE_TOPICS } from "@/lib/guides/types";
+import { GUIDE_TOPICS, guideSiteId } from "@/lib/guides/types";
+import { newsSiteId } from "@/lib/news/types";
 import { sites } from "@/sites";
+import type { SiteId } from "@/sites/types";
 
 /** Refresh sitemap periodically so ingested news appear without full rebuild. */
 export const revalidate = 3600;
 
-function loadNewsSlugs(): { slug: string; publishedAt: string }[] {
+function loadNewsArticles(): {
+  slug: string;
+  publishedAt: string;
+  siteId?: SiteId;
+}[] {
   const candidates = [
     process.env.NEWS_DATA_PATH?.trim(),
     join(process.cwd(), "data", "news.json"),
@@ -25,7 +31,11 @@ function loadNewsSlugs(): { slug: string; publishedAt: string }[] {
     try {
       const raw = readFileSync(file, "utf8");
       const store = JSON.parse(raw) as {
-        articles?: { slug: string; publishedAt: string }[];
+        articles?: {
+          slug: string;
+          publishedAt: string;
+          siteId?: SiteId;
+        }[];
       };
       return store.articles || [];
     } catch {
@@ -37,26 +47,23 @@ function loadNewsSlugs(): { slug: string; publishedAt: string }[] {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
-  const news = loadNewsSlugs();
+  const news = loadNewsArticles();
 
   for (const site of sites) {
     const siteUrl = `https://${site.primaryHost}`;
     const cats = getCategoriesForSite(site.id);
     const prods = getProductsForSite(site.id);
-    const staticPaths =
-      site.id === "ecoflow"
-        ? [
-            "",
-            "/produits",
-            "/powerstream",
-            "/guides",
-            "/comparatifs",
-            "/actualites",
-            "/a-propos",
-            "/mentions-legales",
-            "/contact",
-          ]
-        : ["", "/produits", "/a-propos", "/mentions-legales", "/contact"];
+    const staticPaths = [
+      "",
+      "/produits",
+      ...(site.id === "ecoflow" ? ["/powerstream"] : []),
+      "/guides",
+      "/comparatifs",
+      "/actualites",
+      "/a-propos",
+      "/mentions-legales",
+      "/contact",
+    ];
 
     for (const locale of routing.locales) {
       for (const path of staticPaths) {
@@ -69,31 +76,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
         });
       }
 
-      if (site.id === "ecoflow") {
-        for (const article of news) {
-          entries.push({
-            url: `${siteUrl}/${locale}/actualites/${article.slug}`,
-            lastModified: new Date(article.publishedAt),
-            changeFrequency: "weekly",
-            priority: 0.7,
-          });
-        }
-        for (const guide of GUIDE_TOPICS) {
-          entries.push({
-            url: `${siteUrl}/${locale}/guides/${guide.slug}`,
-            lastModified: new Date(),
-            changeFrequency: "weekly",
-            priority: 0.75,
-          });
-        }
-        for (const hub of comparisonHubCategories()) {
-          entries.push({
-            url: `${siteUrl}/${locale}/comparatifs/${hub.slug}`,
-            lastModified: new Date(),
-            changeFrequency: "weekly",
-            priority: 0.75,
-          });
-        }
+      for (const article of news) {
+        if (newsSiteId(article) !== site.id) continue;
+        entries.push({
+          url: `${siteUrl}/${locale}/actualites/${article.slug}`,
+          lastModified: new Date(article.publishedAt),
+          changeFrequency: "weekly",
+          priority: 0.7,
+        });
+      }
+
+      for (const guide of GUIDE_TOPICS) {
+        if (guideSiteId(guide) !== site.id) continue;
+        entries.push({
+          url: `${siteUrl}/${locale}/guides/${guide.slug}`,
+          lastModified: new Date(),
+          changeFrequency: "weekly",
+          priority: 0.75,
+        });
+      }
+
+      for (const hub of comparisonHubCategories(site.id)) {
+        entries.push({
+          url: `${siteUrl}/${locale}/comparatifs/${hub.slug}`,
+          lastModified: new Date(),
+          changeFrequency: "weekly",
+          priority: 0.75,
+        });
       }
 
       for (const cat of cats) {

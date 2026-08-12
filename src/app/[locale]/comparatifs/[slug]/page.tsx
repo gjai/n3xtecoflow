@@ -19,6 +19,7 @@ import {
   resolveArticleProductImages,
 } from "@/lib/article-images";
 import {
+  comparisonHubBelongsToSite,
   comparisonHubCategories,
   hubTitle,
   LEGACY_COMPARISON_REDIRECTS,
@@ -27,6 +28,7 @@ import {
 } from "@/lib/comparisons/hub";
 import { resolveDisplayPrice, resolveProductMedia } from "@/lib/product-presentation";
 import { localeAlternates } from "@/lib/seo";
+import { getCurrentSite } from "@/sites/server";
 
 export function generateStaticParams() {
   const hubs = comparisonHubCategories().map((c) => c.slug);
@@ -77,10 +79,12 @@ export default async function ComparisonSlugPage({
   const sp = await searchParams;
   setRequestLocale(locale);
   const isEn = locale === "en";
+  const site = await getCurrentSite();
 
-  // Legacy article slug → redirect to category hub with pair
+  // Legacy article slug → redirect to category hub with pair (ecoflow only)
   const legacy = LEGACY_COMPARISON_REDIRECTS[slug];
   if (legacy && !getCategory(slug)) {
+    if (site.id !== "ecoflow") notFound();
     redirect({
       href: `/comparatifs/${legacy.category}?a=${legacy.left}&b=${legacy.right}`,
       locale,
@@ -89,6 +93,7 @@ export default async function ComparisonSlugPage({
 
   const cat = getCategory(slug);
   if (cat) {
+    if (!comparisonHubBelongsToSite(cat.id, site.id)) notFound();
     const list = productsForHub(cat.id);
     if (list.length < 2) notFound();
     const ecoflowMap = await getEcoflowEntriesMap();
@@ -149,7 +154,8 @@ export default async function ComparisonSlugPage({
     );
   }
 
-  // Fallback: old static comparison articles (if any remain without redirect)
+  // Fallback: old static comparison articles (ecoflow only)
+  if (site.id !== "ecoflow") notFound();
   const item = getComparison(slug);
   if (!item) notFound();
   const articleCopy = locale === "en" ? item.en : item.fr;

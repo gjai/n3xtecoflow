@@ -86,8 +86,17 @@ export type SiteConfig = {
   heroImage: string;
   /** Categories to highlight first on home */
   featuredCategoryIds: string[];
-  /** Sister sites in the network (cross-links) — empty until a 2nd theme exists */
-  network: { siteId: SiteId; labelFr: string; labelEn: string }[];
+  /**
+   * Sister / network sites in the footer.
+   * - Internal theme: set `siteId` (resolved to primaryHost)
+   * - External site (hosted elsewhere): set absolute `href`
+   */
+  network: {
+    siteId?: SiteId;
+    href?: string;
+    labelFr: string;
+    labelEn: string;
+  }[];
   monetization?: SiteMonetization;
   /** Legal publisher stays shared unless overridden later */
   focusFr: string;

@@ -73,6 +73,16 @@ export const tumblerSite: SiteConfig = {
       labelFr: "EcoFlow Stream",
       labelEn: "EcoFlow Stream",
     },
+    {
+      href: "https://elections2027.com",
+      labelFr: "Élections 2027",
+      labelEn: "Élections 2027",
+    },
+    {
+      href: "https://marquage-tuyauterie.com",
+      labelFr: "Marquage tuyauterie",
+      labelEn: "Pipe marking",
+    },
   ],
   focusFr: "Top ventes Amazon de gourdes isothermes (vendu par Amazon).",
   focusEn: "Amazon bestsellers for insulated bottles (sold by Amazon).",

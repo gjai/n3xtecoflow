@@ -12,6 +12,7 @@ import {
 import { GUIDE_TOPICS } from "@/lib/guides/types";
 import { resolveGuide } from "@/lib/guides/refresh";
 import { localeAlternates } from "@/lib/seo";
+import { getCurrentSite } from "@/sites/server";
 
 export const revalidate = 600;
 
@@ -27,10 +28,12 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const guide = await resolveGuide(slug);
+  const site = await getCurrentSite();
+  const guide = await resolveGuide(slug, site.id);
   if (!guide) return {};
   const copy = locale === "en" ? guide.en : guide.fr;
-  const ecoflowMap = await getEcoflowEntriesMap();
+  const ecoflowMap =
+    site.id === "ecoflow" ? await getEcoflowEntriesMap() : {};
   const og = guide.imageSrc
     ? { src: guide.imageSrc }
     : resolveArticlePrimaryImage(slug, "guide", ecoflowMap);
@@ -49,19 +52,24 @@ export default async function GuideArticlePage({
 }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const guide = await resolveGuide(slug);
+  const site = await getCurrentSite();
+  const guide = await resolveGuide(slug, site.id);
   if (!guide) notFound();
   const copy = locale === "en" ? guide.en : guide.fr;
   const isEn = locale === "en";
-  const ecoflowMap = await getEcoflowEntriesMap();
-  const productImages = resolveArticleProductImages(slug, ecoflowMap);
+  const ecoflowMap =
+    site.id === "ecoflow" ? await getEcoflowEntriesMap() : {};
+  const productImages =
+    site.id === "ecoflow"
+      ? resolveArticleProductImages(slug, ecoflowMap)
+      : [];
   const coverImages = guide.imageSrc
     ? [
         {
           src: guide.imageSrc,
           altFr: copy.title,
           altEn: copy.title,
-          credit: guide.imageCredit || "EcoFlow Stream",
+          credit: guide.imageCredit || site.brand.name,
           creditUrl: "#",
         },
       ]

@@ -17,7 +17,6 @@ import {
 import {
   getCategoriesForSite,
   getLocalizedCategory,
-  getLocalizedProduct,
   getProductsForSite,
   type CategoryId,
 } from "@/data/products";
@@ -67,119 +66,20 @@ export default async function HomePage({
   const siteUrl = `https://${site.primaryHost}`;
   const brandName = site.brand.name;
 
-  if (site.id === "tumbler") {
-    const cats = getCategoriesForSite("tumbler");
-    const list = getProductsForSite("tumbler");
-    return (
-      <>
-        <JsonLd data={organizationJsonLd(siteUrl)} />
-        <JsonLd data={websiteJsonLd(siteUrl)} />
-        <section className="hero-grid border-b border-[var(--line)]">
-          <div className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-24">
-            <p className="text-xs uppercase tracking-[0.2em] text-[var(--solar)]">
-              {brandName}
-            </p>
-            <h1 className="mt-4 max-w-3xl font-[family-name:var(--font-display)] text-4xl font-semibold text-[var(--heading)] md:text-6xl">
-              {isEn ? site.brand.headlineEn : site.brand.headlineFr}
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg text-[var(--muted)]">
-              {isEn ? site.brand.subheadEn : site.brand.subheadFr}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Link
-                href="/produits"
-                className="bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-[var(--accent-ink)]"
-              >
-                {isEn ? "Browse catalog" : "Voir le catalogue"}
-              </Link>
-              <AmazonButton
-                href={buildAmazonSearchUrl("gourde isotherme")}
-                label={a("cta")}
-              />
-            </div>
-            <div className="mt-8">
-              <AffiliateDisclosure compact />
-            </div>
-          </div>
-        </section>
-        <section className="mx-auto max-w-6xl px-5 py-14 md:px-8">
-          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
-            {isEn ? "Categories" : "Catégories"}
-          </h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {cats.map((cat) => {
-              const copy = getLocalizedCategory(cat, locale);
-              return (
-                <Link
-                  key={cat.id}
-                  href={`/produits/${cat.slug}`}
-                  className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
-                >
-                  <CoverImage
-                    image={categoryImages[cat.id]}
-                    locale={locale}
-                    className="aspect-[16/9] w-full"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                  <div className="p-5">
-                    <h3 className="text-lg font-semibold text-[var(--heading)]">
-                      {copy.title}
-                    </h3>
-                    <p className="mt-2 text-sm text-[var(--muted)]">{copy.intro}</p>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-        <section className="border-y border-[var(--line)] bg-[var(--surface)]">
-          <div className="mx-auto max-w-6xl px-5 py-14 md:px-8">
-            <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
-              {isEn ? "Top Amazon picks" : "Sélection best-sellers Amazon"}
-            </h2>
-            <p className="mt-3 max-w-2xl text-[var(--muted)]">
-              {isEn
-                ? "Editorial shortlist of bestsellers — prefer listings Ships and sold by Amazon."
-                : "Sélection éditoriale des best-sellers — préférez Expédié et vendu par Amazon."}
-            </p>
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
-              {list.map((p) => {
-                const copy = getLocalizedProduct(p, locale);
-                return (
-                  <Link
-                    key={p.slug}
-                    href={`/produits/${p.category}/${p.slug}`}
-                    className="border border-[var(--line)] bg-[var(--bg)] p-5 transition hover:border-[var(--accent)]"
-                  >
-                    <h3 className="font-semibold text-[var(--heading)]">{p.name}</h3>
-                    <p className="mt-2 text-sm text-[var(--muted)]">{copy.tagline}</p>
-                    <p className="mt-3 text-xs text-[var(--accent)]">
-                      {isEn ? "View sheet →" : "Voir la fiche →"}
-                    </p>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      </>
-    );
-  }
-
-  const newsArticles = getNewsArticles(await readNewsStore());
+  const newsArticles = getNewsArticles(await readNewsStore(), site.id);
   const latestNews = newsArticles.slice(0, 3);
   const latestNewsItem = newsArticles[0];
-  const allGuides = await resolveAllGuides();
-  const latestGuide = allGuides.at(-1)!;
-  const comparisonHubs = comparisonHubCategories();
-  const latestComparisonHub = comparisonHubs[0]!;
-  const siteProducts = getProductsForSite("ecoflow");
+  const allGuides = await resolveAllGuides(site.id);
+  const latestGuide = allGuides.at(-1);
+  const comparisonHubs = comparisonHubCategories(site.id);
+  const latestComparisonHub = comparisonHubs[0];
+  const siteProducts = getProductsForSite(site.id);
   const featuredProducts = siteProducts.filter((p) =>
     site.featuredCategoryIds.includes(p.category),
   );
   const latestProduct =
     featuredProducts.at(-1) ?? siteProducts.at(-1)!;
-  const siteCats = getCategoriesForSite("ecoflow");
+  const siteCats = getCategoriesForSite(site.id);
   const featured = site.featuredCategoryIds
     .map((id) => siteCats.find((c) => c.id === (id as CategoryId)))
     .filter(Boolean) as typeof siteCats;
@@ -190,47 +90,58 @@ export default async function HomePage({
 
   const productImage = resolveProductMedia(
     latestProduct,
-    await getEcoflowEntry(latestProduct.slug),
+    site.id === "ecoflow" ? await getEcoflowEntry(latestProduct.slug) : null,
   ).src;
   const productCopy = resolveProductCopy(
     latestProduct,
     locale,
-    await getEcoflowEditorial(latestProduct.slug),
+    site.id === "ecoflow"
+      ? await getEcoflowEditorial(latestProduct.slug)
+      : null,
   );
   const newsCopy = latestNewsItem
     ? isEn
       ? latestNewsItem.en
       : latestNewsItem.fr
     : null;
-  const guideCopy = isEn ? latestGuide.en : latestGuide.fr;
-  const comparisonTitle = hubTitle(latestComparisonHub.id, locale);
-  const comparisonIntro = getLocalizedCategory(
-    latestComparisonHub,
-    locale,
-  ).intro;
+  const guideCopy = latestGuide
+    ? isEn
+      ? latestGuide.en
+      : latestGuide.fr
+    : null;
+  const comparisonTitle = latestComparisonHub
+    ? hubTitle(latestComparisonHub.id, locale)
+    : null;
+  const comparisonIntro = latestComparisonHub
+    ? getLocalizedCategory(latestComparisonHub, locale).intro
+    : null;
 
-  const ecoflowMap = await getEcoflowEntriesMap();
-  const guideCover = latestGuide.imageSrc
-    ? {
-        src: latestGuide.imageSrc,
-        altFr: guideCopy.title,
-        altEn: guideCopy.title,
-      }
-    : resolveArticlePrimaryImage(latestGuide.slug, "guide", ecoflowMap);
-  const comparisonCover = resolveArticlePrimaryImage(
-    latestComparisonHub.slug,
-    "comparison",
-    ecoflowMap,
-  );
+  const ecoflowMap =
+    site.id === "ecoflow" ? await getEcoflowEntriesMap() : {};
+  const guideCover =
+    latestGuide && guideCopy
+      ? latestGuide.imageSrc
+        ? {
+            src: latestGuide.imageSrc,
+            altFr: guideCopy.title,
+            altEn: guideCopy.title,
+          }
+        : resolveArticlePrimaryImage(latestGuide.slug, "guide", ecoflowMap)
+      : null;
+  const comparisonCover = latestComparisonHub
+    ? resolveArticlePrimaryImage(
+        latestComparisonHub.slug,
+        "comparison",
+        ecoflowMap,
+      )
+    : null;
 
   const heroSlides: HeroSlide[] = [
     {
       id: latestNewsItem ? `news-${latestNewsItem.slug}` : "news-fallback",
       kind: t("slideNews"),
       title: newsCopy?.title || t("slideNewsFallback"),
-      excerpt:
-        newsCopy?.excerpt ||
-        t("slideNewsExcerpt"),
+      excerpt: newsCopy?.excerpt || t("slideNewsExcerpt"),
       href: latestNewsItem
         ? `/actualites/${latestNewsItem.slug}`
         : "/actualites",
@@ -244,7 +155,10 @@ export default async function HomePage({
         ? editorialImages.news.altEn
         : editorialImages.news.altFr,
     },
-    {
+  ];
+
+  if (latestGuide && guideCopy && guideCover) {
+    heroSlides.push({
       id: `guide-${latestGuide.slug}`,
       kind: t("slideGuide"),
       title: guideCopy.title,
@@ -253,8 +167,29 @@ export default async function HomePage({
       cta: t("slideGuideCta"),
       imageSrc: guideCover.src,
       imageAlt: isEn ? guideCover.altEn : guideCover.altFr,
-    },
-    {
+    });
+  } else {
+    heroSlides.push({
+      id: "guide-fallback",
+      kind: t("slideGuide"),
+      title: isEn ? "Buying guides" : "Guides d'achat",
+      excerpt: isEn ? site.brand.taglineEn : site.brand.taglineFr,
+      href: "/guides",
+      cta: t("slideGuideCta"),
+      imageSrc: editorialImages.guides.src || site.heroImage || heroImage.src,
+      imageAlt: isEn
+        ? editorialImages.guides.altEn
+        : editorialImages.guides.altFr,
+    });
+  }
+
+  if (
+    latestComparisonHub &&
+    comparisonTitle &&
+    comparisonIntro &&
+    comparisonCover
+  ) {
+    heroSlides.push({
       id: `comparison-${latestComparisonHub.slug}`,
       kind: t("slideComparison"),
       title: comparisonTitle,
@@ -263,18 +198,35 @@ export default async function HomePage({
       cta: t("slideComparisonCta"),
       imageSrc: comparisonCover.src,
       imageAlt: isEn ? comparisonCover.altEn : comparisonCover.altFr,
-    },
-    {
-      id: `product-${latestProduct.slug}`,
-      kind: t("slideProduct"),
-      title: latestProduct.name,
-      excerpt: productCopy.summary,
-      href: `/produits/${latestProduct.category}/${latestProduct.slug}`,
-      cta: t("slideProductCta"),
-      imageSrc: productImage,
-      imageAlt: latestProduct.name,
-    },
-  ];
+    });
+  } else {
+    heroSlides.push({
+      id: "comparison-fallback",
+      kind: t("slideComparison"),
+      title: isEn ? "Comparisons" : "Comparatifs",
+      excerpt: isEn
+        ? "Compare products side by side."
+        : "Comparez les produits côte à côte.",
+      href: "/comparatifs",
+      cta: t("slideComparisonCta"),
+      imageSrc:
+        editorialImages.comparatifs.src || site.heroImage || heroImage.src,
+      imageAlt: isEn
+        ? editorialImages.comparatifs.altEn
+        : editorialImages.comparatifs.altFr,
+    });
+  }
+
+  heroSlides.push({
+    id: `product-${latestProduct.slug}`,
+    kind: t("slideProduct"),
+    title: latestProduct.name,
+    excerpt: productCopy.summary,
+    href: `/produits/${latestProduct.category}/${latestProduct.slug}`,
+    cta: t("slideProductCta"),
+    imageSrc: productImage,
+    imageAlt: latestProduct.name,
+  });
 
   return (
     <>
@@ -434,34 +386,65 @@ export default async function HomePage({
         </div>
       </section>
 
-      <section className="border-b border-[var(--line)] bg-[var(--surface)]">
-        <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-[1.2fr_0.8fr] md:items-end md:px-8 md:py-18">
-          <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[var(--solar)]">
-              {t("spotlightTitle")}
-            </p>
-            <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
-              {t("spotlightName")}
-            </h2>
-            <p className="mt-4 max-w-xl text-[var(--muted)]">
-              {t("spotlightText")}
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-6">
-              <Link
-                href="/produits/stream"
-                className="text-sm font-semibold text-[var(--accent)] underline-offset-4 hover:underline"
-              >
-                {t("spotlightCta")}
-              </Link>
-              <AmazonButton
-                href={buildAmazonSearchUrl(AMAZON_QUERIES.stream)}
-                label={a("cta")}
-              />
+      {site.id === "ecoflow" ? (
+        <section className="border-b border-[var(--line)] bg-[var(--surface)]">
+          <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-[1.2fr_0.8fr] md:items-end md:px-8 md:py-18">
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-[var(--solar)]">
+                {t("spotlightTitle")}
+              </p>
+              <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
+                {t("spotlightName")}
+              </h2>
+              <p className="mt-4 max-w-xl text-[var(--muted)]">
+                {t("spotlightText")}
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-6">
+                <Link
+                  href="/produits/stream"
+                  className="text-sm font-semibold text-[var(--accent)] underline-offset-4 hover:underline"
+                >
+                  {t("spotlightCta")}
+                </Link>
+                <AmazonButton
+                  href={buildAmazonSearchUrl(AMAZON_QUERIES.stream)}
+                  label={a("cta")}
+                />
+              </div>
             </div>
+            <AffiliateDisclosure />
           </div>
-          <AffiliateDisclosure />
-        </div>
-      </section>
+        </section>
+      ) : (
+        <section className="border-b border-[var(--line)] bg-[var(--surface)]">
+          <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-[1.2fr_0.8fr] md:items-end md:px-8 md:py-18">
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-[var(--solar)]">
+                {brandName}
+              </p>
+              <h2 className="mt-3 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
+                {isEn ? site.brand.headlineEn : site.brand.headlineFr}
+              </h2>
+              <p className="mt-4 max-w-xl text-[var(--muted)]">
+                {isEn ? site.brand.subheadEn : site.brand.subheadFr}
+              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-6">
+                <Link
+                  href="/produits"
+                  className="text-sm font-semibold text-[var(--accent)] underline-offset-4 hover:underline"
+                >
+                  {isEn ? "Browse catalog" : "Voir le catalogue"}
+                </Link>
+                <AmazonButton
+                  href={buildAmazonSearchUrl("gourde isotherme")}
+                  label={a("cta")}
+                />
+              </div>
+            </div>
+            <AffiliateDisclosure />
+          </div>
+        </section>
+      )}
     </>
   );
 }

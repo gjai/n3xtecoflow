@@ -80,6 +80,16 @@ export const ecoflowSite: SiteConfig = {
       labelFr: "La gourde isotherme",
       labelEn: "La gourde isotherme",
     },
+    {
+      href: "https://elections2027.com",
+      labelFr: "Élections 2027",
+      labelEn: "Élections 2027",
+    },
+    {
+      href: "https://marquage-tuyauterie.com",
+      labelFr: "Marquage tuyauterie",
+      labelEn: "Pipe marking",
+    },
   ],
   focusFr:
     "Catalogue large EcoFlow + guides d’achat (camping, backup, solaire balcon).",

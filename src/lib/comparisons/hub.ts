@@ -1,5 +1,7 @@
 import {
   categories,
+  categorySiteId,
+  getCategoriesForSite,
   getCategory,
   getLocalizedCategory,
   getLocalizedProduct,
@@ -11,11 +13,22 @@ import {
 import { amazonHrefForProduct } from "@/lib/amazon";
 import type { EcoflowCatalogEntry } from "@/lib/ecoflow/types";
 import { resolveDisplayPrice, resolveProductMedia } from "@/lib/product-presentation";
+import type { SiteId } from "@/sites/types";
 
 /** Categories that make sense as comparison hubs (≥2 products). */
-export function comparisonHubCategories() {
-  return categories.filter((c) => getProductsByCategory(c.id).length >= 2);
+export function comparisonHubCategories(siteId?: SiteId) {
+  const pool = siteId ? getCategoriesForSite(siteId) : categories;
+  return pool.filter((c) => getProductsByCategory(c.id).length >= 2);
 }
+
+export function comparisonHubBelongsToSite(
+  categoryId: CategoryId,
+  siteId: SiteId,
+) {
+  const cat = getCategory(categoryId);
+  return Boolean(cat && categorySiteId(cat) === siteId);
+}
+
 
 export function isComparisonHubSlug(slug: string): boolean {
   return Boolean(getCategory(slug));

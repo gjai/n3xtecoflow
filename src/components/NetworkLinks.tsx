@@ -20,11 +20,12 @@ export function NetworkLinks() {
         </p>
         <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
           {links.map((l) => (
-            <li key={l.siteId}>
+            <li key={l.key}>
               <a
                 href={l.href}
                 className="text-[var(--accent)] underline-offset-2 hover:underline"
-                rel="noopener noreferrer"
+                rel={l.external ? "noopener noreferrer" : undefined}
+                target={l.external ? "_blank" : undefined}
               >
                 {isEn ? l.labelEn : l.labelFr}
               </a>

@@ -1,8 +1,10 @@
 import { createHash } from "crypto";
 import { promises as fs } from "fs";
 import path from "path";
+import type { SiteId } from "@/sites/types";
 import type { NewsArticle, NewsStore } from "./types";
-import { MAX_NEWS_ARTICLES } from "./types";
+import { MAX_NEWS_ARTICLES, newsSiteId } from "./types";
+
 
 const SEED: NewsStore = {
   updatedAt: new Date().toISOString(),
@@ -48,20 +50,27 @@ export async function writeNewsStore(store: NewsStore): Promise<void> {
   await fs.writeFile(file, JSON.stringify(next, null, 2) + "\n", "utf8");
 }
 
-export function getNewsArticles(store?: NewsStore): NewsArticle[] {
-  return (store?.articles || []).slice().sort((a, b) => {
+export function getNewsArticles(
+  store?: NewsStore,
+  siteId?: SiteId,
+): NewsArticle[] {
+  const all = (store?.articles || []).slice().sort((a, b) => {
     return (
       new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
     );
   });
+  if (!siteId) return all;
+  return all.filter((a) => newsSiteId(a) === siteId);
 }
 
 export function getNewsBySlug(
   slug: string,
   store?: NewsStore,
+  siteId?: SiteId,
 ): NewsArticle | undefined {
-  return getNewsArticles(store).find((a) => a.slug === slug);
+  return getNewsArticles(store, siteId).find((a) => a.slug === slug);
 }
+
 
 export function slugify(input: string): string {
   return input
