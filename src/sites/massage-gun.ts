@@ -95,6 +95,9 @@ export const massageGunSite: SiteConfig = {
       labelEn: "Élections 2027",
     },
   ],
+  monetization: {
+    adsenseClient: "ca-pub-4733644127583822",
+  },
   focusFr:
     "Top ventes Amazon : pistolets, masseurs cervicaux et coussins shiatsu (vendu par Amazon quand possible).",
   focusEn:
