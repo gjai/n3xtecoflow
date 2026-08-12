@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
-
-const CANONICAL_ORIGIN =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-  "https://ecoflow-stream.com";
+import { getCurrentSite } from "@/sites/server";
 
 /** Path without locale prefix, e.g. `/produits/river/river-2` or `` for home. */
 export function localeAlternates(
   locale: string,
   pathWithoutLocale = "",
+  origin?: string,
 ): NonNullable<Metadata["alternates"]> {
   const raw = pathWithoutLocale.trim();
   const path =
@@ -17,10 +15,13 @@ export function localeAlternates(
         ? raw.replace(/\/$/, "")
         : `/${raw.replace(/\/$/, "")}`;
 
-  // Absolute URLs on the primary host — avoids duplicate indexing of powerstream.fr
-  const fr = `${CANONICAL_ORIGIN}/fr${path}`;
-  const en = `${CANONICAL_ORIGIN}/en${path}`;
-  const self = `${CANONICAL_ORIGIN}/${locale}${path}`;
+  const base =
+    (origin || process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com")
+      .replace(/\/$/, "");
+
+  const fr = `${base}/fr${path}`;
+  const en = `${base}/en${path}`;
+  const self = `${base}/${locale}${path}`;
 
   return {
     canonical: self,
@@ -30,6 +31,15 @@ export function localeAlternates(
       "x-default": fr,
     },
   };
+}
+
+/** Canonical / hreflang for the current Host (multi-thème). */
+export async function siteLocaleAlternates(
+  locale: string,
+  pathWithoutLocale = "",
+) {
+  const site = await getCurrentSite();
+  return localeAlternates(locale, pathWithoutLocale, `https://${site.primaryHost}`);
 }
 
 const SPEC_LABELS_EN: Record<string, string> = {
@@ -48,6 +58,9 @@ const SPEC_LABELS_EN: Record<string, string> = {
   Autonomie: "Runtime",
   Compatibilité: "Compatibility",
   MPPT: "MPPT",
+  Isolation: "Insulation",
+  Matière: "Material",
+  "Points forts": "Highlights",
 };
 
 export function localizeSpecs(

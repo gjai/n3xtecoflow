@@ -1,12 +1,14 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { Pagination } from "@/components/Pagination";
 import { SmartCover } from "@/components/SmartCover";
 import { editorialImages } from "@/data/images";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 import { paginate, parsePageParam } from "@/lib/pagination";
-import { localeAlternates } from "@/lib/seo";
+import { siteLocaleAlternates } from "@/lib/seo";
+import { getCurrentSite } from "@/sites/server";
 
 export const revalidate = 600;
 
@@ -20,6 +22,9 @@ export async function generateMetadata({
   searchParams: Promise<{ page?: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  if ((await getCurrentSite()).id !== "ecoflow") {
+    return { robots: { index: false, follow: false } };
+  }
   const { page: pageRaw } = await searchParams;
   const t = await getTranslations({ locale, namespace: "news" });
   const page = parsePageParam(pageRaw);
@@ -27,7 +32,7 @@ export async function generateMetadata({
     title: page > 1 ? `${t("title")} · ${page}` : t("title"),
     description: t("subtitle"),
     robots: page > 1 ? { index: false, follow: true } : undefined,
-    alternates: localeAlternates(locale, "/actualites"),
+    alternates: await siteLocaleAlternates(locale, "/actualites"),
   };
 }
 
@@ -39,8 +44,9 @@ export default async function NewsIndexPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const { locale } = await params;
-  const { page: pageRaw } = await searchParams;
   setRequestLocale(locale);
+  if ((await getCurrentSite()).id !== "ecoflow") notFound();
+  const { page: pageRaw } = await searchParams;
   const t = await getTranslations("news");
   const store = await readNewsStore();
   const all = getNewsArticles(store);

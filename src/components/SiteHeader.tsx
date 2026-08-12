@@ -4,18 +4,23 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { SiteLogo } from "./SiteLogo";
+import { useSite } from "./SiteProvider";
 
 export function SiteHeader() {
   const t = useTranslations("nav");
+  const site = useSite();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  const links = [
-    { href: "/produits", label: t("products") },
-    { href: "/guides", label: t("guides") },
-    { href: "/comparatifs", label: t("comparisons") },
-    { href: "/actualites", label: t("news") },
-  ] as const;
+  const links =
+    site.id === "tumbler"
+      ? ([{ href: "/produits", label: t("products") }] as const)
+      : ([
+          { href: "/produits", label: t("products") },
+          { href: "/guides", label: t("guides") },
+          { href: "/comparatifs", label: t("comparisons") },
+          { href: "/actualites", label: t("news") },
+        ] as const);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);

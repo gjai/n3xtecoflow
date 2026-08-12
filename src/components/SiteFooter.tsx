@@ -30,15 +30,19 @@ export function SiteFooter() {
           <Link href="/produits" className="hover:text-[var(--heading)]">
             {t("products")}
           </Link>
-          <Link href="/guides" className="hover:text-[var(--heading)]">
-            {t("guides")}
-          </Link>
-          <Link href="/comparatifs" className="hover:text-[var(--heading)]">
-            {t("comparisons")}
-          </Link>
-          <Link href="/actualites" className="hover:text-[var(--heading)]">
-            {t("news")}
-          </Link>
+          {site.id === "ecoflow" ? (
+            <>
+              <Link href="/guides" className="hover:text-[var(--heading)]">
+                {t("guides")}
+              </Link>
+              <Link href="/comparatifs" className="hover:text-[var(--heading)]">
+                {t("comparisons")}
+              </Link>
+              <Link href="/actualites" className="hover:text-[var(--heading)]">
+                {t("news")}
+              </Link>
+            </>
+          ) : null}
           <Link href="/a-propos" className="hover:text-[var(--heading)]">
             {t("about")}
           </Link>

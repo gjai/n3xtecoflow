@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { CoverImage } from "@/components/CoverImage";
 import { getCategoryImage } from "@/data/images";
@@ -8,7 +9,8 @@ import {
   hubTitle,
 } from "@/lib/comparisons/hub";
 import { getLocalizedCategory } from "@/data/products";
-import { localeAlternates } from "@/lib/seo";
+import { siteLocaleAlternates } from "@/lib/seo";
+import { getCurrentSite } from "@/sites/server";
 
 export async function generateMetadata({
   params,
@@ -16,13 +18,16 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  if ((await getCurrentSite()).id !== "ecoflow") {
+    return { robots: { index: false, follow: false } };
+  }
   return {
     title: locale === "en" ? "Comparisons" : "Comparatifs",
     description:
       locale === "en"
         ? "Compare EcoFlow products by category: pick any X vs Y and compare specs and prices."
         : "Comparez les produits EcoFlow par catégorie : choisissez X vs Y et comparez specs et prix.",
-    alternates: localeAlternates(locale, "/comparatifs"),
+    alternates: await siteLocaleAlternates(locale, "/comparatifs"),
   };
 }
 
@@ -33,6 +38,7 @@ export default async function ComparisonsIndexPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  if ((await getCurrentSite()).id !== "ecoflow") notFound();
   const isEn = locale === "en";
   const hubs = comparisonHubCategories();
 

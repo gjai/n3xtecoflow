@@ -14,7 +14,13 @@ import {
   editorialImages,
   heroImage,
 } from "@/data/images";
-import { categories, products, getLocalizedCategory, type CategoryId } from "@/data/products";
+import {
+  getCategoriesForSite,
+  getLocalizedCategory,
+  getLocalizedProduct,
+  getProductsForSite,
+  type CategoryId,
+} from "@/data/products";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 import { getEcoflowEntriesMap, getEcoflowEntry } from "@/lib/ecoflow/catalog-store";
 import { getEcoflowEditorial } from "@/lib/ecoflow/editorial-store";
@@ -26,9 +32,8 @@ import {
 import { resolveAllGuides } from "@/lib/guides/refresh";
 import { resolveProductCopy } from "@/lib/product-copy";
 import { resolveProductMedia } from "@/lib/product-presentation";
-import { localeAlternates } from "@/lib/seo";
+import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
-
 /** Fresh news without blocking CDN cache on every request. */
 export const revalidate = 600;
 
@@ -38,11 +43,12 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "home" });
+  const site = await getCurrentSite();
+  const isEn = locale === "en";
   return {
-    title: { absolute: t("brand") },
-    description: t("subhead"),
-    alternates: localeAlternates(locale, ""),
+    title: { absolute: site.brand.name },
+    description: isEn ? site.brand.taglineEn : site.brand.taglineFr,
+    alternates: await siteLocaleAlternates(locale, ""),
   };
 }
 
@@ -59,6 +65,107 @@ export default async function HomePage({
   const site = await getCurrentSite();
   const isEn = locale === "en";
   const siteUrl = `https://${site.primaryHost}`;
+  const brandName = site.brand.name;
+
+  if (site.id === "tumbler") {
+    const cats = getCategoriesForSite("tumbler");
+    const list = getProductsForSite("tumbler");
+    return (
+      <>
+        <JsonLd data={organizationJsonLd(siteUrl)} />
+        <JsonLd data={websiteJsonLd(siteUrl)} />
+        <section className="hero-grid border-b border-[var(--line)]">
+          <div className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-24">
+            <p className="text-xs uppercase tracking-[0.2em] text-[var(--solar)]">
+              {brandName}
+            </p>
+            <h1 className="mt-4 max-w-3xl font-[family-name:var(--font-display)] text-4xl font-semibold text-[var(--heading)] md:text-6xl">
+              {isEn ? site.brand.headlineEn : site.brand.headlineFr}
+            </h1>
+            <p className="mt-5 max-w-2xl text-lg text-[var(--muted)]">
+              {isEn ? site.brand.subheadEn : site.brand.subheadFr}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Link
+                href="/produits"
+                className="bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-[var(--accent-ink)]"
+              >
+                {isEn ? "Browse catalog" : "Voir le catalogue"}
+              </Link>
+              <AmazonButton
+                href={buildAmazonSearchUrl("gourde isotherme")}
+                label={a("cta")}
+              />
+            </div>
+            <div className="mt-8">
+              <AffiliateDisclosure compact />
+            </div>
+          </div>
+        </section>
+        <section className="mx-auto max-w-6xl px-5 py-14 md:px-8">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
+            {isEn ? "Categories" : "Catégories"}
+          </h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {cats.map((cat) => {
+              const copy = getLocalizedCategory(cat, locale);
+              return (
+                <Link
+                  key={cat.id}
+                  href={`/produits/${cat.slug}`}
+                  className="overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
+                >
+                  <CoverImage
+                    image={categoryImages[cat.id]}
+                    locale={locale}
+                    className="aspect-[16/9] w-full"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                  <div className="p-5">
+                    <h3 className="text-lg font-semibold text-[var(--heading)]">
+                      {copy.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-[var(--muted)]">{copy.intro}</p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+        <section className="border-y border-[var(--line)] bg-[var(--surface)]">
+          <div className="mx-auto max-w-6xl px-5 py-14 md:px-8">
+            <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
+              {isEn ? "Top Amazon picks" : "Sélection best-sellers Amazon"}
+            </h2>
+            <p className="mt-3 max-w-2xl text-[var(--muted)]">
+              {isEn
+                ? "Editorial shortlist of bestsellers — prefer listings Ships and sold by Amazon."
+                : "Sélection éditoriale des best-sellers — préférez Expédié et vendu par Amazon."}
+            </p>
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
+              {list.map((p) => {
+                const copy = getLocalizedProduct(p, locale);
+                return (
+                  <Link
+                    key={p.slug}
+                    href={`/produits/${p.category}/${p.slug}`}
+                    className="border border-[var(--line)] bg-[var(--bg)] p-5 transition hover:border-[var(--accent)]"
+                  >
+                    <h3 className="font-semibold text-[var(--heading)]">{p.name}</h3>
+                    <p className="mt-2 text-sm text-[var(--muted)]">{copy.tagline}</p>
+                    <p className="mt-3 text-xs text-[var(--accent)]">
+                      {isEn ? "View sheet →" : "Voir la fiche →"}
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      </>
+    );
+  }
+
   const newsArticles = getNewsArticles(await readNewsStore());
   const latestNews = newsArticles.slice(0, 3);
   const latestNewsItem = newsArticles[0];
@@ -66,19 +173,20 @@ export default async function HomePage({
   const latestGuide = allGuides.at(-1)!;
   const comparisonHubs = comparisonHubCategories();
   const latestComparisonHub = comparisonHubs[0]!;
-  const featuredProducts = products.filter((p) =>
+  const siteProducts = getProductsForSite("ecoflow");
+  const featuredProducts = siteProducts.filter((p) =>
     site.featuredCategoryIds.includes(p.category),
   );
   const latestProduct =
-    featuredProducts.at(-1) ?? products.at(-1)!;
+    featuredProducts.at(-1) ?? siteProducts.at(-1)!;
+  const siteCats = getCategoriesForSite("ecoflow");
   const featured = site.featuredCategoryIds
-    .map((id) => categories.find((c) => c.id === (id as CategoryId)))
-    .filter(Boolean) as typeof categories;
+    .map((id) => siteCats.find((c) => c.id === (id as CategoryId)))
+    .filter(Boolean) as typeof siteCats;
   const orderedCategories = [
     ...featured,
-    ...categories.filter((c) => !site.featuredCategoryIds.includes(c.id)),
+    ...siteCats.filter((c) => !site.featuredCategoryIds.includes(c.id)),
   ];
-  const brandName = site.brand.name;
 
   const productImage = resolveProductMedia(
     latestProduct,
@@ -267,7 +375,7 @@ export default async function HomePage({
           ))}
         </div>
         <p className="mt-8 text-sm text-[var(--muted)]">
-          {products.length} {isEn ? "product sheets" : "fiches produits"} ·{" "}
+          {siteProducts.length} {isEn ? "product sheets" : "fiches produits"} ·{" "}
           {allGuides.length} {isEn ? "guides" : "guides"} ·{" "}
           {comparisonHubs.length}{" "}
           <Link

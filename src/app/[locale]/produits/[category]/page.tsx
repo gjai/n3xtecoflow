@@ -11,13 +11,15 @@ import {
   resolveDisplayPrice,
   resolveProductMedia,
 } from "@/lib/product-presentation";
-import { localeAlternates } from "@/lib/seo";
+import { siteLocaleAlternates } from "@/lib/seo";
 import {
   categories,
+  categorySiteId,
   getCategory,
   getLocalizedCategory,
   getProductsByCategory,
 } from "@/data/products";
+import { getCurrentSite } from "@/sites/server";
 
 export const revalidate = 600;
 
@@ -39,7 +41,7 @@ export async function generateMetadata({
   return {
     title: copy.title,
     description: copy.intro,
-    alternates: localeAlternates(locale, `/produits/${category}`),
+    alternates: await siteLocaleAlternates(locale, `/produits/${category}`),
   };
 }
 
@@ -50,8 +52,9 @@ export default async function CategoryPage({
 }) {
   const { locale, category } = await params;
   setRequestLocale(locale);
+  const site = await getCurrentSite();
   const cat = getCategory(category);
-  if (!cat) notFound();
+  if (!cat || categorySiteId(cat) !== site.id) notFound();
   const copy = getLocalizedCategory(cat, locale);
   const items = getProductsByCategory(cat.id);
   const isEn = locale === "en";

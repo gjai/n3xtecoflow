@@ -1,12 +1,14 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { ArticleCover } from "@/components/ArticleCover";
 import { editorialImages } from "@/data/images";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import { resolveArticleProductImages } from "@/lib/article-images";
 import { resolveAllGuides } from "@/lib/guides/refresh";
-import { localeAlternates } from "@/lib/seo";
+import { siteLocaleAlternates } from "@/lib/seo";
+import { getCurrentSite } from "@/sites/server";
 
 export const revalidate = 600;
 
@@ -16,13 +18,15 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const site = await getCurrentSite();
+  if (site.id !== "ecoflow") return { robots: { index: false, follow: false } };
   return {
     title: locale === "en" ? "Buying guides" : "Guides d'achat",
     description:
       locale === "en"
         ? "EcoFlow buying guides: stations, solar, home backup, camping, STREAM."
         : "Guides d'achat EcoFlow : stations, solaire, backup maison, camping, STREAM.",
-    alternates: localeAlternates(locale, "/guides"),
+    alternates: await siteLocaleAlternates(locale, "/guides"),
   };
 }
 
@@ -33,6 +37,7 @@ export default async function GuidesIndexPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  if ((await getCurrentSite()).id !== "ecoflow") notFound();
   const isEn = locale === "en";
   const ecoflowMap = await getEcoflowEntriesMap();
   const allGuides = await resolveAllGuides();

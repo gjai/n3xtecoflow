@@ -74,7 +74,13 @@ export const ecoflowSite: SiteConfig = {
   },
   heroImage: "/images/hero/station-solaire.jpg",
   featuredCategoryIds: ["stream", "delta", "river", "solaire", "powerstream"],
-  network: [],
+  network: [
+    {
+      siteId: "tumbler",
+      labelFr: "La gourde isotherme",
+      labelEn: "La gourde isotherme",
+    },
+  ],
   focusFr:
     "Catalogue large EcoFlow + guides d’achat (camping, backup, solaire balcon).",
   focusEn:

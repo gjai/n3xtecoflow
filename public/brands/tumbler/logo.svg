@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 40" fill="none" role="img" aria-label="La gourde isotherme">
+  <rect x="0" y="4" width="32" height="32" rx="8" fill="#e07a3d"/>
+  <path d="M12 9h8v2h-1.1v13.2c0 1.5-1.2 2.7-2.7 2.7h-.5c-1.5 0-2.7-1.2-2.7-2.7V11H12V9Z" fill="#1a1008"/>
+  <path d="M13.3 12.8h5.4v9c0 .8-.6 1.4-1.4 1.4h-.5c-.8 0-1.4-.6-1.4-1.4v-9Z" fill="#fff7f0"/>
+  <text x="44" y="27" fill="currentColor" font-family="Sora, Outfit, system-ui, sans-serif" font-size="17" font-weight="600" letter-spacing="-0.02em">La gourde isotherme</text>
+</svg>

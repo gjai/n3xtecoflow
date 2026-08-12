@@ -81,6 +81,20 @@ export const categoryImages: Record<CategoryId, SiteImage> = {
     credit: "Unsplash",
     creditUrl: "https://unsplash.com/license",
   },
+  gourdes: {
+    src: "/images/editorial/guides.jpg",
+    altFr: "Gourde isotherme — hydratation quotidienne",
+    altEn: "Insulated bottle — daily hydration",
+    credit: "Unsplash",
+    creditUrl: "https://unsplash.com/license",
+  },
+  tumblers: {
+    src: "/images/editorial/comparatifs.jpg",
+    altFr: "Tumbler isotherme — bureau et trajet",
+    altEn: "Insulated tumbler — office and commute",
+    credit: "Unsplash",
+    creditUrl: "https://unsplash.com/license",
+  },
 };
 
 export const editorialImages = {

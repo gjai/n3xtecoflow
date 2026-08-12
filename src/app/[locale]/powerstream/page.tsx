@@ -1,10 +1,12 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AmazonButton } from "@/components/AmazonButton";
 import { AMAZON_QUERIES, buildAmazonSearchUrl } from "@/lib/amazon";
-import { localeAlternates } from "@/lib/seo";
+import { siteLocaleAlternates } from "@/lib/seo";
+import { getCurrentSite } from "@/sites/server";
 
 export async function generateMetadata({
   params,
@@ -12,11 +14,14 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  if ((await getCurrentSite()).id !== "ecoflow") {
+    return { robots: { index: false, follow: false } };
+  }
   const t = await getTranslations({ locale, namespace: "powerstream" });
   return {
     title: t("title"),
     description: t("subtitle"),
-    alternates: localeAlternates(locale, "/powerstream"),
+    alternates: await siteLocaleAlternates(locale, "/powerstream"),
   };
 }
 
@@ -27,6 +32,7 @@ export default async function PowerStreamPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  if ((await getCurrentSite()).id !== "ecoflow") notFound();
   const t = await getTranslations("powerstream");
   const isEn = locale === "en";
 

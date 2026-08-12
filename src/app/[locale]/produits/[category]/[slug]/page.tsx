@@ -18,14 +18,17 @@ import {
 import { getRelatedEditorial } from "@/lib/product-related";
 import { RelatedReading } from "@/components/RelatedReading";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
-import { localeAlternates, localizeSpecs } from "@/lib/seo";
+import { localeAlternates, localizeSpecs, siteLocaleAlternates } from "@/lib/seo";
 import {
+  categorySiteId,
   getCategory,
   getLocalizedCategory,
   getProduct,
   getProductsByCategory,
+  productSiteId,
   products,
 } from "@/data/products";
+import { getCurrentSite } from "@/sites/server";
 
 export const revalidate = 600;
 
@@ -48,6 +51,8 @@ export async function generateMetadata({
   const { locale, category, slug } = await params;
   const product = getProduct(category, slug);
   if (!product) return {};
+  const site = await getCurrentSite();
+  if (productSiteId(product) !== site.id) return {};
   const editorial = await getEcoflowEditorial(product.slug);
   const copy = resolveProductCopy(product, locale, editorial);
   const ecoflow = await getEcoflowEntry(product.slug);
@@ -55,7 +60,7 @@ export async function generateMetadata({
   return {
     title: `${product.name} — ${copy.tagline}`,
     description: copy.summary,
-    alternates: localeAlternates(locale, `/produits/${category}/${slug}`),
+    alternates: await siteLocaleAlternates(locale, `/produits/${category}/${slug}`),
     openGraph: {
       title: product.name,
       description: copy.summary,
@@ -72,9 +77,17 @@ export default async function ProductPage({
 }) {
   const { locale, category, slug } = await params;
   setRequestLocale(locale);
+  const site = await getCurrentSite();
   const product = getProduct(category, slug);
   const cat = getCategory(category);
-  if (!product || !cat) notFound();
+  if (
+    !product ||
+    !cat ||
+    productSiteId(product) !== site.id ||
+    categorySiteId(cat) !== site.id
+  ) {
+    notFound();
+  }
 
   const copy = resolveProductCopy(
     product,
@@ -83,8 +96,7 @@ export default async function ProductPage({
   );
   const catCopy = getLocalizedCategory(cat, locale);
   const isEn = locale === "en";
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://ecoflow-stream.com";
+  const siteUrl = `https://${site.primaryHost}`;
   const productUrl = `${siteUrl}/${locale}/produits/${cat.slug}/${product.slug}`;
   const offer = await getAmazonOffer(product.slug);
   const ecoflow = await getEcoflowEntry(product.slug);
@@ -98,11 +110,14 @@ export default async function ProductPage({
     .slice(0, 4);
 
   const newsStore = await readNewsStore();
-  const editorial = getRelatedEditorial({
-    product,
-    locale,
-    news: getNewsArticles(newsStore),
-  });
+  const editorial =
+    site.id === "ecoflow"
+      ? getRelatedEditorial({
+          product,
+          locale,
+          news: getNewsArticles(newsStore),
+        })
+      : { guides: [], comparisons: [], news: [] };
 
   const buyLabel = isEn ? "Buy on Amazon.fr" : "Acheter sur Amazon.fr";
   const priceFallback = isEn

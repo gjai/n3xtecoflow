@@ -1,3 +1,5 @@
+import { tumblerCategories, tumblerProducts } from "./tumbler-products";
+
 export type CategoryId =
   | "river"
   | "delta"
@@ -7,7 +9,9 @@ export type CategoryId =
   | "ocean"
   | "solaire"
   | "outdoor"
-  | "accessoires";
+  | "accessoires"
+  | "gourdes"
+  | "tumblers";
 
 export type LocaleCopy = {
   tagline: string;
@@ -21,6 +25,8 @@ export type LocaleCopy = {
 export type Product = {
   slug: string;
   category: CategoryId;
+  /** Theme that owns this product. Defaults to ecoflow when omitted. */
+  siteId?: "ecoflow" | "tumbler";
   name: string;
   capacityWh?: number;
   outputW?: number;
@@ -44,6 +50,8 @@ export type Product = {
 export type CategoryMeta = {
   id: CategoryId;
   slug: string;
+  /** Theme that owns this category. Defaults to ecoflow when omitted. */
+  siteId?: "ecoflow" | "tumbler";
   fr: { title: string; intro: string };
   en: { title: string; intro: string };
 };
@@ -52,6 +60,7 @@ export const categories: CategoryMeta[] = [
   {
     id: "river",
     slug: "river",
+    siteId: "ecoflow",
     fr: {
       title: "Stations RIVER (portables)",
       intro:
@@ -66,6 +75,7 @@ export const categories: CategoryMeta[] = [
   {
     id: "delta",
     slug: "delta",
+    siteId: "ecoflow",
     fr: {
       title: "Stations DELTA (polyvalentes)",
       intro:
@@ -80,6 +90,7 @@ export const categories: CategoryMeta[] = [
   {
     id: "delta-pro",
     slug: "delta-pro",
+    siteId: "ecoflow",
     fr: {
       title: "DELTA Pro (backup maison)",
       intro:
@@ -94,6 +105,7 @@ export const categories: CategoryMeta[] = [
   {
     id: "stream",
     slug: "stream",
+    siteId: "ecoflow",
     fr: {
       title: "Série STREAM (solaire plug-in)",
       intro:
@@ -108,6 +120,7 @@ export const categories: CategoryMeta[] = [
   {
     id: "powerstream",
     slug: "powerstream",
+    siteId: "ecoflow",
     fr: {
       title: "PowerStream (micro-onduleur)",
       intro:
@@ -122,6 +135,7 @@ export const categories: CategoryMeta[] = [
   {
     id: "ocean",
     slug: "ocean",
+    siteId: "ecoflow",
     fr: {
       title: "OCEAN (batterie domestique)",
       intro:
@@ -136,6 +150,7 @@ export const categories: CategoryMeta[] = [
   {
     id: "solaire",
     slug: "solaire",
+    siteId: "ecoflow",
     fr: {
       title: "Panneaux solaires EcoFlow",
       intro:
@@ -150,6 +165,7 @@ export const categories: CategoryMeta[] = [
   {
     id: "outdoor",
     slug: "outdoor",
+    siteId: "ecoflow",
     fr: {
       title: "Outdoor & mobilité",
       intro:
@@ -164,6 +180,7 @@ export const categories: CategoryMeta[] = [
   {
     id: "accessoires",
     slug: "accessoires",
+    siteId: "ecoflow",
     fr: {
       title: "Batteries & accessoires",
       intro:
@@ -1690,6 +1707,25 @@ export const products: Product[] = [
     ),
   },
 ];
+
+categories.push(...tumblerCategories);
+products.push(...tumblerProducts);
+
+export function productSiteId(product: Product): "ecoflow" | "tumbler" {
+  return product.siteId || "ecoflow";
+}
+
+export function categorySiteId(cat: CategoryMeta): "ecoflow" | "tumbler" {
+  return cat.siteId || "ecoflow";
+}
+
+export function getCategoriesForSite(siteId: "ecoflow" | "tumbler") {
+  return categories.filter((c) => categorySiteId(c) === siteId);
+}
+
+export function getProductsForSite(siteId: "ecoflow" | "tumbler") {
+  return products.filter((p) => productSiteId(p) === siteId);
+}
 
 export function getCategory(slug: string) {
   return categories.find((c) => c.slug === slug);
