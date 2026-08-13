@@ -35,7 +35,7 @@ const COMPANION_TOOLS = (slug: string): GameToolLink[] => [
   { id: "nextDraw", href: `/jeux/${slug}#prochain` },
   { id: "stats", href: `/jeux/${slug}#stats` },
   { id: "guides", href: `/guides/comprendre-${slug}` },
-  { id: "news", href: `/jeux/${slug}` },
+  { id: "news", href: `/actualites` },
 ];
 
 export const LOTTERY_GAMES_NAV: LotteryGameNav[] = [

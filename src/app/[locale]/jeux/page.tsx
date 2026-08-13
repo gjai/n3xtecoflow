@@ -7,6 +7,7 @@ import { GameLabel } from "@/components/GameMark";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { LOTTERY_GAMES_NAV, lotteryGameLabel } from "@/lib/fdj-games/nav";
 import { gameRailStyle } from "@/lib/fdj-games/identity";
+import { JsonLd, breadcrumbJsonLd, itemListJsonLd } from "@/components/JsonLd";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { readFdjGamesStore } from "@/lib/fdj-games/store";
 import { getCurrentSite } from "@/sites/server";
@@ -40,9 +41,28 @@ export default async function JeuxHubPage({
 
   const t = await getTranslations("games");
   const store = await readFdjGamesStore();
+  const siteUrl = `https://${site.primaryHost}`;
 
   return (
-    <main className="pb-16">
+    <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: site.brand.name, url: `${siteUrl}/${locale}` },
+          { name: t("hubTitle"), url: `${siteUrl}/${locale}/jeux` },
+        ])}
+      />
+      <JsonLd
+        data={itemListJsonLd({
+          name: t("hubTitle"),
+          description: t("hubMeta"),
+          url: `${siteUrl}/${locale}/jeux`,
+          items: LOTTERY_GAMES_NAV.map((game) => ({
+            name: lotteryGameLabel(game, locale),
+            url: `${siteUrl}/${locale}${game.href === "/" ? "" : game.href}`,
+          })),
+        })}
+      />
+      <main className="pb-16">
       <div className="mx-auto max-w-6xl px-5 pt-14 md:px-8 md:pt-20">
         <Link
           href="/"
@@ -81,5 +101,6 @@ export default async function JeuxHubPage({
       </div>
       <FdjCompanionGamesBlock store={store} locale={locale} variant="hub" />
     </main>
+    </>
   );
 }

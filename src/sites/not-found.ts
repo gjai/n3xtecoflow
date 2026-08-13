@@ -1,3 +1,4 @@
+import { pickLocalized } from "@/i18n/locales";
 import type { SiteConfig } from "./types";
 import {
   siteAllowsLocale,
@@ -25,24 +26,106 @@ export function siteNotFoundCtas(site: SiteConfig): NotFoundCta[] {
     ctas.push({ href: "/produits", labelKey: "products" });
   }
   ctas.push({ href: "/guides", labelKey: "guides" });
-  if (siteIsCasinosCrypto(site) && siteShowsNews(site)) {
+  if (siteShowsNews(site)) {
     ctas.push({ href: "/actualites", labelKey: "news" });
   }
   return ctas;
 }
 
+const EM_COPY = {
+  fr: {
+    title: "Page introuvable",
+    body: "Cette adresse n’existe pas — retour aux résultats EuroMillions.",
+  },
+  en: {
+    title: "Page not found",
+    body: "This address does not exist — back to EuroMillions results.",
+  },
+  it: {
+    title: "Pagina non trovata",
+    body: "Questo indirizzo non esiste — torna ai risultati EuroMillions.",
+  },
+  es: {
+    title: "Página no encontrada",
+    body: "Esta dirección no existe — vuelve a los resultados EuroMillions.",
+  },
+  pt: {
+    title: "Página não encontrada",
+    body: "Este endereço não existe — volte aos resultados EuroMillions.",
+  },
+  de: {
+    title: "Seite nicht gefunden",
+    body: "Diese Adresse existiert nicht — zurück zu den EuroMillions-Ergebnissen.",
+  },
+  nl: {
+    title: "Pagina niet gevonden",
+    body: "Dit adres bestaat niet — terug naar de EuroMillions-uitslagen.",
+  },
+} as const;
+
+const CTA_COPY = {
+  fr: {
+    home: "Retour à l’accueil",
+    products: "Produits",
+    guides: "Guides",
+    news: "Actualités",
+  },
+  en: {
+    home: "Back to home",
+    products: "Products",
+    guides: "Guides",
+    news: "News",
+  },
+  it: {
+    home: "Torna alla home",
+    products: "Prodotti",
+    guides: "Guide",
+    news: "Notizie",
+  },
+  es: {
+    home: "Volver al inicio",
+    products: "Productos",
+    guides: "Guías",
+    news: "Noticias",
+  },
+  pt: {
+    home: "Voltar ao início",
+    products: "Produtos",
+    guides: "Guias",
+    news: "Notícias",
+  },
+  de: {
+    home: "Zur Startseite",
+    products: "Produkte",
+    guides: "Guides",
+    news: "News",
+  },
+  nl: {
+    home: "Terug naar home",
+    products: "Producten",
+    guides: "Gidsen",
+    news: "Nieuws",
+  },
+} as const;
+
+const EM_PRODUCTS_CTA = {
+  fr: "Résultats",
+  en: "Results",
+  it: "Risultati",
+  es: "Resultados",
+  pt: "Resultados",
+  de: "Ergebnisse",
+  nl: "Uitslagen",
+} as const;
+
 export function siteNotFoundCopy(
   site: SiteConfig,
-  isEn: boolean,
+  locale: string,
 ): { title: string; body: string } {
   const name = site.brand.name;
+  const isEn = locale === "en";
   if (siteIsEuroMillions(site)) {
-    return {
-      title: isEn ? "Page not found" : "Page introuvable",
-      body: isEn
-        ? "This address does not exist — back to EuroMillions results."
-        : "Cette adresse n’existe pas — retour aux résultats EuroMillions.",
-    };
+    return pickLocalized(locale, EM_COPY);
   }
   if (siteIsCasinosCrypto(site)) {
     return {
@@ -70,8 +153,9 @@ export function siteNotFoundCopy(
 
 export function ctaLabel(
   key: NotFoundCta["labelKey"],
-  isEn: boolean,
+  locale: string,
   t?: (key: string) => string,
+  site?: SiteConfig,
 ): string {
   if (t) {
     try {
@@ -81,19 +165,10 @@ export function ctaLabel(
       /* overlay may omit news */
     }
   }
-  const fr: Record<NotFoundCta["labelKey"], string> = {
-    home: "Retour à l’accueil",
-    products: "Produits",
-    guides: "Guides",
-    news: "Actualités",
-  };
-  const en: Record<NotFoundCta["labelKey"], string> = {
-    home: "Back to home",
-    products: "Products",
-    guides: "Guides",
-    news: "News",
-  };
-  return isEn ? en[key] : fr[key];
+  if (key === "products" && site && siteIsEuroMillions(site)) {
+    return pickLocalized(locale, EM_PRODUCTS_CTA);
+  }
+  return pickLocalized(locale, CTA_COPY)[key];
 }
 
 export function localeFromHeaders(

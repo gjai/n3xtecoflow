@@ -16,7 +16,6 @@ export default async function LocaleNotFound() {
   const t = await getTranslations("notFound");
   const site = await getCurrentSite();
   const locale = await getLocale();
-  const isEn = locale === "en";
 
   return (
     <section className="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center px-5 py-20 md:px-8">
@@ -34,7 +33,7 @@ export default async function LocaleNotFound() {
       </p>
       <div className="mt-10 flex flex-wrap gap-3">
         {siteNotFoundCtas(site).map((cta) => {
-          const label = ctaLabel(cta.labelKey, isEn, (key) => t(key));
+          const label = ctaLabel(cta.labelKey, locale, (key) => t(key), site);
           const className = cta.primary
             ? "bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-[var(--accent-ink)] transition hover:brightness-110"
             : "border border-[var(--line)] px-5 py-3 text-sm font-semibold text-[var(--heading)] transition hover:border-[var(--accent)]";

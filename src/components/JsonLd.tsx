@@ -183,6 +183,28 @@ export function breadcrumbJsonLd(
   };
 }
 
+export function itemListJsonLd(args: {
+  name: string;
+  description?: string;
+  url: string;
+  items: { name: string; url: string }[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: args.name,
+    description: args.description,
+    url: args.url,
+    numberOfItems: args.items.length,
+    itemListElement: args.items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
 export function lotteryDrawJsonLd(args: {
   siteUrl: string;
   locale: string;

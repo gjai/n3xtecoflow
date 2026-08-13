@@ -78,27 +78,12 @@ function amountEur(list?: FdjAmount[]): number | null {
   return Math.round(eur.value / 10 ** scale);
 }
 
-/** FDJ anonymous API — boules + code My Million (FR). */
-export async function fetchFdjEuroMillionsDraws(
-  size = 20,
-): Promise<EuroMillionsDraw[]> {
-  const capped = Math.min(Math.max(size, 1), 20);
-  const url =
-    `https://www.sto.api.fdj.fr/anonymous/service-draw-info/v3/draws` +
-    `?game_name=euromillions&include=results%2Cshares&to_planned_at=now` +
-    `&sort=planned_at%3Adesc&size=${capped}`;
-  const res = await fetch(url, {
-    headers: {
-      Accept: "application/json",
-      "User-Agent":
-        "EuroMillionsResultatsBot/1.0 (+https://euromillions-resultats.fr)",
-    },
-    signal: AbortSignal.timeout(25_000),
-    next: { revalidate: 0 },
-  });
-  if (!res.ok) throw new Error(`fdj_draws_${res.status}`);
-  const data = (await res.json()) as FdjDraw[];
-  if (!Array.isArray(data)) return [];
+const FDJ_UA =
+  "EuroMillionsResultatsBot/1.0 (+https://euromillions-resultats.fr)";
+const FDJ_DRAWS_URL =
+  "https://www.sto.api.fdj.fr/anonymous/service-draw-info/v3/draws";
+
+function mapFdjApiDraws(data: FdjDraw[], sourceUrl: string): EuroMillionsDraw[] {
   const now = new Date().toISOString();
   const out: EuroMillionsDraw[] = [];
   for (const d of data) {
@@ -122,9 +107,62 @@ export async function fetchFdjEuroMillionsDraws(
       myMillionCode: codeRaw ? normalizeMyMillionCode(codeRaw) : null,
       prizeTiers: prizeTiers.length ? prizeTiers : undefined,
       source: "fdj",
-      sourceUrl: url,
+      sourceUrl,
       fetchedAt: now,
     });
+  }
+  return out;
+}
+
+async function fetchFdjDrawPage(
+  toPlannedAt: string,
+  size: number,
+): Promise<{ raw: FdjDraw[]; url: string }> {
+  const capped = Math.min(Math.max(size, 1), 20);
+  const url =
+    `${FDJ_DRAWS_URL}?game_name=euromillions&include=results%2Cshares` +
+    `&to_planned_at=${encodeURIComponent(toPlannedAt)}` +
+    `&sort=planned_at%3Adesc&size=${capped}`;
+  const res = await fetch(url, {
+    headers: { Accept: "application/json", "User-Agent": FDJ_UA },
+    signal: AbortSignal.timeout(25_000),
+    next: { revalidate: 0 },
+  });
+  if (res.status === 204) return { raw: [], url };
+  if (!res.ok) throw new Error(`fdj_draws_${res.status}`);
+  const data = (await res.json()) as FdjDraw[];
+  return { raw: Array.isArray(data) ? data : [], url };
+}
+
+/**
+ * FDJ live API — size max 20. Fenêtre ~2 mois (~18 tirages).
+ * `pages` > 1 : curseur `to_planned_at` = `planned_at` du plus ancien
+ * (s’arrête s’il n’y a plus de dates nouvelles).
+ */
+export async function fetchFdjEuroMillionsDraws(
+  size = 20,
+  pages = 1,
+): Promise<EuroMillionsDraw[]> {
+  const pageCount = Math.min(Math.max(pages, 1), 8);
+  const seen = new Set<string>();
+  const out: EuroMillionsDraw[] = [];
+  let cursor = "now";
+  for (let p = 0; p < pageCount; p++) {
+    const { raw, url } = await fetchFdjDrawPage(cursor, size);
+    if (!raw.length) break;
+    let added = 0;
+    for (const d of mapFdjApiDraws(raw, url)) {
+      if (seen.has(d.date)) continue;
+      seen.add(d.date);
+      out.push(d);
+      added += 1;
+    }
+    const oldest = raw[raw.length - 1]?.planned_at;
+    if (!oldest || added === 0) break;
+    cursor = oldest;
+    if (p < pageCount - 1) {
+      await new Promise((r) => setTimeout(r, 400));
+    }
   }
   return out;
 }

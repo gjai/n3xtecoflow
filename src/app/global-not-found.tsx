@@ -43,8 +43,7 @@ export default async function GlobalNotFound() {
   const h = await headers();
   const site = getSiteByHost(h.get("host"));
   const locale = localeFromHeaders(h, site);
-  const isEn = locale === "en";
-  const copy = siteNotFoundCopy(site, isEn);
+  const copy = siteNotFoundCopy(site, locale);
 
   return (
     <html
@@ -67,7 +66,7 @@ export default async function GlobalNotFound() {
           body={copy.body}
           links={siteNotFoundCtas(site).map((cta) => ({
             href: withLocalePrefix(locale, cta.href),
-            label: ctaLabel(cta.labelKey, isEn),
+            label: ctaLabel(cta.labelKey, locale, undefined, site),
             primary: cta.primary,
           }))}
         />

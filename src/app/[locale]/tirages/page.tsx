@@ -9,6 +9,7 @@ import { EuroMillionsStatsPanel } from "@/components/EuroMillionsStatsPanel";
 import { FlashGridGenerator } from "@/components/FlashGridGenerator";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { ResultsLivePoller } from "@/components/ResultsLivePoller";
+import { JsonLd, breadcrumbJsonLd, itemListJsonLd } from "@/components/JsonLd";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -81,8 +82,28 @@ export default async function TiragesPage({
       ? dateParam
       : latest?.date || null;
 
+  const siteUrl = `https://${site.primaryHost}`;
+  const listDraws = draws.slice(0, 30);
+
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: site.brand.name, url: `${siteUrl}/${locale}` },
+          { name: t("title"), url: `${siteUrl}/${locale}/tirages` },
+        ])}
+      />
+      <JsonLd
+        data={itemListJsonLd({
+          name: t("title"),
+          description: t("meta"),
+          url: `${siteUrl}/${locale}/tirages`,
+          items: listDraws.map((draw) => ({
+            name: formatDate(draw.date, locale),
+            url: `${siteUrl}/${locale}/tirages/${draw.date}`,
+          })),
+        })}
+      />
       <main className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-20">
         <ResultsLivePoller
           enabled={pending}

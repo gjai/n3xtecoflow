@@ -1,5 +1,6 @@
 import { refreshFdjCompanionGames } from "@/lib/fdj-games/refresh";
 import { readFdjGamesStore } from "@/lib/fdj-games/store";
+import { fetchFdjEuroMillionsArchiveDraws } from "./fdj-archives";
 import {
   fetchFdjEuroMillionsDraws,
   fetchFdjMyMillionWinnerLocations,
@@ -144,11 +145,21 @@ export async function refreshEuroMillionsData(options?: {
   }
 
   try {
-    const fdj = await fetchFdjEuroMillionsDraws(fast ? 8 : 20);
+    const fdj = await fetchFdjEuroMillionsDraws(fast ? 8 : 20, fast ? 1 : 8);
     incoming = incoming.concat(fdj);
     sources.push(`fdj:${fdj.length}`);
   } catch (err) {
     console.error("euromillions_fdj_fail", err);
+  }
+
+  if (!fast) {
+    try {
+      const archives = await fetchFdjEuroMillionsArchiveDraws();
+      incoming = incoming.concat(archives);
+      sources.push(`fdj-archive:${archives.length}`);
+    } catch (err) {
+      console.error("euromillions_fdj_archive_fail", err);
+    }
   }
 
   for (const year of years) {
