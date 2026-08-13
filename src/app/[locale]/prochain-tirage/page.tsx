@@ -5,9 +5,11 @@ import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { NextJackpotBanner } from "@/components/NextJackpotBanner";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
+import { GameLabel } from "@/components/GameMark";
 import { NextDrawMenuMeta } from "@/components/NextDrawMenuMeta";
 import { ResultsLivePoller } from "@/components/ResultsLivePoller";
 import { LOTTERY_GAMES_NAV, lotteryGameLabel } from "@/lib/fdj-games/nav";
+import { gameRailStyle } from "@/lib/fdj-games/identity";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -102,12 +104,15 @@ export default async function ProchainTiragePage({
                 <li
                   key={game.id}
                   className="border border-[var(--line)] bg-[var(--surface)] px-4 py-3"
+                  style={gameRailStyle(game.id)}
                 >
                   <Link
                     href={nextHref}
                     className="font-semibold text-[var(--heading)] hover:text-[var(--accent)]"
                   >
-                    {lotteryGameLabel(game, locale)}
+                    <GameLabel gameId={game.id} size={20}>
+                      {lotteryGameLabel(game, locale)}
+                    </GameLabel>
                   </Link>
                   <NextDrawMenuMeta gameId={game.id} variant="block" />
                 </li>

@@ -5,7 +5,9 @@ import { FDJ_COMPANION_GAMES } from "@/lib/fdj-games/catalog";
 import { getGameLatest } from "@/lib/fdj-games/store";
 import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import { FdjGameBalls } from "@/components/FdjGameBalls";
+import { GameMark } from "@/components/GameMark";
 import { companionResultPending, formatDrawWhen } from "@/lib/fdj-games/display";
+import { gameRailStyle } from "@/lib/fdj-games/identity";
 
 function formatDate(iso: string, locale: string) {
   const d = new Date(`${iso}T12:00:00Z`);
@@ -128,10 +130,12 @@ export async function FdjCompanionGamesBlock({
               <li
                 key={game.id}
                 className="border border-[var(--line)] bg-[var(--surface)] p-5"
+                style={gameRailStyle(game.id)}
               >
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
-                    <h3 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+                    <h3 className="flex items-center gap-2 font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+                      <GameMark gameId={game.id} size={28} />
                       {label}
                     </h3>
                     {latest ? (

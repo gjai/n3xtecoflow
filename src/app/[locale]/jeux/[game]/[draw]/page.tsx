@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { FdjGameBalls } from "@/components/FdjGameBalls";
+import { GameMark } from "@/components/GameMark";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { JsonLd, breadcrumbJsonLd, lotteryDrawJsonLd } from "@/components/JsonLd";
 import { getCompanionGame } from "@/lib/fdj-games/catalog";
@@ -21,6 +22,7 @@ import { FdjCompanionSimulator } from "@/components/FdjCompanionSimulator";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
+import { gameScopeStyle } from "@/lib/fdj-games/identity";
 
 export const revalidate = 600;
 
@@ -145,7 +147,10 @@ export default async function CompanionDrawPage({
           },
         ])}
       />
-      <main className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-20">
+      <main
+        className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-20"
+        style={gameScopeStyle(entry.id)}
+      >
         <Link
           href={`/jeux/${entry.slug}`}
           className="text-sm font-semibold text-[var(--accent)] hover:underline"
@@ -155,7 +160,8 @@ export default async function CompanionDrawPage({
         <div className="mt-4">
           <GameToolsNav gameId={entry.id} />
         </div>
-        <h1 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
+        <h1 className="mt-6 flex items-center gap-3 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
+          <GameMark gameId={entry.id} size={36} />
           {title}
         </h1>
         <p className="mt-4 text-[var(--muted)]">{brief.lead}</p>

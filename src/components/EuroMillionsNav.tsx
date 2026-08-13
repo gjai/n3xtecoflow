@@ -13,6 +13,7 @@ import {
   type LotteryGameId,
   type LotteryGameNav,
 } from "@/lib/fdj-games/nav";
+import { GameLabel, gameUnderline } from "./GameMark";
 import { NextDrawMenuMeta } from "./NextDrawMenuMeta";
 
 function useHash() {
@@ -82,13 +83,16 @@ function GameDropdown({
     >
       <Link
         href={game.href}
-        className={`inline-flex items-center gap-0.5 whitespace-nowrap hover:text-[var(--heading)] ${
+        className={`inline-flex items-center gap-1 whitespace-nowrap pb-0.5 hover:text-[var(--heading)] ${
           active ? "text-[var(--heading)]" : ""
         }`}
+        style={active ? gameUnderline(game.id) : undefined}
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        {label}
+        <GameLabel gameId={game.id} size={16}>
+          {label}
+        </GameLabel>
         <span className="text-[0.65em] opacity-70" aria-hidden>
           ▾
         </span>
@@ -179,7 +183,9 @@ export function EuroMillionsMobileNav({
                 className="min-h-11 flex-1 py-3 font-semibold"
                 onClick={onNavigate}
               >
-                {label}
+                <GameLabel gameId={game.id} size={20}>
+                  {label}
+                </GameLabel>
               </Link>
               <button
                 type="button"

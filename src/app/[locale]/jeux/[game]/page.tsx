@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { FdjGameBalls } from "@/components/FdjGameBalls";
+import { GameMark } from "@/components/GameMark";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { ResultsLivePoller } from "@/components/ResultsLivePoller";
 import { FDJ_COMPANION_GAMES, getCompanionGame } from "@/lib/fdj-games/catalog";
@@ -20,6 +21,7 @@ import {
 import { FdjCompanionSimulator } from "@/components/FdjCompanionSimulator";
 import { NextDrawMenuMeta } from "@/components/NextDrawMenuMeta";
 import { companionDrawKey } from "@/lib/fdj-games/keys";
+import { gameScopeStyle } from "@/lib/fdj-games/identity";
 import { COMPANION_GRID, groupNumbers } from "@/lib/lottery/rules";
 import { numberPoolStats } from "@/lib/euromillions/stats";
 import { siteLocaleAlternates } from "@/lib/seo";
@@ -150,7 +152,10 @@ export default async function JeuxGamePage({
   };
 
   return (
-    <main className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-20">
+    <main
+      className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-20"
+      style={gameScopeStyle(gameId)}
+    >
       <ResultsLivePoller
         enabled={pending}
         fingerprint={latest?.plannedAt || "none"}
@@ -161,7 +166,8 @@ export default async function JeuxGamePage({
       >
         ← {t("backHub")}
       </Link>
-      <h1 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
+      <h1 className="mt-6 flex items-center gap-3 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
+        <GameMark gameId={gameId} size={40} />
         {t("gameTitle", { game: label })}
       </h1>
       <div className="mt-4">

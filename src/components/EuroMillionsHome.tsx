@@ -4,6 +4,7 @@ import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { SmartCover } from "@/components/SmartCover";
 import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
 import { FdjCompanionGamesBlock } from "@/components/FdjCompanionGamesBlock";
+import { GameMark } from "@/components/GameMark";
 import { NextJackpotBanner } from "@/components/NextJackpotBanner";
 import {
   EUROMILLIONS_CRESCENDO_GUIDE_SLUG,
@@ -26,7 +27,9 @@ import {
   anyLotteryResultPending,
 } from "@/lib/euromillions/fingerprint";
 import { getLatestDraw } from "@/lib/euromillions/store";
+import type { LotteryGameId } from "@/lib/fdj-games/nav";
 import type { FdjGamesStore } from "@/lib/fdj-games/types";
+import { GAME_IDENTITY } from "@/lib/fdj-games/identity";
 import type { NewsArticle } from "@/lib/news/types";
 import type { SiteConfig } from "@/sites/types";
 
@@ -49,6 +52,15 @@ function formatDate(iso: string, locale: string) {
     day: "numeric",
   }).format(d);
 }
+
+const GUIDE_GAME: Partial<Record<string, LotteryGameId>> = {
+  [EUROMILLIONS_MAIN_GUIDE_SLUG]: "euromillions",
+  [EUROMILLIONS_LOTO_GUIDE_SLUG]: "loto",
+  [EUROMILLIONS_EURODREAMS_GUIDE_SLUG]: "eurodreams",
+  [EUROMILLIONS_KENO_GUIDE_SLUG]: "keno",
+  [EUROMILLIONS_CRESCENDO_GUIDE_SLUG]: "crescendo",
+  [EUROMILLIONS_MY_MILLION_GUIDE_SLUG]: "my-million",
+};
 
 export function DrawBalls({
   draw,
@@ -221,10 +233,17 @@ export async function EuroMillionsHome({
                 />
                 {latest.myMillionCode ? (
                   <div className="mt-6 border-t border-[var(--line)] pt-5">
-                    <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                    <p
+                      className="flex items-center gap-2 text-xs uppercase tracking-[0.18em]"
+                      style={{ color: GAME_IDENTITY["my-million"].accent }}
+                    >
+                      <GameMark gameId="my-million" size={16} />
                       {t("myMillionLabel")}
                     </p>
-                    <p className="mt-2 font-[family-name:var(--font-display)] text-xl font-semibold tracking-wide text-[var(--heading)]">
+                    <p
+                      className="mt-2 font-[family-name:var(--font-display)] text-xl font-semibold tracking-wide"
+                      style={{ color: GAME_IDENTITY["my-million"].accent }}
+                    >
                       {latest.myMillionCode}
                     </p>
                     {latest.myMillionLocation ? (
@@ -339,16 +358,25 @@ export async function EuroMillionsHome({
                 EUROMILLIONS_MY_MILLION_GUIDE_SLUG,
                 EUROMILLIONS_RESPONSIBLE_GUIDE_SLUG,
               ] as const
-            ).map((slug) => (
+            ).map((slug) => {
+              const gameId = GUIDE_GAME[slug];
+              return (
               <li key={slug}>
                 <Link
                   href={`/guides/${slug}`}
-                  className="block border border-[var(--line)] bg-[var(--surface)] px-4 py-3 text-sm font-semibold text-[var(--heading)] hover:border-[var(--accent)]"
+                  className="flex items-center gap-2 border border-[var(--line)] bg-[var(--surface)] px-4 py-3 text-sm font-semibold text-[var(--heading)] hover:border-[var(--accent)]"
+                  style={
+                    gameId
+                      ? { borderLeftWidth: 3, borderLeftColor: GAME_IDENTITY[gameId].accent }
+                      : undefined
+                  }
                 >
+                  {gameId ? <GameMark gameId={gameId} size={20} /> : null}
                   {t(`guideCard.${slug}`)}
                 </Link>
               </li>
-            ))}
+              );
+            })}
           </ul>
         </div>
       </section>
@@ -413,7 +441,11 @@ export async function EuroMillionsHome({
           <div className="mx-auto max-w-6xl px-5 py-12 md:px-8">
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
+                <p
+                  className="flex items-center gap-2 text-xs uppercase tracking-[0.2em]"
+                  style={{ color: GAME_IDENTITY["my-million"].accent }}
+                >
+                  <GameMark gameId="my-million" size={16} />
                   My Million
                 </p>
                 <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">

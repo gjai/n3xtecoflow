@@ -3,8 +3,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { FdjCompanionGamesBlock } from "@/components/FdjCompanionGamesBlock";
+import { GameLabel } from "@/components/GameMark";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { LOTTERY_GAMES_NAV, lotteryGameLabel } from "@/lib/fdj-games/nav";
+import { gameRailStyle } from "@/lib/fdj-games/identity";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { readFdjGamesStore } from "@/lib/fdj-games/store";
 import { getCurrentSite } from "@/sites/server";
@@ -60,12 +62,15 @@ export default async function JeuxHubPage({
             <li
               key={game.id}
               className="border border-[var(--line)] bg-[var(--surface)] p-4"
+              style={gameRailStyle(game.id)}
             >
               <Link
                 href={game.href}
                 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)] hover:text-[var(--accent)]"
               >
-                {lotteryGameLabel(game, locale)}
+                <GameLabel gameId={game.id} size={24}>
+                  {lotteryGameLabel(game, locale)}
+                </GameLabel>
               </Link>
               <div className="mt-3">
                 <GameToolsNav gameId={game.id} />

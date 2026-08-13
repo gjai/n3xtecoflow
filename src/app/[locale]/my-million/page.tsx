@@ -4,12 +4,14 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
+import { GameMark } from "@/components/GameMark";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { ResultsLivePoller } from "@/components/ResultsLivePoller";
 import { MyMillionChecker } from "@/components/MyMillionChecker";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
+import { gameScopeStyle } from "@/lib/fdj-games/identity";
 import { euroMillionsResultPending } from "@/lib/euromillions/datetime";
 import { readEuroMillionsStore } from "@/lib/euromillions/store";
 
@@ -66,11 +68,15 @@ export default async function MyMillionPage({
         enabled={pending}
         fingerprint={store.draws.find((d) => d.myMillionCode)?.date || "none"}
       />
-      <main className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-20">
+      <main
+        className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-20"
+        style={gameScopeStyle("my-million")}
+      >
         <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
           My Million
         </p>
-        <h1 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
+        <h1 className="mt-2 flex items-center gap-3 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
+          <GameMark gameId="my-million" size={36} />
           {t("title")}
         </h1>
         <div className="mt-4">

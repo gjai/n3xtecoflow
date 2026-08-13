@@ -27,11 +27,11 @@ export const EUROMILLIONS_MY_MILLION_GUIDE_SLUG = "comprendre-my-million";
 export const EUROMILLIONS_TIERS_GUIDE_SLUG = "rangs-gains-euromillions";
 export const EUROMILLIONS_OTHER_GAMES_GUIDE_SLUG = "euromillions-et-autres-tirages";
 
-const CREDIT = "EuroMillions Résultats";
+const CREDIT = "EuroMillions Résultats (IA)";
 
 function cover(slug: string) {
   return {
-    src: `/brands/euromillions/guides/${slug}.svg`,
+    src: `/images/euromillions/guides/${slug}.jpg`,
     credit: CREDIT,
     creditUrl: "https://euromillions-resultats.fr",
   };

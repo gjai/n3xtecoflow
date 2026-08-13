@@ -12,10 +12,12 @@ import {
 } from "@/components/JsonLd";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { DrawBalls } from "@/components/EuroMillionsHome";
+import { GameMark } from "@/components/GameMark";
 import { euroMillionsBrief } from "@/lib/lottery/brief";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
+import { GAME_IDENTITY } from "@/lib/fdj-games/identity";
 import {
   getDrawByDate,
   readEuroMillionsStore,
@@ -145,10 +147,17 @@ export default async function TirageDetailPage({
           />
           {draw.myMillionCode ? (
             <div className="mt-6 border-t border-[var(--line)] pt-6">
-              <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+              <p
+                className="flex items-center gap-2 text-xs uppercase tracking-[0.18em]"
+                style={{ color: GAME_IDENTITY["my-million"].accent }}
+              >
+                <GameMark gameId="my-million" size={16} />
                 {t("myMillion")}
               </p>
-              <p className="mt-2 font-mono text-xl tracking-wide text-[var(--heading)]">
+              <p
+                className="mt-2 font-mono text-xl tracking-wide"
+                style={{ color: GAME_IDENTITY["my-million"].accent }}
+              >
                 {draw.myMillionCode}
               </p>
               {draw.myMillionLocation ? (
