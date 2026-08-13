@@ -1,5 +1,8 @@
 import { promises as fs } from "fs";
 import path from "path";
+import {
+  companionDrawKey,
+} from "./keys";
 import type {
   FdjCompanionGameId,
   FdjGameDraw,
@@ -49,10 +52,10 @@ export function getGameLatest(
   return store.games[gameId]?.latest || store.games[gameId]?.draws?.[0] || null;
 }
 
-export function getDrawByDate(
+export function getDrawByKey(
   store: FdjGamesStore,
   gameId: FdjCompanionGameId,
-  date: string,
+  key: string,
 ): FdjGameDraw | undefined {
-  return getGameDraws(store, gameId).find((d) => d.date === date);
+  return getGameDraws(store, gameId).find((d) => companionDrawKey(d) === key);
 }

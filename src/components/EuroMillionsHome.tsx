@@ -6,12 +6,15 @@ import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
 import { FdjCompanionGamesBlock } from "@/components/FdjCompanionGamesBlock";
 import { NextJackpotBanner } from "@/components/NextJackpotBanner";
 import {
+  EUROMILLIONS_CRESCENDO_GUIDE_SLUG,
+  EUROMILLIONS_EURODREAMS_GUIDE_SLUG,
+  EUROMILLIONS_KENO_GUIDE_SLUG,
+  EUROMILLIONS_LOTO_GUIDE_SLUG,
   EUROMILLIONS_MAIN_GUIDE_SLUG,
   EUROMILLIONS_MY_MILLION_GUIDE_SLUG,
-  EUROMILLIONS_ODDS_GUIDE_SLUG,
-  EUROMILLIONS_OTHER_GAMES_GUIDE_SLUG,
+  EUROMILLIONS_READ_RESULTS_GUIDE_SLUG,
   EUROMILLIONS_RESPONSIBLE_GUIDE_SLUG,
-  EUROMILLIONS_TIERS_GUIDE_SLUG,
+  EUROMILLIONS_SCHEDULE_GUIDE_SLUG,
 } from "@/data/euromillions-guides";
 import { ResultsLivePoller } from "@/components/ResultsLivePoller";
 import { getEditorialImages } from "@/data/images";
@@ -313,10 +316,13 @@ export async function EuroMillionsHome({
             {(
               [
                 EUROMILLIONS_MAIN_GUIDE_SLUG,
-                EUROMILLIONS_TIERS_GUIDE_SLUG,
-                EUROMILLIONS_ODDS_GUIDE_SLUG,
+                EUROMILLIONS_LOTO_GUIDE_SLUG,
+                EUROMILLIONS_EURODREAMS_GUIDE_SLUG,
+                EUROMILLIONS_KENO_GUIDE_SLUG,
+                EUROMILLIONS_CRESCENDO_GUIDE_SLUG,
+                EUROMILLIONS_READ_RESULTS_GUIDE_SLUG,
+                EUROMILLIONS_SCHEDULE_GUIDE_SLUG,
                 EUROMILLIONS_MY_MILLION_GUIDE_SLUG,
-                EUROMILLIONS_OTHER_GAMES_GUIDE_SLUG,
                 EUROMILLIONS_RESPONSIBLE_GUIDE_SLUG,
               ] as const
             ).map((slug) => (

@@ -71,7 +71,7 @@
     "archiveCta": "Details ansehen",
     "statsCta": "Statistik ansehen",
     "guidesTitle": "Guides",
-    "guidesLead": "Gewinnränge, Wahrscheinlichkeiten, My Million und verantwortungsvolles Spielen — ohne versprochenes System.",
+    "guidesLead": "Ränge, Wahrscheinlichkeiten, Loto, Keno, Zeiten und verantwortungsvolles Spiel — ohne versprochenes System.",
     "allGuidesCta": "Alle Guides",
     "guideCard": {
       "comprendre-euromillions": "EuroMillions verstehen",
@@ -79,7 +79,13 @@
       "probabilites-euromillions": "Wahrscheinlichkeiten und Mythen",
       "comprendre-my-million": "Einen My-Million-Code lesen",
       "euromillions-et-autres-tirages": "Loto, EuroDreams, Keno…",
-      "jeu-responsable-euromillions": "Verantwortungsvoll spielen (18+)"
+      "jeu-responsable-euromillions": "Verantwortungsvoll spielen (18+)",
+      "comprendre-loto": "Loto verstehen",
+      "comprendre-eurodreams": "EuroDreams verstehen",
+      "comprendre-keno": "Keno verstehen",
+      "comprendre-crescendo": "Crescendo verstehen",
+      "lire-resultats-tirages": "Ein Ergebnis lesen",
+      "horaires-tirages-fdj": "Ziehungszeiten"
     },
     "myMillionLabel": "My-Million-Code",
     "myMillionLocation": "Angekündigter Ort",
@@ -146,7 +152,14 @@
       "joker": "Joker",
       "secondDraw": "2. Ziehung",
       "other": "Sonstiges"
-    }
+    },
+    "simTitle": "{game}-Simulator",
+    "simLead": "Vergleichen Sie ein Grid mit einer bereits veröffentlichten Ziehung. Keine Prognose.",
+    "statsTitle": "Beobachtete Häufigkeiten",
+    "statsLead": "Auf der lokalen Historie dieses Spiels — nur beschreibend.",
+    "statsCount": "{count} Treffer",
+    "statsDelay": "Abstand {delay}",
+    "gameGuideCta": "Guide zu diesem Spiel"
   },
   "simulator": {
     "eyebrow": "Tools",
@@ -214,7 +227,9 @@
     "prizeAmount": "Gewinn",
     "prizeWinners": "Gewinner",
     "simulatorCta": "Tipp bei dieser Ziehung prüfen",
-    "checkCta": "Prüfen"
+    "checkCta": "Prüfen",
+    "companionOf": "{game}-Ergebnis vom {date}",
+    "companionMeta": "Zahlen und Details der {game}-Ziehung vom {date}. Unabhängige Seite, 18+."
   },
   "myMillion": {
     "title": "My Million — Codes & Orte",
@@ -375,7 +390,7 @@
   },
   "guides": {
     "title": "Guides",
-    "subtitle": "EuroMillions verstehen: Gewinnränge, Wahrscheinlichkeiten, verantwortungsvolles Spielen.",
+    "subtitle": "EuroMillions, Loto, EuroDreams, Keno, Crescendo: Ergebnisse lesen, Zeiten, verantwortungsvolles Spiel.",
     "cta": "Lesen"
   },
   "amazon": {
@@ -387,5 +402,26 @@
   },
   "network": {
     "title": "Im selben Netzwerk"
+  },
+  "gameSim": {
+    "kenoPick": "Wie viele Zahlen spielen Sie?",
+    "mainLabel": "Zahlen",
+    "bonus": {
+      "chance": "Chance-Zahl",
+      "dream": "Dream-Zahl"
+    },
+    "letterLabel": "Buchstabe",
+    "dateLabel": "Ziehung",
+    "randomPick": "Zufallstipp",
+    "clearPick": "Löschen",
+    "submit": "Prüfen",
+    "hitsMain": "{count} richtige Zahl(en)",
+    "bonusHit": "Bonus getroffen",
+    "bonusMiss": "Bonus verfehlt",
+    "letterHit": "Buchstabe getroffen",
+    "letterMiss": "Buchstabe verfehlt",
+    "archiveNear": "{count} andere Ziehung(en) mit mindestens 3 gemeinsamen Zahlen",
+    "seeDraw": "Karte ansehen",
+    "disclaimer": "Informationswerkzeug. 18+ · verantwortungsvoll spielen — kein System schlägt die Wahrscheinlichkeiten."
   }
 }

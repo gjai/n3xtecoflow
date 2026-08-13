@@ -11,6 +11,9 @@ import {
 import { comparisonHubCategories } from "@/lib/comparisons/hub";
 import { GUIDE_TOPICS, guideSiteId } from "@/lib/guides/types";
 import { newsSiteId } from "@/lib/news/types";
+import { FDJ_COMPANION_GAMES } from "@/lib/fdj-games/catalog";
+import { companionDrawKey } from "@/lib/fdj-games/keys";
+import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import { getSiteByHost } from "@/sites";
 import {
   siteLocales,
@@ -63,6 +66,33 @@ function loadEuroMillionsDates(): string[] {
       return (store.draws || [])
         .map((d) => d.date)
         .filter((d): d is string => Boolean(d));
+    } catch {
+      /* try next */
+    }
+  }
+  return [];
+}
+
+function loadCompanionDrawKeys(): { slug: string; key: string; date: string }[] {
+  const candidates = [
+    process.env.FDJ_GAMES_DATA_PATH?.trim(),
+    join(process.cwd(), "data", "fdj-games.json"),
+  ].filter(Boolean) as string[];
+  for (const file of candidates) {
+    try {
+      const raw = readFileSync(file, "utf8");
+      const store = JSON.parse(raw) as FdjGamesStore;
+      const out: { slug: string; key: string; date: string }[] = [];
+      for (const game of FDJ_COMPANION_GAMES) {
+        for (const draw of store.games[game.id]?.draws || []) {
+          out.push({
+            slug: game.slug,
+            key: companionDrawKey(draw),
+            date: draw.date,
+          });
+        }
+      }
+      return out;
     } catch {
       /* try next */
     }
@@ -140,12 +170,20 @@ export function buildSitemapForSite(
     }
 
     if (site.id === "euromillions") {
-      for (const date of loadEuroMillionsDates().slice(0, 400)) {
+      for (const date of loadEuroMillionsDates().slice(0, 2500)) {
         entries.push({
           url: `${siteUrl}/${locale}/tirages/${date}`,
           lastModified: new Date(date),
           changeFrequency: "monthly",
           priority: 0.65,
+        });
+      }
+      for (const item of loadCompanionDrawKeys()) {
+        entries.push({
+          url: `${siteUrl}/${locale}/jeux/${item.slug}/${item.key}`,
+          lastModified: new Date(item.date),
+          changeFrequency: "monthly",
+          priority: 0.55,
         });
       }
     }

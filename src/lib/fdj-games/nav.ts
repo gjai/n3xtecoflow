@@ -34,8 +34,8 @@ const COMPANION_TOOLS = (slug: string): GameToolLink[] => [
   { id: "simulator", href: `/jeux/${slug}#simulateur` },
   { id: "nextDraw", href: `/jeux/${slug}#prochain` },
   { id: "stats", href: `/jeux/${slug}#stats` },
-  { id: "guides", href: "/guides" },
-  { id: "news", href: "/actualites" },
+  { id: "guides", href: `/guides/comprendre-${slug}` },
+  { id: "news", href: `/jeux/${slug}` },
 ];
 
 export const LOTTERY_GAMES_NAV: LotteryGameNav[] = [
@@ -60,10 +60,10 @@ export const LOTTERY_GAMES_NAV: LotteryGameNav[] = [
     labelEn: "My Million",
     tools: [
       { id: "archive", href: "/my-million#archives" },
-      { id: "simulator", href: "/simulateur" },
+      { id: "simulator", href: "/my-million" },
       { id: "nextDraw", href: "/prochain-tirage" },
       { id: "stats", href: "/stats" },
-      { id: "guides", href: "/guides" },
+      { id: "guides", href: "/guides/comprendre-my-million" },
       { id: "news", href: "/actualites" },
     ],
   },

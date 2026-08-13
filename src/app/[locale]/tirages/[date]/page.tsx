@@ -12,6 +12,7 @@ import {
 } from "@/components/JsonLd";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { DrawBalls } from "@/components/EuroMillionsHome";
+import { euroMillionsBrief } from "@/lib/lottery/brief";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -117,6 +118,19 @@ export default async function TirageDetailPage({
         <h1 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
           {t("drawOf", { date: prettyDate })}
         </h1>
+        {(() => {
+          const brief = euroMillionsBrief(draw, locale, prettyDate, jackpot);
+          return (
+            <>
+              <p className="mt-4 text-[var(--muted)]">{brief.lead}</p>
+              {brief.paragraphs.map((p) => (
+                <p key={p.slice(0, 28)} className="mt-3 text-[var(--muted)]">
+                  {p}
+                </p>
+              ))}
+            </>
+          );
+        })()}
         {jackpot ? (
           <p className="mt-3 text-[var(--muted)]">
             {t("jackpot")} · {jackpot}

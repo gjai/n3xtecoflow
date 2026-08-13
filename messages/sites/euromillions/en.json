@@ -71,7 +71,7 @@
     "archiveCta": "View details",
     "statsCta": "View stats",
     "guidesTitle": "Guides",
-    "guidesLead": "Tiers, odds, My Million and responsible play — with no promised system.",
+    "guidesLead": "Tiers, odds, Loto, Keno, schedules and responsible play — with no promised system.",
     "allGuidesCta": "All guides",
     "guideCard": {
       "comprendre-euromillions": "Understanding EuroMillions",
@@ -79,7 +79,13 @@
       "probabilites-euromillions": "Odds and myths",
       "comprendre-my-million": "Reading a My Million code",
       "euromillions-et-autres-tirages": "Loto, EuroDreams, Keno…",
-      "jeu-responsable-euromillions": "Responsible play (18+)"
+      "jeu-responsable-euromillions": "Responsible play (18+)",
+      "comprendre-loto": "Understanding Loto",
+      "comprendre-eurodreams": "Understanding EuroDreams",
+      "comprendre-keno": "Understanding Keno",
+      "comprendre-crescendo": "Understanding Crescendo",
+      "lire-resultats-tirages": "How to read a draw result",
+      "horaires-tirages-fdj": "Draw schedules"
     },
     "myMillionLabel": "My Million code",
     "myMillionLocation": "Announced location",
@@ -146,7 +152,14 @@
       "joker": "Joker",
       "secondDraw": "2nd draw",
       "other": "Other"
-    }
+    },
+    "simTitle": "{game} simulator",
+    "simLead": "Compare a grid with a published draw. This is not a forecast.",
+    "statsTitle": "Observed frequencies",
+    "statsLead": "On this game’s local history — descriptive only.",
+    "statsCount": "{count} appearances",
+    "statsDelay": "gap {delay}",
+    "gameGuideCta": "Guide for this game"
   },
   "simulator": {
     "eyebrow": "Tools",
@@ -214,7 +227,9 @@
     "prizeAmount": "Prize",
     "prizeWinners": "Winners",
     "simulatorCta": "Check my grid on this draw",
-    "checkCta": "Check"
+    "checkCta": "Check",
+    "companionOf": "{game} result for {date}",
+    "companionMeta": "Numbers and details of the {game} draw on {date}. Independent site, 18+."
   },
   "myMillion": {
     "title": "My Million — codes & locations",
@@ -375,7 +390,7 @@
   },
   "guides": {
     "title": "Guides",
-    "subtitle": "Understand EuroMillions: prize tiers, odds, responsible play.",
+    "subtitle": "EuroMillions, Loto, EuroDreams, Keno, Crescendo: reading results, schedules, responsible play.",
     "cta": "Read"
   },
   "amazon": {
@@ -387,5 +402,26 @@
   },
   "network": {
     "title": "In the same network"
+  },
+  "gameSim": {
+    "kenoPick": "How many numbers are you playing?",
+    "mainLabel": "Numbers",
+    "bonus": {
+      "chance": "Chance number",
+      "dream": "Dream number"
+    },
+    "letterLabel": "Letter",
+    "dateLabel": "Draw",
+    "randomPick": "Random pick",
+    "clearPick": "Clear",
+    "submit": "Check",
+    "hitsMain": "{count} matching number(s)",
+    "bonusHit": "bonus matched",
+    "bonusMiss": "bonus missed",
+    "letterHit": "letter matched",
+    "letterMiss": "letter missed",
+    "archiveNear": "{count} other draw(s) with at least 3 numbers in common",
+    "seeDraw": "View draw",
+    "disclaimer": "Informational tool. 18+ · play responsibly — no system beats the odds."
   }
 }

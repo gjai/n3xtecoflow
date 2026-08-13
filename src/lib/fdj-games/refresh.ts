@@ -1,5 +1,5 @@
 import { FDJ_COMPANION_GAMES } from "./catalog";
-import { fetchFdjCompanionDraws } from "./fetch";
+import { fetchFdjCompanionDraws, fetchFdjCompanionHistory } from "./fetch";
 import { readFdjGamesStore, writeFdjGamesStore } from "./store";
 import type { FdjGameDraw, FdjGamesStore } from "./types";
 
@@ -37,12 +37,15 @@ export async function refreshFdjCompanionGames(options?: {
   const counts: Record<string, number> = {};
   const sources: string[] = [];
   const size = options?.size ?? 20;
+  const deep = size > 20;
 
   async function pullOne(game: (typeof FDJ_COMPANION_GAMES)[number]) {
     try {
-      const incoming = await fetchFdjCompanionDraws(game.id, size);
+      const incoming = deep
+        ? await fetchFdjCompanionHistory(game.id, 160)
+        : await fetchFdjCompanionDraws(game.id, size);
       const prev = games[game.id]?.draws || [];
-      const draws = mergeDraws(prev, incoming).slice(0, 80);
+      const draws = mergeDraws(prev, incoming).slice(0, 250);
       games[game.id] = {
         latest: draws[0] || null,
         draws,

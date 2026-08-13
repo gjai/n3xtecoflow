@@ -71,7 +71,7 @@
     "archiveCta": "Details bekijken",
     "statsCta": "Statistieken bekijken",
     "guidesTitle": "Gidsen",
-    "guidesLead": "Rangen, kansen, My Million en verantwoord spelen — zonder beloofd systeem.",
+    "guidesLead": "Rangen, kansen, Loto, Keno, tijden en verantwoord spelen — zonder beloofd systeem.",
     "allGuidesCta": "Alle gidsen",
     "guideCard": {
       "comprendre-euromillions": "EuroMillions begrijpen",
@@ -79,7 +79,13 @@
       "probabilites-euromillions": "Kansen en mythes",
       "comprendre-my-million": "Een My Million-code lezen",
       "euromillions-et-autres-tirages": "Loto, EuroDreams, Keno…",
-      "jeu-responsable-euromillions": "Verantwoord spelen (18+)"
+      "jeu-responsable-euromillions": "Verantwoord spelen (18+)",
+      "comprendre-loto": "Loto begrijpen",
+      "comprendre-eurodreams": "EuroDreams begrijpen",
+      "comprendre-keno": "Keno begrijpen",
+      "comprendre-crescendo": "Crescendo begrijpen",
+      "lire-resultats-tirages": "Een uitslag lezen",
+      "horaires-tirages-fdj": "Trekkingstijden"
     },
     "myMillionLabel": "My Million-code",
     "myMillionLocation": "Aangekondigde locatie",
@@ -146,7 +152,14 @@
       "joker": "Joker",
       "secondDraw": "2e trekking",
       "other": "Overig"
-    }
+    },
+    "simTitle": "{game}-simulator",
+    "simLead": "Vergelijk een grid met een al gepubliceerde trekking. Dit is geen prognose.",
+    "statsTitle": "Waargenomen frequenties",
+    "statsLead": "Op de lokale geschiedenis van dit spel — alleen beschrijvend.",
+    "statsCount": "{count} treffers",
+    "statsDelay": "achterstand {delay}",
+    "gameGuideCta": "Gids van dit spel"
   },
   "simulator": {
     "eyebrow": "Tools",
@@ -214,7 +227,9 @@
     "prizeAmount": "Prijs",
     "prizeWinners": "Winnaars",
     "simulatorCta": "Mijn rooster op deze trekking controleren",
-    "checkCta": "Controleren"
+    "checkCta": "Controleren",
+    "companionOf": "{game}-uitslag van {date}",
+    "companionMeta": "Nummers en details van de {game}-trekking van {date}. Onafhankelijke site, 18+."
   },
   "myMillion": {
     "title": "My Million — codes & locaties",
@@ -375,7 +390,7 @@
   },
   "guides": {
     "title": "Gidsen",
-    "subtitle": "EuroMillions begrijpen: prijscategorieën, kansen, verantwoord spelen.",
+    "subtitle": "EuroMillions, Loto, EuroDreams, Keno, Crescendo: uitslagen lezen, tijden, verantwoord spelen.",
     "cta": "Lezen"
   },
   "amazon": {
@@ -387,5 +402,26 @@
   },
   "network": {
     "title": "In hetzelfde netwerk"
+  },
+  "gameSim": {
+    "kenoPick": "Hoeveel nummers speelt u?",
+    "mainLabel": "Nummers",
+    "bonus": {
+      "chance": "Chance-nummer",
+      "dream": "Dream-nummer"
+    },
+    "letterLabel": "Letter",
+    "dateLabel": "Trekking",
+    "randomPick": "Willekeurig",
+    "clearPick": "Wissen",
+    "submit": "Controleren",
+    "hitsMain": "{count} juist(e) nummer(s)",
+    "bonusHit": "bonus raak",
+    "bonusMiss": "bonus mis",
+    "letterHit": "letter raak",
+    "letterMiss": "letter mis",
+    "archiveNear": "{count} andere trekking(en) met minstens 3 gemeenschappelijke nummers",
+    "seeDraw": "Fiche bekijken",
+    "disclaimer": "Informatief hulpmiddel. 18+ · speel verantwoord — geen systeem verslaat de kansen."
   }
 }

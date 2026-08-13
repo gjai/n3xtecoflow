@@ -80,6 +80,27 @@ function attachWinnerLocations(
   });
 }
 
+const EM_ARCHIVE_START = 2004;
+
+function yearsNeedingBackfill(
+  draws: EuroMillionsDraw[],
+  yearNow: number,
+): number[] {
+  const counts = new Map<number, number>();
+  for (const d of draws) {
+    const y = Number(String(d.date).slice(0, 4));
+    if (!Number.isFinite(y)) continue;
+    counts.set(y, (counts.get(y) || 0) + 1);
+  }
+  const missing: number[] = [];
+  for (let y = EM_ARCHIVE_START; y <= yearNow; y += 1) {
+    const n = counts.get(y) || 0;
+    const target = y === yearNow ? 8 : 90;
+    if (n < target) missing.push(y);
+  }
+  return missing;
+}
+
 export async function refreshEuroMillionsData(options?: {
   years?: number[];
   mode?: "full" | "fast";
@@ -91,7 +112,7 @@ export async function refreshEuroMillionsData(options?: {
     ? []
     : options?.years?.length
       ? options.years
-      : [yearNow, yearNow - 1, yearNow - 2];
+      : yearsNeedingBackfill(store.draws, yearNow).slice(0, 4);
 
   const sources: string[] = [];
   let incoming: EuroMillionsDraw[] = [];
@@ -104,7 +125,7 @@ export async function refreshEuroMillionsData(options?: {
   let companionGames: Record<string, number> | undefined;
   try {
     const companions = await refreshFdjCompanionGames(
-      fast ? { parallel: true, size: 8 } : undefined,
+      fast ? { parallel: true, size: 8 } : { size: 80 },
     );
     companionGames = companions.games;
     sources.push(...companions.sources.map((s) => `companion:${s}`));
@@ -126,7 +147,7 @@ export async function refreshEuroMillionsData(options?: {
       incoming = incoming.concat(batch);
       yearsFetched.push(year);
       sources.push(`pedromealha:${year}`);
-      await new Promise((r) => setTimeout(r, 1200));
+      await new Promise((r) => setTimeout(r, 2500));
     } catch (err) {
       console.error("euromillions_pedro_year_fail", year, err);
     }

@@ -874,7 +874,7 @@ export const euromillionsGuideLocales: EmGuideLocaleMap = {
           bullets: [
             "Gli orari esatti spettano a FDJ",
             "Gli archivi complementari sono più corti dello storico EuroMillions",
-            "Il simulatore e le statistiche dettagliate del sito riguardano l’EuroMillions",
+            "Ogni gioco ha il proprio simulatore e le proprie statistiche sulla pagina /jeux/…",
           ],
         },
         {
@@ -906,7 +906,7 @@ export const euromillionsGuideLocales: EmGuideLocaleMap = {
           bullets: [
             "Los horarios exactos los fija FDJ",
             "Los archivos complementarios son más cortos que el historial EuroMillions",
-            "El simulador y las estadísticas detalladas del sitio cubren EuroMillions",
+            "Cada juego tiene su simulador y estadísticas en su página /jeux/…",
           ],
         },
         {
@@ -938,7 +938,7 @@ export const euromillionsGuideLocales: EmGuideLocaleMap = {
           bullets: [
             "Os horários exatos cabem à FDJ",
             "Os arquivos de acompanhamento são mais curtos do que o histórico EuroMillions",
-            "O simulador e as estatísticas detalhadas do site cobrem o EuroMillions",
+            "Cada jogo tem o seu simulador e estatísticas na página /jeux/…",
           ],
         },
         {
@@ -970,7 +970,7 @@ export const euromillionsGuideLocales: EmGuideLocaleMap = {
           bullets: [
             "Die genauen Zeiten legt FDJ fest",
             "Die Begleitarchive sind kürzer als die EuroMillions-Historie",
-            "Der detaillierte Simulator und die Statistik dieser Website decken EuroMillions ab",
+            "Jedes Spiel hat Simulator und Statistik auf seiner /jeux/…-Seite",
           ],
         },
         {
@@ -1002,7 +1002,7 @@ export const euromillionsGuideLocales: EmGuideLocaleMap = {
           bullets: [
             "De exacte tijden worden door FDJ vastgelegd",
             "De begeleidende archieven zijn korter dan de EuroMillions-geschiedenis",
-            "De gedetailleerde simulator en statistieken van deze site gaan over EuroMillions",
+            "Elk spel heeft zijn simulator en statistieken op de pagina /jeux/…",
           ],
         },
         {

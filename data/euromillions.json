@@ -1323,6 +1323,4186 @@
       "source": "pedromealha",
       "sourceUrl": "https://euromillions.api.pedromealha.dev/draws?year=2026",
       "fetchedAt": "2026-08-13T09:39:02.856Z"
+    },
+    {
+      "date": "2024-12-31",
+      "drawId": 1052024,
+      "numbers": [
+        19,
+        24,
+        26,
+        28,
+        33
+      ],
+      "stars": [
+        8,
+        12
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-12-27",
+      "drawId": 1042024,
+      "numbers": [
+        12,
+        22,
+        27,
+        33,
+        45
+      ],
+      "stars": [
+        4,
+        8
+      ],
+      "jackpotEur": 41205363,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-12-24",
+      "drawId": 1032024,
+      "numbers": [
+        6,
+        10,
+        16,
+        23,
+        24
+      ],
+      "stars": [
+        11,
+        12
+      ],
+      "jackpotEur": 28754036,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-12-20",
+      "drawId": 1022024,
+      "numbers": [
+        10,
+        14,
+        21,
+        33,
+        50
+      ],
+      "stars": [
+        6,
+        9
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-12-17",
+      "drawId": 1012024,
+      "numbers": [
+        1,
+        3,
+        4,
+        21,
+        29
+      ],
+      "stars": [
+        2,
+        7
+      ],
+      "jackpotEur": 77557137,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-12-13",
+      "drawId": 1002024,
+      "numbers": [
+        1,
+        15,
+        25,
+        42,
+        50
+      ],
+      "stars": [
+        4,
+        10
+      ],
+      "jackpotEur": 0,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-12-10",
+      "drawId": 992024,
+      "numbers": [
+        5,
+        24,
+        25,
+        29,
+        47
+      ],
+      "stars": [
+        5,
+        9
+      ],
+      "jackpotEur": 50987545,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-12-06",
+      "drawId": 982024,
+      "numbers": [
+        14,
+        25,
+        39,
+        44,
+        47
+      ],
+      "stars": [
+        6,
+        10
+      ],
+      "jackpotEur": 40367384,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-12-03",
+      "drawId": 972024,
+      "numbers": [
+        23,
+        25,
+        34,
+        46,
+        47
+      ],
+      "stars": [
+        6,
+        8
+      ],
+      "jackpotEur": 27018616,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-11-29",
+      "drawId": 962024,
+      "numbers": [
+        8,
+        17,
+        18,
+        29,
+        43
+      ],
+      "stars": [
+        5,
+        9
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-11-26",
+      "drawId": 952024,
+      "numbers": [
+        7,
+        11,
+        25,
+        31,
+        40
+      ],
+      "stars": [
+        9,
+        12
+      ],
+      "jackpotEur": 212448937,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-11-22",
+      "drawId": 942024,
+      "numbers": [
+        10,
+        11,
+        12,
+        29,
+        31
+      ],
+      "stars": [
+        8,
+        11
+      ],
+      "jackpotEur": 194669133,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-11-19",
+      "drawId": 932024,
+      "numbers": [
+        4,
+        13,
+        20,
+        28,
+        49
+      ],
+      "stars": [
+        7,
+        12
+      ],
+      "jackpotEur": 167885088,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-11-15",
+      "drawId": 922024,
+      "numbers": [
+        7,
+        8,
+        34,
+        39,
+        44
+      ],
+      "stars": [
+        2,
+        6
+      ],
+      "jackpotEur": 153801395,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-11-12",
+      "drawId": 912024,
+      "numbers": [
+        10,
+        11,
+        12,
+        22,
+        50
+      ],
+      "stars": [
+        1,
+        10
+      ],
+      "jackpotEur": 137211026,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-11-08",
+      "drawId": 902024,
+      "numbers": [
+        2,
+        33,
+        35,
+        42,
+        48
+      ],
+      "stars": [
+        1,
+        3
+      ],
+      "jackpotEur": 124837601,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-11-05",
+      "drawId": 892024,
+      "numbers": [
+        1,
+        8,
+        19,
+        37,
+        50
+      ],
+      "stars": [
+        6,
+        9
+      ],
+      "jackpotEur": 109544201,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-11-01",
+      "drawId": 882024,
+      "numbers": [
+        7,
+        33,
+        38,
+        44,
+        50
+      ],
+      "stars": [
+        2,
+        7
+      ],
+      "jackpotEur": 98005009,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-10-29",
+      "drawId": 872024,
+      "numbers": [
+        1,
+        2,
+        19,
+        30,
+        45
+      ],
+      "stars": [
+        10,
+        12
+      ],
+      "jackpotEur": 85747958,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-10-25",
+      "drawId": 862024,
+      "numbers": [
+        4,
+        17,
+        20,
+        25,
+        45
+      ],
+      "stars": [
+        8,
+        9
+      ],
+      "jackpotEur": 76313062,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-10-22",
+      "drawId": 852024,
+      "numbers": [
+        3,
+        13,
+        27,
+        30,
+        46
+      ],
+      "stars": [
+        1,
+        2
+      ],
+      "jackpotEur": 63353583,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-10-18",
+      "drawId": 842024,
+      "numbers": [
+        4,
+        15,
+        23,
+        30,
+        39
+      ],
+      "stars": [
+        1,
+        12
+      ],
+      "jackpotEur": 53040810,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-10-15",
+      "drawId": 832024,
+      "numbers": [
+        2,
+        15,
+        32,
+        36,
+        48
+      ],
+      "stars": [
+        3,
+        9
+      ],
+      "jackpotEur": 39530015,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-10-11",
+      "drawId": 822024,
+      "numbers": [
+        16,
+        23,
+        32,
+        46,
+        49
+      ],
+      "stars": [
+        4,
+        5
+      ],
+      "jackpotEur": 29821152,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-10-08",
+      "drawId": 812024,
+      "numbers": [
+        7,
+        14,
+        19,
+        34,
+        40
+      ],
+      "stars": [
+        6,
+        8
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-10-04",
+      "drawId": 802024,
+      "numbers": [
+        4,
+        8,
+        16,
+        17,
+        20
+      ],
+      "stars": [
+        1,
+        6
+      ],
+      "jackpotEur": 162256512,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-10-01",
+      "drawId": 792024,
+      "numbers": [
+        8,
+        22,
+        29,
+        41,
+        42
+      ],
+      "stars": [
+        9,
+        11
+      ],
+      "jackpotEur": 143969599,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-09-27",
+      "drawId": 782024,
+      "numbers": [
+        7,
+        20,
+        21,
+        27,
+        38
+      ],
+      "stars": [
+        5,
+        12
+      ],
+      "jackpotEur": 130000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-09-24",
+      "drawId": 772024,
+      "numbers": [
+        18,
+        20,
+        21,
+        36,
+        49
+      ],
+      "stars": [
+        3,
+        5
+      ],
+      "jackpotEur": 65337927,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-09-20",
+      "drawId": 762024,
+      "numbers": [
+        16,
+        25,
+        29,
+        34,
+        37
+      ],
+      "stars": [
+        3,
+        7
+      ],
+      "jackpotEur": 54712555,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-09-17",
+      "drawId": 752024,
+      "numbers": [
+        20,
+        30,
+        32,
+        41,
+        44
+      ],
+      "stars": [
+        1,
+        10
+      ],
+      "jackpotEur": 41391923,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-09-13",
+      "drawId": 742024,
+      "numbers": [
+        10,
+        15,
+        17,
+        31,
+        42
+      ],
+      "stars": [
+        4,
+        12
+      ],
+      "jackpotEur": 31511704,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-09-10",
+      "drawId": 732024,
+      "numbers": [
+        6,
+        29,
+        46,
+        47,
+        48
+      ],
+      "stars": [
+        2,
+        9
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-09-06",
+      "drawId": 722024,
+      "numbers": [
+        12,
+        14,
+        34,
+        41,
+        47
+      ],
+      "stars": [
+        3,
+        4
+      ],
+      "jackpotEur": 149017789,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-09-03",
+      "drawId": 712024,
+      "numbers": [
+        7,
+        9,
+        11,
+        16,
+        45
+      ],
+      "stars": [
+        2,
+        5
+      ],
+      "jackpotEur": 132447715,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-08-30",
+      "drawId": 702024,
+      "numbers": [
+        3,
+        24,
+        27,
+        33,
+        42
+      ],
+      "stars": [
+        4,
+        6
+      ],
+      "jackpotEur": 119772690,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-08-27",
+      "drawId": 692024,
+      "numbers": [
+        1,
+        8,
+        11,
+        42,
+        47
+      ],
+      "stars": [
+        4,
+        11
+      ],
+      "jackpotEur": 104936241,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-08-23",
+      "drawId": 682024,
+      "numbers": [
+        9,
+        15,
+        24,
+        47,
+        50
+      ],
+      "stars": [
+        8,
+        9
+      ],
+      "jackpotEur": 94498718,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-08-20",
+      "drawId": 672024,
+      "numbers": [
+        7,
+        10,
+        13,
+        18,
+        26
+      ],
+      "stars": [
+        3,
+        12
+      ],
+      "jackpotEur": 81964326,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-08-16",
+      "drawId": 662024,
+      "numbers": [
+        15,
+        17,
+        29,
+        45,
+        49
+      ],
+      "stars": [
+        1,
+        10
+      ],
+      "jackpotEur": 72769716,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-08-13",
+      "drawId": 652024,
+      "numbers": [
+        15,
+        16,
+        39,
+        40,
+        47
+      ],
+      "stars": [
+        1,
+        6
+      ],
+      "jackpotEur": 60887191,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-08-09",
+      "drawId": 642024,
+      "numbers": [
+        21,
+        23,
+        25,
+        33,
+        44
+      ],
+      "stars": [
+        4,
+        10
+      ],
+      "jackpotEur": 50649439,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-08-06",
+      "drawId": 632024,
+      "numbers": [
+        1,
+        18,
+        27,
+        41,
+        50
+      ],
+      "stars": [
+        2,
+        12
+      ],
+      "jackpotEur": 38085988,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-08-02",
+      "drawId": 622024,
+      "numbers": [
+        5,
+        7,
+        12,
+        33,
+        46
+      ],
+      "stars": [
+        3,
+        12
+      ],
+      "jackpotEur": 28776997,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-07-30",
+      "drawId": 612024,
+      "numbers": [
+        9,
+        25,
+        28,
+        37,
+        38
+      ],
+      "stars": [
+        2,
+        8
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-07-26",
+      "drawId": 602024,
+      "numbers": [
+        4,
+        19,
+        23,
+        35,
+        37
+      ],
+      "stars": [
+        4,
+        8
+      ],
+      "jackpotEur": 28649442,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-07-23",
+      "drawId": 592024,
+      "numbers": [
+        4,
+        8,
+        10,
+        16,
+        34
+      ],
+      "stars": [
+        4,
+        8
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-07-19",
+      "drawId": 582024,
+      "numbers": [
+        15,
+        22,
+        35,
+        44,
+        48
+      ],
+      "stars": [
+        6,
+        7
+      ],
+      "jackpotEur": 26181999,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-07-16",
+      "drawId": 572024,
+      "numbers": [
+        2,
+        32,
+        35,
+        36,
+        39
+      ],
+      "stars": [
+        7,
+        8
+      ],
+      "jackpotEur": 38567424,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-07-12",
+      "drawId": 562024,
+      "numbers": [
+        12,
+        18,
+        24,
+        25,
+        39
+      ],
+      "stars": [
+        8,
+        10
+      ],
+      "jackpotEur": 29128125,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-07-09",
+      "drawId": 552024,
+      "numbers": [
+        6,
+        15,
+        19,
+        28,
+        39
+      ],
+      "stars": [
+        7,
+        11
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-07-05",
+      "drawId": 542024,
+      "numbers": [
+        11,
+        13,
+        29,
+        31,
+        47
+      ],
+      "stars": [
+        1,
+        11
+      ],
+      "jackpotEur": 39132032,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-07-02",
+      "drawId": 532024,
+      "numbers": [
+        2,
+        7,
+        34,
+        35,
+        46
+      ],
+      "stars": [
+        6,
+        8
+      ],
+      "jackpotEur": 26534528,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-06-28",
+      "drawId": 522024,
+      "numbers": [
+        10,
+        16,
+        18,
+        22,
+        35
+      ],
+      "stars": [
+        1,
+        10
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-06-25",
+      "drawId": 512024,
+      "numbers": [
+        14,
+        16,
+        37,
+        45,
+        49
+      ],
+      "stars": [
+        5,
+        7
+      ],
+      "jackpotEur": 213887390,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-06-21",
+      "drawId": 502024,
+      "numbers": [
+        3,
+        4,
+        7,
+        11,
+        17
+      ],
+      "stars": [
+        3,
+        12
+      ],
+      "jackpotEur": 195721466,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-06-18",
+      "drawId": 492024,
+      "numbers": [
+        3,
+        11,
+        33,
+        34,
+        36
+      ],
+      "stars": [
+        1,
+        12
+      ],
+      "jackpotEur": 176125264,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-06-14",
+      "drawId": 482024,
+      "numbers": [
+        2,
+        13,
+        16,
+        24,
+        32
+      ],
+      "stars": [
+        1,
+        7
+      ],
+      "jackpotEur": 161234811,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-06-11",
+      "drawId": 472024,
+      "numbers": [
+        7,
+        15,
+        34,
+        45,
+        48
+      ],
+      "stars": [
+        7,
+        9
+      ],
+      "jackpotEur": 143550510,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-06-07",
+      "drawId": 462024,
+      "numbers": [
+        15,
+        16,
+        26,
+        30,
+        37
+      ],
+      "stars": [
+        5,
+        8
+      ],
+      "jackpotEur": 130000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-06-04",
+      "drawId": 452024,
+      "numbers": [
+        6,
+        7,
+        9,
+        14,
+        43
+      ],
+      "stars": [
+        3,
+        4
+      ],
+      "jackpotEur": 70207869,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-05-31",
+      "drawId": 442024,
+      "numbers": [
+        4,
+        7,
+        16,
+        33,
+        34
+      ],
+      "stars": [
+        7,
+        8
+      ],
+      "jackpotEur": 61212841,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-05-28",
+      "drawId": 432024,
+      "numbers": [
+        16,
+        18,
+        35,
+        36,
+        41
+      ],
+      "stars": [
+        6,
+        7
+      ],
+      "jackpotEur": 47755444,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-05-24",
+      "drawId": 422024,
+      "numbers": [
+        9,
+        12,
+        18,
+        22,
+        50
+      ],
+      "stars": [
+        1,
+        3
+      ],
+      "jackpotEur": 38150341,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-05-21",
+      "drawId": 412024,
+      "numbers": [
+        11,
+        13,
+        14,
+        34,
+        48
+      ],
+      "stars": [
+        7,
+        9
+      ],
+      "jackpotEur": 25835023,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-05-17",
+      "drawId": 402024,
+      "numbers": [
+        18,
+        31,
+        32,
+        41,
+        46
+      ],
+      "stars": [
+        1,
+        10
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-05-14",
+      "drawId": 392024,
+      "numbers": [
+        2,
+        8,
+        17,
+        28,
+        35
+      ],
+      "stars": [
+        7,
+        9
+      ],
+      "jackpotEur": 48748900,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-05-10",
+      "drawId": 382024,
+      "numbers": [
+        13,
+        28,
+        29,
+        44,
+        48
+      ],
+      "stars": [
+        4,
+        12
+      ],
+      "jackpotEur": 38735491,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-05-07",
+      "drawId": 372024,
+      "numbers": [
+        35,
+        36,
+        41,
+        42,
+        45
+      ],
+      "stars": [
+        6,
+        11
+      ],
+      "jackpotEur": 26436748,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-05-03",
+      "drawId": 362024,
+      "numbers": [
+        6,
+        9,
+        10,
+        30,
+        49
+      ],
+      "stars": [
+        3,
+        4
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-04-30",
+      "drawId": 352024,
+      "numbers": [
+        13,
+        22,
+        24,
+        33,
+        47
+      ],
+      "stars": [
+        1,
+        5
+      ],
+      "jackpotEur": 166790050,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-04-26",
+      "drawId": 342024,
+      "numbers": [
+        2,
+        20,
+        39,
+        40,
+        47
+      ],
+      "stars": [
+        4,
+        8
+      ],
+      "jackpotEur": 152030614,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-04-23",
+      "drawId": 332024,
+      "numbers": [
+        6,
+        9,
+        11,
+        32,
+        49
+      ],
+      "stars": [
+        2,
+        10
+      ],
+      "jackpotEur": 133997921,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-04-19",
+      "drawId": 322024,
+      "numbers": [
+        10,
+        20,
+        40,
+        44,
+        46
+      ],
+      "stars": [
+        1,
+        3
+      ],
+      "jackpotEur": 121428317,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-04-16",
+      "drawId": 312024,
+      "numbers": [
+        22,
+        29,
+        31,
+        39,
+        46
+      ],
+      "stars": [
+        3,
+        7
+      ],
+      "jackpotEur": 106321540,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-04-12",
+      "drawId": 302024,
+      "numbers": [
+        2,
+        3,
+        12,
+        16,
+        45
+      ],
+      "stars": [
+        2,
+        11
+      ],
+      "jackpotEur": 95455077,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-04-09",
+      "drawId": 292024,
+      "numbers": [
+        19,
+        23,
+        26,
+        27,
+        46
+      ],
+      "stars": [
+        2,
+        10
+      ],
+      "jackpotEur": 82919693,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-04-05",
+      "drawId": 282024,
+      "numbers": [
+        13,
+        18,
+        26,
+        35,
+        37
+      ],
+      "stars": [
+        8,
+        11
+      ],
+      "jackpotEur": 73573473,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-04-02",
+      "drawId": 272024,
+      "numbers": [
+        1,
+        23,
+        31,
+        36,
+        48
+      ],
+      "stars": [
+        5,
+        8
+      ],
+      "jackpotEur": 61841233,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-03-29",
+      "drawId": 262024,
+      "numbers": [
+        16,
+        17,
+        35,
+        36,
+        49
+      ],
+      "stars": [
+        1,
+        10
+      ],
+      "jackpotEur": 52158877,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-03-26",
+      "drawId": 252024,
+      "numbers": [
+        2,
+        13,
+        14,
+        26,
+        29
+      ],
+      "stars": [
+        5,
+        6
+      ],
+      "jackpotEur": 38982717,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-03-22",
+      "drawId": 242024,
+      "numbers": [
+        8,
+        11,
+        23,
+        32,
+        44
+      ],
+      "stars": [
+        9,
+        10
+      ],
+      "jackpotEur": 29416867,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-03-19",
+      "drawId": 232024,
+      "numbers": [
+        7,
+        16,
+        18,
+        20,
+        32
+      ],
+      "stars": [
+        1,
+        3
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-03-15",
+      "drawId": 222024,
+      "numbers": [
+        1,
+        4,
+        31,
+        34,
+        40
+      ],
+      "stars": [
+        4,
+        5
+      ],
+      "jackpotEur": 130000000,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-03-12",
+      "drawId": 212024,
+      "numbers": [
+        13,
+        19,
+        30,
+        38,
+        46
+      ],
+      "stars": [
+        4,
+        12
+      ],
+      "jackpotEur": 72905622,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-03-08",
+      "drawId": 202024,
+      "numbers": [
+        8,
+        11,
+        12,
+        16,
+        44
+      ],
+      "stars": [
+        4,
+        7
+      ],
+      "jackpotEur": 63706419,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-03-05",
+      "drawId": 192024,
+      "numbers": [
+        2,
+        15,
+        17,
+        23,
+        36
+      ],
+      "stars": [
+        3,
+        8
+      ],
+      "jackpotEur": 49724673,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-03-01",
+      "drawId": 182024,
+      "numbers": [
+        4,
+        7,
+        19,
+        20,
+        34
+      ],
+      "stars": [
+        2,
+        4
+      ],
+      "jackpotEur": 39478163,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-02-27",
+      "drawId": 172024,
+      "numbers": [
+        3,
+        4,
+        9,
+        12,
+        20
+      ],
+      "stars": [
+        5,
+        6
+      ],
+      "jackpotEur": 26481832,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-02-23",
+      "drawId": 162024,
+      "numbers": [
+        24,
+        27,
+        28,
+        30,
+        49
+      ],
+      "stars": [
+        1,
+        12
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-02-20",
+      "drawId": 152024,
+      "numbers": [
+        23,
+        31,
+        37,
+        42,
+        48
+      ],
+      "stars": [
+        3,
+        7
+      ],
+      "jackpotEur": 73448160,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-02-16",
+      "drawId": 142024,
+      "numbers": [
+        8,
+        13,
+        14,
+        24,
+        26
+      ],
+      "stars": [
+        1,
+        2
+      ],
+      "jackpotEur": 64205788,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-02-13",
+      "drawId": 132024,
+      "numbers": [
+        13,
+        17,
+        18,
+        20,
+        46
+      ],
+      "stars": [
+        4,
+        9
+      ],
+      "jackpotEur": 50200268,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-02-09",
+      "drawId": 122024,
+      "numbers": [
+        23,
+        24,
+        35,
+        37,
+        45
+      ],
+      "stars": [
+        9,
+        12
+      ],
+      "jackpotEur": 39863292,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-02-06",
+      "drawId": 112024,
+      "numbers": [
+        2,
+        7,
+        21,
+        28,
+        45
+      ],
+      "stars": [
+        5,
+        11
+      ],
+      "jackpotEur": 26671243,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-02-02",
+      "drawId": 102024,
+      "numbers": [
+        13,
+        20,
+        23,
+        27,
+        42
+      ],
+      "stars": [
+        5,
+        9
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-01-30",
+      "drawId": 92024,
+      "numbers": [
+        5,
+        10,
+        19,
+        27,
+        30
+      ],
+      "stars": [
+        5,
+        6
+      ],
+      "jackpotEur": 72274808,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-01-26",
+      "drawId": 82024,
+      "numbers": [
+        8,
+        19,
+        32,
+        41,
+        42
+      ],
+      "stars": [
+        9,
+        12
+      ],
+      "jackpotEur": 130000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-01-23",
+      "drawId": 72024,
+      "numbers": [
+        14,
+        23,
+        39,
+        48,
+        50
+      ],
+      "stars": [
+        3,
+        12
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-01-19",
+      "drawId": 62024,
+      "numbers": [
+        27,
+        28,
+        44,
+        48,
+        50
+      ],
+      "stars": [
+        7,
+        12
+      ],
+      "jackpotEur": 17000000,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-01-16",
+      "drawId": 52024,
+      "numbers": [
+        10,
+        18,
+        21,
+        33,
+        45
+      ],
+      "stars": [
+        8,
+        12
+      ],
+      "jackpotEur": 87952574,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-01-12",
+      "drawId": 42024,
+      "numbers": [
+        16,
+        17,
+        18,
+        45,
+        49
+      ],
+      "stars": [
+        9,
+        12
+      ],
+      "jackpotEur": 78232869,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-01-09",
+      "drawId": 32024,
+      "numbers": [
+        2,
+        9,
+        12,
+        39,
+        40
+      ],
+      "stars": [
+        1,
+        3
+      ],
+      "jackpotEur": 64655930,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-01-05",
+      "drawId": 22024,
+      "numbers": [
+        4,
+        7,
+        18,
+        39,
+        50
+      ],
+      "stars": [
+        3,
+        8
+      ],
+      "jackpotEur": 53860693,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2024-01-02",
+      "drawId": 12024,
+      "numbers": [
+        7,
+        15,
+        18,
+        46,
+        49
+      ],
+      "stars": [
+        10,
+        12
+      ],
+      "jackpotEur": 40104043,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-12-30",
+      "drawId": 1042014,
+      "numbers": [
+        6,
+        18,
+        39,
+        44,
+        50
+      ],
+      "stars": [
+        8,
+        11
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-12-26",
+      "drawId": 1032014,
+      "numbers": [
+        17,
+        26,
+        27,
+        45,
+        49
+      ],
+      "stars": [
+        2,
+        3
+      ],
+      "jackpotEur": 25234535,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-12-23",
+      "drawId": 1022014,
+      "numbers": [
+        8,
+        9,
+        19,
+        25,
+        49
+      ],
+      "stars": [
+        2,
+        10
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-12-19",
+      "drawId": 1012014,
+      "numbers": [
+        23,
+        29,
+        31,
+        39,
+        44
+      ],
+      "stars": [
+        5,
+        8
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-12-16",
+      "drawId": 1002014,
+      "numbers": [
+        3,
+        7,
+        12,
+        13,
+        25
+      ],
+      "stars": [
+        5,
+        8
+      ],
+      "jackpotEur": 39580687,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-12-12",
+      "drawId": 992014,
+      "numbers": [
+        2,
+        15,
+        28,
+        31,
+        37
+      ],
+      "stars": [
+        4,
+        6
+      ],
+      "jackpotEur": 32170284,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-12-09",
+      "drawId": 982014,
+      "numbers": [
+        1,
+        3,
+        31,
+        42,
+        46
+      ],
+      "stars": [
+        4,
+        11
+      ],
+      "jackpotEur": 21823076,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-12-05",
+      "drawId": 972014,
+      "numbers": [
+        5,
+        8,
+        37,
+        47,
+        48
+      ],
+      "stars": [
+        2,
+        3
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-12-02",
+      "drawId": 962014,
+      "numbers": [
+        3,
+        15,
+        25,
+        44,
+        49
+      ],
+      "stars": [
+        1,
+        9
+      ],
+      "jackpotEur": 72971665,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-11-28",
+      "drawId": 952014,
+      "numbers": [
+        6,
+        10,
+        15,
+        23,
+        41
+      ],
+      "stars": [
+        4,
+        10
+      ],
+      "jackpotEur": 64238836,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-11-25",
+      "drawId": 942014,
+      "numbers": [
+        3,
+        7,
+        25,
+        32,
+        36
+      ],
+      "stars": [
+        1,
+        6
+      ],
+      "jackpotEur": 51208489,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-11-21",
+      "drawId": 932014,
+      "numbers": [
+        4,
+        7,
+        28,
+        32,
+        37
+      ],
+      "stars": [
+        5,
+        10
+      ],
+      "jackpotEur": 43061336,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-11-18",
+      "drawId": 922014,
+      "numbers": [
+        2,
+        3,
+        17,
+        36,
+        38
+      ],
+      "stars": [
+        4,
+        11
+      ],
+      "jackpotEur": 32415734,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-11-14",
+      "drawId": 912014,
+      "numbers": [
+        17,
+        32,
+        36,
+        38,
+        48
+      ],
+      "stars": [
+        5,
+        8
+      ],
+      "jackpotEur": 25319129,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-11-11",
+      "drawId": 902014,
+      "numbers": [
+        2,
+        14,
+        21,
+        36,
+        46
+      ],
+      "stars": [
+        7,
+        11
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-11-07",
+      "drawId": 892014,
+      "numbers": [
+        13,
+        25,
+        32,
+        38,
+        46
+      ],
+      "stars": [
+        1,
+        10
+      ],
+      "jackpotEur": 16506235,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-11-04",
+      "drawId": 882014,
+      "numbers": [
+        1,
+        6,
+        13,
+        17,
+        26
+      ],
+      "stars": [
+        3,
+        5
+      ],
+      "jackpotEur": 22206694,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-10-31",
+      "drawId": 872014,
+      "numbers": [
+        10,
+        13,
+        20,
+        33,
+        41
+      ],
+      "stars": [
+        3,
+        9
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-10-28",
+      "drawId": 862014,
+      "numbers": [
+        10,
+        15,
+        17,
+        40,
+        45
+      ],
+      "stars": [
+        1,
+        2
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-10-24",
+      "drawId": 852014,
+      "numbers": [
+        3,
+        9,
+        20,
+        30,
+        42
+      ],
+      "stars": [
+        1,
+        6
+      ],
+      "jackpotEur": 190000000,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-10-21",
+      "drawId": 842014,
+      "numbers": [
+        20,
+        21,
+        27,
+        33,
+        40
+      ],
+      "stars": [
+        3,
+        10
+      ],
+      "jackpotEur": 181778808,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-10-17",
+      "drawId": 832014,
+      "numbers": [
+        1,
+        13,
+        40,
+        48,
+        49
+      ],
+      "stars": [
+        8,
+        10
+      ],
+      "jackpotEur": 164013958,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-10-14",
+      "drawId": 822014,
+      "numbers": [
+        4,
+        5,
+        15,
+        23,
+        32
+      ],
+      "stars": [
+        3,
+        7
+      ],
+      "jackpotEur": 143635159,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-10-10",
+      "drawId": 812014,
+      "numbers": [
+        6,
+        29,
+        42,
+        45,
+        47
+      ],
+      "stars": [
+        9,
+        10
+      ],
+      "jackpotEur": 129467188,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-10-07",
+      "drawId": 802014,
+      "numbers": [
+        9,
+        21,
+        28,
+        30,
+        38
+      ],
+      "stars": [
+        1,
+        8
+      ],
+      "jackpotEur": 112118981,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-10-03",
+      "drawId": 792014,
+      "numbers": [
+        4,
+        13,
+        23,
+        48,
+        50
+      ],
+      "stars": [
+        5,
+        10
+      ],
+      "jackpotEur": 100000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-09-30",
+      "drawId": 782014,
+      "numbers": [
+        3,
+        13,
+        15,
+        33,
+        42
+      ],
+      "stars": [
+        5,
+        7
+      ],
+      "jackpotEur": 32929188,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-09-26",
+      "drawId": 772014,
+      "numbers": [
+        13,
+        27,
+        35,
+        46,
+        47
+      ],
+      "stars": [
+        1,
+        2
+      ],
+      "jackpotEur": 25767850,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-09-23",
+      "drawId": 762014,
+      "numbers": [
+        12,
+        13,
+        14,
+        29,
+        35
+      ],
+      "stars": [
+        1,
+        7
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-09-19",
+      "drawId": 752014,
+      "numbers": [
+        6,
+        8,
+        34,
+        38,
+        48
+      ],
+      "stars": [
+        3,
+        9
+      ],
+      "jackpotEur": 86732923,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-09-16",
+      "drawId": 742014,
+      "numbers": [
+        4,
+        29,
+        30,
+        35,
+        50
+      ],
+      "stars": [
+        2,
+        4
+      ],
+      "jackpotEur": 74610475,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-09-12",
+      "drawId": 732014,
+      "numbers": [
+        9,
+        13,
+        26,
+        31,
+        33
+      ],
+      "stars": [
+        7,
+        11
+      ],
+      "jackpotEur": 66213888,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-09-09",
+      "drawId": 722014,
+      "numbers": [
+        8,
+        15,
+        19,
+        24,
+        35
+      ],
+      "stars": [
+        8,
+        10
+      ],
+      "jackpotEur": 55073280,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-09-05",
+      "drawId": 712014,
+      "numbers": [
+        1,
+        18,
+        23,
+        46,
+        50
+      ],
+      "stars": [
+        3,
+        9
+      ],
+      "jackpotEur": 47592166,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-09-02",
+      "drawId": 702014,
+      "numbers": [
+        5,
+        25,
+        31,
+        39,
+        45
+      ],
+      "stars": [
+        1,
+        8
+      ],
+      "jackpotEur": 37624288,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-08-29",
+      "drawId": 692014,
+      "numbers": [
+        2,
+        9,
+        26,
+        32,
+        38
+      ],
+      "stars": [
+        3,
+        6
+      ],
+      "jackpotEur": 30847109,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-08-26",
+      "drawId": 682014,
+      "numbers": [
+        10,
+        22,
+        36,
+        45,
+        48
+      ],
+      "stars": [
+        4,
+        11
+      ],
+      "jackpotEur": 21332468,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-08-22",
+      "drawId": 672014,
+      "numbers": [
+        4,
+        17,
+        29,
+        35,
+        49
+      ],
+      "stars": [
+        1,
+        2
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-08-19",
+      "drawId": 662014,
+      "numbers": [
+        4,
+        7,
+        11,
+        34,
+        47
+      ],
+      "stars": [
+        7,
+        8
+      ],
+      "jackpotEur": 54304297,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-08-15",
+      "drawId": 652014,
+      "numbers": [
+        4,
+        5,
+        21,
+        23,
+        30
+      ],
+      "stars": [
+        8,
+        10
+      ],
+      "jackpotEur": 46954024,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-08-12",
+      "drawId": 642014,
+      "numbers": [
+        7,
+        16,
+        19,
+        22,
+        33
+      ],
+      "stars": [
+        2,
+        5
+      ],
+      "jackpotEur": 37783516,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-08-08",
+      "drawId": 632014,
+      "numbers": [
+        21,
+        29,
+        35,
+        43,
+        46
+      ],
+      "stars": [
+        1,
+        9
+      ],
+      "jackpotEur": 30941693,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-08-05",
+      "drawId": 622014,
+      "numbers": [
+        5,
+        7,
+        19,
+        21,
+        42
+      ],
+      "stars": [
+        5,
+        11
+      ],
+      "jackpotEur": 21466842,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-08-01",
+      "drawId": 612014,
+      "numbers": [
+        24,
+        44,
+        46,
+        48,
+        50
+      ],
+      "stars": [
+        5,
+        10
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-07-29",
+      "drawId": 602014,
+      "numbers": [
+        10,
+        23,
+        35,
+        40,
+        43
+      ],
+      "stars": [
+        3,
+        9
+      ],
+      "jackpotEur": 37632166,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-07-25",
+      "drawId": 592014,
+      "numbers": [
+        9,
+        10,
+        12,
+        24,
+        43
+      ],
+      "stars": [
+        5,
+        9
+      ],
+      "jackpotEur": 30819743,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-07-22",
+      "drawId": 582014,
+      "numbers": [
+        1,
+        24,
+        43,
+        45,
+        50
+      ],
+      "stars": [
+        5,
+        8
+      ],
+      "jackpotEur": 21405298,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-07-18",
+      "drawId": 572014,
+      "numbers": [
+        1,
+        11,
+        29,
+        41,
+        43
+      ],
+      "stars": [
+        3,
+        11
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-07-15",
+      "drawId": 562014,
+      "numbers": [
+        15,
+        18,
+        20,
+        27,
+        34
+      ],
+      "stars": [
+        1,
+        3
+      ],
+      "jackpotEur": 67902166,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-07-11",
+      "drawId": 552014,
+      "numbers": [
+        5,
+        22,
+        35,
+        38,
+        49
+      ],
+      "stars": [
+        4,
+        7
+      ],
+      "jackpotEur": 60081769,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-07-08",
+      "drawId": 542014,
+      "numbers": [
+        8,
+        18,
+        22,
+        24,
+        27
+      ],
+      "stars": [
+        4,
+        11
+      ],
+      "jackpotEur": 49306200,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-07-04",
+      "drawId": 532014,
+      "numbers": [
+        4,
+        18,
+        39,
+        43,
+        47
+      ],
+      "stars": [
+        2,
+        6
+      ],
+      "jackpotEur": 42031147,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-07-01",
+      "drawId": 522014,
+      "numbers": [
+        18,
+        22,
+        25,
+        27,
+        39
+      ],
+      "stars": [
+        5,
+        10
+      ],
+      "jackpotEur": 31752213,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-06-27",
+      "drawId": 512014,
+      "numbers": [
+        31,
+        33,
+        34,
+        39,
+        45
+      ],
+      "stars": [
+        2,
+        10
+      ],
+      "jackpotEur": 24831312,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-06-24",
+      "drawId": 502014,
+      "numbers": [
+        1,
+        7,
+        20,
+        21,
+        48
+      ],
+      "stars": [
+        4,
+        7
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-06-20",
+      "drawId": 492014,
+      "numbers": [
+        5,
+        15,
+        25,
+        38,
+        49
+      ],
+      "stars": [
+        1,
+        2
+      ],
+      "jackpotEur": 24974879,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-06-17",
+      "drawId": 482014,
+      "numbers": [
+        11,
+        13,
+        37,
+        40,
+        48
+      ],
+      "stars": [
+        8,
+        9
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-06-13",
+      "drawId": 472014,
+      "numbers": [
+        16,
+        18,
+        22,
+        28,
+        46
+      ],
+      "stars": [
+        9,
+        11
+      ],
+      "jackpotEur": 137313501,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-06-10",
+      "drawId": 462014,
+      "numbers": [
+        12,
+        18,
+        21,
+        32,
+        33
+      ],
+      "stars": [
+        1,
+        11
+      ],
+      "jackpotEur": 118626756,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-06-06",
+      "drawId": 452014,
+      "numbers": [
+        7,
+        25,
+        34,
+        40,
+        49
+      ],
+      "stars": [
+        9,
+        11
+      ],
+      "jackpotEur": 106876333,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-06-03",
+      "drawId": 442014,
+      "numbers": [
+        2,
+        15,
+        32,
+        39,
+        44
+      ],
+      "stars": [
+        5,
+        10
+      ],
+      "jackpotEur": 88945682,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-05-30",
+      "drawId": 432014,
+      "numbers": [
+        5,
+        24,
+        27,
+        41,
+        45
+      ],
+      "stars": [
+        6,
+        7
+      ],
+      "jackpotEur": 78898283,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-05-27",
+      "drawId": 422014,
+      "numbers": [
+        7,
+        13,
+        16,
+        25,
+        26
+      ],
+      "stars": [
+        1,
+        6
+      ],
+      "jackpotEur": 67034874,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-05-23",
+      "drawId": 412014,
+      "numbers": [
+        3,
+        8,
+        31,
+        34,
+        47
+      ],
+      "stars": [
+        9,
+        11
+      ],
+      "jackpotEur": 59346874,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-05-20",
+      "drawId": 402014,
+      "numbers": [
+        5,
+        33,
+        36,
+        38,
+        47
+      ],
+      "stars": [
+        4,
+        9
+      ],
+      "jackpotEur": 48745949,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-05-16",
+      "drawId": 392014,
+      "numbers": [
+        23,
+        26,
+        29,
+        37,
+        40
+      ],
+      "stars": [
+        3,
+        4
+      ],
+      "jackpotEur": 41696345,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-05-13",
+      "drawId": 382014,
+      "numbers": [
+        4,
+        13,
+        30,
+        34,
+        47
+      ],
+      "stars": [
+        2,
+        6
+      ],
+      "jackpotEur": 31594762,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-05-09",
+      "drawId": 372014,
+      "numbers": [
+        3,
+        21,
+        26,
+        28,
+        45
+      ],
+      "stars": [
+        7,
+        10
+      ],
+      "jackpotEur": 24736690,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-05-06",
+      "drawId": 362014,
+      "numbers": [
+        5,
+        19,
+        24,
+        31,
+        37
+      ],
+      "stars": [
+        1,
+        9
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-05-02",
+      "drawId": 352014,
+      "numbers": [
+        4,
+        30,
+        31,
+        38,
+        42
+      ],
+      "stars": [
+        2,
+        11
+      ],
+      "jackpotEur": 89166455,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-04-29",
+      "drawId": 342014,
+      "numbers": [
+        18,
+        23,
+        26,
+        35,
+        44
+      ],
+      "stars": [
+        3,
+        11
+      ],
+      "jackpotEur": 76616042,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-04-25",
+      "drawId": 332014,
+      "numbers": [
+        13,
+        21,
+        24,
+        44,
+        49
+      ],
+      "stars": [
+        1,
+        9
+      ],
+      "jackpotEur": 67951355,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-04-22",
+      "drawId": 322014,
+      "numbers": [
+        13,
+        15,
+        20,
+        24,
+        46
+      ],
+      "stars": [
+        1,
+        8
+      ],
+      "jackpotEur": 56813879,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-04-18",
+      "drawId": 312014,
+      "numbers": [
+        21,
+        24,
+        31,
+        39,
+        47
+      ],
+      "stars": [
+        3,
+        7
+      ],
+      "jackpotEur": 49741996,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-04-15",
+      "drawId": 302014,
+      "numbers": [
+        3,
+        14,
+        26,
+        47,
+        50
+      ],
+      "stars": [
+        7,
+        11
+      ],
+      "jackpotEur": 39469425,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-04-11",
+      "drawId": 292014,
+      "numbers": [
+        8,
+        12,
+        19,
+        30,
+        33
+      ],
+      "stars": [
+        4,
+        11
+      ],
+      "jackpotEur": 32404758,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-04-08",
+      "drawId": 282014,
+      "numbers": [
+        11,
+        18,
+        29,
+        42,
+        49
+      ],
+      "stars": [
+        4,
+        11
+      ],
+      "jackpotEur": 21651231,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-04-04",
+      "drawId": 272014,
+      "numbers": [
+        6,
+        10,
+        28,
+        45,
+        50
+      ],
+      "stars": [
+        10,
+        11
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-04-01",
+      "drawId": 262014,
+      "numbers": [
+        16,
+        18,
+        26,
+        38,
+        44
+      ],
+      "stars": [
+        8,
+        10
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-03-28",
+      "drawId": 252014,
+      "numbers": [
+        3,
+        4,
+        19,
+        28,
+        43
+      ],
+      "stars": [
+        3,
+        7
+      ],
+      "jackpotEur": 25329483,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-03-25",
+      "drawId": 242014,
+      "numbers": [
+        7,
+        20,
+        26,
+        28,
+        50
+      ],
+      "stars": [
+        2,
+        8
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-03-21",
+      "drawId": 232014,
+      "numbers": [
+        7,
+        30,
+        37,
+        39,
+        42
+      ],
+      "stars": [
+        5,
+        7
+      ],
+      "jackpotEur": 25493153,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-03-18",
+      "drawId": 222014,
+      "numbers": [
+        8,
+        27,
+        34,
+        36,
+        39
+      ],
+      "stars": [
+        5,
+        10
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-03-14",
+      "drawId": 212014,
+      "numbers": [
+        6,
+        24,
+        25,
+        27,
+        30
+      ],
+      "stars": [
+        5,
+        9
+      ],
+      "jackpotEur": 129384564,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-03-11",
+      "drawId": 202014,
+      "numbers": [
+        1,
+        4,
+        23,
+        33,
+        44
+      ],
+      "stars": [
+        7,
+        8
+      ],
+      "jackpotEur": 112224513,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-03-07",
+      "drawId": 192014,
+      "numbers": [
+        5,
+        10,
+        38,
+        40,
+        41
+      ],
+      "stars": [
+        1,
+        8
+      ],
+      "jackpotEur": 100000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-03-04",
+      "drawId": 182014,
+      "numbers": [
+        3,
+        5,
+        22,
+        27,
+        44
+      ],
+      "stars": [
+        1,
+        6
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-02-28",
+      "drawId": 172014,
+      "numbers": [
+        12,
+        32,
+        38,
+        43,
+        44
+      ],
+      "stars": [
+        2,
+        7
+      ],
+      "jackpotEur": 42517715,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-02-25",
+      "drawId": 162014,
+      "numbers": [
+        21,
+        25,
+        28,
+        35,
+        42
+      ],
+      "stars": [
+        4,
+        6
+      ],
+      "jackpotEur": 31885464,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-02-21",
+      "drawId": 152014,
+      "numbers": [
+        13,
+        17,
+        28,
+        30,
+        32
+      ],
+      "stars": [
+        5,
+        7
+      ],
+      "jackpotEur": 24964477,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-02-18",
+      "drawId": 142014,
+      "numbers": [
+        23,
+        26,
+        36,
+        37,
+        49
+      ],
+      "stars": [
+        6,
+        7
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-02-14",
+      "drawId": 132014,
+      "numbers": [
+        2,
+        4,
+        6,
+        19,
+        39
+      ],
+      "stars": [
+        2,
+        7
+      ],
+      "jackpotEur": 25543227,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-02-11",
+      "drawId": 122014,
+      "numbers": [
+        8,
+        17,
+        25,
+        41,
+        47
+      ],
+      "stars": [
+        1,
+        2
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-02-07",
+      "drawId": 112014,
+      "numbers": [
+        3,
+        17,
+        19,
+        46,
+        47
+      ],
+      "stars": [
+        9,
+        10
+      ],
+      "jackpotEur": 25315477,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-02-04",
+      "drawId": 102014,
+      "numbers": [
+        1,
+        21,
+        33,
+        37,
+        38
+      ],
+      "stars": [
+        4,
+        8
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-01-31",
+      "drawId": 92014,
+      "numbers": [
+        8,
+        10,
+        15,
+        16,
+        31
+      ],
+      "stars": [
+        8,
+        9
+      ],
+      "jackpotEur": 72149579,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-01-28",
+      "drawId": 82014,
+      "numbers": [
+        18,
+        20,
+        23,
+        42,
+        48
+      ],
+      "stars": [
+        2,
+        9
+      ],
+      "jackpotEur": 59913845,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-01-24",
+      "drawId": 72014,
+      "numbers": [
+        5,
+        19,
+        34,
+        35,
+        41
+      ],
+      "stars": [
+        1,
+        5
+      ],
+      "jackpotEur": 51853731,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-01-21",
+      "drawId": 62014,
+      "numbers": [
+        4,
+        12,
+        35,
+        42,
+        48
+      ],
+      "stars": [
+        5,
+        8
+      ],
+      "jackpotEur": 40648762,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-01-17",
+      "drawId": 52014,
+      "numbers": [
+        19,
+        26,
+        32,
+        33,
+        42
+      ],
+      "stars": [
+        4,
+        10
+      ],
+      "jackpotEur": 33069927,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-01-14",
+      "drawId": 42014,
+      "numbers": [
+        18,
+        20,
+        25,
+        26,
+        37
+      ],
+      "stars": [
+        10,
+        11
+      ],
+      "jackpotEur": 22323820,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-01-10",
+      "drawId": 32014,
+      "numbers": [
+        1,
+        2,
+        11,
+        27,
+        29
+      ],
+      "stars": [
+        1,
+        10
+      ],
+      "jackpotEur": 15000000,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-01-07",
+      "drawId": 22014,
+      "numbers": [
+        2,
+        20,
+        27,
+        33,
+        45
+      ],
+      "stars": [
+        6,
+        10
+      ],
+      "jackpotEur": 65138886,
+      "hasWinner": true,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
+    },
+    {
+      "date": "2014-01-03",
+      "drawId": 12014,
+      "numbers": [
+        3,
+        27,
+        31,
+        38,
+        44
+      ],
+      "stars": [
+        3,
+        8
+      ],
+      "jackpotEur": 116122938,
+      "hasWinner": false,
+      "source": "pedromealha",
+      "sourceUrl": "https://euromillions.api.pedromealha.dev/draws",
+      "fetchedAt": "2026-08-13T13:00:00.000Z"
     }
   ],
   "myMillionWinners": [

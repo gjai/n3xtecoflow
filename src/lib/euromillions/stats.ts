@@ -53,6 +53,13 @@ function buildStats(max: number, drawsNewestFirst: number[][]): NumberStat[] {
   });
 }
 
+export function numberPoolStats(
+  drawsNewestFirst: number[][],
+  max: number,
+): NumberStat[] {
+  return buildStats(max, drawsNewestFirst);
+}
+
 export function euroMillionsNumberStats(draws: EuroMillionsDraw[]): {
   numbers: NumberStat[];
   stars: NumberStat[];

@@ -1,5 +1,24 @@
 import type { GuideArticle } from "./articles";
 import { euromillionsGuideLocales } from "./euromillions-guide-locales";
+import {
+  EUROMILLIONS_CRESCENDO_GUIDE_SLUG,
+  EUROMILLIONS_EURODREAMS_GUIDE_SLUG,
+  EUROMILLIONS_KENO_GUIDE_SLUG,
+  EUROMILLIONS_LOTO_GUIDE_SLUG,
+  EUROMILLIONS_READ_RESULTS_GUIDE_SLUG,
+  EUROMILLIONS_SCHEDULE_GUIDE_SLUG,
+  euromillionsCompanionGuidesRaw,
+} from "./euromillions-companion-guides";
+import { euromillionsCompanionGuideLocales } from "./euromillions-companion-guide-locales";
+
+export {
+  EUROMILLIONS_CRESCENDO_GUIDE_SLUG,
+  EUROMILLIONS_EURODREAMS_GUIDE_SLUG,
+  EUROMILLIONS_KENO_GUIDE_SLUG,
+  EUROMILLIONS_LOTO_GUIDE_SLUG,
+  EUROMILLIONS_READ_RESULTS_GUIDE_SLUG,
+  EUROMILLIONS_SCHEDULE_GUIDE_SLUG,
+};
 
 export const EUROMILLIONS_MAIN_GUIDE_SLUG = "comprendre-euromillions";
 export const EUROMILLIONS_ODDS_GUIDE_SLUG = "probabilites-euromillions";
@@ -27,9 +46,15 @@ export const euromillionsGuideCovers: Record<
   [EUROMILLIONS_MY_MILLION_GUIDE_SLUG]: COVER_META,
   [EUROMILLIONS_TIERS_GUIDE_SLUG]: COVER_META,
   [EUROMILLIONS_OTHER_GAMES_GUIDE_SLUG]: COVER_META,
+  [EUROMILLIONS_LOTO_GUIDE_SLUG]: COVER_META,
+  [EUROMILLIONS_EURODREAMS_GUIDE_SLUG]: COVER_META,
+  [EUROMILLIONS_KENO_GUIDE_SLUG]: COVER_META,
+  [EUROMILLIONS_CRESCENDO_GUIDE_SLUG]: COVER_META,
+  [EUROMILLIONS_READ_RESULTS_GUIDE_SLUG]: COVER_META,
+  [EUROMILLIONS_SCHEDULE_GUIDE_SLUG]: COVER_META,
 };
 
-export const euromillionsGuidesRaw: GuideArticle[] = [
+const euromillionsCoreGuidesRaw: GuideArticle[] = [
   {
     slug: EUROMILLIONS_MAIN_GUIDE_SLUG,
     fr: {
@@ -398,7 +423,7 @@ export const euromillionsGuidesRaw: GuideArticle[] = [
           bullets: [
             "Les horaires exacts relèvent de la FDJ",
             "Les archives compagnons sont plus courtes que l’historique EuroMillions",
-            "Simulateur et stats détaillés du site portent sur l’EuroMillions",
+            "Chaque jeu a son simulateur et ses stats sur sa page /jeux/…",
           ],
         },
         {
@@ -430,7 +455,7 @@ export const euromillionsGuidesRaw: GuideArticle[] = [
           bullets: [
             "Exact times are set by FDJ",
             "Companion archives are shorter than the EuroMillions history",
-            "This site’s detailed simulator and stats cover EuroMillions",
+            "Each game has its own simulator and stats on its /jeux/… page",
           ],
         },
         {
@@ -444,8 +469,15 @@ export const euromillionsGuidesRaw: GuideArticle[] = [
   },
 ];
 
+export const euromillionsGuidesRaw: GuideArticle[] = [
+  ...euromillionsCoreGuidesRaw,
+  ...euromillionsCompanionGuidesRaw,
+];
+
 export const euromillionsGuides: GuideArticle[] =
   euromillionsGuidesRaw.map((guide) => {
-    const extra = euromillionsGuideLocales[guide.slug];
+    const extra =
+      euromillionsGuideLocales[guide.slug] ||
+      euromillionsCompanionGuideLocales[guide.slug];
     return extra ? { ...guide, ...extra } : guide;
   });

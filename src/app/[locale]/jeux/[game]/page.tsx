@@ -17,6 +17,10 @@ import {
   getGameLatest,
   readFdjGamesStore,
 } from "@/lib/fdj-games/store";
+import { FdjCompanionSimulator } from "@/components/FdjCompanionSimulator";
+import { companionDrawKey } from "@/lib/fdj-games/keys";
+import { COMPANION_GRID, groupNumbers } from "@/lib/lottery/rules";
+import { numberPoolStats } from "@/lib/euromillions/stats";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -95,7 +99,23 @@ export default async function JeuxGamePage({
   const t = await getTranslations("games");
   const store = await readFdjGamesStore();
   const latest = getGameLatest(store, gameId);
-  const draws = getGameDraws(store, gameId).slice(0, 40);
+  const draws = getGameDraws(store, gameId).slice(0, 80);
+  const spec = COMPANION_GRID[gameId];
+  const mainStats = numberPoolStats(
+    draws.map((d) => groupNumbers(d, "main")),
+    spec.mainMax,
+  )
+    .slice()
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
+  const guideSlug =
+    gameId === "loto"
+      ? "comprendre-loto"
+      : gameId === "eurodreams"
+        ? "comprendre-eurodreams"
+        : gameId === "keno"
+          ? "comprendre-keno"
+          : "comprendre-crescendo";
   const label = locale === "en" ? entry.labelEn : entry.labelFr;
   const pending = companionResultPending(gameId, latest);
 
@@ -201,18 +221,20 @@ export default async function JeuxGamePage({
           {t("archiveTitle")}
         </h2>
         {draws.length > 0 ? (
-          <ul className="mt-4 space-y-3">
+          <ul className="mt-4 space-y-2">
             {draws.map((d) => (
-              <li
-                key={`${d.date}-${d.plannedAt}-${d.drawId}`}
-                className="border border-[var(--line)] bg-[var(--surface)] px-4 py-3"
-              >
-                <p className="text-sm font-semibold text-[var(--heading)]">
-                  {headingFor(d)}
-                </p>
-                <div className="mt-3">
-                  <FdjGameBalls draw={d} labels={groupLabels} />
-                </div>
+              <li key={`${d.date}-${d.plannedAt}-${d.drawId}`}>
+                <Link
+                  href={`/jeux/${entry.slug}/${companionDrawKey(d)}`}
+                  className="block border border-[var(--line)] bg-[var(--surface)] px-4 py-3 hover:border-[var(--accent)]"
+                >
+                  <p className="text-sm font-semibold text-[var(--heading)]">
+                    {headingFor(d)}
+                  </p>
+                  <div className="mt-3">
+                    <FdjGameBalls draw={d} labels={groupLabels} />
+                  </div>
+                </Link>
               </li>
             ))}
           </ul>
@@ -221,30 +243,48 @@ export default async function JeuxGamePage({
         )}
       </section>
 
-      <section className="relative mt-10 scroll-mt-28 border border-[var(--line)] bg-[var(--surface)] p-5">
-        <span id="simulateur" className="absolute -top-24" />
-        <span id="stats" className="absolute -top-24" />
-        <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)]">
-          {t("emToolsTitle")}
+      <section id="simulateur" className="mt-12 scroll-mt-28">
+        <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+          {t("simTitle", { game: label })}
         </h2>
-        <p className="mt-2 text-sm text-[var(--muted)]">{t("emToolsLead")}</p>
-        <div className="mt-4 flex flex-wrap gap-4 text-sm">
-          <Link
-            href="/simulateur"
-            className="font-semibold text-[var(--accent)] hover:underline"
-          >
-            {t("emSimulatorCta")} →
-          </Link>
-          <Link
-            href="/stats"
-            className="font-semibold text-[var(--accent)] hover:underline"
-          >
-            {t("emStatsCta")} →
-          </Link>
+        <p className="mt-2 text-sm text-[var(--muted)]">{t("simLead")}</p>
+        <div className="mt-6">
+          <FdjCompanionSimulator
+            draws={getGameDraws(store, gameId)}
+            spec={spec}
+            gameSlug={entry.slug}
+            initialKey={latest ? companionDrawKey(latest) : null}
+          />
         </div>
       </section>
 
+      <section id="stats" className="mt-12 scroll-mt-28">
+        <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+          {t("statsTitle", { game: label })}
+        </h2>
+        <p className="mt-2 text-sm text-[var(--muted)]">{t("statsLead")}</p>
+        <ul className="mt-4 space-y-2">
+          {mainStats.map((s) => (
+            <li
+              key={s.n}
+              className="flex justify-between border-b border-[var(--line)] py-2 text-sm"
+            >
+              <span className="font-semibold text-[var(--heading)]">{s.n}</span>
+              <span className="text-[var(--muted)]">
+                {t("statsCount", { count: s.count })} · {t("statsDelay", { delay: s.delay })}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <div className="mt-10 flex flex-wrap gap-4 text-sm">
+        <Link
+          href={`/guides/${guideSlug}`}
+          className="font-semibold text-[var(--accent)] hover:underline"
+        >
+          {t("gameGuideCta")} →
+        </Link>
         <a
           href={entry.fdjUrl}
           target="_blank"

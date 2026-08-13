@@ -122,14 +122,16 @@ function parseDraw(
 export async function fetchFdjCompanionDraws(
   gameId: FdjCompanionGameId,
   size = 20,
+  toPlannedAt = "now",
 ): Promise<FdjGameDraw[]> {
   const game = FDJ_COMPANION_GAMES.find((g) => g.id === gameId);
   if (!game) return [];
   const capped = Math.min(Math.max(size, 1), 20);
+  const cursor = encodeURIComponent(toPlannedAt);
   const url =
     `https://www.sto.api.fdj.fr/anonymous/service-draw-info/v3/draws` +
     `?game_name=${encodeURIComponent(game.apiName)}` +
-    `&include=results%2Cshares&to_planned_at=now` +
+    `&include=results%2Cshares&to_planned_at=${cursor}` +
     `&sort=planned_at%3Adesc&size=${capped}`;
   const res = await fetch(url, {
     headers: {
@@ -151,4 +153,23 @@ export async function fetchFdjCompanionDraws(
     if (parsed) out.push(parsed);
   }
   return out;
+}
+
+/** Pages of 20 until `maxDraws` or the API stops. */
+export async function fetchFdjCompanionHistory(
+  gameId: FdjCompanionGameId,
+  maxDraws = 120,
+): Promise<FdjGameDraw[]> {
+  const acc: FdjGameDraw[] = [];
+  let cursor = "now";
+  for (let page = 0; page < 8 && acc.length < maxDraws; page += 1) {
+    const batch = await fetchFdjCompanionDraws(gameId, 20, cursor);
+    if (!batch.length) break;
+    acc.push(...batch);
+    const oldest = batch[batch.length - 1];
+    if (!oldest?.plannedAt || batch.length < 20) break;
+    cursor = oldest.plannedAt;
+    await new Promise((r) => setTimeout(r, 250));
+  }
+  return acc;
 }
