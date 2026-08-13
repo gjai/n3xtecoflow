@@ -6,6 +6,7 @@ import {
 } from "./fdj";
 import { fetchPedroMealhaDraws, fetchUkLatestDraw } from "./fetch";
 import { lotteryFingerprint } from "./fingerprint";
+import { lotteryIndexNowUrls, submitIndexNow } from "@/lib/seo/indexnow";
 import { revalidateLotteryPages } from "./live";
 import {
   readEuroMillionsStore,
@@ -194,7 +195,10 @@ export async function refreshEuroMillionsData(options?: {
   const afterFdj = await readFdjGamesStore();
   const fingerprint = lotteryFingerprint(next, afterFdj);
   const changed = fingerprint !== beforeFp;
-  if (changed) revalidateLotteryPages();
+  if (changed) {
+    revalidateLotteryPages();
+    await submitIndexNow(lotteryIndexNowUrls(next, afterFdj));
+  }
 
   return {
     ok: true,

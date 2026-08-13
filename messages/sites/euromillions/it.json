@@ -288,7 +288,17 @@
     "howExpected": "Su uno storico lungo, ogni pallina (1–50) dovrebbe apparire all’incirca altrettanto spesso (cinque palline per estrazione). Gli scarti osservati sono rumore statistico, non un segnale.",
     "oddsCta": "Guida alle probabilità",
     "disclaimer": "Le frequenze passate non predicono la prossima estrazione. Nessun sistema batte le probabilità.",
-    "meta": "Frequenze, ritardi e jackpot EuroMillions — storico locale."
+    "meta": "Frequenze, ritardi e jackpot EuroMillions — storico locale.",
+    "expectedLine": "Media attesa per numero su questo storico: ~{expected} uscite (5 numeri × estrazioni / 50).",
+    "freqTitle": "Frequenze, numeri 1–50",
+    "freqLead": "Altezza = uscite nell’archivio locale. Non è un pronostico.",
+    "freqCaption": "Griglia 1–50 · uscite osservate",
+    "delayTitle": "Scarti attuali, numeri 1–50",
+    "delayLead": "Altezza = estrazioni dall’ultima uscita. Uno scarto lungo non alza la probabilità.",
+    "delayCaption": "Griglia 1–50 · scarto attuale",
+    "starsBoardTitle": "Stelle 1–12 (uscite)",
+    "starsFreqCaption": "Frequenze delle 12 stelle",
+    "allStars": "Tutte le stelle (1–12)"
   },
   "notFound": {
     "title": "Pagina non trovata",
@@ -391,7 +401,8 @@
   "guides": {
     "title": "Guide",
     "subtitle": "EuroMillions, Loto, EuroDreams, Keno, Crescendo: leggere i risultati, orari, gioco responsabile.",
-    "cta": "Leggi"
+    "cta": "Leggi",
+    "faqTitle": "Domande frequenti"
   },
   "amazon": {
     "badge": "Indipendenza",

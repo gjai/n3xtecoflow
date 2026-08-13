@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
+import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
+import { JackpotBars, StatBoard } from "@/components/EuroMillionsStatCharts";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -95,6 +97,7 @@ export default async function StatsPage({
   const jackpots = jackpotHistory(draws, 12);
 
   return (
+    <>
     <main className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-20">
       <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
         {t("title")}
@@ -105,6 +108,11 @@ export default async function StatsPage({
       <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("subtitle")}</p>
       <p className="mt-2 text-sm text-[var(--accent)]">
         {t("sample", { count: draws.length })}
+      </p>
+      <p className="mt-1 text-sm text-[var(--muted)]">
+        {t("expectedLine", {
+          expected: Math.round((draws.length * 5) / 50),
+        })}
       </p>
       <section className="mt-8 max-w-3xl border border-[var(--line)] bg-[var(--surface)] p-5">
         <h2 className="text-lg font-semibold text-[var(--heading)]">
@@ -118,6 +126,47 @@ export default async function StatsPage({
         >
           {t("oddsCta")} →
         </Link>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-lg font-semibold text-[var(--heading)]">
+          {t("freqTitle")}
+        </h2>
+        <p className="mt-2 text-sm text-[var(--muted)]">{t("freqLead")}</p>
+        <div className="mt-6">
+          <StatBoard
+            items={numbers}
+            mode="count"
+            caption={t("freqCaption")}
+          />
+        </div>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-lg font-semibold text-[var(--heading)]">
+          {t("delayTitle")}
+        </h2>
+        <p className="mt-2 text-sm text-[var(--muted)]">{t("delayLead")}</p>
+        <div className="mt-6">
+          <StatBoard
+            items={numbers}
+            mode="delay"
+            caption={t("delayCaption")}
+          />
+        </div>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-lg font-semibold text-[var(--heading)]">
+          {t("starsBoardTitle")}
+        </h2>
+        <div className="mt-6 max-w-3xl">
+          <StatBoard
+            items={stars}
+            mode="count"
+            caption={t("starsFreqCaption")}
+          />
+        </div>
       </section>
 
       <div className="mt-10 grid gap-10 md:grid-cols-2">
@@ -193,12 +242,50 @@ export default async function StatsPage({
         </div>
       </section>
 
+      <section className="mt-14">
+        <h2 className="text-lg font-semibold text-[var(--heading)]">
+          {t("allStars")}
+        </h2>
+        <div className="mt-4 overflow-x-auto border border-[var(--line)]">
+          <table className="w-full min-w-[480px] text-left text-sm">
+            <thead className="bg-[var(--surface)] text-xs uppercase tracking-[0.12em] text-[var(--muted)]">
+              <tr>
+                <th className="px-3 py-2 font-medium">{t("colNumber")}</th>
+                <th className="px-3 py-2 font-medium">{t("colCount")}</th>
+                <th className="px-3 py-2 font-medium">{t("colDelay")}</th>
+                <th className="px-3 py-2 font-medium">{t("colMaxDelay")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stars.map((s) => (
+                <tr key={s.n} className="border-t border-[var(--line)]">
+                  <td className="px-3 py-2 font-semibold text-[var(--heading)]">
+                    {s.n}
+                  </td>
+                  <td className="px-3 py-2 text-[var(--muted)]">{s.count}</td>
+                  <td className="px-3 py-2 text-[var(--muted)]">{s.delay}</td>
+                  <td className="px-3 py-2 text-[var(--muted)]">{s.maxDelay}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       {jackpots.length > 0 ? (
         <section className="mt-14">
           <h2 className="text-lg font-semibold text-[var(--heading)]">
             {t("jackpotsTitle")}
           </h2>
-          <ul className="mt-4 divide-y divide-[var(--line)] border border-[var(--line)]">
+          <div className="mt-6 max-w-3xl">
+            <JackpotBars
+              rows={jackpots}
+              formatMoney={(n) => formatMoney(n, locale)}
+              wonLabel={t("jackpotWon")}
+              rolloverLabel={t("jackpotRollover")}
+            />
+          </div>
+          <ul className="mt-8 divide-y divide-[var(--line)] border border-[var(--line)]">
             {jackpots.map((j) => (
               <li key={j.date} className="flex items-center justify-between px-4 py-3 text-sm">
                 <Link
@@ -225,5 +312,7 @@ export default async function StatsPage({
         {t("disclaimer")}
       </p>
     </main>
+    <EuroMillionsOffersBlock site={site} locale={locale} variant="compact" />
+    </>
   );
 }

@@ -28,6 +28,7 @@ import { resolveAffiliateOffers } from "@/lib/affiliates";
 import { siteAmazonFallbackQuery } from "@/sites/copy";
 import { siteAllowsAmazon, siteIsEuroMillions, siteShowsProducts } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
+import { EuroMillionsGuideFaq } from "@/components/EuroMillionsGuideFaq";
 import { redirect } from "@/i18n/navigation";
 
 export const revalidate = 600;
@@ -223,6 +224,9 @@ export default async function GuideArticlePage({
           ) : undefined
         }
       />
+      {siteIsEuroMillions(site) ? (
+        <EuroMillionsGuideFaq slug={slug} locale={locale} />
+      ) : null}
     </article>
   );
 }

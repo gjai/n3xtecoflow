@@ -288,7 +288,17 @@
     "howExpected": "Over een lange geschiedenis zou elke bal (1–50) ongeveer even vaak moeten verschijnen (vijf ballen per trekking). Waargenomen afwijkingen zijn statistische ruis, geen signaal.",
     "oddsCta": "Kansengids",
     "disclaimer": "Voorbije frequenties voorspellen de volgende trekking niet. Geen enkel systeem verslaat de kansen.",
-    "meta": "EuroMillions-frequenties, achterstanden en jackpots — lokale geschiedenis."
+    "meta": "EuroMillions-frequenties, achterstanden en jackpots — lokale geschiedenis.",
+    "expectedLine": "Verwacht gemiddelde per nummer in deze geschiedenis: ~{expected} treffers (5 ballen × trekkingen / 50).",
+    "freqTitle": "Frequenties, nummers 1–50",
+    "freqLead": "Hoogte = treffers in het lokale archief. Geen prognose.",
+    "freqCaption": "Bord 1–50 · waargenomen treffers",
+    "delayTitle": "Huidige achterstanden, nummers 1–50",
+    "delayLead": "Hoogte = trekkingen sinds de laatste treffer. Een lange achterstand verhoogt de kans niet.",
+    "delayCaption": "Bord 1–50 · huidige achterstand",
+    "starsBoardTitle": "Sterren 1–12 (treffers)",
+    "starsFreqCaption": "Frequenties van de 12 sterren",
+    "allStars": "Alle sterren (1–12)"
   },
   "notFound": {
     "title": "Pagina niet gevonden",
@@ -391,7 +401,8 @@
   "guides": {
     "title": "Gidsen",
     "subtitle": "EuroMillions, Loto, EuroDreams, Keno, Crescendo: uitslagen lezen, tijden, verantwoord spelen.",
-    "cta": "Lezen"
+    "cta": "Lezen",
+    "faqTitle": "Veelgestelde vragen"
   },
   "amazon": {
     "badge": "Onafhankelijkheid",

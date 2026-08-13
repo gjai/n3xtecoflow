@@ -288,7 +288,17 @@
     "howExpected": "Num histórico longo, cada bola (1–50) deveria aparecer aproximadamente com a mesma frequência (cinco bolas por sorteio). Os desvios observados são ruído estatístico, não um sinal.",
     "oddsCta": "Guia das probabilidades",
     "disclaimer": "As frequências passadas não preveem o próximo sorteio. Nenhum sistema bate as probabilidades.",
-    "meta": "Frequências, atrasos e jackpots EuroMillions — histórico local."
+    "meta": "Frequências, atrasos e jackpots EuroMillions — histórico local.",
+    "expectedLine": "Média esperada por número neste histórico: ~{expected} saídas (5 bolas × sorteios / 50).",
+    "freqTitle": "Frequências, números 1–50",
+    "freqLead": "Altura = saídas no arquivo local. Não é um prognóstico.",
+    "freqCaption": "Quadro 1–50 · saídas observadas",
+    "delayTitle": "Atrasos actuais, números 1–50",
+    "delayLead": "Altura = sorteios desde a última saída. Um atraso longo não aumenta a probabilidade.",
+    "delayCaption": "Quadro 1–50 · atraso actual",
+    "starsBoardTitle": "Estrelas 1–12 (saídas)",
+    "starsFreqCaption": "Frequências das 12 estrelas",
+    "allStars": "Todas as estrelas (1–12)"
   },
   "notFound": {
     "title": "Página não encontrada",
@@ -391,7 +401,8 @@
   "guides": {
     "title": "Guias",
     "subtitle": "EuroMillions, Loto, EuroDreams, Keno, Crescendo: ler resultados, horários, jogo responsável.",
-    "cta": "Ler"
+    "cta": "Ler",
+    "faqTitle": "Perguntas frequentes"
   },
   "amazon": {
     "badge": "Independência",

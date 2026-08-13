@@ -288,7 +288,17 @@
     "howExpected": "Sur un historique long, chaque boule (1–50) devrait apparaître à peu près aussi souvent (cinq boules par tirage). Les écarts observés sont du bruit statistique, pas un signal.",
     "oddsCta": "Guide des probabilités",
     "disclaimer": "Les fréquences passées ne prédisent pas le prochain tirage. Aucun système ne bat les probabilités.",
-    "meta": "Fréquences, écarts et jackpots EuroMillions — historique local."
+    "meta": "Fréquences, écarts et jackpots EuroMillions — historique local.",
+    "expectedLine": "Moyenne attendue par boule sur cet historique : ~{expected} sorties (5 boules × tirages / 50).",
+    "freqTitle": "Fréquences, boules 1–50",
+    "freqLead": "Hauteur = nombre de sorties dans l’archive locale. Pas un pronostic.",
+    "freqCaption": "Tableau 1–50 · sorties observées",
+    "delayTitle": "Écarts actuels, boules 1–50",
+    "delayLead": "Hauteur = tirages depuis la dernière apparition. Un écart long n’augmente pas la chance au prochain tirage.",
+    "delayCaption": "Tableau 1–50 · écart actuel",
+    "starsBoardTitle": "Étoiles 1–12 (sorties)",
+    "starsFreqCaption": "Fréquences des 12 étoiles",
+    "allStars": "Toutes les étoiles (1–12)"
   },
   "notFound": {
     "title": "Page introuvable",
@@ -391,7 +401,8 @@
   "guides": {
     "title": "Guides",
     "subtitle": "EuroMillions, Loto, EuroDreams, Keno, Crescendo : lecture des résultats, horaires, jeu responsable.",
-    "cta": "Lire"
+    "cta": "Lire",
+    "faqTitle": "Questions fréquentes"
   },
   "amazon": {
     "badge": "Indépendance",

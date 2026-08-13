@@ -29,6 +29,7 @@ export function revalidateLotteryPages() {
     "/[locale]/prochain-tirage",
     "/[locale]/jeux",
     "/[locale]/jeux/[game]",
+    "/[locale]/jeux/[game]/[draw]",
     "/[locale]/stats",
     "/[locale]/simulateur",
   ] as const;

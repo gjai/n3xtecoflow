@@ -288,7 +288,17 @@
     "howExpected": "Über eine lange Historie sollte jede Kugel (1–50) etwa gleich oft erscheinen (fünf Kugeln pro Ziehung). Beobachtete Abweichungen sind statistisches Rauschen, kein Signal.",
     "oddsCta": "Wahrscheinlichkeits-Guide",
     "disclaimer": "Vergangene Häufigkeiten sagen die nächste Ziehung nicht voraus. Kein System schlägt die Wahrscheinlichkeiten.",
-    "meta": "EuroMillions-Häufigkeiten, Rückstände und Jackpots — lokale Historie."
+    "meta": "EuroMillions-Häufigkeiten, Rückstände und Jackpots — lokale Historie.",
+    "expectedLine": "Erwarteter Mittelwert je Zahl in dieser Historie: ~{expected} Treffer (5 Kugeln × Ziehungen / 50).",
+    "freqTitle": "Häufigkeiten, Zahlen 1–50",
+    "freqLead": "Höhe = Treffer im lokalen Archiv. Keine Prognose.",
+    "freqCaption": "Tafel 1–50 · beobachtete Treffer",
+    "delayTitle": "Aktuelle Abstände, Zahlen 1–50",
+    "delayLead": "Höhe = Ziehungen seit dem letzten Treffer. Ein langer Abstand erhöht nicht die Chance.",
+    "delayCaption": "Tafel 1–50 · aktueller Abstand",
+    "starsBoardTitle": "Sterne 1–12 (Treffer)",
+    "starsFreqCaption": "Häufigkeiten der 12 Sterne",
+    "allStars": "Alle Sterne (1–12)"
   },
   "notFound": {
     "title": "Seite nicht gefunden",
@@ -391,7 +401,8 @@
   "guides": {
     "title": "Guides",
     "subtitle": "EuroMillions, Loto, EuroDreams, Keno, Crescendo: Ergebnisse lesen, Zeiten, verantwortungsvolles Spiel.",
-    "cta": "Lesen"
+    "cta": "Lesen",
+    "faqTitle": "Häufige Fragen"
   },
   "amazon": {
     "badge": "Unabhängigkeit",
