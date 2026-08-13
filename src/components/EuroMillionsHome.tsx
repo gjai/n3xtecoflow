@@ -137,11 +137,6 @@ export async function EuroMillionsHome({
         pending={pending}
         locale={locale}
       />
-      <div className="border-b border-[var(--line)] bg-[var(--bg)]">
-        <div className="mx-auto max-w-6xl px-5 py-3 md:px-8">
-          <GameToolsNav gameId="euromillions" />
-        </div>
-      </div>
       <section className="relative overflow-hidden border-b border-[var(--line)]">
         <div
           className="pointer-events-none absolute inset-0 opacity-90"
