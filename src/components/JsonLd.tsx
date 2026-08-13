@@ -152,3 +152,56 @@ export function articleJsonLd(args: {
     publisher: { "@type": "Organization", name: publisher },
   };
 }
+
+export function faqJsonLd(items: { question: string; answer: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+}
+
+export function breadcrumbJsonLd(
+  items: { name: string; url: string }[],
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
+export function lotteryDrawJsonLd(args: {
+  siteUrl: string;
+  locale: string;
+  date: string;
+  title: string;
+  description: string;
+  numbers: number[];
+  stars: number[];
+  jackpotEur?: number | null;
+  myMillionCode?: string | null;
+  publisherName: string;
+}) {
+  const url = `${args.siteUrl}/${args.locale}/tirages/${args.date}`;
+  return articleJsonLd({
+    title: args.title,
+    description: args.description,
+    url,
+    locale: args.locale,
+    datePublished: args.date,
+    publisherName: args.publisherName,
+  });
+}

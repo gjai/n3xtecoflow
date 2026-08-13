@@ -1,7 +1,15 @@
 import type { Locale } from "./routing";
 
 /** All locales the app can route (global). Per-site allow-lists filter further. */
-export const APP_LOCALES = ["fr", "en", "it", "es", "pt", "de"] as const;
+export const APP_LOCALES = [
+  "fr",
+  "en",
+  "it",
+  "es",
+  "pt",
+  "de",
+  "nl",
+] as const;
 
 export type AppLocale = (typeof APP_LOCALES)[number];
 
@@ -16,6 +24,20 @@ export const CASINO_LOCALES: AppLocale[] = [
   "de",
 ];
 
+/**
+ * Pays où l’on peut jouer à l’EuroMillions :
+ * FR, UK/IE (en), ES, PT, AT/CH/LU/BE (de), CH-TI (it), BE-VL (nl).
+ */
+export const EUROMILLIONS_LOCALES: AppLocale[] = [
+  "fr",
+  "en",
+  "it",
+  "es",
+  "pt",
+  "de",
+  "nl",
+];
+
 export const LOCALE_LABELS: Record<AppLocale, string> = {
   fr: "Français",
   en: "English",
@@ -23,6 +45,7 @@ export const LOCALE_LABELS: Record<AppLocale, string> = {
   es: "Español",
   pt: "Português",
   de: "Deutsch",
+  nl: "Nederlands",
 };
 
 export const OG_LOCALE: Record<AppLocale, string> = {
@@ -32,16 +55,23 @@ export const OG_LOCALE: Record<AppLocale, string> = {
   es: "es_ES",
   pt: "pt_PT",
   de: "de_DE",
+  nl: "nl_BE",
 };
 
 export const DATE_LOCALE: Record<AppLocale, string> = {
   fr: "fr-FR",
-  en: "en-US",
+  en: "en-GB",
   it: "it-IT",
   es: "es-ES",
   pt: "pt-PT",
   de: "de-DE",
+  nl: "nl-BE",
 };
+
+/** BCP 47 tag for `Intl` date/money (UK English for lottery, not en-US). */
+export function intlLocale(locale: string): string {
+  return DATE_LOCALE[toAppLocale(locale)];
+}
 
 export function isAppLocale(value: string): value is AppLocale {
   return (APP_LOCALES as readonly string[]).includes(value);

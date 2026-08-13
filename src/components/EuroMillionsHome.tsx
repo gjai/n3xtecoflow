@@ -1,10 +1,10 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { SmartCover } from "@/components/SmartCover";
 import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
 import { FdjCompanionGamesBlock } from "@/components/FdjCompanionGamesBlock";
 import { NextJackpotBanner } from "@/components/NextJackpotBanner";
-import { GameToolsNav } from "@/components/EuroMillionsNav";
 import {
   EUROMILLIONS_MAIN_GUIDE_SLUG,
   EUROMILLIONS_MY_MILLION_GUIDE_SLUG,
@@ -15,7 +15,7 @@ import {
 } from "@/data/euromillions-guides";
 import { ResultsLivePoller } from "@/components/ResultsLivePoller";
 import { getEditorialImages } from "@/data/images";
-import { usesEnglishFallback } from "@/i18n/locales";
+import { intlLocale, usesEnglishFallback } from "@/i18n/locales";
 import type { EuroMillionsDraw, EuroMillionsStore } from "@/lib/euromillions/types";
 import { euroMillionsResultPending } from "@/lib/euromillions/datetime";
 import {
@@ -29,7 +29,7 @@ import type { SiteConfig } from "@/sites/types";
 
 function formatMoney(amount: number | null | undefined, locale: string) {
   if (amount == null || !Number.isFinite(amount)) return null;
-  return new Intl.NumberFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.NumberFormat(intlLocale(locale), {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: 0,
@@ -39,7 +39,7 @@ function formatMoney(amount: number | null | undefined, locale: string) {
 function formatDate(iso: string, locale: string) {
   const d = new Date(`${iso}T12:00:00Z`);
   if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.DateTimeFormat(intlLocale(locale), {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -267,6 +267,10 @@ export async function EuroMillionsHome({
           </div>
         </div>
       </section>
+
+      <div className="mx-auto max-w-6xl px-5 py-8 md:px-8">
+        <AdSenseUnit label={t("adsLabel")} />
+      </div>
 
       <section className="border-b border-[var(--line)] bg-[var(--bg)]">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-8 md:px-8">

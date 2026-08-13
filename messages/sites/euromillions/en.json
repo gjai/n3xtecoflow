@@ -95,7 +95,16 @@
     "feature2Title": "Simulator",
     "feature2Text": "Check winnings for a date, or whether the combo already appeared.",
     "feature3Title": "Auto news",
-    "feature3Text": "Press digest refreshed automatically — jackpots and draws."
+    "feature3Text": "Press digest refreshed automatically — jackpots and draws.",
+    "adsLabel": "Advertisement",
+    "faqWhenQ": "When is the EuroMillions draw?",
+    "faqWhenA": "Usually on Tuesdays and Fridays around 9pm (Paris time). Exact times are set by the operators. This site shows the latest published result and a countdown to the next draw.",
+    "faqCheckQ": "How do I check a EuroMillions grid?",
+    "faqCheckA": "Use the simulator: pick 5 numbers and 2 stars, then the draw date. The tool compares your grid with the official result and shows the prize tier if any. We do not validate physical tickets.",
+    "faqMyMillionQ": "What is My Million?",
+    "faqMyMillionA": "My Million is a unique code attached to EuroMillions grids played in France. The My Million prize is separate from the jackpot. The My Million page lists published codes and lets you compare yours.",
+    "faqTicketsQ": "Does this site sell tickets?",
+    "faqTicketsA": "No. EuroMillions Results is an independent editorial site: results, archives and tools. To play, use a licensed operator in your country. 18+ · play responsibly."
   },
   "games": {
     "eyebrow": "Other FDJ draws",
@@ -192,8 +201,9 @@
     "empty": "No archives yet.",
     "back": "Back to results",
     "jackpot": "Jackpot",
-    "drawOf": "Draw of {date}",
+    "drawOf": "EuroMillions result for {date}",
     "meta": "EuroMillions archives and results by date.",
+    "drawMeta": "Numbers, stars, jackpot and My Million for the EuroMillions draw on {date}. Independent site, 18+.",
     "source": "Data source",
     "updated": "Updated",
     "myMillion": "My Million code",

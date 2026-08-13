@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { intlLocale } from "@/i18n/locales";
 import {
   EM_DRAW_HOUR,
   EM_DRAW_MINUTE,
@@ -51,7 +52,7 @@ export function NextJackpotBanner({
 
   const parts = target ? splitRemaining(target.getTime() - now) : null;
   const dateLabel = target
-    ? new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+    ? new Intl.DateTimeFormat(intlLocale(locale), {
         weekday: "long",
         day: "numeric",
         month: "long",

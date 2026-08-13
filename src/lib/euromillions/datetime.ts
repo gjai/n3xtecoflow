@@ -1,3 +1,5 @@
+import { intlLocale } from "@/i18n/locales";
+
 const PARIS = "Europe/Paris";
 
 export function parisDateKey(date = new Date()): string {
@@ -79,7 +81,7 @@ export function parisHourMinute(date = new Date()): { hour: number; minute: numb
 export function formatParisTime(iso: string, locale: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.DateTimeFormat(intlLocale(locale), {
     timeZone: PARIS,
     hour: "2-digit",
     minute: "2-digit",
@@ -89,7 +91,7 @@ export function formatParisTime(iso: string, locale: string): string {
 export function formatParisDateTime(iso: string, locale: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.DateTimeFormat(intlLocale(locale), {
     timeZone: PARIS,
     weekday: "long",
     day: "numeric",

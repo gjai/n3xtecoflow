@@ -1,3 +1,4 @@
+import { intlLocale } from "@/i18n/locales";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { FDJ_COMPANION_GAMES } from "@/lib/fdj-games/catalog";
@@ -9,7 +10,7 @@ import { companionResultPending, formatDrawWhen } from "@/lib/fdj-games/display"
 function formatDate(iso: string, locale: string) {
   const d = new Date(`${iso}T12:00:00Z`);
   if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.DateTimeFormat(intlLocale(locale), {
     weekday: "short",
     day: "numeric",
     month: "short",
@@ -18,7 +19,7 @@ function formatDate(iso: string, locale: string) {
 
 function formatMoney(amount: number | null | undefined, locale: string) {
   if (amount == null || !Number.isFinite(amount)) return null;
-  return new Intl.NumberFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.NumberFormat(intlLocale(locale), {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: 0,

@@ -1,8 +1,15 @@
+import { intlLocale } from "@/i18n/locales";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
+import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
+import {
+  JsonLd,
+  breadcrumbJsonLd,
+  lotteryDrawJsonLd,
+} from "@/components/JsonLd";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { DrawBalls } from "@/components/EuroMillionsHome";
 import { siteLocaleAlternates } from "@/lib/seo";
@@ -26,9 +33,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, date } = await params;
   const t = await getTranslations({ locale, namespace: "draws" });
+  const pretty = formatDate(date, locale);
   return {
-    title: t("drawOf", { date }),
-    description: t("meta"),
+    title: t("drawOf", { date: pretty }),
+    description: t("drawMeta", { date: pretty }),
     alternates: await siteLocaleAlternates(locale, `/tirages/${date}`),
   };
 }
@@ -36,7 +44,7 @@ export async function generateMetadata({
 function formatDate(iso: string, locale: string) {
   const d = new Date(`${iso}T12:00:00Z`);
   if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.DateTimeFormat(intlLocale(locale), {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -46,7 +54,7 @@ function formatDate(iso: string, locale: string) {
 
 function formatMoney(amount: number | null | undefined, locale: string) {
   if (amount == null || !Number.isFinite(amount)) return null;
-  return new Intl.NumberFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.NumberFormat(intlLocale(locale), {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: amount < 10 ? 2 : 0,
@@ -70,9 +78,34 @@ export default async function TirageDetailPage({
   if (!draw) notFound();
 
   const jackpot = formatMoney(draw.jackpotEur, locale);
+  const prettyDate = formatDate(draw.date, locale);
+  const title = t("drawOf", { date: prettyDate });
+  const description = t("drawMeta", { date: prettyDate });
+  const siteUrl = `https://${site.primaryHost}`;
 
   return (
     <>
+      <JsonLd
+        data={lotteryDrawJsonLd({
+          siteUrl,
+          locale,
+          date: draw.date,
+          title,
+          description,
+          numbers: draw.numbers,
+          stars: draw.stars,
+          jackpotEur: draw.jackpotEur,
+          myMillionCode: draw.myMillionCode,
+          publisherName: site.brand.name,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: site.brand.name, url: `${siteUrl}/${locale}` },
+          { name: t("title"), url: `${siteUrl}/${locale}/tirages` },
+          { name: title, url: `${siteUrl}/${locale}/tirages/${draw.date}` },
+        ])}
+      />
       <main className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-20">
         <Link
           href="/tirages"
@@ -82,7 +115,7 @@ export default async function TirageDetailPage({
         </Link>
         <GameToolsNav gameId="euromillions" />
         <h1 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
-          {t("drawOf", { date: formatDate(draw.date, locale) })}
+          {t("drawOf", { date: prettyDate })}
         </h1>
         {jackpot ? (
           <p className="mt-3 text-[var(--muted)]">
@@ -119,6 +152,10 @@ export default async function TirageDetailPage({
               </p>
             </div>
           ) : null}
+        </div>
+
+        <div className="mt-8">
+          <AdSenseUnit label={homeT("adsLabel")} />
         </div>
 
         {draw.prizeTiers && draw.prizeTiers.length > 0 ? (
@@ -178,7 +215,7 @@ export default async function TirageDetailPage({
         <p className="mt-6 text-xs text-[var(--muted)]">
           {t("source")} · {draw.source}
           {store.updatedAt
-            ? ` · ${t("updated")} ${new Date(store.updatedAt).toLocaleString(locale === "en" ? "en-GB" : "fr-FR")}`
+            ? ` · ${t("updated")} ${new Date(store.updatedAt).toLocaleString(intlLocale(locale))}`
             : ""}
         </p>
       </main>

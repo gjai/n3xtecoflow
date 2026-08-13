@@ -1,3 +1,4 @@
+import { EUROMILLIONS_LOCALES } from "@/i18n/locales";
 import type { SiteConfig } from "./types";
 
 /**
@@ -8,7 +9,7 @@ export const euromillionsSite: SiteConfig = {
   id: "euromillions",
   primaryHost: "euromillions-resultats.fr",
   hosts: ["euromillions-resultats.fr", "www.euromillions-resultats.fr"],
-  locales: ["fr", "en"],
+  locales: [...EUROMILLIONS_LOCALES],
   brand: {
     name: "EuroMillions Résultats",
     taglineFr:

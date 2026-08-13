@@ -95,7 +95,16 @@
     "feature2Title": "Simulateur",
     "feature2Text": "Vérifiez vos gains pour une date, ou si la combi est déjà sortie.",
     "feature3Title": "Actus auto",
-    "feature3Text": "Revue de presse mise à jour automatiquement — jackpots et tirages."
+    "feature3Text": "Revue de presse mise à jour automatiquement — jackpots et tirages.",
+    "adsLabel": "Publicité",
+    "faqWhenQ": "Quand a lieu le tirage EuroMillions ?",
+    "faqWhenA": "En général le mardi et le vendredi vers 21h (heure de Paris). Les horaires exacts relèvent des opérateurs. Ce site affiche le dernier résultat publié et un compte à rebours vers le prochain tirage.",
+    "faqCheckQ": "Comment vérifier une grille EuroMillions ?",
+    "faqCheckA": "Utilisez le simulateur : choisissez 5 boules et 2 étoiles, puis la date du tirage. L’outil compare votre grille au résultat officiel et indique le rang éventuel. Nous ne validons pas de ticket physique.",
+    "faqMyMillionQ": "Qu’est-ce que My Million ?",
+    "faqMyMillionA": "My Million est un code unique associé aux grilles EuroMillions jouées en France. Le gain My Million est distinct du jackpot. La page My Million liste les codes publiés et permet de comparer les vôtres.",
+    "faqTicketsQ": "Ce site vend-il des tickets ?",
+    "faqTicketsA": "Non. EuroMillions Résultats est un site éditorial indépendant : résultats, archives et outils. Pour jouer, passez par un opérateur légal dans votre pays (en France : réseau agréé, par exemple FDJ). 18+ · jeu responsable."
   },
   "games": {
     "eyebrow": "Autres tirages FDJ",
@@ -192,8 +201,9 @@
     "empty": "Aucune archive pour le moment.",
     "back": "Retour aux résultats",
     "jackpot": "Jackpot",
-    "drawOf": "Tirage du {date}",
+    "drawOf": "Résultat EuroMillions du {date}",
     "meta": "Archives et résultats EuroMillions par date.",
+    "drawMeta": "Boules, étoiles, jackpot et My Million du tirage EuroMillions du {date}. Site indépendant, 18+.",
     "source": "Source des données",
     "updated": "Mis à jour",
     "myMillion": "Code My Million",

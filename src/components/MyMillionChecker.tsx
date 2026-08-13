@@ -1,5 +1,6 @@
 "use client";
 
+import { intlLocale } from "@/i18n/locales";
 import { useMemo, useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -17,7 +18,7 @@ type CodedDraw = {
 function formatDate(iso: string, locale: string) {
   const d = new Date(`${iso}T12:00:00Z`);
   if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.DateTimeFormat(intlLocale(locale), {
     weekday: "short",
     year: "numeric",
     month: "long",

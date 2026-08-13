@@ -1,6 +1,7 @@
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { ArticleBody, type ArticleProductCard } from "@/components/ArticleBody";
 import { ArticleCover } from "@/components/ArticleCover";
 import {
@@ -118,6 +119,7 @@ export default async function GuideArticlePage({
   const guide = await resolveGuide(slug, site.id);
   if (!guide) notFound();
   const copy = getGuideCopy(guide, locale);
+  const adsT = await getTranslations("home");
   const isEn = locale !== "fr";
   const ecoflowMap =
     site.id === "ecoflow" ? await getEcoflowEntriesMap() : {};
@@ -187,6 +189,11 @@ export default async function GuideArticlePage({
             slug={slug}
             locale={locale}
           />
+        </div>
+      ) : null}
+      {siteIsEuroMillions(site) ? (
+        <div className="mx-auto max-w-3xl px-5 pt-8 md:px-8">
+          <AdSenseUnit label={adsT("adsLabel")} />
         </div>
       ) : null}
       <ArticleBody

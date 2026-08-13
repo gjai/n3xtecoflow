@@ -1,3 +1,4 @@
+import { intlLocale } from "@/i18n/locales";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
@@ -32,7 +33,7 @@ export async function generateMetadata({
 function formatDate(iso: string, locale: string) {
   const d = new Date(`${iso}T12:00:00Z`);
   if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.DateTimeFormat(intlLocale(locale), {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -40,7 +41,7 @@ function formatDate(iso: string, locale: string) {
 }
 
 function formatMoney(amount: number, locale: string) {
-  return new Intl.NumberFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.NumberFormat(intlLocale(locale), {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: 0,

@@ -1,3 +1,4 @@
+import { intlLocale } from "@/i18n/locales";
 import type { FdjCompanionGameId, FdjGameDraw } from "./types";
 import {
   formatParisTime,
@@ -58,7 +59,7 @@ export function companionScheduleSummary(
   }
   const names = DRAW_WEEKDAYS[gameId].map((day) => {
     const date = new Date(Date.UTC(2026, 0, 4 + day));
-    return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+    return new Intl.DateTimeFormat(intlLocale(locale), {
       weekday: "long",
       timeZone: "UTC",
     }).format(date);

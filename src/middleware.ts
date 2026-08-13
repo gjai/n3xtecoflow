@@ -53,7 +53,7 @@ export const config = {
   matcher: [
     "/",
     "/favicon.ico",
-    "/(fr|en|it|es|pt|de)/:path*",
+    "/(fr|en|it|es|pt|de|nl)/:path*",
     "/((?!api|_next|_vercel|.*\\..*).*)",
   ],
 };

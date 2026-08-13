@@ -1,4 +1,5 @@
 import type { GuideArticle } from "./articles";
+import { euromillionsGuideLocales } from "./euromillions-guide-locales";
 
 export const EUROMILLIONS_MAIN_GUIDE_SLUG = "comprendre-euromillions";
 export const EUROMILLIONS_ODDS_GUIDE_SLUG = "probabilites-euromillions";
@@ -28,7 +29,7 @@ export const euromillionsGuideCovers: Record<
   [EUROMILLIONS_OTHER_GAMES_GUIDE_SLUG]: COVER_META,
 };
 
-export const euromillionsGuides: GuideArticle[] = [
+export const euromillionsGuidesRaw: GuideArticle[] = [
   {
     slug: EUROMILLIONS_MAIN_GUIDE_SLUG,
     fr: {
@@ -442,3 +443,9 @@ export const euromillionsGuides: GuideArticle[] = [
     },
   },
 ];
+
+export const euromillionsGuides: GuideArticle[] =
+  euromillionsGuidesRaw.map((guide) => {
+    const extra = euromillionsGuideLocales[guide.slug];
+    return extra ? { ...guide, ...extra } : guide;
+  });

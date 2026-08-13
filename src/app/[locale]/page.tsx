@@ -7,7 +7,7 @@ import { AmazonButton } from "@/components/AmazonButton";
 import { CoverImage } from "@/components/CoverImage";
 import { SmartCover } from "@/components/SmartCover";
 import { HeroSlider, type HeroSlide } from "@/components/HeroSlider";
-import { JsonLd, organizationJsonLd, websiteJsonLd } from "@/components/JsonLd";
+import { JsonLd, faqJsonLd, organizationJsonLd, websiteJsonLd } from "@/components/JsonLd";
 import { AMAZON_QUERIES, buildAmazonSearchUrl } from "@/lib/amazon";
 import {
   categoryImages,
@@ -72,6 +72,11 @@ export async function generateMetadata({
       ? pickLocalized(locale, {
           fr: "Résultats EuroMillions : tirages & archives | EuroMillions Résultats",
           en: "EuroMillions results: draws & archives | EuroMillions Results",
+          it: "Risultati EuroMillions: estrazioni e archivi | EuroMillions Risultati",
+          es: "Resultados EuroMillions: sorteos y archivos | EuroMillions Resultados",
+          pt: "Resultados EuroMillions: sorteios e arquivos | EuroMillions Resultados",
+          de: "EuroMillions-Ergebnisse: Ziehungen & Archiv | EuroMillions Ergebnisse",
+          nl: "EuroMillions-resultaten: trekkingen & archief | EuroMillions Resultaten",
         })
       : site.brand.name;
   return {
@@ -110,6 +115,14 @@ export default async function HomePage({
         <>
           <JsonLd data={organizationJsonLd(site)} />
           <JsonLd data={websiteJsonLd(site)} />
+          <JsonLd
+            data={faqJsonLd([
+              { question: t("faqWhenQ"), answer: t("faqWhenA") },
+              { question: t("faqCheckQ"), answer: t("faqCheckA") },
+              { question: t("faqMyMillionQ"), answer: t("faqMyMillionA") },
+              { question: t("faqTicketsQ"), answer: t("faqTicketsA") },
+            ])}
+          />
           <EuroMillionsHome
             site={site}
             locale={locale}

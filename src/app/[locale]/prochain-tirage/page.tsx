@@ -1,3 +1,4 @@
+import { intlLocale } from "@/i18n/locales";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
@@ -32,7 +33,7 @@ export async function generateMetadata({
 
 function formatMoney(amount: number | null | undefined, locale: string) {
   if (amount == null || !Number.isFinite(amount)) return null;
-  return new Intl.NumberFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.NumberFormat(intlLocale(locale), {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: 0,

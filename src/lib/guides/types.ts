@@ -17,6 +17,7 @@ export type GuideEntry = {
   es?: GuideLocaleCopy;
   pt?: GuideLocaleCopy;
   de?: GuideLocaleCopy;
+  nl?: GuideLocaleCopy;
   imageSrc?: string;
   imageCredit?: string;
   model?: string;

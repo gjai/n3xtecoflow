@@ -265,6 +265,7 @@ function fromStatic(slug: string): GuideEntry | null {
     ...(g.es ? { es: loc(g.es) } : {}),
     ...(g.pt ? { pt: loc(g.pt) } : {}),
     ...(g.de ? { de: loc(g.de) } : {}),
+    ...(g.nl ? { nl: loc(g.nl) } : {}),
     model: "static",
     updatedAt: new Date().toISOString(),
     ...(cover

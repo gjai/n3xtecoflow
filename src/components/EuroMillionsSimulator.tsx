@@ -1,5 +1,6 @@
 "use client";
 
+import { intlLocale } from "@/i18n/locales";
 import { useMemo, useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -13,7 +14,7 @@ import {
 
 function formatMoney(amount: number | null | undefined, locale: string) {
   if (amount == null || !Number.isFinite(amount)) return null;
-  return new Intl.NumberFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.NumberFormat(intlLocale(locale), {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: amount < 10 ? 2 : 0,
@@ -23,7 +24,7 @@ function formatMoney(amount: number | null | undefined, locale: string) {
 function formatDate(iso: string, locale: string) {
   const d = new Date(`${iso}T12:00:00Z`);
   if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+  return new Intl.DateTimeFormat(intlLocale(locale), {
     weekday: "short",
     year: "numeric",
     month: "long",

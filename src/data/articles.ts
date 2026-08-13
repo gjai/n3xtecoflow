@@ -32,10 +32,11 @@ export type GuideArticle = {
   es?: LocalizedGuideCopy;
   pt?: LocalizedGuideCopy;
   de?: LocalizedGuideCopy;
+  nl?: LocalizedGuideCopy;
 };
 
 export function getGuideCopy(
-  guide: Pick<GuideArticle, "fr" | "en" | "it" | "es" | "pt" | "de">,
+  guide: Pick<GuideArticle, "fr" | "en" | "it" | "es" | "pt" | "de" | "nl">,
   locale: string,
 ): LocalizedGuideCopy {
   return pickLocalized(locale, {
@@ -45,6 +46,7 @@ export function getGuideCopy(
     es: guide.es,
     pt: guide.pt,
     de: guide.de,
+    nl: guide.nl,
   });
 }
 
