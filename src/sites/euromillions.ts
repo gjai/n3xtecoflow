@@ -102,11 +102,22 @@ export const euromillionsSite: SiteConfig = {
     },
   ],
   monetization: {
-    disableAmazon: true,
+    disableAmazon: false,
     disableAdsense: true,
+    offers: [
+      {
+        id: "fdj",
+        labelFr: "Jouer sur FDJ.fr",
+        labelEn: "Play on FDJ.fr",
+        // Remplacer via FDJ_AFFILIATE_URL après inscription Kwanko :
+        // https://www.fdj.fr/affiliation
+        url: "https://www.fdj.fr/jeux-de-tirage/euromillions-my-million",
+        envKey: "FDJ_AFFILIATE_URL",
+      },
+    ],
   },
   editorial: {
-    amazonQuery: "",
+    amazonQuery: "EuroMillions protège tickets carnet",
     knowsAbout: [
       "EuroMillions",
       "Résultats EuroMillions",
@@ -128,23 +139,27 @@ export const euromillionsSite: SiteConfig = {
     topicLabelFr: "l’EuroMillions (résultats et tirages)",
     topicLabelEn: "EuroMillions (results and draws)",
     guideScope:
-      "EuroMillions / résultats / archives / stats / probabilités / jeu responsable (pas Amazon)",
-    productHintFr: "Guides résultats, archives et probabilités — 18+.",
-    productHintEn: "Results, archives and odds guides — 18+.",
-    checklistFr: "Budget, 18+, comprendre les rangs, vérifier la grille, archives.",
-    checklistEn: "Budget, 18+, understand prize tiers, check your grid, archives.",
+      "EuroMillions / résultats / My Million / archives / stats / probabilités / jeu responsable",
+    productHintFr:
+      "Guides résultats, My Million, archives et probabilités — 18+.",
+    productHintEn:
+      "Results, My Million, archives and odds guides — 18+.",
+    checklistFr:
+      "Budget, 18+, comprendre les rangs, vérifier la grille, code My Million, archives.",
+    checklistEn:
+      "Budget, 18+, understand prize tiers, check your grid, My Million code, archives.",
     newsPerimeter:
       "EuroMillions / jackpot / tirage / FDJ / loterie européenne / My Million",
     newsTitleMustMention:
-      "EuroMillions, jackpot, tirage, loterie ou gagnant",
+      "EuroMillions, jackpot, tirage, loterie, My Million ou gagnant",
     newsBuyingCriteria:
-      "résultat du tirage, jackpot, archives, probabilités, jeu responsable",
-    newsDefaultTags: ["euromillions", "tirage", "resultats", "jackpot"],
+      "résultat du tirage, My Million, jackpot, archives, probabilités, jeu responsable",
+    newsDefaultTags: ["euromillions", "tirage", "resultats", "jackpot", "my-million"],
     newsExtraRules: [
-      "Interdiction Amazon / AdSense dans le texte",
+      "Pas de promesse de gains ; Amazon = accessoires seulement",
       "Ne jamais promettre de méthode pour gagner",
       "Rappeler 18+ et jeu responsable",
-      "Rester factuel sur les montants de jackpot",
+      "Rester factuel sur les montants de jackpot et codes My Million",
     ],
     coverSubject: "EuroMillions lottery editorial cover",
     coverContextDefault:

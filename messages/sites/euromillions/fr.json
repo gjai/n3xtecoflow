@@ -27,6 +27,7 @@
     "results": "Résultats",
     "archive": "Archives",
     "stats": "Stats",
+    "myMillion": "My Million",
     "language": "Langue",
     "openMenu": "Menu",
     "closeMenu": "Fermer",
@@ -59,26 +60,57 @@
     "nextJackpotLabel": "Jackpot estimé",
     "archiveCta": "Voir les archives",
     "statsCta": "Voir les stats",
+    "myMillionLabel": "Code My Million",
+    "myMillionLocation": "Localisation annoncée",
+    "myMillionCta": "Archives My Million",
+    "winnersTitle": "Gagnants My Million (annonces)",
+    "locationUnknown": "Localisation non précisée",
     "empty": "Les résultats seront synchronisés au prochain refresh.",
-    "disclaimer": "Site indépendant, non affilié à la FDJ ni aux opérateurs EuroMillions. 18+ · Jeu responsable.",
+    "disclaimer": "Site indépendant, non affilié à la FDJ ni aux opérateurs EuroMillions. Contient des liens d’affiliation Amazon. 18+ · Jeu responsable.",
     "featuresTitle": "Pourquoi ce site",
     "feature1Title": "Résultats clairs",
-    "feature1Text": "Boules, étoiles et jackpot du dernier tirage.",
+    "feature1Text": "Boules, étoiles, jackpot et code My Million.",
     "feature2Title": "Archives",
-    "feature2Text": "Historique des tirages pour retrouver une date.",
+    "feature2Text": "Historique des tirages et codes My Million.",
     "feature3Title": "Sans illusion",
     "feature3Text": "Stats et probabilités — jamais de « méthode miracle »."
   },
   "draws": {
     "title": "Archives des tirages",
-    "subtitle": "Historique EuroMillions — dates, boules et étoiles.",
+    "subtitle": "Historique EuroMillions — dates, boules, étoiles et My Million.",
     "empty": "Aucune archive pour le moment.",
     "back": "Retour aux résultats",
     "jackpot": "Jackpot",
     "drawOf": "Tirage du {date}",
     "meta": "Archives et résultats EuroMillions par date.",
     "source": "Source des données",
-    "updated": "Mis à jour"
+    "updated": "Mis à jour",
+    "myMillion": "Code My Million",
+    "myMillionLocation": "Localisation",
+    "myMillionArchive": "Voir My Million"
+  },
+  "myMillion": {
+    "title": "My Million — codes & localisations",
+    "subtitle": "Codes gagnants My Million par tirage, et annonces Mag FDJ avec localisation quand disponible.",
+    "meta": "Archives My Million : codes gagnants et localisations des gagnants.",
+    "disclaimer": "Les localisations viennent d’annonces publiques FDJ Mag (pas toujours publiées pour chaque tirage).",
+    "codesTitle": "Codes par tirage",
+    "winnersTitle": "Annonces de gagnants (localisation)",
+    "winnersSubtitle": "Exemples d’annonces Mag — département / ville / Internet.",
+    "empty": "Aucun code My Million synchronisé pour l’instant.",
+    "emptyWinners": "Aucune annonce de localisation pour l’instant.",
+    "locationPending": "Localisation non encore annoncée",
+    "locationUnknown": "Localisation non précisée",
+    "sourceLink": "Source FDJ Mag"
+  },
+  "offersBlock": {
+    "eyebrow": "Accessoires",
+    "title": "Utile autour du tirage",
+    "subtitle": "Pochettes et carnets — produits Amazon, affiliation. Ça n’améliore pas vos chances.",
+    "fdjNote": "18+ · Jeu responsable. Lien FDJ : après inscription affiliation Kwanko, brancher FDJ_AFFILIATE_URL."
+  },
+  "offers": {
+    "fdj": "Jouer sur FDJ.fr"
   },
   "stats": {
     "title": "Statistiques EuroMillions",
@@ -107,7 +139,7 @@
     "independenceTitle": "Indépendance",
     "independenceBody": "Nous ne sommes pas la FDJ ni un opérateur EuroMillions. Aucune vente de tickets.",
     "monetizationTitle": "Monétisation",
-    "monetizationBody": "Pas d’Amazon Associates sur ce domaine. Publicité éventuelle plus tard, clairement signalée."
+    "monetizationBody": "Affiliation Amazon (accessoires) clairement signalée. AdSense prévu plus tard. Lien FDJ possible via le programme Kwanko (fdj.fr/affiliation)."
   },
   "legal": {
     "hubTitle": "Mentions légales",
@@ -175,8 +207,8 @@
   "amazon": {
     "badge": "Indépendance",
     "cta": "Voir",
-    "disclosure": "Site indépendant — pas de vente de tickets EuroMillions.",
-    "disclosureShort": "Site indépendant — pas de vente de tickets.",
+    "disclosure": "Site indépendant — liens d’affiliation Amazon. Pas de vente de tickets EuroMillions.",
+    "disclosureShort": "Affiliation Amazon — pas de vente de tickets.",
     "disclosureLink": "En savoir plus"
   },
   "network": {

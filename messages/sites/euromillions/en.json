@@ -27,6 +27,7 @@
     "results": "Results",
     "archive": "Archives",
     "stats": "Stats",
+    "myMillion": "My Million",
     "language": "Language",
     "openMenu": "Menu",
     "closeMenu": "Close",
@@ -59,26 +60,57 @@
     "nextJackpotLabel": "Estimated jackpot",
     "archiveCta": "Browse archives",
     "statsCta": "View stats",
+    "myMillionLabel": "My Million code",
+    "myMillionLocation": "Announced location",
+    "myMillionCta": "My Million archives",
+    "winnersTitle": "My Million winners (announcements)",
+    "locationUnknown": "Location not specified",
     "empty": "Results will sync on the next refresh.",
-    "disclaimer": "Independent site, not affiliated with FDJ or EuroMillions operators. 18+ · Play responsibly.",
+    "disclaimer": "Independent site, not affiliated with FDJ or EuroMillions operators. Contains Amazon affiliate links. 18+ · Play responsibly.",
     "featuresTitle": "Why this site",
     "feature1Title": "Clear results",
-    "feature1Text": "Numbers, stars and jackpot for the latest draw.",
+    "feature1Text": "Numbers, stars, jackpot and My Million code.",
     "feature2Title": "Archives",
-    "feature2Text": "Draw history so you can look up any date.",
+    "feature2Text": "Draw history and My Million codes.",
     "feature3Title": "No illusions",
     "feature3Text": "Stats and odds — never a “winning system”."
   },
   "draws": {
     "title": "Draw archives",
-    "subtitle": "EuroMillions history — dates, numbers and stars.",
+    "subtitle": "EuroMillions history — dates, numbers, stars and My Million.",
     "empty": "No archives yet.",
     "back": "Back to results",
     "jackpot": "Jackpot",
     "drawOf": "Draw of {date}",
     "meta": "EuroMillions archives and results by date.",
     "source": "Data source",
-    "updated": "Updated"
+    "updated": "Updated",
+    "myMillion": "My Million code",
+    "myMillionLocation": "Location",
+    "myMillionArchive": "Browse My Million"
+  },
+  "myMillion": {
+    "title": "My Million — codes & locations",
+    "subtitle": "Winning My Million codes by draw, plus FDJ Mag announcements with location when available.",
+    "meta": "My Million archives: winning codes and winner locations.",
+    "disclaimer": "Locations come from public FDJ Mag announcements (not always published for every draw).",
+    "codesTitle": "Codes by draw",
+    "winnersTitle": "Winner announcements (location)",
+    "winnersSubtitle": "Mag announcements — department / city / Internet.",
+    "empty": "No My Million codes synced yet.",
+    "emptyWinners": "No location announcements yet.",
+    "locationPending": "Location not announced yet",
+    "locationUnknown": "Location not specified",
+    "sourceLink": "FDJ Mag source"
+  },
+  "offersBlock": {
+    "eyebrow": "Accessories",
+    "title": "Useful around the draw",
+    "subtitle": "Sleeves and notebooks — Amazon affiliate products. They do not improve your odds.",
+    "fdjNote": "18+ · Play responsibly. FDJ link: after Kwanko signup, set FDJ_AFFILIATE_URL."
+  },
+  "offers": {
+    "fdj": "Play on FDJ.fr"
   },
   "stats": {
     "title": "EuroMillions statistics",
@@ -107,7 +139,7 @@
     "independenceTitle": "Independence",
     "independenceBody": "We are not FDJ and not a EuroMillions operator. No ticket sales.",
     "monetizationTitle": "Monetization",
-    "monetizationBody": "No Amazon Associates on this domain. Ads may come later, clearly disclosed."
+    "monetizationBody": "Amazon Associates (accessories) clearly disclosed. AdSense later. FDJ link possible via the Kwanko program (fdj.fr/affiliation)."
   },
   "legal": {
     "hubTitle": "Legal notice",
@@ -175,8 +207,8 @@
   "amazon": {
     "badge": "Independence",
     "cta": "View",
-    "disclosure": "Independent site — no EuroMillions ticket sales.",
-    "disclosureShort": "Independent site — no ticket sales.",
+    "disclosure": "Independent site — Amazon affiliate links. No EuroMillions ticket sales.",
+    "disclosureShort": "Amazon affiliate — no ticket sales.",
     "disclosureLink": "Learn more"
   },
   "network": {

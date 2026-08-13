@@ -29,6 +29,7 @@ export function SiteHeader() {
     ? (
         [
           { href: "/tirages", label: t("archive") },
+          { href: "/my-million", label: t("myMillion") },
           { href: "/stats", label: t("stats") },
           { href: "/guides", label: t("guides") },
           siteShowsNews(site)

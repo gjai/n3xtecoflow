@@ -1,10 +1,18 @@
+import {
+  fetchFdjEuroMillionsDraws,
+  fetchFdjMyMillionWinnerLocations,
+} from "./fdj";
 import { fetchPedroMealhaDraws, fetchUkLatestDraw } from "./fetch";
 import {
   readEuroMillionsStore,
   sortDrawsNewest,
   writeEuroMillionsStore,
 } from "./store";
-import type { EuroMillionsDraw, EuroMillionsStore } from "./types";
+import type {
+  EuroMillionsDraw,
+  EuroMillionsStore,
+  MyMillionWinner,
+} from "./types";
 
 export type EuroMillionsRefreshResult = {
   ok: true;
@@ -12,6 +20,7 @@ export type EuroMillionsRefreshResult = {
   latest: string | null;
   sources: string[];
   yearsFetched: number[];
+  myMillionWinners: number;
 };
 
 function mergeDraws(
@@ -26,7 +35,6 @@ function mergeDraws(
       byDate.set(d.date, d);
       continue;
     }
-    // Prefer richer jackpot / UK latest overlay
     byDate.set(d.date, {
       ...prev,
       ...d,
@@ -35,9 +43,31 @@ function mergeDraws(
       jackpotEur: d.jackpotEur ?? prev.jackpotEur,
       hasWinner: d.hasWinner ?? prev.hasWinner,
       drawId: d.drawId ?? prev.drawId,
+      myMillionCode: d.myMillionCode ?? prev.myMillionCode,
+      myMillionLocation: d.myMillionLocation ?? prev.myMillionLocation,
+      // Prefer FDJ when it has My Million / FR jackpot
+      source:
+        d.source === "fdj" || prev.source === "fdj"
+          ? "fdj"
+          : d.source || prev.source,
     });
   }
   return sortDrawsNewest([...byDate.values()]);
+}
+
+function attachWinnerLocations(
+  draws: EuroMillionsDraw[],
+  winners: MyMillionWinner[],
+): EuroMillionsDraw[] {
+  const byDate = new Map<string, MyMillionWinner>();
+  for (const w of winners) {
+    if (w.date && !byDate.has(w.date)) byDate.set(w.date, w);
+  }
+  return draws.map((d) => {
+    const w = byDate.get(d.date);
+    if (!w?.location) return d;
+    return { ...d, myMillionLocation: d.myMillionLocation || w.location };
+  });
 }
 
 export async function refreshEuroMillionsData(options?: {
@@ -53,13 +83,20 @@ export async function refreshEuroMillionsData(options?: {
   let incoming: EuroMillionsDraw[] = [];
   const yearsFetched: number[] = [];
 
+  try {
+    const fdj = await fetchFdjEuroMillionsDraws(20);
+    incoming = incoming.concat(fdj);
+    sources.push(`fdj:${fdj.length}`);
+  } catch (err) {
+    console.error("euromillions_fdj_fail", err);
+  }
+
   for (const year of years) {
     try {
       const batch = await fetchPedroMealhaDraws(year);
       incoming = incoming.concat(batch);
       yearsFetched.push(year);
       sources.push(`pedromealha:${year}`);
-      // Soft throttle for rate limits
       await new Promise((r) => setTimeout(r, 1200));
     } catch (err) {
       console.error("euromillions_pedro_year_fail", year, err);
@@ -80,7 +117,16 @@ export async function refreshEuroMillionsData(options?: {
     console.error("euromillions_uk_fail", err);
   }
 
-  const draws = mergeDraws(store.draws, incoming);
+  let winners = store.myMillionWinners || [];
+  try {
+    winners = await fetchFdjMyMillionWinnerLocations();
+    sources.push(`fdj-mag-winners:${winners.length}`);
+  } catch (err) {
+    console.error("euromillions_fdj_mag_fail", err);
+  }
+
+  let draws = mergeDraws(store.draws, incoming);
+  draws = attachWinnerLocations(draws, winners);
   const latest = draws[0] || null;
   const next: EuroMillionsStore = {
     updatedAt: new Date().toISOString(),
@@ -88,6 +134,7 @@ export async function refreshEuroMillionsData(options?: {
     nextDrawDate,
     nextJackpotEur,
     draws,
+    myMillionWinners: winners,
   };
   await writeEuroMillionsStore(next);
 
@@ -97,5 +144,6 @@ export async function refreshEuroMillionsData(options?: {
     latest: latest?.date || null,
     sources,
     yearsFetched,
+    myMillionWinners: winners.length,
   };
 }

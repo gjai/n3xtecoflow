@@ -1,3 +1,12 @@
+export type MyMillionWinner = {
+  title: string;
+  location: string | null;
+  /** ISO date when parseable from FDJ Mag slug */
+  date: string | null;
+  sourceUrl: string;
+  fetchedAt: string;
+};
+
 export type EuroMillionsDraw = {
   /** ISO date YYYY-MM-DD (draw day) */
   date: string;
@@ -8,7 +17,11 @@ export type EuroMillionsDraw = {
   /** Jackpot / prize pool when known (EUR) */
   jackpotEur?: number | null;
   hasWinner?: boolean | null;
-  source: "pedromealha" | "uk-lottery" | "manual";
+  /** Code My Million (ex. "MV 866 5058") */
+  myMillionCode?: string | null;
+  /** Localisation gagnant My Million si connue (Mag FDJ) */
+  myMillionLocation?: string | null;
+  source: "pedromealha" | "uk-lottery" | "fdj" | "manual";
   sourceUrl?: string;
   fetchedAt: string;
 };
@@ -19,4 +32,6 @@ export type EuroMillionsStore = {
   nextDrawDate?: string | null;
   nextJackpotEur?: number | null;
   draws: EuroMillionsDraw[];
+  /** Annonces Mag FDJ (localisation gagnants) */
+  myMillionWinners?: MyMillionWinner[];
 };

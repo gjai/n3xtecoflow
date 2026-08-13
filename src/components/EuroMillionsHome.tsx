@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
 import type { EuroMillionsDraw, EuroMillionsStore } from "@/lib/euromillions/types";
 import { getLatestDraw } from "@/lib/euromillions/store";
 import type { SiteConfig } from "@/sites/types";
@@ -83,6 +84,7 @@ export async function EuroMillionsHome({
   const jackpot = latest ? formatMoney(latest.jackpotEur, locale) : null;
   const nextJackpot = formatMoney(store.nextJackpotEur, locale);
   const brand = site.brand.name;
+  const recentWinners = (store.myMillionWinners || []).slice(0, 4);
 
   return (
     <>
@@ -166,6 +168,29 @@ export async function EuroMillionsHome({
               ballsLabel={t("ballsLabel")}
               starsLabel={t("starsLabel")}
             />
+            {latest.myMillionCode ? (
+              <div className="mt-6 border-t border-[var(--line)] pt-6">
+                <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                  {t("myMillionLabel")}
+                </p>
+                <p className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold tracking-wide text-[var(--heading)]">
+                  {latest.myMillionCode}
+                </p>
+                {latest.myMillionLocation ? (
+                  <p className="mt-2 text-sm text-[var(--muted)]">
+                    {t("myMillionLocation")} · {latest.myMillionLocation}
+                  </p>
+                ) : null}
+                <p className="mt-3">
+                  <Link
+                    href="/my-million"
+                    className="text-sm font-semibold text-[var(--accent)] hover:underline"
+                  >
+                    {t("myMillionCta")} →
+                  </Link>
+                </p>
+              </div>
+            ) : null}
             <p className="mt-6">
               <Link
                 href={`/tirages/${latest.date}`}
@@ -180,7 +205,45 @@ export async function EuroMillionsHome({
         )}
       </section>
 
-      <section className="border-y border-[var(--line)] bg-[var(--surface)]">
+      {recentWinners.length > 0 ? (
+        <section className="border-y border-[var(--line)] bg-[var(--bg)]">
+          <div className="mx-auto max-w-6xl px-5 py-12 md:px-8">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
+                  My Million
+                </p>
+                <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
+                  {t("winnersTitle")}
+                </h2>
+              </div>
+              <Link
+                href="/my-million"
+                className="text-sm font-semibold text-[var(--accent)] hover:underline"
+              >
+                {t("myMillionCta")} →
+              </Link>
+            </div>
+            <ul className="mt-6 grid gap-3 md:grid-cols-2">
+              {recentWinners.map((w) => (
+                <li
+                  key={w.sourceUrl}
+                  className="border border-[var(--line)] bg-[var(--surface)] px-4 py-3"
+                >
+                  <p className="text-sm font-semibold text-[var(--heading)]">
+                    {w.location || t("locationUnknown")}
+                  </p>
+                  <p className="mt-1 text-xs text-[var(--muted)]">{w.title}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
+
+      <EuroMillionsOffersBlock site={site} locale={locale} variant="home" />
+
+      <section className="border-b border-[var(--line)] bg-[var(--surface)]">
         <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
           <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
             {t("featuresTitle")}
@@ -205,16 +268,16 @@ export async function EuroMillionsHome({
               {t("archiveCta")} →
             </Link>
             <Link
+              href="/my-million"
+              className="text-sm font-semibold text-[var(--accent)] hover:underline"
+            >
+              {t("myMillionCta")} →
+            </Link>
+            <Link
               href="/stats"
               className="text-sm font-semibold text-[var(--accent)] hover:underline"
             >
               {t("statsCta")} →
-            </Link>
-            <Link
-              href="/guides"
-              className="text-sm font-semibold text-[var(--accent)] hover:underline"
-            >
-              Guides →
             </Link>
           </div>
           <p className="mt-8 max-w-2xl text-xs text-[var(--muted)]">

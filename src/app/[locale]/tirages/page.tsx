@@ -73,6 +73,9 @@ export default async function TiragesPage({
                   </p>
                   <p className="mt-1 text-sm text-[var(--muted)]">
                     {draw.numbers.join(" · ")} · ★ {draw.stars.join(" · ")}
+                    {draw.myMillionCode
+                      ? ` · MM ${draw.myMillionCode}`
+                      : ""}
                   </p>
                 </div>
                 <span className="text-sm text-[var(--accent)]">→</span>
