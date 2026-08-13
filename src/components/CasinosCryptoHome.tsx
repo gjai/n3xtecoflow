@@ -1,5 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
+import { HeroSlider, type HeroSlide } from "@/components/HeroSlider";
 import { SmartCover } from "@/components/SmartCover";
 import type { AffiliateOffer } from "@/lib/affiliates";
 import {
@@ -11,6 +12,78 @@ import {
 import { getEditorialImages } from "@/data/images";
 import type { NewsArticle } from "@/lib/news/types";
 import type { SiteConfig } from "@/sites/types";
+
+function buildCasinoHeroSlides(
+  locale: string,
+  site: SiteConfig,
+  latestNews: NewsArticle[],
+): HeroSlide[] {
+  const isEn = locale === "en";
+  const editorial = getEditorialImages(site.id);
+  const stakeCover = casinosCryptoGuideCovers[CASINOS_CRYPTO_STAKE_GUIDE_SLUG];
+  const cryptoCover =
+    casinosCryptoGuideCovers[CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG];
+  const vpnCover = casinosCryptoGuideCovers[CASINOS_CRYPTO_VPN_GUIDE_SLUG];
+  const latest = latestNews[0];
+  const newsCopy = latest ? (isEn ? latest.en : latest.fr) : null;
+
+  return [
+    {
+      id: latest ? `news-${latest.slug}` : "news-fallback",
+      kind: isEn ? "News" : "Actu",
+      title:
+        newsCopy?.title ||
+        (isEn ? "Crypto casino news" : "Actualités casinos crypto"),
+      excerpt:
+        newsCopy?.excerpt ||
+        (isEn
+          ? "Editorial briefs on Stake, wallets and secure access."
+          : "Synthèses éditoriales sur Stake, wallets et accès sécurisé."),
+      href: latest ? `/actualites/${latest.slug}` : "/actualites",
+      cta: isEn ? "Read the article" : "Lire l’article",
+      imageSrc: latest?.imageSrc || editorial.news.src || site.heroImage,
+      imageAlt: isEn ? editorial.news.altEn : editorial.news.altFr,
+    },
+    {
+      id: "stake-guide",
+      kind: "Stake",
+      title: isEn ? "Stake crypto casino guide" : "Guide Stake casino crypto",
+      excerpt: isEn
+        ? "Why Stake, how to start, KYC and responsible play — 18+."
+        : "Pourquoi Stake, comment démarrer, KYC et jeu responsable — 18+.",
+      href: `/guides/${CASINOS_CRYPTO_STAKE_GUIDE_SLUG}`,
+      cta: isEn ? "Read the Stake guide" : "Lire le guide Stake",
+      imageSrc: stakeCover.src,
+      imageAlt: isEn ? "Stake guide cover" : "Couverture guide Stake",
+    },
+    {
+      id: "vpn-guide",
+      kind: "VPN",
+      title: isEn ? "VPN companion guide" : "Petit guide VPN",
+      excerpt: isEn
+        ? "Stable private connection before you play — kill-switch and cautious setup."
+        : "Connexion stable et privée avant de jouer — kill-switch et setup prudent.",
+      href: `/guides/${CASINOS_CRYPTO_VPN_GUIDE_SLUG}`,
+      cta: isEn ? "Read the VPN guide" : "Lire le guide VPN",
+      imageSrc: vpnCover.src,
+      imageAlt: isEn ? "VPN guide cover" : "Couverture guide VPN",
+    },
+    {
+      id: "wallet-guide",
+      kind: isEn ? "Guide" : "Guide",
+      title: isEn
+        ? "Crypto.com wallet before Stake"
+        : "Wallet Crypto.com avant Stake",
+      excerpt: isEn
+        ? "Buy and hold crypto calmly, then prepare a casino deposit."
+        : "Acheter et détenir la crypto sereinement, puis préparer un dépôt casino.",
+      href: `/guides/${CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG}`,
+      cta: isEn ? "Read the wallet guide" : "Lire le guide wallet",
+      imageSrc: cryptoCover.src,
+      imageAlt: isEn ? "Crypto.com guide cover" : "Couverture guide Crypto.com",
+    },
+  ];
+}
 
 export function CasinosCryptoHome({
   site,
@@ -29,54 +102,25 @@ export function CasinosCryptoHome({
 }) {
   const isEn = locale === "en";
   const brand = site.brand.name;
-  const headline = isEn ? site.brand.headlineEn : site.brand.headlineFr;
-  const subhead = isEn ? site.brand.subheadEn : site.brand.subheadFr;
   const editorial = getEditorialImages(site.id);
   const stakeCover = casinosCryptoGuideCovers[CASINOS_CRYPTO_STAKE_GUIDE_SLUG];
   const cryptoCover =
     casinosCryptoGuideCovers[CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG];
   const vpnCover = casinosCryptoGuideCovers[CASINOS_CRYPTO_VPN_GUIDE_SLUG];
+  const heroSlides = buildCasinoHeroSlides(locale, site, latestNews);
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-[var(--line)]">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${site.heroImage})` }}
-          aria-hidden
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(105deg,var(--hero-from)_0%,color-mix(in_srgb,var(--hero-mid)_78%,transparent)_42%,color-mix(in_srgb,var(--hero-to)_40%,transparent)_100%)]" />
-        <div className="relative mx-auto flex min-h-[42vh] max-w-6xl flex-col justify-end px-5 pb-8 pt-20 md:min-h-[38vh] md:px-8 md:pb-10">
-          <p className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--heading)] md:text-5xl lg:text-6xl">
-            {brand}
-          </p>
-          <h1 className="mt-2 max-w-2xl font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)] md:text-2xl">
-            {headline}
-          </h1>
-          <p className="mt-2 max-w-xl text-sm text-[var(--fog)] md:text-base">
-            {subhead}
-          </p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            {stake ? (
-              <AffiliateOfferButton
-                href={stake.href}
-                label={isEn ? stake.labelEn : stake.labelFr}
-              />
-            ) : null}
-            <Link
-              href="/guides"
-              className="inline-flex min-h-11 items-center justify-center border border-[var(--line)] px-5 py-2.5 text-sm font-semibold text-[var(--heading)] hover:bg-[var(--surface)]"
-            >
-              {isEn ? "Browse guides" : "Voir les guides"}
-            </Link>
-          </div>
-          <p className="mt-4 text-xs text-[var(--muted)]">
-            {isEn
-              ? "18+ · Play responsibly · Independent editorial site · Affiliate links"
-              : "18+ · Jouez responsable · Site éditorial indépendant · Liens d’affiliation"}
-          </p>
-        </div>
-      </section>
+      <HeroSlider
+        brandName={brand}
+        slides={heroSlides}
+        compact
+        footerNote={
+          isEn
+            ? "18+ · Play responsibly · Affiliate links"
+            : "18+ · Jouez responsable · Liens d’affiliation"
+        }
+      />
 
       <section className="border-b border-[var(--line)]">
         <div className="mx-auto grid max-w-6xl gap-0 md:grid-cols-2">
@@ -275,15 +319,6 @@ export function CasinosCryptoHome({
         </section>
       ) : null}
 
-      <section className="border-b border-[var(--line)]">
-        <div className="mx-auto max-w-6xl px-5 py-12 md:px-8">
-          <p className="max-w-3xl text-sm leading-relaxed text-[var(--muted)]">
-            {isEn
-              ? `${brand} is an independent editorial site. Stake, Crypto.com and NordVPN links may be affiliate links. We are not the operator. Gambling involves risk of loss. 18+ only.`
-              : `${brand} est un site éditorial indépendant. Les liens Stake, Crypto.com et NordVPN peuvent être affiliés. Nous ne sommes pas l’opérateur. Le jeu comporte un risque de perte. 18+ uniquement.`}
-          </p>
-        </div>
-      </section>
     </>
   );
 }

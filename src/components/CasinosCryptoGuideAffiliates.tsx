@@ -1,5 +1,6 @@
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
+import { GamblingDisclaimer } from "@/components/GamblingDisclaimer";
 import {
   affiliateOffer,
   resolveAffiliateOffers,
@@ -217,11 +218,7 @@ export function CasinosCryptoGuideAffiliates({
       </div>
 
       <AffiliateDisclosure compact />
-      <p className="text-xs text-[var(--muted)]">
-        {isEn
-          ? "Affiliate links · 18+ · Play responsibly · We are not the operator"
-          : "Liens d’affiliation · 18+ · Jouez responsable · Nous ne sommes pas l’opérateur"}
-      </p>
+      <GamblingDisclaimer compact />
     </aside>
   );
 }

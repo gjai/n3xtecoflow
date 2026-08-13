@@ -2,7 +2,21 @@
   "meta": {
     "siteName": "Casinos Crypto",
     "tagline": "Guides indépendants sur les casinos crypto : Stake, accès sécurisé et bonnes pratiques.",
-    "disclaimerShort": "Site éditorial indépendant. Contient des liens d'affiliation Stake, Crypto.com et NordVPN. 18+."
+    "disclaimerShort": "18+ · Jeu responsable · Risque de perte · Affiliation Stake / Crypto.com / NordVPN · Joueurs Info Service 09 74 75 13 13."
+  },
+  "responsible": {
+    "badge18": "18+",
+    "title": "Jeu responsable",
+    "body": "Le jeu d’argent comporte un risque de perte. Réservé aux majeurs (18+). Fixez un budget de loisir, ne poursuivez jamais vos pertes, et arrêtez si le jeu n’est plus un plaisir.",
+    "bodyShort": "Jeu responsable — risque de perte. Réservé aux majeurs.",
+    "affiliate": "Affiliation : ce site contient des liens Stake, Crypto.com et NordVPN. Nous pouvons être rémunérés si vous passez par ces liens, sans coût supplémentaire pour vous. Nous ne sommes pas l’opérateur.",
+    "affiliateShort": "Liens d’affiliation Stake / Crypto.com / NordVPN.",
+    "helpLabel": "Aide aux joueurs (France) :",
+    "helpPhone": "09 74 75 13 13",
+    "helpLink": "joueurs-info-service.fr",
+    "helpUrl": "https://www.joueurs-info-service.fr",
+    "showHelp": "1",
+    "legalLink": "Mentions légales & affiliation"
   },
   "nav": {
     "products": "Guides",
@@ -81,10 +95,13 @@
     "siren": "",
     "amazon": "Affiliation : ce site peut contenir des liens affiliés Stake, Crypto.com et NordVPN. Nous pouvons être rémunérés si vous passez par ces liens.",
     "adsense": "Pas de publicité Google AdSense sur Casinos Crypto.",
-    "affiliateBody": "Les liens Stake, Crypto.com et NordVPN sont des liens d’affiliation. Amazon Affiliates n’est pas utilisé sur ce site."
+    "affiliateBody": "Les liens Stake, Crypto.com et NordVPN sont des liens d’affiliation. Amazon Affiliates n’est pas utilisé sur ce site.",
+    "responsibleTitle": "Jeu responsable (18+)",
+    "responsibleBody": "Le jeu d’argent comporte un risque de perte. Ce site s’adresse uniquement aux majeurs (18+). Fixez un budget de loisir, ne poursuivez jamais vos pertes.",
+    "responsibleHelp": "Aide aux joueurs en France : Joueurs Info Service — 09 74 75 13 13 — https://www.joueurs-info-service.fr"
   },
   "footer": {
-    "independent": "Site indépendant — casinos crypto",
+    "independent": "Site indépendant — casinos crypto · 18+",
     "rights": "© {year} Casinos Crypto",
     "products": "Guides",
     "comparisons": "VPN",

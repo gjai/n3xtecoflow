@@ -119,8 +119,8 @@ export default async function LocaleLayout({
       ? "Independent editorial site. Contains Amazon affiliate links."
       : "Site éditorial indépendant. Contient des liens d'affiliation Amazon."
     : locale === "en"
-      ? "Independent editorial site. May contain Stake and NordVPN affiliate links. 18+."
-      : "Site éditorial indépendant. Peut contenir des liens d'affiliation Stake et NordVPN. 18+.";
+      ? "18+. Play responsibly. Risk of loss. Affiliate links: Stake, Crypto.com, NordVPN. France help: Joueurs Info Service 09 74 75 13 13 / joueurs-info-service.fr."
+      : "18+. Jeu responsable. Risque de perte. Liens d'affiliation Stake, Crypto.com, NordVPN. Aide : Joueurs Info Service 09 74 75 13 13 / joueurs-info-service.fr.";
 
   return (
     <html

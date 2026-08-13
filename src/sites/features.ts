@@ -23,3 +23,8 @@ export function siteAllowsAmazon(site: SiteConfig): boolean {
 export function siteAllowsAdsense(site: SiteConfig): boolean {
   return site.monetization?.disableAdsense !== true;
 }
+
+/** Casino / gambling editorial themes — 18+ & responsible-play strip. */
+export function siteNeedsGamblingDisclaimer(site: SiteConfig): boolean {
+  return site.id === "casinos-crypto";
+}

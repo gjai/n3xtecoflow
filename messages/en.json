@@ -151,7 +151,10 @@
     "privacyBasisBody": "Legal bases: legitimate interest (security, technical logs, anonymized audience), responding to your request (contact form), and consent (AdSense advertising cookies). Retention: technical logs for a limited period (order of a few weeks), contact messages for the time needed to handle them, consent choice stored locally on your device until cleared.",
     "privacyRightsTitle": "Your rights (GDPR)",
     "privacyRightsBody": "Under the GDPR you have rights of access, rectification, erasure, restriction, objection and portability where applicable, and the right to withdraw advertising-cookie consent at any time. To exercise these rights, use the contact form and describe your request. You may also lodge a complaint with your supervisory authority (in France: CNIL, www.cnil.fr).",
-    "affiliateBody": "Product links may be Amazon affiliate links. Your price does not change. AdSense units are labeled “Advertisement”."
+    "affiliateBody": "Product links may be Amazon affiliate links. Your price does not change. AdSense units are labeled “Advertisement”.",
+    "responsibleTitle": "Responsible gambling",
+    "responsibleBody": "",
+    "responsibleHelp": ""
   },
   "contact": {
     "title": "Contact",
@@ -244,5 +247,19 @@
   },
   "network": {
     "title": "Site network"
+  },
+  "responsible": {
+    "badge18": "18+",
+    "title": "Responsible gambling",
+    "body": "",
+    "bodyShort": "",
+    "affiliate": "",
+    "affiliateShort": "",
+    "helpLabel": "",
+    "helpPhone": "",
+    "helpLink": "",
+    "helpUrl": "https://www.joueurs-info-service.fr",
+    "showHelp": "0",
+    "legalLink": "Legal notice"
   }
 }

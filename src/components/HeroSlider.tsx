@@ -21,14 +21,22 @@ const INTERVAL_MS = 6500;
 export function HeroSlider({
   brandName,
   slides,
+  compact = false,
+  footerNote,
 }: {
   brandName: string;
   slides: HeroSlide[];
+  /** Shorter hero (editorial / casino themes). */
+  compact?: boolean;
+  footerNote?: string;
 }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const count = slides.length;
   const active = slides[index] ?? slides[0];
+  const shell = compact
+    ? "min-h-[42vh] md:min-h-[38vh]"
+    : "min-h-[68svh] md:min-h-[62svh]";
 
   const goNext = useEffectEvent(() => {
     setIndex((i) => (i + 1) % count);
@@ -44,7 +52,7 @@ export function HeroSlider({
 
   return (
     <section
-      className="hero-grid relative min-h-[68svh] overflow-hidden md:min-h-[62svh]"
+      className={`hero-grid relative overflow-hidden ${shell}`}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-roledescription="carousel"
@@ -96,7 +104,11 @@ export function HeroSlider({
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--hero-from)]/80 via-transparent to-[var(--hero-from)]/30" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[68svh] max-w-6xl flex-col justify-end px-5 pb-10 pt-10 md:min-h-[62svh] md:justify-center md:px-8 md:pb-14">
+      <div
+        className={`relative mx-auto flex max-w-6xl flex-col justify-end px-5 pt-10 md:px-8 ${shell} ${
+          compact ? "pb-8 md:pb-10" : "pb-10 md:justify-center md:pb-14"
+        }`}
+      >
         <p className="reveal font-[family-name:var(--font-display)] text-sm uppercase tracking-[0.28em] text-[var(--accent)]">
           {brandName}
         </p>
@@ -105,13 +117,23 @@ export function HeroSlider({
           <p className="text-xs uppercase tracking-[0.22em] text-[var(--hero-muted)]">
             {active.kind}
           </p>
-          <h1 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold leading-[1.05] tracking-tight text-[var(--hero-fg)] sm:text-4xl md:text-5xl lg:text-6xl">
+          <h1
+            className={`mt-2 font-[family-name:var(--font-display)] font-semibold leading-[1.05] tracking-tight text-[var(--hero-fg)] ${
+              compact
+                ? "text-2xl sm:text-3xl md:text-4xl"
+                : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
+            }`}
+          >
             {active.title}
           </h1>
-          <p className="mt-4 max-w-xl text-sm text-[var(--hero-muted)] md:text-base">
+          <p
+            className={`mt-3 max-w-xl text-[var(--hero-muted)] ${
+              compact ? "text-sm" : "text-sm md:text-base mt-4"
+            }`}
+          >
             {active.excerpt}
           </p>
-          <div className="mt-7 flex flex-wrap gap-3 sm:gap-4">
+          <div className={`flex flex-wrap gap-3 sm:gap-4 ${compact ? "mt-5" : "mt-7"}`}>
             <Link
               href={active.href}
               className="bg-[var(--accent)] px-5 py-3 text-sm font-semibold tracking-wide text-[var(--accent-ink)] transition hover:brightness-110"
@@ -121,12 +143,15 @@ export function HeroSlider({
           </div>
         </div>
 
-        <div className="reveal-delay-2 mt-5 max-w-xl">
+        <div className="reveal-delay-2 mt-4 max-w-xl">
           <AffiliateDisclosure compact />
+          {footerNote ? (
+            <p className="mt-2 text-xs text-[var(--hero-muted)]">{footerNote}</p>
+          ) : null}
         </div>
 
         {count > 1 ? (
-          <div className="mt-6 flex items-center gap-2">
+          <div className={`flex items-center gap-2 ${compact ? "mt-4" : "mt-6"}`}>
             {slides.map((slide, i) => (
               <button
                 key={slide.id}

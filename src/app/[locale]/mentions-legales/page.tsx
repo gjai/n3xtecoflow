@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { LegalScroll } from "@/components/LegalScroll";
 import { siteLocaleAlternates } from "@/lib/seo";
+import { siteNeedsGamblingDisclaimer } from "@/sites/features";
+import { getCurrentSite } from "@/sites/server";
 
 export async function generateMetadata({
   params,
@@ -27,6 +29,9 @@ export default async function MentionsPage({
   setRequestLocale(locale);
   const t = await getTranslations("legal");
   const isEn = locale === "en";
+  const site = await getCurrentSite();
+  const showResponsible =
+    siteNeedsGamblingDisclaimer(site) && Boolean(t("responsibleBody").trim());
 
   const toc = [
     { id: "editeur", label: t("publisherTitle") },
@@ -35,6 +40,9 @@ export default async function MentionsPage({
     { id: "droits", label: t("privacyRightsTitle") },
     { id: "cookies", label: t("cookiesTitle") },
     { id: "affiliation", label: t("affiliateTitle") },
+    ...(showResponsible
+      ? [{ id: "jeu-responsable", label: t("responsibleTitle") }]
+      : []),
   ] as const;
 
   return (
@@ -179,6 +187,33 @@ export default async function MentionsPage({
           <p className="mt-3">{t("affiliateBody")}</p>
           <p className="mt-3">{t("adsense")}</p>
         </section>
+
+        {showResponsible ? (
+          <section id="jeu-responsable" className="scroll-mt-28">
+            <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
+              {t("responsibleTitle")}
+            </h2>
+            <p className="mt-4">{t("responsibleBody")}</p>
+            <p className="mt-3">
+              {t("responsibleHelp")}{" "}
+              <a
+                href="https://www.joueurs-info-service.fr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--accent)] underline-offset-2 hover:underline"
+              >
+                joueurs-info-service.fr
+              </a>
+              {" · "}
+              <a
+                href="tel:0974751313"
+                className="text-[var(--accent)] underline-offset-2 hover:underline"
+              >
+                09 74 75 13 13
+              </a>
+            </p>
+          </section>
+        ) : null}
 
         <p className="border-t border-[var(--line)] pt-8 text-sm text-[var(--muted)]">
           {t("contactViaForm")}{" "}

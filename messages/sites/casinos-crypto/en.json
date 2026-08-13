@@ -2,7 +2,21 @@
   "meta": {
     "siteName": "Casinos Crypto",
     "tagline": "Independent guides to crypto casinos: Stake, secure access and best practices.",
-    "disclaimerShort": "Independent editorial site. Contains Stake, Crypto.com and NordVPN affiliate links. 18+."
+    "disclaimerShort": "18+ · Play responsibly · Risk of loss · Stake / Crypto.com / NordVPN affiliates · France: Joueurs Info Service 09 74 75 13 13."
+  },
+  "responsible": {
+    "badge18": "18+",
+    "title": "Responsible gambling",
+    "body": "Gambling involves a risk of loss. Adults only (18+). Set a leisure budget, never chase losses, and stop if it is no longer fun.",
+    "bodyShort": "Play responsibly — risk of loss. Adults only.",
+    "affiliate": "Affiliation: this site contains Stake, Crypto.com and NordVPN links. We may be paid if you use them, at no extra cost to you. We are not the operator.",
+    "affiliateShort": "Stake / Crypto.com / NordVPN affiliate links.",
+    "helpLabel": "Player support (France):",
+    "helpPhone": "09 74 75 13 13",
+    "helpLink": "joueurs-info-service.fr",
+    "helpUrl": "https://www.joueurs-info-service.fr",
+    "showHelp": "1",
+    "legalLink": "Legal notice & affiliation"
   },
   "nav": {
     "products": "Guides",
@@ -81,10 +95,13 @@
     "siren": "",
     "amazon": "Affiliation: this site may contain Stake, Crypto.com and NordVPN affiliate links. We may be paid if you use those links.",
     "adsense": "No Google AdSense advertising on Casinos Crypto.",
-    "affiliateBody": "Stake, Crypto.com and NordVPN links are affiliate links. Amazon Associates is not used on this site."
+    "affiliateBody": "Stake, Crypto.com and NordVPN links are affiliate links. Amazon Associates is not used on this site.",
+    "responsibleTitle": "Responsible gambling (18+)",
+    "responsibleBody": "Gambling involves a risk of loss. This site is for adults only (18+). Set a leisure budget and never chase losses.",
+    "responsibleHelp": "Player support in France: Joueurs Info Service — 09 74 75 13 13 — https://www.joueurs-info-service.fr"
   },
   "footer": {
-    "independent": "Independent site — crypto casinos",
+    "independent": "Independent site — crypto casinos · 18+",
     "rights": "© {year} Casinos Crypto",
     "products": "Guides",
     "comparisons": "VPN",
