@@ -25,6 +25,13 @@ export default function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const seg = pathname.split("/").filter(Boolean)[0];
 
+  // Browsers often request /favicon.ico directly — serve the theme mark.
+  if (pathname === "/favicon.ico") {
+    const url = request.nextUrl.clone();
+    url.pathname = site.brand.icons.favicon;
+    return NextResponse.rewrite(url);
+  }
+
   // Theme allow-list: /it on ecoflow → /fr/...
   if (seg && isAppLocale(seg) && !siteAllowsLocale(site, seg)) {
     const fallback = siteLocales(site)[0] || "fr";
@@ -45,6 +52,7 @@ export default function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/",
+    "/favicon.ico",
     "/(fr|en|it|es|pt|de)/:path*",
     "/((?!api|_next|_vercel|.*\\..*).*)",
   ],

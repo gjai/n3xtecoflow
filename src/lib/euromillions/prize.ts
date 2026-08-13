@@ -99,3 +99,31 @@ export function isValidEuroMillionsPick(
   }
   return true;
 }
+
+/** Wins on other archive draws (any prize tier), best amount first. */
+export function findWinningChecks(
+  draws: EuroMillionsDraw[],
+  numbers: number[],
+  stars: number[],
+  options?: { excludeDate?: string; limit?: number },
+): TicketCheckResult[] {
+  if (!isValidEuroMillionsPick(numbers, stars)) return [];
+  const results: TicketCheckResult[] = [];
+  for (const draw of draws) {
+    if (options?.excludeDate && draw.date === options.excludeDate) continue;
+    const check = checkTicketOnDraw(numbers, stars, draw);
+    if (check.rank) results.push(check);
+  }
+  results.sort((a, b) => {
+    const aa = a.amountEur ?? -1;
+    const bb = b.amountEur ?? -1;
+    if (bb !== aa) return bb - aa;
+    const score = (c: TicketCheckResult) =>
+      c.matchedBalls * 10 + c.matchedStars;
+    if (score(b) !== score(a)) return score(b) - score(a);
+    return b.date.localeCompare(a.date);
+  });
+  return typeof options?.limit === "number"
+    ? results.slice(0, options.limit)
+    : results;
+}

@@ -79,8 +79,9 @@ export async function generateMetadata({
     description,
     metadataBase: new URL(`https://${site.primaryHost}`),
     icons: {
-      icon: [{ url: icons.favicon, type: "image/svg+xml" }],
-      shortcut: icons.icon32 || icons.favicon,
+      // Per-host brand mark only — no shared app/favicon.ico (it won in browsers).
+      icon: [{ url: icons.favicon, type: "image/svg+xml", sizes: "any" }],
+      shortcut: icons.favicon,
       apple: icons.apple || icons.favicon,
     },
     robots: {

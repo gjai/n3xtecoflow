@@ -37,7 +37,9 @@ export function UmamiScript({ host }: { host?: string | null }) {
       defer
       data-website-id={websiteId}
       data-auto-track="true"
-      data-do-not-track="true"
+      // Audience first-party / cookieless — ne pas bloquer sur DNT navigateur
+      // (sinon Safari & co. = 0 vue). Toujours hors AdSense / cookies pubs.
+      data-do-not-track="false"
     />
   );
 }
