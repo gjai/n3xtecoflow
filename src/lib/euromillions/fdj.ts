@@ -134,6 +134,40 @@ async function fetchFdjDrawPage(
   return { raw: Array.isArray(data) ? data : [], url };
 }
 
+/** Prochain tirage FDJ (annonce FR, sans résultats encore). */
+export async function fetchFdjNextEuroMillions(): Promise<{
+  date: string;
+  jackpotEur: number | null;
+} | null> {
+  const to = new Date(Date.now() + 10 * 86400000).toISOString();
+  const url =
+    `${FDJ_DRAWS_URL}?game_name=euromillions` +
+    `&to_planned_at=${encodeURIComponent(to)}` +
+    `&sort=planned_at%3Adesc&size=8`;
+  const res = await fetch(url, {
+    headers: { Accept: "application/json", "User-Agent": FDJ_UA },
+    signal: AbortSignal.timeout(15_000),
+    next: { revalidate: 0 },
+  });
+  if (!res.ok) throw new Error(`fdj_next_${res.status}`);
+  const data = (await res.json()) as FdjDraw[];
+  if (!Array.isArray(data)) return null;
+  const now = Date.now();
+  const upcoming = data
+    .filter((d) => d.planned_at && new Date(d.planned_at).getTime() > now)
+    .sort(
+      (a, b) =>
+        new Date(a.planned_at!).getTime() - new Date(b.planned_at!).getTime(),
+    );
+  const next = upcoming[0];
+  if (!next?.planned_at) return null;
+  return {
+    date: toIsoDate(next.planned_at),
+    jackpotEur:
+      amountEur(next.estimated_jackpot) ?? amountEur(next.guaranteed_amounts),
+  };
+}
+
 /**
  * FDJ live API — size max 20. Fenêtre ~2 mois (~18 tirages).
  * `pages` > 1 : curseur `to_planned_at` = `planned_at` du plus ancien

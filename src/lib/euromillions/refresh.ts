@@ -4,6 +4,7 @@ import { fetchFdjEuroMillionsArchiveDraws } from "./fdj-archives";
 import {
   fetchFdjEuroMillionsDraws,
   fetchFdjMyMillionWinnerLocations,
+  fetchFdjNextEuroMillions,
 } from "./fdj";
 import { fetchPedroMealhaDraws, fetchUkLatestDraw } from "./fetch";
 import { lotteryFingerprint } from "./fingerprint";
@@ -177,14 +178,26 @@ export async function refreshEuroMillionsData(options?: {
 
   let nextDrawDate = store.nextDrawDate ?? null;
   let nextJackpotEur = store.nextJackpotEur ?? null;
+  try {
+    const fdjNext = await fetchFdjNextEuroMillions();
+    if (fdjNext) {
+      nextDrawDate = fdjNext.date;
+      if (fdjNext.jackpotEur != null) nextJackpotEur = fdjNext.jackpotEur;
+      sources.push(
+        `fdj-next:${fdjNext.date}:${fdjNext.jackpotEur ?? "na"}`,
+      );
+    }
+  } catch (err) {
+    console.error("euromillions_fdj_next_fail", err);
+  }
   if (!fast) {
     try {
       const uk = await fetchUkLatestDraw();
       if (uk?.draw) {
         incoming.push(uk.draw);
         sources.push("uk-lottery:latest");
-        nextDrawDate = uk.nextDrawDate ?? nextDrawDate;
-        nextJackpotEur = uk.nextJackpotEur ?? nextJackpotEur;
+        nextDrawDate = nextDrawDate ?? uk.nextDrawDate ?? null;
+        nextJackpotEur = nextJackpotEur ?? uk.nextJackpotEur ?? null;
       }
     } catch (err) {
       console.error("euromillions_uk_fail", err);

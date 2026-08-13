@@ -38,6 +38,12 @@
     "closeMenu": "Sluiten",
     "about": "Over ons"
   },
+  "pagination": {
+    "prev": "Vorige",
+    "next": "Volgende",
+    "pageOf": "Pagina {page} / {total}",
+    "range": "{from}–{to} van {total}"
+  },
   "footer": {
     "independent": "Onafhankelijke site — EuroMillions · 18+",
     "rights": "© {year} EuroMillions Resultaten",

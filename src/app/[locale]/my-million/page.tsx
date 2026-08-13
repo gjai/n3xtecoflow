@@ -1,13 +1,15 @@
 import { intlLocale } from "@/i18n/locales";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
-import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
 import { GameMark } from "@/components/GameMark";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { ResultsLivePoller } from "@/components/ResultsLivePoller";
 import { MyMillionChecker } from "@/components/MyMillionChecker";
+import { ArchivePagination } from "@/components/ArchivePagination";
+import { DrawArchiveRow } from "@/components/DrawArchiveRow";
+import { archivePageHref, ARCHIVE_PAGE_SIZE, paginate, parsePageParam } from "@/lib/pagination";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -43,19 +45,27 @@ function formatDate(iso: string, locale: string) {
 
 export default async function MyMillionPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const { locale } = await params;
+  const { page: pageParam } = await searchParams;
   setRequestLocale(locale);
   const site = await getCurrentSite();
   if (!siteIsEuroMillions(site)) notFound();
 
   const t = await getTranslations("myMillion");
+  const pageT = await getTranslations("pagination");
   const store = await readEuroMillionsStore();
-  const coded = store.draws
-    .filter((d) => d.myMillionCode)
-    .slice(0, 80);
+  const allCoded = store.draws.filter((d) => d.myMillionCode);
+  const listed = paginate(
+    allCoded,
+    parsePageParam(pageParam),
+    ARCHIVE_PAGE_SIZE,
+  );
+  const coded = listed.items;
   const winners = store.myMillionWinners || [];
   const pending = euroMillionsResultPending({
     latestDate: store.latest?.date || store.draws[0]?.date,
@@ -88,13 +98,11 @@ export default async function MyMillionPage({
         <div className="mt-10">
           <MyMillionChecker
             locale={locale}
-            draws={coded
-              .filter((d) => d.myMillionCode)
-              .map((d) => ({
-                date: d.date,
-                code: d.myMillionCode as string,
-                location: d.myMillionLocation,
-              }))}
+            draws={allCoded.map((d) => ({
+              date: d.date,
+              code: d.myMillionCode as string,
+              location: d.myMillionLocation,
+            }))}
           />
         </div>
 
@@ -104,31 +112,44 @@ export default async function MyMillionPage({
         >
           {t("codesTitle")}
         </h2>
-        {coded.length === 0 ? (
+        {listed.total === 0 ? (
           <p className="mt-4 text-[var(--muted)]">{t("empty")}</p>
         ) : (
+          <>
           <ul className="mt-4 divide-y divide-[var(--line)] border border-[var(--line)]">
             {coded.map((d) => (
-              <li key={d.date}>
-                <Link
-                  href={`/tirages/${d.date}`}
-                  className="flex flex-col gap-2 px-4 py-4 transition hover:bg-[var(--surface)] sm:flex-row sm:items-center sm:justify-between"
-                >
-                  <div>
-                    <p className="font-semibold text-[var(--heading)]">
-                      {formatDate(d.date, locale)}
-                    </p>
-                    <p className="mt-1 font-mono text-sm tracking-wide text-[var(--accent)]">
-                      {d.myMillionCode}
-                    </p>
-                  </div>
-                  <p className="text-sm text-[var(--muted)]">
+              <DrawArchiveRow
+                key={d.date}
+                href={`/tirages/${d.date}`}
+                title={formatDate(d.date, locale)}
+                balls={
+                  <span className="lottery-code">{d.myMillionCode}</span>
+                }
+                extra={
+                  <p className="mt-2 text-sm text-[var(--muted)]">
                     {d.myMillionLocation || t("locationPending")}
                   </p>
-                </Link>
-              </li>
+                }
+              />
             ))}
           </ul>
+          <ArchivePagination
+            page={listed.page}
+            totalPages={listed.totalPages}
+            hrefForPage={(p) => archivePageHref("/my-million", p)}
+            prevLabel={pageT("prev")}
+            nextLabel={pageT("next")}
+            pageOf={pageT("pageOf", {
+              page: listed.page,
+              total: listed.totalPages,
+            })}
+            range={pageT("range", {
+              from: listed.from,
+              to: listed.to,
+              total: listed.total,
+            })}
+          />
+          </>
         )}
 
         <h2 className="mt-12 text-lg font-semibold text-[var(--heading)]">

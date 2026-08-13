@@ -25,10 +25,7 @@ import { siteIsEuroMillions } from "@/sites/features";
 import { gameScopeStyle } from "@/lib/fdj-games/identity";
 
 export const revalidate = 600;
-
-export async function generateStaticParams() {
-  return [];
-}
+export const dynamic = "force-dynamic";
 
 function formatDate(iso: string, locale: string) {
   const d = new Date(`${iso}T12:00:00Z`);
@@ -106,7 +103,8 @@ export default async function CompanionDrawPage({
   const title = t("companionOf", { game: label, date: heading });
   const siteUrl = `https://${site.primaryHost}`;
   const spec = COMPANION_GRID[entry.id];
-  const allDraws = getGameDraws(store, entry.id);
+  if (!spec) notFound();
+  const allDraws = getGameDraws(store, entry.id).slice(0, 80);
   const groupLabels: Record<string, string> = {
     main: gamesT("group.main"),
     stars: gamesT("group.stars"),

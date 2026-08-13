@@ -3,24 +3,40 @@ import type { FdjGameDraw, FdjResultGroup } from "@/lib/fdj-games/types";
 function Ball({
   value,
   variant,
+  size = "md",
 }: {
   value: number | string;
   variant: "main" | "bonus" | "letter" | "code";
+  size?: "sm" | "md" | "lg";
 }) {
   if (variant === "code") {
     return <span className="lottery-code">{value}</span>;
   }
+  const sizeClass =
+    size === "lg"
+      ? "lottery-ball--lg"
+      : size === "sm"
+        ? "lottery-ball--sm"
+        : "";
   if (variant === "letter") {
     return (
-      <span className="lottery-ball lottery-ball--letter">{value}</span>
+      <span className={`lottery-ball lottery-ball--letter ${sizeClass}`}>
+        {value}
+      </span>
     );
   }
   if (variant === "bonus") {
     return (
-      <span className="lottery-ball lottery-ball--bonus">{value}</span>
+      <span className={`lottery-ball lottery-ball--bonus ${sizeClass}`}>
+        {value}
+      </span>
     );
   }
-  return <span className="lottery-ball lottery-ball--main">{value}</span>;
+  return (
+    <span className={`lottery-ball lottery-ball--main ${sizeClass}`}>
+      {value}
+    </span>
+  );
 }
 
 function groupVariant(
@@ -35,10 +51,29 @@ function groupVariant(
 export function FdjGameBalls({
   draw,
   labels,
+  compact = false,
 }: {
   draw: FdjGameDraw;
   labels: Record<string, string>;
+  /** Une seule rangée (listes d’archives) — mêmes boules que le détail. */
+  compact?: boolean;
 }) {
+  if (compact) {
+    return (
+      <div className="lottery-balls lottery-balls--compact">
+        {draw.groups.flatMap((g) =>
+          g.values.map((v, i) => (
+            <Ball
+              key={`${g.labelKey}-${v}-${i}`}
+              value={v}
+              variant={groupVariant(g)}
+              size="sm"
+            />
+          )),
+        )}
+      </div>
+    );
+  }
   return (
     <div className="space-y-4">
       {draw.groups.map((g) => (

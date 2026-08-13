@@ -38,6 +38,12 @@
     "closeMenu": "Chiudi",
     "about": "Chi siamo"
   },
+  "pagination": {
+    "prev": "Precedente",
+    "next": "Successivo",
+    "pageOf": "Pagina {page} / {total}",
+    "range": "{from}–{to} di {total}"
+  },
   "footer": {
     "independent": "Sito indipendente — EuroMillions · 18+",
     "rights": "© {year} EuroMillions Risultati",

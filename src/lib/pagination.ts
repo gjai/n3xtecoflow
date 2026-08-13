@@ -6,7 +6,11 @@ export type PageResult<T> = {
   totalPages: number;
   hasPrev: boolean;
   hasNext: boolean;
+  from: number;
+  to: number;
 };
+
+export const ARCHIVE_PAGE_SIZE = 20;
 
 export function parsePageParam(raw: string | string[] | undefined): number {
   const value = Array.isArray(raw) ? raw[0] : raw;
@@ -24,14 +28,17 @@ export function paginate<T>(
   const totalPages = Math.max(1, Math.ceil(total / pageSize) || 1);
   const safePage = Math.min(Math.max(1, page), totalPages);
   const start = (safePage - 1) * pageSize;
+  const slice = items.slice(start, start + pageSize);
   return {
-    items: items.slice(start, start + pageSize),
+    items: slice,
     page: safePage,
     pageSize,
     total,
     totalPages,
     hasPrev: safePage > 1,
     hasNext: safePage < totalPages,
+    from: total === 0 ? 0 : start + 1,
+    to: start + slice.length,
   };
 }
 
@@ -56,4 +63,21 @@ export function pageWindow(
     out.push(n);
   }
   return out;
+}
+
+/** `?page=` omitted on page 1. Hash `#archives` for in-page lists. */
+export function archivePageHref(
+  pathname: string,
+  page: number,
+  extra?: Record<string, string | undefined>,
+): string {
+  const params = new URLSearchParams();
+  if (extra) {
+    for (const [key, value] of Object.entries(extra)) {
+      if (value) params.set(key, value);
+    }
+  }
+  if (page > 1) params.set("page", String(page));
+  const q = params.toString();
+  return `${pathname}${q ? `?${q}` : ""}#archives`;
 }

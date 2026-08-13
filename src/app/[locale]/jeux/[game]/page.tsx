@@ -24,6 +24,9 @@ import { companionDrawKey } from "@/lib/fdj-games/keys";
 import { gameScopeStyle } from "@/lib/fdj-games/identity";
 import { COMPANION_GRID, groupNumbers } from "@/lib/lottery/rules";
 import { numberPoolStats } from "@/lib/euromillions/stats";
+import { ArchivePagination } from "@/components/ArchivePagination";
+import { DrawArchiveRow } from "@/components/DrawArchiveRow";
+import { archivePageHref, ARCHIVE_PAGE_SIZE, paginate, parsePageParam } from "@/lib/pagination";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -87,10 +90,13 @@ function formatMoney(amount: number | null | undefined, locale: string) {
 
 export default async function JeuxGamePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string; game: string }>;
+  searchParams: Promise<{ page?: string }>;
 }) {
   const { locale, game: slug } = await params;
+  const { page: pageParam } = await searchParams;
   setRequestLocale(locale);
   const site = await getCurrentSite();
   if (!siteIsEuroMillions(site)) notFound();
@@ -100,12 +106,20 @@ export default async function JeuxGamePage({
   const gameId = entry.id;
 
   const t = await getTranslations("games");
+  const pageT = await getTranslations("pagination");
+  const drawsT = await getTranslations("draws");
   const store = await readFdjGamesStore();
   const latest = getGameLatest(store, gameId);
-  const draws = getGameDraws(store, gameId).slice(0, 80);
+  const allDraws = getGameDraws(store, gameId);
+  const listed = paginate(
+    allDraws,
+    parsePageParam(pageParam),
+    ARCHIVE_PAGE_SIZE,
+  );
+  const draws = listed.items;
   const spec = COMPANION_GRID[gameId];
   const mainStats = numberPoolStats(
-    draws.map((d) => groupNumbers(d, "main")),
+    allDraws.map((d) => groupNumbers(d, "main")),
     spec.mainMax,
   )
     .slice()
@@ -153,7 +167,7 @@ export default async function JeuxGamePage({
 
   return (
     <main
-      className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-20"
+      className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-20"
       style={gameScopeStyle(gameId)}
     >
       <ResultsLivePoller
@@ -227,34 +241,53 @@ export default async function JeuxGamePage({
       )}
 
       <section id="archives" className="mt-12 scroll-mt-28">
-        <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+        <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
           {t("archiveTitle")}
         </h2>
-        {draws.length > 0 ? (
-          <ul className="mt-4 space-y-2">
+        {listed.total > 0 ? (
+          <>
+          <ul className="mt-4 divide-y divide-[var(--line)] border border-[var(--line)]">
             {draws.map((d) => (
-              <li key={`${d.date}-${d.plannedAt}-${d.drawId}`}>
-                <Link
-                  href={`/jeux/${entry.slug}/${companionDrawKey(d)}`}
-                  className="block border border-[var(--line)] bg-[var(--surface)] px-4 py-3 hover:border-[var(--accent)]"
-                >
-                  <p className="text-sm font-semibold text-[var(--heading)]">
-                    {headingFor(d)}
-                  </p>
-                  <div className="mt-3">
-                    <FdjGameBalls draw={d} labels={groupLabels} />
-                  </div>
-                </Link>
-              </li>
+              <DrawArchiveRow
+                key={`${d.date}-${d.plannedAt}-${d.drawId}`}
+                href={`/jeux/${entry.slug}/${companionDrawKey(d)}`}
+                title={headingFor(d)}
+                balls={
+                  <FdjGameBalls
+                    draw={d}
+                    labels={groupLabels}
+                    compact
+                  />
+                }
+                actionHref={`/jeux/${entry.slug}/${companionDrawKey(d)}#simulateur`}
+                actionLabel={drawsT("checkCta")}
+              />
             ))}
           </ul>
+          <ArchivePagination
+            page={listed.page}
+            totalPages={listed.totalPages}
+            hrefForPage={(p) => archivePageHref(`/jeux/${entry.slug}`, p)}
+            prevLabel={pageT("prev")}
+            nextLabel={pageT("next")}
+            pageOf={pageT("pageOf", {
+              page: listed.page,
+              total: listed.totalPages,
+            })}
+            range={pageT("range", {
+              from: listed.from,
+              to: listed.to,
+              total: listed.total,
+            })}
+          />
+          </>
         ) : (
           <p className="mt-4 text-[var(--muted)]">{t("emptyGame")}</p>
         )}
       </section>
 
-      <section id="simulateur" className="mt-12 scroll-mt-28">
-        <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+      <section id="simulateur" className="mt-16 max-w-3xl scroll-mt-28">
+        <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
           {t("simTitle", { game: label })}
         </h2>
         <p className="mt-2 text-sm text-[var(--muted)]">{t("simLead")}</p>
@@ -268,8 +301,8 @@ export default async function JeuxGamePage({
         </div>
       </section>
 
-      <section id="stats" className="mt-12 scroll-mt-28">
-        <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+      <section id="stats" className="mt-16 scroll-mt-28">
+        <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
           {t("statsTitle", { game: label })}
         </h2>
         <p className="mt-2 text-sm text-[var(--muted)]">{t("statsLead")}</p>

@@ -25,6 +25,12 @@
     "guides": "Guides",
     "news": "Actualités"
   },
+  "pagination": {
+    "prev": "Précédent",
+    "next": "Suivant",
+    "pageOf": "Page {page} / {total}",
+    "range": "{from}–{to} sur {total}"
+  },
   "home": {
     "brand": "EcoFlow Stream",
     "headline": "Tout l’écosystème EcoFlow, expliqué.",

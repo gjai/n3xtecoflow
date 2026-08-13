@@ -24,10 +24,7 @@ import {
 } from "@/lib/euromillions/store";
 
 export const revalidate = 600;
-
-export async function generateStaticParams() {
-  return [];
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -78,7 +75,7 @@ export default async function TirageDetailPage({
   const homeT = await getTranslations("home");
   const store = await readEuroMillionsStore();
   const draw = getDrawByDate(store, date);
-  if (!draw) notFound();
+  if (!draw?.numbers?.length || !draw.stars?.length) notFound();
 
   const jackpot = formatMoney(draw.jackpotEur, locale);
   const prettyDate = formatDate(draw.date, locale);
@@ -196,9 +193,9 @@ export default async function TirageDetailPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {draw.prizeTiers.map((tier) => (
+                  {draw.prizeTiers.map((tier, i) => (
                     <tr
-                      key={tier.rank}
+                      key={`${tier.rank}-${i}`}
                       className="border-t border-[var(--line)]"
                     >
                       <td className="px-3 py-2 font-semibold text-[var(--heading)]">

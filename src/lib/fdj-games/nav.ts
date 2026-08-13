@@ -45,7 +45,7 @@ export const LOTTERY_GAMES_NAV: LotteryGameNav[] = [
     labelFr: "EuroMillions",
     labelEn: "EuroMillions",
     tools: [
-      { id: "archive", href: "/tirages" },
+      { id: "archive", href: "/tirages#archives" },
       { id: "simulator", href: "/tirages#simulateur" },
       { id: "nextDraw", href: "/prochain-tirage" },
       { id: "stats", href: "/tirages#stats" },

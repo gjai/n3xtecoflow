@@ -79,8 +79,10 @@ a{color:inherit;text-decoration:none}
   .em-menu-btn{display:none!important}
 }
 .lottery-balls{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+.lottery-balls--compact{gap:.35rem;margin-top:.4rem}
 .lottery-ball{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;width:2.75rem;height:2.75rem;border-radius:9999px;font-weight:600;font-size:.875rem;line-height:1}
 .lottery-ball--lg{width:3.5rem;height:3.5rem;font-size:1.125rem}
+.lottery-ball--sm{width:2.15rem;height:2.15rem;font-size:.75rem}
 .lottery-ball--main{background:var(--accent);color:var(--accent-ink)}
 .lottery-ball--bonus{border:1px solid var(--accent);background:var(--surface);color:var(--heading)}
 .lottery-ball--letter{border:2px solid var(--accent);background:var(--surface);color:var(--heading)}

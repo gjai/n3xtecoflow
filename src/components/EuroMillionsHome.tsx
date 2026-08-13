@@ -68,15 +68,54 @@ export function DrawBalls({
   starsLabel,
   large = false,
   animate = false,
+  compact = false,
 }: {
   draw: EuroMillionsDraw;
   ballsLabel: string;
   starsLabel: string;
   large?: boolean;
   animate?: boolean;
+  compact?: boolean;
 }) {
-  const size = large ? "lottery-ball--lg" : "";
+  const size = large ? "lottery-ball--lg" : compact ? "lottery-ball--sm" : "";
   const ballClass = animate ? "draw-ball-in" : "";
+  const balls = (
+    <div
+      className={
+        compact ? "lottery-balls lottery-balls--compact" : "lottery-balls"
+      }
+    >
+      {draw.numbers.map((n, i) => (
+        <span
+          key={`n-${n}`}
+          className={`lottery-ball lottery-ball--main ${size} ${ballClass}`}
+          style={
+            animate
+              ? { ["--ball-delay" as string]: `${420 + i * 75}ms` }
+              : undefined
+          }
+        >
+          {n}
+        </span>
+      ))}
+      {draw.stars.map((n, i) => (
+        <span
+          key={`s-${n}`}
+          className={`lottery-ball lottery-ball--bonus ${size} ${ballClass}`}
+          style={
+            animate
+              ? {
+                  ["--ball-delay" as string]: `${420 + (draw.numbers.length + i) * 75}ms`,
+                }
+              : undefined
+          }
+        >
+          {n}
+        </span>
+      ))}
+    </div>
+  );
+  if (compact) return balls;
   return (
     <div className="space-y-4">
       <div>

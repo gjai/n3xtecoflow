@@ -171,7 +171,11 @@ export async function FdjCompanionGamesBlock({
                 </div>
                 {latest ? (
                   <div className="mt-4">
-                    <FdjGameBalls draw={latest} labels={groupLabels} />
+                    <FdjGameBalls
+                      draw={latest}
+                      labels={groupLabels}
+                      compact
+                    />
                   </div>
                 ) : null}
               </li>
