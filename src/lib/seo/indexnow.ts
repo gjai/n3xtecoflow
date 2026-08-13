@@ -36,7 +36,7 @@ export function lotteryIndexNowUrls(
     const draw = fdj.games[game.id]?.latest;
     if (draw) paths.add(`/jeux/${game.slug}/${companionDrawKey(draw)}`);
   }
-  const urls: string[] = [];
+  const urls: string[] = [`https://${HOST}/sitemap.xml`];
   for (const locale of EUROMILLIONS_LOCALES) {
     for (const path of paths) {
       urls.push(`${origin}/${locale}${path}`);

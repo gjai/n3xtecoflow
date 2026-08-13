@@ -8,6 +8,8 @@ import {
   rankNewsCandidates,
 } from "./quality";
 import { readNewsStore, writeNewsStore } from "./store";
+import { revalidateSitemap } from "@/lib/euromillions/live";
+import { revalidatePath } from "next/cache";
 
 export type IngestOptions = {
   limit?: number;
@@ -248,6 +250,10 @@ export async function ingestNews(
 
   if (created.length || backfilled || refreshed || purged) {
     await writeNewsStore(store);
+    revalidatePath("/[locale]/actualites", "page");
+    revalidatePath("/[locale]/actualites/[slug]", "page");
+    revalidatePath("/[locale]", "page");
+    revalidateSitemap();
   }
 
   return {

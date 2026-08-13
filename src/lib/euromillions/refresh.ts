@@ -7,7 +7,7 @@ import {
 import { fetchPedroMealhaDraws, fetchUkLatestDraw } from "./fetch";
 import { lotteryFingerprint } from "./fingerprint";
 import { lotteryIndexNowUrls, submitIndexNow } from "@/lib/seo/indexnow";
-import { revalidateLotteryPages } from "./live";
+import { revalidateLotteryPages, revalidateSitemap } from "./live";
 import {
   readEuroMillionsStore,
   sortDrawsNewest,
@@ -94,7 +94,8 @@ function yearsNeedingBackfill(
     counts.set(y, (counts.get(y) || 0) + 1);
   }
   const missing: number[] = [];
-  for (let y = EM_ARCHIVE_START; y <= yearNow; y += 1) {
+  // Newest first: 2025 SEO before 2004. Cron takes 4 years / run.
+  for (let y = yearNow; y >= EM_ARCHIVE_START; y -= 1) {
     const n = counts.get(y) || 0;
     const target = y === yearNow ? 8 : 90;
     if (n < target) missing.push(y);
@@ -148,9 +149,10 @@ export async function refreshEuroMillionsData(options?: {
       incoming = incoming.concat(batch);
       yearsFetched.push(year);
       sources.push(`pedromealha:${year}`);
-      await new Promise((r) => setTimeout(r, 2500));
+      await new Promise((r) => setTimeout(r, 6000));
     } catch (err) {
       console.error("euromillions_pedro_year_fail", year, err);
+      await new Promise((r) => setTimeout(r, 8000));
     }
   }
 
@@ -195,6 +197,8 @@ export async function refreshEuroMillionsData(options?: {
   const afterFdj = await readFdjGamesStore();
   const fingerprint = lotteryFingerprint(next, afterFdj);
   const changed = fingerprint !== beforeFp;
+  // Sitemap always: archives can grow without changing the latest draw.
+  revalidateSitemap();
   if (changed) {
     revalidateLotteryPages();
     await submitIndexNow(lotteryIndexNowUrls(next, afterFdj));

@@ -29,37 +29,46 @@ export async function fetchPedroMealhaDraws(
 ): Promise<EuroMillionsDraw[]> {
   const y = year || new Date().getFullYear();
   const url = `https://euromillions.api.pedromealha.dev/draws?year=${y}`;
-  const res = await fetch(url, {
-    headers: {
-      Accept: "application/json",
-      "User-Agent":
-        "EuroMillionsResultatsBot/1.0 (+https://euromillions-resultats.fr)",
-    },
-    signal: AbortSignal.timeout(25_000),
-    next: { revalidate: 0 },
-  });
-  if (!res.ok) {
-    throw new Error(`pedromealha_${res.status}`);
+  let lastErr: Error | null = null;
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    const res = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+        "User-Agent":
+          "EuroMillionsResultatsBot/1.0 (+https://euromillions-resultats.fr)",
+      },
+      signal: AbortSignal.timeout(25_000),
+      next: { revalidate: 0 },
+    });
+    if (res.status === 429) {
+      lastErr = new Error("pedromealha_429");
+      await new Promise((r) => setTimeout(r, 12_000 * (attempt + 1)));
+      continue;
+    }
+    if (!res.ok) {
+      throw new Error(`pedromealha_${res.status}`);
+    }
+    const data = (await res.json()) as PedroDraw[];
+    if (!Array.isArray(data)) return [];
+    const now = new Date().toISOString();
+    return data
+      .filter((d) => d.date && d.numbers?.length === 5 && d.stars?.length === 2)
+      .map((d) => ({
+        date: toIsoDate(d.date!),
+        drawId: d.draw_id ?? d.id,
+        numbers: nums(d.numbers || []),
+        stars: nums(d.stars || []),
+        jackpotEur:
+          typeof d.prize === "number" && Number.isFinite(d.prize)
+            ? Math.round(d.prize)
+            : null,
+        hasWinner: d.has_winner ?? null,
+        source: "pedromealha" as const,
+        sourceUrl: url,
+        fetchedAt: now,
+      }));
   }
-  const data = (await res.json()) as PedroDraw[];
-  if (!Array.isArray(data)) return [];
-  const now = new Date().toISOString();
-  return data
-    .filter((d) => d.date && d.numbers?.length === 5 && d.stars?.length === 2)
-    .map((d) => ({
-      date: toIsoDate(d.date!),
-      drawId: d.draw_id ?? d.id,
-      numbers: nums(d.numbers || []),
-      stars: nums(d.stars || []),
-      jackpotEur:
-        typeof d.prize === "number" && Number.isFinite(d.prize)
-          ? Math.round(d.prize)
-          : null,
-      hasWinner: d.has_winner ?? null,
-      source: "pedromealha" as const,
-      sourceUrl: url,
-      fetchedAt: now,
-    }));
+  throw lastErr || new Error("pedromealha_failed");
 }
 
 export type UkLatestMeta = {

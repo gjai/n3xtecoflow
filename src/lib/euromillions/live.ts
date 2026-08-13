@@ -20,6 +20,10 @@ function throttlePath() {
   return path.join(dataDir(), "euromillions-live-throttle.json");
 }
 
+export function revalidateSitemap() {
+  revalidatePath("/sitemap.xml");
+}
+
 export function revalidateLotteryPages() {
   const paths = [
     "/[locale]",
@@ -36,6 +40,7 @@ export function revalidateLotteryPages() {
   for (const p of paths) {
     revalidatePath(p, "page");
   }
+  revalidateSitemap();
 }
 
 export async function withLotteryRefreshLock<T>(

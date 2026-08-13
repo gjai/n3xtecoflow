@@ -23,8 +23,11 @@ import {
 } from "@/sites/features";
 import type { SiteConfig, SiteId } from "@/sites/types";
 
-/** Refresh sitemap periodically so ingested news appear without full rebuild. */
-export const revalidate = 3600;
+/**
+ * Always read volume-backed news / tirages (Coolify `/app/data`).
+ * Writes also call `revalidateSitemap()` so crawlers see new URLs immediately.
+ */
+export const dynamic = "force-dynamic";
 
 function loadNewsArticles(): {
   slug: string;
@@ -116,7 +119,6 @@ export function buildSitemapForSite(
     ...(site.id === "euromillions"
       ? [
           "/tirages",
-          "/simulateur",
           "/generateur",
           "/prochain-tirage",
           "/jeux",
@@ -124,7 +126,6 @@ export function buildSitemapForSite(
           "/jeux/loto",
           "/jeux/crescendo",
           "/jeux/keno",
-          "/stats",
           "/my-million",
         ]
       : []),

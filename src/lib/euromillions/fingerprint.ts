@@ -29,7 +29,7 @@ export function lotteryFingerprint(
     const balls = d.groups.map((gr) => gr.values.join(",")).join("|");
     return `${g.id}:${d.plannedAt}:${balls}`;
   });
-  return `${emPart}#${games.join(";")}`;
+  return `${emPart}#n=${em.draws.length}#${games.join(";")}`;
 }
 
 export function anyLotteryResultPending(
