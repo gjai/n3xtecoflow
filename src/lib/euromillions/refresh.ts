@@ -83,6 +83,15 @@ function attachWinnerLocations(
 
 const EM_ARCHIVE_START = 2004;
 
+function yearBackfillTarget(y: number, yearNow: number): number {
+  if (y === yearNow) return 8;
+  // Weekly draws until May 2011, then Tue+Fri (~104/year).
+  if (y <= 2004) return 40;
+  if (y <= 2010) return 48;
+  if (y === 2011) return 80;
+  return 90;
+}
+
 function yearsNeedingBackfill(
   draws: EuroMillionsDraw[],
   yearNow: number,
@@ -97,8 +106,7 @@ function yearsNeedingBackfill(
   // Newest first: 2025 SEO before 2004. Cron takes 4 years / run.
   for (let y = yearNow; y >= EM_ARCHIVE_START; y -= 1) {
     const n = counts.get(y) || 0;
-    const target = y === yearNow ? 8 : 90;
-    if (n < target) missing.push(y);
+    if (n < yearBackfillTarget(y, yearNow)) missing.push(y);
   }
   return missing;
 }
