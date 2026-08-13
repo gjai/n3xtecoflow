@@ -122,6 +122,11 @@ export async function generateMetadata({
       description,
       images: [ogImage],
     },
+    appleWebApp: {
+      capable: true,
+      title,
+      statusBarStyle: "default",
+    },
   };
 }
 

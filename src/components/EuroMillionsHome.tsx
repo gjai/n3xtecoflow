@@ -16,6 +16,7 @@ import {
   EUROMILLIONS_READ_RESULTS_GUIDE_SLUG,
   EUROMILLIONS_RESPONSIBLE_GUIDE_SLUG,
   EUROMILLIONS_SCHEDULE_GUIDE_SLUG,
+  EUROMILLIONS_CLAIM_GUIDE_SLUG,
 } from "@/data/euromillions-guides";
 import { ResultsLivePoller } from "@/components/ResultsLivePoller";
 import { getEditorialImages } from "@/data/images";
@@ -402,6 +403,7 @@ export async function EuroMillionsHome({
                 EUROMILLIONS_CRESCENDO_GUIDE_SLUG,
                 EUROMILLIONS_READ_RESULTS_GUIDE_SLUG,
                 EUROMILLIONS_SCHEDULE_GUIDE_SLUG,
+                EUROMILLIONS_CLAIM_GUIDE_SLUG,
                 EUROMILLIONS_MY_MILLION_GUIDE_SLUG,
                 EUROMILLIONS_RESPONSIBLE_GUIDE_SLUG,
               ] as const

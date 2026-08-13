@@ -287,4 +287,12 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     angleFr: "EuroMillions, Loto, EuroDreams, Keno, Crescendo — repères horaires",
     angleEn: "EuroMillions, Loto, EuroDreams, Keno, Crescendo — schedule landmarks",
   },
+  {
+    slug: "toucher-un-gain-euromillions",
+    siteId: "euromillions",
+    topicFr: "Toucher un gain EuroMillions",
+    topicEn: "Claiming an EuroMillions prize",
+    angleFr: "Forclusion 60 jours, FDJ, ce que le site ne paie pas",
+    angleEn: "60-day time limit, FDJ, this site does not pay prizes",
+  },
 ];

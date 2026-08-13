@@ -143,6 +143,22 @@ export default async function ProchainTiragePage({
             </li>
           ) : null}
           <li>
+            <a
+              href="/api/euromillions/calendar"
+              className="font-semibold text-[var(--accent)] hover:underline"
+            >
+              {t("calendarCta")} →
+            </a>
+          </li>
+          <li>
+            <Link
+              href="/guides/toucher-un-gain-euromillions"
+              className="font-semibold text-[var(--accent)] hover:underline"
+            >
+              {t("claimCta")} →
+            </Link>
+          </li>
+          <li>
             <Link
               href="/tirages"
               className="font-semibold text-[var(--accent)] hover:underline"

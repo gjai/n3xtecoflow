@@ -284,6 +284,14 @@ export default async function TirageDetailPage({
             ? ` · ${t("updated")} ${new Date(store.updatedAt).toLocaleString(intlLocale(locale))}`
             : ""}
         </p>
+        <p className="mt-4">
+          <Link
+            href="/guides/toucher-un-gain-euromillions"
+            className="text-sm font-semibold text-[var(--accent)] hover:underline"
+          >
+            {t("claimCta")} →
+          </Link>
+        </p>
       </main>
       <EuroMillionsOffersBlock site={site} locale={locale} variant="compact" />
     </>

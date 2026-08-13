@@ -30,7 +30,8 @@ Voir `.env.example` (extrait) :
 - `NEWS_CRON_SECRET` (+ workflows GitHub)
 - `GEMINI_API_KEY` / `OPENAI_*` (rewrite actu)
 - `AMAZON_CREATORS_*` (prix live — dès éligibilité Associates)
-- `NEXT_PUBLIC_ADSENSE_CLIENT` + `NEXT_PUBLIC_ADSENSE_SLOTS=1` + slot IDs
+- `NEXT_PUBLIC_ADSENSE_CLIENT` (snippet revue). **`NEXT_PUBLIC_ADSENSE_SLOTS=1` seulement après approbation AdSense**, avec les IDs d’unités
+- `FDJ_AFFILIATE_URL` (lien Kwanko FDJ — tant que vide, le CTA pointe vers fdj.fr)
 
 ## Déploiement Coolify
 

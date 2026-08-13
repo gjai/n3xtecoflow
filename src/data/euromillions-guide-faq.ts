@@ -423,6 +423,42 @@ const FAQ: Record<string, { fr: GuideFaqItem[]; en: GuideFaqItem[] }> = {
       },
     ],
   },
+  "toucher-un-gain-euromillions": {
+    fr: [
+      {
+        question: "Ce site peut-il encaisser mon ticket ?",
+        answer:
+          "Non. Site éditorial indépendant : nous ne validons pas de ticket physique et ne versons aucun gain. Passez par un opérateur agréé (en France : FDJ).",
+      },
+      {
+        question: "Combien de temps pour toucher un gain ?",
+        answer:
+          "En France, en général 60 jours à compter de la date du tirage (forclusion FDJ). Le règlement officiel de l’opérateur prime.",
+      },
+      {
+        question: "Où s’adresser ?",
+        answer:
+          "Pages officielles FDJ (gains / EuroMillions) ou le compte en ligne où la grille a été validée. Nous ne tenons pas de liste de détaillants.",
+      },
+    ],
+    en: [
+      {
+        question: "Can this site cash my ticket?",
+        answer:
+          "No. Independent editorial site: we do not validate physical tickets or pay prizes. Use a licensed operator (in France: FDJ).",
+      },
+      {
+        question: "How long to claim a prize?",
+        answer:
+          "In France, generally 60 days from the draw date (FDJ time limit). The operator’s official rules prevail.",
+      },
+      {
+        question: "Where do I go?",
+        answer:
+          "Official FDJ pages (winnings / EuroMillions) or the online account where the grid was validated. We do not keep a retailer list.",
+      },
+    ],
+  },
 };
 
 export function getGuideFaq(slug: string, locale: string): GuideFaqItem[] {

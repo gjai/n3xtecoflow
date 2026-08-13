@@ -135,6 +135,14 @@ export default async function TiragesPage({
           <GameToolsNav gameId="euromillions" />
         </div>
         <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("subtitle")}</p>
+        <p className="mt-4">
+          <a
+            href="/api/euromillions/export"
+            className="text-sm font-semibold text-[var(--accent)] hover:underline"
+          >
+            {t("csvExport")} →
+          </a>
+        </p>
 
         <section id="archives" className="mt-10 scroll-mt-28">
           {listed.total === 0 ? (

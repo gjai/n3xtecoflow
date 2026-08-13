@@ -3,6 +3,8 @@ type AffiliateOfferButtonProps = {
   label: string;
   variant?: "primary" | "secondary";
   className?: string;
+  /** True when the URL is a tracked affiliate redirect (Kwanko, etc.). */
+  tracked?: boolean;
 };
 
 export function AffiliateOfferButton({
@@ -10,6 +12,7 @@ export function AffiliateOfferButton({
   label,
   variant = "primary",
   className = "",
+  tracked = false,
 }: AffiliateOfferButtonProps) {
   const base =
     "inline-flex min-h-11 items-center justify-center px-5 py-2.5 text-sm font-semibold transition-colors";
@@ -22,7 +25,11 @@ export function AffiliateOfferButton({
     <a
       href={href}
       target="_blank"
-      rel="sponsored noopener noreferrer"
+      rel={
+        tracked
+          ? "sponsored noopener noreferrer"
+          : "noopener noreferrer"
+      }
       className={`${base} ${styles} ${className}`}
     >
       {label}

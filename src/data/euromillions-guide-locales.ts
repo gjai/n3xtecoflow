@@ -1014,4 +1014,241 @@ export const euromillionsGuideLocales: EmGuideLocaleMap = {
       ],
     },
   },
+  "toucher-un-gain-euromillions": {
+    it: {
+      title: "Riscuotere una vincita EuroMillions",
+      subtitle:
+        "Termine di 60 giorni, dove rivolgersi, cosa questo sito non fa — senza vendita di biglietti.",
+      sections: [
+        {
+          heading: "Questo sito non paga vincite",
+          paragraphs: [
+            "EuroMillions Risultati è un sito editoriale indipendente. Non conserviamo i vostri biglietti e non versiamo premi. Per riscuotere: operatore autorizzato (in Francia: rete FDJ).",
+            "Una categoria nel simulatore legge le tabelle pubbliche. Non è una prova di pagamento.",
+          ],
+        },
+        {
+          heading: "Il termine di 60 giorni",
+          paragraphs: [
+            "In Francia i premi dei giochi di estrazione FDJ sono in genere pagabili per 60 giorni dalla data dell’estrazione. Oltre, il biglietto è prescritto.",
+            "Il simulatore mostra un avviso informativo. Il regolamento ufficiale prevale.",
+          ],
+        },
+        {
+          heading: "Dove rivolgersi (Francia)",
+          paragraphs: [
+            "Soglie e sportelli li fissa la FDJ. Consultate le pagine ufficiali prima di spostarvi.",
+            "Conservate il biglietto integro.",
+          ],
+          bullets: [
+            "Sito ufficiale: fdj.fr",
+            "Gioco online: l’account dell’operatore",
+            "Non teniamo un elenco di rivenditori",
+          ],
+        },
+        {
+          heading: "My Million ed Étoile+",
+          paragraphs: [
+            "My Million è un codice distinto dal jackpot 5+2. Étoile+ è un’opzione di gioco con ranghi extra se l’avete giocata.",
+            "Controllate il biglietto prima di presentarvi.",
+          ],
+        },
+        {
+          heading: "Gioco responsabile",
+          paragraphs: [
+            "Solo 18+. Una vincita non giustifica di alzare la puntata. Aiuto in Francia: Joueurs Info Service.",
+            "Questa guida indirizza all’operatore, non sostituisce il regolamento.",
+          ],
+        },
+      ],
+    },
+    es: {
+      title: "Cobrar un premio EuroMillions",
+      subtitle:
+        "Plazo de 60 días, dónde acudir, lo que este sitio no hace — sin venta de boletos.",
+      sections: [
+        {
+          heading: "Este sitio no paga premios",
+          paragraphs: [
+            "EuroMillions Resultados es un sitio editorial independiente. No guardamos boletos ni pagamos ganancias. Para cobrar: operador autorizado (en Francia: red FDJ).",
+            "Una categoría del simulador lee las tablas públicas. No es un justificante de pago.",
+          ],
+        },
+        {
+          heading: "El plazo de 60 días",
+          paragraphs: [
+            "En Francia los premios de los sorteos FDJ suelen cobrarse durante 60 días desde la fecha del sorteo. Después el boleto caduca.",
+            "El simulador muestra un aviso informativo. Prima el reglamento oficial.",
+          ],
+        },
+        {
+          heading: "Dónde acudir (Francia)",
+          paragraphs: [
+            "Los umbrales y puntos de pago los fija FDJ. Consulte las páginas oficiales antes de desplazarse.",
+            "Conserve el boleto intacto.",
+          ],
+          bullets: [
+            "Sitio oficial: fdj.fr",
+            "Juego online: la cuenta del operador",
+            "No mantenemos un listado de puntos de venta",
+          ],
+        },
+        {
+          heading: "My Million y Étoile+",
+          paragraphs: [
+            "My Million es un código distinto del bote 5+2. Étoile+ es una opción con categorías extra si la jugó.",
+            "Revise el boleto antes de presentarse.",
+          ],
+        },
+        {
+          heading: "Juego responsable",
+          paragraphs: [
+            "Solo 18+. Un premio no justifica subir la apuesta. Ayuda en Francia: Joueurs Info Service.",
+            "Esta guía orienta al operador; no sustituye el reglamento.",
+          ],
+        },
+      ],
+    },
+    pt: {
+      title: "Receber um prémio EuroMillions",
+      subtitle:
+        "Prazo de 60 dias, onde se dirigir, o que este site não faz — sem venda de bilhetes.",
+      sections: [
+        {
+          heading: "Este site não paga prémios",
+          paragraphs: [
+            "EuroMillions Resultados é um site editorial independente. Não guardamos bilhetes nem pagamos ganhos. Para receber: operador autorizado (em França: rede FDJ).",
+            "Uma categoria no simulador lê as tabelas públicas. Não é comprovativo de pagamento.",
+          ],
+        },
+        {
+          heading: "O prazo de 60 dias",
+          paragraphs: [
+            "Em França os prémios dos jogos de sorteio FDJ são em geral pagáveis durante 60 dias a partir da data do sorteio. Depois o bilhete caduca.",
+            "O simulador mostra um aviso informativo. O regulamento oficial prevalece.",
+          ],
+        },
+        {
+          heading: "Onde se dirigir (França)",
+          paragraphs: [
+            "Limiares e balcões são definidos pela FDJ. Consulte as páginas oficiais antes de se deslocar.",
+            "Mantenha o bilhete intacto.",
+          ],
+          bullets: [
+            "Site oficial: fdj.fr",
+            "Jogo online: a conta do operador",
+            "Não mantemos uma lista de revendedores",
+          ],
+        },
+        {
+          heading: "My Million e Étoile+",
+          paragraphs: [
+            "My Million é um código distinto do jackpot 5+2. Étoile+ é uma opção com escalões extra se a jogou.",
+            "Verifique o bilhete antes de se apresentar.",
+          ],
+        },
+        {
+          heading: "Jogo responsável",
+          paragraphs: [
+            "Apenas 18+. Um prémio não justifica aumentar a aposta. Ajuda em França: Joueurs Info Service.",
+            "Este guia aponta para o operador; não substitui o regulamento.",
+          ],
+        },
+      ],
+    },
+    de: {
+      title: "Einen EuroMillions-Gewinn einlösen",
+      subtitle:
+        "60-Tage-Frist, wohin wenden, was diese Seite nicht tut — ohne Tippscheinverkauf.",
+      sections: [
+        {
+          heading: "Diese Seite zahlt keine Gewinne",
+          paragraphs: [
+            "EuroMillions Ergebnisse ist eine unabhängige redaktionelle Seite. Wir verwahren keine Tippscheine und zahlen nichts aus. Zum Einlösen: zugelassener Anbieter (in Frankreich: FDJ-Netz).",
+            "Eine Stufe im Simulator liest öffentliche Tabellen. Das ist kein Zahlungsbeleg.",
+          ],
+        },
+        {
+          heading: "Die 60-Tage-Frist",
+          paragraphs: [
+            "In Frankreich sind FDJ-Ziehungsgewinne in der Regel 60 Tage ab Ziehungsdatum zahlbar. Danach verfällt der Schein.",
+            "Der Simulator zeigt einen Hinweis. Es gilt das offizielle Regelwerk.",
+          ],
+        },
+        {
+          heading: "Wohin in Frankreich",
+          paragraphs: [
+            "Schwellen und Annahmestellen legt die FDJ fest. Prüfen Sie die offiziellen Seiten vor der Anreise.",
+            "Tippschein unversehrt aufbewahren.",
+          ],
+          bullets: [
+            "Offizielle Seite: fdj.fr",
+            "Online-Spiel: das Betreiberkonto",
+            "Wir führen keine Händlerliste",
+          ],
+        },
+        {
+          heading: "My Million und Étoile+",
+          paragraphs: [
+            "My Million ist ein Code getrennt vom 5+2-Jackpot. Étoile+ ist eine Option mit Extra-Rängen, wenn sie gespielt wurde.",
+            "Prüfen Sie den Schein vor der Vorlage.",
+          ],
+        },
+        {
+          heading: "Verantwortungsvoll spielen",
+          paragraphs: [
+            "Nur 18+. Ein Gewinn rechtfertigt keine höhere Einsatz. Hilfe in Frankreich: Joueurs Info Service.",
+            "Dieser Leitfaden verweist auf den Betreiber, ersetzt aber nicht das Regelwerk.",
+          ],
+        },
+      ],
+    },
+    nl: {
+      title: "Een EuroMillions-winst innen",
+      subtitle:
+        "Termijn van 60 dagen, waar naartoe, wat deze site niet doet — zonder lotenverkoop.",
+      sections: [
+        {
+          heading: "Deze site keert geen winst uit",
+          paragraphs: [
+            "EuroMillions Resultaten is een onafhankelijke redactionele site. Wij bewaren geen loten en betalen niets. Om te innen: vergunde operator (in Frankrijk: FDJ-netwerk).",
+            "Een rang in de simulator leest openbare tabellen. Dat is geen betalingsbewijs.",
+          ],
+        },
+        {
+          heading: "De termijn van 60 dagen",
+          paragraphs: [
+            "In Frankrijk zijn FDJ-trekkingsprijzen doorgaans 60 dagen vanaf de trekkingsdatum betaalbaar. Daarna vervalt het lot.",
+            "De simulator toont een informatieve banner. Het officiële reglement geldt.",
+          ],
+        },
+        {
+          heading: "Waar naartoe (Frankrijk)",
+          paragraphs: [
+            "Drempels en loketten bepaalt FDJ. Raadpleeg de officiële pagina’s voor u afreist.",
+            "Bewaar het lot onbeschadigd.",
+          ],
+          bullets: [
+            "Officiële site: fdj.fr",
+            "Online spel: het operatoraccount",
+            "Wij houden geen lijst van verkooppunten bij",
+          ],
+        },
+        {
+          heading: "My Million en Étoile+",
+          paragraphs: [
+            "My Million is een code los van de 5+2-jackpot. Étoile+ is een optie met extra rangen als u die speelde.",
+            "Controleer het lot voor u zich meldt.",
+          ],
+        },
+        {
+          heading: "Verantwoord spelen",
+          paragraphs: [
+            "Alleen 18+. Winst is geen reden om de inzet te verhogen. Hulp in Frankrijk: Joueurs Info Service.",
+            "Deze gids wijst naar de operator; hij vervangt het reglement niet.",
+          ],
+        },
+      ],
+    },
+  },
 };

@@ -92,7 +92,8 @@
       "comprendre-keno": "Keno begrijpen",
       "comprendre-crescendo": "Crescendo begrijpen",
       "lire-resultats-tirages": "Een uitslag lezen",
-      "horaires-tirages-fdj": "Trekkingstijden"
+      "horaires-tirages-fdj": "Trekkingstijden",
+      "toucher-un-gain-euromillions": "Winst innen"
     },
     "myMillionLabel": "My Million-code",
     "myMillionLocation": "Aangekondigde locatie",
@@ -254,7 +255,9 @@
     "companionOf": "{game}-uitslag van {date}",
     "companionMeta": "Nummers en details van de {game}-trekking van {date}. Onafhankelijke site, 18+.",
     "prizesEtoilePlus": "Étoile+ prizes",
-    "prizesEtoilePlusHelp": "Extra tiers if the Étoile+ option was played — same 5+2 combination."
+    "prizesEtoilePlusHelp": "Extra tiers if the Étoile+ option was played — same 5+2 combination.",
+    "csvExport": "Archief downloaden (CSV)",
+    "claimCta": "Winst innen"
   },
   "myMillion": {
     "title": "My Million — codes & locaties",
@@ -368,7 +371,9 @@
     "allTitle": "Alle spellen",
     "allLead": "Dag, uur (Europa/Parijs) en countdown — indicatieve tijden.",
     "cutoffOpen": "Tickets accepted until {time} (Europe/Paris) on draw day.",
-    "cutoffClosed": "Sales closed (8:15 pm) — draw around 9 pm."
+    "cutoffClosed": "Sales closed (8:15 pm) — draw around 9 pm.",
+    "calendarCta": "Trekkingen in de agenda (ICS)",
+    "claimCta": "Winst innen"
   },
   "generator": {
     "eyebrow": "Toeval",

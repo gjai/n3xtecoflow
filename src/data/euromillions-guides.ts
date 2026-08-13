@@ -26,6 +26,7 @@ export const EUROMILLIONS_RESPONSIBLE_GUIDE_SLUG = "jeu-responsable-euromillions
 export const EUROMILLIONS_MY_MILLION_GUIDE_SLUG = "comprendre-my-million";
 export const EUROMILLIONS_TIERS_GUIDE_SLUG = "rangs-gains-euromillions";
 export const EUROMILLIONS_OTHER_GAMES_GUIDE_SLUG = "euromillions-et-autres-tirages";
+export const EUROMILLIONS_CLAIM_GUIDE_SLUG = "toucher-un-gain-euromillions";
 
 const CREDIT = "EuroMillions Résultats (IA)";
 
@@ -47,6 +48,11 @@ export const euromillionsGuideCovers: Record<
   [EUROMILLIONS_MY_MILLION_GUIDE_SLUG]: cover(EUROMILLIONS_MY_MILLION_GUIDE_SLUG),
   [EUROMILLIONS_TIERS_GUIDE_SLUG]: cover(EUROMILLIONS_TIERS_GUIDE_SLUG),
   [EUROMILLIONS_OTHER_GAMES_GUIDE_SLUG]: cover(EUROMILLIONS_OTHER_GAMES_GUIDE_SLUG),
+  [EUROMILLIONS_CLAIM_GUIDE_SLUG]: {
+    src: "/images/euromillions/guides/rangs-gains-euromillions.jpg",
+    credit: CREDIT,
+    creditUrl: "https://euromillions-resultats.fr",
+  },
   [EUROMILLIONS_LOTO_GUIDE_SLUG]: cover(EUROMILLIONS_LOTO_GUIDE_SLUG),
   [EUROMILLIONS_EURODREAMS_GUIDE_SLUG]: cover(EUROMILLIONS_EURODREAMS_GUIDE_SLUG),
   [EUROMILLIONS_KENO_GUIDE_SLUG]: cover(EUROMILLIONS_KENO_GUIDE_SLUG),
@@ -463,6 +469,103 @@ const euromillionsCoreGuidesRaw: GuideArticle[] = [
           heading: "What we do not do",
           paragraphs: [
             "No “magic combo” across games, no ticket sales, no promise of winnings. To play: licensed operator, 18+, leisure budget.",
+          ],
+        },
+      ],
+    },
+  },
+  {
+    slug: EUROMILLIONS_CLAIM_GUIDE_SLUG,
+    fr: {
+      title: "Toucher un gain EuroMillions",
+      subtitle:
+        "Forclusion 60 jours, où s’adresser, ce que ce site ne fait pas — sans vente de tickets.",
+      sections: [
+        {
+          heading: "Ce site n’encaisse rien",
+          paragraphs: [
+            "EuroMillions Résultats est un site éditorial indépendant. Nous n’avons pas vos tickets, nous ne validons pas un support physique, et nous ne versons aucun gain. Pour encaisser, passez par un opérateur agréé (en France : réseau FDJ).",
+            "Un rang affiché dans le simulateur est une lecture des barèmes publics. Ce n’est pas une preuve de paiement.",
+          ],
+        },
+        {
+          heading: "Le délai de 60 jours",
+          paragraphs: [
+            "En France, les lots des jeux de tirage FDJ sont en général payables pendant 60 jours à compter de la date du tirage. Passé ce délai, le ticket est forclos : il ne peut plus être encaissé, même s’il était gagnant.",
+            "Le simulateur de ce site affiche un bandeau de forclusion à titre informatif. Le règlement officiel de l’opérateur prime toujours.",
+          ],
+        },
+        {
+          heading: "Où s’adresser (France)",
+          paragraphs: [
+            "Les modalités exactes (seuils en détaillant, centres de paiement, compte en ligne) relèvent de la FDJ et peuvent changer. Consultez les pages officielles avant de vous déplacer, et identifiez-vous si le montant l’exige.",
+            "Gardez le ticket intact (pas de lavage, pas de découpe). Un ticket illisible peut être refusé.",
+          ],
+          bullets: [
+            "Page officielle FDJ : fdj.fr (rubrique gains / EuroMillions)",
+            "Jeu en ligne : compte de l’opérateur où la grille a été validée",
+            "Nous ne tenons pas de liste de détaillants",
+          ],
+        },
+        {
+          heading: "My Million et Étoile+",
+          paragraphs: [
+            "My Million est un code distinct du jackpot 5+2. Un million My Million ne s’encaisse pas « via les boules ». Étoile+ est une option de mise : des rangs extra s’ajoutent si vous l’avez jouée, selon le barème FDJ du tirage.",
+            "Vérifiez le ticket (option cochée, code imprimé) avant de vous présenter.",
+          ],
+        },
+        {
+          heading: "Jeu responsable",
+          paragraphs: [
+            "18+ uniquement. Un gain ne justifie pas d’augmenter la mise. Aide en France : Joueurs Info Service — 09 74 75 13 13 — joueurs-info-service.fr.",
+            "Ce guide oriente vers l’opérateur. Il ne remplace pas le règlement du jeu.",
+          ],
+        },
+      ],
+    },
+    en: {
+      title: "How to claim an EuroMillions prize",
+      subtitle:
+        "60-day time limit, where to go, what this site does not do — no ticket sales.",
+      sections: [
+        {
+          heading: "This site does not pay prizes",
+          paragraphs: [
+            "EuroMillions Résultats is an independent editorial site. We do not hold your tickets, we do not validate physical slips, and we do not pay winnings. To claim, use a licensed operator (in France: the FDJ network).",
+            "A tier shown in the simulator is a reading of public prize tables. It is not proof of payment.",
+          ],
+        },
+        {
+          heading: "The 60-day limit",
+          paragraphs: [
+            "In France, FDJ draw prizes are generally payable for 60 days from the draw date. After that the ticket is time-barred, even if it was a winner.",
+            "Our simulator shows a time-limit banner for information only. The operator’s official rules always prevail.",
+          ],
+        },
+        {
+          heading: "Where to claim (France)",
+          paragraphs: [
+            "Exact thresholds (retailers, payment centres, online account) are set by FDJ and can change. Check the official pages before travelling, and bring ID if the amount requires it.",
+            "Keep the ticket intact. An unreadable ticket can be refused.",
+          ],
+          bullets: [
+            "Official FDJ site: fdj.fr (winnings / EuroMillions)",
+            "Online play: the operator account where the grid was validated",
+            "We do not keep a list of retailers",
+          ],
+        },
+        {
+          heading: "My Million and Étoile+",
+          paragraphs: [
+            "My Million is a code separate from the 5+2 jackpot. An Étoile+ option adds extra tiers if you played it, according to the FDJ table for that draw.",
+            "Check the ticket (option marked, printed code) before you go.",
+          ],
+        },
+        {
+          heading: "Play responsibly",
+          paragraphs: [
+            "18+ only. A win is not a reason to raise the stake. Help in France: Joueurs Info Service — 09 74 75 13 13 — joueurs-info-service.fr.",
+            "This guide points to the operator. It does not replace the game rules.",
           ],
         },
       ],

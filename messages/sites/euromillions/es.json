@@ -92,7 +92,8 @@
       "comprendre-keno": "Entender el Keno",
       "comprendre-crescendo": "Entender Crescendo",
       "lire-resultats-tirages": "Leer un resultado",
-      "horaires-tirages-fdj": "Horarios de los sorteos"
+      "horaires-tirages-fdj": "Horarios de los sorteos",
+      "toucher-un-gain-euromillions": "Cobrar un premio"
     },
     "myMillionLabel": "Código My Million",
     "myMillionLocation": "Localización anunciada",
@@ -254,7 +255,9 @@
     "companionOf": "Resultado {game} del {date}",
     "companionMeta": "Números y detalles del sorteo {game} del {date}. Sitio independiente, 18+.",
     "prizesEtoilePlus": "Étoile+ prizes",
-    "prizesEtoilePlusHelp": "Extra tiers if the Étoile+ option was played — same 5+2 combination."
+    "prizesEtoilePlusHelp": "Extra tiers if the Étoile+ option was played — same 5+2 combination.",
+    "csvExport": "Descargar archivo (CSV)",
+    "claimCta": "Cobrar un premio"
   },
   "myMillion": {
     "title": "My Million — códigos y localizaciones",
@@ -368,7 +371,9 @@
     "allTitle": "Todos los juegos",
     "allLead": "Día, hora (Europa/París) y cuenta atrás — horarios orientativos.",
     "cutoffOpen": "Tickets accepted until {time} (Europe/Paris) on draw day.",
-    "cutoffClosed": "Sales closed (8:15 pm) — draw around 9 pm."
+    "cutoffClosed": "Sales closed (8:15 pm) — draw around 9 pm.",
+    "calendarCta": "Añadir sorteos al calendario (ICS)",
+    "claimCta": "Cobrar un premio"
   },
   "generator": {
     "eyebrow": "Aleatorio",

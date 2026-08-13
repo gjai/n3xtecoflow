@@ -92,7 +92,8 @@
       "comprendre-keno": "Understanding Keno",
       "comprendre-crescendo": "Understanding Crescendo",
       "lire-resultats-tirages": "How to read a draw result",
-      "horaires-tirages-fdj": "Draw schedules"
+      "horaires-tirages-fdj": "Draw schedules",
+      "toucher-un-gain-euromillions": "How to claim a prize"
     },
     "myMillionLabel": "My Million code",
     "myMillionLocation": "Announced location",
@@ -254,7 +255,9 @@
     "companionOf": "{game} result for {date}",
     "companionMeta": "Numbers and details of the {game} draw on {date}. Independent site, 18+.",
     "prizesEtoilePlus": "Étoile+ prizes",
-    "prizesEtoilePlusHelp": "Extra tiers if the Étoile+ option was played — same 5+2 combination."
+    "prizesEtoilePlusHelp": "Extra tiers if the Étoile+ option was played — same 5+2 combination.",
+    "csvExport": "Download archives (CSV)",
+    "claimCta": "How to claim a prize"
   },
   "myMillion": {
     "title": "My Million — codes & locations",
@@ -368,7 +371,9 @@
     "allTitle": "All games",
     "allLead": "Day, time (Europe/Paris) and countdown — times are indicative.",
     "cutoffOpen": "Tickets accepted until {time} (Europe/Paris) on draw day.",
-    "cutoffClosed": "Sales closed (8:15 pm) — draw around 9 pm."
+    "cutoffClosed": "Sales closed (8:15 pm) — draw around 9 pm.",
+    "calendarCta": "Add draws to your calendar (ICS)",
+    "claimCta": "How to claim a prize"
   },
   "generator": {
     "eyebrow": "Random",

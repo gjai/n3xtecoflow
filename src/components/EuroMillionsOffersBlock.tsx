@@ -135,7 +135,11 @@ export async function EuroMillionsOffersBlock({
 
         {fdj ? (
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <AffiliateOfferButton href={fdj.href} label={isEn ? fdj.labelEn : fdj.labelFr} />
+            <AffiliateOfferButton
+              href={fdj.href}
+              label={isEn ? fdj.labelEn : fdj.labelFr}
+              tracked={Boolean(process.env.FDJ_AFFILIATE_URL?.trim())}
+            />
             <p className="max-w-md text-xs text-[var(--muted)]">{t("fdjNote")}</p>
           </div>
         ) : null}
