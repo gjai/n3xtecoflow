@@ -229,10 +229,8 @@ export async function refreshEuroMillionsData(options?: {
   const afterFdj = await readFdjGamesStore();
   const fingerprint = lotteryFingerprint(next, afterFdj);
   const changed = fingerprint !== beforeFp;
-  // Sitemap always: archives can grow without changing the latest draw.
-  revalidateSitemap();
+  revalidateLotteryPages();
   if (changed) {
-    revalidateLotteryPages();
     await submitIndexNow(lotteryIndexNowUrls(next, afterFdj));
   }
 
