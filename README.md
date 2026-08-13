@@ -36,7 +36,8 @@ Voir `.env.example` (extrait) :
 
 1. DNS A `@` et `www` → VPS pour **chaque** domaine
 2. App Coolify : Dockerfile, port `3000`
-3. **Volume persistant** monté sur `/app/data` (news, images, analytics, prix, euromillions)
+3. **Volume persistant** monté sur `/app/data` (news, images, prix, euromillions, fdj-games)
+3b. **Umami** (service Coolify one-click) + env build `NEXT_PUBLIC_UMAMI_SCRIPT_URL` / `NEXT_PUBLIC_UMAMI_WEBSITE_ID`
 4. FQDN (même app) :
    `ecoflow-stream.com,www.ecoflow-stream.com,powerstream.fr,www.powerstream.fr,mon-tumbler.fr,www.mon-tumbler.fr,massage-gun.fr,www.massage-gun.fr,casinos-crypto.fr,www.casinos-crypto.fr,euromillions-resultats.fr,www.euromillions-resultats.fr`
 5. Let's Encrypt

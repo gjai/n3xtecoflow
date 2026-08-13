@@ -48,7 +48,7 @@ function formatMoney(amount: number | null | undefined, locale: string) {
   return new Intl.NumberFormat(locale === "en" ? "en-GB" : "fr-FR", {
     style: "currency",
     currency: "EUR",
-    maximumFractionDigits: 0,
+    maximumFractionDigits: amount < 10 ? 2 : 0,
   }).format(amount);
 }
 
@@ -118,6 +118,60 @@ export default async function TirageDetailPage({
             </div>
           ) : null}
         </div>
+
+        {draw.prizeTiers && draw.prizeTiers.length > 0 ? (
+          <div className="mt-8">
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+              {t("prizesTitle")}
+            </h2>
+            <div className="mt-4 overflow-x-auto border border-[var(--line)]">
+              <table className="w-full min-w-[320px] text-left text-sm">
+                <thead className="bg-[var(--surface)] text-xs uppercase tracking-[0.12em] text-[var(--muted)]">
+                  <tr>
+                    <th className="px-3 py-2 font-medium">{t("prizeRank")}</th>
+                    <th className="px-3 py-2 font-medium">{t("prizeAmount")}</th>
+                    <th className="px-3 py-2 font-medium">{t("prizeWinners")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {draw.prizeTiers.map((tier) => (
+                    <tr
+                      key={tier.rank}
+                      className="border-t border-[var(--line)]"
+                    >
+                      <td className="px-3 py-2 font-semibold text-[var(--heading)]">
+                        {tier.rank}
+                      </td>
+                      <td className="px-3 py-2 text-[var(--heading)]">
+                        {formatMoney(tier.amountEur, locale) || "—"}
+                      </td>
+                      <td className="px-3 py-2 text-[var(--muted)]">
+                        {tier.winners}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-4">
+              <Link
+                href="/simulateur"
+                className="text-sm font-semibold text-[var(--accent)] hover:underline"
+              >
+                {t("simulatorCta")} →
+              </Link>
+            </p>
+          </div>
+        ) : (
+          <p className="mt-6">
+            <Link
+              href="/simulateur"
+              className="text-sm font-semibold text-[var(--accent)] hover:underline"
+            >
+              {t("simulatorCta")} →
+            </Link>
+          </p>
+        )}
 
         <p className="mt-6 text-xs text-[var(--muted)]">
           {t("source")} · {draw.source}

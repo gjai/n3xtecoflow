@@ -26,6 +26,15 @@ jobs:
           curl -fsS -X POST \
             -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
             "${SITE_URL}/api/euromillions/refresh"
+      - name: Ingest EuroMillions news
+        env:
+          NEWS_CRON_SECRET: ${{ secrets.NEWS_CRON_SECRET }}
+          SITE_URL: https://euromillions-resultats.fr
+        run: |
+          set -euo pipefail
+          curl -fsS -X POST \
+            -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
+            "${SITE_URL}/api/news/ingest?siteId=euromillions&limit=2"
       - name: Alert on failure
         if: failure()
         env:

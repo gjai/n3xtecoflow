@@ -1,4 +1,4 @@
-name: Daily site stats email
+name: Daily ops digest email
 
 on:
   schedule:
@@ -10,7 +10,7 @@ jobs:
   digest:
     runs-on: ubuntu-latest
     steps:
-      - name: Send daily stats digest
+      - name: Send daily ops digest
         env:
           NEWS_CRON_SECRET: ${{ secrets.NEWS_CRON_SECRET }}
           SITE_URL: https://ecoflow-stream.com

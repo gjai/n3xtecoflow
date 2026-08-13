@@ -145,7 +145,7 @@
     "adsense": "This site may show Google AdSense ads. Google may use cookies to personalize ads, only after your consent.",
     "contactViaForm": "To reach us, use the",
     "contactLink": "contact form",
-    "privacyBody": "We collect minimal technical data (server logs, cookieless anonymized audience measurement) and, if you accept, Google AdSense advertising cookies. The contact form transmits name, email and message only to reply to you. We do not sell personal data.",
+    "privacyBody": "We collect minimal technical data (server logs) and cookieless anonymized audience measurement via self-hosted Umami (no ad cookies). If you accept, Google AdSense advertising cookies may also apply. The contact form transmits name, email and message only to reply to you. We do not sell personal data.",
     "privacyConsent": "You can accept or reject advertising cookies via the cookie banner. Strictly necessary cookies remain active. Technical measures: HTTPS, security headers, contact form spam throttling.",
     "privacyBasisTitle": "Legal basis & retention",
     "privacyBasisBody": "Legal bases: legitimate interest (security, technical logs, anonymized audience), responding to your request (contact form), and consent (AdSense advertising cookies). Retention: technical logs for a limited period (order of a few weeks), contact messages for the time needed to handle them, consent choice stored locally on your device until cleared.",

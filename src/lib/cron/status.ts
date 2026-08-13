@@ -115,7 +115,7 @@ const EXPECTED: {
   { job: "catalog", label: "Catalogue EcoFlow", maxAgeHours: 18 },
   { job: "guides", label: "Guides IA", maxAgeHours: 240 }, // weekly + margin
   { job: "amazon", label: "Prix Amazon", maxAgeHours: 18, optional: true },
-  { job: "stats", label: "Digest stats", maxAgeHours: 36 },
+  { job: "stats", label: "Digest ops", maxAgeHours: 36 },
 ];
 
 export async function evaluateCronHealth(): Promise<{

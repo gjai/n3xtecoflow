@@ -157,7 +157,7 @@
     "cookiesMeta": "Necessary cookies only — no AdSense advertising on Casinos Crypto.",
     "cookiesAdsTitle": "Advertising cookies",
     "cookiesAdsBody": "No Google AdSense on Casinos Crypto: no advertising cookies are set.",
-    "privacyBody": "We collect minimal technical data (server logs, anonymised analytics without ad cookies). The contact form sends name, email and message only to reply. No data resale. No AdSense.",
+    "privacyBody": "We collect minimal technical data (server logs) and anonymised analytics via self-hosted Umami (no ad cookies). The contact form sends name, email and message only to reply. No data resale. No AdSense.",
     "privacyConsent": "No advertising cookies on this site. Strictly necessary cookies stay on.",
     "privacyBasisBody": "Legal bases: legitimate interest (security, technical logs, anonymised analytics) and pre-contractual steps / answering your request (form). Retention: technical logs for a limited period, contact messages for the time needed to handle them.",
     "hubTitle": "Legal notice",

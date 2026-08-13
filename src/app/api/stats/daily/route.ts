@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
-import { buildDailyDigest, sendDigestEmail } from "@/lib/analytics/digest";
+import {
+  buildDailyDigest,
+  parisDateKey,
+  sendDigestEmail,
+  shiftParisDateKey,
+} from "@/lib/ops/digest";
 import { markCronFail, markCronOk } from "@/lib/cron/status";
-import { shiftParisDateKey, parisDateKey } from "@/lib/analytics/store";
 
 export const maxDuration = 60;
 
@@ -51,7 +55,6 @@ export async function POST(request: Request) {
       ok: true,
       dayKey: digest.dayKey,
       subject: digest.subject,
-      totals: digest.totals,
       cronHealthOk: digest.cronHealth?.ok ?? true,
     });
   } catch (err) {

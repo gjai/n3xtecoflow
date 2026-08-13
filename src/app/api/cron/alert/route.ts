@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sendDigestEmail } from "@/lib/analytics/digest";
+import { sendDigestEmail } from "@/lib/ops/digest";
 import { markCronFail } from "@/lib/cron/status";
 
 export const maxDuration = 30;

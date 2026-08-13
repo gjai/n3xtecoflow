@@ -1,4 +1,8 @@
-import type { EuroMillionsDraw, MyMillionWinner } from "./types";
+import type {
+  EuroMillionsDraw,
+  EuroMillionsPrizeTier,
+  MyMillionWinner,
+} from "./types";
 
 function toIsoDate(input: string): string {
   const d = new Date(input);
@@ -19,6 +23,20 @@ function normalizeMyMillionCode(raw: string): string {
 
 type FdjAmount = { value?: number; currency?: string; scale?: number };
 type FdjResult = { type?: string; numbers?: string[] };
+type FdjBoard = {
+  count?: number;
+  amount?: number;
+  currency?: string;
+  scale?: number;
+};
+type FdjPrizeLevel = {
+  division_name?: string;
+  winning_boards?: FdjBoard[];
+};
+type FdjShareSet = {
+  winset_name?: string;
+  prize_levels?: FdjPrizeLevel[];
+};
 type FdjDraw = {
   id?: string;
   external_id?: string;
@@ -26,7 +44,32 @@ type FdjDraw = {
   results?: FdjResult[];
   estimated_jackpot?: FdjAmount[];
   guaranteed_amounts?: FdjAmount[];
+  shares?: FdjShareSet[];
 };
+
+function parsePrizeTiers(shares?: FdjShareSet[]): EuroMillionsPrizeTier[] {
+  const regular =
+    (shares || []).find((s) =>
+      String(s.winset_name || "")
+        .toLowerCase()
+        .includes("regular"),
+    ) || shares?.[0];
+  if (!regular?.prize_levels?.length) return [];
+  const out: EuroMillionsPrizeTier[] = [];
+  for (const level of regular.prize_levels) {
+    const rank = String(level.division_name || "").trim();
+    if (!rank) continue;
+    const eur = (level.winning_boards || []).find((b) => b.currency === "EUR");
+    if (!eur || typeof eur.amount !== "number") continue;
+    const scale = typeof eur.scale === "number" ? eur.scale : 0;
+    out.push({
+      rank,
+      winners: typeof eur.count === "number" ? eur.count : 0,
+      amountEur: eur.amount / 10 ** scale,
+    });
+  }
+  return out;
+}
 
 function amountEur(list?: FdjAmount[]): number | null {
   const eur = (list || []).find((a) => a.currency === "EUR");
@@ -67,6 +110,7 @@ export async function fetchFdjEuroMillionsDraws(
     const starNums = nums(stars?.numbers || []);
     if (numbers.length !== 5 || starNums.length !== 2) continue;
     const codeRaw = mm?.numbers?.[0];
+    const prizeTiers = parsePrizeTiers(d.shares);
     out.push({
       date: toIsoDate(d.planned_at),
       drawId: d.external_id || d.id,
@@ -76,6 +120,7 @@ export async function fetchFdjEuroMillionsDraws(
         amountEur(d.estimated_jackpot) ?? amountEur(d.guaranteed_amounts),
       hasWinner: null,
       myMillionCode: codeRaw ? normalizeMyMillionCode(codeRaw) : null,
+      prizeTiers: prizeTiers.length ? prizeTiers : undefined,
       source: "fdj",
       sourceUrl: url,
       fetchedAt: now,

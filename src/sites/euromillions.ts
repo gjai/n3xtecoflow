@@ -18,9 +18,9 @@ export const euromillionsSite: SiteConfig = {
     headlineFr: "Les résultats EuroMillions, clairement.",
     headlineEn: "EuroMillions results, clearly.",
     subheadFr:
-      "Dernier tirage, historique et statistiques — sans promesse de gains.",
+      "EuroMillions en avant — plus Loto, EuroDreams, Crescendo et Keno. Sans promesse de gains.",
     subheadEn:
-      "Latest draw, history and statistics — with no promise of winnings.",
+      "EuroMillions first — plus Loto, EuroDreams, Crescendo and Keno. No promise of winnings.",
     footerBlurbFr:
       "Site indépendant — résultats & archives EuroMillions · 18+ · Jeu responsable",
     footerBlurbEn:
@@ -125,6 +125,10 @@ export const euromillionsSite: SiteConfig = {
       "Archives tirages",
       "Statistiques EuroMillions",
       "Jackpot EuroMillions",
+      "EuroDreams",
+      "Loto",
+      "Crescendo",
+      "Keno",
       "Jeu responsable",
     ],
     mainGuideSlug: "comprendre-euromillions",

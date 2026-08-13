@@ -29,6 +29,8 @@ export function SiteHeader() {
     ? (
         [
           { href: "/tirages", label: t("archive") },
+          { href: "/simulateur", label: t("simulator") },
+          { href: "/jeux", label: t("otherGames") },
           { href: "/my-million", label: t("myMillion") },
           { href: "/stats", label: t("stats") },
           { href: "/guides", label: t("guides") },

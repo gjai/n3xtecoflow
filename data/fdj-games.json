@@ -1,0 +1,3596 @@
+{
+  "updatedAt": "2026-08-13T09:54:43.747Z",
+  "games": {
+    "eurodreams": {
+      "latest": {
+        "gameId": "eurodreams",
+        "date": "2026-08-10",
+        "plannedAt": "2026-08-10T21:00:00.000+02:00",
+        "drawId": "26064",
+        "jackpotEur": 20000,
+        "jackpotNote": "20000|30",
+        "groups": [
+          {
+            "type": "numeros principaux",
+            "kind": "numbers",
+            "labelKey": "main",
+            "values": [
+              7,
+              9,
+              10,
+              26,
+              33,
+              40
+            ]
+          },
+          {
+            "type": "numero dream",
+            "kind": "bonus",
+            "labelKey": "dream",
+            "values": [
+              1
+            ]
+          }
+        ],
+        "source": "fdj",
+        "fetchedAt": "2026-08-13T09:54:41.908Z"
+      },
+      "draws": [
+        {
+          "gameId": "eurodreams",
+          "date": "2026-08-10",
+          "plannedAt": "2026-08-10T21:00:00.000+02:00",
+          "drawId": "26064",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                7,
+                9,
+                10,
+                26,
+                33,
+                40
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                1
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-08-06",
+          "plannedAt": "2026-08-06T21:00:00.000+02:00",
+          "drawId": "26063",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                18,
+                22,
+                24,
+                26,
+                33
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                2
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-08-03",
+          "plannedAt": "2026-08-03T21:00:00.000+02:00",
+          "drawId": "26062",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                12,
+                13,
+                17,
+                20,
+                23,
+                34
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                2
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-07-30",
+          "plannedAt": "2026-07-30T21:00:00.000+02:00",
+          "drawId": "26061",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                4,
+                12,
+                21,
+                27,
+                34,
+                39
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                1
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-07-27",
+          "plannedAt": "2026-07-27T21:00:00.000+02:00",
+          "drawId": "26060",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                2,
+                4,
+                13,
+                16,
+                21,
+                25
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                3
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-07-23",
+          "plannedAt": "2026-07-23T21:00:00.000+02:00",
+          "drawId": "26059",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                4,
+                17,
+                21,
+                31,
+                33
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                2
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-07-20",
+          "plannedAt": "2026-07-20T21:00:00.000+02:00",
+          "drawId": "26058",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                8,
+                11,
+                12,
+                22,
+                26,
+                36
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                1
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-07-16",
+          "plannedAt": "2026-07-16T21:00:00.000+02:00",
+          "drawId": "26057",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                9,
+                14,
+                16,
+                30,
+                40
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                3
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-07-13",
+          "plannedAt": "2026-07-13T21:00:00.000+02:00",
+          "drawId": "26056",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                9,
+                12,
+                13,
+                17,
+                21,
+                30
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                1
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-07-09",
+          "plannedAt": "2026-07-09T21:00:00.000+02:00",
+          "drawId": "26055",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                5,
+                14,
+                18,
+                22,
+                33,
+                35
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                4
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-07-06",
+          "plannedAt": "2026-07-06T21:00:00.000+02:00",
+          "drawId": "26054",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                4,
+                5,
+                7,
+                12,
+                29,
+                37
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                2
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-07-02",
+          "plannedAt": "2026-07-02T21:00:00.000+02:00",
+          "drawId": "26053",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                12,
+                23,
+                24,
+                36,
+                40
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                3
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-06-29",
+          "plannedAt": "2026-06-29T21:00:00.000+02:00",
+          "drawId": "26052",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                12,
+                20,
+                22,
+                28,
+                29,
+                40
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                2
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-06-25",
+          "plannedAt": "2026-06-25T21:00:00.000+02:00",
+          "drawId": "26051",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                4,
+                11,
+                16,
+                17,
+                38
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                1
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-06-22",
+          "plannedAt": "2026-06-22T21:00:00.000+02:00",
+          "drawId": "26050",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                4,
+                10,
+                14,
+                15,
+                29,
+                37
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                3
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-06-18",
+          "plannedAt": "2026-06-18T21:00:00.000+02:00",
+          "drawId": "26049",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                2,
+                19,
+                23,
+                27,
+                28,
+                30
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                3
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-06-15",
+          "plannedAt": "2026-06-15T21:00:00.000+02:00",
+          "drawId": "26048",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                14,
+                20,
+                22,
+                29,
+                40
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                5
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        },
+        {
+          "gameId": "eurodreams",
+          "date": "2026-06-11",
+          "plannedAt": "2026-06-11T21:00:00.000+02:00",
+          "drawId": "26047",
+          "jackpotEur": 20000,
+          "jackpotNote": "20000|30",
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                6,
+                18,
+                22,
+                25,
+                31,
+                32
+              ]
+            },
+            {
+              "type": "numero dream",
+              "kind": "bonus",
+              "labelKey": "dream",
+              "values": [
+                5
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:41.908Z"
+        }
+      ]
+    },
+    "loto": {
+      "latest": {
+        "gameId": "loto",
+        "date": "2026-08-12",
+        "plannedAt": "2026-08-12T20:55:00.000+02:00",
+        "drawId": "26096",
+        "jackpotEur": 2000000,
+        "jackpotNote": null,
+        "groups": [
+          {
+            "type": "numeros principaux",
+            "kind": "numbers",
+            "labelKey": "main",
+            "values": [
+              4,
+              5,
+              18,
+              22,
+              35
+            ]
+          },
+          {
+            "type": "numero chance",
+            "kind": "bonus",
+            "labelKey": "chance",
+            "values": [
+              2
+            ]
+          },
+          {
+            "type": "2eme tirage",
+            "kind": "numbers",
+            "labelKey": "secondDraw",
+            "values": [
+              1,
+              15,
+              16,
+              34,
+              45
+            ]
+          },
+          {
+            "type": "joker",
+            "kind": "code",
+            "labelKey": "joker",
+            "values": [
+              "3077476"
+            ]
+          }
+        ],
+        "source": "fdj",
+        "fetchedAt": "2026-08-13T09:54:42.366Z"
+      },
+      "draws": [
+        {
+          "gameId": "loto",
+          "date": "2026-08-12",
+          "plannedAt": "2026-08-12T20:55:00.000+02:00",
+          "drawId": "26096",
+          "jackpotEur": 2000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                4,
+                5,
+                18,
+                22,
+                35
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                1,
+                15,
+                16,
+                34,
+                45
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "3077476"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-08-10",
+          "plannedAt": "2026-08-10T20:55:00.000+02:00",
+          "drawId": "26095",
+          "jackpotEur": 9000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                19,
+                21,
+                23,
+                34,
+                35
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                10
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                1,
+                3,
+                9,
+                21,
+                28
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "0216008"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-08-08",
+          "plannedAt": "2026-08-08T20:55:00.000+02:00",
+          "drawId": "26094",
+          "jackpotEur": 8000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                4,
+                6,
+                22,
+                36,
+                37
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                3
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                17,
+                27,
+                29,
+                32,
+                44
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "3466514"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-08-05",
+          "plannedAt": "2026-08-05T20:55:00.000+02:00",
+          "drawId": "26093",
+          "jackpotEur": 7000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                12,
+                22,
+                24,
+                33,
+                38
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                9
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                1,
+                2,
+                5,
+                28,
+                29
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "5983093"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-08-03",
+          "plannedAt": "2026-08-03T20:55:00.000+02:00",
+          "drawId": "26092",
+          "jackpotEur": 6000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                5,
+                25,
+                37,
+                41,
+                42
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                10
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                5,
+                6,
+                9,
+                28,
+                30
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "9146674"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-08-01",
+          "plannedAt": "2026-08-01T20:55:00.000+02:00",
+          "drawId": "26091",
+          "jackpotEur": 5000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                5,
+                6,
+                8,
+                30,
+                37
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                4
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                8,
+                12,
+                22,
+                25,
+                31
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "3131679"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-07-29",
+          "plannedAt": "2026-07-29T20:55:00.000+02:00",
+          "drawId": "26090",
+          "jackpotEur": 4000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                15,
+                27,
+                34,
+                40,
+                41
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                9
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                5,
+                6,
+                13,
+                21,
+                43
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "7166081"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-07-27",
+          "plannedAt": "2026-07-27T20:55:00.000+02:00",
+          "drawId": "26089",
+          "jackpotEur": 3000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                6,
+                7,
+                8,
+                16,
+                36
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                3
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                15,
+                16,
+                18,
+                43,
+                45
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "7764536"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-07-25",
+          "plannedAt": "2026-07-25T20:55:00.000+02:00",
+          "drawId": "26088",
+          "jackpotEur": 2000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                22,
+                29,
+                30,
+                36,
+                47
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                4,
+                11,
+                36,
+                41,
+                43
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "2741918"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-07-22",
+          "plannedAt": "2026-07-22T20:55:00.000+02:00",
+          "drawId": "26087",
+          "jackpotEur": 15000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                4,
+                9,
+                10,
+                13,
+                23
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                7
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                26,
+                36,
+                37,
+                42,
+                47
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "5923926"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-07-20",
+          "plannedAt": "2026-07-20T20:55:00.000+02:00",
+          "drawId": "26086",
+          "jackpotEur": 14000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                13,
+                15,
+                20,
+                24,
+                45
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                8
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                11,
+                23,
+                28,
+                32,
+                42
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "8464067"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-07-18",
+          "plannedAt": "2026-07-18T20:55:00.000+02:00",
+          "drawId": "26085",
+          "jackpotEur": 13000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                10,
+                11,
+                24,
+                27,
+                36
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                7
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                2,
+                8,
+                17,
+                22,
+                31
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "6772421"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-07-15",
+          "plannedAt": "2026-07-15T20:55:00.000+02:00",
+          "drawId": "26084",
+          "jackpotEur": 12000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                9,
+                13,
+                21,
+                37
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                3
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                16,
+                19,
+                31,
+                39,
+                42
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "6403375"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-07-13",
+          "plannedAt": "2026-07-13T20:55:00.000+02:00",
+          "drawId": "26083",
+          "jackpotEur": 11000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                5,
+                18,
+                26,
+                29,
+                45
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                7
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                2,
+                4,
+                9,
+                32,
+                43
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "8913306"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-07-11",
+          "plannedAt": "2026-07-11T20:55:00.000+02:00",
+          "drawId": "26082",
+          "jackpotEur": 10000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                16,
+                34,
+                35,
+                38
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                18,
+                23,
+                24,
+                43,
+                46
+              ]
+            },
+            {
+              "type": "multiplicateur promo",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "4457715"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-07-08",
+          "plannedAt": "2026-07-08T20:55:00.000+02:00",
+          "drawId": "26081",
+          "jackpotEur": 4000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                7,
+                16,
+                18,
+                28,
+                35
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                8
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                14,
+                15,
+                20,
+                39,
+                47
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "2665984"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-07-06",
+          "plannedAt": "2026-07-06T20:55:00.000+02:00",
+          "drawId": "26080",
+          "jackpotEur": 3000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                16,
+                29,
+                31,
+                36,
+                46
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                7
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                2,
+                16,
+                33,
+                46,
+                47
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "1010505"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-07-04",
+          "plannedAt": "2026-07-04T20:55:00.000+02:00",
+          "drawId": "26079",
+          "jackpotEur": 2000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                15,
+                31,
+                41,
+                48,
+                49
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                3
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                11,
+                16,
+                21,
+                32,
+                46
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "9108142"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-07-01",
+          "plannedAt": "2026-07-01T20:55:00.000+02:00",
+          "drawId": "26078",
+          "jackpotEur": 2000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                8,
+                9,
+                10,
+                25,
+                31
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                5
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                1,
+                2,
+                24,
+                26,
+                44
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "3729636"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        },
+        {
+          "gameId": "loto",
+          "date": "2026-06-29",
+          "plannedAt": "2026-06-29T20:55:00.000+02:00",
+          "drawId": "26077",
+          "jackpotEur": 2000000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                13,
+                27,
+                32,
+                41
+              ]
+            },
+            {
+              "type": "numero chance",
+              "kind": "bonus",
+              "labelKey": "chance",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "2eme tirage",
+              "kind": "numbers",
+              "labelKey": "secondDraw",
+              "values": [
+                5,
+                10,
+                20,
+                24,
+                47
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "0630977"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.366Z"
+        }
+      ]
+    },
+    "crescendo": {
+      "latest": {
+        "gameId": "crescendo",
+        "date": "2026-08-08",
+        "plannedAt": "2026-08-08T19:00:01.000+02:00",
+        "drawId": "26224",
+        "jackpotEur": 100000,
+        "jackpotNote": null,
+        "groups": [
+          {
+            "type": "numeros principaux",
+            "kind": "numbers",
+            "labelKey": "main",
+            "values": [
+              2,
+              3,
+              5,
+              7,
+              8,
+              14,
+              17,
+              19,
+              23,
+              24
+            ]
+          },
+          {
+            "type": "lettre",
+            "kind": "letter",
+            "labelKey": "letter",
+            "values": [
+              "M"
+            ]
+          }
+        ],
+        "source": "fdj",
+        "fetchedAt": "2026-08-13T09:54:42.846Z"
+      },
+      "draws": [
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-08",
+          "plannedAt": "2026-08-08T19:00:01.000+02:00",
+          "drawId": "26224",
+          "jackpotEur": 100000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                2,
+                3,
+                5,
+                7,
+                8,
+                14,
+                17,
+                19,
+                23,
+                24
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "M"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-08",
+          "plannedAt": "2026-08-08T18:00:01.000+02:00",
+          "drawId": "26223",
+          "jackpotEur": 600000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                3,
+                4,
+                6,
+                9,
+                11,
+                15,
+                18,
+                22,
+                25
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "I"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-08",
+          "plannedAt": "2026-08-08T17:00:01.000+02:00",
+          "drawId": "26222",
+          "jackpotEur": 500000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                2,
+                4,
+                6,
+                7,
+                8,
+                9,
+                14,
+                20,
+                25
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "I"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-08",
+          "plannedAt": "2026-08-08T16:00:01.000+02:00",
+          "drawId": "26221",
+          "jackpotEur": 400000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                2,
+                8,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                23
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "A"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-08",
+          "plannedAt": "2026-08-08T15:00:01.000+02:00",
+          "drawId": "26220",
+          "jackpotEur": 300000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                3,
+                5,
+                10,
+                11,
+                12,
+                18,
+                19,
+                20,
+                21
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "M"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-08",
+          "plannedAt": "2026-08-08T14:00:01.000+02:00",
+          "drawId": "26219",
+          "jackpotEur": 200000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                2,
+                3,
+                5,
+                11,
+                14,
+                18,
+                19,
+                20,
+                23
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "M"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-08",
+          "plannedAt": "2026-08-08T13:00:01.000+02:00",
+          "drawId": "26218",
+          "jackpotEur": 100000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                2,
+                4,
+                5,
+                7,
+                8,
+                10,
+                16,
+                18,
+                24
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "D"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-01",
+          "plannedAt": "2026-08-01T19:00:01.000+02:00",
+          "drawId": "26217",
+          "jackpotEur": 700000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                5,
+                7,
+                8,
+                11,
+                14,
+                15,
+                16,
+                20,
+                23
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "I"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-01",
+          "plannedAt": "2026-08-01T18:00:01.000+02:00",
+          "drawId": "26216",
+          "jackpotEur": 600000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                2,
+                9,
+                10,
+                11,
+                13,
+                16,
+                18,
+                19,
+                23
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "S"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-01",
+          "plannedAt": "2026-08-01T17:00:01.000+02:00",
+          "drawId": "26215",
+          "jackpotEur": 500000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                2,
+                3,
+                4,
+                6,
+                7,
+                11,
+                17,
+                18,
+                20,
+                22
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "S"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-01",
+          "plannedAt": "2026-08-01T16:00:01.000+02:00",
+          "drawId": "26214",
+          "jackpotEur": 400000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                3,
+                5,
+                7,
+                11,
+                14,
+                17,
+                18,
+                19,
+                22
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "S"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-01",
+          "plannedAt": "2026-08-01T15:00:01.000+02:00",
+          "drawId": "26213",
+          "jackpotEur": 300000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                6,
+                8,
+                10,
+                11,
+                12,
+                14,
+                20,
+                21,
+                23,
+                24
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "S"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-01",
+          "plannedAt": "2026-08-01T14:00:01.000+02:00",
+          "drawId": "26212",
+          "jackpotEur": 200000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                4,
+                8,
+                10,
+                11,
+                12,
+                13,
+                14,
+                18,
+                19
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "S"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-08-01",
+          "plannedAt": "2026-08-01T13:00:01.000+02:00",
+          "drawId": "26211",
+          "jackpotEur": 100000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                7,
+                9,
+                12,
+                17,
+                18,
+                20,
+                21,
+                22,
+                23
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "S"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-07-25",
+          "plannedAt": "2026-07-25T19:00:01.000+02:00",
+          "drawId": "26210",
+          "jackpotEur": 700000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                2,
+                4,
+                6,
+                10,
+                14,
+                15,
+                16,
+                22,
+                23
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "A"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-07-25",
+          "plannedAt": "2026-07-25T18:00:01.000+02:00",
+          "drawId": "26209",
+          "jackpotEur": 600000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                2,
+                3,
+                7,
+                11,
+                12,
+                16,
+                19,
+                20,
+                21,
+                25
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "I"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-07-25",
+          "plannedAt": "2026-07-25T17:00:01.000+02:00",
+          "drawId": "26208",
+          "jackpotEur": 500000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                2,
+                6,
+                10,
+                11,
+                13,
+                14,
+                15,
+                17,
+                18,
+                20
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "S"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-07-25",
+          "plannedAt": "2026-07-25T16:00:01.000+02:00",
+          "drawId": "26207",
+          "jackpotEur": 400000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                2,
+                3,
+                5,
+                6,
+                10,
+                11,
+                13,
+                19,
+                22
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "D"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-07-25",
+          "plannedAt": "2026-07-25T15:00:01.000+02:00",
+          "drawId": "26206",
+          "jackpotEur": 300000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                5,
+                7,
+                8,
+                9,
+                11,
+                14,
+                23,
+                24,
+                25
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "D"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        },
+        {
+          "gameId": "crescendo",
+          "date": "2026-07-25",
+          "plannedAt": "2026-07-25T14:00:01.000+02:00",
+          "drawId": "26205",
+          "jackpotEur": 200000,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                4,
+                5,
+                6,
+                8,
+                14,
+                16,
+                19,
+                20,
+                21,
+                23
+              ]
+            },
+            {
+              "type": "lettre",
+              "kind": "letter",
+              "labelKey": "letter",
+              "values": [
+                "E"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:42.846Z"
+        }
+      ]
+    },
+    "keno": {
+      "latest": {
+        "gameId": "keno",
+        "date": "2026-08-12",
+        "plannedAt": "2026-08-12T20:35:00.000+02:00",
+        "drawId": "26314",
+        "jackpotEur": null,
+        "jackpotNote": null,
+        "groups": [
+          {
+            "type": "numeros principaux",
+            "kind": "numbers",
+            "labelKey": "main",
+            "values": [
+              2,
+              8,
+              16,
+              19,
+              23,
+              28,
+              29,
+              33,
+              35,
+              37,
+              48,
+              49,
+              52,
+              54,
+              55,
+              56
+            ]
+          },
+          {
+            "type": "multiplicateur option",
+            "kind": "bonus",
+            "labelKey": "multiplier",
+            "values": [
+              2
+            ]
+          },
+          {
+            "type": "joker",
+            "kind": "code",
+            "labelKey": "joker",
+            "values": [
+              "3077476"
+            ]
+          }
+        ],
+        "source": "fdj",
+        "fetchedAt": "2026-08-13T09:54:43.345Z"
+      },
+      "draws": [
+        {
+          "gameId": "keno",
+          "date": "2026-08-12",
+          "plannedAt": "2026-08-12T20:35:00.000+02:00",
+          "drawId": "26314",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                2,
+                8,
+                16,
+                19,
+                23,
+                28,
+                29,
+                33,
+                35,
+                37,
+                48,
+                49,
+                52,
+                54,
+                55,
+                56
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "3077476"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-08-11",
+          "plannedAt": "2026-08-11T20:35:00.000+02:00",
+          "drawId": "26313",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                7,
+                14,
+                17,
+                21,
+                22,
+                23,
+                24,
+                29,
+                30,
+                36,
+                41,
+                42,
+                49,
+                52,
+                56
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "6448241"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-08-10",
+          "plannedAt": "2026-08-10T20:35:00.000+02:00",
+          "drawId": "26312",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                10,
+                14,
+                19,
+                22,
+                27,
+                28,
+                31,
+                34,
+                35,
+                42,
+                47,
+                49,
+                50,
+                51,
+                53
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                3
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "0216008"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-08-09",
+          "plannedAt": "2026-08-09T20:35:00.000+02:00",
+          "drawId": "26311",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                2,
+                6,
+                9,
+                18,
+                19,
+                22,
+                23,
+                24,
+                28,
+                32,
+                34,
+                39,
+                43,
+                45,
+                49,
+                51
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                3
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "0031185"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-08-08",
+          "plannedAt": "2026-08-08T20:35:00.000+02:00",
+          "drawId": "26310",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                4,
+                8,
+                9,
+                12,
+                13,
+                14,
+                20,
+                23,
+                25,
+                37,
+                38,
+                47,
+                49,
+                51,
+                54
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "3466514"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-08-07",
+          "plannedAt": "2026-08-07T20:35:00.000+02:00",
+          "drawId": "26309",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                5,
+                7,
+                11,
+                13,
+                15,
+                16,
+                17,
+                25,
+                26,
+                35,
+                36,
+                45,
+                46,
+                49,
+                53,
+                54
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "2050870"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-08-06",
+          "plannedAt": "2026-08-06T20:35:00.000+02:00",
+          "drawId": "26308",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                4,
+                6,
+                9,
+                16,
+                18,
+                25,
+                26,
+                27,
+                30,
+                34,
+                37,
+                38,
+                47,
+                48,
+                50,
+                53
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "8626827"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-08-05",
+          "plannedAt": "2026-08-05T20:35:00.000+02:00",
+          "drawId": "26307",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                6,
+                8,
+                10,
+                13,
+                15,
+                21,
+                24,
+                33,
+                35,
+                38,
+                40,
+                42,
+                48,
+                49,
+                50
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "5983093"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-08-04",
+          "plannedAt": "2026-08-04T20:35:00.000+02:00",
+          "drawId": "26306",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                4,
+                10,
+                15,
+                16,
+                17,
+                20,
+                27,
+                28,
+                33,
+                34,
+                35,
+                49,
+                50,
+                51,
+                53,
+                55
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                3
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "4147597"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-08-03",
+          "plannedAt": "2026-08-03T20:35:00.000+02:00",
+          "drawId": "26305",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                4,
+                7,
+                10,
+                11,
+                12,
+                17,
+                18,
+                21,
+                25,
+                30,
+                31,
+                34,
+                37,
+                39,
+                40,
+                43
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "9146674"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-08-02",
+          "plannedAt": "2026-08-02T20:35:00.000+02:00",
+          "drawId": "26304",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                2,
+                6,
+                7,
+                8,
+                10,
+                12,
+                19,
+                20,
+                26,
+                27,
+                28,
+                29,
+                32,
+                46,
+                52,
+                54
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                3
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "1868784"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-08-01",
+          "plannedAt": "2026-08-01T20:35:00.000+02:00",
+          "drawId": "26303",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                11,
+                16,
+                17,
+                22,
+                24,
+                26,
+                32,
+                40,
+                42,
+                44,
+                45,
+                50,
+                51,
+                54,
+                55
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                3
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "3131679"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-07-31",
+          "plannedAt": "2026-07-31T20:35:00.000+02:00",
+          "drawId": "26302",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                2,
+                3,
+                5,
+                9,
+                10,
+                13,
+                14,
+                16,
+                17,
+                19,
+                30,
+                33,
+                34,
+                42,
+                50,
+                54
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "0377783"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-07-30",
+          "plannedAt": "2026-07-30T20:35:00.000+02:00",
+          "drawId": "26301",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                11,
+                14,
+                16,
+                25,
+                32,
+                35,
+                37,
+                38,
+                41,
+                45,
+                46,
+                48,
+                50,
+                53,
+                54,
+                55
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "0998498"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-07-29",
+          "plannedAt": "2026-07-29T20:35:00.000+02:00",
+          "drawId": "26300",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                4,
+                9,
+                10,
+                12,
+                19,
+                23,
+                24,
+                26,
+                31,
+                33,
+                38,
+                40,
+                43,
+                50,
+                53
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                3
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "7166081"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-07-28",
+          "plannedAt": "2026-07-28T20:35:00.000+02:00",
+          "drawId": "26299",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                2,
+                7,
+                8,
+                10,
+                13,
+                20,
+                22,
+                25,
+                35,
+                38,
+                39,
+                44,
+                47,
+                54,
+                55,
+                56
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                2
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "7313793"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-07-27",
+          "plannedAt": "2026-07-27T20:35:00.000+02:00",
+          "drawId": "26298",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                3,
+                4,
+                6,
+                9,
+                11,
+                14,
+                15,
+                17,
+                31,
+                39,
+                41,
+                48,
+                50,
+                51,
+                52,
+                56
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                5
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "7764536"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-07-26",
+          "plannedAt": "2026-07-26T20:35:00.000+02:00",
+          "drawId": "26297",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                2,
+                3,
+                6,
+                13,
+                15,
+                16,
+                20,
+                28,
+                31,
+                32,
+                38,
+                47,
+                49,
+                50,
+                51,
+                55
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                3
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "9209922"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-07-25",
+          "plannedAt": "2026-07-25T20:35:00.000+02:00",
+          "drawId": "26296",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                1,
+                4,
+                5,
+                14,
+                15,
+                18,
+                22,
+                28,
+                30,
+                32,
+                37,
+                38,
+                43,
+                44,
+                46,
+                50
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                3
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "2741918"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        },
+        {
+          "gameId": "keno",
+          "date": "2026-07-24",
+          "plannedAt": "2026-07-24T20:35:00.000+02:00",
+          "drawId": "26295",
+          "jackpotEur": null,
+          "jackpotNote": null,
+          "groups": [
+            {
+              "type": "numeros principaux",
+              "kind": "numbers",
+              "labelKey": "main",
+              "values": [
+                12,
+                13,
+                15,
+                16,
+                17,
+                22,
+                23,
+                24,
+                31,
+                34,
+                35,
+                36,
+                37,
+                41,
+                47,
+                51
+              ]
+            },
+            {
+              "type": "multiplicateur option",
+              "kind": "bonus",
+              "labelKey": "multiplier",
+              "values": [
+                3
+              ]
+            },
+            {
+              "type": "joker",
+              "kind": "code",
+              "labelKey": "joker",
+              "values": [
+                "0170168"
+              ]
+            }
+          ],
+          "source": "fdj",
+          "fetchedAt": "2026-08-13T09:54:43.345Z"
+        }
+      ]
+    }
+  }
+}

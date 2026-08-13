@@ -7,6 +7,13 @@ export type MyMillionWinner = {
   fetchedAt: string;
 };
 
+/** Rang de gain « Regular » (ex. 5+2, 5+1, 2) avec montant FR. */
+export type EuroMillionsPrizeTier = {
+  rank: string;
+  winners: number;
+  amountEur: number;
+};
+
 export type EuroMillionsDraw = {
   /** ISO date YYYY-MM-DD (draw day) */
   date: string;
@@ -21,6 +28,8 @@ export type EuroMillionsDraw = {
   myMillionCode?: string | null;
   /** Localisation gagnant My Million si connue (Mag FDJ) */
   myMillionLocation?: string | null;
+  /** Gains par rang (FDJ shares) quand disponibles */
+  prizeTiers?: EuroMillionsPrizeTier[];
   source: "pedromealha" | "uk-lottery" | "fdj" | "manual";
   sourceUrl?: string;
   fetchedAt: string;

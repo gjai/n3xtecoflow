@@ -41,6 +41,7 @@ import { affiliateOffer } from "@/lib/affiliates";
 import { CasinosCryptoHome } from "@/components/CasinosCryptoHome";
 import { EuroMillionsHome } from "@/components/EuroMillionsHome";
 import { readEuroMillionsStore } from "@/lib/euromillions/store";
+import { readFdjGamesStore } from "@/lib/fdj-games/store";
 import {
   siteAllowsAmazon,
   siteIsCasinosCrypto,
@@ -104,11 +105,18 @@ export default async function HomePage({
     ).slice(0, 3);
     if (siteIsEuroMillions(site)) {
       const store = await readEuroMillionsStore();
+      const fdjGames = await readFdjGamesStore();
       return (
         <>
           <JsonLd data={organizationJsonLd(site)} />
           <JsonLd data={websiteJsonLd(site)} />
-          <EuroMillionsHome site={site} locale={locale} store={store} />
+          <EuroMillionsHome
+            site={site}
+            locale={locale}
+            store={store}
+            fdjGames={fdjGames}
+            latestNews={editorialNews}
+          />
         </>
       );
     }

@@ -1,8 +1,14 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { SmartCover } from "@/components/SmartCover";
 import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
+import { FdjCompanionGamesBlock } from "@/components/FdjCompanionGamesBlock";
+import { getEditorialImages } from "@/data/images";
+import { usesEnglishFallback } from "@/i18n/locales";
 import type { EuroMillionsDraw, EuroMillionsStore } from "@/lib/euromillions/types";
 import { getLatestDraw } from "@/lib/euromillions/store";
+import type { FdjGamesStore } from "@/lib/fdj-games/types";
+import type { NewsArticle } from "@/lib/news/types";
 import type { SiteConfig } from "@/sites/types";
 
 function formatMoney(amount: number | null | undefined, locale: string) {
@@ -29,11 +35,16 @@ export function DrawBalls({
   draw,
   ballsLabel,
   starsLabel,
+  large = false,
 }: {
   draw: EuroMillionsDraw;
   ballsLabel: string;
   starsLabel: string;
+  large?: boolean;
 }) {
+  const size = large
+    ? "h-12 w-12 text-base md:h-14 md:w-14 md:text-lg"
+    : "h-11 w-11 text-sm";
   return (
     <div className="space-y-4">
       <div>
@@ -44,7 +55,7 @@ export function DrawBalls({
           {draw.numbers.map((n) => (
             <span
               key={`n-${n}`}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[var(--accent)] text-sm font-semibold text-[var(--accent-ink)]"
+              className={`inline-flex items-center justify-center rounded-full bg-[var(--accent)] font-semibold text-[var(--accent-ink)] ${size}`}
             >
               {n}
             </span>
@@ -59,7 +70,7 @@ export function DrawBalls({
           {draw.stars.map((n) => (
             <span
               key={`s-${n}`}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--accent)] bg-[var(--surface)] text-sm font-semibold text-[var(--heading)]"
+              className={`inline-flex items-center justify-center rounded-full border border-[var(--accent)] bg-[var(--surface)] font-semibold text-[var(--heading)] ${size}`}
             >
               {n}
             </span>
@@ -74,17 +85,24 @@ export async function EuroMillionsHome({
   site,
   locale,
   store,
+  fdjGames,
+  latestNews = [],
 }: {
   site: SiteConfig;
   locale: string;
   store: EuroMillionsStore;
+  fdjGames: FdjGamesStore;
+  latestNews?: NewsArticle[];
 }) {
   const t = await getTranslations({ locale, namespace: "home" });
+  const newsT = await getTranslations({ locale, namespace: "news" });
   const latest = getLatestDraw(store);
   const jackpot = latest ? formatMoney(latest.jackpotEur, locale) : null;
   const nextJackpot = formatMoney(store.nextJackpotEur, locale);
   const brand = site.brand.name;
   const recentWinners = (store.myMillionWinners || []).slice(0, 4);
+  const editorial = getEditorialImages(site.id);
+  const isEn = usesEnglishFallback(locale);
 
   return (
     <>
@@ -96,7 +114,7 @@ export async function EuroMillionsHome({
               "linear-gradient(160deg, var(--hero-from), var(--hero-mid) 45%, var(--hero-to))",
           }}
         />
-        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-16 md:grid-cols-[1.1fr_0.9fr] md:items-end md:px-8 md:py-24">
+        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1fr_1.05fr] md:items-center md:px-8 md:py-20">
           <div>
             <p className="font-[family-name:var(--font-display)] text-4xl font-semibold tracking-tight text-[var(--heading)] md:text-6xl">
               {brand}
@@ -106,12 +124,12 @@ export async function EuroMillionsHome({
             </h1>
             <p className="mt-4 max-w-lg text-[var(--muted)]">{t("subhead")}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="#dernier-tirage"
+              <Link
+                href="/simulateur"
                 className="inline-flex min-h-11 items-center bg-[var(--accent)] px-5 text-sm font-semibold text-[var(--accent-ink)]"
               >
-                {t("ctaPrimary")}
-              </a>
+                {t("simulatorCta")}
+              </Link>
               <Link
                 href="/tirages"
                 className="inline-flex min-h-11 items-center border border-[var(--line)] px-5 text-sm font-semibold text-[var(--heading)]"
@@ -120,93 +138,164 @@ export async function EuroMillionsHome({
               </Link>
             </div>
           </div>
-          <div className="border border-[var(--line)] bg-[var(--surface)]/80 p-6 backdrop-blur">
-            <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
-              {t("nextDrawLabel")}
-            </p>
-            <p className="mt-3 font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">
-              {store.nextDrawDate
-                ? formatDate(store.nextDrawDate, locale)
-                : "—"}
-            </p>
-            {nextJackpot ? (
-              <p className="mt-2 text-sm text-[var(--muted)]">
-                {t("nextJackpotLabel")} · {nextJackpot}
-              </p>
-            ) : null}
-          </div>
-        </div>
-      </section>
 
-      <section
-        id="dernier-tirage"
-        className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-20"
-      >
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
-              {t("latestTitle")}
-            </p>
-            <h2 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)]">
-              {latest ? formatDate(latest.date, locale) : t("empty")}
-            </h2>
-          </div>
-          {jackpot ? (
-            <p className="text-sm text-[var(--muted)]">
-              {t("jackpotLabel")} ·{" "}
-              <span className="font-semibold text-[var(--heading)]">
-                {jackpot}
-              </span>
-            </p>
-          ) : null}
-        </div>
+          <div
+            id="dernier-tirage"
+            className="border border-[var(--line)] bg-[var(--surface)]/90 p-6 backdrop-blur md:p-8"
+          >
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
+                  {t("latestTitle")}
+                </p>
+                <p className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
+                  {latest ? formatDate(latest.date, locale) : t("empty")}
+                </p>
+              </div>
+              {jackpot ? (
+                <p className="text-right text-sm text-[var(--muted)]">
+                  {t("jackpotLabel")}
+                  <br />
+                  <span className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)]">
+                    {jackpot}
+                  </span>
+                </p>
+              ) : null}
+            </div>
 
-        {latest ? (
-          <div className="mt-8 border border-[var(--line)] bg-[var(--surface)] p-6 md:p-8">
-            <DrawBalls
-              draw={latest}
-              ballsLabel={t("ballsLabel")}
-              starsLabel={t("starsLabel")}
-            />
-            {latest.myMillionCode ? (
-              <div className="mt-6 border-t border-[var(--line)] pt-6">
-                <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-                  {t("myMillionLabel")}
-                </p>
-                <p className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold tracking-wide text-[var(--heading)]">
-                  {latest.myMillionCode}
-                </p>
-                {latest.myMillionLocation ? (
-                  <p className="mt-2 text-sm text-[var(--muted)]">
-                    {t("myMillionLocation")} · {latest.myMillionLocation}
-                  </p>
+            {latest ? (
+              <div className="mt-6">
+                <DrawBalls
+                  draw={latest}
+                  ballsLabel={t("ballsLabel")}
+                  starsLabel={t("starsLabel")}
+                  large
+                />
+                {latest.myMillionCode ? (
+                  <div className="mt-6 border-t border-[var(--line)] pt-5">
+                    <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                      {t("myMillionLabel")}
+                    </p>
+                    <p className="mt-2 font-[family-name:var(--font-display)] text-xl font-semibold tracking-wide text-[var(--heading)]">
+                      {latest.myMillionCode}
+                    </p>
+                    {latest.myMillionLocation ? (
+                      <p className="mt-1 text-sm text-[var(--muted)]">
+                        {t("myMillionLocation")} · {latest.myMillionLocation}
+                      </p>
+                    ) : null}
+                  </div>
                 ) : null}
-                <p className="mt-3">
+                <div className="mt-6 flex flex-wrap gap-4">
+                  <Link
+                    href={`/tirages/${latest.date}`}
+                    className="text-sm font-semibold text-[var(--accent)] hover:underline"
+                  >
+                    {t("archiveCta")} →
+                  </Link>
                   <Link
                     href="/my-million"
                     className="text-sm font-semibold text-[var(--accent)] hover:underline"
                   >
                     {t("myMillionCta")} →
                   </Link>
-                </p>
+                </div>
               </div>
-            ) : null}
-            <p className="mt-6">
-              <Link
-                href={`/tirages/${latest.date}`}
-                className="text-sm font-semibold text-[var(--accent)] hover:underline"
-              >
-                {t("archiveCta")} →
-              </Link>
-            </p>
+            ) : (
+              <p className="mt-6 text-[var(--muted)]">{t("empty")}</p>
+            )}
+
+            {(store.nextDrawDate || nextJackpot) && (
+              <div className="mt-6 border-t border-[var(--line)] pt-5 text-sm text-[var(--muted)]">
+                <span className="text-[var(--heading)]">
+                  {t("nextDrawLabel")}
+                </span>
+                {store.nextDrawDate
+                  ? ` · ${formatDate(store.nextDrawDate, locale)}`
+                  : null}
+                {nextJackpot ? ` · ${nextJackpot}` : null}
+              </div>
+            )}
           </div>
-        ) : (
-          <p className="mt-6 text-[var(--muted)]">{t("empty")}</p>
-        )}
+        </div>
       </section>
 
+      <section className="border-b border-[var(--line)] bg-[var(--bg)]">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-8 md:px-8">
+          <div>
+            <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+              {t("simulatorTeaserTitle")}
+            </h2>
+            <p className="mt-1 text-sm text-[var(--muted)]">
+              {t("simulatorTeaserText")}
+            </p>
+          </div>
+          <Link
+            href="/simulateur"
+            className="inline-flex min-h-11 items-center border border-[var(--accent)] px-5 text-sm font-semibold text-[var(--heading)]"
+          >
+            {t("simulatorCta")} →
+          </Link>
+        </div>
+      </section>
+
+      <FdjCompanionGamesBlock store={fdjGames} locale={locale} variant="home" />
+
+      {latestNews.length > 0 ? (
+        <section className="border-b border-[var(--line)]">
+          <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
+                  {newsT("eyebrow")}
+                </p>
+                <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
+                  {t("latestNewsTitle")}
+                </h2>
+              </div>
+              <Link
+                href="/actualites"
+                className="text-sm font-semibold text-[var(--accent)] hover:underline"
+              >
+                {t("allNewsCta")} →
+              </Link>
+            </div>
+            <ul className="mt-8 grid gap-6 md:grid-cols-3">
+              {latestNews.slice(0, 3).map((article) => {
+                const copy = isEn ? article.en : article.fr;
+                return (
+                  <li key={article.slug}>
+                    <Link
+                      href={`/actualites/${article.slug}`}
+                      className="group block overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
+                    >
+                      <SmartCover
+                        src={article.imageSrc}
+                        fallback={editorial.news}
+                        locale={locale}
+                        credit={article.imageCredit}
+                        className="aspect-[16/9] w-full"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                      <div className="p-4">
+                        <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)] group-hover:text-[var(--accent)]">
+                          {copy.title}
+                        </h3>
+                        <p className="mt-2 line-clamp-2 text-sm text-[var(--muted)]">
+                          {copy.excerpt}
+                        </p>
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </section>
+      ) : null}
+
       {recentWinners.length > 0 ? (
-        <section className="border-y border-[var(--line)] bg-[var(--bg)]">
+        <section className="border-b border-[var(--line)] bg-[var(--bg)]">
           <div className="mx-auto max-w-6xl px-5 py-12 md:px-8">
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
@@ -262,16 +351,16 @@ export async function EuroMillionsHome({
           </div>
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
+              href="/simulateur"
+              className="text-sm font-semibold text-[var(--accent)] hover:underline"
+            >
+              {t("simulatorCta")} →
+            </Link>
+            <Link
               href="/tirages"
               className="text-sm font-semibold text-[var(--accent)] hover:underline"
             >
               {t("archiveCta")} →
-            </Link>
-            <Link
-              href="/my-million"
-              className="text-sm font-semibold text-[var(--accent)] hover:underline"
-            >
-              {t("myMillionCta")} →
             </Link>
             <Link
               href="/stats"

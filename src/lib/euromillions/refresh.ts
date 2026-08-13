@@ -1,3 +1,4 @@
+import { refreshFdjCompanionGames } from "@/lib/fdj-games/refresh";
 import {
   fetchFdjEuroMillionsDraws,
   fetchFdjMyMillionWinnerLocations,
@@ -21,6 +22,7 @@ export type EuroMillionsRefreshResult = {
   sources: string[];
   yearsFetched: number[];
   myMillionWinners: number;
+  companionGames?: Record<string, number>;
 };
 
 function mergeDraws(
@@ -45,6 +47,8 @@ function mergeDraws(
       drawId: d.drawId ?? prev.drawId,
       myMillionCode: d.myMillionCode ?? prev.myMillionCode,
       myMillionLocation: d.myMillionLocation ?? prev.myMillionLocation,
+      prizeTiers:
+        d.prizeTiers?.length ? d.prizeTiers : prev.prizeTiers,
       // Prefer FDJ when it has My Million / FR jackpot
       source:
         d.source === "fdj" || prev.source === "fdj"
@@ -138,6 +142,15 @@ export async function refreshEuroMillionsData(options?: {
   };
   await writeEuroMillionsStore(next);
 
+  let companionGames: Record<string, number> | undefined;
+  try {
+    const companions = await refreshFdjCompanionGames();
+    companionGames = companions.games;
+    sources.push(...companions.sources.map((s) => `companion:${s}`));
+  } catch (err) {
+    console.error("euromillions_companions_fail", err);
+  }
+
   return {
     ok: true,
     draws: draws.length,
@@ -145,5 +158,6 @@ export async function refreshEuroMillionsData(options?: {
     sources,
     yearsFetched,
     myMillionWinners: winners.length,
+    companionGames,
   };
 }

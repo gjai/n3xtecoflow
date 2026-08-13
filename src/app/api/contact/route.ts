@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { normalizeHost, recordContact } from "@/lib/analytics/store";
 
 const CONTACT_TO = process.env.CONTACT_TO_EMAIL?.trim() || "djgjai@gmail.com";
 const recent = new Map<string, number>();
@@ -66,11 +65,6 @@ export async function POST(request: Request) {
   if (!res.ok) {
     return NextResponse.json({ error: "send_failed" }, { status: 502 });
   }
-
-  const host = normalizeHost(
-    request.headers.get("x-forwarded-host") || request.headers.get("host"),
-  );
-  void recordContact({ host }).catch(() => undefined);
 
   return NextResponse.json({ ok: true });
 }

@@ -10,8 +10,8 @@ import {
 } from "@/i18n/locales";
 import { routing } from "@/i18n/routing";
 import { AdSenseScript } from "@/components/AdSenseScript";
-import { AnalyticsBeacon } from "@/components/AnalyticsBeacon";
 import { ConsentProvider } from "@/components/ConsentProvider";
+import { UmamiScript } from "@/components/UmamiScript";
 import { CookieBanner } from "@/components/CookieBanner";
 import { NetworkLinks } from "@/components/NetworkLinks";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -21,6 +21,7 @@ import {
   ThemeProvider,
   themeInitScript,
 } from "@/components/ThemeProvider";
+import { headers } from "next/headers";
 import { getCurrentSite } from "@/sites/server";
 import {
   siteAllowsAdsense,
@@ -132,6 +133,15 @@ export default async function LocaleLayout({
   if (!siteAllowsLocale(site, locale)) {
     notFound();
   }
+  const hdrs = await headers();
+  const requestHost = (
+    hdrs.get("x-forwarded-host") ||
+    hdrs.get("host") ||
+    site.primaryHost
+  )
+    .split(",")[0]
+    ?.trim()
+    .toLowerCase();
   const allowAds = siteAllowsAdsense(site);
   const adsenseClient = allowAds
     ? site.monetization?.adsenseClient?.trim() ||
@@ -178,7 +188,7 @@ export default async function LocaleLayout({
             <ThemeProvider>
               <ConsentProvider>
                 <AdSenseScript />
-                <AnalyticsBeacon />
+                <UmamiScript host={requestHost} />
                 <div className="flex min-h-full flex-col">
                   <SiteHeader />
                   <main className="flex-1">{children}</main>

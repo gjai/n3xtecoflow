@@ -83,7 +83,19 @@ export function buildSitemapForSite(
     "",
     ...(siteShowsProducts(site) ? ["/produits"] : []),
     ...(site.id === "ecoflow" ? ["/powerstream"] : []),
-    ...(site.id === "euromillions" ? ["/tirages", "/stats", "/my-million"] : []),
+    ...(site.id === "euromillions"
+      ? [
+          "/tirages",
+          "/simulateur",
+          "/jeux",
+          "/jeux/eurodreams",
+          "/jeux/loto",
+          "/jeux/crescendo",
+          "/jeux/keno",
+          "/stats",
+          "/my-million",
+        ]
+      : []),
     "/guides",
     ...(siteShowsComparisons(site) ? ["/comparatifs"] : []),
     ...(siteShowsNews(site) ? ["/actualites"] : []),

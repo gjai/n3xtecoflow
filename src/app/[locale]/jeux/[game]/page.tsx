@@ -1,0 +1,178 @@
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { Link } from "@/i18n/navigation";
+import { FdjGameBalls } from "@/components/FdjGameBalls";
+import { FDJ_COMPANION_GAMES, getCompanionGame } from "@/lib/fdj-games/catalog";
+import {
+  getGameDraws,
+  getGameLatest,
+  readFdjGamesStore,
+} from "@/lib/fdj-games/store";
+import { siteLocaleAlternates } from "@/lib/seo";
+import { getCurrentSite } from "@/sites/server";
+import { siteIsEuroMillions } from "@/sites/features";
+
+export const revalidate = 600;
+
+export function generateStaticParams() {
+  return FDJ_COMPANION_GAMES.map((g) => ({ game: g.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; game: string }>;
+}): Promise<Metadata> {
+  const { locale, game: slug } = await params;
+  const entry = getCompanionGame(slug);
+  if (!entry) return {};
+  const t = await getTranslations({ locale, namespace: "games" });
+  const label = locale === "en" ? entry.labelEn : entry.labelFr;
+  return {
+    title: t("gameTitle", { game: label }),
+    description: t("gameMeta", { game: label }),
+    alternates: await siteLocaleAlternates(locale, `/jeux/${entry.slug}`),
+  };
+}
+
+function formatDate(iso: string, locale: string) {
+  const d = new Date(`${iso}T12:00:00Z`);
+  if (Number.isNaN(d.getTime())) return iso;
+  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(d);
+}
+
+function formatMoney(amount: number | null | undefined, locale: string) {
+  if (amount == null || !Number.isFinite(amount)) return null;
+  return new Intl.NumberFormat(locale === "en" ? "en-GB" : "fr-FR", {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+export default async function JeuxGamePage({
+  params,
+}: {
+  params: Promise<{ locale: string; game: string }>;
+}) {
+  const { locale, game: slug } = await params;
+  setRequestLocale(locale);
+  const site = await getCurrentSite();
+  if (!siteIsEuroMillions(site)) notFound();
+
+  const entry = getCompanionGame(slug);
+  if (!entry) notFound();
+
+  const t = await getTranslations("games");
+  const store = await readFdjGamesStore();
+  const latest = getGameLatest(store, entry.id);
+  const draws = getGameDraws(store, entry.id).slice(0, 40);
+  const label = locale === "en" ? entry.labelEn : entry.labelFr;
+
+  const groupLabels: Record<string, string> = {
+    main: t("group.main"),
+    stars: t("group.stars"),
+    dream: t("group.dream"),
+    chance: t("group.chance"),
+    letter: t("group.letter"),
+    multiplier: t("group.multiplier"),
+    joker: t("group.joker"),
+    secondDraw: t("group.secondDraw"),
+    other: t("group.other"),
+  };
+
+  return (
+    <main className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-20">
+      <Link
+        href="/jeux"
+        className="text-sm font-semibold text-[var(--accent)] hover:underline"
+      >
+        ← {t("backHub")}
+      </Link>
+      <h1 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
+        {t("gameTitle", { game: label })}
+      </h1>
+      <p className="mt-3 text-[var(--muted)]">
+        {t("gameLead", { game: label })}
+      </p>
+
+      {latest ? (
+        <div className="mt-8 border border-[var(--line)] bg-[var(--surface)] p-6 md:p-8">
+          <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
+            {t("latestLabel")}
+          </p>
+          <p className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
+            {formatDate(latest.date, locale)}
+          </p>
+          {latest.jackpotNote ? (
+            <p className="mt-2 text-sm text-[var(--muted)]">
+              {(() => {
+                const [m, y] = latest.jackpotNote.split("|");
+                const money = formatMoney(Number(m), locale);
+                return money
+                  ? t("annuityNote", { amount: money, years: Number(y) })
+                  : null;
+              })()}
+            </p>
+          ) : latest.jackpotEur != null ? (
+            <p className="mt-2 text-sm text-[var(--muted)]">
+              {t("jackpotLabel")} · {formatMoney(latest.jackpotEur, locale)}
+            </p>
+          ) : null}
+          <div className="mt-6">
+            <FdjGameBalls draw={latest} labels={groupLabels} />
+          </div>
+        </div>
+      ) : (
+        <p className="mt-8 text-[var(--muted)]">{t("emptyGame")}</p>
+      )}
+
+      {draws.length > 1 ? (
+        <section className="mt-12">
+          <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+            {t("archiveTitle")}
+          </h2>
+          <ul className="mt-4 space-y-3">
+            {draws.map((d) => (
+              <li
+                key={`${d.date}-${d.plannedAt}-${d.drawId}`}
+                className="border border-[var(--line)] bg-[var(--surface)] px-4 py-3"
+              >
+                <p className="text-sm font-semibold text-[var(--heading)]">
+                  {formatDate(d.date, locale)}
+                </p>
+                <div className="mt-3">
+                  <FdjGameBalls draw={d} labels={groupLabels} />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      <div className="mt-10 flex flex-wrap gap-4 text-sm">
+        <a
+          href={entry.fdjUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-[var(--accent)] hover:underline"
+        >
+          {t("officialCta")} →
+        </a>
+        <Link
+          href="/tirages"
+          className="font-semibold text-[var(--accent)] hover:underline"
+        >
+          {t("emPrimaryCta")} →
+        </Link>
+      </div>
+      <p className="mt-6 text-xs text-[var(--muted)]">{t("disclaimer")}</p>
+    </main>
+  );
+}

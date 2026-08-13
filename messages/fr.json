@@ -145,7 +145,7 @@
     "adsense": "Ce site peut afficher des annonces Google AdSense. Google peut utiliser des cookies pour personnaliser les pubs, uniquement après votre consentement.",
     "contactViaForm": "Pour nous contacter, utilisez le",
     "contactLink": "formulaire de contact",
-    "privacyBody": "Nous collectons des données techniques minimales (logs serveur, mesure d’audience anonymisée sans cookie publicitaire) et, si vous acceptez, des cookies publicitaires Google AdSense. Le formulaire de contact transmet nom, email et message uniquement pour vous répondre. Aucune revente de données personnelles.",
+    "privacyBody": "Nous collectons des données techniques minimales (logs serveur) et une mesure d’audience anonymisée via Umami (self-hébergé, sans cookie publicitaire). Si vous acceptez, des cookies publicitaires Google AdSense peuvent s’ajouter. Le formulaire de contact transmet nom, email et message uniquement pour vous répondre. Aucune revente de données personnelles.",
     "privacyConsent": "Vous pouvez accepter ou refuser les cookies publicitaires via le bandeau cookies. Les cookies strictement nécessaires au fonctionnement du site restent actifs. Mesures techniques : HTTPS, en-têtes de sécurité, limitation du spam sur le formulaire.",
     "privacyBasisTitle": "Base légale & conservation",
     "privacyBasisBody": "Bases légales : intérêt légitime (sécurité, logs techniques, audience anonymisée), exécution de mesures précontractuelles / réponse à votre demande (formulaire), et consentement (cookies publicitaires AdSense). Conservation : logs techniques pour une durée limitée (ordre de quelques semaines), messages de contact le temps du traitement, choix de consentement stocké localement sur votre appareil jusqu’à suppression.",
