@@ -2,7 +2,6 @@ import type { MetadataRoute } from "next";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { headers } from "next/headers";
-import { routing } from "@/i18n/routing";
 import {
   categorySiteId,
   getCategoriesForSite,
@@ -14,6 +13,7 @@ import { GUIDE_TOPICS, guideSiteId } from "@/lib/guides/types";
 import { newsSiteId } from "@/lib/news/types";
 import { getSiteByHost } from "@/sites";
 import {
+  siteLocales,
   siteShowsComparisons,
   siteShowsNews,
   siteShowsProducts,
@@ -72,7 +72,7 @@ export function buildSitemapForSite(
     "/contact",
   ];
 
-  for (const locale of routing.locales) {
+  for (const locale of siteLocales(site)) {
     for (const path of staticPaths) {
       entries.push({
         url: `${siteUrl}/${locale}${path}`,

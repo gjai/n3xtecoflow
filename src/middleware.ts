@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
-import { resolveSiteIdFromHost, SITE_HEADER } from "./sites";
+import { isAppLocale } from "./i18n/locales";
+import { getSiteByHost, resolveSiteIdFromHost, SITE_HEADER } from "./sites";
+import { siteAllowsLocale, siteLocales } from "./sites/features";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -19,6 +21,18 @@ export default function middleware(request: NextRequest) {
   }
 
   const siteId = resolveSiteIdFromHost(host);
+  const site = getSiteByHost(host);
+  const pathname = request.nextUrl.pathname;
+  const seg = pathname.split("/").filter(Boolean)[0];
+
+  // Theme allow-list: /it on ecoflow → /fr/...
+  if (seg && isAppLocale(seg) && !siteAllowsLocale(site, seg)) {
+    const fallback = siteLocales(site)[0] || "fr";
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.replace(/^\/[^/]+/, `/${fallback}`) || `/${fallback}`;
+    return NextResponse.redirect(url, 308);
+  }
+
   const response = intlMiddleware(request);
   response.headers.set(SITE_HEADER, siteId);
   response.headers.set(
@@ -29,5 +43,9 @@ export default function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/(fr|en)/:path*", "/((?!api|_next|_vercel|.*\\..*).*)"],
+  matcher: [
+    "/",
+    "/(fr|en|it|es|pt|de)/:path*",
+    "/((?!api|_next|_vercel|.*\\..*).*)",
+  ],
 };

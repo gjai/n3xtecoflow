@@ -3,7 +3,9 @@
 import Image from "next/image";
 import { useEffect, useEffectEvent, useState } from "react";
 import { Link } from "@/i18n/navigation";
+import type { AffiliateOffer } from "@/lib/affiliates";
 import { AffiliateDisclosure } from "./AffiliateDisclosure";
+import { AffiliateLinkedText } from "./AffiliateLinkedText";
 
 export type HeroSlide = {
   id: string;
@@ -23,12 +25,14 @@ export function HeroSlider({
   slides,
   compact = false,
   footerNote,
+  affiliateKeywordOffers,
 }: {
   brandName: string;
   slides: HeroSlide[];
   /** Shorter hero (editorial / casino themes). */
   compact?: boolean;
   footerNote?: string;
+  affiliateKeywordOffers?: AffiliateOffer[];
 }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -124,14 +128,28 @@ export function HeroSlider({
                 : "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
             }`}
           >
-            {active.title}
+            {affiliateKeywordOffers?.length ? (
+              <AffiliateLinkedText
+                text={active.title}
+                offers={affiliateKeywordOffers}
+              />
+            ) : (
+              active.title
+            )}
           </h1>
           <p
             className={`mt-3 max-w-xl text-[var(--hero-muted)] ${
               compact ? "text-sm" : "text-sm md:text-base mt-4"
             }`}
           >
-            {active.excerpt}
+            {affiliateKeywordOffers?.length ? (
+              <AffiliateLinkedText
+                text={active.excerpt}
+                offers={affiliateKeywordOffers}
+              />
+            ) : (
+              active.excerpt
+            )}
           </p>
           <div className={`flex flex-wrap gap-3 sm:gap-4 ${compact ? "mt-5" : "mt-7"}`}>
             <Link

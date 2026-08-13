@@ -1,7 +1,7 @@
 {
   "meta": {
     "siteName": "Casinos Crypto",
-    "tagline": "Independent guides to crypto casinos: Stake, secure access and best practices.",
+    "tagline": "Online crypto casino & Stake guides: access, crypto deposit, VPN — 18+, play responsibly.",
     "disclaimerShort": "18+ · Play responsibly · Risk of loss · Stake / Crypto.com / NordVPN affiliates · France: Joueurs Info Service 09 74 75 13 13."
   },
   "responsible": {
@@ -22,41 +22,45 @@
     "products": "Guides",
     "powerstream": "Stake",
     "comparisons": "VPN",
-    "news": "News"
+    "news": "News",
+    "stake": "Stake",
+    "crypto": "Crypto",
+    "vpn": "VPN",
+    "guides": "Guides"
   },
   "notFound": {
     "body": "This URL doesn’t exist — or the content was moved. Back to Casinos Crypto guides."
   },
   "home": {
     "brand": "Casinos Crypto",
-    "headline": "Crypto casino, without the noise.",
-    "subhead": "Stake explained, how to get started, responsible play — and why a VPN helps for a calmer connection.",
+    "headline": "Online crypto casino, without the noise.",
+    "subhead": "How to access Stake, prepare a crypto deposit and secure your connection — with the limits (18+, play responsibly).",
     "ctaPrimary": "Stake guide",
     "ctaSecondary": "Crypto.com guide",
     "featuresTitle": "Why these guides",
     "feature1Title": "Independent",
     "feature1Text": "Editorial analysis — we are not the Stake, Crypto.com or NordVPN operator.",
     "feature2Title": "Decision-focused",
-    "feature2Text": "Why Stake, Crypto.com wallet, limits and responsible gambling.",
+    "feature2Text": "Stake online casino, Crypto.com wallet, VPN access and responsible play.",
     "feature3Title": "Transparency",
     "feature3Text": "Stake / Crypto.com / NordVPN affiliate links clearly labelled. No Amazon, no AdSense.",
-    "editorialLead": "We explain Stake, Crypto.com and the VPN setup so you can start clearly — with no promise of profits.",
+    "editorialLead": "We explain the Stake crypto casino, Crypto.com deposits and VPN — with no promise of profits.",
     "howTitle": "How to read our content",
-    "howBody1": "The Stake guide covers the why, the start, and the limits.",
-    "howBody2": "The Crypto.com guide covers the wallet / on-ramp before depositing.",
+    "howBody1": "The Stake guide covers the online casino, access and limits.",
+    "howBody2": "The Crypto.com guide covers buying crypto before you deposit.",
     "howBody3": "Gambling involves a risk of loss. 18+ only."
   },
   "guides": {
-    "subtitle": "Stake, Crypto.com and VPN: three guides to start clearly.",
+    "subtitle": "Online crypto casino: Stake, Crypto.com wallet and VPN to start clearly.",
     "buyersTitle": "Stake guide",
-    "buyersText": "Why Stake, crypto deposits, KYC and responsible gambling."
+    "buyersText": "Stake online casino, access, crypto deposit, KYC and responsible play."
   },
   "powerstream": {
-    "title": "Guides",
-    "subtitle": "Stake, crypto wallet and secure access.",
-    "intro": "Browse the guides to get started.",
+    "title": "Crypto casino guides",
+    "subtitle": "Stake, access, wallet and VPN.",
+    "intro": "Browse the guides to start on an online crypto casino.",
     "whatTitle": "The topic",
-    "whatText": "Crypto casino, Stake, Crypto.com and companion VPN.",
+    "whatText": "Stake online casino, crypto deposit (Crypto.com) and companion VPN.",
     "forWhoTitle": "Who is it for?",
     "forWhoText": "Adults 18+ who want clarity before playing.",
     "checklistTitle": "Before you play",
@@ -72,11 +76,11 @@
   "comparisons": {
     "subtitle": "Useful reads around crypto casinos.",
     "card1Title": "Stake",
-    "card1Text": "Why and how to start.",
+    "card1Text": "Online crypto casino: access, deposit, limits.",
     "card2Title": "Crypto.com",
-    "card2Text": "Wallet and on-ramp before depositing.",
-    "card3Title": "VPN & responsible play",
-    "card3Text": "Stable connection, budget, breaks."
+    "card2Text": "Buy crypto for a Stake deposit.",
+    "card3Title": "Casino VPN",
+    "card3Text": "Stable connection for calmer play."
   },
   "amazon": {
     "disclosure": "This site contains Stake, Crypto.com and NordVPN affiliate links. We may earn a commission at no extra cost to you.",
@@ -98,7 +102,13 @@
     "affiliateBody": "Stake, Crypto.com and NordVPN links are affiliate links. Amazon Associates is not used on this site.",
     "responsibleTitle": "Responsible gambling (18+)",
     "responsibleBody": "Gambling involves a risk of loss. This site is for adults only (18+). Set a leisure budget and never chase losses.",
-    "responsibleHelp": "Player support in France: Joueurs Info Service — 09 74 75 13 13 — https://www.joueurs-info-service.fr"
+    "responsibleHelp": "Player support in France: Joueurs Info Service — 09 74 75 13 13 — https://www.joueurs-info-service.fr",
+    "cookiesMeta": "Necessary cookies only — no AdSense advertising on Casinos Crypto.",
+    "cookiesAdsTitle": "Advertising cookies",
+    "cookiesAdsBody": "No Google AdSense on Casinos Crypto: no advertising cookies are set.",
+    "privacyBody": "We collect minimal technical data (server logs, anonymised analytics without ad cookies). The contact form sends name, email and message only to reply. No data resale. No AdSense.",
+    "privacyConsent": "No advertising cookies on this site. Strictly necessary cookies stay on. Technical measures: HTTPS, security headers, contact form spam limits.",
+    "privacyBasisBody": "Legal bases: legitimate interest (security, technical logs, anonymised analytics) and pre-contractual steps / answering your request (form). Retention: technical logs for a limited period, contact messages for the time needed to handle them."
   },
   "footer": {
     "independent": "Independent site — crypto casinos · 18+",
@@ -124,9 +134,19 @@
   },
   "news": {
     "eyebrow": "Press review",
-    "title": "Crypto casino news",
-    "subtitle": "Editorial briefs on Stake, Crypto.com, VPN and crypto casinos — with clear affiliate links.",
+    "title": "Online casino & Stake news",
+    "subtitle": "Crypto casino, Stake, wallet and VPN briefs — with clear affiliate links.",
     "empty": "No news yet — the next automated run will fill this section.",
-    "catalogCta": "Read the Stake, Crypto.com & VPN guides →"
+    "catalogCta": "Stake, crypto casino & VPN guides →"
+  },
+  "cookies": {
+    "title": "Cookies",
+    "body": "We only use cookies that are necessary for the site to work (language, security). No AdSense advertising cookies on Casinos Crypto. More in our",
+    "privacyLink": "cookie policy",
+    "necessary": "Necessary: always on (function, language, security).",
+    "advertising": "Advertising: none (AdSense disabled on this site).",
+    "accept": "Got it",
+    "reject": "Close",
+    "customize": "Details"
   }
 }

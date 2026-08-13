@@ -1,5 +1,8 @@
 export type SiteId = "ecoflow" | "tumbler" | "massage-gun" | "casinos-crypto";
 
+/** Locales exposées pour ce thème (sous-ensemble de APP_LOCALES). */
+export type SiteLocale = "fr" | "en" | "it" | "es" | "pt" | "de";
+
 export type SiteTheme = {
   /** Accent / CTA (dark surfaces) */
   accent: string;
@@ -176,6 +179,11 @@ export type SiteConfig = {
   primaryHost: string;
   /** All hostnames that resolve to this site/theme (apex + www, sister domains) */
   hosts: string[];
+  /**
+   * Locales publiées pour ce thème.
+   * Défaut implicite : fr + en. Casinos-crypto peut élargir (it/es/pt/de…).
+   */
+  locales?: SiteLocale[];
   brand: SiteBrand;
   theme: SiteTheme;
   heroImage: string;

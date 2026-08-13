@@ -22,7 +22,7 @@ export function SiteFooter() {
   const locale = useLocale();
   const year = new Date().getFullYear();
   const blurb =
-    locale === "en" ? site.brand.footerBlurbEn : site.brand.footerBlurbFr;
+    locale === "fr" ? site.brand.footerBlurbFr : site.brand.footerBlurbEn;
 
   const links = siteUsesEditorialHome(site)
     ? (

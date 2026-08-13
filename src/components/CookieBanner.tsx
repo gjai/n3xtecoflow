@@ -2,10 +2,14 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { siteAllowsAdsense } from "@/sites/features";
 import { useConsent } from "./ConsentProvider";
+import { useSite } from "./SiteProvider";
 
 export function CookieBanner() {
   const t = useTranslations("cookies");
+  const site = useSite();
+  const allowAds = siteAllowsAdsense(site);
   const {
     consent,
     acceptAll,
@@ -41,29 +45,33 @@ export function CookieBanner() {
             </Link>
             .
           </p>
-          {preferencesOpen ? (
+          {preferencesOpen || !allowAds ? (
             <ul className="mt-3 space-y-1 text-sm text-[var(--muted)]">
               <li>{t("necessary")}</li>
-              <li>{t("advertising")}</li>
+              {allowAds ? <li>{t("advertising")}</li> : null}
             </ul>
           ) : null}
         </div>
         <div className="flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={rejectAds}
-            className="border border-[var(--line)] px-4 py-2 text-sm font-semibold text-[var(--heading)] transition hover:border-[var(--accent)]"
-          >
-            {t("reject")}
-          </button>
-          {!preferencesOpen ? (
-            <button
-              type="button"
-              onClick={() => setPreferencesOpen(true)}
-              className="border border-[var(--line)] px-4 py-2 text-sm font-semibold text-[var(--heading)] transition hover:border-[var(--accent)]"
-            >
-              {t("customize")}
-            </button>
+          {allowAds ? (
+            <>
+              <button
+                type="button"
+                onClick={rejectAds}
+                className="border border-[var(--line)] px-4 py-2 text-sm font-semibold text-[var(--heading)] transition hover:border-[var(--accent)]"
+              >
+                {t("reject")}
+              </button>
+              {!preferencesOpen ? (
+                <button
+                  type="button"
+                  onClick={() => setPreferencesOpen(true)}
+                  className="border border-[var(--line)] px-4 py-2 text-sm font-semibold text-[var(--heading)] transition hover:border-[var(--accent)]"
+                >
+                  {t("customize")}
+                </button>
+              ) : null}
+            </>
           ) : null}
           <button
             type="button"

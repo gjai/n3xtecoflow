@@ -5,9 +5,12 @@ import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
+import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { AmazonButton } from "@/components/AmazonButton";
+import type { AffiliateOffer } from "@/lib/affiliates";
 import { buildAmazonSearchUrl } from "@/lib/amazon";
 import type { ArticleSection } from "@/data/articles";
+import { usesEnglishFallback } from "@/i18n/locales";
 
 export type ArticleProductCard = {
   slug: string;
@@ -24,6 +27,7 @@ export function ArticleBody({
   productCards,
   hideCatalogLink,
   footerActions,
+  affiliateKeywordOffers,
 }: {
   sections: ArticleSection[];
   amazonQuery?: string;
@@ -32,6 +36,8 @@ export function ArticleBody({
   productCards?: Record<string, ArticleProductCard>;
   hideCatalogLink?: boolean;
   footerActions?: ReactNode;
+  /** Casino: auto-lien Stake / VPN / crypto dans le corps. */
+  affiliateKeywordOffers?: AffiliateOffer[];
 }) {
   const t = useTranslations("amazon");
   const tHome = useTranslations("home");
@@ -39,6 +45,12 @@ export function ArticleBody({
   const catalogLabel =
     locale === "en" ? "Browse the product catalog" : "Voir le catalogue produits";
   const ficheLabel = locale === "en" ? "Product sheet →" : "Fiche produit →";
+  const linkify = (text: string) =>
+    affiliateKeywordOffers?.length ? (
+      <AffiliateLinkedText text={text} offers={affiliateKeywordOffers} />
+    ) : (
+      text
+    );
 
   return (
     <div className="mx-auto max-w-3xl space-y-10 px-5 pb-16 pt-10 text-base leading-relaxed text-[var(--fog)] md:px-8">
@@ -47,20 +59,50 @@ export function ArticleBody({
           .map((slug) => productCards?.[slug])
           .filter(Boolean) as ArticleProductCard[];
 
+        const sectionImage = section.imageSrc
+          ? {
+              src: section.imageSrc,
+              alt: usesEnglishFallback(locale)
+                ? section.imageAltEn ||
+                  section.imageAltFr ||
+                  section.heading
+                : section.imageAltFr || section.heading,
+              credit: section.imageCredit,
+            }
+          : null;
+
         return (
           <section key={section.heading}>
             <h2 className="font-[family-name:var(--font-display)] text-2xl text-[var(--heading)]">
-              {section.heading}
+              {linkify(section.heading)}
             </h2>
+            {sectionImage ? (
+              <figure className="mt-5 overflow-hidden border border-[var(--line)] bg-[var(--surface)]">
+                <div className="relative aspect-[16/9] w-full">
+                  <Image
+                    src={sectionImage.src}
+                    alt={sectionImage.alt}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 768px"
+                  />
+                </div>
+                {sectionImage.credit ? (
+                  <figcaption className="px-3 py-2 text-xs text-[var(--muted)]">
+                    {sectionImage.credit}
+                  </figcaption>
+                ) : null}
+              </figure>
+            ) : null}
             {section.paragraphs.map((p) => (
               <p key={p.slice(0, 48)} className="mt-3">
-                {p}
+                {linkify(p)}
               </p>
             ))}
             {section.bullets ? (
               <ul className="mt-4 list-disc space-y-2 pl-5">
                 {section.bullets.map((b) => (
-                  <li key={b}>{b}</li>
+                  <li key={b}>{linkify(b)}</li>
                 ))}
               </ul>
             ) : null}

@@ -4,13 +4,20 @@ import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { articleJsonLd, JsonLd } from "@/components/JsonLd";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
+import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
 import { AmazonButton } from "@/components/AmazonButton";
 import { SmartCover } from "@/components/SmartCover";
 import { getEditorialImages } from "@/data/images";
+import { resolveAffiliateOffers } from "@/lib/affiliates";
 import { affiliateCtaForNews } from "@/lib/news/affiliate-cta";
 import { amazonCtaForNews } from "@/lib/news/amazon-cta";
 import { getNewsBySlug, readNewsStore } from "@/lib/news/store";
+import {
+  DATE_LOCALE,
+  toAppLocale,
+  usesEnglishFallback,
+} from "@/i18n/locales";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { siteAllowsAmazon, siteShowsProducts } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
@@ -27,7 +34,7 @@ export async function generateMetadata({
   const store = await readNewsStore();
   const article = getNewsBySlug(slug, store, site.id);
   if (!article) return {};
-  const copy = locale === "en" ? article.en : article.fr;
+  const copy = usesEnglishFallback(locale) ? article.en : article.fr;
   return {
     title: copy.title,
     description: copy.excerpt,
@@ -52,12 +59,12 @@ export default async function NewsArticlePage({
   const article = getNewsBySlug(slug, store, site.id);
   if (!article) notFound();
 
-  const isEn = locale === "en";
+  const isEn = usesEnglishFallback(locale);
   const copy = isEn ? article.en : article.fr;
   const siteUrl = `https://${site.primaryHost}`;
   const editorialImages = getEditorialImages(site.id);
   const date = new Date(article.publishedAt).toLocaleDateString(
-    isEn ? "en-US" : "fr-FR",
+    DATE_LOCALE[toAppLocale(locale)],
     { year: "numeric", month: "long", day: "numeric" },
   );
   const useAmazon = siteAllowsAmazon(site);
@@ -78,6 +85,14 @@ export default async function NewsArticlePage({
         ? "Open offer"
         : "Voir l’offre";
   const mid = Math.max(2, Math.floor(copy.body.length / 2));
+  const keywordOffers =
+    site.id === "casinos-crypto" ? resolveAffiliateOffers(site) : undefined;
+  const linkify = (text: string) =>
+    keywordOffers ? (
+      <AffiliateLinkedText text={text} offers={keywordOffers} />
+    ) : (
+      text
+    );
 
   function AmazonCtaBlock() {
     if (!amazonCta) return null;
@@ -169,9 +184,11 @@ export default async function NewsArticlePage({
             priority
           />
           <h1 className="mt-6 font-[family-name:var(--font-display)] text-4xl font-semibold text-[var(--heading)] md:text-5xl">
-            {copy.title}
+            {linkify(copy.title)}
           </h1>
-          <p className="mt-4 text-lg text-[var(--muted)]">{copy.excerpt}</p>
+          <p className="mt-4 text-lg text-[var(--muted)]">
+            {linkify(copy.excerpt)}
+          </p>
           <p className="mt-4 text-sm text-[var(--muted)]">
             <time dateTime={article.publishedAt}>{date}</time>
             {" · "}
@@ -194,11 +211,11 @@ export default async function NewsArticlePage({
 
       <div className="mx-auto max-w-3xl space-y-5 px-5 py-12 text-[var(--fog)] leading-relaxed md:px-8">
         {copy.body.slice(0, mid).map((p) => (
-          <p key={p.slice(0, 48)}>{p}</p>
+          <p key={p.slice(0, 48)}>{linkify(p)}</p>
         ))}
         <CtaBlock />
         {copy.body.slice(mid).map((p) => (
-          <p key={p.slice(0, 48)}>{p}</p>
+          <p key={p.slice(0, 48)}>{linkify(p)}</p>
         ))}
         <p className="border-t border-[var(--line)] pt-6">
           <a

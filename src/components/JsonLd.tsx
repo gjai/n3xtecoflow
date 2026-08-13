@@ -1,5 +1,7 @@
-import type { SiteConfig } from "@/sites/types";
+import { DATE_LOCALE, type AppLocale } from "@/i18n/locales";
 import { siteKnowsAbout } from "@/sites/copy";
+import { siteLocales, siteShowsProducts } from "@/sites/features";
+import type { SiteConfig } from "@/sites/types";
 
 export function JsonLd({ data }: { data: Record<string, unknown> }) {
   return (
@@ -45,7 +47,9 @@ export function organizationJsonLd(siteOrUrl: SiteConfig | string) {
       "@type": "ContactPoint",
       contactType: "editorial",
       url: `${siteUrl}/fr/contact`,
-      availableLanguage: ["French", "English"],
+      availableLanguage: site
+        ? siteLocales(site).map((code) => DATE_LOCALE[code as AppLocale])
+        : ["fr-FR", "en-US"],
     },
   };
 }
@@ -54,12 +58,21 @@ export function websiteJsonLd(siteOrUrl: SiteConfig | string) {
   const isConfig = typeof siteOrUrl !== "string";
   const site = isConfig ? siteOrUrl : null;
   const siteUrl = siteUrlOf(siteOrUrl);
-  return {
+  const languages = site
+    ? siteLocales(site).map((code) => DATE_LOCALE[code as AppLocale])
+    : ["fr-FR", "en-US"];
+  const base = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: site?.brand.name || "EcoFlow Stream",
     url: siteUrl,
-    inLanguage: ["fr-FR", "en"],
+    inLanguage: languages,
+  };
+  if (site && !siteShowsProducts(site)) {
+    return base;
+  }
+  return {
+    ...base,
     potentialAction: {
       "@type": "SearchAction",
       target: `${siteUrl}/fr/produits`,

@@ -4,6 +4,11 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import {
+  CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG,
+  CASINOS_CRYPTO_STAKE_GUIDE_SLUG,
+  CASINOS_CRYPTO_VPN_GUIDE_SLUG,
+} from "@/data/casinos-crypto-guides";
+import {
   siteShowsComparisons,
   siteShowsNews,
   siteShowsProducts,
@@ -18,15 +23,26 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Editorial themes: compact nav — deep links live on home / guides hub.
+  // Casino editorial: Guides + Stake / Crypto / VPN + actus (pas d’À propos).
   const links = siteUsesEditorialHome(site)
     ? (
         [
           { href: "/guides", label: t("guides") },
+          {
+            href: `/guides/${CASINOS_CRYPTO_STAKE_GUIDE_SLUG}`,
+            label: t("stake"),
+          },
+          {
+            href: `/guides/${CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG}`,
+            label: t("crypto"),
+          },
+          {
+            href: `/guides/${CASINOS_CRYPTO_VPN_GUIDE_SLUG}`,
+            label: t("vpn"),
+          },
           siteShowsNews(site)
             ? { href: "/actualites", label: t("news") }
             : null,
-          { href: "/a-propos", label: t("about") },
         ] as const
       ).filter(Boolean) as { href: string; label: string }[]
     : (

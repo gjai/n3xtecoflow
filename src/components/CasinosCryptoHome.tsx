@@ -1,8 +1,12 @@
 import { Link } from "@/i18n/navigation";
+import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
 import { HeroSlider, type HeroSlide } from "@/components/HeroSlider";
 import { SmartCover } from "@/components/SmartCover";
-import type { AffiliateOffer } from "@/lib/affiliates";
+import {
+  resolveAffiliateOffers,
+  type AffiliateOffer,
+} from "@/lib/affiliates";
 import {
   CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG,
   CASINOS_CRYPTO_STAKE_GUIDE_SLUG,
@@ -10,6 +14,7 @@ import {
   casinosCryptoGuideCovers,
 } from "@/data/casinos-crypto-guides";
 import { getEditorialImages } from "@/data/images";
+import { usesEnglishFallback } from "@/i18n/locales";
 import type { NewsArticle } from "@/lib/news/types";
 import type { SiteConfig } from "@/sites/types";
 
@@ -18,7 +23,7 @@ function buildCasinoHeroSlides(
   site: SiteConfig,
   latestNews: NewsArticle[],
 ): HeroSlide[] {
-  const isEn = locale === "en";
+  const isEn = usesEnglishFallback(locale);
   const editorial = getEditorialImages(site.id);
   const stakeCover = casinosCryptoGuideCovers[CASINOS_CRYPTO_STAKE_GUIDE_SLUG];
   const cryptoCover =
@@ -33,12 +38,14 @@ function buildCasinoHeroSlides(
       kind: isEn ? "News" : "Actu",
       title:
         newsCopy?.title ||
-        (isEn ? "Crypto casino news" : "Actualités casinos crypto"),
+        (isEn
+          ? "Online crypto casino & Stake news"
+          : "Actus casino en ligne & Stake"),
       excerpt:
         newsCopy?.excerpt ||
         (isEn
-          ? "Editorial briefs on Stake, wallets and secure access."
-          : "Synthèses éditoriales sur Stake, wallets et accès sécurisé."),
+          ? "Editorial briefs on Stake, crypto deposits and VPN access."
+          : "Synthèses sur Stake, dépôt crypto et accès VPN."),
       href: latest ? `/actualites/${latest.slug}` : "/actualites",
       cta: isEn ? "Read the article" : "Lire l’article",
       imageSrc: latest?.imageSrc || editorial.news.src || site.heroImage,
@@ -47,10 +54,12 @@ function buildCasinoHeroSlides(
     {
       id: "stake-guide",
       kind: "Stake",
-      title: isEn ? "Stake crypto casino guide" : "Guide Stake casino crypto",
+      title: isEn
+        ? "Stake online crypto casino: full guide"
+        : "Stake casino en ligne crypto : guide complet",
       excerpt: isEn
-        ? "Why Stake, how to start, KYC and responsible play — 18+."
-        : "Pourquoi Stake, comment démarrer, KYC et jeu responsable — 18+.",
+        ? "How to access Stake, deposit crypto, KYC and play responsibly — 18+."
+        : "Comment accéder à Stake, déposer en crypto, KYC et jouer responsable — 18+.",
       href: `/guides/${CASINOS_CRYPTO_STAKE_GUIDE_SLUG}`,
       cta: isEn ? "Read the Stake guide" : "Lire le guide Stake",
       imageSrc: stakeCover.src,
@@ -59,10 +68,12 @@ function buildCasinoHeroSlides(
     {
       id: "vpn-guide",
       kind: "VPN",
-      title: isEn ? "VPN companion guide" : "Petit guide VPN",
+      title: isEn
+        ? "VPN for Stake / online crypto casino"
+        : "VPN pour Stake / casino crypto",
       excerpt: isEn
-        ? "Stable private connection before you play — kill-switch and cautious setup."
-        : "Connexion stable et privée avant de jouer — kill-switch et setup prudent.",
+        ? "Steadier access and connection before you play — kill-switch setup."
+        : "Accéder et jouer plus sereinement — setup kill-switch.",
       href: `/guides/${CASINOS_CRYPTO_VPN_GUIDE_SLUG}`,
       cta: isEn ? "Read the VPN guide" : "Lire le guide VPN",
       imageSrc: vpnCover.src,
@@ -72,11 +83,11 @@ function buildCasinoHeroSlides(
       id: "wallet-guide",
       kind: isEn ? "Guide" : "Guide",
       title: isEn
-        ? "Crypto.com wallet before Stake"
-        : "Wallet Crypto.com avant Stake",
+        ? "Buy crypto for Stake with Crypto.com"
+        : "Acheter de la crypto pour Stake (Crypto.com)",
       excerpt: isEn
-        ? "Buy and hold crypto calmly, then prepare a casino deposit."
-        : "Acheter et détenir la crypto sereinement, puis préparer un dépôt casino.",
+        ? "Wallet and deposit path before an online casino session."
+        : "Wallet et dépôt avant une session casino en ligne.",
       href: `/guides/${CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG}`,
       cta: isEn ? "Read the wallet guide" : "Lire le guide wallet",
       imageSrc: cryptoCover.src,
@@ -100,7 +111,7 @@ export function CasinosCryptoHome({
   cryptocom?: AffiliateOffer;
   latestNews?: NewsArticle[];
 }) {
-  const isEn = locale === "en";
+  const isEn = usesEnglishFallback(locale);
   const brand = site.brand.name;
   const editorial = getEditorialImages(site.id);
   const stakeCover = casinosCryptoGuideCovers[CASINOS_CRYPTO_STAKE_GUIDE_SLUG];
@@ -108,6 +119,10 @@ export function CasinosCryptoHome({
     casinosCryptoGuideCovers[CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG];
   const vpnCover = casinosCryptoGuideCovers[CASINOS_CRYPTO_VPN_GUIDE_SLUG];
   const heroSlides = buildCasinoHeroSlides(locale, site, latestNews);
+  const keywordOffers = resolveAffiliateOffers(site);
+  const L = ({ text }: { text: string }) => (
+    <AffiliateLinkedText text={text} offers={keywordOffers} />
+  );
 
   return (
     <>
@@ -115,6 +130,7 @@ export function CasinosCryptoHome({
         brandName={brand}
         slides={heroSlides}
         compact
+        affiliateKeywordOffers={keywordOffers}
         footerNote={
           isEn
             ? "18+ · Play responsibly · Affiliate links"
@@ -135,12 +151,22 @@ export function CasinosCryptoHome({
           />
           <div className="flex flex-col justify-center px-5 py-14 md:px-10 md:py-16">
             <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
-              {isEn ? "Why Stake" : "Pourquoi Stake"}
+              <L
+                text={
+                  isEn
+                    ? "Stake online crypto casino"
+                    : "Stake : casino en ligne crypto"
+                }
+              />
             </h2>
             <p className="mt-4 max-w-xl text-[var(--muted)]">
-              {isEn
-                ? "A crypto-first casino experience: speed, game variety, and a clear onboarding path — if you stay within a fixed budget."
-                : "Une expérience casino orientée crypto : rapidité, variété de jeux, parcours clair — à condition de rester dans un budget fixe."}
+              <L
+                text={
+                  isEn
+                    ? "How to start on Stake, prepare access and deposit crypto — if you stay within a fixed leisure budget (18+)."
+                    : "Comment démarrer sur Stake, préparer l’accès et un dépôt crypto — à condition de rester dans un budget loisir (18+)."
+                }
+              />
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -165,12 +191,16 @@ export function CasinosCryptoHome({
         <div className="mx-auto grid max-w-6xl gap-0 md:grid-cols-2">
           <div className="order-2 flex flex-col justify-center px-5 py-14 md:order-1 md:px-10 md:py-16">
             <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
-              {isEn ? "Crypto.com wallet" : "Wallet Crypto.com"}
+              <L text={isEn ? "Crypto.com wallet" : "Wallet Crypto.com"} />
             </h2>
             <p className="mt-4 max-w-xl text-[var(--muted)]">
-              {isEn
-                ? "Buy and hold crypto before a Stake deposit. A practical on-ramp — separate from gambling risk."
-                : "Achetez et stockez la crypto avant un dépôt Stake. On-ramp pratique — distinct du risque de jeu."}
+              <L
+                text={
+                  isEn
+                    ? "Buy and hold crypto before a Stake deposit. A practical on-ramp — separate from gambling risk."
+                    : "Achetez et stockez la crypto avant un dépôt Stake. On-ramp pratique — distinct du risque de jeu."
+                }
+              />
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -211,12 +241,16 @@ export function CasinosCryptoHome({
           />
           <div className="flex flex-col justify-center px-5 py-14 md:px-10 md:py-16">
             <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
-              {isEn ? "VPN companion" : "VPN compagnon"}
+              <L text={isEn ? "VPN companion" : "VPN compagnon"} />
             </h2>
             <p className="mt-4 max-w-xl text-[var(--muted)]">
-              {isEn
-                ? "A stable, private connection before you play — kill-switch, stable server, full session."
-                : "Connexion stable et privée avant de jouer — kill-switch, serveur stable, session complète."}
+              <L
+                text={
+                  isEn
+                    ? "A stable, private connection before you play — kill-switch, stable server, full session."
+                    : "Connexion stable et privée avant de jouer — kill-switch, serveur stable, session complète."
+                }
+              />
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -264,7 +298,9 @@ export function CasinosCryptoHome({
                 <span className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--accent)]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <p className="text-[var(--heading)]">{step}</p>
+                <p className="text-[var(--heading)]">
+                  <L text={step} />
+                </p>
               </li>
             ))}
           </ol>

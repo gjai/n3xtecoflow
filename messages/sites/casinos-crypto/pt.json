@@ -1,0 +1,152 @@
+{
+  "meta": {
+    "siteName": "Casinos Crypto",
+    "tagline": "Casino crypto online e guias Stake: acesso, depósito crypto, VPN — 18+, jogo responsável.",
+    "disclaimerShort": "18+ · Jogue com responsabilidade · Risco de perda · Afiliados Stake / Crypto.com / NordVPN · França: Joueurs Info Service 09 74 75 13 13."
+  },
+  "responsible": {
+    "badge18": "18+",
+    "title": "Jogo responsável",
+    "body": "O jogo de azar envolve risco de perda. Apenas adultos (18+). Defina um orçamento de lazer, não persiga perdas e pare se já não for divertido.",
+    "bodyShort": "Jogue com responsabilidade — risco de perda. Apenas adultos.",
+    "affiliate": "Afiliação: este site contém links Stake, Crypto.com e NordVPN. Podemos ser remunerados se os usar, sem custo extra para si. Não somos o operador.",
+    "affiliateShort": "Links de afiliados Stake / Crypto.com / NordVPN.",
+    "helpLabel": "Apoio ao jogador (França):",
+    "helpPhone": "09 74 75 13 13",
+    "helpLink": "joueurs-info-service.fr",
+    "helpUrl": "https://www.joueurs-info-service.fr",
+    "showHelp": "1",
+    "legalLink": "Aviso legal e afiliação"
+  },
+  "nav": {
+    "products": "Guias",
+    "powerstream": "Stake",
+    "comparisons": "VPN",
+    "news": "Notícias",
+    "stake": "Stake",
+    "crypto": "Crypto",
+    "vpn": "VPN",
+    "guides": "Guias"
+  },
+  "notFound": {
+    "body": "Este URL não existe — ou o conteúdo foi movido. Volte aos guias Casinos Crypto."
+  },
+  "home": {
+    "brand": "Casinos Crypto",
+    "headline": "Casino crypto online, sem ruído.",
+    "subhead": "Como aceder à Stake, preparar um depósito crypto e proteger a ligação — com os limites (18+, jogo responsável).",
+    "ctaPrimary": "Guia Stake",
+    "ctaSecondary": "Guia Crypto.com",
+    "featuresTitle": "Porque estes guias",
+    "feature1Title": "Independentes",
+    "feature1Text": "Análise editorial — não somos o operador da Stake, Crypto.com ou NordVPN.",
+    "feature2Title": "Focados na decisão",
+    "feature2Text": "Casino Stake online, wallet Crypto.com, acesso VPN e jogo responsável.",
+    "feature3Title": "Transparência",
+    "feature3Text": "Links de afiliados Stake / Crypto.com / NordVPN claramente identificados. Sem Amazon, sem AdSense.",
+    "editorialLead": "Explicamos o casino crypto Stake, depósitos Crypto.com e VPN — sem promessa de lucros.",
+    "howTitle": "Como ler o nosso conteúdo",
+    "howBody1": "O guia Stake cobre o casino online, o acesso e os limites.",
+    "howBody2": "O guia Crypto.com cobre a compra de crypto antes do depósito.",
+    "howBody3": "O jogo envolve risco de perda. Apenas 18+."
+  },
+  "guides": {
+    "subtitle": "Casino crypto online: Stake, wallet Crypto.com e VPN para começar com clareza.",
+    "buyersTitle": "Guia Stake",
+    "buyersText": "Casino Stake online, acesso, depósito crypto, KYC e jogo responsável."
+  },
+  "powerstream": {
+    "title": "Guias de casino crypto",
+    "subtitle": "Stake, acesso, wallet e VPN.",
+    "intro": "Consulte os guias para começar num casino crypto online.",
+    "whatTitle": "O tema",
+    "whatText": "Casino Stake online, depósito crypto (Crypto.com) e VPN de apoio.",
+    "forWhoTitle": "Para quem é?",
+    "forWhoText": "Adultos 18+ que querem clareza antes de jogar.",
+    "checklistTitle": "Antes de jogar",
+    "check1": "Orçamento de lazer fixo",
+    "check2": "18+ e o seu quadro legal",
+    "check3": "Wallet crypto + ligação controlada (VPN)",
+    "check4": "Termos do bónus lidos",
+    "ctaAmazon": "Abrir Stake",
+    "relatedTitle": "Ir mais longe",
+    "relatedGuide": "Guia Stake",
+    "adsLabel": "Publicidade"
+  },
+  "comparisons": {
+    "subtitle": "Leituras úteis em torno de casinos crypto.",
+    "card1Title": "Stake",
+    "card1Text": "Casino crypto online: acesso, depósito, limites.",
+    "card2Title": "Crypto.com",
+    "card2Text": "Compre crypto para um depósito na Stake.",
+    "card3Title": "VPN casino",
+    "card3Text": "Ligação estável para jogar com mais calma."
+  },
+  "amazon": {
+    "disclosure": "Este site contém links de afiliados Stake, Crypto.com e NordVPN. Podemos ganhar uma comissão sem custo extra para si.",
+    "disclosureShort": "Links de afiliados Stake / Crypto.com / NordVPN.",
+    "badge": "Afiliado",
+    "cta": "Abrir"
+  },
+  "legal": {
+    "hubMeta": "Editor, alojamento, privacidade, cookies e afiliação — informação legal Casinos Crypto.",
+    "cookiesIntro": "Esta secção explica os cookies usados no Casinos Crypto. Sem publicidade AdSense neste site.",
+    "independent": "Casinos Crypto é um site editorial independente. Não é operado pela Stake, Crypto.com, NordVPN ou Amazon.",
+    "publisherName": "Casinos Crypto — site editorial",
+    "publisherAddress": "",
+    "publisherDirector": "",
+    "publisherTva": "",
+    "siren": "",
+    "amazon": "Afiliação: este site pode conter links de afiliados Stake, Crypto.com e NordVPN. Podemos ser remunerados se os usar.",
+    "adsense": "Sem publicidade Google AdSense no Casinos Crypto.",
+    "affiliateBody": "Os links Stake, Crypto.com e NordVPN são de afiliados. Amazon Associates não é usado neste site.",
+    "responsibleTitle": "Jogo responsável (18+)",
+    "responsibleBody": "O jogo de azar envolve risco de perda. Este site é apenas para adultos (18+). Defina um orçamento de lazer e não persiga perdas.",
+    "responsibleHelp": "Apoio ao jogador em França: Joueurs Info Service — 09 74 75 13 13 — https://www.joueurs-info-service.fr",
+    "cookiesMeta": "Apenas cookies necessários — sem AdSense no Casinos Crypto.",
+    "cookiesAdsTitle": "Cookies publicitários",
+    "cookiesAdsBody": "Sem publicidade Google AdSense no Casinos Crypto: nenhum cookie publicitário é definido.",
+    "privacyBody": "Recolhemos dados técnicos mínimos (logs de servidor, analytics anonimizada sem cookies publicitários). O formulário envia nome, email e mensagem só para responder. Sem revenda. Sem AdSense.",
+    "privacyConsent": "Sem cookies publicitários neste site. Os cookies estritamente necessários permanecem ativos. Medidas: HTTPS, cabeçalhos de segurança, antispam no formulário.",
+    "privacyBasisBody": "Bases legais: interesse legítimo (segurança, logs, analytics anonimizada) e resposta ao pedido (formulário). Conservação: logs por período limitado, mensagens pelo tempo do tratamento."
+  },
+  "footer": {
+    "independent": "Site independente — casinos crypto · 18+",
+    "rights": "© {year} Casinos Crypto",
+    "products": "Guias",
+    "comparisons": "VPN",
+    "news": "Notícias",
+    "powerstream": "Stake"
+  },
+  "about": {
+    "title": "Sobre o Casinos Crypto",
+    "meta": "Quem somos, método editorial, independência e transparência sobre afiliados Stake / Crypto.com / NordVPN.",
+    "lead": "Casinos Crypto é um site editorial independente focado em casinos crypto, com uma apresentação clara da Stake, on-ramp Crypto.com e um guia VPN de apoio.",
+    "missionBody": "Explicar a Stake, a configuração do wallet Crypto.com e um setup VPN prudente — sem prometer lucros.",
+    "methodBody": "Construímos as páginas a partir de informação pública e um método editorial (porquê, como, limites).",
+    "method1": "Guia Stake: visão geral, onboarding, KYC, jogo responsável.",
+    "method2": "Guia Crypto.com: wallet / on-ramp antes de um depósito Stake.",
+    "method3": "Guia VPN + afiliados transparentes (Stake, Crypto.com, NordVPN).",
+    "method4": "Sem catálogo Amazon e sem anúncios display AdSense.",
+    "independenceBody": "Este site não é operado pela Stake, Crypto.com ou NordVPN. As marcas pertencem aos respetivos titulares.",
+    "monetizationTitle": "Monetização",
+    "monetizationBody": "Afiliados Stake, Crypto.com e NordVPN. Sem Amazon Associates nem AdSense neste domínio."
+  },
+  "news": {
+    "eyebrow": "Revista de imprensa",
+    "title": "Notícias de casino online e Stake",
+    "subtitle": "Breves sobre casino crypto, Stake, wallet e VPN — com links de afiliados claros.",
+    "empty": "Ainda sem notícias — a próxima execução automática preencherá esta secção.",
+    "catalogCta": "Guias Stake, casino crypto e VPN →"
+  },
+  "cookies": {
+    "title": "Cookies",
+    "body": "Usamos apenas cookies necessários ao funcionamento do site (idioma, segurança). Sem cookies publicitários AdSense no Casinos Crypto. Mais na nossa",
+    "privacyLink": "política de cookies",
+    "necessary": "Necessários: sempre ativos (funcionamento, idioma, segurança).",
+    "advertising": "Publicidade: nenhuma (AdSense desativado).",
+    "accept": "Compreendi",
+    "reject": "Fechar",
+    "customize": "Detalhes"
+  }
+}

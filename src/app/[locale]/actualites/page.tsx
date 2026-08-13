@@ -6,6 +6,11 @@ import { SmartCover } from "@/components/SmartCover";
 import { getEditorialImages } from "@/data/images";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 import { paginate, parsePageParam } from "@/lib/pagination";
+import {
+  DATE_LOCALE,
+  toAppLocale,
+  usesEnglishFallback,
+} from "@/i18n/locales";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { siteShowsNews } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
@@ -57,7 +62,7 @@ export default async function NewsIndexPage({
     parsePageParam(pageRaw),
     PAGE_SIZE,
   );
-  const isEn = locale === "en";
+  const isEn = usesEnglishFallback(locale);
 
   return (
     <div className="mx-auto max-w-6xl px-5 pb-16 pt-10 md:px-8">
@@ -82,7 +87,7 @@ export default async function NewsIndexPage({
           items.map((article) => {
             const copy = isEn ? article.en : article.fr;
             const date = new Date(article.publishedAt).toLocaleDateString(
-              isEn ? "en-US" : "fr-FR",
+              DATE_LOCALE[toAppLocale(locale)],
               { year: "numeric", month: "short", day: "numeric" },
             );
             return (

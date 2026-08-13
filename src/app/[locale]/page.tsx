@@ -33,6 +33,7 @@ import {
 import { resolveAllGuides } from "@/lib/guides/refresh";
 import { resolveProductCopy } from "@/lib/product-copy";
 import { resolveProductMedia } from "@/lib/product-presentation";
+import { pickLocalized } from "@/i18n/locales";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteAmazonFallbackQuery } from "@/sites/copy";
@@ -52,10 +53,23 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const site = await getCurrentSite();
-  const isEn = locale === "en";
+  const tMeta = await getTranslations({ locale, namespace: "meta" });
+  const homeTitle =
+    site.id === "casinos-crypto"
+      ? pickLocalized(locale, {
+          fr: "Stake & casino en ligne crypto : guides | Casinos Crypto",
+          en: "Stake & online crypto casino: guides | Casinos Crypto",
+          it: "Stake e casino crypto online: guide | Casinos Crypto",
+          es: "Stake y casino crypto online: guías | Casinos Crypto",
+          pt: "Stake e casino crypto online: guias | Casinos Crypto",
+          de: "Stake & Online-Krypto-Casino: Guides | Casinos Crypto",
+        })
+      : site.brand.name;
   return {
-    title: { absolute: site.brand.name },
-    description: isEn ? site.brand.taglineEn : site.brand.taglineFr,
+    title: { absolute: homeTitle },
+    description:
+      tMeta("tagline") ||
+      (locale === "fr" ? site.brand.taglineFr : site.brand.taglineEn),
     alternates: await siteLocaleAlternates(locale, ""),
   };
 }

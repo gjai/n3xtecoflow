@@ -1,7 +1,9 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
+import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { JsonLd, organizationJsonLd } from "@/components/JsonLd";
+import { resolveAffiliateOffers } from "@/lib/affiliates";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 
@@ -29,6 +31,14 @@ export default async function AboutPage({
   const t = await getTranslations("about");
   const site = await getCurrentSite();
   const siteUrl = `https://${site.primaryHost}`;
+  const keywordOffers =
+    site.id === "casinos-crypto" ? resolveAffiliateOffers(site) : undefined;
+  const L = ({ text }: { text: string }) =>
+    keywordOffers ? (
+      <AffiliateLinkedText text={text} offers={keywordOffers} />
+    ) : (
+      <>{text}</>
+    );
 
   return (
     <article className="mx-auto max-w-3xl px-5 pb-16 pt-10 md:px-8">
@@ -45,10 +55,10 @@ export default async function AboutPage({
         {t("eyebrow")}
       </p>
       <h1 className="mt-3 font-[family-name:var(--font-display)] text-4xl font-semibold text-[var(--heading)] md:text-5xl">
-        {t("title")}
+        <L text={t("title")} />
       </h1>
       <p className="mt-5 text-lg leading-relaxed text-[var(--fog)]">
-        {t("lead")}
+        <L text={t("lead")} />
       </p>
 
       <div className="mt-10 space-y-8 leading-relaxed text-[var(--fog)]">
@@ -56,19 +66,31 @@ export default async function AboutPage({
           <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
             {t("missionTitle")}
           </h2>
-          <p className="mt-3">{t("missionBody")}</p>
+          <p className="mt-3">
+            <L text={t("missionBody")} />
+          </p>
         </section>
 
         <section>
           <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
             {t("methodTitle")}
           </h2>
-          <p className="mt-3">{t("methodBody")}</p>
+          <p className="mt-3">
+            <L text={t("methodBody")} />
+          </p>
           <ul className="mt-4 list-disc space-y-2 pl-5">
-            <li>{t("method1")}</li>
-            <li>{t("method2")}</li>
-            <li>{t("method3")}</li>
-            <li>{t("method4")}</li>
+            <li>
+              <L text={t("method1")} />
+            </li>
+            <li>
+              <L text={t("method2")} />
+            </li>
+            <li>
+              <L text={t("method3")} />
+            </li>
+            <li>
+              <L text={t("method4")} />
+            </li>
           </ul>
         </section>
 
@@ -76,14 +98,18 @@ export default async function AboutPage({
           <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
             {t("independenceTitle")}
           </h2>
-          <p className="mt-3">{t("independenceBody")}</p>
+          <p className="mt-3">
+            <L text={t("independenceBody")} />
+          </p>
         </section>
 
         <section>
           <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
             {t("monetizationTitle")}
           </h2>
-          <p className="mt-3">{t("monetizationBody")}</p>
+          <p className="mt-3">
+            <L text={t("monetizationBody")} />
+          </p>
           <p className="mt-3">
             {t("seeAlso")}{" "}
             <Link

@@ -1,3 +1,4 @@
+import { pickLocalized } from "@/i18n/locales";
 import { tumblerGuides } from "./tumbler-guides";
 import { massageGunGuides } from "./massage-gun-guides";
 import { casinosCryptoGuides } from "./casinos-crypto-guides";
@@ -8,13 +9,43 @@ export type ArticleSection = {
   bullets?: string[];
   /** Product slugs to show as linked packshot cards under the section */
   productSlugs?: string[];
+  /** Inline editorial illustration (casino guides, etc.) */
+  imageSrc?: string;
+  imageAltFr?: string;
+  imageAltEn?: string;
+  imageCredit?: string;
+};
+
+export type LocalizedGuideCopy = {
+  title: string;
+  subtitle: string;
+  sections: ArticleSection[];
 };
 
 export type GuideArticle = {
   slug: string;
-  fr: { title: string; subtitle: string; sections: ArticleSection[] };
-  en: { title: string; subtitle: string; sections: ArticleSection[] };
+  fr: LocalizedGuideCopy;
+  en: LocalizedGuideCopy;
+  /** Optional — falls back to en then fr via getGuideCopy */
+  it?: LocalizedGuideCopy;
+  es?: LocalizedGuideCopy;
+  pt?: LocalizedGuideCopy;
+  de?: LocalizedGuideCopy;
 };
+
+export function getGuideCopy(
+  guide: GuideArticle,
+  locale: string,
+): LocalizedGuideCopy {
+  return pickLocalized(locale, {
+    fr: guide.fr,
+    en: guide.en,
+    it: guide.it,
+    es: guide.es,
+    pt: guide.pt,
+    de: guide.de,
+  });
+}
 
 const ecoflowGuides: GuideArticle[] = [
   {

@@ -1,4 +1,8 @@
-import { guides as staticGuides, type GuideArticle } from "@/data/articles";
+import {
+  getGuideCopy,
+  guides as staticGuides,
+  type GuideArticle,
+} from "@/data/articles";
 import type { Product } from "@/data/products";
 import { productSiteId } from "@/data/products";
 import {
@@ -85,7 +89,7 @@ function scoreText(haystack: string, tokens: string[]): number {
 }
 
 function scoreArticle(article: GuideArticle, tokens: string[], locale: string): number {
-  const copy = locale === "en" ? article.en : article.fr;
+  const copy = getGuideCopy(article, locale);
   return (
     scoreText(article.slug, tokens) * 2 +
     scoreText(copy.title, tokens) +
@@ -107,7 +111,7 @@ function scoreGuideTopic(
 }
 
 function scoreNews(article: NewsArticle, tokens: string[], locale: string): number {
-  const copy = locale === "en" ? article.en : article.fr;
+  const copy = locale === "fr" ? article.fr : article.en;
   const tags = (article.tags || []).join(" ");
   return (
     scoreText(article.slug, tokens) * 2 +
@@ -178,10 +182,10 @@ const MANUAL: Record<string, { guides?: string[]; comparisons?: string[] }> = {
 
 function guideTitle(slug: string, locale: string): string {
   const topic = GUIDE_TOPICS.find((t) => t.slug === slug);
-  if (topic) return locale === "en" ? topic.topicEn : topic.topicFr;
+  if (topic) return locale === "fr" ? topic.topicFr : topic.topicEn;
   const staticG = staticGuides.find((g) => g.slug === slug);
   if (staticG) {
-    return locale === "en" ? staticG.en.title : staticG.fr.title;
+    return getGuideCopy(staticG, locale).title;
   }
   return slug;
 }
@@ -272,7 +276,7 @@ export function getRelatedEditorial(options: {
     })),
     comparisons,
     news: newsScores.map(({ n }) => {
-      const copy = locale === "en" ? n.en : n.fr;
+      const copy = locale === "fr" ? n.fr : n.en;
       return {
         href: `/actualites/${n.slug}`,
         title: copy.title,

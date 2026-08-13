@@ -7,6 +7,7 @@ import {
   LEGACY_TUMBLER_GUIDE_SLUGS,
   TUMBLER_MAIN_GUIDE_SLUG,
 } from "@/data/tumbler-guides";
+import { getGuideCopy } from "@/data/articles";
 import { products, getLocalizedProduct } from "@/data/products";
 import { getEditorialImages } from "@/data/images";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
@@ -18,7 +19,10 @@ import { GUIDE_TOPICS } from "@/lib/guides/types";
 import { resolveGuide } from "@/lib/guides/refresh";
 import { resolveProductMedia } from "@/lib/product-presentation";
 import { siteLocaleAlternates } from "@/lib/seo";
+import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { CasinosCryptoGuideAffiliates } from "@/components/CasinosCryptoGuideAffiliates";
+import { APP_LOCALES } from "@/i18n/locales";
+import { resolveAffiliateOffers } from "@/lib/affiliates";
 import { siteAmazonFallbackQuery } from "@/sites/copy";
 import { siteAllowsAmazon, siteShowsProducts } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
@@ -31,7 +35,7 @@ export function generateStaticParams() {
   const topics = GUIDE_TOPICS.map((g) => ({ slug: g.slug }));
   const slugs = [...new Set([...topics, ...tumblerLegacy].map((x) => x.slug))];
   return slugs.flatMap((slug) =>
-    ["fr", "en"].map((locale) => ({ locale, slug })),
+    APP_LOCALES.map((locale) => ({ locale, slug })),
   );
 }
 
@@ -55,7 +59,7 @@ export async function generateMetadata({
   }
   const guide = await resolveGuide(slug, site.id);
   if (!guide) return {};
-  const copy = locale === "en" ? guide.en : guide.fr;
+  const copy = getGuideCopy(guide, locale);
   const ecoflowMap =
     site.id === "ecoflow" ? await getEcoflowEntriesMap() : {};
   const og = guide.imageSrc
@@ -112,8 +116,8 @@ export default async function GuideArticlePage({
 
   const guide = await resolveGuide(slug, site.id);
   if (!guide) notFound();
-  const copy = locale === "en" ? guide.en : guide.fr;
-  const isEn = locale === "en";
+  const copy = getGuideCopy(guide, locale);
+  const isEn = locale !== "fr";
   const ecoflowMap =
     site.id === "ecoflow" ? await getEcoflowEntriesMap() : {};
   const productImages =
@@ -133,6 +137,8 @@ export default async function GuideArticlePage({
     : productImages;
   const editorialImages = getEditorialImages(site.id);
   const productCards = buildProductCards(copy.sections, locale);
+  const keywordOffers =
+    site.id === "casinos-crypto" ? resolveAffiliateOffers(site) : undefined;
 
   return (
     <article>
@@ -140,9 +146,22 @@ export default async function GuideArticlePage({
         <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-[1.1fr_0.9fr] md:items-center md:px-8">
           <div>
             <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold md:text-5xl">
-              {copy.title}
+              {keywordOffers ? (
+                <AffiliateLinkedText text={copy.title} offers={keywordOffers} />
+              ) : (
+                copy.title
+              )}
             </h1>
-            <p className="mt-4 text-lg text-[var(--muted)]">{copy.subtitle}</p>
+            <p className="mt-4 text-lg text-[var(--muted)]">
+              {keywordOffers ? (
+                <AffiliateLinkedText
+                  text={copy.subtitle}
+                  offers={keywordOffers}
+                />
+              ) : (
+                copy.subtitle
+              )}
+            </p>
           </div>
           <ArticleCover
             images={coverImages}
@@ -180,6 +199,7 @@ export default async function GuideArticlePage({
         }
         productCards={productCards}
         hideCatalogLink={!siteShowsProducts(site)}
+        affiliateKeywordOffers={keywordOffers}
         footerActions={
           !siteAllowsAmazon(site) ? (
             <CasinosCryptoGuideAffiliates

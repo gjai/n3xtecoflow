@@ -1,7 +1,20 @@
+import {
+  DEFAULT_SITE_LOCALES,
+  type AppLocale,
+} from "@/i18n/locales";
 import type { SiteConfig } from "./types";
 
 export function siteShowsProducts(site: SiteConfig): boolean {
   return site.features?.products !== false;
+}
+
+/** Locales allowed for this theme (others redirect to default). */
+export function siteLocales(site: SiteConfig): AppLocale[] {
+  return (site.locales?.length ? site.locales : DEFAULT_SITE_LOCALES) as AppLocale[];
+}
+
+export function siteAllowsLocale(site: SiteConfig, locale: string): boolean {
+  return siteLocales(site).includes(locale as AppLocale);
 }
 
 export function siteShowsComparisons(site: SiteConfig): boolean {

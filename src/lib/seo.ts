@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { DEFAULT_SITE_LOCALES, type AppLocale } from "@/i18n/locales";
+import { siteLocales } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
 
 /**
@@ -10,6 +12,7 @@ export function localeAlternates(
   locale: string,
   pathWithoutLocale = "",
   origin: string,
+  locales: readonly AppLocale[] | string[] = DEFAULT_SITE_LOCALES,
 ): NonNullable<Metadata["alternates"]> {
   const raw = pathWithoutLocale.trim();
   const path =
@@ -20,18 +23,16 @@ export function localeAlternates(
         : `/${raw.replace(/\/$/, "")}`;
 
   const base = origin.replace(/\/$/, "");
-
-  const fr = `${base}/fr${path}`;
-  const en = `${base}/en${path}`;
   const self = `${base}/${locale}${path}`;
+  const languages: Record<string, string> = {};
+  for (const code of locales) {
+    languages[code] = `${base}/${code}${path}`;
+  }
+  languages["x-default"] = languages.fr || languages[locales[0]] || self;
 
   return {
     canonical: self,
-    languages: {
-      fr,
-      en,
-      "x-default": fr,
-    },
+    languages,
   };
 }
 
@@ -45,6 +46,7 @@ export async function siteLocaleAlternates(
     locale,
     pathWithoutLocale,
     `https://${site.primaryHost}`,
+    siteLocales(site),
   );
 }
 

@@ -29,21 +29,36 @@ export function mergeMessages(base: Messages, overlay: Messages): Messages {
  * Overlay générique : messages/sites/<siteId>/{locale}.json
  * (ecoflow = base seule ; tumbler + futurs thèmes = overlay).
  */
-function loadSiteOverlay(siteId: string, locale: string): Messages {
-  if (siteId === "ecoflow") return {};
-  const file = join(
-    process.cwd(),
-    "messages",
-    "sites",
-    siteId,
-    `${locale}.json`,
-  );
-  if (!existsSync(file)) return {};
+function readMessagesFile(...parts: string[]): Messages | null {
+  const file = join(process.cwd(), ...parts);
+  if (!existsSync(file)) return null;
   try {
     return JSON.parse(readFileSync(file, "utf8")) as Messages;
   } catch {
-    return {};
+    return null;
   }
+}
+
+async function loadBaseMessages(locale: string): Promise<Messages> {
+  try {
+    return (await import(`../../messages/${locale}.json`)).default as Messages;
+  } catch {
+    if (locale !== "en") {
+      return (await import(`../../messages/en.json`)).default as Messages;
+    }
+    return (await import(`../../messages/fr.json`)).default as Messages;
+  }
+}
+
+function loadSiteOverlay(siteId: string, locale: string): Messages {
+  if (siteId === "ecoflow") return {};
+  return (
+    readMessagesFile("messages", "sites", siteId, `${locale}.json`) ||
+    (locale !== "en"
+      ? readMessagesFile("messages", "sites", siteId, "en.json") || {}
+      : {}) ||
+    {}
+  );
 }
 
 export default getRequestConfig(async ({ requestLocale }) => {
@@ -57,7 +72,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     ? getSiteById(h.get(SITE_HEADER))
     : getSiteByHost(h.get("host"));
 
-  const base = (await import(`../../messages/${locale}.json`)).default as Messages;
+  const base = await loadBaseMessages(locale);
   const overlay = loadSiteOverlay(site.id, locale);
 
   return {

@@ -1,4 +1,5 @@
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
+import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
 import { GamblingDisclaimer } from "@/components/GamblingDisclaimer";
 import {
@@ -12,6 +13,7 @@ import {
   CASINOS_CRYPTO_STAKE_GUIDE_SLUG,
   CASINOS_CRYPTO_VPN_GUIDE_SLUG,
 } from "@/data/casinos-crypto-guides";
+import { usesEnglishFallback } from "@/i18n/locales";
 
 type GuideAngle = "stake" | "cryptocom" | "vpn";
 
@@ -124,11 +126,13 @@ function OfferRow({
   hint,
   label,
   primary,
+  offers,
 }: {
   offer: AffiliateOffer;
   hint: string;
   label: string;
   primary?: boolean;
+  offers: AffiliateOffer[];
 }) {
   return (
     <div
@@ -145,7 +149,7 @@ function OfferRow({
             : "text-xs text-[var(--muted)]"
         }
       >
-        {hint}
+        <AffiliateLinkedText text={hint} offers={offers} />
       </p>
       <AffiliateOfferButton
         href={offer.href}
@@ -167,14 +171,18 @@ export function CasinosCryptoGuideAffiliates({
   slug: string;
   locale: string;
 }) {
-  if (!resolveAffiliateOffers(site).length) return null;
+  const offers = resolveAffiliateOffers(site);
+  if (!offers.length) return null;
 
-  const isEn = locale === "en";
+  const isEn = usesEnglishFallback(locale);
   const angle = angleForSlug(slug);
   const copy = copyForAngle(angle, isEn);
   const stake = affiliateOffer(site, "stake");
   const cryptocom = affiliateOffer(site, "cryptocom");
   const nordvpn = affiliateOffer(site, "nordvpn");
+  const L = ({ text }: { text: string }) => (
+    <AffiliateLinkedText text={text} offers={offers} />
+  );
 
   if (!stake && !cryptocom && !nordvpn) return null;
 
@@ -185,9 +193,11 @@ export function CasinosCryptoGuideAffiliates({
           {copy.eyebrow}
         </p>
         <h3 className="mt-2 font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)] md:text-2xl">
-          {copy.title}
+          <L text={copy.title} />
         </h3>
-        <p className="mt-2 text-sm text-[var(--muted)]">{copy.lead}</p>
+        <p className="mt-2 text-sm text-[var(--muted)]">
+          <L text={copy.lead} />
+        </p>
       </div>
 
       <div className="space-y-3">
@@ -197,6 +207,7 @@ export function CasinosCryptoGuideAffiliates({
             hint={copy.stakeHint}
             label={copy.stakeLabel}
             primary
+            offers={offers}
           />
         ) : null}
         <div className="grid gap-3 sm:grid-cols-2">
@@ -205,6 +216,7 @@ export function CasinosCryptoGuideAffiliates({
               offer={cryptocom}
               hint={copy.cryptocomHint}
               label={copy.cryptocomLabel}
+              offers={offers}
             />
           ) : null}
           {nordvpn ? (
@@ -212,6 +224,7 @@ export function CasinosCryptoGuideAffiliates({
               offer={nordvpn}
               hint={copy.nordvpnHint}
               label={copy.nordvpnLabel}
+              offers={offers}
             />
           ) : null}
         </div>

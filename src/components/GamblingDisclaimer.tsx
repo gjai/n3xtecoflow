@@ -2,7 +2,9 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { resolveAffiliateOffers } from "@/lib/affiliates";
 import { siteNeedsGamblingDisclaimer } from "@/sites/features";
+import { AffiliateLinkedText } from "./AffiliateLinkedText";
 import { useSite } from "./SiteProvider";
 
 /** Site-wide 18+ / responsible gambling / affiliate strip (casinos-crypto). */
@@ -19,6 +21,10 @@ export function GamblingDisclaimer({
 
   const helpUrl = t("helpUrl");
   const showFrHelp = locale === "fr" || t("showHelp") === "1";
+  const offers = resolveAffiliateOffers(site);
+  const L = ({ text }: { text: string }) => (
+    <AffiliateLinkedText text={text} offers={offers} />
+  );
 
   if (compact) {
     return (
@@ -26,8 +32,8 @@ export function GamblingDisclaimer({
         <span className="mr-2 inline-flex min-h-6 min-w-8 items-center justify-center border border-[var(--accent)] px-1.5 font-semibold text-[var(--accent)]">
           {t("badge18")}
         </span>
-        {t("bodyShort")}{" "}
-        {t("affiliateShort")}{" "}
+        <L text={t("bodyShort")} />{" "}
+        <L text={t("affiliateShort")} />{" "}
         {showFrHelp ? (
           <>
             {t("helpLabel")}{" "}
@@ -63,8 +69,12 @@ export function GamblingDisclaimer({
         </p>
         <div className="min-w-0 space-y-2 text-sm leading-relaxed text-[var(--muted)]">
           <p className="font-semibold text-[var(--heading)]">{t("title")}</p>
-          <p>{t("body")}</p>
-          <p>{t("affiliate")}</p>
+          <p>
+            <L text={t("body")} />
+          </p>
+          <p>
+            <L text={t("affiliate")} />
+          </p>
           {showFrHelp ? (
             <p>
               {t("helpLabel")}{" "}

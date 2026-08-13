@@ -1,7 +1,8 @@
 import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Outfit, Sora } from "next/font/google";
+import { OG_LOCALE, pickLocalized, toAppLocale } from "@/i18n/locales";
 import { routing } from "@/i18n/routing";
 import { AdSenseScript } from "@/components/AdSenseScript";
 import { AnalyticsBeacon } from "@/components/AnalyticsBeacon";
@@ -16,7 +17,11 @@ import {
   themeInitScript,
 } from "@/components/ThemeProvider";
 import { getCurrentSite } from "@/sites/server";
-import { siteAllowsAdsense, siteAllowsAmazon } from "@/sites/features";
+import {
+  siteAllowsAdsense,
+  siteAllowsAmazon,
+  siteAllowsLocale,
+} from "@/sites/features";
 import { siteThemeCss } from "@/sites/theme-css";
 import "../globals.css";
 
@@ -43,7 +48,6 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const site = await getCurrentSite();
-  const isEn = locale === "en";
   const allowAds = siteAllowsAdsense(site);
   const adsenseClient = allowAds
     ? site.monetization?.adsenseClient?.trim() ||
@@ -51,9 +55,13 @@ export async function generateMetadata({
       "ca-pub-4733644127583822"
     : "";
   const title = site.brand.name;
-  const description = isEn ? site.brand.taglineEn : site.brand.taglineFr;
-
+  const tMeta = await getTranslations({ locale, namespace: "meta" });
+  const description =
+    tMeta("tagline") ||
+    (locale === "fr" ? site.brand.taglineFr : site.brand.taglineEn);
   const { icons } = site.brand;
+  const ogImage = site.heroImage || icons.apple || icons.favicon;
+  const ogIsHero = Boolean(site.heroImage);
 
   return {
     title: {
@@ -78,17 +86,23 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      locale: locale === "fr" ? "fr_FR" : "en_US",
+      locale: OG_LOCALE[toAppLocale(locale)],
       type: "website",
       siteName: title,
       url: `https://${site.primaryHost}`,
-      images: [{ url: icons.apple || icons.favicon, width: 180, height: 180 }],
+      images: [
+        {
+          url: ogImage,
+          width: ogIsHero ? 1200 : 180,
+          height: ogIsHero ? 630 : 180,
+        },
+      ],
     },
     twitter: {
-      card: "summary",
+      card: ogIsHero ? "summary_large_image" : "summary",
       title,
       description,
-      images: [icons.apple || icons.favicon],
+      images: [ogImage],
     },
   };
 }
@@ -108,6 +122,9 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
   const messages = await getMessages();
   const site = await getCurrentSite();
+  if (!siteAllowsLocale(site, locale)) {
+    notFound();
+  }
   const allowAds = siteAllowsAdsense(site);
   const adsenseClient = allowAds
     ? site.monetization?.adsenseClient?.trim() ||
@@ -115,12 +132,14 @@ export default async function LocaleLayout({
       "ca-pub-4733644127583822"
     : "";
   const disclaimer = siteAllowsAmazon(site)
-    ? locale === "en"
-      ? "Independent editorial site. Contains Amazon affiliate links."
-      : "Site éditorial indépendant. Contient des liens d'affiliation Amazon."
-    : locale === "en"
-      ? "18+. Play responsibly. Risk of loss. Affiliate links: Stake, Crypto.com, NordVPN. France help: Joueurs Info Service 09 74 75 13 13 / joueurs-info-service.fr."
-      : "18+. Jeu responsable. Risque de perte. Liens d'affiliation Stake, Crypto.com, NordVPN. Aide : Joueurs Info Service 09 74 75 13 13 / joueurs-info-service.fr.";
+    ? pickLocalized(locale, {
+        fr: "Site éditorial indépendant. Contient des liens d'affiliation Amazon.",
+        en: "Independent editorial site. Contains Amazon affiliate links.",
+      })
+    : pickLocalized(locale, {
+        fr: "18+. Jeu responsable. Risque de perte. Liens d'affiliation Stake, Crypto.com, NordVPN. Aide : Joueurs Info Service 09 74 75 13 13 / joueurs-info-service.fr.",
+        en: "18+. Play responsibly. Risk of loss. Affiliate links: Stake, Crypto.com, NordVPN. France help: Joueurs Info Service 09 74 75 13 13 / joueurs-info-service.fr.",
+      });
 
   return (
     <html
