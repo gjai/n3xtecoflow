@@ -152,10 +152,12 @@ export function EuroMillionsSimulator({
   draws,
   locale,
   latestDate,
+  initialDate,
 }: {
   draws: EuroMillionsDraw[];
   locale: string;
   latestDate: string | null;
+  initialDate?: string | null;
 }) {
   const t = useTranslations("simulator");
   const dates = useMemo(
@@ -164,7 +166,11 @@ export function EuroMillionsSimulator({
   );
   const [numbers, setNumbers] = useState<number[]>([]);
   const [stars, setStars] = useState<number[]>([]);
-  const [date, setDate] = useState(latestDate || dates[0] || "");
+  const [date, setDate] = useState(
+    (initialDate && dates.includes(initialDate)
+      ? initialDate
+      : latestDate || dates[0]) || "",
+  );
   const [submitted, setSubmitted] = useState(false);
 
   const valid = isValidEuroMillionsPick(numbers, stars);

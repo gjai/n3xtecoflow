@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
+import { MyMillionChecker } from "@/components/MyMillionChecker";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -62,6 +63,19 @@ export default async function MyMillionPage({
         </h1>
         <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("subtitle")}</p>
         <p className="mt-2 text-xs text-[var(--muted)]">{t("disclaimer")}</p>
+
+        <div className="mt-10">
+          <MyMillionChecker
+            locale={locale}
+            draws={coded
+              .filter((d) => d.myMillionCode)
+              .map((d) => ({
+                date: d.date,
+                code: d.myMillionCode as string,
+                location: d.myMillionLocation,
+              }))}
+          />
+        </div>
 
         <h2 className="mt-12 text-lg font-semibold text-[var(--heading)]">
           {t("codesTitle")}

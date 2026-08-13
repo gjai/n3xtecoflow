@@ -62,23 +62,27 @@ export default async function TiragesPage({
       ) : (
         <ul className="mt-10 divide-y divide-[var(--line)] border border-[var(--line)]">
           {draws.map((draw) => (
-            <li key={draw.date}>
+            <li
+              key={draw.date}
+              className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
+            >
               <Link
                 href={`/tirages/${draw.date}`}
-                className="flex flex-col gap-3 px-4 py-4 transition hover:bg-[var(--surface)] sm:flex-row sm:items-center sm:justify-between"
+                className="min-w-0 flex-1 transition hover:text-[var(--accent)]"
               >
-                <div>
-                  <p className="font-semibold text-[var(--heading)]">
-                    {formatDate(draw.date, locale)}
-                  </p>
-                  <p className="mt-1 text-sm text-[var(--muted)]">
-                    {draw.numbers.join(" · ")} · ★ {draw.stars.join(" · ")}
-                    {draw.myMillionCode
-                      ? ` · MM ${draw.myMillionCode}`
-                      : ""}
-                  </p>
-                </div>
-                <span className="text-sm text-[var(--accent)]">→</span>
+                <p className="font-semibold text-[var(--heading)]">
+                  {formatDate(draw.date, locale)}
+                </p>
+                <p className="mt-1 text-sm text-[var(--muted)]">
+                  {draw.numbers.join(" · ")} · ★ {draw.stars.join(" · ")}
+                  {draw.myMillionCode ? ` · MM ${draw.myMillionCode}` : ""}
+                </p>
+              </Link>
+              <Link
+                href={`/simulateur?date=${draw.date}`}
+                className="shrink-0 text-sm font-semibold text-[var(--accent)] hover:underline"
+              >
+                {t("checkCta")} →
               </Link>
             </li>
           ))}

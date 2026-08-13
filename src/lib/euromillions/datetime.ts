@@ -1,0 +1,129 @@
+const PARIS = "Europe/Paris";
+
+export function parisDateKey(date = new Date()): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: PARIS,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
+/** Convert a Paris wall-clock (date + hour) to a UTC Date. */
+export function parisLocalToUtc(
+  isoDate: string,
+  hour = 21,
+  minute = 0,
+): Date {
+  const hh = String(hour).padStart(2, "0");
+  const mm = String(minute).padStart(2, "0");
+  for (const offset of ["+01:00", "+02:00"] as const) {
+    const candidate = new Date(`${isoDate}T${hh}:${mm}:00${offset}`);
+    if (Number.isNaN(candidate.getTime())) continue;
+    const day = parisDateKey(candidate);
+    const parisHour = Number(
+      new Intl.DateTimeFormat("en-GB", {
+        timeZone: PARIS,
+        hour: "2-digit",
+        hourCycle: "h23",
+      }).format(candidate),
+    );
+    const parisMin = Number(
+      new Intl.DateTimeFormat("en-GB", {
+        timeZone: PARIS,
+        minute: "2-digit",
+      }).format(candidate),
+    );
+    if (day === isoDate && parisHour === hour && parisMin === minute) {
+      return candidate;
+    }
+  }
+  return new Date(`${isoDate}T${hh}:${mm}:00+02:00`);
+}
+
+export function parisWeekday(isoDate: string): number {
+  const d = new Date(`${isoDate}T12:00:00+01:00`);
+  const wd = new Intl.DateTimeFormat("en-US", {
+    timeZone: PARIS,
+    weekday: "short",
+  }).format(d);
+  const map: Record<string, number> = {
+    Sun: 0,
+    Mon: 1,
+    Tue: 2,
+    Wed: 3,
+    Thu: 4,
+    Fri: 5,
+    Sat: 6,
+  };
+  return map[wd] ?? d.getUTCDay();
+}
+
+export function parisHourMinute(date = new Date()): { hour: number; minute: number } {
+  const hour = Number(
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: PARIS,
+      hour: "2-digit",
+      hourCycle: "h23",
+    }).format(date),
+  );
+  const minute = Number(
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: PARIS,
+      minute: "2-digit",
+    }).format(date),
+  );
+  return { hour, minute };
+}
+
+export function formatParisTime(iso: string, locale: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+    timeZone: PARIS,
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(d);
+}
+
+export function formatParisDateTime(iso: string, locale: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+    timeZone: PARIS,
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(d);
+}
+
+/** Typical EuroMillions draw ~21:00 Europe/Paris. */
+export const EM_DRAW_HOUR = 21;
+export const EM_DRAW_MINUTE = 0;
+
+export function isEuroMillionsDrawWeekday(isoDate: string): boolean {
+  const wd = parisWeekday(isoDate);
+  return wd === 2 || wd === 5;
+}
+
+export function euroMillionsResultPending(options: {
+  latestDate: string | null | undefined;
+  nextDrawDate: string | null | undefined;
+  now?: Date;
+}): boolean {
+  const now = options.now || new Date();
+  const today = parisDateKey(now);
+  const hasToday = options.latestDate === today;
+  if (hasToday) return false;
+
+  const next = options.nextDrawDate;
+  if (next === today) return true;
+
+  if (isEuroMillionsDrawWeekday(today)) {
+    const { hour } = parisHourMinute(now);
+    return hour >= 20;
+  }
+  return false;
+}

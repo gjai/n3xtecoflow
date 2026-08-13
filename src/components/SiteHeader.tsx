@@ -30,6 +30,7 @@ export function SiteHeader() {
         [
           { href: "/tirages", label: t("archive") },
           { href: "/simulateur", label: t("simulator") },
+          { href: "/prochain-tirage", label: t("nextDraw") },
           { href: "/jeux", label: t("otherGames") },
           { href: "/my-million", label: t("myMillion") },
           { href: "/stats", label: t("stats") },

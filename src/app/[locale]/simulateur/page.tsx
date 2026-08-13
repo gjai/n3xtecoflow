@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EuroMillionsSimulator } from "@/components/EuroMillionsSimulator";
+import { FlashGridGenerator } from "@/components/FlashGridGenerator";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -28,10 +29,13 @@ export async function generateMetadata({
 
 export default async function SimulateurPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ date?: string }>;
 }) {
   const { locale } = await params;
+  const { date: dateParam } = await searchParams;
   setRequestLocale(locale);
   const site = await getCurrentSite();
   if (!siteIsEuroMillions(site)) notFound();
@@ -48,6 +52,10 @@ export default async function SimulateurPage({
     source: d.source,
     fetchedAt: d.fetchedAt,
   }));
+  const initialDate =
+    dateParam && store.draws.some((d) => d.date === dateParam)
+      ? dateParam
+      : latest?.date || null;
 
   return (
     <main className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-20">
@@ -63,7 +71,11 @@ export default async function SimulateurPage({
           draws={draws}
           locale={locale}
           latestDate={latest?.date || null}
+          initialDate={initialDate}
         />
+      </div>
+      <div className="mt-12">
+        <FlashGridGenerator />
       </div>
     </main>
   );

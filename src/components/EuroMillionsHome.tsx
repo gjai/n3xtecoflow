@@ -3,9 +3,11 @@ import { Link } from "@/i18n/navigation";
 import { SmartCover } from "@/components/SmartCover";
 import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
 import { FdjCompanionGamesBlock } from "@/components/FdjCompanionGamesBlock";
+import { NextJackpotBanner } from "@/components/NextJackpotBanner";
 import { getEditorialImages } from "@/data/images";
 import { usesEnglishFallback } from "@/i18n/locales";
 import type { EuroMillionsDraw, EuroMillionsStore } from "@/lib/euromillions/types";
+import { euroMillionsResultPending } from "@/lib/euromillions/datetime";
 import { getLatestDraw } from "@/lib/euromillions/store";
 import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import type { NewsArticle } from "@/lib/news/types";
@@ -99,6 +101,10 @@ export async function EuroMillionsHome({
   const latest = getLatestDraw(store);
   const jackpot = latest ? formatMoney(latest.jackpotEur, locale) : null;
   const nextJackpot = formatMoney(store.nextJackpotEur, locale);
+  const pending = euroMillionsResultPending({
+    latestDate: latest?.date,
+    nextDrawDate: store.nextDrawDate,
+  });
   const brand = site.brand.name;
   const recentWinners = (store.myMillionWinners || []).slice(0, 4);
   const editorial = getEditorialImages(site.id);
@@ -106,6 +112,12 @@ export async function EuroMillionsHome({
 
   return (
     <>
+      <NextJackpotBanner
+        nextDrawDate={store.nextDrawDate || null}
+        nextJackpot={nextJackpot}
+        pending={pending}
+        locale={locale}
+      />
       <section className="relative overflow-hidden border-b border-[var(--line)]">
         <div
           className="pointer-events-none absolute inset-0 opacity-90"
@@ -188,6 +200,12 @@ export async function EuroMillionsHome({
                 ) : null}
                 <div className="mt-6 flex flex-wrap gap-4">
                   <Link
+                    href={`/simulateur?date=${latest.date}`}
+                    className="inline-flex min-h-10 items-center bg-[var(--accent)] px-4 text-sm font-semibold text-[var(--accent-ink)]"
+                  >
+                    {t("simulatorCta")}
+                  </Link>
+                  <Link
                     href={`/tirages/${latest.date}`}
                     className="text-sm font-semibold text-[var(--accent)] hover:underline"
                   >
@@ -205,17 +223,28 @@ export async function EuroMillionsHome({
               <p className="mt-6 text-[var(--muted)]">{t("empty")}</p>
             )}
 
-            {(store.nextDrawDate || nextJackpot) && (
+            {pending && latest ? (
+              <p className="mt-6 text-sm text-[var(--muted)]">
+                {t("pendingLatest", {
+                  date: formatDate(latest.date, locale),
+                })}
+              </p>
+            ) : null}
+
+            {(store.nextDrawDate || nextJackpot) && !pending ? (
               <div className="mt-6 border-t border-[var(--line)] pt-5 text-sm text-[var(--muted)]">
-                <span className="text-[var(--heading)]">
+                <Link
+                  href="/prochain-tirage"
+                  className="font-semibold text-[var(--heading)] hover:underline"
+                >
                   {t("nextDrawLabel")}
-                </span>
+                </Link>
                 {store.nextDrawDate
                   ? ` · ${formatDate(store.nextDrawDate, locale)}`
                   : null}
                 {nextJackpot ? ` · ${nextJackpot}` : null}
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </section>

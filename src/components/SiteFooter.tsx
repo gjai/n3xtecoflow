@@ -33,6 +33,7 @@ export function SiteFooter() {
         [
           { href: "/tirages", label: t("products") },
           { href: "/simulateur", label: tNav("simulator") },
+          { href: "/prochain-tirage", label: tNav("nextDraw") },
           { href: "/jeux", label: tNav("otherGames") },
           { href: "/my-million", label: tNav("myMillion") },
           { href: "/stats", label: t("comparisons") },

@@ -155,20 +155,20 @@ export default async function TirageDetailPage({
             </div>
             <p className="mt-4">
               <Link
-                href="/simulateur"
-                className="text-sm font-semibold text-[var(--accent)] hover:underline"
+                href={`/simulateur?date=${draw.date}`}
+                className="inline-flex min-h-11 items-center bg-[var(--accent)] px-5 text-sm font-semibold text-[var(--accent-ink)]"
               >
-                {t("simulatorCta")} →
+                {t("simulatorCta")}
               </Link>
             </p>
           </div>
         ) : (
           <p className="mt-6">
             <Link
-              href="/simulateur"
-              className="text-sm font-semibold text-[var(--accent)] hover:underline"
+              href={`/simulateur?date=${draw.date}`}
+              className="inline-flex min-h-11 items-center bg-[var(--accent)] px-5 text-sm font-semibold text-[var(--accent-ink)]"
             >
-              {t("simulatorCta")} →
+              {t("simulatorCta")}
             </Link>
           </p>
         )}

@@ -4,6 +4,7 @@ import { FDJ_COMPANION_GAMES } from "@/lib/fdj-games/catalog";
 import { getGameLatest } from "@/lib/fdj-games/store";
 import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import { FdjGameBalls } from "@/components/FdjGameBalls";
+import { companionResultPending, formatDrawWhen } from "@/lib/fdj-games/display";
 
 function formatDate(iso: string, locale: string) {
   const d = new Date(`${iso}T12:00:00Z`);
@@ -114,6 +115,14 @@ export async function FdjCompanionGamesBlock({
                     years: annuity.years,
                   })
                 : null;
+            const when = latest ? formatDrawWhen(latest, locale) : null;
+            const pending = companionResultPending(game.id, latest);
+            const slotLabel =
+              when?.kenoSlot === "midi"
+                ? t("kenoMidi")
+                : when?.kenoSlot === "soir"
+                  ? t("kenoSoir")
+                  : null;
             return (
               <li
                 key={game.id}
@@ -127,6 +136,10 @@ export async function FdjCompanionGamesBlock({
                     {latest ? (
                       <p className="mt-1 text-sm text-[var(--muted)]">
                         {formatDate(latest.date, locale)}
+                        {slotLabel ? ` · ${slotLabel}` : ""}
+                        {when?.time && game.id === "crescendo"
+                          ? ` · ${when.time}`
+                          : ""}
                         {annuityText
                           ? ` · ${annuityText}`
                           : jackpot
@@ -138,6 +151,11 @@ export async function FdjCompanionGamesBlock({
                         {t("emptyGame")}
                       </p>
                     )}
+                    {pending ? (
+                      <p className="mt-1 text-xs text-[var(--accent)]">
+                        {t("pending")}
+                      </p>
+                    ) : null}
                   </div>
                   <Link
                     href={`/jeux/${game.slug}`}

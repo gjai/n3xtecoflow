@@ -5,6 +5,10 @@ import { Link } from "@/i18n/navigation";
 import { FdjGameBalls } from "@/components/FdjGameBalls";
 import { FDJ_COMPANION_GAMES, getCompanionGame } from "@/lib/fdj-games/catalog";
 import {
+  companionResultPending,
+  formatDrawWhen,
+} from "@/lib/fdj-games/display";
+import {
   getGameDraws,
   getGameLatest,
   readFdjGamesStore,
@@ -47,6 +51,20 @@ function formatDate(iso: string, locale: string) {
   }).format(d);
 }
 
+function formatDateTime(isoDate: string, plannedAt: string, locale: string) {
+  const d = new Date(plannedAt);
+  if (Number.isNaN(d.getTime())) return formatDate(isoDate, locale);
+  return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Paris",
+  }).format(d);
+}
+
 function formatMoney(amount: number | null | undefined, locale: string) {
   if (amount == null || !Number.isFinite(amount)) return null;
   return new Intl.NumberFormat(locale === "en" ? "en-GB" : "fr-FR", {
@@ -68,12 +86,31 @@ export default async function JeuxGamePage({
 
   const entry = getCompanionGame(slug);
   if (!entry) notFound();
+  const gameId = entry.id;
 
   const t = await getTranslations("games");
   const store = await readFdjGamesStore();
-  const latest = getGameLatest(store, entry.id);
-  const draws = getGameDraws(store, entry.id).slice(0, 40);
+  const latest = getGameLatest(store, gameId);
+  const draws = getGameDraws(store, gameId).slice(0, 40);
   const label = locale === "en" ? entry.labelEn : entry.labelFr;
+  const pending = companionResultPending(gameId, latest);
+
+  function headingFor(d: NonNullable<typeof latest>) {
+    const when = formatDrawWhen(d, locale);
+    const slot =
+      when.kenoSlot === "midi"
+        ? t("kenoMidi")
+        : when.kenoSlot === "soir"
+          ? t("kenoSoir")
+          : null;
+    if (gameId === "keno" && slot) {
+      return `${formatDate(d.date, locale)} · ${slot}`;
+    }
+    if (gameId === "crescendo") {
+      return formatDateTime(d.date, d.plannedAt, locale);
+    }
+    return formatDate(d.date, locale);
+  }
 
   const groupLabels: Record<string, string> = {
     main: t("group.main"),
@@ -108,8 +145,11 @@ export default async function JeuxGamePage({
             {t("latestLabel")}
           </p>
           <p className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
-            {formatDate(latest.date, locale)}
+            {headingFor(latest)}
           </p>
+          {pending ? (
+            <p className="mt-2 text-sm text-[var(--accent)]">{t("pending")}</p>
+          ) : null}
           {latest.jackpotNote ? (
             <p className="mt-2 text-sm text-[var(--muted)]">
               {(() => {
@@ -145,7 +185,7 @@ export default async function JeuxGamePage({
                 className="border border-[var(--line)] bg-[var(--surface)] px-4 py-3"
               >
                 <p className="text-sm font-semibold text-[var(--heading)]">
-                  {formatDate(d.date, locale)}
+                  {headingFor(d)}
                 </p>
                 <div className="mt-3">
                   <FdjGameBalls draw={d} labels={groupLabels} />

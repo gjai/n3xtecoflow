@@ -87,6 +87,8 @@ export function buildSitemapForSite(
       ? [
           "/tirages",
           "/simulateur",
+          "/generateur",
+          "/prochain-tirage",
           "/jeux",
           "/jeux/eurodreams",
           "/jeux/loto",
