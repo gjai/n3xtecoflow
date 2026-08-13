@@ -24,6 +24,8 @@ export default function middleware(request: NextRequest) {
   const site = getSiteByHost(host);
   const pathname = request.nextUrl.pathname;
   const seg = pathname.split("/").filter(Boolean)[0];
+  request.headers.set("x-pathname", pathname);
+  request.headers.set(SITE_HEADER, siteId);
 
   // Browsers often request /favicon.ico directly — serve the theme mark.
   if (pathname === "/favicon.ico") {
@@ -42,6 +44,7 @@ export default function middleware(request: NextRequest) {
 
   const response = intlMiddleware(request);
   response.headers.set(SITE_HEADER, siteId);
+  response.headers.set("x-pathname", pathname);
   response.headers.set(
     "Vary",
     [response.headers.get("Vary"), "Host"].filter(Boolean).join(", "),

@@ -25,7 +25,7 @@ export function SiteLogo({ variant = "header", className = "" }: SiteLogoProps) 
         height={32}
         className="h-8 w-8 shrink-0"
         unoptimized
-        priority={variant === "header"}
+        priority={false}
       />
       <span>{site.brand.name}</span>
     </span>

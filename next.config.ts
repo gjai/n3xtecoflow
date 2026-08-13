@@ -50,6 +50,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   experimental: {
     globalNotFound: true,
+    /** CSS dans le HTML : plus de 404 /_next/static/*.css au redeploy Coolify. */
+    inlineCss: true,
   },
   images: {
     remotePatterns: [

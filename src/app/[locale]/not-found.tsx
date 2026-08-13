@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getCurrentSite } from "@/sites/server";
+import { ctaLabel, siteNotFoundCtas } from "@/sites/not-found";
 
-export const metadata: Metadata = {
-  title: "404",
-  robots: { index: false, follow: true },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getCurrentSite();
+  return {
+    title: `404 · ${site.brand.name}`,
+    robots: { index: false, follow: true },
+  };
+}
 
 export default async function LocaleNotFound() {
   const t = await getTranslations("notFound");
   const site = await getCurrentSite();
+  const locale = await getLocale();
+  const isEn = locale === "en";
 
   return (
     <section className="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center px-5 py-20 md:px-8">
@@ -27,24 +33,17 @@ export default async function LocaleNotFound() {
         {t("body")}
       </p>
       <div className="mt-10 flex flex-wrap gap-3">
-        <Link
-          href="/"
-          className="bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-[var(--accent-ink)] transition hover:brightness-110"
-        >
-          {t("home")}
-        </Link>
-        <Link
-          href="/produits"
-          className="border border-[var(--line)] px-5 py-3 text-sm font-semibold text-[var(--heading)] transition hover:border-[var(--accent)]"
-        >
-          {t("products")}
-        </Link>
-        <Link
-          href="/guides"
-          className="border border-[var(--line)] px-5 py-3 text-sm font-semibold text-[var(--heading)] transition hover:border-[var(--accent)]"
-        >
-          {t("guides")}
-        </Link>
+        {siteNotFoundCtas(site).map((cta) => {
+          const label = ctaLabel(cta.labelKey, isEn, (key) => t(key));
+          const className = cta.primary
+            ? "bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-[var(--accent-ink)] transition hover:brightness-110"
+            : "border border-[var(--line)] px-5 py-3 text-sm font-semibold text-[var(--heading)] transition hover:border-[var(--accent)]";
+          return (
+            <Link key={cta.href} href={cta.href} className={className}>
+              {label}
+            </Link>
+          );
+        })}
       </div>
     </section>
   );
