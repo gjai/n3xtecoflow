@@ -400,8 +400,8 @@ export async function EuroMillionsHome({
                 {t("allNewsCta")} →
               </Link>
             </div>
-            <ul className="mt-8 grid gap-6 md:grid-cols-3">
-              {latestNews.slice(0, 3).map((article) => {
+            <ul className="mt-8 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+              {latestNews.slice(0, 6).map((article) => {
                 const copy = isEn ? article.en : article.fr;
                 return (
                   <li key={article.slug}>

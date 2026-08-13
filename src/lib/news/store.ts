@@ -4,7 +4,7 @@ import path from "path";
 import type { SiteId } from "@/sites/types";
 import { pricesToEuroText } from "@/lib/money";
 import type { NewsArticle, NewsLocaleCopy, NewsStore } from "./types";
-import { MAX_NEWS_ARTICLES, newsSiteId } from "./types";
+import { MAX_NEWS_ARTICLES, maxNewsPerSite, newsSiteId } from "./types";
 
 const SEED: NewsStore = {
   updatedAt: new Date().toISOString(),
@@ -63,12 +63,35 @@ export async function readNewsStore(): Promise<NewsStore> {
   }
 }
 
+function capArticlesPerSite(articles: NewsArticle[]): NewsArticle[] {
+  const bySite = new Map<SiteId, NewsArticle[]>();
+  for (const article of articles) {
+    const sid = newsSiteId(article);
+    const list = bySite.get(sid) || [];
+    list.push(article);
+    bySite.set(sid, list);
+  }
+  const out: NewsArticle[] = [];
+  for (const [sid, list] of bySite) {
+    list.sort(
+      (a, b) =>
+        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+    );
+    out.push(...list.slice(0, maxNewsPerSite(sid)));
+  }
+  out.sort(
+    (a, b) =>
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+  );
+  return out.slice(0, MAX_NEWS_ARTICLES);
+}
+
 export async function writeNewsStore(store: NewsStore): Promise<void> {
   const file = dataPath();
   await fs.mkdir(path.dirname(file), { recursive: true });
   const next: NewsStore = {
     updatedAt: new Date().toISOString(),
-    articles: store.articles.map(sanitizeArticle).slice(0, MAX_NEWS_ARTICLES),
+    articles: capArticlesPerSite(store.articles.map(sanitizeArticle)),
   };
   await fs.writeFile(file, JSON.stringify(next, null, 2) + "\n", "utf8");
 }

@@ -21,13 +21,18 @@ jobs:
             exit 1
           fi
           # Sequential: shared news.json must not be written in parallel.
-          # limit=2 per theme keeps AI rewrite under maxDuration.
+          # limit=2 per theme keeps AI rewrite under maxDuration;
+          # euromillions takes 4 so the lottery index can fill.
           fail=0
           for site in ecoflow tumbler massage-gun casinos-crypto euromillions; do
-            echo "=== ingest siteId=${site} ==="
+            limit=2
+            if [ "${site}" = "euromillions" ]; then
+              limit=4
+            fi
+            echo "=== ingest siteId=${site} limit=${limit} ==="
             if ! curl -fsS -X POST \
               -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
-              "${SITE_URL}/api/news/ingest?siteId=${site}&limit=2"; then
+              "${SITE_URL}/api/news/ingest?siteId=${site}&limit=${limit}"; then
               echo "FAILED: ${site}"
               fail=1
             fi

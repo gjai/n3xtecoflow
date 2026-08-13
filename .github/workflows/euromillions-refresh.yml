@@ -67,7 +67,7 @@ jobs:
           set -euo pipefail
           curl -fsS -X POST \
             -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
-            "${SITE_URL}/api/news/ingest?siteId=euromillions&limit=2"
+            "${SITE_URL}/api/news/ingest?siteId=euromillions&limit=4"
       - name: Alert on failure
         if: failure()
         env:

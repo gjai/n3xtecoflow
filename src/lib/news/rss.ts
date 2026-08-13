@@ -82,6 +82,10 @@ const OFF_TOPIC =
 const OFF_TOPIC_HARD =
   /\bpressoth[eé]rapie\b|\bbottes?\s+de\s+press|\bcompression\s+boots?\b|\bbalances?\s+connect|\bmassage\s+(pour\s+)?les\s+pieds\b|\bfoot\s+massager\b|\bchaise\s+de\s+massage\b|\bthermo[-\s]?pad\b|\bpad\s+chaud\b|\bchaud[-\s]?froid\b/i;
 
+/** Casino / US lottery / sports betting — hors périmètre EuroMillions-résultats. */
+const EUROMILLIONS_OFF_TOPIC =
+  /\bstake\.com\b|\bcrypto\s*casino\b|\bpowerball\b|\bmega\s*millions\b|\bsportsbook\b|\bparions\s*sport\b|\bbet365\b|\bwinamax\b/i;
+
 function brandPrimary(title: string, brand: RegExp) {
   const t = title.trim();
   if (!t || !brand.test(t)) return false;
@@ -104,6 +108,7 @@ export function isRelevantItem(item: RssItem, siteId: SiteId = "ecoflow") {
   const brand = topicBrand(siteId);
   const hay = `${item.title} ${item.description}`;
   if (OFF_TOPIC_HARD.test(hay)) return false;
+  if (siteId === "euromillions" && EUROMILLIONS_OFF_TOPIC.test(hay)) return false;
   if (!brand.test(hay)) return false;
   if (!brandPrimary(item.title, brand) && !brandPrimary(hay.slice(0, 160), brand)) {
     return false;
@@ -128,6 +133,9 @@ export function isOnTopicArticle(
   const titles = `${input.titleFr || ""} ${input.titleEn || ""} ${input.sourceTitle || ""}`;
   const excerpts = `${input.excerptFr || ""} ${input.excerptEn || ""}`;
   if (OFF_TOPIC_HARD.test(titles) || OFF_TOPIC_HARD.test(excerpts)) return false;
+  if (siteId === "euromillions" && EUROMILLIONS_OFF_TOPIC.test(`${titles} ${excerpts}`)) {
+    return false;
+  }
   if (!brand.test(titles) && !brand.test(excerpts)) return false;
 
   const fr = input.titleFr || "";

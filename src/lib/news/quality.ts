@@ -2,8 +2,23 @@ import type { SiteId } from "@/sites/types";
 
 /** Max articles kept per brand cluster in the store (per site). */
 export const MAX_NEWS_PER_BRAND = 4;
+/** Lottery is one editorial cluster — a cap of 4 emptied the EM news index. */
+export const MAX_NEWS_PER_BRAND_BY_SITE: Partial<Record<SiteId, number>> = {
+  euromillions: 28,
+};
 /** Max same-brand picks in one ingest selection. */
 export const MAX_BRAND_PER_INGEST = 2;
+export const MAX_BRAND_PER_INGEST_BY_SITE: Partial<Record<SiteId, number>> = {
+  euromillions: 4,
+};
+
+export function maxNewsPerBrand(siteId: SiteId): number {
+  return MAX_NEWS_PER_BRAND_BY_SITE[siteId] ?? MAX_NEWS_PER_BRAND;
+}
+
+export function maxBrandPerIngest(siteId: SiteId): number {
+  return MAX_BRAND_PER_INGEST_BY_SITE[siteId] ?? MAX_BRAND_PER_INGEST;
+}
 
 const PROMO_HEAVY =
   /\b(promo(?:tion)?s?|r[ée]duction|%\s*off|deal|deals|coupon|code\s*promo|brad[ée]e?s?|soldes?|flash\s*sale|prix\s*cass[ée]|offre\s*rare|en\s*promo|discount|save\s*\$|save\s*€|academy\s*sports?|presale|airdrop|moonberg)\b/i;
@@ -67,11 +82,13 @@ const BRANDS_BY_SITE: Record<string, BrandRule[]> = {
     { id: "vpn", pattern: /\bvpn\b/i },
   ],
   euromillions: [
-    { id: "euromillions", pattern: /\beuromillions\b|\beuro\s*millions\b/i },
+    { id: "euromillions", pattern: /\beuromillions\b|\beuro\s*millions\b|\beuromillones\b/i },
+    { id: "loto", pattern: /\bloto\b/i },
+    { id: "eurodreams", pattern: /\beurodreams\b|\beuro\s*dreams\b/i },
     { id: "jackpot", pattern: /\bjackpot\b/i },
     { id: "fdj", pattern: /\bfdjd?\b|\bfran[cç]aise\s+des\s+jeux\b/i },
     { id: "mymillion", pattern: /\bmy\s*million\b/i },
-    { id: "tirage", pattern: /\btirage\b|\bdraw\b|\br[ée]sultat/i },
+    { id: "tirage", pattern: /\btirage\b|\bdraw\b|\br[ée]sultat|\bsorteo\b/i },
   ],
 };
 
@@ -204,7 +221,7 @@ export function rankNewsCandidates<T extends NewsQualityInput>(
       }
       if (item.brand) {
         const n = brandCounts.get(item.brand) || 0;
-        if (n >= MAX_BRAND_PER_INGEST) continue;
+        if (n >= maxBrandPerIngest(item.siteId)) continue;
         brandCounts.set(item.brand, n + 1);
       }
       if (item.dupKey) selectedKeys.add(item.dupKey);
@@ -277,6 +294,7 @@ export function pruneLowQualityNewsArticles<T extends StoreArticleLike>(
 
   const keptBrand: T[] = [];
   for (const [, group] of byBrand) {
+    if (!group[0]) continue;
     group.sort((a, b) => {
       const aPromo =
         isPromoHeavyNews(a.fr?.title || "", a.fr?.excerpt || "") ||
@@ -289,8 +307,10 @@ export function pruneLowQualityNewsArticles<T extends StoreArticleLike>(
         new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
       );
     });
-    keptBrand.push(...group.slice(0, MAX_NEWS_PER_BRAND));
-    for (const extra of group.slice(MAX_NEWS_PER_BRAND)) removed.add(extra.slug);
+    const sid = (group[0].siteId || "ecoflow") as SiteId;
+    const cap = maxNewsPerBrand(sid);
+    keptBrand.push(...group.slice(0, cap));
+    for (const extra of group.slice(cap)) removed.add(extra.slug);
   }
 
   const kept = [...keptBrand, ...noBrand].sort(

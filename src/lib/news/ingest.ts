@@ -1,10 +1,5 @@
 import type { SiteId } from "@/sites/types";
-import {
-  NEWS_FEEDS,
-  MAX_NEW_PER_RUN,
-  MAX_NEW_PER_SITE_RUN,
-  newsSiteId,
-} from "./types";
+import { NEWS_FEEDS, maxNewPerSiteRun, newsSiteId } from "./types";
 import { fetchFeedItems, isOnTopicArticle, type RssItem } from "./rss";
 import { buildArticleFromRss, refreshArticle } from "./rewrite";
 import { isStoredNewsImageJunk, resolveNewsCover } from "./images";
@@ -68,9 +63,7 @@ function articleOnTopic(article: {
 export async function ingestNews(
   options?: IngestOptions,
 ): Promise<IngestResult> {
-  const limit =
-    options?.limit ??
-    (options?.siteId ? MAX_NEW_PER_SITE_RUN : MAX_NEW_PER_RUN);
+  const limit = options?.limit ?? maxNewPerSiteRun(options?.siteId);
   const store = await readNewsStore();
   const known = new Set(store.articles.map((a) => a.sourceGuid));
 

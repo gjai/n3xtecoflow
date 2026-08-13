@@ -158,12 +158,20 @@ export const euromillionsSite: SiteConfig = {
     checklistEn:
       "Budget, 18+, understand prize tiers, check your grid, My Million code, archives.",
     newsPerimeter:
-      "EuroMillions / jackpot / tirage / FDJ / loterie européenne / My Million",
+      "EuroMillions / Loto FDJ / EuroDreams / My Million / Keno FDJ / jackpot / tirage / loterie européenne — pas de casinos, paris sportifs ni loteries US",
     newsTitleMustMention:
-      "EuroMillions, jackpot, tirage, loterie, My Million ou gagnant",
+      "EuroMillions, Euromillones, Loto, EuroDreams, My Million, FDJ, jackpot, tirage ou gagnant",
     newsBuyingCriteria:
       "résultat du tirage, My Million, jackpot, archives, probabilités, jeu responsable",
-    newsDefaultTags: ["euromillions", "tirage", "resultats", "jackpot", "my-million"],
+    newsDefaultTags: [
+      "euromillions",
+      "tirage",
+      "resultats",
+      "jackpot",
+      "my-million",
+      "loto",
+      "eurodreams",
+    ],
     newsExtraRules: [
       "Pas de promesse de gains ; Amazon = accessoires seulement",
       "Ne jamais promettre de méthode pour gagner",
@@ -181,7 +189,7 @@ export const euromillionsSite: SiteConfig = {
     preferAiNewsCovers: true,
     allowWeakPackshotDefault: false,
     topicBrandPattern:
-      String.raw`\beuromillions\b|\beuro\s*millions\b|\bjackpot\b|\btirage\b|\bloterie\b|\bmy\s*million\b`,
+      String.raw`\beuromillions\b|\beuro\s*millions\b|\beuromillones\b|\bjackpot\b|\btirage\b|\bloterie\b|\bmy\s*million\b|\beurodreams\b|\beuro\s*dreams\b|\bloto\b|\bfdjd?\b|\bsorteo\b`,
   },
   focusFr:
     "Résultats EuroMillions, archives et stats — site indépendant, 18+, jeu responsable.",
