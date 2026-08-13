@@ -104,6 +104,11 @@ export function formatParisDateTime(iso: string, locale: string): string {
 /** Typical EuroMillions draw ~21:00 Europe/Paris. */
 export const EM_DRAW_HOUR = 21;
 export const EM_DRAW_MINUTE = 0;
+/** FDJ sales close ~20:15 Europe/Paris on draw days. */
+export const EM_SALES_CUTOFF_HOUR = 20;
+export const EM_SALES_CUTOFF_MINUTE = 15;
+/** Lots payable 60 days from the draw date (FDJ). */
+export const FORCLUSION_DAYS = 60;
 
 export function isEuroMillionsDrawWeekday(isoDate: string): boolean {
   const wd = parisWeekday(isoDate);
@@ -124,8 +129,31 @@ export function euroMillionsResultPending(options: {
   if (next === today) return true;
 
   if (isEuroMillionsDrawWeekday(today)) {
-    const { hour } = parisHourMinute(now);
-    return hour >= 20;
+    return true;
   }
   return false;
+}
+
+export function isEuroMillionsForclos(
+  isoDate: string,
+  now = new Date(),
+): boolean {
+  const start = parisLocalToUtc(isoDate, 0, 0);
+  const limitMs = start.getTime() + FORCLUSION_DAYS * 86_400_000;
+  return now.getTime() > limitMs;
+}
+
+export function euroMillionsSalesOpen(
+  nextDrawDate: string | null | undefined,
+  now = new Date(),
+): boolean {
+  if (!nextDrawDate) return true;
+  const today = parisDateKey(now);
+  if (nextDrawDate !== today) return true;
+  const cutoff = parisLocalToUtc(
+    nextDrawDate,
+    EM_SALES_CUTOFF_HOUR,
+    EM_SALES_CUTOFF_MINUTE,
+  );
+  return now.getTime() < cutoff.getTime();
 }

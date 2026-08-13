@@ -7,6 +7,9 @@ import { intlLocale } from "@/i18n/locales";
 import {
   EM_DRAW_HOUR,
   EM_DRAW_MINUTE,
+  EM_SALES_CUTOFF_HOUR,
+  EM_SALES_CUTOFF_MINUTE,
+  euroMillionsSalesOpen,
   parisLocalToUtc,
 } from "@/lib/euromillions/datetime";
 
@@ -48,6 +51,21 @@ export function NextJackpotBanner({
     return () => window.clearInterval(id);
   }, []);
 
+  const salesOpen = euroMillionsSalesOpen(nextDrawDate, new Date(now));
+  const cutoffLabel = nextDrawDate
+    ? new Intl.DateTimeFormat(intlLocale(locale), {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "Europe/Paris",
+      }).format(
+        parisLocalToUtc(
+          nextDrawDate,
+          EM_SALES_CUTOFF_HOUR,
+          EM_SALES_CUTOFF_MINUTE,
+        ),
+      )
+    : "20:15";
+
   if (!nextDrawDate && !nextJackpot) return null;
 
   const parts = target ? splitRemaining(target.getTime() - now) : null;
@@ -77,6 +95,13 @@ export function NextJackpotBanner({
           </p>
           {dateLabel ? (
             <p className="mt-1 text-sm text-[var(--muted)]">{dateLabel}</p>
+          ) : null}
+          {!pending ? (
+            <p className="mt-2 text-sm text-[var(--muted)]">
+              {salesOpen
+                ? t("cutoffOpen", { time: cutoffLabel })
+                : t("cutoffClosed")}
+            </p>
           ) : null}
           {pending ? (
             <p className="mt-2 text-sm text-[var(--muted)]">{t("pendingHelp")}</p>

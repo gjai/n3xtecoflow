@@ -58,6 +58,9 @@ function mergeDraws(
       myMillionLocation: d.myMillionLocation ?? prev.myMillionLocation,
       prizeTiers:
         d.prizeTiers?.length ? d.prizeTiers : prev.prizeTiers,
+      prizeTiersEtoilePlus: d.prizeTiersEtoilePlus?.length
+        ? d.prizeTiersEtoilePlus
+        : prev.prizeTiersEtoilePlus,
       // Prefer FDJ when it has My Million / FR jackpot
       source:
         d.source === "fdj" || prev.source === "fdj"

@@ -11,6 +11,7 @@ export type LotteryGameId =
 export type GameToolId =
   | "archive"
   | "simulator"
+  | "generator"
   | "nextDraw"
   | "stats"
   | "guides"
@@ -47,6 +48,7 @@ export const LOTTERY_GAMES_NAV: LotteryGameNav[] = [
     tools: [
       { id: "archive", href: "/tirages#archives" },
       { id: "simulator", href: "/tirages#simulateur" },
+      { id: "generator", href: "/generateur" },
       { id: "nextDraw", href: "/prochain-tirage" },
       { id: "stats", href: "/tirages#stats" },
       { id: "guides", href: "/guides" },

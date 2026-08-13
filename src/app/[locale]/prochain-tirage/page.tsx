@@ -84,6 +84,9 @@ export default async function ProchainTiragePage({
           <GameToolsNav gameId="euromillions" />
         </div>
         <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("pageLead")}</p>
+        <p className="mt-3 max-w-2xl text-sm text-[var(--muted)]">
+          {t("cutoffOpen", { time: "20:15" })}
+        </p>
         {pending ? (
           <p className="mt-6 border border-[var(--line)] bg-[var(--surface)] p-5 text-[var(--heading)]">
             {t("pendingHelp")}

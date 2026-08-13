@@ -36,7 +36,8 @@
     "language": "Idioma",
     "openMenu": "Menú",
     "closeMenu": "Cerrar",
-    "about": "Quiénes somos"
+    "about": "Quiénes somos",
+    "generator": "Generador"
   },
   "pagination": {
     "prev": "Anterior",
@@ -116,7 +117,9 @@
     "faqMyMillionQ": "¿Qué es My Million?",
     "faqMyMillionA": "My Million es un código único asociado a las combinaciones EuroMillions jugadas en Francia. El premio My Million es independiente del bote. La página My Million lista los códigos publicados y permite comparar los tuyos.",
     "faqTicketsQ": "¿Este sitio vende boletos?",
-    "faqTicketsA": "No. EuroMillions Resultados es un sitio editorial independiente: resultados, archivos y herramientas. Para jugar, usa un operador autorizado en tu país. 18+ · juega con responsabilidad."
+    "faqTicketsA": "No. EuroMillions Resultados es un sitio editorial independiente: resultados, archivos y herramientas. Para jugar, usa un operador autorizado en tu país. 18+ · juega con responsabilidad.",
+    "resultOf": "Resultado del {date}",
+    "digestEyebrow": "Resultado del día"
   },
   "games": {
     "eyebrow": "Otros sorteos FDJ",
@@ -165,7 +168,9 @@
     "statsLead": "Sobre el historial local de este juego — solo descriptivo.",
     "statsCount": "{count} apariciones",
     "statsDelay": "retraso {delay}",
-    "gameGuideCta": "Guía de este juego"
+    "gameGuideCta": "Guía de este juego",
+    "crescendoHour": "{hour}:00",
+    "pendingShort": "en espera"
   },
   "simulator": {
     "eyebrow": "Herramientas",
@@ -212,7 +217,19 @@
     "archiveFound": "{count} sorteo(s) con esta combinación exacta",
     "archiveExactWin": "Combinación ganadora del sorteo (categoría 5+2)",
     "archiveScope": "Comparado con {count} otros sorteos del archivo local.",
-    "disclaimer": "Herramienta informativa. Importes de los repartos oficiales cuando están disponibles. 18+ · Juega con responsabilidad — ningún sistema supera las probabilidades."
+    "disclaimer": "Herramienta informativa. Importes de los repartos oficiales cuando están disponibles. 18+ · Juega con responsabilidad — ningún sistema supera las probabilidades.",
+    "forclusionBanner": "EuroMillions prizes can be claimed for 60 days from the draw date (FDJ time limit). After that, a ticket can no longer be cashed.",
+    "forclusionAlert": "This draw is more than 60 days old: the FDJ time limit applies. The simulation remains informational.",
+    "gridLabel": "Grid {n}",
+    "removeGrid": "Remove",
+    "addGrid": "Add a grid",
+    "etoilePlusLabel": "Étoile+ option",
+    "etoilePlusHelp": "Étoile+ adds 10 extra prize tiers on the same 5+2 grid (FDJ table). It is not a third star.",
+    "gridResult": "Grid {n} result",
+    "etoilePlusWin": "Étoile+ · tier {rank}",
+    "etoilePlusLose": "No Étoile+ win on this draw",
+    "etoilePlusGain": "Étoile+ prize",
+    "gainTotal": "Total Regular + Étoile+"
   },
   "draws": {
     "title": "Resultados de sorteos",
@@ -235,7 +252,9 @@
     "simulatorCta": "Comprobar mi combinación en este sorteo",
     "checkCta": "Comprobar",
     "companionOf": "Resultado {game} del {date}",
-    "companionMeta": "Números y detalles del sorteo {game} del {date}. Sitio independiente, 18+."
+    "companionMeta": "Números y detalles del sorteo {game} del {date}. Sitio independiente, 18+.",
+    "prizesEtoilePlus": "Étoile+ prizes",
+    "prizesEtoilePlusHelp": "Extra tiers if the Étoile+ option was played — same 5+2 combination."
   },
   "myMillion": {
     "title": "My Million — códigos y localizaciones",
@@ -305,7 +324,10 @@
     "delayCaption": "Tablero 1–50 · retraso actual",
     "starsBoardTitle": "Estrellas 1–12 (apariciones)",
     "starsFreqCaption": "Frecuencias de las 12 estrellas",
-    "allStars": "Todas las estrellas (1–12)"
+    "allStars": "Todas las estrellas (1–12)",
+    "colForm10": "Form 10",
+    "colForm30": "Form 30",
+    "howForm": "“Form 10 / 30” counts appearances in the last 10 and 30 draws. Not a prediction."
   },
   "notFound": {
     "title": "Página no encontrada",
@@ -344,7 +366,9 @@
     "archiveCta": "Resultados",
     "disclaimer": "Horarios orientativos. 18+ · Juega con responsabilidad.",
     "allTitle": "Todos los juegos",
-    "allLead": "Día, hora (Europa/París) y cuenta atrás — horarios orientativos."
+    "allLead": "Día, hora (Europa/París) y cuenta atrás — horarios orientativos.",
+    "cutoffOpen": "Tickets accepted until {time} (Europe/Paris) on draw day.",
+    "cutoffClosed": "Sales closed (8:15 pm) — draw around 9 pm."
   },
   "generator": {
     "eyebrow": "Aleatorio",

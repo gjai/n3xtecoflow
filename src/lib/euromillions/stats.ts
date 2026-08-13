@@ -6,6 +6,10 @@ export type NumberStat = {
   /** Draws since last appearance (0 = drawn in the latest). */
   delay: number;
   maxDelay: number;
+  /** Appearances in the last 10 draws. */
+  form10: number;
+  /** Appearances in the last 30 draws. */
+  form30: number;
 };
 
 export type JackpotRow = {
@@ -22,6 +26,12 @@ function buildStats(max: number, drawsNewestFirst: number[][]): NumberStat[] {
   let runningDelay = new Map<number, number>();
   for (let i = 1; i <= max; i += 1) runningDelay.set(i, 0);
   const maxDelay = new Map<number, number>();
+  const form10 = new Map<number, number>();
+  const form30 = new Map<number, number>();
+  for (let i = 1; i <= max; i += 1) {
+    form10.set(i, 0);
+    form30.set(i, 0);
+  }
 
   // drawsNewestFirst[0] is latest
   for (let idx = 0; idx < drawsNewestFirst.length; idx += 1) {
@@ -33,6 +43,8 @@ function buildStats(max: number, drawsNewestFirst: number[][]): NumberStat[] {
         const streak = runningDelay.get(n) || 0;
         maxDelay.set(n, Math.max(maxDelay.get(n) || 0, streak));
         runningDelay.set(n, 0);
+        if (idx < 10) form10.set(n, (form10.get(n) || 0) + 1);
+        if (idx < 30) form30.set(n, (form30.get(n) || 0) + 1);
       } else {
         runningDelay.set(n, (runningDelay.get(n) || 0) + 1);
       }
@@ -49,6 +61,8 @@ function buildStats(max: number, drawsNewestFirst: number[][]): NumberStat[] {
       count: count.get(n) || 0,
       delay: lastIndex.has(n) ? lastIndex.get(n)! : drawsNewestFirst.length,
       maxDelay: maxDelay.get(n) || 0,
+      form10: form10.get(n) || 0,
+      form30: form30.get(n) || 0,
     };
   });
 }

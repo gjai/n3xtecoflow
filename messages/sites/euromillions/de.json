@@ -36,7 +36,8 @@
     "language": "Sprache",
     "openMenu": "Menü",
     "closeMenu": "Schließen",
-    "about": "Über uns"
+    "about": "Über uns",
+    "generator": "Generator"
   },
   "pagination": {
     "prev": "Zurück",
@@ -116,7 +117,9 @@
     "faqMyMillionQ": "Was ist My Million?",
     "faqMyMillionA": "My Million ist ein eindeutiger Code, der an in Frankreich gespielte EuroMillions-Tipps gekoppelt ist. Der My-Million-Gewinn ist vom Jackpot getrennt. Die My-Million-Seite listet veröffentlichte Codes und lässt Sie die Ihren vergleichen.",
     "faqTicketsQ": "Verkauft diese Website Tippscheine?",
-    "faqTicketsA": "Nein. EuroMillions Ergebnisse ist eine unabhängige redaktionelle Website: Ergebnisse, Archiv und Tools. Zum Spielen nutzen Sie einen lizenzierten Betreiber in Ihrem Land. 18+ · verantwortungsvoll spielen."
+    "faqTicketsA": "Nein. EuroMillions Ergebnisse ist eine unabhängige redaktionelle Website: Ergebnisse, Archiv und Tools. Zum Spielen nutzen Sie einen lizenzierten Betreiber in Ihrem Land. 18+ · verantwortungsvoll spielen.",
+    "resultOf": "Ergebnis vom {date}",
+    "digestEyebrow": "Ergebnis des Tages"
   },
   "games": {
     "eyebrow": "Weitere FDJ-Ziehungen",
@@ -165,7 +168,9 @@
     "statsLead": "Auf der lokalen Historie dieses Spiels — nur beschreibend.",
     "statsCount": "{count} Treffer",
     "statsDelay": "Abstand {delay}",
-    "gameGuideCta": "Guide zu diesem Spiel"
+    "gameGuideCta": "Guide zu diesem Spiel",
+    "crescendoHour": "{hour}:00",
+    "pendingShort": "ausstehend"
   },
   "simulator": {
     "eyebrow": "Tools",
@@ -212,7 +217,19 @@
     "archiveFound": "{count} Ziehung(en) mit dieser exakten Kombination",
     "archiveExactWin": "Gewinnkombination der Ziehung (Rang 5+2)",
     "archiveScope": "Verglichen mit {count} anderen Ziehungen im lokalen Archiv.",
-    "disclaimer": "Informatives Tool. Beträge aus den offiziellen Gewinnanteilen, sofern verfügbar. 18+ · Verantwortungsvoll spielen — kein System schlägt die Wahrscheinlichkeiten."
+    "disclaimer": "Informatives Tool. Beträge aus den offiziellen Gewinnanteilen, sofern verfügbar. 18+ · Verantwortungsvoll spielen — kein System schlägt die Wahrscheinlichkeiten.",
+    "forclusionBanner": "EuroMillions prizes can be claimed for 60 days from the draw date (FDJ time limit). After that, a ticket can no longer be cashed.",
+    "forclusionAlert": "This draw is more than 60 days old: the FDJ time limit applies. The simulation remains informational.",
+    "gridLabel": "Grid {n}",
+    "removeGrid": "Remove",
+    "addGrid": "Add a grid",
+    "etoilePlusLabel": "Étoile+ option",
+    "etoilePlusHelp": "Étoile+ adds 10 extra prize tiers on the same 5+2 grid (FDJ table). It is not a third star.",
+    "gridResult": "Grid {n} result",
+    "etoilePlusWin": "Étoile+ · tier {rank}",
+    "etoilePlusLose": "No Étoile+ win on this draw",
+    "etoilePlusGain": "Étoile+ prize",
+    "gainTotal": "Total Regular + Étoile+"
   },
   "draws": {
     "title": "Ziehungsergebnisse",
@@ -235,7 +252,9 @@
     "simulatorCta": "Tipp bei dieser Ziehung prüfen",
     "checkCta": "Prüfen",
     "companionOf": "{game}-Ergebnis vom {date}",
-    "companionMeta": "Zahlen und Details der {game}-Ziehung vom {date}. Unabhängige Seite, 18+."
+    "companionMeta": "Zahlen und Details der {game}-Ziehung vom {date}. Unabhängige Seite, 18+.",
+    "prizesEtoilePlus": "Étoile+ prizes",
+    "prizesEtoilePlusHelp": "Extra tiers if the Étoile+ option was played — same 5+2 combination."
   },
   "myMillion": {
     "title": "My Million — Codes & Orte",
@@ -305,7 +324,10 @@
     "delayCaption": "Tafel 1–50 · aktueller Abstand",
     "starsBoardTitle": "Sterne 1–12 (Treffer)",
     "starsFreqCaption": "Häufigkeiten der 12 Sterne",
-    "allStars": "Alle Sterne (1–12)"
+    "allStars": "Alle Sterne (1–12)",
+    "colForm10": "Form 10",
+    "colForm30": "Form 30",
+    "howForm": "“Form 10 / 30” counts appearances in the last 10 and 30 draws. Not a prediction."
   },
   "notFound": {
     "title": "Seite nicht gefunden",
@@ -344,7 +366,9 @@
     "archiveCta": "Ergebnisse",
     "disclaimer": "Zeiten sind Richtwerte. 18+ · Verantwortungsvoll spielen.",
     "allTitle": "Alle Spiele",
-    "allLead": "Tag, Uhrzeit (Europa/Paris) und Countdown — Richtzeiten."
+    "allLead": "Tag, Uhrzeit (Europa/Paris) und Countdown — Richtzeiten.",
+    "cutoffOpen": "Tickets accepted until {time} (Europe/Paris) on draw day.",
+    "cutoffClosed": "Sales closed (8:15 pm) — draw around 9 pm."
   },
   "generator": {
     "eyebrow": "Zufall",

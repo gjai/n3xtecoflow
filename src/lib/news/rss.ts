@@ -86,6 +86,20 @@ const OFF_TOPIC_HARD =
 const EUROMILLIONS_OFF_TOPIC =
   /\bstake\.com\b|\bcrypto\s*casino\b|\bpowerball\b|\bmega\s*millions\b|\bsportsbook\b|\bparions\s*sport\b|\bbet365\b|\bwinamax\b/i;
 
+const BLOCKED_LOTTERY_SOURCE =
+  /tirage[-\s.]?gagnant/i;
+
+export function isBlockedLotteryNewsSource(item: {
+  sourceName?: string;
+  sourceUrl?: string;
+  sourceHomepage?: string;
+  title?: string;
+  link?: string;
+}): boolean {
+  const hay = `${item.sourceName || ""} ${item.sourceUrl || ""} ${item.sourceHomepage || ""} ${item.title || ""} ${item.link || ""}`;
+  return BLOCKED_LOTTERY_SOURCE.test(hay);
+}
+
 function brandPrimary(title: string, brand: RegExp) {
   const t = title.trim();
   if (!t || !brand.test(t)) return false;
@@ -109,6 +123,7 @@ export function isRelevantItem(item: RssItem, siteId: SiteId = "ecoflow") {
   const hay = `${item.title} ${item.description}`;
   if (OFF_TOPIC_HARD.test(hay)) return false;
   if (siteId === "euromillions" && EUROMILLIONS_OFF_TOPIC.test(hay)) return false;
+  if (siteId === "euromillions" && isBlockedLotteryNewsSource(item)) return false;
   if (!brand.test(hay)) return false;
   if (!brandPrimary(item.title, brand) && !brandPrimary(hay.slice(0, 160), brand)) {
     return false;
@@ -134,6 +149,15 @@ export function isOnTopicArticle(
   const excerpts = `${input.excerptFr || ""} ${input.excerptEn || ""}`;
   if (OFF_TOPIC_HARD.test(titles) || OFF_TOPIC_HARD.test(excerpts)) return false;
   if (siteId === "euromillions" && EUROMILLIONS_OFF_TOPIC.test(`${titles} ${excerpts}`)) {
+    return false;
+  }
+  if (
+    siteId === "euromillions" &&
+    isBlockedLotteryNewsSource({
+      title: titles,
+      sourceName: input.sourceTitle,
+    })
+  ) {
     return false;
   }
   if (!brand.test(titles) && !brand.test(excerpts)) return false;

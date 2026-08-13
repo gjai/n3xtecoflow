@@ -47,16 +47,18 @@ type FdjDraw = {
   shares?: FdjShareSet[];
 };
 
-function parsePrizeTiers(shares?: FdjShareSet[]): EuroMillionsPrizeTier[] {
-  const regular =
-    (shares || []).find((s) =>
-      String(s.winset_name || "")
-        .toLowerCase()
-        .includes("regular"),
-    ) || shares?.[0];
-  if (!regular?.prize_levels?.length) return [];
+function parseWinsetTiers(
+  shares: FdjShareSet[] | undefined,
+  needle: string,
+): EuroMillionsPrizeTier[] {
+  const set = (shares || []).find((s) =>
+    String(s.winset_name || "")
+      .toLowerCase()
+      .includes(needle),
+  );
+  if (!set?.prize_levels?.length) return [];
   const out: EuroMillionsPrizeTier[] = [];
-  for (const level of regular.prize_levels) {
+  for (const level of set.prize_levels) {
     const rank = String(level.division_name || "").trim();
     if (!rank) continue;
     const eur = (level.winning_boards || []).find((b) => b.currency === "EUR");
@@ -69,6 +71,12 @@ function parsePrizeTiers(shares?: FdjShareSet[]): EuroMillionsPrizeTier[] {
     });
   }
   return out;
+}
+
+function parsePrizeTiers(shares?: FdjShareSet[]): EuroMillionsPrizeTier[] {
+  const regular = parseWinsetTiers(shares, "regular");
+  if (regular.length) return regular;
+  return parseWinsetTiers(shares, "");
 }
 
 function amountEur(list?: FdjAmount[]): number | null {
@@ -96,6 +104,7 @@ function mapFdjApiDraws(data: FdjDraw[], sourceUrl: string): EuroMillionsDraw[] 
     if (numbers.length !== 5 || starNums.length !== 2) continue;
     const codeRaw = mm?.numbers?.[0];
     const prizeTiers = parsePrizeTiers(d.shares);
+    const prizeTiersEtoilePlus = parseWinsetTiers(d.shares, "etoile");
     out.push({
       date: toIsoDate(d.planned_at),
       drawId: d.external_id || d.id,
@@ -106,6 +115,9 @@ function mapFdjApiDraws(data: FdjDraw[], sourceUrl: string): EuroMillionsDraw[] 
       hasWinner: null,
       myMillionCode: codeRaw ? normalizeMyMillionCode(codeRaw) : null,
       prizeTiers: prizeTiers.length ? prizeTiers : undefined,
+      prizeTiersEtoilePlus: prizeTiersEtoilePlus.length
+        ? prizeTiersEtoilePlus
+        : undefined,
       source: "fdj",
       sourceUrl,
       fetchedAt: now,

@@ -30,7 +30,9 @@ import { getLatestDraw } from "@/lib/euromillions/store";
 import type { LotteryGameId } from "@/lib/fdj-games/nav";
 import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import { GAME_IDENTITY } from "@/lib/fdj-games/identity";
+import { euroMillionsBrief } from "@/lib/lottery/brief";
 import type { NewsArticle } from "@/lib/news/types";
+import { isBlockedLotteryNewsSource } from "@/lib/news/rss";
 import type { SiteConfig } from "@/sites/types";
 
 function formatMoney(amount: number | null | undefined, locale: string) {
@@ -191,6 +193,14 @@ export async function EuroMillionsHome({
   const recentWinners = (store.myMillionWinners || []).slice(0, 4);
   const editorial = getEditorialImages(site.id);
   const isEn = usesEnglishFallback(locale);
+  const news = latestNews.filter(
+    (a) =>
+      !isBlockedLotteryNewsSource({
+        sourceName: a.sourceName,
+        sourceUrl: a.sourceUrl,
+        title: `${a.fr?.title || ""} ${a.en?.title || ""}`,
+      }),
+  );
 
   return (
     <>
@@ -301,7 +311,7 @@ export async function EuroMillionsHome({
                     href={`/tirages/${latest.date}`}
                     className="text-sm font-semibold text-[var(--accent)] hover:underline"
                   >
-                    {t("archiveCta")} →
+                    {t("resultOf", { date: formatDate(latest.date, locale) })} →
                   </Link>
                   <Link
                     href="/my-million"
@@ -420,7 +430,46 @@ export async function EuroMillionsHome({
 
       <FdjCompanionGamesBlock store={fdjGames} locale={locale} variant="home" />
 
-      {latestNews.length > 0 ? (
+      {latest ? (
+        <section className="border-b border-[var(--line)]">
+          <div className="mx-auto max-w-6xl px-5 py-10 md:px-8">
+            <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
+              {t("digestEyebrow")}
+            </p>
+            <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
+              {t("resultOf", { date: formatDate(latest.date, locale) })}
+            </h2>
+            {(() => {
+              const brief = euroMillionsBrief(
+                latest,
+                locale,
+                formatDate(latest.date, locale),
+                jackpot,
+              );
+              return (
+                <>
+                  <p className="mt-3 max-w-3xl text-[var(--heading)]">
+                    {brief.lead}
+                  </p>
+                  <p className="mt-2 max-w-3xl text-sm text-[var(--muted)]">
+                    {brief.paragraphs[0]}
+                  </p>
+                </>
+              );
+            })()}
+            <p className="mt-4">
+              <Link
+                href={`/tirages/${latest.date}`}
+                className="text-sm font-semibold text-[var(--accent)] hover:underline"
+              >
+                {t("resultOf", { date: formatDate(latest.date, locale) })} →
+              </Link>
+            </p>
+          </div>
+        </section>
+      ) : null}
+
+      {news.length > 0 ? (
         <section className="border-b border-[var(--line)]">
           <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
             <div className="flex flex-wrap items-end justify-between gap-4">
@@ -440,7 +489,7 @@ export async function EuroMillionsHome({
               </Link>
             </div>
             <ul className="mt-8 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-              {latestNews.slice(0, 6).map((article) => {
+              {news.slice(0, 6).map((article) => {
                 const copy = isEn ? article.en : article.fr;
                 return (
                   <li key={article.slug}>

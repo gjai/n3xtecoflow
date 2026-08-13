@@ -28,8 +28,10 @@ export type EuroMillionsDraw = {
   myMillionCode?: string | null;
   /** Localisation gagnant My Million si connue (Mag FDJ) */
   myMillionLocation?: string | null;
-  /** Gains par rang (FDJ shares) quand disponibles */
+  /** Gains par rang Regular (FDJ shares) quand disponibles */
   prizeTiers?: EuroMillionsPrizeTier[];
+  /** Gains option Étoile+ (winset FDJ « Etoile + ») */
+  prizeTiersEtoilePlus?: EuroMillionsPrizeTier[];
   source: "pedromealha" | "uk-lottery" | "fdj" | "manual";
   sourceUrl?: string;
   fetchedAt: string;

@@ -36,7 +36,8 @@
     "language": "Language",
     "openMenu": "Menu",
     "closeMenu": "Close",
-    "about": "About"
+    "about": "About",
+    "generator": "Generator"
   },
   "pagination": {
     "prev": "Previous",
@@ -116,7 +117,9 @@
     "faqMyMillionQ": "What is My Million?",
     "faqMyMillionA": "My Million is a unique code attached to EuroMillions grids played in France. The My Million prize is separate from the jackpot. The My Million page lists published codes and lets you compare yours.",
     "faqTicketsQ": "Does this site sell tickets?",
-    "faqTicketsA": "No. EuroMillions Results is an independent editorial site: results, archives and tools. To play, use a licensed operator in your country. 18+ · play responsibly."
+    "faqTicketsA": "No. EuroMillions Results is an independent editorial site: results, archives and tools. To play, use a licensed operator in your country. 18+ · play responsibly.",
+    "resultOf": "Result of {date}",
+    "digestEyebrow": "Today’s result"
   },
   "games": {
     "eyebrow": "Other FDJ draws",
@@ -165,7 +168,9 @@
     "statsLead": "On this game’s local history — descriptive only.",
     "statsCount": "{count} appearances",
     "statsDelay": "gap {delay}",
-    "gameGuideCta": "Guide for this game"
+    "gameGuideCta": "Guide for this game",
+    "crescendoHour": "{hour}:00",
+    "pendingShort": "pending"
   },
   "simulator": {
     "eyebrow": "Tools",
@@ -212,7 +217,19 @@
     "archiveFound": "{count} draw(s) with this exact combination",
     "archiveExactWin": "Winning combination of the draw (tier 5+2)",
     "archiveScope": "Compared against {count} other draws in the local archive.",
-    "disclaimer": "Informational tool. Amounts from official prize shares when available. 18+ · Play responsibly — no system beats the odds."
+    "disclaimer": "Informational tool. Amounts from official prize shares when available. 18+ · Play responsibly — no system beats the odds.",
+    "forclusionBanner": "EuroMillions prizes can be claimed for 60 days from the draw date (FDJ time limit). After that, a ticket can no longer be cashed.",
+    "forclusionAlert": "This draw is more than 60 days old: the FDJ time limit applies. The simulation remains informational.",
+    "gridLabel": "Grid {n}",
+    "removeGrid": "Remove",
+    "addGrid": "Add a grid",
+    "etoilePlusLabel": "Étoile+ option",
+    "etoilePlusHelp": "Étoile+ adds 10 extra prize tiers on the same 5+2 grid (FDJ table). It is not a third star.",
+    "gridResult": "Grid {n} result",
+    "etoilePlusWin": "Étoile+ · tier {rank}",
+    "etoilePlusLose": "No Étoile+ win on this draw",
+    "etoilePlusGain": "Étoile+ prize",
+    "gainTotal": "Total Regular + Étoile+"
   },
   "draws": {
     "title": "Draw results",
@@ -235,7 +252,9 @@
     "simulatorCta": "Check my grid on this draw",
     "checkCta": "Check",
     "companionOf": "{game} result for {date}",
-    "companionMeta": "Numbers and details of the {game} draw on {date}. Independent site, 18+."
+    "companionMeta": "Numbers and details of the {game} draw on {date}. Independent site, 18+.",
+    "prizesEtoilePlus": "Étoile+ prizes",
+    "prizesEtoilePlusHelp": "Extra tiers if the Étoile+ option was played — same 5+2 combination."
   },
   "myMillion": {
     "title": "My Million — codes & locations",
@@ -305,7 +324,10 @@
     "delayCaption": "Board 1–50 · current gap",
     "starsBoardTitle": "Stars 1–12 (hits)",
     "starsFreqCaption": "Frequencies of the 12 stars",
-    "allStars": "All stars (1–12)"
+    "allStars": "All stars (1–12)",
+    "colForm10": "Form 10",
+    "colForm30": "Form 30",
+    "howForm": "“Form 10 / 30” counts appearances in the last 10 and 30 draws. Not a prediction."
   },
   "notFound": {
     "title": "Page not found",
@@ -344,7 +366,9 @@
     "archiveCta": "Results",
     "disclaimer": "Times are indicative. 18+ · Play responsibly.",
     "allTitle": "All games",
-    "allLead": "Day, time (Europe/Paris) and countdown — times are indicative."
+    "allLead": "Day, time (Europe/Paris) and countdown — times are indicative.",
+    "cutoffOpen": "Tickets accepted until {time} (Europe/Paris) on draw day.",
+    "cutoffClosed": "Sales closed (8:15 pm) — draw around 9 pm."
   },
   "generator": {
     "eyebrow": "Random",

@@ -6,6 +6,7 @@ import { SmartCover } from "@/components/SmartCover";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { getEditorialImages } from "@/data/images";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
+import { isBlockedLotteryNewsSource } from "@/lib/news/rss";
 import { paginate, parsePageParam } from "@/lib/pagination";
 import {
   DATE_LOCALE,
@@ -56,7 +57,15 @@ export default async function NewsIndexPage({
   const { page: pageRaw } = await searchParams;
   const t = await getTranslations("news");
   const store = await readNewsStore();
-  const all = getNewsArticles(store, site.id);
+  const all = getNewsArticles(store, site.id).filter(
+    (a) =>
+      !siteIsEuroMillions(site) ||
+      !isBlockedLotteryNewsSource({
+        sourceName: a.sourceName,
+        sourceUrl: a.sourceUrl,
+        title: `${a.fr?.title || ""} ${a.en?.title || ""}`,
+      }),
+  );
   const editorialImages = getEditorialImages(site.id);
   const { items, page, totalPages, total } = paginate(
     all,

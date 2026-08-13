@@ -212,6 +212,52 @@ export default async function TirageDetailPage({
                 </tbody>
               </table>
             </div>
+            {draw.prizeTiersEtoilePlus &&
+            draw.prizeTiersEtoilePlus.length > 0 ? (
+              <>
+                <h2 className="mt-10 font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+                  {t("prizesEtoilePlus")}
+                </h2>
+                <p className="mt-2 text-sm text-[var(--muted)]">
+                  {t("prizesEtoilePlusHelp")}
+                </p>
+                <div className="mt-4 overflow-x-auto border border-[var(--line)]">
+                  <table className="w-full min-w-[320px] text-left text-sm">
+                    <thead className="bg-[var(--surface)] text-xs uppercase tracking-[0.12em] text-[var(--muted)]">
+                      <tr>
+                        <th className="px-3 py-2 font-medium">
+                          {t("prizeRank")}
+                        </th>
+                        <th className="px-3 py-2 font-medium">
+                          {t("prizeAmount")}
+                        </th>
+                        <th className="px-3 py-2 font-medium">
+                          {t("prizeWinners")}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {draw.prizeTiersEtoilePlus.map((tier, i) => (
+                        <tr
+                          key={`eplus-${tier.rank}-${i}`}
+                          className="border-t border-[var(--line)]"
+                        >
+                          <td className="px-3 py-2 font-semibold text-[var(--heading)]">
+                            {tier.rank}
+                          </td>
+                          <td className="px-3 py-2 text-[var(--heading)]">
+                            {formatMoney(tier.amountEur, locale) || "—"}
+                          </td>
+                          <td className="px-3 py-2 text-[var(--muted)]">
+                            {tier.winners}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            ) : null}
             <p className="mt-4">
               <Link
                 href={`/tirages?date=${draw.date}#simulateur`}

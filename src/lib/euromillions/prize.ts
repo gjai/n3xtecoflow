@@ -29,6 +29,27 @@ export function rankFromMatches(
   return RANK_BY_MATCH[`${matchedBalls}+${matchedStars}`] ?? null;
 }
 
+/** Rangs extra FDJ « Etoile + » (même 5+2, pas de 3e étoile). */
+const ETOILE_PLUS_BY_MATCH: Record<string, string> = {
+  "5+1": "E+ 5+1",
+  "4+2": "E+ 4+2",
+  "4+1": "E+ 4+1",
+  "3+2": "E+ 3+2",
+  "2+2": "E+ 2+2",
+  "3+1": "E+ 3+1",
+  "1+2": "E+ 1+2",
+  "0+2": "E+ 0+2",
+  "2+1": "E+ 2+1",
+  "0+1": "E+ 0+1",
+};
+
+export function rankFromEtoilePlus(
+  matchedBalls: number,
+  matchedStars: number,
+): string | null {
+  return ETOILE_PLUS_BY_MATCH[`${matchedBalls}+${matchedStars}`] ?? null;
+}
+
 export function comboKey(numbers: number[], stars: number[]): string {
   const n = [...numbers].sort((a, b) => a - b).join("-");
   const s = [...stars].sort((a, b) => a - b).join("-");
@@ -52,6 +73,8 @@ export type TicketCheckResult = {
   rank: string | null;
   amountEur: number | null;
   winners: number | null;
+  etoilePlusRank: string | null;
+  etoilePlusAmountEur: number | null;
   draw: EuroMillionsDraw;
 };
 
@@ -67,11 +90,19 @@ export function checkTicketOnDraw(
   numbers: number[],
   stars: number[],
   draw: EuroMillionsDraw,
+  options?: { etoilePlus?: boolean },
 ): TicketCheckResult {
   const matchedBalls = countMatches(numbers, draw.numbers);
   const matchedStars = countMatches(stars, draw.stars);
   const rank = rankFromMatches(matchedBalls, matchedStars);
   const tier = findPrizeTier(draw.prizeTiers, rank);
+  const etoilePlusRank = options?.etoilePlus
+    ? rankFromEtoilePlus(matchedBalls, matchedStars)
+    : null;
+  const etoilePlusTier = findPrizeTier(
+    draw.prizeTiersEtoilePlus,
+    etoilePlusRank,
+  );
   return {
     date: draw.date,
     matchedBalls,
@@ -79,6 +110,8 @@ export function checkTicketOnDraw(
     rank,
     amountEur: tier?.amountEur ?? null,
     winners: tier?.winners ?? null,
+    etoilePlusRank,
+    etoilePlusAmountEur: etoilePlusTier?.amountEur ?? null,
     draw,
   };
 }
@@ -105,14 +138,16 @@ export function findWinningChecks(
   draws: EuroMillionsDraw[],
   numbers: number[],
   stars: number[],
-  options?: { excludeDate?: string; limit?: number },
+  options?: { excludeDate?: string; limit?: number; etoilePlus?: boolean },
 ): TicketCheckResult[] {
   if (!isValidEuroMillionsPick(numbers, stars)) return [];
   const results: TicketCheckResult[] = [];
   for (const draw of draws) {
     if (options?.excludeDate && draw.date === options.excludeDate) continue;
-    const check = checkTicketOnDraw(numbers, stars, draw);
-    if (check.rank) results.push(check);
+    const check = checkTicketOnDraw(numbers, stars, draw, {
+      etoilePlus: options?.etoilePlus,
+    });
+    if (check.rank || check.etoilePlusRank) results.push(check);
   }
   results.sort((a, b) => {
     const aa = a.amountEur ?? -1;

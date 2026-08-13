@@ -1,6 +1,6 @@
 import type { SiteId } from "@/sites/types";
 import { NEWS_FEEDS, maxNewPerSiteRun, newsSiteId } from "./types";
-import { fetchFeedItems, isOnTopicArticle, type RssItem } from "./rss";
+import { fetchFeedItems, isBlockedLotteryNewsSource, isOnTopicArticle, type RssItem } from "./rss";
 import { buildArticleFromRss, refreshArticle } from "./rewrite";
 import { isStoredNewsImageJunk, resolveNewsCover } from "./images";
 import {
@@ -47,9 +47,21 @@ export type IngestResult = {
 function articleOnTopic(article: {
   siteId?: SiteId;
   slug?: string;
+  sourceName?: string;
+  sourceUrl?: string;
   fr?: { title?: string; excerpt?: string };
   en?: { title?: string; excerpt?: string };
 }) {
+  if (
+    newsSiteId(article) === "euromillions" &&
+    isBlockedLotteryNewsSource({
+      sourceName: article.sourceName,
+      sourceUrl: article.sourceUrl,
+      title: `${article.fr?.title || ""} ${article.en?.title || ""}`,
+    })
+  ) {
+    return false;
+  }
   return isOnTopicArticle(
     {
       titleFr: article.fr?.title,

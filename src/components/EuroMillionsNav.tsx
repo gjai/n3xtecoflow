@@ -37,6 +37,8 @@ function toolLabel(
       return t("results");
     case "simulator":
       return t("simulator");
+    case "generator":
+      return t("generator");
     case "nextDraw":
       return t("nextDraw");
     case "stats":

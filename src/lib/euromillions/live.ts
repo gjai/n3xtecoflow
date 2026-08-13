@@ -36,6 +36,7 @@ export function revalidateLotteryPages() {
     "/[locale]/jeux/[game]/[draw]",
     "/[locale]/stats",
     "/[locale]/simulateur",
+    "/[locale]/generateur",
   ] as const;
   for (const p of paths) {
     revalidatePath(p, "page");

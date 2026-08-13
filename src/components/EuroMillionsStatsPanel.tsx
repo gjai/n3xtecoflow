@@ -86,6 +86,7 @@ export async function EuroMillionsStatsPanel({
         </h3>
         <p className="mt-2 text-sm text-[var(--muted)]">{t("howBody")}</p>
         <p className="mt-2 text-sm text-[var(--muted)]">{t("howExpected")}</p>
+        <p className="mt-2 text-sm text-[var(--muted)]">{t("howForm")}</p>
         <Link
           href="/guides/probabilites-euromillions"
           className="mt-3 inline-block text-sm font-semibold text-[var(--accent)] hover:underline"
@@ -190,6 +191,8 @@ export async function EuroMillionsStatsPanel({
                 <th className="px-3 py-2 font-medium">{t("colCount")}</th>
                 <th className="px-3 py-2 font-medium">{t("colDelay")}</th>
                 <th className="px-3 py-2 font-medium">{t("colMaxDelay")}</th>
+                <th className="px-3 py-2 font-medium">{t("colForm10")}</th>
+                <th className="px-3 py-2 font-medium">{t("colForm30")}</th>
               </tr>
             </thead>
             <tbody>
@@ -201,6 +204,8 @@ export async function EuroMillionsStatsPanel({
                   <td className="px-3 py-2 text-[var(--muted)]">{s.count}</td>
                   <td className="px-3 py-2 text-[var(--muted)]">{s.delay}</td>
                   <td className="px-3 py-2 text-[var(--muted)]">{s.maxDelay}</td>
+                  <td className="px-3 py-2 text-[var(--muted)]">{s.form10}</td>
+                  <td className="px-3 py-2 text-[var(--muted)]">{s.form30}</td>
                 </tr>
               ))}
             </tbody>
@@ -220,6 +225,8 @@ export async function EuroMillionsStatsPanel({
                 <th className="px-3 py-2 font-medium">{t("colCount")}</th>
                 <th className="px-3 py-2 font-medium">{t("colDelay")}</th>
                 <th className="px-3 py-2 font-medium">{t("colMaxDelay")}</th>
+                <th className="px-3 py-2 font-medium">{t("colForm10")}</th>
+                <th className="px-3 py-2 font-medium">{t("colForm30")}</th>
               </tr>
             </thead>
             <tbody>
@@ -231,6 +238,8 @@ export async function EuroMillionsStatsPanel({
                   <td className="px-3 py-2 text-[var(--muted)]">{s.count}</td>
                   <td className="px-3 py-2 text-[var(--muted)]">{s.delay}</td>
                   <td className="px-3 py-2 text-[var(--muted)]">{s.maxDelay}</td>
+                  <td className="px-3 py-2 text-[var(--muted)]">{s.form10}</td>
+                  <td className="px-3 py-2 text-[var(--muted)]">{s.form30}</td>
                 </tr>
               ))}
             </tbody>

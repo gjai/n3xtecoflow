@@ -2,11 +2,15 @@ import { intlLocale } from "@/i18n/locales";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { FDJ_COMPANION_GAMES } from "@/lib/fdj-games/catalog";
-import { getGameLatest } from "@/lib/fdj-games/store";
+import {
+  companionHomeSlots,
+  companionResultPending,
+  formatDrawWhen,
+} from "@/lib/fdj-games/display";
+import { getGameDraws, getGameLatest } from "@/lib/fdj-games/store";
 import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import { FdjGameBalls } from "@/components/FdjGameBalls";
 import { GameMark } from "@/components/GameMark";
-import { companionResultPending, formatDrawWhen } from "@/lib/fdj-games/display";
 import { gameRailStyle } from "@/lib/fdj-games/identity";
 
 function formatDate(iso: string, locale: string) {
@@ -104,6 +108,8 @@ export async function FdjCompanionGamesBlock({
         <ul className="mt-8 grid gap-5 md:grid-cols-2">
           {FDJ_COMPANION_GAMES.map((game) => {
             const latest = getGameLatest(store, game.id);
+            const allDraws = getGameDraws(store, game.id);
+            const slots = companionHomeSlots(game.id, allDraws);
             const label = isEn ? game.labelEn : game.labelFr;
             const jackpot = latest
               ? formatMoney(latest.jackpotEur, locale)
@@ -126,6 +132,8 @@ export async function FdjCompanionGamesBlock({
                 : when?.kenoSlot === "soir"
                   ? t("kenoSoir")
                   : null;
+            const showBalls =
+              slots.find((s) => s.draw)?.draw || latest || null;
             return (
               <li
                 key={game.id}
@@ -161,6 +169,33 @@ export async function FdjCompanionGamesBlock({
                         {t("pending")}
                       </p>
                     ) : null}
+                    {game.id === "crescendo" || game.id === "keno" ? (
+                      <ul className="mt-2 flex flex-wrap gap-1.5 text-xs text-[var(--muted)]">
+                        {slots.map((s) => {
+                          const name =
+                            s.kenoSlot === "midi"
+                              ? t("kenoMidi")
+                              : s.kenoSlot === "soir"
+                                ? t("kenoSoir")
+                                : s.hour != null
+                                  ? t("crescendoHour", { hour: s.hour })
+                                  : "";
+                          return (
+                            <li
+                              key={s.id}
+                              className={`border px-2 py-0.5 ${
+                                s.draw
+                                  ? "border-[var(--line)] text-[var(--heading)]"
+                                  : "border-[var(--accent)] text-[var(--accent)]"
+                              }`}
+                            >
+                              {name}
+                              {s.draw ? "" : ` · ${t("pendingShort")}`}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    ) : null}
                   </div>
                   <Link
                     href={`/jeux/${game.slug}`}
@@ -169,14 +204,18 @@ export async function FdjCompanionGamesBlock({
                     {t("seeGame")} →
                   </Link>
                 </div>
-                {latest ? (
+                {showBalls ? (
                   <div className="mt-4">
                     <FdjGameBalls
-                      draw={latest}
+                      draw={showBalls}
                       labels={groupLabels}
                       compact
                     />
                   </div>
+                ) : pending ? (
+                  <p className="mt-4 text-sm text-[var(--accent)]">
+                    {t("pending")}
+                  </p>
                 ) : null}
               </li>
             );

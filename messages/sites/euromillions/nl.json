@@ -36,7 +36,8 @@
     "language": "Taal",
     "openMenu": "Menu",
     "closeMenu": "Sluiten",
-    "about": "Over ons"
+    "about": "Over ons",
+    "generator": "Generator"
   },
   "pagination": {
     "prev": "Vorige",
@@ -116,7 +117,9 @@
     "faqMyMillionQ": "Wat is My Million?",
     "faqMyMillionA": "My Million is een unieke code gekoppeld aan EuroMillions-roosters die in Frankrijk gespeeld worden. De My Million-prijs is los van de jackpot. De My Million-pagina somt gepubliceerde codes op en laat u de uwe vergelijken.",
     "faqTicketsQ": "Verkoopt deze site loten?",
-    "faqTicketsA": "Nee. EuroMillions Resultaten is een onafhankelijke redactionele site: uitslagen, archieven en tools. Om te spelen, gebruik een vergunde operator in uw land. 18+ · speel verantwoord."
+    "faqTicketsA": "Nee. EuroMillions Resultaten is een onafhankelijke redactionele site: uitslagen, archieven en tools. Om te spelen, gebruik een vergunde operator in uw land. 18+ · speel verantwoord.",
+    "resultOf": "Uitslag van {date}",
+    "digestEyebrow": "Uitslag van de dag"
   },
   "games": {
     "eyebrow": "Andere FDJ-trekkingen",
@@ -165,7 +168,9 @@
     "statsLead": "Op de lokale geschiedenis van dit spel — alleen beschrijvend.",
     "statsCount": "{count} treffers",
     "statsDelay": "achterstand {delay}",
-    "gameGuideCta": "Gids van dit spel"
+    "gameGuideCta": "Gids van dit spel",
+    "crescendoHour": "{hour}:00",
+    "pendingShort": "in afwachting"
   },
   "simulator": {
     "eyebrow": "Tools",
@@ -212,7 +217,19 @@
     "archiveFound": "{count} trekking(en) met deze exacte combinatie",
     "archiveExactWin": "Winnende combinatie van de trekking (rang 5+2)",
     "archiveScope": "Vergeleken met {count} andere trekkingen in het lokale archief.",
-    "disclaimer": "Informatieve tool. Bedragen uit de officiële prijsaandelen wanneer beschikbaar. 18+ · Speel verantwoord — geen enkel systeem verslaat de kansen."
+    "disclaimer": "Informatieve tool. Bedragen uit de officiële prijsaandelen wanneer beschikbaar. 18+ · Speel verantwoord — geen enkel systeem verslaat de kansen.",
+    "forclusionBanner": "EuroMillions prizes can be claimed for 60 days from the draw date (FDJ time limit). After that, a ticket can no longer be cashed.",
+    "forclusionAlert": "This draw is more than 60 days old: the FDJ time limit applies. The simulation remains informational.",
+    "gridLabel": "Grid {n}",
+    "removeGrid": "Remove",
+    "addGrid": "Add a grid",
+    "etoilePlusLabel": "Étoile+ option",
+    "etoilePlusHelp": "Étoile+ adds 10 extra prize tiers on the same 5+2 grid (FDJ table). It is not a third star.",
+    "gridResult": "Grid {n} result",
+    "etoilePlusWin": "Étoile+ · tier {rank}",
+    "etoilePlusLose": "No Étoile+ win on this draw",
+    "etoilePlusGain": "Étoile+ prize",
+    "gainTotal": "Total Regular + Étoile+"
   },
   "draws": {
     "title": "Trekkingsuitslagen",
@@ -235,7 +252,9 @@
     "simulatorCta": "Mijn rooster op deze trekking controleren",
     "checkCta": "Controleren",
     "companionOf": "{game}-uitslag van {date}",
-    "companionMeta": "Nummers en details van de {game}-trekking van {date}. Onafhankelijke site, 18+."
+    "companionMeta": "Nummers en details van de {game}-trekking van {date}. Onafhankelijke site, 18+.",
+    "prizesEtoilePlus": "Étoile+ prizes",
+    "prizesEtoilePlusHelp": "Extra tiers if the Étoile+ option was played — same 5+2 combination."
   },
   "myMillion": {
     "title": "My Million — codes & locaties",
@@ -305,7 +324,10 @@
     "delayCaption": "Bord 1–50 · huidige achterstand",
     "starsBoardTitle": "Sterren 1–12 (treffers)",
     "starsFreqCaption": "Frequenties van de 12 sterren",
-    "allStars": "Alle sterren (1–12)"
+    "allStars": "Alle sterren (1–12)",
+    "colForm10": "Form 10",
+    "colForm30": "Form 30",
+    "howForm": "“Form 10 / 30” counts appearances in the last 10 and 30 draws. Not a prediction."
   },
   "notFound": {
     "title": "Pagina niet gevonden",
@@ -344,7 +366,9 @@
     "archiveCta": "Uitslagen",
     "disclaimer": "Tijden zijn indicatief. 18+ · Speel verantwoord.",
     "allTitle": "Alle spellen",
-    "allLead": "Dag, uur (Europa/Parijs) en countdown — indicatieve tijden."
+    "allLead": "Dag, uur (Europa/Parijs) en countdown — indicatieve tijden.",
+    "cutoffOpen": "Tickets accepted until {time} (Europe/Paris) on draw day.",
+    "cutoffClosed": "Sales closed (8:15 pm) — draw around 9 pm."
   },
   "generator": {
     "eyebrow": "Toeval",
