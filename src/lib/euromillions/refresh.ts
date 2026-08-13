@@ -87,6 +87,17 @@ export async function refreshEuroMillionsData(options?: {
   let incoming: EuroMillionsDraw[] = [];
   const yearsFetched: number[] = [];
 
+  // Companions first: Keno / Loto / EuroDreams must not wait on PedroMealha
+  // archives (the 120s route budget often killed them before write).
+  let companionGames: Record<string, number> | undefined;
+  try {
+    const companions = await refreshFdjCompanionGames();
+    companionGames = companions.games;
+    sources.push(...companions.sources.map((s) => `companion:${s}`));
+  } catch (err) {
+    console.error("euromillions_companions_fail", err);
+  }
+
   try {
     const fdj = await fetchFdjEuroMillionsDraws(20);
     incoming = incoming.concat(fdj);
@@ -141,15 +152,6 @@ export async function refreshEuroMillionsData(options?: {
     myMillionWinners: winners,
   };
   await writeEuroMillionsStore(next);
-
-  let companionGames: Record<string, number> | undefined;
-  try {
-    const companions = await refreshFdjCompanionGames();
-    companionGames = companions.games;
-    sources.push(...companions.sources.map((s) => `companion:${s}`));
-  } catch (err) {
-    console.error("euromillions_companions_fail", err);
-  }
 
   return {
     ok: true,

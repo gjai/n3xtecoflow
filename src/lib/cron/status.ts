@@ -8,7 +8,8 @@ export type CronJobId =
   | "amazon"
   | "stats"
   | "alert"
-  | "euromillions";
+  | "euromillions"
+  | "fdj-games";
 
 export type CronJobStatus = {
   lastOkAt?: string;
@@ -116,6 +117,8 @@ const EXPECTED: {
   { job: "guides", label: "Guides IA", maxAgeHours: 240 }, // weekly + margin
   { job: "amazon", label: "Prix Amazon", maxAgeHours: 18, optional: true },
   { job: "stats", label: "Digest ops", maxAgeHours: 36 },
+  { job: "euromillions", label: "EuroMillions", maxAgeHours: 36 },
+  { job: "fdj-games", label: "Jeux FDJ (Loto…)", maxAgeHours: 18 },
 ];
 
 export async function evaluateCronHealth(): Promise<{

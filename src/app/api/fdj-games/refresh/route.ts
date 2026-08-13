@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { markCronFail, markCronOk } from "@/lib/cron/status";
-import { refreshEuroMillionsData } from "@/lib/euromillions/refresh";
+import { refreshFdjCompanionGames } from "@/lib/fdj-games/refresh";
 
-export const maxDuration = 180;
+export const maxDuration = 60;
 
 function authorized(request: Request) {
   const secret = process.env.NEWS_CRON_SECRET?.trim();
@@ -18,21 +18,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
   try {
-    const url = new URL(request.url);
-    const yearsRaw = url.searchParams.get("years");
-    const years = yearsRaw
-      ? yearsRaw
-          .split(",")
-          .map((y) => Number(y.trim()))
-          .filter((n) => Number.isFinite(n) && n >= 2004)
-      : undefined;
-    const result = await refreshEuroMillionsData({ years });
-    await markCronOk("euromillions", `draws=${result.draws}`);
+    const result = await refreshFdjCompanionGames();
+    await markCronOk(
+      "fdj-games",
+      Object.entries(result.games)
+        .map(([id, n]) => `${id}=${n}`)
+        .join(","),
+    );
     return NextResponse.json(result);
   } catch (err) {
     console.error(err);
     await markCronFail(
-      "euromillions",
+      "fdj-games",
       err instanceof Error ? err.message : "refresh_failed",
     );
     return NextResponse.json({ error: "refresh_failed" }, { status: 500 });
