@@ -1,26 +1,39 @@
-name: Ingest EcoFlow news
+name: Ingest news (all themes)
 
 on:
   schedule:
-    - cron: "15 */6 * * *"
+    # Every 4 hours — fair per-theme ingest (incl. casinos-crypto)
+    - cron: "20 */4 * * *"
   workflow_dispatch:
 
 jobs:
   ingest:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger production news ingest
+      - name: Trigger production news ingest (per theme)
         env:
           NEWS_CRON_SECRET: ${{ secrets.NEWS_CRON_SECRET }}
           SITE_URL: https://ecoflow-stream.com
         run: |
+          set -euo pipefail
           if [ -z "$NEWS_CRON_SECRET" ]; then
             echo "NEWS_CRON_SECRET missing"
             exit 1
           fi
-          curl -fsS -X POST \
-            -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
-            "${SITE_URL}/api/news/ingest"
+          # Sequential: shared news.json must not be written in parallel.
+          # limit=2 per theme keeps AI rewrite under maxDuration.
+          fail=0
+          for site in ecoflow tumbler massage-gun casinos-crypto; do
+            echo "=== ingest siteId=${site} ==="
+            if ! curl -fsS -X POST \
+              -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
+              "${SITE_URL}/api/news/ingest?siteId=${site}&limit=2"; then
+              echo "FAILED: ${site}"
+              fail=1
+            fi
+            echo
+          done
+          exit "${fail}"
       - name: Alert on failure
         if: failure()
         env:

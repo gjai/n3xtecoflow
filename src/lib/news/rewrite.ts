@@ -197,6 +197,16 @@ function guessTags(
     if (tags.size === 0) tags.add("gourde");
     return [...tags];
   }
+  if (siteId === "casinos-crypto") {
+    if (/\bstake\b/.test(hay)) tags.add("stake");
+    if (/crypto\.com|cryptocom/.test(hay)) tags.add("cryptocom");
+    if (/nordvpn|nord\s*vpn/.test(hay)) tags.add("nordvpn");
+    if (/vpn/.test(hay)) tags.add("vpn");
+    if (/casino|gambling|jeu\s*d.?argent/.test(hay)) tags.add("casino-crypto");
+    if (/wallet|usdt|bitcoin|btc|ethereum/.test(hay)) tags.add("crypto");
+    if (tags.size === 0) tags.add("casino-crypto");
+    return [...tags];
+  }
   if (siteId === "massage-gun") {
     if (/theragun|therabody/.test(hay)) tags.add("theragun");
     if (/hypervolt|hyperice/.test(hay)) tags.add("hyperice");

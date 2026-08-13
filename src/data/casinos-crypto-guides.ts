@@ -1,7 +1,29 @@
 import type { GuideArticle } from "./articles";
 
 export const CASINOS_CRYPTO_STAKE_GUIDE_SLUG = "guide-stake-casino-crypto";
+export const CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG = "guide-cryptocom-wallet";
 export const CASINOS_CRYPTO_VPN_GUIDE_SLUG = "vpn-acces-casino";
+
+export const casinosCryptoGuideCovers: Record<
+  string,
+  { src: string; credit: string; creditUrl: string }
+> = {
+  [CASINOS_CRYPTO_STAKE_GUIDE_SLUG]: {
+    src: "/images/casinos-crypto/stake.jpg",
+    credit: "Casinos Crypto (IA)",
+    creditUrl: "https://casinos-crypto.fr",
+  },
+  [CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG]: {
+    src: "/images/casinos-crypto/cryptocom.jpg",
+    credit: "Casinos Crypto (IA)",
+    creditUrl: "https://casinos-crypto.fr",
+  },
+  [CASINOS_CRYPTO_VPN_GUIDE_SLUG]: {
+    src: "/images/casinos-crypto/vpn.jpg",
+    credit: "Casinos Crypto (IA)",
+    creditUrl: "https://casinos-crypto.fr",
+  },
+};
 
 export const casinosCryptoGuides: GuideArticle[] = [
   {
@@ -49,6 +71,7 @@ export const casinosCryptoGuides: GuideArticle[] = [
           heading: "4. Dépôts, retraits, KYC",
           paragraphs: [
             "Les crypto accélèrent souvent le cycle, mais les frais réseau et la volatilité restent réels. Un dépôt en USDT n’élimine pas le risque de jeu.",
+            "Pour acheter / détenir la crypto avant un dépôt Stake, une app type Crypto.com peut servir d’on-ramp. Gardez un wallet dédié au loisir, séparé de vos économies.",
             "Comme chez la plupart des opérateurs, un contrôle d’identité (KYC) peut être demandé avant un gros retrait. Anticipez plutôt que de le découvrir sous pression.",
           ],
         },
@@ -75,8 +98,8 @@ export const casinosCryptoGuides: GuideArticle[] = [
         {
           heading: "7. Suite logique",
           paragraphs: [
-            "Une fois le cadre clair : lisez le guide VPN, puis ouvrez Stake uniquement si cela reste un loisir maîtrisé.",
-            "Les liens d’affiliation Stake / NordVPN peuvent nous soutenir sans coût supplémentaire pour vous — transparence totale dans les mentions légales.",
+            "Priorité : Stake, si le cadre reste un loisir maîtrisé (18+, budget fixe). Crypto.com sert à préparer le dépôt ; NordVPN à stabiliser la connexion.",
+            "Les trois liens d’affiliation ci-dessous peuvent nous soutenir sans coût pour vous — Stake reste la mise en avant principale. Transparence dans les mentions légales.",
           ],
         },
       ],
@@ -124,6 +147,7 @@ export const casinosCryptoGuides: GuideArticle[] = [
           heading: "4. Deposits, withdrawals, KYC",
           paragraphs: [
             "Crypto often speeds the cycle, but network fees and volatility remain real. A USDT deposit does not remove gambling risk.",
+            "To buy / hold crypto before a Stake deposit, an app like Crypto.com can work as an on-ramp. Keep a leisure wallet separate from savings.",
             "Like most operators, identity checks (KYC) may be required before large withdrawals. Anticipate that rather than discovering it under pressure.",
           ],
         },
@@ -150,8 +174,135 @@ export const casinosCryptoGuides: GuideArticle[] = [
         {
           heading: "7. Next steps",
           paragraphs: [
-            "Once the framework is clear: read the VPN guide, then open Stake only if it remains controlled entertainment.",
-            "Stake / NordVPN affiliate links may support us at no extra cost to you — full transparency in the legal pages.",
+            "Priority: Stake, if it stays controlled entertainment (18+, fixed budget). Crypto.com prepares the deposit; NordVPN stabilises the connection.",
+            "The three affiliate links below may support us at no cost to you — Stake stays the main highlight. Full transparency in the legal pages.",
+          ],
+        },
+      ],
+    },
+  },
+  {
+    slug: CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG,
+    fr: {
+      title: "Guide Crypto.com : wallet avant Stake",
+      subtitle:
+        "Acheter et détenir la crypto sereinement, puis préparer un dépôt casino — sans mélanger loisir et épargne.",
+      sections: [
+        {
+          heading: "1. Pourquoi un wallet dédié ?",
+          paragraphs: [
+            "Stake fonctionne en crypto : avant de déposer, il faut acheter, stocker et envoyer des actifs (USDT, BTC, ETH… selon les options du moment).",
+            "Crypto.com est une app grand public qui sert d’on-ramp : carte / virement → crypto, avec un wallet intégré. Ce n’est pas un casino : c’est une étape technique avant le jeu.",
+          ],
+          bullets: [
+            "Séparer loisir et épargne (montants distincts)",
+            "Comprendre frais réseau et délais avant d’envoyer",
+            "Activer 2FA dès la création du compte",
+            "18+ et identité (KYC) souvent requis pour fiat ↔ crypto",
+          ],
+        },
+        {
+          heading: "2. Ce que Crypto.com apporte ici",
+          paragraphs: [
+            "Pour beaucoup de joueurs, le frein n’est pas Stake : c’est « comment obtenir de la crypto proprement ». Crypto.com simplifie l’achat et le stockage court terme.",
+            "Les marchés crypto sont volatils : un montant en euro peut bouger avant d’arriver sur Stake. Ne convertissez que le budget loisir déjà fixé.",
+          ],
+        },
+        {
+          heading: "3. Méthode simple (checklist)",
+          paragraphs: [
+            "Gardez une séquence courte. L’objectif : un petit dépôt test, pas un transfert maximal dès le premier jour.",
+          ],
+          bullets: [
+            "Créer le compte Crypto.com + 2FA",
+            "Compléter le KYC si nécessaire pour acheter en €",
+            "Acheter uniquement le montant loisir prévu",
+            "Noter le réseau (ERC-20, TRC-20…) exigé par Stake",
+            "Envoyer d’abord un micro-test, puis le reste",
+            "Ne jamais partager seed phrase / codes 2FA",
+          ],
+        },
+        {
+          heading: "4. Vers Stake : bons réflexes",
+          paragraphs: [
+            "Avant chaque envoi : vérifiez l’adresse de dépôt Stake, le réseau, et les frais. Une erreur de réseau peut faire perdre les fonds.",
+            "Après un retrait Stake, vous pouvez rapatrier la crypto vers Crypto.com ou un autre wallet — toujours avec le même soin sur le réseau.",
+          ],
+        },
+        {
+          heading: "5. Limites & transparence",
+          paragraphs: [
+            "Crypto.com n’élimine ni le risque de marché ni le risque de jeu. Un wallet bien géré ne transforme pas le casino en investissement.",
+            "Ce site est indépendant : les liens Crypto.com / Stake / NordVPN peuvent être affiliés. Détails dans les mentions légales.",
+          ],
+        },
+        {
+          heading: "6. Suite",
+          paragraphs: [
+            "Angle wallet : Crypto.com prépare les fonds, mais la destination principale reste Stake. NordVPN complète le setup. Jouez responsable, budget fixe, 18+.",
+            "Utilisez les trois liens d’affiliation ci-dessous — Stake reste le CTA principal.",
+          ],
+        },
+      ],
+    },
+    en: {
+      title: "Crypto.com guide: wallet before Stake",
+      subtitle:
+        "Buy and hold crypto calmly, then prepare a casino deposit — without mixing leisure and savings.",
+      sections: [
+        {
+          heading: "1. Why a dedicated wallet?",
+          paragraphs: [
+            "Stake runs on crypto: before depositing you need to buy, hold and send assets (USDT, BTC, ETH… depending on current options).",
+            "Crypto.com is a mainstream app that works as an on-ramp: card / bank → crypto, with a built-in wallet. It is not a casino — it is a technical step before play.",
+          ],
+          bullets: [
+            "Keep leisure funds separate from savings",
+            "Understand network fees and timing before sending",
+            "Enable 2FA as soon as you create the account",
+            "18+ and identity (KYC) often required for fiat ↔ crypto",
+          ],
+        },
+        {
+          heading: "2. What Crypto.com adds here",
+          paragraphs: [
+            "For many players the blocker is not Stake — it is “how do I get crypto properly”. Crypto.com simplifies buying and short-term storage.",
+            "Crypto markets are volatile: a euro amount can move before it reaches Stake. Only convert the leisure budget you already set.",
+          ],
+        },
+        {
+          heading: "3. Simple method (checklist)",
+          paragraphs: [
+            "Keep a short sequence. Goal: a small test deposit, not a max transfer on day one.",
+          ],
+          bullets: [
+            "Create Crypto.com account + 2FA",
+            "Complete KYC if needed to buy with €",
+            "Buy only the planned leisure amount",
+            "Note the network (ERC-20, TRC-20…) Stake requires",
+            "Send a micro-test first, then the rest",
+            "Never share seed phrases / 2FA codes",
+          ],
+        },
+        {
+          heading: "4. Toward Stake: good habits",
+          paragraphs: [
+            "Before every send: verify the Stake deposit address, network, and fees. A wrong network can lose funds.",
+            "After a Stake withdrawal, you can move crypto back to Crypto.com or another wallet — with the same care on the network.",
+          ],
+        },
+        {
+          heading: "5. Limits & transparency",
+          paragraphs: [
+            "Crypto.com removes neither market risk nor gambling risk. A well-managed wallet does not turn a casino into an investment.",
+            "This site is independent: Crypto.com / Stake / NordVPN links may be affiliates. Details in the legal pages.",
+          ],
+        },
+        {
+          heading: "6. Next",
+          paragraphs: [
+            "Wallet angle: Crypto.com prepares funds, but the main destination remains Stake. NordVPN completes the setup. Play responsibly, fixed budget, 18+.",
+            "Use the three affiliate links below — Stake stays the primary CTA.",
           ],
         },
       ],
@@ -207,7 +358,8 @@ export const casinosCryptoGuides: GuideArticle[] = [
         {
           heading: "5. Suite",
           paragraphs: [
-            "Revenez au guide Stake pour la méthode de démarrage, puis utilisez les liens d’affiliation si vous choisissez NordVPN / Stake via ce site.",
+            "Angle VPN : sécurisez d’abord la connexion, puis ouvrez Stake (destination principale) et préparez le dépôt via Crypto.com si besoin.",
+            "Les trois liens d’affiliation ci-dessous sont disponibles — Stake reste le plus mis en avant.",
           ],
         },
       ],
@@ -260,7 +412,8 @@ export const casinosCryptoGuides: GuideArticle[] = [
         {
           heading: "5. Next",
           paragraphs: [
-            "Return to the Stake guide for the onboarding method, then use affiliate links if you choose NordVPN / Stake through this site.",
+            "VPN angle: secure the connection first, then open Stake (main destination) and prepare the deposit via Crypto.com if needed.",
+            "All three affiliate links below are available — Stake stays the most prominent.",
           ],
         },
       ],

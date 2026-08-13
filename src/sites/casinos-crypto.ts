@@ -65,14 +65,14 @@ export const casinosCryptoSite: SiteConfig = {
       heroTo: "#f3f7f3",
     },
   },
-  heroImage: "/images/casinos-crypto/hero.svg",
+  heroImage: "/images/casinos-crypto/hero.jpg",
   featuredCategoryIds: [],
   catalogLayout: "flat",
   featuredProductSlugs: [],
   features: {
     products: false,
     comparisons: false,
-    news: false,
+    news: true,
     editorialHome: true,
   },
   network: [
@@ -91,6 +91,11 @@ export const casinosCryptoSite: SiteConfig = {
       labelFr: "Le pistolet de massage",
       labelEn: "Le pistolet de massage",
     },
+    {
+      href: "https://elections2027.com",
+      labelFr: "Élections 2027",
+      labelEn: "Élections 2027",
+    },
   ],
   monetization: {
     disableAdsense: true,
@@ -102,6 +107,13 @@ export const casinosCryptoSite: SiteConfig = {
         labelEn: "Open Stake",
         url: "https://stake.com/?c=100STAKE",
         envKey: "STAKE_AFFILIATE_URL",
+      },
+      {
+        id: "cryptocom",
+        labelFr: "Ouvrir Crypto.com",
+        labelEn: "Open Crypto.com",
+        url: "https://crypto.com/app/e8yc5gbfd4",
+        envKey: "CRYPTOCOM_AFFILIATE_URL",
       },
       {
         id: "nordvpn",
@@ -117,6 +129,7 @@ export const casinosCryptoSite: SiteConfig = {
     knowsAbout: [
       "Crypto casinos",
       "Stake",
+      "Crypto.com",
       "VPN access",
       "Responsible gambling",
     ],
@@ -131,18 +144,27 @@ export const casinosCryptoSite: SiteConfig = {
     topicLabelFr: "les casinos crypto",
     topicLabelEn: "crypto casinos",
     guideScope:
-      "casinos crypto / Stake / dépôt crypto / VPN / jeu responsable (pas Amazon, pas AdSense)",
+      "casinos crypto / Stake / Crypto.com / dépôt crypto / VPN / jeu responsable (pas Amazon, pas AdSense)",
     productHintFr:
-      "Consultez nos guides Stake et VPN pour démarrer en toute clarté.",
-    productHintEn: "Read our Stake and VPN guides to get started clearly.",
+      "Consultez nos guides Stake, Crypto.com et VPN pour démarrer en toute clarté.",
+    productHintEn:
+      "Read our Stake, Crypto.com and VPN guides to get started clearly.",
     checklistFr:
       "Budget, 18+, moyen de dépôt crypto, connexion sécurisée (VPN), limites personnelles.",
     checklistEn:
       "Budget, 18+, crypto deposit method, secure connection (VPN), personal limits.",
-    newsPerimeter: "casinos crypto / Stake / VPN gaming",
-    newsTitleMustMention: "casino crypto, Stake ou VPN",
-    newsBuyingCriteria: "bonus, dépôt, retraits, VPN, jeu responsable",
+    newsPerimeter:
+      "casinos crypto / Stake / Crypto.com (wallet) / NordVPN (accès)",
+    newsTitleMustMention: "casino crypto, Stake, Crypto.com ou VPN",
+    newsBuyingCriteria:
+      "bonus, dépôt crypto, wallet, retraits, VPN, jeu responsable",
     newsDefaultTags: ["casino-crypto", "stake"],
+    newsExtraRules: [
+      "Interdiction absolue de mentionner Amazon, AdSense, ou tout lien d’achat Amazon",
+      "Ne jamais inventer d’URL — les CTA affiliation (Stake / Crypto.com / NordVPN) sont gérés par le site, pas dans le texte",
+      "Si prix ou offre : oriente vers les conditions de l’opérateur (Stake / Crypto.com / NordVPN) sans inventer de promo",
+      "Rappeler 18+ et jeu responsable quand le sujet touche au casino",
+    ],
     coverSubject: "crypto casino editorial cover",
     coverContextDefault: "crypto casino, dark premium desk, subtle neon green",
     coverStyle:
@@ -153,10 +175,10 @@ export const casinosCryptoSite: SiteConfig = {
     preferAiNewsCovers: true,
     allowWeakPackshotDefault: false,
     topicBrandPattern:
-      String.raw`\bcasino\b|\bcrypto\s*casino\b|\bstake\b|\bnordvpn\b|\bvpn\b`,
+      String.raw`\bcrypto\s*casino\b|\bcasino\s*crypto\b|\bstake\b|\bcrypto\.com\b|\bcryptocom\b|\bnordvpn\b|\bvpn\b.*\b(casino|gaming|jeu|stake)\b|\b(casino|gaming|jeu|stake)\b.*\bvpn\b`,
   },
   focusFr:
-    "Présentation Stake, démarrage crypto et guide VPN — sans Amazon ni publicité display.",
+    "Présentation Stake, Crypto.com pour le wallet, et guide VPN — sans Amazon ni publicité display.",
   focusEn:
-    "Stake overview, crypto onboarding and VPN guide — no Amazon, no display ads.",
+    "Stake overview, Crypto.com for wallet setup, and VPN guide — no Amazon, no display ads.",
 };

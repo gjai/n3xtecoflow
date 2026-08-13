@@ -159,6 +159,14 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     angleEn: "Why Stake, onboarding, KYC, responsible gambling",
   },
   {
+    slug: "guide-cryptocom-wallet",
+    siteId: "casinos-crypto",
+    topicFr: "Guide Crypto.com : wallet avant Stake",
+    topicEn: "Crypto.com guide: wallet before Stake",
+    angleFr: "On-ramp crypto, KYC, envoi vers Stake, sécurité",
+    angleEn: "Crypto on-ramp, KYC, send to Stake, security",
+  },
+  {
     slug: "vpn-acces-casino",
     siteId: "casinos-crypto",
     topicFr: "VPN pour casino crypto",

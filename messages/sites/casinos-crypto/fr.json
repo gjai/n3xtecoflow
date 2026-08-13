@@ -2,13 +2,13 @@
   "meta": {
     "siteName": "Casinos Crypto",
     "tagline": "Guides indépendants sur les casinos crypto : Stake, accès sécurisé et bonnes pratiques.",
-    "disclaimerShort": "Site éditorial indépendant. Contient des liens d'affiliation Stake et NordVPN. 18+."
+    "disclaimerShort": "Site éditorial indépendant. Contient des liens d'affiliation Stake, Crypto.com et NordVPN. 18+."
   },
   "nav": {
     "products": "Guides",
     "powerstream": "Stake",
     "comparisons": "VPN",
-    "news": "À propos"
+    "news": "Actualités"
   },
   "notFound": {
     "body": "Cette adresse n’existe pas — ou le contenu a été déplacé. Retour aux guides Casinos Crypto."
@@ -18,37 +18,37 @@
     "headline": "Casino crypto, sans se perdre.",
     "subhead": "Présentation de Stake, comment démarrer, jeu responsable — et le rôle d’un VPN pour une connexion plus sereine.",
     "ctaPrimary": "Guide Stake",
-    "ctaSecondary": "Guide VPN",
+    "ctaSecondary": "Guide Crypto.com",
     "featuresTitle": "Pourquoi ces guides",
     "feature1Title": "Indépendant",
-    "feature1Text": "Analyses éditoriales — nous ne sommes pas l’opérateur Stake ni NordVPN.",
+    "feature1Text": "Analyses éditoriales — nous ne sommes pas l’opérateur Stake, Crypto.com ni NordVPN.",
     "feature2Title": "Orienté décision",
-    "feature2Text": "Pourquoi Stake, comment démarrer, limites et jeu responsable.",
+    "feature2Text": "Pourquoi Stake, wallet Crypto.com, limites et jeu responsable.",
     "feature3Title": "Transparence",
-    "feature3Text": "Liens d’affiliation Stake / NordVPN clairement indiqués. Pas d’Amazon, pas d’AdSense.",
-    "editorialLead": "Nous expliquons Stake et le setup VPN pour démarrer clairement — sans promesse de gains.",
+    "feature3Text": "Liens d’affiliation Stake / Crypto.com / NordVPN clairement indiqués. Pas d’Amazon, pas d’AdSense.",
+    "editorialLead": "Nous expliquons Stake, Crypto.com et le setup VPN pour démarrer clairement — sans promesse de gains.",
     "howTitle": "Comment lire nos contenus",
     "howBody1": "Le guide Stake couvre le pourquoi, le démarrage et les limites.",
-    "howBody2": "Le guide VPN détaille un setup prudent (ex. NordVPN).",
+    "howBody2": "Le guide Crypto.com détaille le wallet / on-ramp avant dépôt.",
     "howBody3": "Le jeu d’argent comporte un risque de perte. 18+ uniquement."
   },
   "guides": {
-    "subtitle": "Stake et VPN : deux guides pour démarrer clairement.",
+    "subtitle": "Stake, Crypto.com et VPN : trois guides pour démarrer clairement.",
     "buyersTitle": "Guide Stake",
     "buyersText": "Pourquoi Stake, dépôt crypto, KYC et jeu responsable."
   },
   "powerstream": {
     "title": "Guides",
-    "subtitle": "Stake et accès sécurisé.",
+    "subtitle": "Stake, wallet crypto et accès sécurisé.",
     "intro": "Parcourez les guides pour démarrer.",
     "whatTitle": "Le sujet",
-    "whatText": "Casino crypto, Stake et VPN compagnon.",
+    "whatText": "Casino crypto, Stake, Crypto.com et VPN compagnon.",
     "forWhoTitle": "Pour qui ?",
     "forWhoText": "Adultes 18+ qui veulent comprendre avant de jouer.",
     "checklistTitle": "Avant de jouer",
     "check1": "Budget loisir fixe",
     "check2": "18+ et cadre légal personnel",
-    "check3": "Connexion maîtrisée (VPN)",
+    "check3": "Wallet crypto + connexion maîtrisée (VPN)",
     "check4": "Conditions de bonus lues",
     "ctaAmazon": "Voir Stake",
     "relatedTitle": "Aller plus loin",
@@ -59,49 +59,57 @@
     "subtitle": "Lectures utiles autour du casino crypto.",
     "card1Title": "Stake",
     "card1Text": "Pourquoi et comment démarrer.",
-    "card2Title": "VPN",
-    "card2Text": "Setup prudent pour une session stable.",
-    "card3Title": "Jeu responsable",
-    "card3Text": "Budget, pauses, aide si besoin."
+    "card2Title": "Crypto.com",
+    "card2Text": "Wallet et on-ramp avant dépôt.",
+    "card3Title": "VPN & jeu responsable",
+    "card3Text": "Connexion stable, budget, pauses."
   },
   "amazon": {
-    "disclosure": "Ce site contient des liens d’affiliation Stake et NordVPN. Nous pouvons percevoir une commission sans coût supplémentaire pour vous.",
-    "disclosureShort": "Liens d’affiliation Stake / NordVPN.",
+    "disclosure": "Ce site contient des liens d’affiliation Stake, Crypto.com et NordVPN. Nous pouvons percevoir une commission sans coût supplémentaire pour vous.",
+    "disclosureShort": "Liens d’affiliation Stake / Crypto.com / NordVPN.",
     "badge": "Affiliation",
     "cta": "Ouvrir"
   },
   "legal": {
     "hubMeta": "Éditeur, hébergeur, confidentialité, cookies et affiliation — informations légales Casinos Crypto.",
     "cookiesIntro": "Cette section décrit les cookies utilisés sur Casinos Crypto. Pas de publicité AdSense sur ce site.",
-    "independent": "Casinos Crypto est un site éditorial indépendant. Il n'est pas exploité par Stake, NordVPN ni Amazon.",
-    "amazon": "Affiliation : ce site peut contenir des liens affiliés Stake et NordVPN. Nous pouvons être rémunérés si vous passez par ces liens.",
+    "independent": "Casinos Crypto est un site éditorial indépendant. Il n'est pas exploité par Stake, Crypto.com, NordVPN ni Amazon.",
+    "publisherName": "Casinos Crypto — site éditorial",
+    "publisherAddress": "",
+    "publisherDirector": "",
+    "publisherTva": "",
+    "siren": "",
+    "amazon": "Affiliation : ce site peut contenir des liens affiliés Stake, Crypto.com et NordVPN. Nous pouvons être rémunérés si vous passez par ces liens.",
     "adsense": "Pas de publicité Google AdSense sur Casinos Crypto.",
-    "affiliateBody": "Les liens Stake et NordVPN sont des liens d’affiliation. Amazon Affiliates n’est pas utilisé sur ce site."
+    "affiliateBody": "Les liens Stake, Crypto.com et NordVPN sont des liens d’affiliation. Amazon Affiliates n’est pas utilisé sur ce site."
   },
   "footer": {
     "independent": "Site indépendant — casinos crypto",
     "rights": "© {year} Casinos Crypto",
     "products": "Guides",
     "comparisons": "VPN",
-    "news": "À propos",
+    "news": "Actualités",
     "powerstream": "Stake"
   },
   "about": {
     "title": "À propos de Casinos Crypto",
-    "meta": "Qui sommes-nous, méthode éditoriale, indépendance et transparence sur l’affiliation Stake / NordVPN.",
-    "lead": "Casinos Crypto est un site éditorial indépendant dédié aux casinos crypto, avec une présentation claire de Stake et un guide VPN compagnon.",
-    "missionBody": "Expliquer Stake, le démarrage crypto et un setup VPN prudent — sans promesse de gains.",
+    "meta": "Qui sommes-nous, méthode éditoriale, indépendance et transparence sur l’affiliation Stake / Crypto.com / NordVPN.",
+    "lead": "Casinos Crypto est un site éditorial indépendant dédié aux casinos crypto, avec une présentation claire de Stake, Crypto.com et un guide VPN compagnon.",
+    "missionBody": "Expliquer Stake, le wallet crypto (Crypto.com) et un setup VPN prudent — sans promesse de gains.",
     "methodBody": "Nous construisons nos pages à partir d’informations publiques et d’une méthode éditoriale (pourquoi, comment, limites).",
     "method1": "Guide Stake : présentation, démarrage, KYC, jeu responsable.",
-    "method2": "Guide VPN : connexion stable et privée (NordVPN).",
-    "method3": "Transparence : liens d’affiliation identifiables.",
+    "method2": "Guide Crypto.com : wallet / on-ramp avant dépôt Stake.",
+    "method3": "Guide VPN + transparence affiliation (Stake, Crypto.com, NordVPN).",
     "method4": "Pas de catalogue Amazon ni de publicité display AdSense.",
-    "independenceBody": "Ce site n’est pas exploité par Stake ni NordVPN. Les marques appartiennent à leurs propriétaires.",
+    "independenceBody": "Ce site n’est pas exploité par Stake, Crypto.com ni NordVPN. Les marques appartiennent à leurs propriétaires.",
     "monetizationTitle": "Monétisation",
-    "monetizationBody": "Affiliation Stake et NordVPN uniquement. Pas d’Amazon Associates ni d’AdSense sur ce domaine."
+    "monetizationBody": "Affiliation Stake, Crypto.com et NordVPN. Pas d’Amazon Associates ni d’AdSense sur ce domaine."
   },
   "news": {
-    "eyebrow": "Guides",
-    "empty": "Pas de fil d’actus sur ce site — consultez les guides Stake et VPN."
+    "eyebrow": "Revue de presse",
+    "title": "Actualités casinos crypto",
+    "subtitle": "Synthèses éditoriales sur Stake, Crypto.com, VPN et les casinos crypto — avec liens d’affiliation clairs.",
+    "empty": "Aucune actu pour le moment — le prochain passage automatique va peupler cette section.",
+    "catalogCta": "Lire les guides Stake, Crypto.com & VPN →"
   }
 }

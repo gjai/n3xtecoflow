@@ -8,10 +8,6 @@ import {
   siteShowsProducts,
   siteUsesEditorialHome,
 } from "@/sites/features";
-import {
-  CASINOS_CRYPTO_STAKE_GUIDE_SLUG,
-  CASINOS_CRYPTO_VPN_GUIDE_SLUG,
-} from "@/data/casinos-crypto-guides";
 import { CookieSettingsButton } from "./CookieSettingsButton";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { SiteLogo } from "./SiteLogo";
@@ -28,20 +24,17 @@ export function SiteFooter() {
     locale === "en" ? site.brand.footerBlurbEn : site.brand.footerBlurbFr;
 
   const links = siteUsesEditorialHome(site)
-    ? [
-        { href: "/guides", label: t("guides") },
-        {
-          href: `/guides/${CASINOS_CRYPTO_STAKE_GUIDE_SLUG}`,
-          label: "Stake",
-        },
-        {
-          href: `/guides/${CASINOS_CRYPTO_VPN_GUIDE_SLUG}`,
-          label: "VPN",
-        },
-        { href: "/a-propos", label: t("about") },
-        { href: "/mentions-legales", label: t("legal") },
-        { href: "/contact", label: t("contact") },
-      ]
+    ? (
+        [
+          { href: "/guides", label: t("guides") },
+          siteShowsNews(site)
+            ? { href: "/actualites", label: t("news") }
+            : null,
+          { href: "/a-propos", label: t("about") },
+          { href: "/mentions-legales", label: t("legal") },
+          { href: "/contact", label: t("contact") },
+        ] as const
+      ).filter(Boolean) as { href: string; label: string }[]
     : (
         [
           siteShowsProducts(site)

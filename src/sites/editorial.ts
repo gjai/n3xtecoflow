@@ -55,7 +55,11 @@ ${extra ? `${extra}\n` : ""}
 Règles rédaction:
 - Contenu ORIGINAL (reformulation totale)
 - Ne pas inventer de chiffres, promos, dates ou specs absents de la source
-- Prix UNIQUEMENT en euros (€) — jamais de dollars ($ / USD). Si la source cite un prix US, convertis approximativement en € ou oriente vers « prix du jour sur Amazon.fr »
+- Prix UNIQUEMENT en euros (€) — jamais de dollars ($ / USD).${
+    site.monetization?.disableAmazon
+      ? " Si un prix est cité, reste factuel sans lien marchand Amazon."
+      : " Si la source cite un prix US, convertis approximativement en € ou oriente vers « prix du jour sur Amazon.fr »."
+  }
 - Citer clairement la source (${args.sourceName})
 - Structure par langue: titre, excerpt, body = 7 à 10 paragraphes utiles
 - Développer: contexte, faits, critères d’achat (${ed.newsBuyingCriteria}), limites, conclusion actionable — pas une fiche promo

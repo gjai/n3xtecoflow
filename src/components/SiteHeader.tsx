@@ -9,10 +9,6 @@ import {
   siteShowsProducts,
   siteUsesEditorialHome,
 } from "@/sites/features";
-import {
-  CASINOS_CRYPTO_STAKE_GUIDE_SLUG,
-  CASINOS_CRYPTO_VPN_GUIDE_SLUG,
-} from "@/data/casinos-crypto-guides";
 import { SiteLogo } from "./SiteLogo";
 import { useSite } from "./SiteProvider";
 
@@ -22,19 +18,17 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // Editorial themes: compact nav — deep links live on home / guides hub.
   const links = siteUsesEditorialHome(site)
-    ? [
-        { href: "/guides", label: t("guides") },
-        {
-          href: `/guides/${CASINOS_CRYPTO_STAKE_GUIDE_SLUG}`,
-          label: "Stake",
-        },
-        {
-          href: `/guides/${CASINOS_CRYPTO_VPN_GUIDE_SLUG}`,
-          label: "VPN",
-        },
-        { href: "/a-propos", label: t("about") },
-      ]
+    ? (
+        [
+          { href: "/guides", label: t("guides") },
+          siteShowsNews(site)
+            ? { href: "/actualites", label: t("news") }
+            : null,
+          { href: "/a-propos", label: t("about") },
+        ] as const
+      ).filter(Boolean) as { href: string; label: string }[]
     : (
         [
           siteShowsProducts(site)
@@ -83,7 +77,7 @@ export function SiteHeader() {
         <Link href="/" onClick={() => setOpen(false)} aria-label={t("home")}>
           <SiteLogo variant="header" />
         </Link>
-        <nav className="hidden items-center gap-5 text-sm text-[var(--muted)] lg:flex">
+        <nav className="hidden items-center gap-6 text-sm text-[var(--muted)] lg:flex">
           {links.map((l) => (
             <Link
               key={l.href}

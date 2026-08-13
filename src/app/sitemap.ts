@@ -83,14 +83,16 @@ export function buildSitemapForSite(
       });
     }
 
-    for (const article of news) {
-      if (newsSiteId(article) !== site.id) continue;
-      entries.push({
-        url: `${siteUrl}/${locale}/actualites/${article.slug}`,
-        lastModified: new Date(article.publishedAt),
-        changeFrequency: "weekly",
-        priority: 0.7,
-      });
+    if (siteShowsNews(site)) {
+      for (const article of news) {
+        if (newsSiteId(article) !== site.id) continue;
+        entries.push({
+          url: `${siteUrl}/${locale}/actualites/${article.slug}`,
+          lastModified: new Date(article.publishedAt),
+          changeFrequency: "weekly",
+          priority: 0.7,
+        });
+      }
     }
 
     for (const guide of GUIDE_TOPICS) {

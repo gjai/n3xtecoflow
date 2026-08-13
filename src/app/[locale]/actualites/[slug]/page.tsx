@@ -4,12 +4,15 @@ import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { articleJsonLd, JsonLd } from "@/components/JsonLd";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
+import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
 import { AmazonButton } from "@/components/AmazonButton";
 import { SmartCover } from "@/components/SmartCover";
 import { getEditorialImages } from "@/data/images";
+import { affiliateCtaForNews } from "@/lib/news/affiliate-cta";
 import { amazonCtaForNews } from "@/lib/news/amazon-cta";
 import { getNewsBySlug, readNewsStore } from "@/lib/news/store";
 import { siteLocaleAlternates } from "@/lib/seo";
+import { siteAllowsAmazon, siteShowsProducts } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
 
 export const revalidate = 600;
@@ -57,25 +60,41 @@ export default async function NewsArticlePage({
     isEn ? "en-US" : "fr-FR",
     { year: "numeric", month: "long", day: "numeric" },
   );
-  const cta = amazonCtaForNews(article);
-  const buyLabel = isEn ? "Buy on Amazon.fr" : "Acheter sur Amazon.fr";
+  const useAmazon = siteAllowsAmazon(site);
+  const amazonCta = useAmazon ? amazonCtaForNews(article) : null;
+  const affiCta = !useAmazon ? affiliateCtaForNews(article, site) : null;
+  const stickyHref = useAmazon
+    ? amazonCta!.href
+    : affiCta?.primary?.href || affiCta?.offers[0]?.href || "";
+  const stickyLabel = useAmazon
+    ? isEn
+      ? "Buy on Amazon.fr"
+      : "Acheter sur Amazon.fr"
+    : affiCta?.primary
+      ? isEn
+        ? affiCta.primary.labelEn
+        : affiCta.primary.labelFr
+      : isEn
+        ? "Open offer"
+        : "Voir l’offre";
   const mid = Math.max(2, Math.floor(copy.body.length / 2));
 
   function AmazonCtaBlock() {
+    if (!amazonCta) return null;
     return (
       <div className="space-y-3 border border-[var(--accent)] bg-[var(--surface)] p-5">
         <p className="text-sm font-medium text-[var(--heading)]">
           {isEn
-            ? cta.product
-              ? `See ${cta.product.name} on Amazon`
+            ? amazonCta.product
+              ? `See ${amazonCta.product.name} on Amazon`
               : `See picks on Amazon`
-            : cta.product
-              ? `Voir ${cta.product.name} sur Amazon`
+            : amazonCta.product
+              ? `Voir ${amazonCta.product.name} sur Amazon`
               : `Voir la sélection sur Amazon`}
         </p>
         <AmazonButton
-          href={cta.href}
-          label={buyLabel}
+          href={amazonCta.href}
+          label={stickyLabel}
           size="lg"
           priceFallback={
             isEn
@@ -87,6 +106,37 @@ export default async function NewsArticlePage({
       </div>
     );
   }
+
+  function AffiliateCtaBlock() {
+    if (!affiCta?.offers.length) return null;
+    return (
+      <div className="space-y-3 border border-[var(--accent)] bg-[var(--surface)] p-5">
+        <p className="text-sm font-medium text-[var(--heading)]">
+          {isEn
+            ? "Continue with our affiliate partners"
+            : "Continuer via nos partenaires affiliés"}
+        </p>
+        <div className="flex flex-wrap gap-3">
+          {affiCta.offers.map((offer) => (
+            <AffiliateOfferButton
+              key={offer.id}
+              href={offer.href}
+              label={isEn ? offer.labelEn : offer.labelFr}
+              variant={offer.id === affiCta.matchedId ? "primary" : "secondary"}
+            />
+          ))}
+        </div>
+        <p className="text-xs text-[var(--muted)]">
+          {isEn
+            ? "Affiliate links · 18+ · Play responsibly"
+            : "Liens d’affiliation · 18+ · Jouez responsable"}
+        </p>
+        <AffiliateDisclosure compact />
+      </div>
+    );
+  }
+
+  const CtaBlock = useAmazon ? AmazonCtaBlock : AffiliateCtaBlock;
 
   return (
     <article>
@@ -137,7 +187,7 @@ export default async function NewsArticlePage({
             {article.rewrittenBy === "ai" ? ` · ${t("aiBadge")}` : null}
           </p>
           <div className="mt-6">
-            <AmazonCtaBlock />
+            <CtaBlock />
           </div>
         </div>
       </header>
@@ -146,7 +196,7 @@ export default async function NewsArticlePage({
         {copy.body.slice(0, mid).map((p) => (
           <p key={p.slice(0, 48)}>{p}</p>
         ))}
-        <AmazonCtaBlock />
+        <CtaBlock />
         {copy.body.slice(mid).map((p) => (
           <p key={p.slice(0, 48)}>{p}</p>
         ))}
@@ -161,28 +211,43 @@ export default async function NewsArticlePage({
           </a>
         </p>
         <p>
-          <Link
-            href="/produits"
-            className="text-sm text-[var(--accent)] hover:underline"
-          >
-            {t("catalogCta")}
-          </Link>
+          {siteShowsProducts(site) ? (
+            <Link
+              href="/produits"
+              className="text-sm text-[var(--accent)] hover:underline"
+            >
+              {t("catalogCta")}
+            </Link>
+          ) : (
+            <Link
+              href="/guides"
+              className="text-sm text-[var(--accent)] hover:underline"
+            >
+              {t("catalogCta")}
+            </Link>
+          )}
           {" · "}
-          <span className="text-xs text-[var(--muted)]">{a("disclosureShort")}</span>
+          <span className="text-xs text-[var(--muted)]">
+            {a("disclosureShort")}
+          </span>
         </p>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-[var(--line)] bg-[var(--bg)]/95 p-3 backdrop-blur md:hidden">
-        <a
-          href={cta.href}
-          target="_blank"
-          rel="nofollow sponsored noopener noreferrer"
-          className="flex min-h-12 items-center justify-center bg-[var(--accent)] px-4 text-sm font-semibold text-[var(--accent-ink)]"
-        >
-          {buyLabel}
-        </a>
-      </div>
-      <div className="h-16 md:hidden" aria-hidden />
+      {stickyHref ? (
+        <>
+          <div className="fixed inset-x-0 bottom-0 z-20 border-t border-[var(--line)] bg-[var(--bg)]/95 p-3 backdrop-blur md:hidden">
+            <a
+              href={stickyHref}
+              target="_blank"
+              rel="nofollow sponsored noopener noreferrer"
+              className="flex min-h-12 items-center justify-center bg-[var(--accent)] px-4 text-sm font-semibold text-[var(--accent-ink)]"
+            >
+              {stickyLabel}
+            </a>
+          </div>
+          <div className="h-16 md:hidden" aria-hidden />
+        </>
+      ) : null}
     </article>
   );
 }

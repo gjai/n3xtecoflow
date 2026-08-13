@@ -1,5 +1,10 @@
 import type { SiteId } from "@/sites/types";
-import { NEWS_FEEDS, MAX_NEW_PER_RUN, newsSiteId } from "./types";
+import {
+  NEWS_FEEDS,
+  MAX_NEW_PER_RUN,
+  MAX_NEW_PER_SITE_RUN,
+  newsSiteId,
+} from "./types";
 import { fetchFeedItems, isOnTopicArticle, type RssItem } from "./rss";
 import { buildArticleFromRss, refreshArticle } from "./rewrite";
 import { isStoredNewsImageJunk, resolveNewsCover } from "./images";
@@ -63,7 +68,9 @@ function articleOnTopic(article: {
 export async function ingestNews(
   options?: IngestOptions,
 ): Promise<IngestResult> {
-  const limit = options?.limit ?? MAX_NEW_PER_RUN;
+  const limit =
+    options?.limit ??
+    (options?.siteId ? MAX_NEW_PER_SITE_RUN : MAX_NEW_PER_RUN);
   const store = await readNewsStore();
   const known = new Set(store.articles.map((a) => a.sourceGuid));
 
@@ -89,8 +96,8 @@ export async function ingestNews(
     if (!byGuid.has(item.guid)) byGuid.set(item.guid, item);
   }
 
-  // Prefer balanced intake + quality ranking (anti-promo / anti-doublons / diversité marques).
-  const perSiteCap = Math.max(2, Math.ceil(limit / 2));
+  // Balanced intake per theme (anti-promo / anti-doublons / diversité marques).
+  // Avoid starving casinos-crypto / tumbler when ecoflow RSS is fresher.
   const bySite = new Map<SiteId, Collected[]>();
   for (const item of byGuid.values()) {
     if (known.has(item.guid)) continue;
@@ -98,11 +105,22 @@ export async function ingestNews(
     list.push(item);
     bySite.set(item.siteId, list);
   }
-  const candidates: Collected[] = [];
-  for (const [siteId, list] of bySite) {
+  const siteIds = [...bySite.keys()];
+  const basePerSite =
+    siteIds.length > 0
+      ? Math.max(1, Math.floor(limit / siteIds.length))
+      : limit;
+  let bonusSlots = siteIds.length > 0 ? limit - basePerSite * siteIds.length : 0;
+
+  const selected: Collected[] = [];
+  const overflow: Collected[] = [];
+  for (const siteId of siteIds) {
+    const list = bySite.get(siteId) || [];
     const existingTitles = store.articles
       .filter((a) => newsSiteId(a) === siteId)
       .map((a) => a.fr?.title || a.en?.title || "");
+    const take = basePerSite + (bonusSlots > 0 ? 1 : 0);
+    if (bonusSlots > 0) bonusSlots -= 1;
     const ranked = rankNewsCandidates(
       list.map((item) => ({
         ...item,
@@ -110,17 +128,18 @@ export async function ingestNews(
         description: item.description,
       })),
       existingTitles,
-      perSiteCap,
+      Math.max(take + 2, take),
     );
-    for (const item of ranked) {
-      candidates.push(item);
-    }
+    selected.push(...ranked.slice(0, take));
+    overflow.push(...ranked.slice(take));
   }
-  candidates.sort(
-    (a, b) =>
-      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
-  );
-  const selected = candidates.slice(0, limit);
+  if (selected.length < limit && overflow.length) {
+    overflow.sort(
+      (a, b) =>
+        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+    );
+    selected.push(...overflow.slice(0, limit - selected.length));
+  }
 
   const created = [];
   let rejected = 0;

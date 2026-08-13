@@ -47,6 +47,16 @@ const BRANDS_BY_SITE: Record<string, BrandRule[]> = {
     { id: "glacier", pattern: /\bglacier\b/i },
     { id: "wave", pattern: /\bwave\b/i },
   ],
+  "casinos-crypto": [
+    { id: "stake", pattern: /\bstake\b/i },
+    { id: "cryptocom", pattern: /\bcrypto\.com\b|\bcryptocom\b/i },
+    { id: "nordvpn", pattern: /\bnordvpn\b|\bnord\s*vpn\b/i },
+    {
+      id: "casino-crypto",
+      pattern: /\bcrypto\s*casino\b|\bcasino\s*crypto\b/i,
+    },
+    { id: "vpn", pattern: /\bvpn\b/i },
+  ],
 };
 
 function brandRules(siteId: SiteId): BrandRule[] {

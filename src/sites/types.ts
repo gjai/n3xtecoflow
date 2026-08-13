@@ -82,7 +82,7 @@ export type SiteMonetization = {
    * `url` peut être surchargée par la variable d’env indiquée.
    */
   offers?: {
-    id: "stake" | "nordvpn" | string;
+    id: "stake" | "nordvpn" | "cryptocom" | string;
     labelFr: string;
     labelEn: string;
     /** URL de secours si env absente */

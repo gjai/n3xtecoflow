@@ -76,6 +76,10 @@ export default async function HomePage({
   const brandName = site.brand.name;
 
   if (siteUsesEditorialHome(site)) {
+    const casinoNews = getNewsArticles(await readNewsStore(), site.id).slice(
+      0,
+      3,
+    );
     return (
       <>
         <JsonLd data={organizationJsonLd(site)} />
@@ -85,6 +89,8 @@ export default async function HomePage({
           locale={locale}
           stake={affiliateOffer(site, "stake")}
           nordvpn={affiliateOffer(site, "nordvpn")}
+          cryptocom={affiliateOffer(site, "cryptocom")}
+          latestNews={casinoNews}
         />
       </>
     );

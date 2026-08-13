@@ -78,8 +78,23 @@ export const NEWS_FEEDS: NewsFeed[] = [
     siteId: "massage-gun",
     url: "https://news.google.com/rss/search?q=(%22massage+gun%22+OR+%22neck+massager%22+OR+%22shiatsu+massager%22+OR+Theragun+OR+Therabody+OR+Hypervolt+OR+Hyperice+OR+Renpho+OR+TOLOCO+OR+Brelley+OR+Jolt+OR+percussion+massager+OR+%22muscle+recovery%22)+when:45d&hl=en-US&gl=US&ceid=US:en",
   },
+  {
+    id: "casinos-crypto-gnews-fr",
+    siteId: "casinos-crypto",
+    url: "https://news.google.com/rss/search?q=(Stake+(casino+OR+crypto)+OR+%22casino+crypto%22+OR+%22crypto+casino%22+OR+%22Crypto.com%22+(wallet+OR+app+OR+crypto)+OR+NordVPN+(casino+OR+jeu+OR+gaming+OR+Stake))+when:45d&hl=fr&gl=FR&ceid=FR:fr",
+  },
+  {
+    id: "casinos-crypto-gnews-en",
+    siteId: "casinos-crypto",
+    url: "https://news.google.com/rss/search?q=(Stake+(casino+OR+crypto)+OR+%22crypto+casino%22+OR+%22Crypto.com%22+(wallet+OR+app)+OR+NordVPN+(casino+OR+gaming+OR+Stake))+when:45d&hl=en-US&gl=US&ceid=US:en",
+  },
 ];
 
 export const MAX_NEWS_ARTICLES = 80;
-/** New articles created per ingest run (shared across sites). */
-export const MAX_NEW_PER_RUN = 6;
+/**
+ * New articles per ingest run when no `siteId` is set.
+ * Sized for ~2 picks × number of themes with feeds.
+ */
+export const MAX_NEW_PER_RUN = 8;
+/** Default cap when ingesting a single theme (`?siteId=`). */
+export const MAX_NEW_PER_SITE_RUN = 2;

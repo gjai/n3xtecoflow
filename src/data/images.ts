@@ -216,41 +216,41 @@ const massageGunEditorial = {
   },
 } as const satisfies Record<string, SiteImage>;
 
-const casinosCryptoCredit = {
-  credit: "Casinos Crypto",
-  creditUrl: "https://casinos-crypto.fr",
-} as const;
-
 const casinosCryptoEditorial = {
   guides: {
-    src: "/images/casinos-crypto/hero.svg",
+    src: "/images/casinos-crypto/stake.jpg",
     altFr: "Guides casinos crypto",
     altEn: "Crypto casino guides",
-    ...casinosCryptoCredit,
+    credit: "Casinos Crypto (IA)",
+    creditUrl: "https://casinos-crypto.fr",
   },
   news: {
-    src: "/images/casinos-crypto/hero.svg",
+    src: "/images/casinos-crypto/hero.jpg",
     altFr: "Casinos crypto",
     altEn: "Crypto casinos",
-    ...casinosCryptoCredit,
+    credit: "Casinos Crypto (IA)",
+    creditUrl: "https://casinos-crypto.fr",
   },
   camping: {
-    src: "/images/casinos-crypto/hero.svg",
-    altFr: "Casino crypto",
-    altEn: "Crypto casino",
-    ...casinosCryptoCredit,
+    src: "/images/casinos-crypto/cryptocom.jpg",
+    altFr: "Wallet crypto",
+    altEn: "Crypto wallet",
+    credit: "Casinos Crypto (IA)",
+    creditUrl: "https://casinos-crypto.fr",
   },
   backup: {
-    src: "/images/casinos-crypto/hero.svg",
-    altFr: "Casino crypto",
-    altEn: "Crypto casino",
-    ...casinosCryptoCredit,
+    src: "/images/casinos-crypto/vpn.jpg",
+    altFr: "Connexion sécurisée",
+    altEn: "Secure connection",
+    credit: "Casinos Crypto (IA)",
+    creditUrl: "https://casinos-crypto.fr",
   },
   comparatifs: {
-    src: "/images/casinos-crypto/hero.svg",
+    src: "/images/casinos-crypto/hero.jpg",
     altFr: "Casino crypto",
     altEn: "Crypto casino",
-    ...casinosCryptoCredit,
+    credit: "Casinos Crypto (IA)",
+    creditUrl: "https://casinos-crypto.fr",
   },
 } as const satisfies Record<string, SiteImage>;
 
@@ -281,10 +281,10 @@ export function getHeroImage(siteId: SiteId = "ecoflow"): SiteImage {
   }
   if (siteId === "casinos-crypto") {
     return {
-      src: "/images/casinos-crypto/hero.svg",
+      src: "/images/casinos-crypto/hero.jpg",
       altFr: "Casinos crypto — Stake & accès sécurisé",
       altEn: "Crypto casinos — Stake & secure access",
-      credit: "Casinos Crypto",
+      credit: "Casinos Crypto (IA)",
       creditUrl: "https://casinos-crypto.fr",
     };
   }

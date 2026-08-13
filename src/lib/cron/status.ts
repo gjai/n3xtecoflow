@@ -110,7 +110,7 @@ const EXPECTED: {
   maxAgeHours: number;
   optional?: boolean;
 }[] = [
-  { job: "news", label: "Actus", maxAgeHours: 18 },
+  { job: "news", label: "Actus", maxAgeHours: 12 },
   { job: "catalog", label: "Catalogue EcoFlow", maxAgeHours: 18 },
   { job: "guides", label: "Guides IA", maxAgeHours: 240 }, // weekly + margin
   { job: "amazon", label: "Prix Amazon", maxAgeHours: 18, optional: true },

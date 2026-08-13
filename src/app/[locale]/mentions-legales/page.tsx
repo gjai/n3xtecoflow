@@ -69,20 +69,32 @@ export default async function MentionsPage({
             {t("publisherTitle")}
           </h2>
           <p className="mt-4">{t("independent")}</p>
-          <p className="mt-2 font-medium text-[var(--heading)]">{t("publisherName")}</p>
-          <p className="mt-2">
-            <a
-              href="https://n3xt.fr"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--accent)] underline-offset-2 hover:underline"
-            >
-              n3xt.fr
-            </a>
-          </p>
-          <p className="mt-2">{t("publisherDirector")}</p>
-          <p className="mt-2">{t("siren")}</p>
-          <p className="mt-2">{t("publisherTva")}</p>
+          {t("publisherName").trim() ? (
+            <p className="mt-2 font-medium text-[var(--heading)]">
+              {t("publisherName")}
+            </p>
+          ) : null}
+          {t("publisherAddress").trim() ? (
+            <p className="mt-2">
+              <a
+                href={t("publisherAddress").trim()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[var(--accent)] underline-offset-2 hover:underline"
+              >
+                {t("publisherAddress")
+                  .trim()
+                  .replace(/^https?:\/\//, "")}
+              </a>
+            </p>
+          ) : null}
+          {t("publisherDirector").trim() ? (
+            <p className="mt-2">{t("publisherDirector")}</p>
+          ) : null}
+          {t("siren").trim() ? <p className="mt-2">{t("siren")}</p> : null}
+          {t("publisherTva").trim() ? (
+            <p className="mt-2">{t("publisherTva")}</p>
+          ) : null}
           <p className="mt-2">
             <Link
               href="/a-propos"
