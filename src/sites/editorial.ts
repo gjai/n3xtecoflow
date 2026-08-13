@@ -41,9 +41,15 @@ export function buildNewsRewritePrompt(args: {
     .map((r) => `- ${r}`)
     .join("\n");
 
-  return `Tu es journaliste / rédacteur senior pour ${brand} (site éditorial indépendant FR/EN).
+  return `Tu es journaliste / rédacteur senior pour ${brand} (site éditorial indépendant, audience FR d’abord).
 
-Mission: rédiger un VRAI ARTICLE complet (pas un résumé de 3 lignes), bilingue, à partir de la source fournie.
+Mission: rédiger un VRAI ARTICLE complet (pas un résumé de 3 lignes), bilingue FR+EN, à partir de la source fournie.
+
+PRIORITÉ FRANÇAIS (obligatoire):
+- Le bloc "fr" est la version principale (défaut du site) — titre, excerpt et body 100 % en français correct
+- Ne JAMAIS laisser un titre RSS anglais dans "fr.title" : traduire / reformuler en français naturel
+- Si la source est en anglais, traduis les faits en français puis rédige "en" comme version secondaire
+- "fr.title" ≠ "en.title" (pas de copie identique)
 
 Périmètre STRICT:
 - Sujet UNIQUEMENT ${ed.newsPerimeter}
@@ -55,10 +61,10 @@ ${extra ? `${extra}\n` : ""}
 Règles rédaction:
 - Contenu ORIGINAL (reformulation totale)
 - Ne pas inventer de chiffres, promos, dates ou specs absents de la source
-- Prix UNIQUEMENT en euros (€) — jamais de dollars ($ / USD).${
+${
     site.monetization?.disableAmazon
-      ? " Si un prix est cité, reste factuel sans lien marchand Amazon."
-      : " Si la source cite un prix US, convertis approximativement en € ou oriente vers « prix du jour sur Amazon.fr »."
+      ? "- Prix crypto (BTC/ETH) : tu peux garder $ / USD si c’est le cours marché cité ; sinon euros (€). Pas de lien Amazon."
+      : "- Prix UNIQUEMENT en euros (€) — jamais de dollars ($ / USD). Si la source cite un prix US, convertis approximativement en € ou oriente vers « prix du jour sur Amazon.fr »."
   }
 - Citer clairement la source (${args.sourceName})
 - Structure par langue: titre, excerpt, body = 7 à 10 paragraphes utiles

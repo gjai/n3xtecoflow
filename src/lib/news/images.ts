@@ -429,8 +429,8 @@ export async function resolveNewsCover(args: {
 
   const title = args.title || args.slug;
 
-  // Thèmes flat : IA d’abord pour des couvertures uniques par article
-  // (les packshots Amazon se répétaient via des mots génériques).
+  // Thèmes flat / casino : après scrape OG, IA pour couvertures uniques
+  // (pas de catalogue packshot fiable — éviter les listicles sans image).
   if (getEditorial(siteId).preferAiNewsCovers) {
     const aiFirst = await generateCoverWithGemini({
       title,

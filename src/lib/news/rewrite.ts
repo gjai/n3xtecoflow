@@ -12,6 +12,33 @@ function cleanTitle(title: string) {
   return title.replace(/\s+-\s+[^-]+$/, "").trim();
 }
 
+/** Heuristic: English-looking UI/RSS title that must not stay in fr.*. */
+export function looksEnglish(text: string): boolean {
+  const t = (text || "").trim();
+  if (t.length < 8) return false;
+  if (/[àâäéèêëïîôùûüçœæ]/i.test(t)) return false;
+  if (
+    /\b(le|la|les|des|une|pour|avec|dans|sur|pourquoi|march[ée]|selon|prix|actualité|lance|bloque)\b/i.test(
+      t,
+    )
+  ) {
+    return false;
+  }
+  return /\b(the|and|for|with|from|after|price|launches|climbs|accounts|nearly|security|hardening|extension|updates|lost|climbed)\b/i.test(
+    t,
+  );
+}
+
+function needsFrenchUpgrade(fr: NewsLocaleCopy, en: NewsLocaleCopy): boolean {
+  if (!fr?.title) return true;
+  if (looksEnglish(fr.title)) return true;
+  if (fr.title.trim() === (en?.title || "").trim() && looksEnglish(fr.title)) {
+    return true;
+  }
+  const bodyEnShare = (fr.body || []).filter((p) => looksEnglish(p)).length;
+  return bodyEnShare >= 2;
+}
+
 function templateCopy(
   locale: "fr" | "en",
   item: RssItem,
@@ -124,7 +151,7 @@ async function rewriteWithAi(
       {
         role: "system",
         content:
-          "You write full original bilingual news articles as strict JSON only. No markdown fences. Substantial paragraphs, not short blurbs.",
+          "You write full original bilingual news articles as strict JSON only. No markdown fences. Substantial paragraphs, not short blurbs. French (fr) is the primary locale: fr.title/excerpt/body must be natural French, never a copy of the English RSS headline.",
       },
       { role: "user", content: prompt },
     ],
@@ -240,16 +267,109 @@ function guessTags(
   return [...tags];
 }
 
-function normalizeCopy(copy: NewsLocaleCopy): NewsLocaleCopy {
+function normalizeCopy(
+  copy: NewsLocaleCopy,
+  siteId: SiteId = "ecoflow",
+): NewsLocaleCopy {
+  // Casinos / crypto : ne pas convertir les cours BTC/ETH ($) en euros Amazon.
+  const money =
+    siteId === "casinos-crypto"
+      ? (s: string) => s
+      : (s: string) => pricesToEuroText(s);
   return {
-    title: pricesToEuroText(copy.title).slice(0, 180),
-    excerpt: pricesToEuroText(copy.excerpt || "").slice(0, 320),
+    title: money(copy.title).slice(0, 180),
+    excerpt: money(copy.excerpt || "").slice(0, 320),
     body: copy.body
-      .map((p) => pricesToEuroText(p.trim()))
+      .map((p) => money(p.trim()))
       .filter(Boolean)
       .map((p) => p.slice(0, 2200))
       .slice(0, 12),
   };
+}
+
+async function translateArticleToFrench(
+  en: NewsLocaleCopy,
+  siteId: SiteId,
+): Promise<NewsLocaleCopy | null> {
+  const apiKey =
+    process.env.GEMINI_API_KEY?.trim() ||
+    process.env.OPENAI_API_KEY?.trim() ||
+    process.env.AI_API_KEY?.trim();
+  if (!apiKey) return null;
+
+  const usingGemini =
+    Boolean(process.env.GEMINI_API_KEY?.trim()) ||
+    (process.env.OPENAI_BASE_URL || "").includes(
+      "generativelanguage.googleapis.com",
+    );
+  const base =
+    process.env.OPENAI_BASE_URL?.trim() ||
+    (usingGemini
+      ? "https://generativelanguage.googleapis.com/v1beta/openai/"
+      : "https://api.openai.com/v1");
+  const model =
+    process.env.OPENAI_MODEL?.trim() ||
+    (usingGemini ? "gemini-2.5-flash-lite" : "gpt-4o-mini");
+
+  const brand = getEditorial(siteId).topicLabelFr;
+  const payload: Record<string, unknown> = {
+    model,
+    temperature: 0.3,
+    max_tokens: 4096,
+    messages: [
+      {
+        role: "system",
+        content:
+          "Tu traduis / reformules en français journalistique naturel. JSON strict uniquement, sans markdown.",
+      },
+      {
+        role: "user",
+        content: `Traduis cet article d’actualité en français pour un site sur ${brand}.
+Garde les faits, noms propres (Stake, Bitcoin, NordVPN, Crypto.com) et chiffres.
+Réponds JSON: {"title":"...","excerpt":"...","body":["..."]}
+
+EN:
+${JSON.stringify(en)}`,
+      },
+    ],
+  };
+  if (!usingGemini) {
+    payload.response_format = { type: "json_object" };
+  }
+
+  try {
+    const res = await fetch(`${base.replace(/\/$/, "")}/chat/completions`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(60_000),
+    });
+    if (!res.ok) return null;
+    const json = (await res.json()) as {
+      choices?: { message?: { content?: string } }[];
+    };
+    let content = json.choices?.[0]?.message?.content || "";
+    content = content
+      .replace(/^```json\s*/i, "")
+      .replace(/^```\s*/i, "")
+      .replace(/\s*```$/i, "")
+      .trim();
+    const parsed = JSON.parse(content) as NewsLocaleCopy;
+    if (!parsed?.title || !Array.isArray(parsed.body) || parsed.body.length < 2) {
+      return null;
+    }
+    return {
+      title: String(parsed.title).slice(0, 180),
+      excerpt: String(parsed.excerpt || "").slice(0, 320),
+      body: parsed.body.map((p) => String(p).trim()).filter(Boolean).slice(0, 12),
+    };
+  } catch (err) {
+    console.error("fr_translate_failed", err);
+    return null;
+  }
 }
 
 export async function buildArticleFromRss(
@@ -269,13 +389,25 @@ export async function buildArticleFromRss(
   const aiSkipped = Boolean(ai?.skip);
   if (aiSkipped && !isRelevantItem(item, siteId)) return null;
 
-  const rewrittenBy = !aiSkipped && ai && ai.fr && ai.en ? "ai" : "template";
-  const fr = normalizeCopy(
+  let rewrittenBy: NewsArticle["rewrittenBy"] =
+    !aiSkipped && ai && ai.fr && ai.en ? "ai" : "template";
+  let fr = normalizeCopy(
     !aiSkipped && ai?.fr ? ai.fr : templateCopy("fr", item, source, siteId),
+    siteId,
   );
   const en = normalizeCopy(
     !aiSkipped && ai?.en ? ai.en : templateCopy("en", item, source, siteId),
+    siteId,
   );
+
+  // Garantir le français par défaut (surtout sources RSS EN / templates).
+  if (needsFrenchUpgrade(fr, en)) {
+    const translated = await translateArticleToFrench(en, siteId);
+    if (translated) {
+      fr = normalizeCopy(translated, siteId);
+      if (rewrittenBy === "template") rewrittenBy = "ai";
+    }
+  }
 
   if (
     !isOnTopicArticle(

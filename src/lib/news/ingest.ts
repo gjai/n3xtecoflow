@@ -166,6 +166,10 @@ export async function ingestNews(
       (a.en?.body?.length || 0) < 6 ||
       a.rewrittenBy === "template" ||
       !a.imageSrc ||
+      // FR encore en anglais (seed RSS EN) → re-traduire
+      (Boolean(a.fr?.title) &&
+        Boolean(a.en?.title) &&
+        a.fr!.title.trim() === a.en!.title.trim()) ||
       /googleusercontent|gstatic|google-analytics|googletagmanager|\.js$/i.test(
         a.sourceUrl || "",
       );
