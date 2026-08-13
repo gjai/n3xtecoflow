@@ -5,7 +5,9 @@ import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { NextJackpotBanner } from "@/components/NextJackpotBanner";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
+import { NextDrawMenuMeta } from "@/components/NextDrawMenuMeta";
 import { ResultsLivePoller } from "@/components/ResultsLivePoller";
+import { LOTTERY_GAMES_NAV, lotteryGameLabel } from "@/lib/fdj-games/nav";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -85,6 +87,34 @@ export default async function ProchainTiragePage({
             {t("pendingHelp")}
           </p>
         ) : null}
+
+        <section className="mt-10">
+          <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+            {t("allTitle")}
+          </h2>
+          <p className="mt-2 text-sm text-[var(--muted)]">{t("allLead")}</p>
+          <ul className="mt-6 space-y-3">
+            {LOTTERY_GAMES_NAV.map((game) => {
+              const nextHref =
+                game.tools.find((tool) => tool.id === "nextDraw")?.href ||
+                game.href;
+              return (
+                <li
+                  key={game.id}
+                  className="border border-[var(--line)] bg-[var(--surface)] px-4 py-3"
+                >
+                  <Link
+                    href={nextHref}
+                    className="font-semibold text-[var(--heading)] hover:text-[var(--accent)]"
+                  >
+                    {lotteryGameLabel(game, locale)}
+                  </Link>
+                  <NextDrawMenuMeta gameId={game.id} variant="block" />
+                </li>
+              );
+            })}
+          </ul>
+        </section>
         <ul className="mt-8 space-y-3 text-sm">
           <li>
             <Link

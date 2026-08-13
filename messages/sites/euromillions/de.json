@@ -330,11 +330,13 @@
     "pageCta": "Seite zur nächsten Ziehung",
     "pageTitle": "Nächste EuroMillions-Ziehung",
     "pageMeta": "Datum, geschätzter Jackpot und Countdown zur nächsten EuroMillions-Ziehung.",
-    "pageLead": "Dienstags und freitags, gegen 21 Uhr (Europe/Paris). Der geschätzte Jackpot stammt aus öffentlichen Quellen, sofern bekannt.",
+    "pageLead": "Dienstag und Freitag, gegen 21 Uhr (Europa/Paris) für EuroMillions. Darunter: der nächste Slot jedes Spiels.",
     "checkCta": "Tipp prüfen",
     "latestCta": "Letztes Ergebnis",
     "archiveCta": "Archiv",
-    "disclaimer": "Zeiten sind Richtwerte. 18+ · Verantwortungsvoll spielen."
+    "disclaimer": "Zeiten sind Richtwerte. 18+ · Verantwortungsvoll spielen.",
+    "allTitle": "Alle Spiele",
+    "allLead": "Tag, Uhrzeit (Europa/Paris) und Countdown — Richtzeiten."
   },
   "generator": {
     "eyebrow": "Zufall",

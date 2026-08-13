@@ -13,6 +13,7 @@ import {
   type LotteryGameId,
   type LotteryGameNav,
 } from "@/lib/fdj-games/nav";
+import { NextDrawMenuMeta } from "./NextDrawMenuMeta";
 
 function useHash() {
   const pathname = usePathname();
@@ -94,7 +95,7 @@ function GameDropdown({
       </Link>
       {open ? (
         <div
-          className={`absolute top-full z-40 min-w-52 pt-2 ${
+          className={`absolute top-full z-40 min-w-64 pt-2 ${
             alignEnd ? "right-0" : "left-0"
           }`}
         >
@@ -115,6 +116,9 @@ function GameDropdown({
                   onClick={onNavigate}
                 >
                   {toolLabel(t, tool.id)}
+                  {tool.id === "nextDraw" ? (
+                    <NextDrawMenuMeta gameId={game.id} compact />
+                  ) : null}
                 </Link>
               </li>
             ))}
@@ -201,6 +205,9 @@ export function EuroMillionsMobileNav({
                       onClick={onNavigate}
                     >
                       {toolLabel(t, tool.id)}
+                      {tool.id === "nextDraw" ? (
+                        <NextDrawMenuMeta gameId={game.id} compact />
+                      ) : null}
                     </Link>
                   </li>
                 ))}
@@ -231,13 +238,16 @@ export function GameToolsNav({ gameId }: { gameId: LotteryGameId }) {
           <Link
             key={tool.id}
             href={tool.href}
-            className={`inline-flex min-h-9 items-center border px-3 py-1.5 ${
+            className={`inline-flex min-h-9 flex-col items-start justify-center border px-3 py-1.5 ${
               active
                 ? "border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-ink)]"
                 : "border-[var(--line)] text-[var(--heading)] hover:border-[var(--accent)]"
             }`}
           >
             {toolLabel(t, tool.id)}
+            {tool.id === "nextDraw" ? (
+              <NextDrawMenuMeta gameId={gameId} compact inverted={active} />
+            ) : null}
           </Link>
         );
       })}

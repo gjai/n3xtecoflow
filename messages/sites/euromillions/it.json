@@ -330,11 +330,13 @@
     "pageCta": "Pagina prossima estrazione",
     "pageTitle": "Prossima estrazione EuroMillions",
     "pageMeta": "Data, jackpot stimato e conto alla rovescia della prossima estrazione EuroMillions.",
-    "pageLead": "Martedì e venerdì, verso le 21 (Europe/Paris). Il jackpot stimato proviene da fonti pubbliche quando è noto.",
+    "pageLead": "Martedì e venerdì, verso le 21 (Europa/Parigi) per l’EuroMillions. Qui sotto: il prossimo slot di ogni gioco.",
     "checkCta": "Verifica una griglia",
     "latestCta": "Ultimo risultato",
     "archiveCta": "Archivi",
-    "disclaimer": "Orari indicativi. 18+ · Gioca responsabilmente."
+    "disclaimer": "Orari indicativi. 18+ · Gioca responsabilmente.",
+    "allTitle": "Tutti i giochi",
+    "allLead": "Giorno, ora (Europa/Parigi) e conto alla rovescia — orari indicativi."
   },
   "generator": {
     "eyebrow": "Casuale",

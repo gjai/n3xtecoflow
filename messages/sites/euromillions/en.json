@@ -330,11 +330,13 @@
     "pageCta": "Next draw page",
     "pageTitle": "Next EuroMillions draw",
     "pageMeta": "Date, estimated jackpot and countdown for the next EuroMillions draw.",
-    "pageLead": "Tuesdays and Fridays, around 9pm (Europe/Paris). Estimated jackpot from public sources when known.",
+    "pageLead": "Tuesday and Friday, around 9pm (Europe/Paris) for EuroMillions. Below: the next slot for each game.",
     "checkCta": "Check a grid",
     "latestCta": "Latest result",
     "archiveCta": "Archives",
-    "disclaimer": "Times are indicative. 18+ · Play responsibly."
+    "disclaimer": "Times are indicative. 18+ · Play responsibly.",
+    "allTitle": "All games",
+    "allLead": "Day, time (Europe/Paris) and countdown — times are indicative."
   },
   "generator": {
     "eyebrow": "Random",

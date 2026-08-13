@@ -330,11 +330,13 @@
     "pageCta": "Página del próximo sorteo",
     "pageTitle": "Próximo sorteo EuroMillions",
     "pageMeta": "Fecha, bote estimado y cuenta atrás del próximo sorteo EuroMillions.",
-    "pageLead": "Martes y viernes, hacia las 21 h (Europe/Paris). El bote estimado procede de fuentes públicas cuando se conoce.",
+    "pageLead": "Martes y viernes, hacia las 21 h (Europa/París) para EuroMillions. Abajo: el próximo hueco de cada juego.",
     "checkCta": "Comprobar una combinación",
     "latestCta": "Último resultado",
     "archiveCta": "Archivos",
-    "disclaimer": "Horarios orientativos. 18+ · Juega con responsabilidad."
+    "disclaimer": "Horarios orientativos. 18+ · Juega con responsabilidad.",
+    "allTitle": "Todos los juegos",
+    "allLead": "Día, hora (Europa/París) y cuenta atrás — horarios orientativos."
   },
   "generator": {
     "eyebrow": "Aleatorio",

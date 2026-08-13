@@ -27,8 +27,13 @@ import {
   siteAllowsAdsense,
   siteAllowsAmazon,
   siteAllowsLocale,
+  siteIsEuroMillions,
 } from "@/sites/features";
 import { siteThemeCss } from "@/sites/theme-css";
+import { NextDrawProvider } from "@/components/NextDrawProvider";
+import { readEuroMillionsStore } from "@/lib/euromillions/store";
+import { readFdjGamesStore } from "@/lib/fdj-games/store";
+import { buildNextDrawSnapshot } from "@/lib/lottery/next-draw";
 import "../globals.css";
 
 const display = Sora({
@@ -159,6 +164,15 @@ export default async function LocaleLayout({
         en: "18+. Play responsibly. Risk of loss. Affiliate links: Stake, Crypto.com, NordVPN. France help: Joueurs Info Service 09 74 75 13 13 / joueurs-info-service.fr.",
       });
 
+  const nextDraws = siteIsEuroMillions(site)
+    ? buildNextDrawSnapshot(
+        ...(await Promise.all([
+          readEuroMillionsStore(),
+          readFdjGamesStore(),
+        ])),
+      )
+    : null;
+
   return (
     <html
       lang={locale}
@@ -187,6 +201,7 @@ export default async function LocaleLayout({
       <body className="min-h-full antialiased">
         <NextIntlClientProvider messages={messages}>
           <SiteProvider site={site}>
+            <NextDrawProvider snapshot={nextDraws}>
             <ThemeProvider>
               <ConsentProvider>
                 <AdSenseScript />
@@ -200,6 +215,7 @@ export default async function LocaleLayout({
                 <p className="sr-only">{disclaimer}</p>
               </ConsentProvider>
             </ThemeProvider>
+            </NextDrawProvider>
           </SiteProvider>
         </NextIntlClientProvider>
       </body>

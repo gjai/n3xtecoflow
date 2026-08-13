@@ -330,11 +330,13 @@
     "pageCta": "Pagina volgende trekking",
     "pageTitle": "Volgende EuroMillions-trekking",
     "pageMeta": "Datum, geschatte jackpot en countdown voor de volgende EuroMillions-trekking.",
-    "pageLead": "Dinsdag en vrijdag, rond 21 uur (Europe/Paris). De geschatte jackpot komt uit openbare bronnen wanneer bekend.",
+    "pageLead": "Dinsdag en vrijdag, rond 21 uur (Europa/Parijs) voor EuroMillions. Hieronder: het volgende slot per spel.",
     "checkCta": "Een rooster controleren",
     "latestCta": "Laatste uitslag",
     "archiveCta": "Archieven",
-    "disclaimer": "Tijden zijn indicatief. 18+ · Speel verantwoord."
+    "disclaimer": "Tijden zijn indicatief. 18+ · Speel verantwoord.",
+    "allTitle": "Alle spellen",
+    "allLead": "Dag, uur (Europa/Parijs) en countdown — indicatieve tijden."
   },
   "generator": {
     "eyebrow": "Toeval",

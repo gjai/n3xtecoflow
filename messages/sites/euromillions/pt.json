@@ -330,11 +330,13 @@
     "pageCta": "Página do próximo sorteio",
     "pageTitle": "Próximo sorteio EuroMillions",
     "pageMeta": "Data, jackpot estimado e contagem decrescente do próximo sorteio EuroMillions.",
-    "pageLead": "Terça e sexta, por volta das 21h (Europe/Paris). O jackpot estimado vem de fontes públicas quando é conhecido.",
+    "pageLead": "Terça e sexta, por volta das 21 h (Europa/Paris) para o EuroMillions. Abaixo: o próximo horário de cada jogo.",
     "checkCta": "Verificar uma grelha",
     "latestCta": "Último resultado",
     "archiveCta": "Arquivos",
-    "disclaimer": "Horários indicativos. 18+ · Jogue com responsabilidade."
+    "disclaimer": "Horários indicativos. 18+ · Jogue com responsabilidade.",
+    "allTitle": "Todos os jogos",
+    "allLead": "Dia, hora (Europa/Paris) e contagem decrescente — horários indicativos."
   },
   "generator": {
     "eyebrow": "Aleatório",

@@ -330,11 +330,13 @@
     "pageCta": "Fiche prochain tirage",
     "pageTitle": "Prochain tirage EuroMillions",
     "pageMeta": "Date, jackpot estimé et compte à rebours du prochain tirage EuroMillions.",
-    "pageLead": "Mardi et vendredi, vers 21h (Europe/Paris). Le jackpot estimé vient des sources publiques quand il est connu.",
+    "pageLead": "Mardi et vendredi, vers 21h (Europe/Paris) pour l’EuroMillions. Ci-dessous : prochain créneau de chaque jeu.",
     "checkCta": "Vérifier une grille",
     "latestCta": "Dernier résultat",
     "archiveCta": "Archives",
-    "disclaimer": "Horaires indicatifs. 18+ · Jeu responsable."
+    "disclaimer": "Horaires indicatifs. 18+ · Jeu responsable.",
+    "allTitle": "Tous les jeux",
+    "allLead": "Jour, heure (Europe/Paris) et compte à rebours — horaires indicatifs."
   },
   "generator": {
     "eyebrow": "Hasard",

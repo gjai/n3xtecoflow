@@ -18,6 +18,7 @@ import {
   readFdjGamesStore,
 } from "@/lib/fdj-games/store";
 import { FdjCompanionSimulator } from "@/components/FdjCompanionSimulator";
+import { NextDrawMenuMeta } from "@/components/NextDrawMenuMeta";
 import { companionDrawKey } from "@/lib/fdj-games/keys";
 import { COMPANION_GRID, groupNumbers } from "@/lib/lottery/rules";
 import { numberPoolStats } from "@/lib/euromillions/stats";
@@ -177,7 +178,10 @@ export default async function JeuxGamePage({
         <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">
           {t("scheduleTitle")}
         </h2>
-        <p className="mt-2 text-[var(--heading)]">
+        <div className="mt-3 text-[var(--heading)]">
+          <NextDrawMenuMeta gameId={gameId} variant="block" />
+        </div>
+        <p className="mt-2 text-sm text-[var(--muted)]">
           {companionScheduleSummary(gameId, locale)}
         </p>
       </section>
