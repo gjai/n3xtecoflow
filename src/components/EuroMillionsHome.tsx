@@ -172,7 +172,7 @@ export async function EuroMillionsHome({
             <p className="mt-4 max-w-lg text-[var(--muted)]">{t("subhead")}</p>
             <div className="reveal-delay mt-8 flex flex-wrap gap-3">
               <Link
-                href="/simulateur"
+                href="/tirages#simulateur"
                 className="inline-flex min-h-11 items-center bg-[var(--accent)] px-5 text-sm font-semibold text-[var(--accent-ink)]"
               >
                 {t("simulatorCta")}
@@ -236,7 +236,7 @@ export async function EuroMillionsHome({
                 ) : null}
                 <div className="mt-6 flex flex-wrap gap-4">
                   <Link
-                    href={`/simulateur?date=${latest.date}`}
+                    href={`/tirages?date=${latest.date}#simulateur`}
                     className="inline-flex min-h-10 items-center bg-[var(--accent)] px-4 text-sm font-semibold text-[var(--accent-ink)]"
                   >
                     {t("simulatorCta")}
@@ -300,7 +300,7 @@ export async function EuroMillionsHome({
             </p>
           </div>
           <Link
-            href="/simulateur"
+            href="/tirages#simulateur"
             className="inline-flex min-h-11 items-center border border-[var(--accent)] px-5 text-sm font-semibold text-[var(--heading)]"
           >
             {t("simulatorCta")} →
@@ -465,7 +465,7 @@ export async function EuroMillionsHome({
           </div>
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
-              href="/simulateur"
+              href="/tirages#simulateur"
               className="text-sm font-semibold text-[var(--accent)] hover:underline"
             >
               {t("simulatorCta")} →
@@ -477,7 +477,7 @@ export async function EuroMillionsHome({
               {t("archiveCta")} →
             </Link>
             <Link
-              href="/stats"
+              href="/tirages#stats"
               className="text-sm font-semibold text-[var(--accent)] hover:underline"
             >
               {t("statsCta")} →

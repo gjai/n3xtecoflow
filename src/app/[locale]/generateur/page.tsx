@@ -53,7 +53,7 @@ export default async function GenerateurPage({
       </div>
       <p className="mt-8">
         <Link
-          href="/simulateur"
+          href="/tirages#simulateur"
           className="text-sm font-semibold text-[var(--accent)] hover:underline"
         >
           {t("simulatorCta")} →

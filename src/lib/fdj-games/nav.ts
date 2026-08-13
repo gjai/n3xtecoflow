@@ -46,9 +46,9 @@ export const LOTTERY_GAMES_NAV: LotteryGameNav[] = [
     labelEn: "EuroMillions",
     tools: [
       { id: "archive", href: "/tirages" },
-      { id: "simulator", href: "/simulateur" },
+      { id: "simulator", href: "/tirages#simulateur" },
       { id: "nextDraw", href: "/prochain-tirage" },
-      { id: "stats", href: "/stats" },
+      { id: "stats", href: "/tirages#stats" },
       { id: "guides", href: "/guides" },
       { id: "news", href: "/actualites" },
     ],
@@ -62,7 +62,7 @@ export const LOTTERY_GAMES_NAV: LotteryGameNav[] = [
       { id: "archive", href: "/my-million#archives" },
       { id: "simulator", href: "/my-million" },
       { id: "nextDraw", href: "/prochain-tirage" },
-      { id: "stats", href: "/stats" },
+      { id: "stats", href: "/tirages#stats" },
       { id: "guides", href: "/guides/comprendre-my-million" },
       { id: "news", href: "/actualites" },
     ],
@@ -127,7 +127,7 @@ export function toolHrefIsActive(
       ? current === "/"
       : current === target || current.startsWith(`${target}/`);
   if (!pathMatch) return false;
-  if (!anchor) return true;
-  const h = hash.startsWith("#") ? hash.slice(1) : hash;
-  return Boolean(h) && h === anchor;
+  const h = (hash.startsWith("#") ? hash.slice(1) : hash) || "";
+  if (!anchor) return !h;
+  return h === anchor;
 }

@@ -118,7 +118,7 @@ export default async function ProchainTiragePage({
         <ul className="mt-8 space-y-3 text-sm">
           <li>
             <Link
-              href="/simulateur"
+              href="/tirages#simulateur"
               className="font-semibold text-[var(--accent)] hover:underline"
             >
               {t("checkCta")} →
