@@ -1,5 +1,3 @@
-import Script from "next/script";
-
 function resolveWebsiteId(host: string | null | undefined): string | null {
   const fallback = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID?.trim() || "";
   const mapRaw = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_IDS?.trim();
@@ -21,9 +19,8 @@ function resolveWebsiteId(host: string | null | undefined): string | null {
 }
 
 /**
- * Umami (self-hosted via Coolify) — cookieless, respect DNT.
- * Env : NEXT_PUBLIC_UMAMI_SCRIPT_URL + NEXT_PUBLIC_UMAMI_WEBSITE_ID
- * Optionnel : NEXT_PUBLIC_UMAMI_WEBSITE_IDS JSON host→id (multi-thèmes).
+ * Native <script defer> (not next/script): Umami needs document.currentScript
+ * to read data-website-id. CSP must allow the Umami origin (see next.config.ts).
  */
 export function UmamiScript({ host }: { host?: string | null }) {
   const scriptUrl = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL?.trim();
@@ -31,15 +28,11 @@ export function UmamiScript({ host }: { host?: string | null }) {
   if (!scriptUrl || !websiteId) return null;
 
   return (
-    <Script
-      src={scriptUrl}
-      strategy="afterInteractive"
+    <script
       defer
+      src={scriptUrl}
       data-website-id={websiteId}
       data-auto-track="true"
-      // Audience first-party / cookieless — ne pas bloquer sur DNT navigateur
-      // (sinon Safari & co. = 0 vue). Toujours hors AdSense / cookies pubs.
-      data-do-not-track="false"
     />
   );
 }

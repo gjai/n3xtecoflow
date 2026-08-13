@@ -172,6 +172,7 @@ export default async function LocaleLayout({
           dangerouslySetInnerHTML={{ __html: siteThemeCss(site) }}
         />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <UmamiScript host={requestHost} />
         {/* AdSense loader only when inventaire/slots are enabled — meta account stays for verification */}
         {allowAds &&
         adsenseClient &&
@@ -189,7 +190,6 @@ export default async function LocaleLayout({
             <ThemeProvider>
               <ConsentProvider>
                 <AdSenseScript />
-                <UmamiScript host={requestHost} />
                 <div className="flex min-h-full flex-col">
                   <SiteHeader />
                   <main className="flex-1">{children}</main>

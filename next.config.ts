@@ -3,6 +3,19 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
+function umamiOrigin(): string | null {
+  const raw = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL?.trim();
+  if (!raw) return null;
+  try {
+    return new URL(raw).origin;
+  } catch {
+    return null;
+  }
+}
+
+const umami = umamiOrigin();
+const umamiCsp = umami ? ` ${umami}` : "";
+
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
@@ -19,11 +32,11 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagservices.com https://partner.googleadservices.com https://tpc.googlesyndication.com",
+      `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagservices.com https://partner.googleadservices.com https://tpc.googlesyndication.com${umamiCsp}`,
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data:",
-      "connect-src 'self' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://formsubmit.co https://*.google.com https://*.googleapis.com",
+      `connect-src 'self' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://formsubmit.co https://*.google.com https://*.googleapis.com${umamiCsp}`,
       "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.google.com",
       "object-src 'none'",
       "base-uri 'self'",
