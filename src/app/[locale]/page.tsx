@@ -70,13 +70,13 @@ export async function generateMetadata({
       })
     : siteIsEuroMillions(site)
       ? pickLocalized(locale, {
-          fr: "Résultats EuroMillions : tirages & archives | EuroMillions Résultats",
-          en: "EuroMillions results: draws & archives | EuroMillions Results",
-          it: "Risultati EuroMillions: estrazioni e archivi | EuroMillions Risultati",
-          es: "Resultados EuroMillions: sorteos y archivos | EuroMillions Resultados",
-          pt: "Resultados EuroMillions: sorteios e arquivos | EuroMillions Resultados",
-          de: "EuroMillions-Ergebnisse: Ziehungen & Archiv | EuroMillions Ergebnisse",
-          nl: "EuroMillions-resultaten: trekkingen & archief | EuroMillions Resultaten",
+          fr: "Résultats EuroMillions : tirages & jackpots | EuroMillions Résultats",
+          en: "EuroMillions results: draws & jackpots | EuroMillions Results",
+          it: "Risultati EuroMillions: estrazioni e jackpot | EuroMillions Risultati",
+          es: "Resultados EuroMillions: sorteos y botes | EuroMillions Resultados",
+          pt: "Resultados EuroMillions: sorteios e jackpots | EuroMillions Resultados",
+          de: "EuroMillions-Ergebnisse: Ziehungen & Jackpots | EuroMillions Ergebnisse",
+          nl: "EuroMillions-resultaten: trekkingen & jackpots | EuroMillions Resultaten",
         })
       : site.brand.name;
   return {

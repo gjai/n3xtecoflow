@@ -128,7 +128,7 @@ export const euromillionsSite: SiteConfig = {
       "EuroMillions",
       "Résultats EuroMillions",
       "Tirage EuroMillions",
-      "Archives tirages",
+      "Résultats tirages",
       "Statistiques EuroMillions",
       "Jackpot EuroMillions",
       "EuroDreams",

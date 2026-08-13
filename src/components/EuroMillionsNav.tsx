@@ -33,7 +33,7 @@ function toolLabel(
 ): string {
   switch (id) {
     case "archive":
-      return t("archive");
+      return t("results");
     case "simulator":
       return t("simulator");
     case "nextDraw":

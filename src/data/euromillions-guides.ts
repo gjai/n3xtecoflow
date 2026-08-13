@@ -480,5 +480,11 @@ export const euromillionsGuides: GuideArticle[] =
     const extra =
       euromillionsGuideLocales[guide.slug] ||
       euromillionsCompanionGuideLocales[guide.slug];
-    return extra ? { ...guide, ...extra } : guide;
+    const cover = euromillionsGuideCovers[guide.slug];
+    return {
+      ...(extra ? { ...guide, ...extra } : guide),
+      ...(cover
+        ? { imageSrc: cover.src, imageCredit: cover.credit }
+        : {}),
+    };
   });

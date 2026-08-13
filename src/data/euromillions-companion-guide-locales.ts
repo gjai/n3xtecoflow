@@ -194,7 +194,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Simulator und Archive",
+          heading: "Simulator und Ergebnisse",
           paragraphs: [
             "Auf der Loto-Seite wählen Sie 5 Zahlen und eine Chance, dann vergleichen Sie mit der gewählten Ziehung. Ein Zähler zeigt, wie viele andere lokale Ziehungen mindestens 3 Zahlen teilen.",
             "Die Begleitarchive sind kürzer als die EuroMillions-Historie. Wir behalten bis zu 250 Ziehungen.",
@@ -292,7 +292,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Archivi",
+          heading: "Risultati",
           paragraphs: [
             "Gli archivi EuroDreams sono limitati dall’API pubblica FDJ (decine di estrazioni, non anni). L’EuroMillions resta il focus del sito.",
           ],
@@ -338,7 +338,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Archivos",
+          heading: "Resultados",
           paragraphs: [
             "Los archivos EuroDreams están limitados por la API pública FDJ. EuroMillions sigue siendo el foco del sitio.",
           ],
@@ -384,7 +384,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Arquivos",
+          heading: "Resultados",
           paragraphs: [
             "Os arquivos EuroDreams estão limitados pela API pública FDJ. O EuroMillions continua a ser o foco do site.",
           ],
@@ -430,7 +430,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Archive",
+          heading: "Ergebnisse",
           paragraphs: [
             "EuroDreams-Archive sind durch die öffentliche FDJ-API begrenzt. EuroMillions bleibt der Fokus der Website.",
           ],
@@ -476,7 +476,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Archieven",
+          heading: "Uitslagen",
           paragraphs: [
             "EuroDreams-archieven zijn beperkt door de openbare FDJ-API. EuroMillions blijft de focus van de site.",
           ],
@@ -755,7 +755,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Archivi",
+          heading: "Risultati",
           paragraphs: [
             "Lo storico locale è limitato dall’API pubblica. Conserviamo fino a 250 risultati quando la fonte li fornisce.",
           ],
@@ -800,7 +800,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Archivos",
+          heading: "Resultados",
           paragraphs: [
             "El historial local está limitado por la API pública. Conservamos hasta 250 resultados cuando la fuente los aporta.",
           ],
@@ -845,7 +845,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Arquivos",
+          heading: "Resultados",
           paragraphs: [
             "O histórico local está limitado pela API pública. Conservamos até 250 resultados quando a fonte os fornece.",
           ],
@@ -890,7 +890,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Archive",
+          heading: "Ergebnisse",
           paragraphs: [
             "Die lokale Historie ist durch die öffentliche API begrenzt. Wir behalten bis zu 250 Ergebnisse, wenn die Quelle sie liefert.",
           ],
@@ -935,7 +935,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Archieven",
+          heading: "Uitslagen",
           paragraphs: [
             "De lokale geschiedenis is beperkt door de openbare API. We bewaren tot 250 resultaten wanneer de bron ze levert.",
           ],
@@ -971,7 +971,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Archivi",
+          heading: "Risultati",
           paragraphs: [
             "Gli archivi EuroMillions mirano a uno storico lungo (backfill progressivo dal 2004). I giochi complementari dipendono dall’API FDJ: decine di estrazioni, non vent’anni.",
           ],
@@ -1014,7 +1014,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Archivos",
+          heading: "Resultados",
           paragraphs: [
             "Los archivos EuroMillions apuntan a un historial largo (backfill progresivo desde 2004). Los juegos complementarios dependen de la API FDJ.",
           ],
@@ -1057,7 +1057,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Arquivos",
+          heading: "Resultados",
           paragraphs: [
             "Os arquivos EuroMillions visam um histórico longo (backfill progressivo desde 2004). Os jogos de acompanhamento dependem da API FDJ.",
           ],
@@ -1100,7 +1100,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Archive",
+          heading: "Ergebnisse",
           paragraphs: [
             "EuroMillions-Archive zielen auf eine lange Historie (progressiver Backfill ab 2004). Begleitspiele hängen von der FDJ-API ab.",
           ],
@@ -1143,7 +1143,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
           ],
         },
         {
-          heading: "Archieven",
+          heading: "Uitslagen",
           paragraphs: [
             "EuroMillions-archieven mikken op een lange geschiedenis (progressieve backfill vanaf 2004). Begeleidende spellen hangen af van de FDJ-API.",
           ],

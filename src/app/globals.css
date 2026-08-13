@@ -151,6 +151,54 @@ summary:focus-visible {
   animation: rise 0.7s ease both;
 }
 
+.hero-orbs {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 9999px;
+  will-change: transform;
+}
+
+.hero-orb-1 {
+  right: 6%;
+  top: 10%;
+  width: min(38vw, 240px);
+  height: min(38vw, 240px);
+  background: color-mix(in srgb, var(--accent) 58%, transparent);
+  opacity: 0.55;
+  animation: hero-drift 16s ease-in-out infinite alternate;
+}
+
+.hero-orb-2 {
+  right: 22%;
+  bottom: 14%;
+  width: min(28vw, 150px);
+  height: min(28vw, 150px);
+  background: color-mix(in srgb, var(--solar) 42%, transparent);
+  opacity: 0.4;
+  animation: hero-drift 20s ease-in-out infinite alternate-reverse;
+}
+
+.hero-orb-3 {
+  right: 3%;
+  bottom: 32%;
+  width: min(18vw, 92px);
+  height: min(18vw, 92px);
+  background: color-mix(in srgb, var(--accent) 48%, transparent);
+  opacity: 0.5;
+  animation: hero-drift 12s ease-in-out 0.6s infinite alternate;
+}
+
+.draw-ball-in {
+  animation: ball-pop 0.55s cubic-bezier(0.22, 1.15, 0.36, 1) both;
+  animation-delay: var(--ball-delay, 0ms);
+}
+
 @keyframes rise {
   from {
     opacity: 0;
@@ -171,12 +219,34 @@ summary:focus-visible {
   }
 }
 
+@keyframes hero-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-22px, 16px, 0) scale(1.08);
+  }
+}
+
+@keyframes ball-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.55) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal-delay,
   .reveal-delay-2,
   .hero-kenburns,
-  .hero-slide-copy {
+  .hero-slide-copy,
+  .hero-orb,
+  .draw-ball-in {
     animation: none;
   }
 

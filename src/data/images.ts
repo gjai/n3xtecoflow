@@ -271,7 +271,7 @@ const euromillionsEditorial = {
   },
   camping: {
     src: "/brands/euromillions/hero.svg",
-    altFr: "Archives EuroMillions",
+    altFr: "Résultats EuroMillions",
     altEn: "EuroMillions archives",
     credit: "EuroMillions Résultats",
     creditUrl: "https://euromillions-resultats.fr",

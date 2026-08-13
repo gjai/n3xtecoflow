@@ -55,15 +55,18 @@ export function DrawBalls({
   ballsLabel,
   starsLabel,
   large = false,
+  animate = false,
 }: {
   draw: EuroMillionsDraw;
   ballsLabel: string;
   starsLabel: string;
   large?: boolean;
+  animate?: boolean;
 }) {
   const size = large
     ? "h-12 w-12 text-base md:h-14 md:w-14 md:text-lg"
     : "h-11 w-11 text-sm";
+  const ballClass = animate ? "draw-ball-in" : "";
   return (
     <div className="space-y-4">
       <div>
@@ -71,10 +74,15 @@ export function DrawBalls({
           {ballsLabel}
         </p>
         <div className="mt-2 flex flex-wrap gap-2">
-          {draw.numbers.map((n) => (
+          {draw.numbers.map((n, i) => (
             <span
               key={`n-${n}`}
-              className={`inline-flex items-center justify-center rounded-full bg-[var(--accent)] font-semibold text-[var(--accent-ink)] ${size}`}
+              className={`inline-flex items-center justify-center rounded-full bg-[var(--accent)] font-semibold text-[var(--accent-ink)] ${size} ${ballClass}`}
+              style={
+                animate
+                  ? { ["--ball-delay" as string]: `${420 + i * 75}ms` }
+                  : undefined
+              }
             >
               {n}
             </span>
@@ -86,10 +94,17 @@ export function DrawBalls({
           {starsLabel}
         </p>
         <div className="mt-2 flex flex-wrap gap-2">
-          {draw.stars.map((n) => (
+          {draw.stars.map((n, i) => (
             <span
               key={`s-${n}`}
-              className={`inline-flex items-center justify-center rounded-full border border-[var(--accent)] bg-[var(--surface)] font-semibold text-[var(--heading)] ${size}`}
+              className={`inline-flex items-center justify-center rounded-full border border-[var(--accent)] bg-[var(--surface)] font-semibold text-[var(--heading)] ${size} ${ballClass}`}
+              style={
+                animate
+                  ? {
+                      ["--ball-delay" as string]: `${420 + (draw.numbers.length + i) * 75}ms`,
+                    }
+                  : undefined
+              }
             >
               {n}
             </span>
@@ -140,16 +155,14 @@ export async function EuroMillionsHome({
         pending={pending}
         locale={locale}
       />
-      <section className="relative overflow-hidden border-b border-[var(--line)]">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-90"
-          style={{
-            background:
-              "linear-gradient(160deg, var(--hero-from), var(--hero-mid) 45%, var(--hero-to))",
-          }}
-        />
+      <section className="hero-grid relative overflow-hidden border-b border-[var(--line)]">
+        <div className="hero-orbs hidden md:block" aria-hidden>
+          <span className="hero-orb hero-orb-1" />
+          <span className="hero-orb hero-orb-2" />
+          <span className="hero-orb hero-orb-3" />
+        </div>
         <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1fr_1.05fr] md:items-center md:px-8 md:py-20">
-          <div>
+          <div className="reveal">
             <p className="font-[family-name:var(--font-display)] text-4xl font-semibold tracking-tight text-[var(--heading)] md:text-6xl">
               {brand}
             </p>
@@ -157,7 +170,7 @@ export async function EuroMillionsHome({
               {t("headline")}
             </h1>
             <p className="mt-4 max-w-lg text-[var(--muted)]">{t("subhead")}</p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="reveal-delay mt-8 flex flex-wrap gap-3">
               <Link
                 href="/simulateur"
                 className="inline-flex min-h-11 items-center bg-[var(--accent)] px-5 text-sm font-semibold text-[var(--accent-ink)]"
@@ -175,7 +188,7 @@ export async function EuroMillionsHome({
 
           <div
             id="dernier-tirage"
-            className="border border-[var(--line)] bg-[var(--surface)]/90 p-6 backdrop-blur md:p-8"
+            className="reveal-delay-2 border border-[var(--line)] bg-[var(--surface)]/90 p-6 backdrop-blur md:p-8"
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
@@ -204,6 +217,7 @@ export async function EuroMillionsHome({
                   ballsLabel={t("ballsLabel")}
                   starsLabel={t("starsLabel")}
                   large
+                  animate
                 />
                 {latest.myMillionCode ? (
                   <div className="mt-6 border-t border-[var(--line)] pt-5">

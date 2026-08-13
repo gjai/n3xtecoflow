@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" fill="none">
+  <rect width="800" height="800" fill="#f4f7fb"/>
+  <rect x="210" y="170" width="380" height="460" rx="18" fill="#0b1220"/>
+  <rect x="230" y="190" width="340" height="420" rx="12" fill="#152238"/>
+  <rect x="250" y="210" width="300" height="180" rx="8" fill="#1a2740" stroke="#f5c542" stroke-width="3"/>
+  <circle cx="310" cy="300" r="28" fill="#f5c542"/>
+  <circle cx="380" cy="300" r="28" fill="#f5c542"/>
+  <circle cx="450" cy="300" r="28" fill="#f5c542"/>
+  <circle cx="345" cy="355" r="22" fill="#7dd3fc"/>
+  <circle cx="415" cy="355" r="22" fill="#7dd3fc"/>
+  <rect x="250" y="420" width="300" height="160" rx="8" fill="#0b1220"/>
+  <text x="400" y="500" text-anchor="middle" fill="#f5c542" font-family="system-ui, sans-serif" font-size="28" font-weight="700">Tickets</text>
+  <text x="400" y="540" text-anchor="middle" fill="#8494ad" font-family="system-ui, sans-serif" font-size="16">EuroMillions · Loto</text>
+</svg>

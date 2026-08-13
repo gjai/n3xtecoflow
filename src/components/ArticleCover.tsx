@@ -1,6 +1,6 @@
-import Image from "next/image";
 import type { SiteImage } from "@/data/images";
 import type { ArticleCoverImage } from "@/lib/article-images";
+import { FillMedia } from "./CoverImage";
 
 type ArticleCoverProps = {
   images: ArticleCoverImage[];
@@ -43,13 +43,11 @@ export function ArticleCover({
             packshot ? "absolute inset-3 md:inset-5" : "absolute inset-0"
           }
         >
-          <Image
+          <FillMedia
             src={image.src}
             alt={alt}
-            fill
             sizes={sizes}
             priority={priority}
-            data-packshot-img={packshot ? "" : undefined}
             className={packshot ? "object-contain" : "object-cover"}
           />
         </div>
@@ -71,13 +69,11 @@ export function ArticleCover({
             className="relative h-full min-h-[10rem] border-r border-[var(--line)] last:border-r-0"
           >
             <div className="absolute inset-3 md:inset-5">
-              <Image
+              <FillMedia
                 src={image.src}
                 alt={alt}
-                fill
                 sizes={sizes}
                 priority={priority}
-                data-packshot-img={packshot ? "" : undefined}
                 className="object-contain"
               />
             </div>

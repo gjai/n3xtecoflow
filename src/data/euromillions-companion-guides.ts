@@ -145,7 +145,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
           ],
         },
         {
-          heading: "Archives",
+          heading: "Résultats",
           paragraphs: [
             "Les archives EuroDreams de ce site sont limitées par l’API publique FDJ (quelques dizaines de tirages, pas des années). Chaque fiche a une URL unique pour le référencement et le partage.",
             "EuroMillions reste le focus du site : plus d’historique, plus de rangs détaillés. EuroDreams est un compagnon, pas un « système croisé ».",
@@ -194,7 +194,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
           ],
         },
         {
-          heading: "Archives",
+          heading: "Results",
           paragraphs: [
             "EuroDreams archives on this site are limited by the public FDJ API (tens of draws, not years). Each card has a unique URL for search and sharing.",
             "EuroMillions remains the site’s focus: more history, more detailed tiers. EuroDreams is a companion, not a “cross-game system”.",
@@ -347,7 +347,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
           ],
         },
         {
-          heading: "Archives",
+          heading: "Résultats",
           paragraphs: [
             "L’historique local Crescendo est limité par l’API publique (quelques dizaines de tirages). Nous conservons jusqu’à 250 résultats quand la source les fournit.",
             "Crescendo n’est pas un « Loto du samedi » : règles, pool et horaires sont distincts.",
@@ -396,7 +396,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
           ],
         },
         {
-          heading: "Archives",
+          heading: "Results",
           paragraphs: [
             "Local Crescendo history is limited by the public API (tens of draws). We keep up to 250 results when the source provides them.",
             "Crescendo is not “Saturday Loto”: rules, pool and times are distinct.",
@@ -434,7 +434,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
           ],
         },
         {
-          heading: "Archives",
+          heading: "Résultats",
           paragraphs: [
             "Les archives EuroMillions visent un historique long (backfill progressif depuis 2004 via des sources publiques). Les jeux compagnons dépendent de l’API FDJ : quelques dizaines de tirages, pas vingt ans.",
             "Un tableau de fréquences sur un historique court est du bruit. Ne l’utilisez pas comme pronostic.",
@@ -482,7 +482,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
           ],
         },
         {
-          heading: "Archives",
+          heading: "Results",
           paragraphs: [
             "EuroMillions archives aim at a long history (progressive backfill from 2004 via public sources). Companion games depend on the FDJ API: tens of draws, not twenty years.",
             "A frequency table on a short history is noise. Do not use it as a forecast.",

@@ -2,8 +2,8 @@
 
 import type { ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
 import { Link } from "@/i18n/navigation";
+import { FillMedia } from "@/components/CoverImage";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { AmazonButton } from "@/components/AmazonButton";
@@ -79,10 +79,9 @@ export function ArticleBody({
             {sectionImage ? (
               <figure className="mt-5 overflow-hidden border border-[var(--line)] bg-[var(--surface)]">
                 <div className="relative aspect-[16/9] w-full">
-                  <Image
+                  <FillMedia
                     src={sectionImage.src}
                     alt={sectionImage.alt}
-                    fill
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, 768px"
                   />
@@ -123,11 +122,9 @@ export function ArticleBody({
                     className="group overflow-hidden border border-[var(--line)] bg-[var(--surface)] transition hover:border-[var(--accent)]"
                   >
                     <div className="relative aspect-square packshot-well">
-                      <Image
+                      <FillMedia
                         src={card.imageSrc}
                         alt={card.name}
-                        fill
-                        data-packshot-img=""
                         className="object-contain p-4 transition duration-300 group-hover:scale-[1.03]"
                         sizes="(max-width: 768px) 50vw, 200px"
                       />

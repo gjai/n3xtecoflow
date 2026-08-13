@@ -71,7 +71,8 @@ export function HeroSlider({
             }`}
             aria-hidden={i !== index}
           >
-            {slide.imageSrc.startsWith("/api/") ? (
+            {slide.imageSrc.startsWith("/api/") ||
+            /\.svg(?:[?#]|$)/i.test(slide.imageSrc) ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={slide.imageSrc}

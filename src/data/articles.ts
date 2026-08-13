@@ -33,6 +33,8 @@ export type GuideArticle = {
   pt?: LocalizedGuideCopy;
   de?: LocalizedGuideCopy;
   nl?: LocalizedGuideCopy;
+  imageSrc?: string;
+  imageCredit?: string;
 };
 
 export function getGuideCopy(

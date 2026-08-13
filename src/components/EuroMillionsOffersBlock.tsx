@@ -12,10 +12,21 @@ import {
 import { siteAllowsAmazon } from "@/sites/features";
 import type { SiteConfig } from "@/sites/types";
 
-export const EUROMILLIONS_AMAZON_OFFERS = [
+type AmazonOfferCard = {
+  id: string;
+  asin: string;
+  imageSrc?: string;
+  labelFr: string;
+  labelEn: string;
+  blurbFr: string;
+  blurbEn: string;
+};
+
+export const EUROMILLIONS_AMAZON_OFFERS: readonly AmazonOfferCard[] = [
   {
     id: "pochette",
     asin: "B0F8J7R2J1",
+    imageSrc: "/images/products/euromillions/pochette-tickets.svg",
     labelFr: "Pochette protège-tickets",
     labelEn: "Ticket sleeve",
     blurbFr: "Étui pour tickets Loto / EuroMillions.",
@@ -37,7 +48,7 @@ export const EUROMILLIONS_AMAZON_OFFERS = [
     blurbFr: "Cahier loisir pour joueurs occasionnels.",
     blurbEn: "Leisure journal for casual players.",
   },
-] as const;
+];
 
 export async function EuroMillionsOffersBlock({
   site,
@@ -89,7 +100,7 @@ export async function EuroMillionsOffersBlock({
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={amazonProductImageUrl(item.asin, 300)}
+                  src={item.imageSrc || amazonProductImageUrl(item.asin, 300)}
                   alt={isEn ? item.labelEn : item.labelFr}
                   className="mx-auto h-28 w-auto object-contain"
                   loading="lazy"

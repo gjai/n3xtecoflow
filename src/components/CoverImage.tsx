@@ -1,6 +1,46 @@
 import Image from "next/image";
 import type { SiteImage } from "@/data/images";
 
+export function isUnoptimizedSrc(src: string) {
+  return src.startsWith("/api/") || /\.svg(?:[?#]|$)/i.test(src);
+}
+
+/** Local SVG / API media: native img. Photos: next/image fill. */
+export function FillMedia({
+  src,
+  alt,
+  className = "",
+  sizes,
+  priority = false,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  sizes?: string;
+  priority?: boolean;
+}) {
+  if (isUnoptimizedSrc(src)) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={src}
+        alt={alt}
+        className={`absolute inset-0 h-full w-full ${className}`}
+      />
+    );
+  }
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      sizes={sizes}
+      priority={priority}
+      className={className}
+    />
+  );
+}
+
 type CoverImageProps = {
   image: SiteImage;
   locale?: string;
@@ -36,13 +76,11 @@ export function CoverImage({
           packshot ? "absolute inset-3 md:inset-5" : "absolute inset-0"
         }
       >
-        <Image
+        <FillMedia
           src={image.src}
           alt={alt}
-          fill
           sizes={sizes}
           priority={priority}
-          data-packshot-img={packshot ? "" : undefined}
           className={fitClass}
         />
       </div>
