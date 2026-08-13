@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "news:seed": "node scripts/seed-news.mjs"
+    "news:seed": "node scripts/seed-news.mjs",
+    "news:seed:casinos": "node scripts/seed-casinos-news.mjs"
   },
   "dependencies": {
     "next": "16.3.0",

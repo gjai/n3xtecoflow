@@ -1,15 +1,19 @@
 import type { SiteId } from "@/sites/types";
 
 /** Max articles kept per brand cluster in the store (per site). */
-export const MAX_NEWS_PER_BRAND = 2;
+export const MAX_NEWS_PER_BRAND = 4;
 /** Max same-brand picks in one ingest selection. */
-export const MAX_BRAND_PER_INGEST = 1;
+export const MAX_BRAND_PER_INGEST = 2;
 
 const PROMO_HEAVY =
-  /\b(promo(?:tion)?s?|r[ée]duction|%\s*off|deal|deals|coupon|code\s*promo|brad[ée]e?s?|soldes?|flash\s*sale|prix\s*cass[ée]|offre\s*rare|en\s*promo|discount|save\s*\$|save\s*€|academy\s*sports?)\b/i;
+  /\b(promo(?:tion)?s?|r[ée]duction|%\s*off|deal|deals|coupon|code\s*promo|brad[ée]e?s?|soldes?|flash\s*sale|prix\s*cass[ée]|offre\s*rare|en\s*promo|discount|save\s*\$|save\s*€|academy\s*sports?|presale|airdrop|moonberg)\b/i;
 
 const EDITORIAL_HINT =
-  /\b(guide|comparatif|test|avis|review|vs\b|choisir|how\s+to|entretien|buying|meilleure?s?|best\b|nouveaut[ée]|lancement|launch|collection)\b/i;
+  /\b(guide|comparatif|test|avis|review|vs\b|choisir|how\s+to|entretien|buying|meilleure?s?|best\b|nouveaut[ée]|lancement|launch|collection|march[ée]|market|prix|price|ETF|SEC|staking|breach|malware|extension|tokenis)\b/i;
+
+/** Listicles / sports-sponsorship noise for casino-crypto feeds. */
+const CASINO_LOW_SIGNAL =
+  /\b(best\s+vpn\s+for|coupon|%\s*off|sleeve\s+deal|everton|luton\s+town|drake|sportsbook|machines?\s*[àa]\s*sous)\b/i;
 
 type BrandRule = { id: string; pattern: RegExp };
 
@@ -157,6 +161,12 @@ export function rankNewsCandidates<T extends NewsQualityInput>(
       let qualityScore = 0;
       if (EDITORIAL_HINT.test(item.title)) qualityScore += 3;
       if (promoHeavy) qualityScore -= 4;
+      if (
+        item.siteId === "casinos-crypto" &&
+        CASINO_LOW_SIGNAL.test(`${item.title} ${item.description || ""}`)
+      ) {
+        qualityScore -= 6;
+      }
       if (existingKeys.has(dupKey)) qualityScore -= 8;
       const publishedMs = item.publishedAt
         ? new Date(item.publishedAt).getTime()
