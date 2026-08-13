@@ -135,6 +135,7 @@ function GameDropdown({
 
 export function EuroMillionsDesktopNav() {
   const locale = useLocale();
+  const t = useTranslations("nav");
   const pathname = usePathname();
   const hash = useHash();
 
@@ -150,6 +151,14 @@ export function EuroMillionsDesktopNav() {
           alignEnd={i >= LOTTERY_GAMES_NAV.length - 2}
         />
       ))}
+      <Link
+        href="/jeux"
+        className={`whitespace-nowrap pb-0.5 hover:text-[var(--heading)] ${
+          pathname.replace(/\/+$/, "") === "/jeux" ? "text-[var(--heading)]" : ""
+        }`}
+      >
+        {t("otherGames")}
+      </Link>
     </nav>
   );
 }
@@ -222,6 +231,17 @@ export function EuroMillionsMobileNav({
           </div>
         );
       })}
+      <Link
+        href="/jeux"
+        className={`min-h-11 py-3 font-semibold ${
+          pathname.replace(/\/+$/, "") === "/jeux"
+            ? "text-[var(--heading)]"
+            : ""
+        }`}
+        onClick={onNavigate}
+      >
+        {t("otherGames")}
+      </Link>
     </div>
   );
 }

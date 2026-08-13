@@ -1,5 +1,3 @@
-import { pickLocalized } from "@/i18n/locales";
-
 export type GuideFaqItem = { question: string; answer: string };
 
 const FAQ: Record<string, { fr: GuideFaqItem[]; en: GuideFaqItem[] }> = {
@@ -430,5 +428,6 @@ const FAQ: Record<string, { fr: GuideFaqItem[]; en: GuideFaqItem[] }> = {
 export function getGuideFaq(slug: string, locale: string): GuideFaqItem[] {
   const entry = FAQ[slug];
   if (!entry) return [];
-  return pickLocalized(locale, { fr: entry.fr, en: entry.en });
+  if (locale !== "fr" && locale !== "en") return [];
+  return locale === "en" ? entry.en : entry.fr;
 }

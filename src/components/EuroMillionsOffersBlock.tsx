@@ -9,6 +9,7 @@ import {
   amazonProductImageUrl,
   buildAmazonProductUrl,
 } from "@/lib/amazon";
+import { formatEuro } from "@/lib/money";
 import { siteAllowsAmazon } from "@/sites/features";
 import type { SiteConfig } from "@/sites/types";
 
@@ -20,6 +21,8 @@ type AmazonOfferCard = {
   labelEn: string;
   blurbFr: string;
   blurbEn: string;
+  /** Prix Amazon.fr relevé éditorialement (fallback UI, pas Creators). */
+  indicativePriceEur: number;
 };
 
 export const EUROMILLIONS_AMAZON_OFFERS: readonly AmazonOfferCard[] = [
@@ -31,22 +34,27 @@ export const EUROMILLIONS_AMAZON_OFFERS: readonly AmazonOfferCard[] = [
     labelEn: "Ticket sleeve",
     blurbFr: "Étui pour tickets Loto / EuroMillions.",
     blurbEn: "Sleeve for Loto / EuroMillions tickets.",
+    indicativePriceEur: 7.9,
   },
   {
     id: "carnet",
     asin: "B0BPR6YM8P",
+    imageSrc: "/images/products/euromillions/carnet-euromillions.svg",
     labelFr: "Carnet EuroMillions",
     labelEn: "EuroMillions notebook",
     blurbFr: "Noter vos grilles — sans illusion de méthode.",
     blurbEn: "Track your grids — with no promised system.",
+    indicativePriceEur: 21.6,
   },
   {
     id: "journal",
     asin: "B0FJ7H6QL7",
+    imageSrc: "/images/products/euromillions/journal-grille.svg",
     labelFr: "Journal « Et si ma grille… »",
     labelEn: "“What if my grid…” journal",
     blurbFr: "Cahier loisir pour joueurs occasionnels.",
     blurbEn: "Leisure journal for casual players.",
+    indicativePriceEur: 12.9,
   },
 ];
 
@@ -116,6 +124,8 @@ export async function EuroMillionsOffersBlock({
                     href={buildAmazonProductUrl(item.asin)}
                     label={a("cta")}
                     badge={a("disclosureShort")}
+                    priceDisplay={formatEuro(item.indicativePriceEur)}
+                    priceHint={t("priceHint")}
                   />
                 </div>
               </div>

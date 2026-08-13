@@ -118,8 +118,80 @@ export function normalizeNewsTitle(title: string): string {
     .trim();
 }
 
+const MONTH_NUM: Record<string, string> = {
+  janvier: "01",
+  january: "01",
+  fevrier: "02",
+  february: "02",
+  mars: "03",
+  march: "03",
+  avril: "04",
+  april: "04",
+  mai: "05",
+  may: "05",
+  juin: "06",
+  june: "06",
+  juillet: "07",
+  july: "07",
+  aout: "08",
+  august: "08",
+  septembre: "09",
+  september: "09",
+  octobre: "10",
+  october: "10",
+  novembre: "11",
+  november: "11",
+  decembre: "12",
+  december: "12",
+};
+
+/** Collapse “résultats Loto du mercredi 12 août” variants into one key. */
+function lotteryResultDupKey(title: string): string | null {
+  const raw = title
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase();
+  if (
+    !/\b(resultats?|tirage|numeros?\s+gagnants?|draw\s+results?|code\s+gagnant)\b/.test(
+      raw,
+    )
+  ) {
+    return null;
+  }
+  let game: string | null = null;
+  if (/\beuromillions\b|\beuro\s*millions\b/.test(raw)) game = "em";
+  else if (/\beurodreams\b|\beuro\s*dreams\b/.test(raw)) game = "ed";
+  else if (/\bmy\s*million\b/.test(raw)) game = "mm";
+  else if (/\bloto\b/.test(raw)) game = "loto";
+  if (!game) return null;
+
+  const y = raw.match(/\b(20\d{2})\b/)?.[1];
+  const dated = raw.match(
+    /\b(\d{1,2})\s+(janvier|fevrier|mars|avril|mai|juin|juillet|aout|septembre|octobre|novembre|decembre|january|february|march|april|may|june|july|august|september|october|november|december)\b/,
+  );
+  const weekday = raw.match(
+    /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/,
+  )?.[1];
+  const monthWord = raw.match(
+    /\b(janvier|fevrier|mars|avril|mai|juin|juillet|aout|septembre|octobre|novembre|decembre|january|february|march|april|may|june|july|august|september|october|november|december)\b/,
+  )?.[1];
+
+  if (dated && y) {
+    const month = MONTH_NUM[dated[2]] || dated[2];
+    return `em-result:${game}:${y}-${month}-${dated[1].padStart(2, "0")}`;
+  }
+  if (y && weekday && monthWord) {
+    return `em-result:${game}:${y}-${MONTH_NUM[monthWord] || monthWord}-${weekday}`;
+  }
+  return null;
+}
+
 /** Stable near-duplicate key (order-insensitive significant tokens). */
-export function newsNearDuplicateKey(title: string): string {
+export function newsNearDuplicateKey(title: string, siteId?: SiteId): string {
+  if (siteId === "euromillions") {
+    const lotto = lotteryResultDupKey(title);
+    if (lotto) return lotto;
+  }
   const tokens = normalizeNewsTitle(title)
     .split(" ")
     .filter((t) => t.length > 3)
@@ -169,8 +241,11 @@ export function rankNewsCandidates<T extends NewsQualityInput>(
   existingTitles: string[],
   limit: number,
 ): ScoredNewsCandidate<T>[] {
+  const siteForKeys = items[0]?.siteId;
   const existingKeys = new Set(
-    existingTitles.map((t) => newsNearDuplicateKey(t)).filter(Boolean),
+    existingTitles
+      .map((t) => newsNearDuplicateKey(t, siteForKeys))
+      .filter(Boolean),
   );
   const brandCounts = new Map<string, number>();
   const selectedKeys = new Set<string>();
@@ -180,7 +255,7 @@ export function rankNewsCandidates<T extends NewsQualityInput>(
         `${item.title} ${item.description || ""}`,
         item.siteId,
       );
-      const dupKey = newsNearDuplicateKey(item.title);
+      const dupKey = newsNearDuplicateKey(item.title, item.siteId);
       const promoHeavy = isPromoHeavyNews(item.title, item.description);
       let qualityScore = 0;
       if (EDITORIAL_HINT.test(item.title)) qualityScore += 3;
@@ -260,7 +335,8 @@ export function pruneLowQualityNewsArticles<T extends StoreArticleLike>(
   const byDup = new Map<string, T[]>();
   for (const a of pool) {
     const title = a.fr?.title || a.en?.title || a.slug;
-    const key = newsNearDuplicateKey(title) || a.slug;
+    const sid = (a.siteId || "ecoflow") as SiteId;
+    const key = newsNearDuplicateKey(title, sid) || a.slug;
     const list = byDup.get(key) || [];
     list.push(a);
     byDup.set(key, list);

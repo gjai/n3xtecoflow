@@ -75,6 +75,10 @@ export async function generateMetadata({
   const { icons } = site.brand;
   const ogImage = site.heroImage || icons.apple || icons.favicon;
   const ogIsHero = Boolean(site.heroImage);
+  const requestHeaders = await headers();
+  const pathname = requestHeaders.get("x-pathname") || `/${locale}`;
+  const ogPath = pathname === "/" ? `/${locale}` : pathname;
+  const ogUrl = `https://${site.primaryHost}${ogPath}`;
 
   return {
     title: {
@@ -103,7 +107,7 @@ export async function generateMetadata({
       locale: OG_LOCALE[toAppLocale(locale)],
       type: "website",
       siteName: title,
-      url: `https://${site.primaryHost}`,
+      url: ogUrl,
       images: [
         {
           url: ogImage,

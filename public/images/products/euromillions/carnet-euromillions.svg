@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" fill="none">
+  <rect width="800" height="800" fill="#f4f7fb"/>
+  <rect x="230" y="150" width="360" height="500" rx="16" fill="#0b1220"/>
+  <rect x="248" y="168" width="324" height="464" rx="10" fill="#152238"/>
+  <rect x="268" y="200" width="284" height="36" rx="4" fill="#1a2740"/>
+  <rect x="268" y="252" width="220" height="14" rx="3" fill="#8494ad"/>
+  <rect x="268" y="280" width="180" height="14" rx="3" fill="#64748b"/>
+  <g transform="translate(268, 330)">
+    <circle cx="22" cy="22" r="18" fill="#f5c542"/>
+    <circle cx="70" cy="22" r="18" fill="#f5c542"/>
+    <circle cx="118" cy="22" r="18" fill="#f5c542"/>
+    <circle cx="166" cy="22" r="18" fill="#f5c542"/>
+    <circle cx="214" cy="22" r="18" fill="#f5c542"/>
+    <circle cx="70" cy="72" r="14" fill="#7dd3fc"/>
+    <circle cx="118" cy="72" r="14" fill="#7dd3fc"/>
+  </g>
+  <text x="400" y="500" text-anchor="middle" fill="#f5c542" font-family="system-ui, sans-serif" font-size="26" font-weight="700">Carnet</text>
+  <text x="400" y="536" text-anchor="middle" fill="#8494ad" font-family="system-ui, sans-serif" font-size="16">EuroMillions</text>
+</svg>
