@@ -2,7 +2,7 @@ import type { SiteConfig } from "./types";
 
 /**
  * Thème « EuroMillions Résultats » — euromillions-resultats.fr
- * Résultats, archives, stats. Pas Amazon. AdSense optionnel plus tard.
+ * Résultats, archives, stats. AdSense + Amazon accessoires. Pas de vente de tickets.
  */
 export const euromillionsSite: SiteConfig = {
   id: "euromillions",
@@ -96,11 +96,6 @@ export const euromillionsSite: SiteConfig = {
       labelEn: "Le pistolet de massage",
     },
     {
-      siteId: "casinos-crypto",
-      labelFr: "Casinos Crypto",
-      labelEn: "Casinos Crypto",
-    },
-    {
       href: "https://elections2027.com",
       labelFr: "Élections 2027",
       labelEn: "Élections 2027",
@@ -113,7 +108,7 @@ export const euromillionsSite: SiteConfig = {
   ],
   monetization: {
     disableAmazon: false,
-    disableAdsense: true,
+    adsenseClient: "ca-pub-4733644127583822",
     offers: [
       {
         id: "fdj",
@@ -141,7 +136,6 @@ export const euromillionsSite: SiteConfig = {
       "Keno",
       "Jeu responsable",
     ],
-    mainGuideSlug: "comprendre-euromillions",
     feedUserAgent:
       "EuroMillionsResultatsBot/1.0 (+https://euromillions-resultats.fr; editorial)",
     packshotCredit: "EuroMillions Résultats",

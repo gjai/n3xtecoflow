@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { markCronFail, markCronOk } from "@/lib/cron/status";
+import { revalidateLotteryPages } from "@/lib/euromillions/live";
 import { refreshFdjCompanionGames } from "@/lib/fdj-games/refresh";
 
 export const maxDuration = 60;
@@ -19,6 +20,7 @@ export async function POST(request: Request) {
   }
   try {
     const result = await refreshFdjCompanionGames();
+    revalidateLotteryPages();
     await markCronOk(
       "fdj-games",
       Object.entries(result.games)

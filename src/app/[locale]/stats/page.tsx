@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
+import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -97,10 +98,26 @@ export default async function StatsPage({
       <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
         {t("title")}
       </h1>
+      <div className="mt-4">
+        <GameToolsNav gameId="euromillions" />
+      </div>
       <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("subtitle")}</p>
       <p className="mt-2 text-sm text-[var(--accent)]">
         {t("sample", { count: draws.length })}
       </p>
+      <section className="mt-8 max-w-3xl border border-[var(--line)] bg-[var(--surface)] p-5">
+        <h2 className="text-lg font-semibold text-[var(--heading)]">
+          {t("howTitle")}
+        </h2>
+        <p className="mt-2 text-sm text-[var(--muted)]">{t("howBody")}</p>
+        <p className="mt-2 text-sm text-[var(--muted)]">{t("howExpected")}</p>
+        <Link
+          href="/guides/probabilites-euromillions"
+          className="mt-3 inline-block text-sm font-semibold text-[var(--accent)] hover:underline"
+        >
+          {t("oddsCta")} →
+        </Link>
+      </section>
 
       <div className="mt-10 grid gap-10 md:grid-cols-2">
         <section>

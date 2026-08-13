@@ -1,9 +1,14 @@
 import { refreshFdjCompanionGames } from "@/lib/fdj-games/refresh";
+import { readFdjGamesStore } from "@/lib/fdj-games/store";
 import {
   fetchFdjEuroMillionsDraws,
   fetchFdjMyMillionWinnerLocations,
 } from "./fdj";
 import { fetchPedroMealhaDraws, fetchUkLatestDraw } from "./fetch";
+import {
+  lotteryFingerprint,
+  revalidateLotteryPages,
+} from "./live";
 import {
   readEuroMillionsStore,
   sortDrawsNewest,
@@ -23,6 +28,9 @@ export type EuroMillionsRefreshResult = {
   yearsFetched: number[];
   myMillionWinners: number;
   companionGames?: Record<string, number>;
+  mode: "full" | "fast";
+  changed: boolean;
+  fingerprint: string;
 };
 
 function mergeDraws(
@@ -76,22 +84,30 @@ function attachWinnerLocations(
 
 export async function refreshEuroMillionsData(options?: {
   years?: number[];
+  mode?: "full" | "fast";
 }): Promise<EuroMillionsRefreshResult> {
+  const fast = options?.mode === "fast";
   const store = await readEuroMillionsStore();
   const yearNow = new Date().getFullYear();
-  const years = options?.years?.length
-    ? options.years
-    : [yearNow, yearNow - 1, yearNow - 2];
+  const years = fast
+    ? []
+    : options?.years?.length
+      ? options.years
+      : [yearNow, yearNow - 1, yearNow - 2];
 
   const sources: string[] = [];
   let incoming: EuroMillionsDraw[] = [];
   const yearsFetched: number[] = [];
+  const beforeFdj = await readFdjGamesStore();
+  const beforeFp = lotteryFingerprint(store, beforeFdj);
 
   // Companions first: Keno / Loto / EuroDreams must not wait on PedroMealha
   // archives (the 120s route budget often killed them before write).
   let companionGames: Record<string, number> | undefined;
   try {
-    const companions = await refreshFdjCompanionGames();
+    const companions = await refreshFdjCompanionGames(
+      fast ? { parallel: true, size: 8 } : undefined,
+    );
     companionGames = companions.games;
     sources.push(...companions.sources.map((s) => `companion:${s}`));
   } catch (err) {
@@ -99,7 +115,7 @@ export async function refreshEuroMillionsData(options?: {
   }
 
   try {
-    const fdj = await fetchFdjEuroMillionsDraws(20);
+    const fdj = await fetchFdjEuroMillionsDraws(fast ? 8 : 20);
     incoming = incoming.concat(fdj);
     sources.push(`fdj:${fdj.length}`);
   } catch (err) {
@@ -120,24 +136,28 @@ export async function refreshEuroMillionsData(options?: {
 
   let nextDrawDate = store.nextDrawDate ?? null;
   let nextJackpotEur = store.nextJackpotEur ?? null;
-  try {
-    const uk = await fetchUkLatestDraw();
-    if (uk?.draw) {
-      incoming.push(uk.draw);
-      sources.push("uk-lottery:latest");
-      nextDrawDate = uk.nextDrawDate ?? nextDrawDate;
-      nextJackpotEur = uk.nextJackpotEur ?? nextJackpotEur;
+  if (!fast) {
+    try {
+      const uk = await fetchUkLatestDraw();
+      if (uk?.draw) {
+        incoming.push(uk.draw);
+        sources.push("uk-lottery:latest");
+        nextDrawDate = uk.nextDrawDate ?? nextDrawDate;
+        nextJackpotEur = uk.nextJackpotEur ?? nextJackpotEur;
+      }
+    } catch (err) {
+      console.error("euromillions_uk_fail", err);
     }
-  } catch (err) {
-    console.error("euromillions_uk_fail", err);
   }
 
   let winners = store.myMillionWinners || [];
-  try {
-    winners = await fetchFdjMyMillionWinnerLocations();
-    sources.push(`fdj-mag-winners:${winners.length}`);
-  } catch (err) {
-    console.error("euromillions_fdj_mag_fail", err);
+  if (!fast) {
+    try {
+      winners = await fetchFdjMyMillionWinnerLocations();
+      sources.push(`fdj-mag-winners:${winners.length}`);
+    } catch (err) {
+      console.error("euromillions_fdj_mag_fail", err);
+    }
   }
 
   let draws = mergeDraws(store.draws, incoming);
@@ -152,6 +172,10 @@ export async function refreshEuroMillionsData(options?: {
     myMillionWinners: winners,
   };
   await writeEuroMillionsStore(next);
+  const afterFdj = await readFdjGamesStore();
+  const fingerprint = lotteryFingerprint(next, afterFdj);
+  const changed = fingerprint !== beforeFp;
+  if (changed) revalidateLotteryPages();
 
   return {
     ok: true,
@@ -161,5 +185,8 @@ export async function refreshEuroMillionsData(options?: {
     yearsFetched,
     myMillionWinners: winners.length,
     companionGames,
+    mode: fast ? "fast" : "full",
+    changed,
+    fingerprint,
   };
 }

@@ -3,9 +3,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { FdjGameBalls } from "@/components/FdjGameBalls";
+import { GameToolsNav } from "@/components/EuroMillionsNav";
+import { ResultsLivePoller } from "@/components/ResultsLivePoller";
 import { FDJ_COMPANION_GAMES, getCompanionGame } from "@/lib/fdj-games/catalog";
 import {
   companionResultPending,
+  companionScheduleSummary,
   formatDrawWhen,
 } from "@/lib/fdj-games/display";
 import {
@@ -126,6 +129,10 @@ export default async function JeuxGamePage({
 
   return (
     <main className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-20">
+      <ResultsLivePoller
+        enabled={pending}
+        fingerprint={latest?.plannedAt || "none"}
+      />
       <Link
         href="/jeux"
         className="text-sm font-semibold text-[var(--accent)] hover:underline"
@@ -135,9 +142,24 @@ export default async function JeuxGamePage({
       <h1 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
         {t("gameTitle", { game: label })}
       </h1>
+      <div className="mt-4">
+        <GameToolsNav gameId={gameId} />
+      </div>
       <p className="mt-3 text-[var(--muted)]">
         {t("gameLead", { game: label })}
       </p>
+
+      <section
+        id="prochain"
+        className="mt-8 scroll-mt-28 border border-[var(--line)] bg-[var(--surface)] p-5"
+      >
+        <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">
+          {t("scheduleTitle")}
+        </h2>
+        <p className="mt-2 text-[var(--heading)]">
+          {companionScheduleSummary(gameId, locale)}
+        </p>
+      </section>
 
       {latest ? (
         <div className="mt-8 border border-[var(--line)] bg-[var(--surface)] p-6 md:p-8">
@@ -173,11 +195,11 @@ export default async function JeuxGamePage({
         <p className="mt-8 text-[var(--muted)]">{t("emptyGame")}</p>
       )}
 
-      {draws.length > 1 ? (
-        <section className="mt-12">
-          <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
-            {t("archiveTitle")}
-          </h2>
+      <section id="archives" className="mt-12 scroll-mt-28">
+        <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+          {t("archiveTitle")}
+        </h2>
+        {draws.length > 0 ? (
           <ul className="mt-4 space-y-3">
             {draws.map((d) => (
               <li
@@ -193,8 +215,33 @@ export default async function JeuxGamePage({
               </li>
             ))}
           </ul>
-        </section>
-      ) : null}
+        ) : (
+          <p className="mt-4 text-[var(--muted)]">{t("emptyGame")}</p>
+        )}
+      </section>
+
+      <section className="relative mt-10 scroll-mt-28 border border-[var(--line)] bg-[var(--surface)] p-5">
+        <span id="simulateur" className="absolute -top-24" />
+        <span id="stats" className="absolute -top-24" />
+        <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)]">
+          {t("emToolsTitle")}
+        </h2>
+        <p className="mt-2 text-sm text-[var(--muted)]">{t("emToolsLead")}</p>
+        <div className="mt-4 flex flex-wrap gap-4 text-sm">
+          <Link
+            href="/simulateur"
+            className="font-semibold text-[var(--accent)] hover:underline"
+          >
+            {t("emSimulatorCta")} →
+          </Link>
+          <Link
+            href="/stats"
+            className="font-semibold text-[var(--accent)] hover:underline"
+          >
+            {t("emStatsCta")} →
+          </Link>
+        </div>
+      </section>
 
       <div className="mt-10 flex flex-wrap gap-4 text-sm">
         <a

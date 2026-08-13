@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { NextJackpotBanner } from "@/components/NextJackpotBanner";
+import { GameToolsNav } from "@/components/EuroMillionsNav";
+import { ResultsLivePoller } from "@/components/ResultsLivePoller";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -58,6 +60,10 @@ export default async function ProchainTiragePage({
 
   return (
     <main>
+      <ResultsLivePoller
+        enabled={pending}
+        fingerprint={latest?.date || "none"}
+      />
       <NextJackpotBanner
         nextDrawDate={store.nextDrawDate || null}
         nextJackpot={jackpot}
@@ -69,6 +75,9 @@ export default async function ProchainTiragePage({
         <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
           {t("pageTitle")}
         </h1>
+        <div className="mt-4">
+          <GameToolsNav gameId="euromillions" />
+        </div>
         <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("pageLead")}</p>
         {pending ? (
           <p className="mt-6 border border-[var(--line)] bg-[var(--surface)] p-5 text-[var(--heading)]">

@@ -2,6 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { LOTTERY_GAMES_NAV, lotteryGameLabel } from "@/lib/fdj-games/nav";
 import {
   siteIsCasinosCrypto,
   siteIsEuroMillions,
@@ -29,23 +30,15 @@ export function SiteFooter() {
       : site.brand.footerBlurbEn;
 
   const links = siteIsEuroMillions(site)
-    ? (
-        [
-          { href: "/tirages", label: t("products") },
-          { href: "/simulateur", label: tNav("simulator") },
-          { href: "/prochain-tirage", label: tNav("nextDraw") },
-          { href: "/jeux", label: tNav("otherGames") },
-          { href: "/my-million", label: tNav("myMillion") },
-          { href: "/stats", label: t("comparisons") },
-          { href: "/guides", label: t("guides") },
-          siteShowsNews(site)
-            ? { href: "/actualites", label: t("news") }
-            : null,
-          { href: "/a-propos", label: t("about") },
-          { href: "/mentions-legales", label: t("legal") },
-          { href: "/contact", label: t("contact") },
-        ] as const
-      ).filter(Boolean) as { href: string; label: string }[]
+    ? [
+        ...LOTTERY_GAMES_NAV.map((g) => ({
+          href: g.href,
+          label: lotteryGameLabel(g, locale),
+        })),
+        { href: "/a-propos", label: t("about") },
+        { href: "/mentions-legales", label: t("legal") },
+        { href: "/contact", label: t("contact") },
+      ]
     : siteIsCasinosCrypto(site)
       ? (
           [

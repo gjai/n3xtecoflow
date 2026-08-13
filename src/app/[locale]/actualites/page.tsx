@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { Pagination } from "@/components/Pagination";
 import { SmartCover } from "@/components/SmartCover";
+import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { getEditorialImages } from "@/data/images";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 import { paginate, parsePageParam } from "@/lib/pagination";
@@ -12,7 +13,7 @@ import {
   usesEnglishFallback,
 } from "@/i18n/locales";
 import { siteLocaleAlternates } from "@/lib/seo";
-import { siteShowsNews } from "@/sites/features";
+import { siteIsEuroMillions, siteShowsNews } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
 import { redirect } from "@/i18n/navigation";
 
@@ -73,6 +74,11 @@ export default async function NewsIndexPage({
         <h1 className="mt-3 font-[family-name:var(--font-display)] text-4xl font-semibold text-[var(--heading)] md:text-5xl">
           {t("title")}
         </h1>
+        {siteIsEuroMillions(site) ? (
+          <div className="mt-4">
+            <GameToolsNav gameId="euromillions" />
+          </div>
+        ) : null}
         {total > 0 ? (
           <p className="mt-3 text-sm text-[var(--muted)]">
             {t("count", { count: total })}

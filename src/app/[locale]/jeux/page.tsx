@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { FdjCompanionGamesBlock } from "@/components/FdjCompanionGamesBlock";
+import { GameToolsNav } from "@/components/EuroMillionsNav";
+import { LOTTERY_GAMES_NAV, lotteryGameLabel } from "@/lib/fdj-games/nav";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { readFdjGamesStore } from "@/lib/fdj-games/store";
 import { getCurrentSite } from "@/sites/server";
@@ -53,14 +55,24 @@ export default async function JeuxHubPage({
           {t("hubTitle")}
         </h1>
         <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("hubLead")}</p>
-        <p className="mt-4">
-          <Link
-            href="/tirages"
-            className="text-sm font-semibold text-[var(--accent)] hover:underline"
-          >
-            {t("emPrimaryCta")} →
-          </Link>
-        </p>
+        <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+          {LOTTERY_GAMES_NAV.map((game) => (
+            <li
+              key={game.id}
+              className="border border-[var(--line)] bg-[var(--surface)] p-4"
+            >
+              <Link
+                href={game.href}
+                className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)] hover:text-[var(--accent)]"
+              >
+                {lotteryGameLabel(game, locale)}
+              </Link>
+              <div className="mt-3">
+                <GameToolsNav gameId={game.id} />
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
       <FdjCompanionGamesBlock store={store} locale={locale} variant="hub" />
     </main>

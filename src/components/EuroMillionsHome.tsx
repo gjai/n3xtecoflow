@@ -4,10 +4,24 @@ import { SmartCover } from "@/components/SmartCover";
 import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
 import { FdjCompanionGamesBlock } from "@/components/FdjCompanionGamesBlock";
 import { NextJackpotBanner } from "@/components/NextJackpotBanner";
+import { GameToolsNav } from "@/components/EuroMillionsNav";
+import {
+  EUROMILLIONS_MAIN_GUIDE_SLUG,
+  EUROMILLIONS_MY_MILLION_GUIDE_SLUG,
+  EUROMILLIONS_ODDS_GUIDE_SLUG,
+  EUROMILLIONS_OTHER_GAMES_GUIDE_SLUG,
+  EUROMILLIONS_RESPONSIBLE_GUIDE_SLUG,
+  EUROMILLIONS_TIERS_GUIDE_SLUG,
+} from "@/data/euromillions-guides";
+import { ResultsLivePoller } from "@/components/ResultsLivePoller";
 import { getEditorialImages } from "@/data/images";
 import { usesEnglishFallback } from "@/i18n/locales";
 import type { EuroMillionsDraw, EuroMillionsStore } from "@/lib/euromillions/types";
 import { euroMillionsResultPending } from "@/lib/euromillions/datetime";
+import {
+  anyLotteryResultPending,
+  lotteryFingerprint,
+} from "@/lib/euromillions/live";
 import { getLatestDraw } from "@/lib/euromillions/store";
 import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import type { NewsArticle } from "@/lib/news/types";
@@ -105,6 +119,7 @@ export async function EuroMillionsHome({
     latestDate: latest?.date,
     nextDrawDate: store.nextDrawDate,
   });
+  const livePending = anyLotteryResultPending(store, fdjGames);
   const brand = site.brand.name;
   const recentWinners = (store.myMillionWinners || []).slice(0, 4);
   const editorial = getEditorialImages(site.id);
@@ -112,12 +127,21 @@ export async function EuroMillionsHome({
 
   return (
     <>
+      <ResultsLivePoller
+        enabled={livePending}
+        fingerprint={lotteryFingerprint(store, fdjGames)}
+      />
       <NextJackpotBanner
         nextDrawDate={store.nextDrawDate || null}
         nextJackpot={nextJackpot}
         pending={pending}
         locale={locale}
       />
+      <div className="border-b border-[var(--line)] bg-[var(--bg)]">
+        <div className="mx-auto max-w-6xl px-5 py-3 md:px-8">
+          <GameToolsNav gameId="euromillions" />
+        </div>
+      </div>
       <section className="relative overflow-hidden border-b border-[var(--line)]">
         <div
           className="pointer-events-none absolute inset-0 opacity-90"
@@ -265,6 +289,48 @@ export async function EuroMillionsHome({
           >
             {t("simulatorCta")} →
           </Link>
+        </div>
+      </section>
+
+      <section className="border-b border-[var(--line)]">
+        <div className="mx-auto max-w-6xl px-5 py-10 md:px-8">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+                {t("guidesTitle")}
+              </h2>
+              <p className="mt-1 max-w-2xl text-sm text-[var(--muted)]">
+                {t("guidesLead")}
+              </p>
+            </div>
+            <Link
+              href="/guides"
+              className="text-sm font-semibold text-[var(--accent)] hover:underline"
+            >
+              {t("allGuidesCta")} →
+            </Link>
+          </div>
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {(
+              [
+                EUROMILLIONS_MAIN_GUIDE_SLUG,
+                EUROMILLIONS_TIERS_GUIDE_SLUG,
+                EUROMILLIONS_ODDS_GUIDE_SLUG,
+                EUROMILLIONS_MY_MILLION_GUIDE_SLUG,
+                EUROMILLIONS_OTHER_GAMES_GUIDE_SLUG,
+                EUROMILLIONS_RESPONSIBLE_GUIDE_SLUG,
+              ] as const
+            ).map((slug) => (
+              <li key={slug}>
+                <Link
+                  href={`/guides/${slug}`}
+                  className="block border border-[var(--line)] bg-[var(--surface)] px-4 py-3 text-sm font-semibold text-[var(--heading)] hover:border-[var(--accent)]"
+                >
+                  {t(`guideCard.${slug}`)}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

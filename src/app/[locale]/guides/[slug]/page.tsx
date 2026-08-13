@@ -21,10 +21,11 @@ import { resolveProductMedia } from "@/lib/product-presentation";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { CasinosCryptoGuideAffiliates } from "@/components/CasinosCryptoGuideAffiliates";
+import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { APP_LOCALES } from "@/i18n/locales";
 import { resolveAffiliateOffers } from "@/lib/affiliates";
 import { siteAmazonFallbackQuery } from "@/sites/copy";
-import { siteAllowsAmazon, siteShowsProducts } from "@/sites/features";
+import { siteAllowsAmazon, siteIsEuroMillions, siteShowsProducts } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
 import { redirect } from "@/i18n/navigation";
 
@@ -162,6 +163,11 @@ export default async function GuideArticlePage({
                 copy.subtitle
               )}
             </p>
+            {siteIsEuroMillions(site) ? (
+              <div className="mt-6">
+                <GameToolsNav gameId="euromillions" />
+              </div>
+            ) : null}
           </div>
           <ArticleCover
             images={coverImages}

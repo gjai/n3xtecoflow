@@ -16,6 +16,10 @@ import {
   siteShowsNews,
   siteShowsProducts,
 } from "@/sites/features";
+import {
+  EuroMillionsDesktopNav,
+  EuroMillionsMobileNav,
+} from "./EuroMillionsNav";
 import { SiteLogo } from "./SiteLogo";
 import { useSite } from "./SiteProvider";
 
@@ -26,20 +30,7 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
 
   const links = siteIsEuroMillions(site)
-    ? (
-        [
-          { href: "/tirages", label: t("archive") },
-          { href: "/simulateur", label: t("simulator") },
-          { href: "/prochain-tirage", label: t("nextDraw") },
-          { href: "/jeux", label: t("otherGames") },
-          { href: "/my-million", label: t("myMillion") },
-          { href: "/stats", label: t("stats") },
-          { href: "/guides", label: t("guides") },
-          siteShowsNews(site)
-            ? { href: "/actualites", label: t("news") }
-            : null,
-        ] as const
-      ).filter(Boolean) as { href: string; label: string }[]
+    ? ([] as { href: string; label: string }[])
     : siteIsCasinosCrypto(site)
       ? (
           [
@@ -109,21 +100,29 @@ export function SiteHeader() {
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 md:px-8">
+      <div
+        className={`mx-auto flex items-center justify-between px-5 py-4 md:px-8 ${
+          siteIsEuroMillions(site) ? "max-w-7xl" : "max-w-6xl"
+        }`}
+      >
         <Link href="/" onClick={() => setOpen(false)} aria-label={t("home")}>
           <SiteLogo variant="header" />
         </Link>
-        <nav className="hidden items-center gap-4 text-sm text-[var(--muted)] xl:gap-5 lg:flex">
-          {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="hover:text-[var(--heading)]"
-            >
-              {l.label}
-            </Link>
-          ))}
-        </nav>
+        {siteIsEuroMillions(site) ? (
+          <EuroMillionsDesktopNav />
+        ) : (
+          <nav className="hidden items-center gap-4 text-sm text-[var(--muted)] xl:gap-5 lg:flex">
+            {links.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="hover:text-[var(--heading)]"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+        )}
         <button
           type="button"
           className="inline-flex min-h-11 min-w-11 items-center justify-center border border-[var(--line)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--heading)] lg:hidden"
@@ -140,18 +139,22 @@ export function SiteHeader() {
           id="mobile-nav"
           className="border-t border-[var(--line)] bg-[var(--surface)] px-5 py-4 lg:hidden"
         >
-          <div className="flex flex-col gap-1 text-sm text-[var(--fg)]">
-            {links.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                className="min-h-11 py-3"
-                onClick={() => setOpen(false)}
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
+          {siteIsEuroMillions(site) ? (
+            <EuroMillionsMobileNav onNavigate={() => setOpen(false)} />
+          ) : (
+            <div className="flex flex-col gap-1 text-sm text-[var(--fg)]">
+              {links.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className="min-h-11 py-3"
+                  onClick={() => setOpen(false)}
+                >
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       ) : null}
     </header>

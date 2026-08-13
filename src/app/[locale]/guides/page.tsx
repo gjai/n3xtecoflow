@@ -12,6 +12,8 @@ import { pickLocalized, usesEnglishFallback } from "@/i18n/locales";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { siteMainGuideSlug } from "@/sites/copy";
 import { getCurrentSite } from "@/sites/server";
+import { siteIsEuroMillions } from "@/sites/features";
+import { GameToolsNav } from "@/components/EuroMillionsNav";
 
 export const revalidate = 600;
 
@@ -24,6 +26,7 @@ export async function generateMetadata({
   const site = await getCurrentSite();
   const brand = site.brand.name;
   const casino = site.id === "casinos-crypto";
+  const em = site.id === "euromillions";
   return {
     title: casino
       ? pickLocalized(locale, {
@@ -34,6 +37,11 @@ export async function generateMetadata({
           pt: "Guias casino crypto e Stake",
           de: "Krypto-Casino- & Stake-Guides",
         })
+      : em
+        ? pickLocalized(locale, {
+            fr: "Guides EuroMillions : rangs, probabilités, My Million",
+            en: "EuroMillions guides: tiers, odds, My Million",
+          })
       : pickLocalized(locale, {
           fr: "Guides d'achat",
           en: "Buying guides",
@@ -51,6 +59,11 @@ export async function generateMetadata({
           pt: `Guias ${brand}: casino Stake, Crypto.com, VPN — 18+, jogo responsável.`,
           de: `${brand}-Guides: Stake Online-Casino, Crypto.com, VPN — 18+, verantwortungsvoll spielen.`,
         })
+      : em
+        ? pickLocalized(locale, {
+            fr: `Guides ${brand} : lire un résultat, rangs de gains, probabilités, My Million et jeu responsable — 18+.`,
+            en: `${brand} guides: reading a result, prize tiers, odds, My Million and responsible play — 18+.`,
+          })
       : pickLocalized(locale, {
           fr: `Guides d'achat ${brand} : critères, comparatifs et checklists concrètes.`,
           en: `Buying guides for ${brand}: criteria, comparisons and practical checklists.`,
@@ -83,6 +96,7 @@ export default async function GuidesIndexPage({
   const allGuides = await resolveAllGuides(site.id);
   const editorialImages = getEditorialImages(site.id);
   const casino = site.id === "casinos-crypto";
+  const em = site.id === "euromillions";
 
   return (
     <div className="pt-6">
@@ -97,6 +111,11 @@ export default async function GuidesIndexPage({
                 pt: "Guias casino crypto e Stake",
                 de: "Krypto-Casino- & Stake-Guides",
               })
+            : em
+              ? pickLocalized(locale, {
+                  fr: "Guides EuroMillions",
+                  en: "EuroMillions guides",
+                })
             : pickLocalized(locale, {
                 fr: "Guides d'achat",
                 en: "Buying guides",
@@ -116,6 +135,11 @@ export default async function GuidesIndexPage({
                 pt: `Stake, Crypto.com e VPN: percurso claro antes de jogar — 18+, jogo responsável.`,
                 de: `Stake, Crypto.com und VPN: klarer Weg vor dem Spielen — 18+, verantwortungsvoll spielen.`,
               })
+            : em
+              ? pickLocalized(locale, {
+                  fr: "Rangs de gains, probabilités, My Million et jeu responsable — sans promesse de méthode. 18+.",
+                  en: "Prize tiers, odds, My Million and responsible play — with no promised system. 18+.",
+                })
             : pickLocalized(locale, {
                 fr: `Méthodes concrètes pour choisir sans se tromper sur ${site.brand.name} — enrichis régulièrement.`,
                 en: `Practical methods to choose with confidence on ${site.brand.name} — regularly enriched.`,
@@ -125,6 +149,11 @@ export default async function GuidesIndexPage({
                 de: `Praktische Methoden für sichere Entscheidungen auf ${site.brand.name} — regelmäßig erweitert.`,
               })}
         </p>
+        {siteIsEuroMillions(site) ? (
+          <div className="mt-6">
+            <GameToolsNav gameId="euromillions" />
+          </div>
+        ) : null}
       </header>
       <div className="mx-auto grid max-w-6xl gap-6 px-5 pb-16 md:grid-cols-2 md:px-8">
         {allGuides.length === 0 ? (

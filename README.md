@@ -48,5 +48,5 @@ Nouveau thème : checklist `src/sites/_template-new-theme.ts` + `.cursor/rules/d
 ## Crons (GitHub Actions)
 
 - `news-ingest.yml` → toutes les 4 h, `POST /api/news/ingest?siteId=…&limit=2` en séquence (ecoflow, tumbler, massage-gun, casinos-crypto, euromillions)
-- `euromillions-refresh.yml` → après tirages + daily, `POST /api/euromillions/refresh`
+- `euromillions-refresh.yml` → live FDJ toutes les 10 min aux heures de tirage (`?mode=fast`) + refresh complet après tirages / daily, `POST /api/euromillions/refresh`
 - `amazon-prices.yml` → `POST /api/amazon/prices/refresh`

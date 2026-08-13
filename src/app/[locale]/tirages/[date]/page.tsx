@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
+import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { DrawBalls } from "@/components/EuroMillionsHome";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
@@ -79,6 +80,7 @@ export default async function TirageDetailPage({
         >
           ← {t("back")}
         </Link>
+        <GameToolsNav gameId="euromillions" />
         <h1 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
           {t("drawOf", { date: formatDate(draw.date, locale) })}
         </h1>

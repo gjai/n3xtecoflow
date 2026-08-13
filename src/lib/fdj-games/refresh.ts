@@ -28,15 +28,19 @@ function mergeDraws(
   });
 }
 
-export async function refreshFdjCompanionGames(): Promise<FdjGamesRefreshResult> {
+export async function refreshFdjCompanionGames(options?: {
+  parallel?: boolean;
+  size?: number;
+}): Promise<FdjGamesRefreshResult> {
   const store = await readFdjGamesStore();
   const games: FdjGamesStore["games"] = { ...store.games };
   const counts: Record<string, number> = {};
   const sources: string[] = [];
+  const size = options?.size ?? 20;
 
-  for (const game of FDJ_COMPANION_GAMES) {
+  async function pullOne(game: (typeof FDJ_COMPANION_GAMES)[number]) {
     try {
-      const incoming = await fetchFdjCompanionDraws(game.id, 20);
+      const incoming = await fetchFdjCompanionDraws(game.id, size);
       const prev = games[game.id]?.draws || [];
       const draws = mergeDraws(prev, incoming).slice(0, 80);
       games[game.id] = {
@@ -45,11 +49,19 @@ export async function refreshFdjCompanionGames(): Promise<FdjGamesRefreshResult>
       };
       counts[game.id] = draws.length;
       sources.push(`${game.apiName}:${incoming.length}`);
-      await new Promise((r) => setTimeout(r, 400));
     } catch (err) {
       console.error("fdj_companion_fail", game.id, err);
       counts[game.id] = games[game.id]?.draws?.length || 0;
       sources.push(`${game.apiName}:fail`);
+    }
+  }
+
+  if (options?.parallel) {
+    await Promise.all(FDJ_COMPANION_GAMES.map((game) => pullOne(game)));
+  } else {
+    for (const game of FDJ_COMPANION_GAMES) {
+      await pullOne(game);
+      await new Promise((r) => setTimeout(r, 400));
     }
   }
 

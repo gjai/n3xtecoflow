@@ -2,10 +2,13 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
+import { GameToolsNav } from "@/components/EuroMillionsNav";
+import { ResultsLivePoller } from "@/components/ResultsLivePoller";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
 import { readEuroMillionsStore } from "@/lib/euromillions/store";
+import { euroMillionsResultPending } from "@/lib/euromillions/datetime";
 
 export const revalidate = 600;
 
@@ -46,15 +49,26 @@ export default async function TiragesPage({
   const t = await getTranslations("draws");
   const store = await readEuroMillionsStore();
   const draws = store.draws.slice(0, 120);
+  const pending = euroMillionsResultPending({
+    latestDate: store.latest?.date || draws[0]?.date,
+    nextDrawDate: store.nextDrawDate,
+  });
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-20">
+      <ResultsLivePoller
+        enabled={pending}
+        fingerprint={store.latest?.date || draws[0]?.date || "none"}
+      />
       <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
         EuroMillions
       </p>
       <h1 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
         {t("title")}
       </h1>
+      <div className="mt-4">
+        <GameToolsNav gameId="euromillions" />
+      </div>
       <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("subtitle")}</p>
 
       {draws.length === 0 ? (

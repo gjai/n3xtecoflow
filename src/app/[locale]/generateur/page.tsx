@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FlashGridGenerator } from "@/components/FlashGridGenerator";
+import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -43,6 +44,9 @@ export default async function GenerateurPage({
       <h1 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
         {t("pageTitle")}
       </h1>
+      <div className="mt-4">
+        <GameToolsNav gameId="euromillions" />
+      </div>
       <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("pageLead")}</p>
       <div className="mt-10">
         <FlashGridGenerator />

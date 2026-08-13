@@ -214,4 +214,28 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     angleFr: "Budget loisir, 18+, aide Joueurs Info Service",
     angleEn: "Leisure budget, 18+, player support resources",
   },
+  {
+    slug: "comprendre-my-million",
+    siteId: "euromillions",
+    topicFr: "Comprendre My Million",
+    topicEn: "Understanding My Million",
+    angleFr: "Code, archives, distinction avec le jackpot",
+    angleEn: "Code, archives, distinct from the jackpot",
+  },
+  {
+    slug: "rangs-gains-euromillions",
+    siteId: "euromillions",
+    topicFr: "Les 13 rangs de gains EuroMillions",
+    topicEn: "The 13 EuroMillions prize tiers",
+    angleFr: "Barème 5+2 jusqu’à 2+0, simulateur",
+    angleEn: "Tiers from 5+2 to 2+0, simulator",
+  },
+  {
+    slug: "euromillions-et-autres-tirages",
+    siteId: "euromillions",
+    topicFr: "EuroMillions et autres tirages FDJ",
+    topicEn: "EuroMillions and other FDJ draws",
+    angleFr: "Loto, EuroDreams, Crescendo, Keno — différences",
+    angleEn: "Loto, EuroDreams, Crescendo, Keno — differences",
+  },
 ];

@@ -3,10 +3,13 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
+import { GameToolsNav } from "@/components/EuroMillionsNav";
+import { ResultsLivePoller } from "@/components/ResultsLivePoller";
 import { MyMillionChecker } from "@/components/MyMillionChecker";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
+import { euroMillionsResultPending } from "@/lib/euromillions/datetime";
 import { readEuroMillionsStore } from "@/lib/euromillions/store";
 
 export const revalidate = 600;
@@ -51,9 +54,17 @@ export default async function MyMillionPage({
     .filter((d) => d.myMillionCode)
     .slice(0, 80);
   const winners = store.myMillionWinners || [];
+  const pending = euroMillionsResultPending({
+    latestDate: store.latest?.date || store.draws[0]?.date,
+    nextDrawDate: store.nextDrawDate,
+  });
 
   return (
     <>
+      <ResultsLivePoller
+        enabled={pending}
+        fingerprint={store.draws.find((d) => d.myMillionCode)?.date || "none"}
+      />
       <main className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-20">
         <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
           My Million
@@ -61,6 +72,9 @@ export default async function MyMillionPage({
         <h1 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
           {t("title")}
         </h1>
+        <div className="mt-4">
+          <GameToolsNav gameId="my-million" />
+        </div>
         <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("subtitle")}</p>
         <p className="mt-2 text-xs text-[var(--muted)]">{t("disclaimer")}</p>
 
@@ -77,7 +91,10 @@ export default async function MyMillionPage({
           />
         </div>
 
-        <h2 className="mt-12 text-lg font-semibold text-[var(--heading)]">
+        <h2
+          id="archives"
+          className="mt-12 scroll-mt-28 text-lg font-semibold text-[var(--heading)]"
+        >
           {t("codesTitle")}
         </h2>
         {coded.length === 0 ? (

@@ -41,6 +41,36 @@ const DRAW_WEEKDAYS: Record<FdjCompanionGameId, number[]> = {
   keno: [0, 1, 2, 3, 4, 5, 6],
 };
 
+/** Sunday = 0. Used for “prochain tirage” copy on companion pages. */
+export function companionScheduleSummary(
+  gameId: FdjCompanionGameId,
+  locale: string,
+): string {
+  if (gameId === "keno") {
+    return locale === "en"
+      ? "Every day — lunchtime and evening draws"
+      : "Tous les jours — tirages midi et soir";
+  }
+  if (gameId === "crescendo") {
+    return locale === "en"
+      ? "Saturdays — several draws during the day"
+      : "Samedi — plusieurs tirages dans la journée";
+  }
+  const names = DRAW_WEEKDAYS[gameId].map((day) => {
+    const date = new Date(Date.UTC(2026, 0, 4 + day));
+    return new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "fr-FR", {
+      weekday: "long",
+      timeZone: "UTC",
+    }).format(date);
+  });
+  if (locale === "en") {
+    return names
+      .map((n) => n.charAt(0).toUpperCase() + n.slice(1))
+      .join(", ");
+  }
+  return names.join(", ");
+}
+
 export function companionResultPending(
   gameId: FdjCompanionGameId,
   latest: FdjGameDraw | null,
