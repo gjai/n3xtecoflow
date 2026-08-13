@@ -10,21 +10,6 @@ import {
   isValidEuroMillionsPick,
 } from "@/lib/euromillions/prize";
 
-function parseNums(raw: string, max: number, count: number): number[] {
-  const parts = raw
-    .split(/[\s,;./|+-]+/)
-    .map((p) => p.trim())
-    .filter(Boolean)
-    .map((p) => Number(p))
-    .filter((n) => Number.isInteger(n) && n >= 1 && n <= max);
-  const uniq: number[] = [];
-  for (const n of parts) {
-    if (!uniq.includes(n)) uniq.push(n);
-    if (uniq.length >= count) break;
-  }
-  return uniq.sort((a, b) => a - b);
-}
-
 function formatMoney(amount: number | null | undefined, locale: string) {
   if (amount == null || !Number.isFinite(amount)) return null;
   return new Intl.NumberFormat(locale === "en" ? "en-GB" : "fr-FR", {
@@ -45,6 +30,97 @@ function formatDate(iso: string, locale: string) {
   }).format(d);
 }
 
+function togglePick(
+  current: number[],
+  value: number,
+  maxCount: number,
+): number[] {
+  if (current.includes(value)) {
+    return current.filter((n) => n !== value).sort((a, b) => a - b);
+  }
+  if (current.length >= maxCount) return current;
+  return [...current, value].sort((a, b) => a - b);
+}
+
+function randomSample(max: number, count: number): number[] {
+  const pool = Array.from({ length: max }, (_, i) => i + 1);
+  for (let i = pool.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, count).sort((a, b) => a - b);
+}
+
+function PickGrid({
+  max,
+  selected,
+  onToggle,
+  variant,
+  label,
+  countLabel,
+}: {
+  max: number;
+  selected: number[];
+  onToggle: (n: number) => void;
+  variant: "ball" | "star";
+  label: string;
+  countLabel: string;
+}) {
+  return (
+    <fieldset className="min-w-0">
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <legend className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+          {label}
+        </legend>
+        <span
+          className={`text-sm font-semibold tabular-nums ${
+            selected.length === (variant === "ball" ? 5 : 2)
+              ? "text-[var(--accent)]"
+              : "text-[var(--muted)]"
+          }`}
+        >
+          {countLabel}
+        </span>
+      </div>
+      <div
+        className={`mt-3 grid gap-1.5 ${
+          variant === "ball"
+            ? "grid-cols-10 sm:grid-cols-10"
+            : "grid-cols-6 sm:grid-cols-6 max-w-sm"
+        }`}
+        role="group"
+        aria-label={label}
+      >
+        {Array.from({ length: max }, (_, i) => i + 1).map((n) => {
+          const on = selected.includes(n);
+          const full =
+            !on && selected.length >= (variant === "ball" ? 5 : 2);
+          return (
+            <button
+              key={`${variant}-${n}`}
+              type="button"
+              onClick={() => onToggle(n)}
+              disabled={full}
+              aria-pressed={on}
+              className={`inline-flex aspect-square items-center justify-center rounded-full text-xs font-semibold transition sm:text-sm ${
+                on
+                  ? variant === "ball"
+                    ? "bg-[var(--accent)] text-[var(--accent-ink)] shadow-[0_0_0_1px_var(--accent)]"
+                    : "border-2 border-[var(--accent)] bg-[var(--accent)] text-[var(--accent-ink)]"
+                  : variant === "ball"
+                    ? "border border-[var(--line)] bg-[var(--surface)] text-[var(--heading)] hover:border-[var(--accent)]"
+                    : "border border-[var(--accent)]/40 bg-[var(--surface)] text-[var(--heading)] hover:border-[var(--accent)]"
+              } ${full ? "cursor-not-allowed opacity-35" : ""}`}
+            >
+              {n}
+            </button>
+          );
+        })}
+      </div>
+    </fieldset>
+  );
+}
+
 export function EuroMillionsSimulator({
   draws,
   locale,
@@ -59,16 +135,13 @@ export function EuroMillionsSimulator({
     () => draws.map((d) => d.date).filter(Boolean),
     [draws],
   );
-  const [numbersRaw, setNumbersRaw] = useState("");
-  const [starsRaw, setStarsRaw] = useState("");
+  const [numbers, setNumbers] = useState<number[]>([]);
+  const [stars, setStars] = useState<number[]>([]);
   const [date, setDate] = useState(latestDate || dates[0] || "");
   const [mode, setMode] = useState<"check" | "archive">("check");
   const [submitted, setSubmitted] = useState(false);
 
-  const numbers = parseNums(numbersRaw, 50, 5);
-  const stars = parseNums(starsRaw, 12, 2);
   const valid = isValidEuroMillionsPick(numbers, stars);
-
   const draw = draws.find((d) => d.date === date);
   const check = valid && draw ? checkTicketOnDraw(numbers, stars, draw) : null;
   const archiveHits =
@@ -76,9 +149,25 @@ export function EuroMillionsSimulator({
       ? findExactComboDraws(draws, numbers, stars)
       : [];
 
+  function resetResult() {
+    setSubmitted(false);
+  }
+
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     setSubmitted(true);
+  }
+
+  function clearPick() {
+    setNumbers([]);
+    setStars([]);
+    resetResult();
+  }
+
+  function randomPick() {
+    setNumbers(randomSample(50, 5));
+    setStars(randomSample(12, 2));
+    resetResult();
   }
 
   return (
@@ -88,7 +177,7 @@ export function EuroMillionsSimulator({
           type="button"
           onClick={() => {
             setMode("check");
-            setSubmitted(false);
+            resetResult();
           }}
           className={`min-h-10 px-4 text-sm font-semibold ${
             mode === "check"
@@ -102,7 +191,7 @@ export function EuroMillionsSimulator({
           type="button"
           onClick={() => {
             setMode("archive");
-            setSubmitted(false);
+            resetResult();
           }}
           className={`min-h-10 px-4 text-sm font-semibold ${
             mode === "archive"
@@ -118,44 +207,74 @@ export function EuroMillionsSimulator({
         {mode === "check" ? t("checkHelp") : t("archiveHelp")}
       </p>
 
-      <form onSubmit={onSubmit} className="space-y-5">
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="block">
-            <span className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-              {t("numbersLabel")}
-            </span>
-            <input
-              value={numbersRaw}
-              onChange={(e) => {
-                setNumbersRaw(e.target.value);
-                setSubmitted(false);
-              }}
-              placeholder={t("numbersPlaceholder")}
-              inputMode="numeric"
-              className="mt-2 w-full border border-[var(--line)] bg-[var(--surface)] px-3 py-2.5 text-[var(--heading)] outline-none focus:border-[var(--accent)]"
-            />
-            <span className="mt-1 block text-xs text-[var(--muted)]">
-              {t("numbersHint")}
-            </span>
-          </label>
-          <label className="block">
-            <span className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-              {t("starsLabel")}
-            </span>
-            <input
-              value={starsRaw}
-              onChange={(e) => {
-                setStarsRaw(e.target.value);
-                setSubmitted(false);
-              }}
-              placeholder={t("starsPlaceholder")}
-              inputMode="numeric"
-              className="mt-2 w-full border border-[var(--line)] bg-[var(--surface)] px-3 py-2.5 text-[var(--heading)] outline-none focus:border-[var(--accent)]"
-            />
-            <span className="mt-1 block text-xs text-[var(--muted)]">
-              {t("starsHint")}
-            </span>
-          </label>
+      <form onSubmit={onSubmit} className="space-y-8">
+        <div className="space-y-8 border border-[var(--line)] bg-[var(--surface)] p-5 md:p-7">
+          <PickGrid
+            max={50}
+            selected={numbers}
+            variant="ball"
+            label={t("numbersLabel")}
+            countLabel={t("numbersCount", { count: numbers.length })}
+            onToggle={(n) => {
+              setNumbers((prev) => togglePick(prev, n, 5));
+              resetResult();
+            }}
+          />
+
+          <PickGrid
+            max={12}
+            selected={stars}
+            variant="star"
+            label={t("starsLabel")}
+            countLabel={t("starsCount", { count: stars.length })}
+            onToggle={(n) => {
+              setStars((prev) => togglePick(prev, n, 2));
+              resetResult();
+            }}
+          />
+
+          <div className="flex flex-wrap items-center gap-4 border-t border-[var(--line)] pt-5">
+            <div className="flex flex-wrap gap-2">
+              {numbers.map((n) => (
+                <span
+                  key={`sel-n-${n}`}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--accent)] text-sm font-semibold text-[var(--accent-ink)]"
+                >
+                  {n}
+                </span>
+              ))}
+              {stars.map((n) => (
+                <span
+                  key={`sel-s-${n}`}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--accent)] bg-[var(--bg)] text-sm font-semibold text-[var(--heading)]"
+                >
+                  {n}
+                </span>
+              ))}
+              {numbers.length === 0 && stars.length === 0 ? (
+                <span className="text-sm text-[var(--muted)]">
+                  {t("pickEmpty")}
+                </span>
+              ) : null}
+            </div>
+            <div className="ml-auto flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={randomPick}
+                className="min-h-10 border border-[var(--line)] px-4 text-sm font-semibold text-[var(--heading)]"
+              >
+                {t("randomPick")}
+              </button>
+              <button
+                type="button"
+                onClick={clearPick}
+                disabled={numbers.length === 0 && stars.length === 0}
+                className="min-h-10 border border-[var(--line)] px-4 text-sm font-semibold text-[var(--heading)] disabled:opacity-40"
+              >
+                {t("clearPick")}
+              </button>
+            </div>
+          </div>
         </div>
 
         {mode === "check" ? (
@@ -167,7 +286,7 @@ export function EuroMillionsSimulator({
               value={date}
               onChange={(e) => {
                 setDate(e.target.value);
-                setSubmitted(false);
+                resetResult();
               }}
               className="mt-2 w-full border border-[var(--line)] bg-[var(--surface)] px-3 py-2.5 text-[var(--heading)] outline-none focus:border-[var(--accent)]"
             >
