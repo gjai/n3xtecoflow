@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import { usesEnglishFallback } from "@/i18n/locales";
 import { useSite } from "./SiteProvider";
 import { getNetworkLinks } from "@/sites";
 
@@ -10,7 +11,7 @@ export function NetworkLinks() {
   const t = useTranslations("network");
   const links = getNetworkLinks(site);
   if (!links.length) return null;
-  const isEn = locale === "en";
+  const isEn = usesEnglishFallback(locale);
 
   return (
     <div className="border-t border-[var(--line)] px-5 py-6 md:px-8">

@@ -30,7 +30,6 @@ export default async function MentionsPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("legal");
-  const isEn = locale === "en";
   const site = await getCurrentSite();
   const showResponsible =
     siteNeedsGamblingDisclaimer(site) && Boolean(t("responsibleBody").trim());
@@ -64,7 +63,7 @@ export default async function MentionsPage({
       <p className="mt-4 text-[var(--muted)]">{t("hubIntro")}</p>
 
       <nav
-        aria-label={isEn ? "Legal sections" : "Sections légales"}
+        aria-label={t.has("tocAria") ? t("tocAria") : t("hubTitle")}
         className="mt-8 border border-[var(--line)] bg-[var(--surface)] p-4"
       >
         <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
@@ -120,9 +119,7 @@ export default async function MentionsPage({
               href="/a-propos"
               className="text-[var(--accent)] underline-offset-2 hover:underline"
             >
-              {isEn
-                ? "About this editorial site"
-                : "À propos de ce site éditorial"}
+              {t("aboutLink")}
             </Link>
           </p>
           <p className="mt-2">

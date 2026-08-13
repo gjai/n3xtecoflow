@@ -21,26 +21,38 @@ function newsHaystack(article: NewsArticle): string {
     .toLowerCase();
 }
 
+function isGeneralCrypto(hay: string): boolean {
+  return /cryptocurrenc|cryptomonnaie|\bbitcoin\b|\bethereum\b|\bbtc\b|\beth\b|\busdt\b|\bstablecoin\b|\bcrypto\b/.test(
+    hay,
+  );
+}
+
 function scoreOffer(hay: string, id: string): number {
   switch (id) {
     case "stake":
       return (
-        (/\bstake\b/.test(hay) ? 6 : 0) +
+        (/\bstake(\.com)?\b/.test(hay) ? 6 : 0) +
         (/casino|gambling|slots?|bonus|wager|mise/.test(hay) ? 3 : 0)
       );
     case "cryptocom":
       return (
-        (/crypto\.com|cryptocom/.test(hay) ? 6 : 0) +
-        (/wallet|on-?ramp|exchange|usdt|\bbtc\b|acheter\s*crypto|crypto\s*app/.test(
+        (/crypto\.com|cryptocom/.test(hay) ? 8 : 0) +
+        (/wallet|on-?ramp|exchange|usdt|\bbtc\b|\beth\b|acheter\s*crypto|crypto\s*app|bitcoin|ethereum|cryptocurrenc|cryptomonnaie|stablecoin/.test(
           hay,
         )
-          ? 3
+          ? 5
+          : 0) +
+        // Actus crypto « générales » → pousser Crypto.com même sans marque explicite
+        (isGeneralCrypto(hay) &&
+        !/\bstake(\.com)?\b/.test(hay) &&
+        !/nordvpn|nord\s*vpn/.test(hay)
+          ? 4
           : 0)
       );
     case "nordvpn":
       return (
         (/nordvpn|nord\s*vpn/.test(hay) ? 6 : 0) +
-        (/\bvpn\b|kill-?switch|connexion\s*(s[eé]curis[eé]e|priv[eé]e)/.test(
+        (/\bvpn\b|kill-?switch|connexion\s*(s[eé]curis[eé]e|priv[eé]e)|privacy/.test(
           hay,
         )
           ? 3
@@ -53,7 +65,9 @@ function scoreOffer(hay: string, id: string): number {
 
 /**
  * Pick affiliate CTAs for a news piece (Stake / Crypto.com / NordVPN).
- * Primary = best topic match, default Stake.
+ * Primary = best topic match.
+ * Crypto générales → Crypto.com ; casino/Stake → Stake ; VPN → NordVPN.
+ * Always returns all three offers when configured (Crypto.com always present).
  */
 export function affiliateCtaForNews(
   article: NewsArticle,
@@ -72,7 +86,7 @@ export function affiliateCtaForNews(
   const list = ordered.length ? ordered : offers;
   const hay = newsHaystack(article);
 
-  let matchedId = "stake";
+  let matchedId: (typeof OFFER_ORDER)[number] = "stake";
   let best = -1;
   for (const id of OFFER_ORDER) {
     const s = scoreOffer(hay, id);
@@ -81,14 +95,35 @@ export function affiliateCtaForNews(
       matchedId = id;
     }
   }
-  if (best <= 0) matchedId = "stake";
+  if (best <= 0) {
+    matchedId = isGeneralCrypto(hay) ? "cryptocom" : "stake";
+  }
+
+  // Garantir Crypto.com dans la liste affichée (actus crypto / wallet).
+  const cryptocom = affiliateOffer(site, "cryptocom");
+  const withCrypto =
+    cryptocom && !list.some((o) => o.id === "cryptocom")
+      ? [...list, cryptocom]
+      : list;
+
+  // Sur actu crypto générale : Crypto.com en tête de liste visuelle.
+  const offersOut =
+    matchedId === "cryptocom" && cryptocom
+      ? [
+          cryptocom,
+          ...withCrypto.filter((o) => o.id !== "cryptocom"),
+        ]
+      : withCrypto;
 
   const primary =
-    list.find((o) => o.id === matchedId) || list[0] || undefined;
+    offersOut.find((o) => o.id === matchedId) ||
+    cryptocom ||
+    offersOut[0] ||
+    undefined;
 
   return {
     primary,
-    offers: list,
+    offers: offersOut,
     matchedId: primary?.id || matchedId,
   };
 }

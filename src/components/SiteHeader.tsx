@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@/i18n/navigation";
 import {
   CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG,
+  CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG,
   CASINOS_CRYPTO_STAKE_GUIDE_SLUG,
   CASINOS_CRYPTO_VPN_GUIDE_SLUG,
 } from "@/data/casinos-crypto-guides";
@@ -33,8 +34,12 @@ export function SiteHeader() {
             label: t("stake"),
           },
           {
-            href: `/guides/${CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG}`,
+            href: `/guides/${CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG}`,
             label: t("crypto"),
+          },
+          {
+            href: `/guides/${CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG}`,
+            label: t("wallet"),
           },
           {
             href: `/guides/${CASINOS_CRYPTO_VPN_GUIDE_SLUG}`,
@@ -93,7 +98,7 @@ export function SiteHeader() {
         <Link href="/" onClick={() => setOpen(false)} aria-label={t("home")}>
           <SiteLogo variant="header" />
         </Link>
-        <nav className="hidden items-center gap-6 text-sm text-[var(--muted)] lg:flex">
+        <nav className="hidden items-center gap-4 text-sm text-[var(--muted)] xl:gap-5 lg:flex">
           {links.map((l) => (
             <Link
               key={l.href}

@@ -79,14 +79,34 @@ export const NEWS_FEEDS: NewsFeed[] = [
     url: "https://news.google.com/rss/search?q=(%22massage+gun%22+OR+%22neck+massager%22+OR+%22shiatsu+massager%22+OR+Theragun+OR+Therabody+OR+Hypervolt+OR+Hyperice+OR+Renpho+OR+TOLOCO+OR+Brelley+OR+Jolt+OR+percussion+massager+OR+%22muscle+recovery%22)+when:45d&hl=en-US&gl=US&ceid=US:en",
   },
   {
-    id: "casinos-crypto-gnews-fr",
+    id: "casinos-crypto-gnews-fr-stake",
     siteId: "casinos-crypto",
-    url: "https://news.google.com/rss/search?q=(Stake+(casino+OR+crypto)+OR+%22casino+crypto%22+OR+%22crypto+casino%22+OR+%22Crypto.com%22+(wallet+OR+app+OR+crypto)+OR+NordVPN+(casino+OR+jeu+OR+gaming+OR+Stake))+when:45d&hl=fr&gl=FR&ceid=FR:fr",
+    url: "https://news.google.com/rss/search?q=(Stake.com+OR+Stake)+(casino+OR+crypto+OR+gambling+OR+%22casino+en+ligne%22)+when:30d&hl=fr&gl=FR&ceid=FR:fr",
   },
   {
-    id: "casinos-crypto-gnews-en",
+    id: "casinos-crypto-gnews-en-stake",
     siteId: "casinos-crypto",
-    url: "https://news.google.com/rss/search?q=(Stake+(casino+OR+crypto)+OR+%22crypto+casino%22+OR+%22Crypto.com%22+(wallet+OR+app)+OR+NordVPN+(casino+OR+gaming+OR+Stake))+when:45d&hl=en-US&gl=US&ceid=US:en",
+    url: "https://news.google.com/rss/search?q=(Stake.com+OR+Stake)+(casino+OR+crypto+OR+gambling)+when:30d&hl=en-US&gl=US&ceid=US:en",
+  },
+  {
+    id: "casinos-crypto-gnews-fr-nordvpn",
+    siteId: "casinos-crypto",
+    url: "https://news.google.com/rss/search?q=(NordVPN+OR+%22Nord+VPN%22)+(VPN+OR+s%C3%A9curit%C3%A9+OR+privacy+OR+casino+OR+crypto)+when:30d&hl=fr&gl=FR&ceid=FR:fr",
+  },
+  {
+    id: "casinos-crypto-gnews-en-nordvpn",
+    siteId: "casinos-crypto",
+    url: "https://news.google.com/rss/search?q=(NordVPN+OR+%22Nord+VPN%22)+(VPN+OR+security+OR+privacy+OR+casino+OR+crypto)+when:30d&hl=en-US&gl=US&ceid=US:en",
+  },
+  {
+    id: "casinos-crypto-gnews-fr-crypto",
+    siteId: "casinos-crypto",
+    url: "https://news.google.com/rss/search?q=(Bitcoin+OR+Ethereum+OR+cryptomonnaie+OR+cryptocurrency+OR+%22Crypto.com%22)+(march%C3%A9+OR+prix+OR+BTC+OR+ETH+OR+wallet+OR+stablecoin)+when:14d&hl=fr&gl=FR&ceid=FR:fr",
+  },
+  {
+    id: "casinos-crypto-gnews-en-crypto",
+    siteId: "casinos-crypto",
+    url: "https://news.google.com/rss/search?q=(Bitcoin+OR+Ethereum+OR+cryptocurrency+OR+%22Crypto.com%22)+(market+OR+price+OR+BTC+OR+ETH+OR+wallet+OR+stablecoin)+when:14d&hl=en-US&gl=US&ceid=US:en",
   },
 ];
 

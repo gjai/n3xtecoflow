@@ -1,7 +1,9 @@
-import type { ArticleSection, GuideArticle } from "./articles";
+import type { ArticleSection, GuideArticle, LocalizedGuideCopy } from "./articles";
+import { casinosCryptoGuideLocales } from "./casinos-crypto-guide-locales";
 
 export const CASINOS_CRYPTO_STAKE_GUIDE_SLUG = "guide-stake-casino-crypto";
 export const CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG = "guide-cryptocom-wallet";
+export const CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG = "guide-cryptomonnaies";
 export const CASINOS_CRYPTO_VPN_GUIDE_SLUG = "vpn-acces-casino";
 
 const AI_CREDIT = "Casinos Crypto (IA)";
@@ -17,6 +19,11 @@ export const casinosCryptoGuideCovers: Record<
   },
   [CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG]: {
     src: "/images/casinos-crypto/cryptocom.jpg",
+    credit: AI_CREDIT,
+    creditUrl: "https://casinos-crypto.fr",
+  },
+  [CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG]: {
+    src: "/images/casinos-crypto/guides/casino-guide-crypto-general-cover.jpg",
     credit: AI_CREDIT,
     creditUrl: "https://casinos-crypto.fr",
   },
@@ -88,6 +95,26 @@ const GUIDE_SECTION_ILLUSTRATIONS: Record<
       credit: AI_CREDIT,
     },
   },
+  [CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG]: {
+    0: {
+      src: "/images/casinos-crypto/guides/casino-guide-crypto-general-cover.jpg",
+      altFr: "Cryptomonnaies : concepts et marché",
+      altEn: "Cryptocurrencies: concepts and market",
+      credit: AI_CREDIT,
+    },
+    1: {
+      src: "/images/casinos-crypto/guides/casino-guide-crypto-learn.jpg",
+      altFr: "Apprendre les bases des cryptomonnaies",
+      altEn: "Learning cryptocurrency basics",
+      credit: AI_CREDIT,
+    },
+    3: {
+      src: "/images/casinos-crypto/guides/casino-guide-crypto-wallet.jpg",
+      altFr: "Wallet crypto sécurisé",
+      altEn: "Secure crypto wallet",
+      credit: AI_CREDIT,
+    },
+  },
   [CASINOS_CRYPTO_VPN_GUIDE_SLUG]: {
     0: {
       src: "/images/casinos-crypto/vpn.jpg",
@@ -129,17 +156,30 @@ function applySectionIllustrations(
   });
 }
 
+function withLocaleCopy(
+  copy: LocalizedGuideCopy,
+  slug: string,
+): LocalizedGuideCopy {
+  return {
+    ...copy,
+    sections: applySectionIllustrations(slug, copy.sections),
+  };
+}
+
 function withGuideIllustrations(guide: GuideArticle): GuideArticle {
+  const extra = casinosCryptoGuideLocales[guide.slug];
   return {
     ...guide,
-    fr: {
-      ...guide.fr,
-      sections: applySectionIllustrations(guide.slug, guide.fr.sections),
-    },
-    en: {
-      ...guide.en,
-      sections: applySectionIllustrations(guide.slug, guide.en.sections),
-    },
+    fr: withLocaleCopy(guide.fr, guide.slug),
+    en: withLocaleCopy(guide.en, guide.slug),
+    ...(extra
+      ? {
+          it: withLocaleCopy(extra.it, guide.slug),
+          es: withLocaleCopy(extra.es, guide.slug),
+          pt: withLocaleCopy(extra.pt, guide.slug),
+          de: withLocaleCopy(extra.de, guide.slug),
+        }
+      : {}),
   };
 }
 
@@ -542,6 +582,117 @@ const casinosCryptoGuidesRaw: GuideArticle[] = [
           heading: "5. Next",
           paragraphs: [
             "Connection ready → Stake guide (crypto casino) and Crypto.com guide (deposit). All three affiliate links are available — Stake stays most prominent. 18+, play responsibly.",
+          ],
+        },
+      ],
+    },
+  },
+  {
+    slug: CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG,
+    fr: {
+      title: "Cryptomonnaies : guide pour démarrer (BTC, ETH, wallet, risques)",
+      subtitle:
+        "Comprendre Bitcoin, Ethereum, les wallets et la volatilité — avant un éventuel dépôt casino (Crypto.com, Stake) — sans conseil financier.",
+      sections: [
+        {
+          heading: "1. Cryptomonnaie, c’est quoi ?",
+          paragraphs: [
+            "Une cryptomonnaie est un actif numérique échangé sur des réseaux décentralisés (blockchain). Bitcoin (BTC) et Ethereum (ETH) restent les plus connus ; les stablecoins type USDT cherchent à coller à une devise (souvent le dollar).",
+            "Ce guide reste éditorial : ce n’est ni un conseil d’investissement, ni une promesse de gains. Les prix crypto bougent vite — vous pouvez perdre une partie ou la totalité de ce que vous engagez.",
+          ],
+          bullets: [
+            "BTC / ETH : actifs volatils, pas un revenu",
+            "Stablecoins : moins volatils, mais risque émetteur / réseau",
+            "Wallet : l’endroit où vous détenez (ou contrôlez) vos clés",
+            "On-ramp : acheter de la crypto avec des euros (ex. Crypto.com)",
+          ],
+        },
+        {
+          heading: "2. Les bases avant d’acheter",
+          paragraphs: [
+            "Trois idées à maîtriser : (1) volatilité — le cours peut chuter en heures ; (2) frais réseau — un envoi « peu cher » peut devenir cher selon le réseau ; (3) phishing — les fausses apps et faux supports pullulent.",
+            "Fixez un montant que vous pouvez perdre entièrement. Séparez clairement : épargne / loisir / (éventuellement) dépôt casino crypto.",
+          ],
+        },
+        {
+          heading: "3. Acheter et stocker : le rôle de Crypto.com",
+          paragraphs: [
+            "Pour beaucoup, le premier pas est une app d’on-ramp réglementée ou grand public. Sur ce site, nous présentons Crypto.com comme parcours pratique pour acheter et détenir de la crypto avant un usage loisir (y compris un dépôt Stake).",
+            "Activez la 2FA, vérifiez l’URL / l’app officielle, et ne partagez jamais vos seed phrases. Le guide Crypto.com détaille le chemin vers un dépôt casino.",
+          ],
+        },
+        {
+          heading: "4. Du wallet au casino en ligne (Stake)",
+          paragraphs: [
+            "Si votre objectif est un casino crypto type Stake : achetez d’abord un petit montant test, choisissez le réseau exact demandé par le casino (ERC-20, TRC-20…), puis envoyez vers l’adresse de dépôt affichée dans le compte Stake.",
+            "Le jeu d’argent reste un risque de perte distinct de la volatilité crypto. 18+ uniquement, budget loisir fixe — voir le guide Stake et le disclaimer jeu responsable.",
+          ],
+        },
+        {
+          heading: "5. Sécurité & connexion",
+          paragraphs: [
+            "Bonnes pratiques : 2FA, e-mail dédié, apps officielles, méfiance envers les « airdrops » et supports qui demandent vos clés.",
+            "Pour stabiliser une session (casino ou wallet), certains utilisateurs préparent un VPN avec kill-switch (nous présentons NordVPN) — outil technique, pas un conseil juridique.",
+          ],
+        },
+        {
+          heading: "6. Suite logique",
+          paragraphs: [
+            "Approfondir : guide Crypto.com (wallet / on-ramp), guide Stake (casino en ligne), guide VPN (connexion). Les liens d’affiliation Crypto.com / Stake / NordVPN peuvent nous soutenir sans coût pour vous — sur le sujet crypto général, Crypto.com est mis en avant.",
+          ],
+        },
+      ],
+    },
+    en: {
+      title: "Cryptocurrencies: starter guide (BTC, ETH, wallet, risks)",
+      subtitle:
+        "Understand Bitcoin, Ethereum, wallets and volatility — before any casino deposit (Crypto.com, Stake) — not financial advice.",
+      sections: [
+        {
+          heading: "1. What is cryptocurrency?",
+          paragraphs: [
+            "A cryptocurrency is a digital asset traded on decentralised networks (blockchains). Bitcoin (BTC) and Ethereum (ETH) remain the best known; stablecoins like USDT aim to track a currency (often the US dollar).",
+            "This guide is editorial: it is not investment advice and does not promise profits. Crypto prices move fast — you can lose some or all of what you put in.",
+          ],
+          bullets: [
+            "BTC / ETH: volatile assets, not income",
+            "Stablecoins: less volatile, still issuer / network risk",
+            "Wallet: where you hold (or control) keys",
+            "On-ramp: buy crypto with fiat (e.g. Crypto.com)",
+          ],
+        },
+        {
+          heading: "2. Basics before you buy",
+          paragraphs: [
+            "Three ideas to master: (1) volatility — prices can drop in hours; (2) network fees — a “cheap” transfer can get expensive depending on the network; (3) phishing — fake apps and fake support are everywhere.",
+            "Set an amount you can lose entirely. Keep a clear split: savings / leisure / (optional) crypto casino deposit.",
+          ],
+        },
+        {
+          heading: "3. Buy and hold: Crypto.com’s role",
+          paragraphs: [
+            "For many people the first step is a mainstream on-ramp app. On this site we present Crypto.com as a practical path to buy and hold crypto before leisure use (including a Stake deposit).",
+            "Enable 2FA, verify the official app / URL, and never share seed phrases. The Crypto.com guide details the path to a casino deposit.",
+          ],
+        },
+        {
+          heading: "4. From wallet to online casino (Stake)",
+          paragraphs: [
+            "If your goal is a crypto casino like Stake: buy a small test amount first, pick the exact network the casino asks for (ERC-20, TRC-20…), then send to the deposit address shown in your Stake account.",
+            "Gambling risk of loss is separate from crypto volatility. Adults only (18+), fixed leisure budget — see the Stake guide and responsible-gambling disclaimer.",
+          ],
+        },
+        {
+          heading: "5. Security & connection",
+          paragraphs: [
+            "Basics: 2FA, dedicated email, official apps, scepticism toward “airdrops” and support asking for keys.",
+            "To steady a session (casino or wallet), some users prepare a VPN with kill-switch (we present NordVPN) — a technical tool, not legal advice.",
+          ],
+        },
+        {
+          heading: "6. Next steps",
+          paragraphs: [
+            "Go deeper: Crypto.com guide (wallet / on-ramp), Stake guide (online casino), VPN guide (connection). Crypto.com / Stake / NordVPN affiliate links may support us at no cost to you — on general crypto topics, Crypto.com stays front and centre.",
           ],
         },
       ],

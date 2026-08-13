@@ -154,7 +154,8 @@
     "affiliateBody": "Product links may be Amazon affiliate links. Your price does not change. AdSense units are labeled “Advertisement”.",
     "responsibleTitle": "Responsible gambling",
     "responsibleBody": "",
-    "responsibleHelp": ""
+    "responsibleHelp": "",
+    "aboutLink": "About this editorial site"
   },
   "contact": {
     "title": "Contact",
@@ -203,7 +204,10 @@
   },
   "theme": {
     "aria": "Change display theme",
-    "title": "Theme: {mode} (click to change)"
+    "title": "Theme: {mode} (click to change)",
+    "system": "Auto",
+    "light": "Light",
+    "dark": "Dark"
   },
   "about": {
     "eyebrow": "Editorial",

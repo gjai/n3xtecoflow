@@ -34,7 +34,7 @@ export type GuideArticle = {
 };
 
 export function getGuideCopy(
-  guide: GuideArticle,
+  guide: Pick<GuideArticle, "fr" | "en" | "it" | "es" | "pt" | "de">,
   locale: string,
 ): LocalizedGuideCopy {
   return pickLocalized(locale, {

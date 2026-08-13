@@ -134,6 +134,9 @@ export const casinosCryptoSite: SiteConfig = {
       "Casino en ligne crypto",
       "Stake casino",
       "Accès Stake France",
+      "Cryptomonnaies",
+      "Bitcoin",
+      "Ethereum",
       "Crypto.com wallet",
       "VPN casino",
       "Jeu responsable",
@@ -149,27 +152,28 @@ export const casinosCryptoSite: SiteConfig = {
     topicLabelFr: "le casino en ligne crypto et Stake",
     topicLabelEn: "online crypto casinos and Stake",
     guideScope:
-      "casino en ligne crypto / Stake France / accès / dépôt crypto / Crypto.com / VPN NordVPN / jeu responsable (pas Amazon, pas AdSense)",
+      "casino en ligne crypto / Stake France / cryptomonnaies / dépôt crypto / Crypto.com / VPN NordVPN / jeu responsable (pas Amazon, pas AdSense)",
     productHintFr:
-      "Guides Stake (casino crypto), Crypto.com (wallet) et VPN pour démarrer clairement — 18+.",
+      "Guides Stake, cryptomonnaies, Crypto.com (wallet) et VPN — 18+.",
     productHintEn:
-      "Stake (crypto casino), Crypto.com (wallet) and VPN guides to start clearly — 18+.",
+      "Stake, cryptocurrency, Crypto.com (wallet) and VPN guides — 18+.",
     checklistFr:
       "Budget, 18+, cadre légal perso, dépôt crypto, connexion (VPN), conditions de bonus.",
     checklistEn:
       "Budget, 18+, your legal framework, crypto deposit, VPN connection, bonus terms.",
     newsPerimeter:
-      "casino en ligne crypto / Stake / Crypto.com / NordVPN / accès France",
+      "casino en ligne crypto / Stake.com / cryptomonnaies (BTC ETH) / Crypto.com / NordVPN / accès France",
     newsTitleMustMention:
-      "casino crypto, casino en ligne, Stake, Crypto.com ou VPN",
+      "casino crypto, Stake, Bitcoin, Ethereum, cryptomonnaie, Crypto.com ou NordVPN",
     newsBuyingCriteria:
-      "accès Stake, bonus casino en ligne, dépôt crypto, wallet, retraits, VPN, jeu responsable",
-    newsDefaultTags: ["casino-en-ligne", "stake", "casino-crypto"],
+      "accès Stake, bonus casino, marché crypto, wallet Crypto.com, VPN NordVPN, jeu responsable",
+    newsDefaultTags: ["casino-en-ligne", "stake", "casino-crypto", "crypto"],
     newsExtraRules: [
       "Interdiction absolue de mentionner Amazon, AdSense, ou tout lien d’achat Amazon",
       "Ne jamais inventer d’URL — les CTA affiliation (Stake / Crypto.com / NordVPN) sont gérés par le site, pas dans le texte",
       "Si prix ou offre : oriente vers les conditions de l’opérateur (Stake / Crypto.com / NordVPN) sans inventer de promo",
       "Rappeler 18+ et jeu responsable quand le sujet touche au casino",
+      "Sur une actu cryptomonnaie générale (BTC/ETH/marché), rester factuel et laisser le site mettre en avant Crypto.com en CTA — sans promesse de gains",
       "Quand c’est pertinent, utiliser le vocabulaire de recherche naturel : casino en ligne, casino crypto, Stake France, accès, dépôt crypto — sans promettre de contourner la loi",
     ],
     coverSubject: "crypto casino editorial cover",
@@ -183,7 +187,7 @@ export const casinosCryptoSite: SiteConfig = {
     preferAiNewsCovers: true,
     allowWeakPackshotDefault: false,
     topicBrandPattern:
-      String.raw`\bcrypto\s*casino\b|\bcasino\s*crypto\b|\bstake\b|\bcrypto\.com\b|\bcryptocom\b|\bnordvpn\b|\bvpn\b.*\b(casino|gaming|jeu|stake)\b|\b(casino|gaming|jeu|stake)\b.*\bvpn\b`,
+      String.raw`\bcrypto\s*casino\b|\bcasino\s*crypto\b|\bstake(\.com)?\b|\bcrypto\.com\b|\bcryptocom\b|\bnordvpn\b|\bnord\s*vpn\b|\bcryptocurrenc|\bcryptomonnaie|\bbitcoin\b|\bethereum\b|\bbtc\b|\beth\b|\busdt\b|\bstablecoin\b|\bvpn\b`,
   },
   focusFr:
     "Casino en ligne crypto : Stake, accès depuis la France, wallet Crypto.com et VPN — sans Amazon ni AdSense.",

@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
@@ -10,14 +11,20 @@ import {
 import type { SiteConfig } from "@/sites/types";
 import {
   CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG,
+  CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG,
   CASINOS_CRYPTO_STAKE_GUIDE_SLUG,
   CASINOS_CRYPTO_VPN_GUIDE_SLUG,
 } from "@/data/casinos-crypto-guides";
-import { usesEnglishFallback } from "@/i18n/locales";
 
-type GuideAngle = "stake" | "cryptocom" | "vpn";
+type GuideAngle = "stake" | "cryptocom" | "crypto" | "vpn";
 
 function angleForSlug(slug: string): GuideAngle {
+  if (
+    slug.includes("cryptomonnaie") ||
+    slug === CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG
+  ) {
+    return "crypto";
+  }
   if (slug.includes("cryptocom") || slug === CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG) {
     return "cryptocom";
   }
@@ -42,83 +49,69 @@ type OfferCopy = {
   nordvpnLabel: string;
 };
 
-function copyForAngle(angle: GuideAngle, isEn: boolean): OfferCopy {
-  if (angle === "cryptocom") {
-    return isEn
-      ? {
-          eyebrow: "Next step",
-          title: "Wallet ready — the casino comes first",
-          lead: "Crypto.com prepares the deposit. Stake remains the main destination. NordVPN secures the session.",
-          stakeHint: "Play on Stake once your wallet is funded (18+).",
-          cryptocomHint: "Buy / hold crypto before sending to Stake.",
-          nordvpnHint: "Stable private connection for the whole session.",
-          stakeLabel: "Open Stake (main)",
-          cryptocomLabel: "Open Crypto.com",
-          nordvpnLabel: "Try NordVPN",
-        }
-      : {
-          eyebrow: "Étape suivante",
-          title: "Wallet prêt — le casino reste la priorité",
-          lead: "Crypto.com prépare le dépôt. Stake reste la destination principale. NordVPN sécurise la session.",
-          stakeHint: "Jouer sur Stake une fois le wallet alimenté (18+).",
-          cryptocomHint: "Acheter / détenir la crypto avant l’envoi vers Stake.",
-          nordvpnHint: "Connexion stable et privée pendant toute la session.",
-          stakeLabel: "Ouvrir Stake (principal)",
-          cryptocomLabel: "Ouvrir Crypto.com",
-          nordvpnLabel: "Essayer NordVPN",
-        };
-  }
+function copyForAngle(
+  angle: GuideAngle,
+  t: Awaited<ReturnType<typeof getTranslations>>,
+): OfferCopy {
+  const prefix =
+    angle === "crypto"
+      ? "crypto"
+      : angle === "cryptocom"
+        ? "wallet"
+        : angle === "vpn"
+          ? "vpn"
+          : "stake";
 
-  if (angle === "vpn") {
-    return isEn
-      ? {
-          eyebrow: "After the VPN",
-          title: "Secure connection — then the crypto casino",
-          lead: "NordVPN is the companion. Stake is still the headline destination. Crypto.com helps fund the deposit.",
-          stakeHint: "Open Stake when your setup is ready (18+).",
-          cryptocomHint: "On-ramp wallet before a first deposit.",
-          nordvpnHint: "Keep kill-switch on for the full session.",
-          stakeLabel: "Open Stake (main)",
-          cryptocomLabel: "Open Crypto.com",
-          nordvpnLabel: "Try NordVPN",
-        }
-      : {
-          eyebrow: "Après le VPN",
-          title: "Connexion sécurisée — puis le casino crypto",
-          lead: "NordVPN est le compagnon. Stake reste la destination principale. Crypto.com aide à préparer le dépôt.",
-          stakeHint: "Ouvrir Stake quand le setup est prêt (18+).",
-          cryptocomHint: "Wallet on-ramp avant un premier dépôt.",
-          nordvpnHint: "Garder le kill-switch pendant toute la session.",
-          stakeLabel: "Ouvrir Stake (principal)",
-          cryptocomLabel: "Ouvrir Crypto.com",
-          nordvpnLabel: "Essayer NordVPN",
-        };
+  if (prefix === "crypto") {
+    return {
+      eyebrow: t("cryptoEyebrow"),
+      title: t("cryptoTitle"),
+      lead: t("cryptoLead"),
+      stakeHint: t("cryptoStakeHint"),
+      cryptocomHint: t("cryptoCryptocomHint"),
+      nordvpnHint: t("cryptoNordvpnHint"),
+      stakeLabel: t("cryptoStakeCta"),
+      cryptocomLabel: t("cryptoCryptocomCta"),
+      nordvpnLabel: t("cryptoNordvpnCta"),
+    };
   }
-
-  // stake (default) — casino angle front and center
-  return isEn
-    ? {
-        eyebrow: "Start here",
-        title: "Stake first — wallet & VPN as companions",
-        lead: "This guide is about the crypto casino. Crypto.com and NordVPN support the path — they are not the main destination.",
-        stakeHint: "Primary: create your Stake account and play within a fixed budget (18+).",
-        cryptocomHint: "Companion: buy crypto before depositing.",
-        nordvpnHint: "Companion: stable private connection.",
-        stakeLabel: "Open Stake",
-        cryptocomLabel: "Crypto.com wallet",
-        nordvpnLabel: "NordVPN setup",
-      }
-    : {
-        eyebrow: "Commencer ici",
-        title: "Stake d’abord — wallet & VPN en compagnons",
-        lead: "Ce guide porte sur le casino crypto. Crypto.com et NordVPN accompagnent le parcours — ce ne sont pas la destination principale.",
-        stakeHint: "Principal : créer votre compte Stake et jouer avec un budget fixe (18+).",
-        cryptocomHint: "Compagnon : acheter la crypto avant de déposer.",
-        nordvpnHint: "Compagnon : connexion stable et privée.",
-        stakeLabel: "Ouvrir Stake",
-        cryptocomLabel: "Wallet Crypto.com",
-        nordvpnLabel: "Setup NordVPN",
-      };
+  if (prefix === "wallet") {
+    return {
+      eyebrow: t("walletEyebrow"),
+      title: t("walletTitle"),
+      lead: t("walletLead"),
+      stakeHint: t("walletStakeHint"),
+      cryptocomHint: t("walletCryptocomHint"),
+      nordvpnHint: t("walletNordvpnHint"),
+      stakeLabel: t("walletStakeCta"),
+      cryptocomLabel: t("walletCryptocomCta"),
+      nordvpnLabel: t("walletNordvpnCta"),
+    };
+  }
+  if (prefix === "vpn") {
+    return {
+      eyebrow: t("vpnEyebrow"),
+      title: t("vpnTitle"),
+      lead: t("vpnLead"),
+      stakeHint: t("vpnStakeHint"),
+      cryptocomHint: t("vpnCryptocomHint"),
+      nordvpnHint: t("vpnNordvpnHint"),
+      stakeLabel: t("vpnStakeCta"),
+      cryptocomLabel: t("vpnCryptocomCta"),
+      nordvpnLabel: t("vpnNordvpnCta"),
+    };
+  }
+  return {
+    eyebrow: t("stakeEyebrow"),
+    title: t("stakeTitle"),
+    lead: t("stakeLead"),
+    stakeHint: t("stakeHint"),
+    cryptocomHint: t("stakeCryptocomHint"),
+    nordvpnHint: t("stakeNordvpnHint"),
+    stakeLabel: t("stakeCta"),
+    cryptocomLabel: t("stakeCryptocomCta"),
+    nordvpnLabel: t("stakeNordvpnCta"),
+  };
 }
 
 function OfferRow({
@@ -162,10 +155,9 @@ function OfferRow({
 }
 
 /** Three affiliate CTAs on every casino guide — Stake always most prominent, angle varies by slug. */
-export function CasinosCryptoGuideAffiliates({
+export async function CasinosCryptoGuideAffiliates({
   site,
   slug,
-  locale,
 }: {
   site: SiteConfig;
   slug: string;
@@ -174,15 +166,16 @@ export function CasinosCryptoGuideAffiliates({
   const offers = resolveAffiliateOffers(site);
   if (!offers.length) return null;
 
-  const isEn = usesEnglishFallback(locale);
+  const t = await getTranslations("affiliates");
   const angle = angleForSlug(slug);
-  const copy = copyForAngle(angle, isEn);
+  const copy = copyForAngle(angle, t);
   const stake = affiliateOffer(site, "stake");
   const cryptocom = affiliateOffer(site, "cryptocom");
   const nordvpn = affiliateOffer(site, "nordvpn");
   const L = ({ text }: { text: string }) => (
     <AffiliateLinkedText text={text} offers={offers} />
   );
+  const cryptoPrimary = angle === "crypto" || angle === "cryptocom";
 
   if (!stake && !cryptocom && !nordvpn) return null;
 
@@ -201,7 +194,16 @@ export function CasinosCryptoGuideAffiliates({
       </div>
 
       <div className="space-y-3">
-        {stake ? (
+        {cryptoPrimary && cryptocom ? (
+          <OfferRow
+            offer={cryptocom}
+            hint={copy.cryptocomHint}
+            label={copy.cryptocomLabel}
+            primary
+            offers={offers}
+          />
+        ) : null}
+        {!cryptoPrimary && stake ? (
           <OfferRow
             offer={stake}
             hint={copy.stakeHint}
@@ -211,7 +213,15 @@ export function CasinosCryptoGuideAffiliates({
           />
         ) : null}
         <div className="grid gap-3 sm:grid-cols-2">
-          {cryptocom ? (
+          {cryptoPrimary && stake ? (
+            <OfferRow
+              offer={stake}
+              hint={copy.stakeHint}
+              label={copy.stakeLabel}
+              offers={offers}
+            />
+          ) : null}
+          {!cryptoPrimary && cryptocom ? (
             <OfferRow
               offer={cryptocom}
               hint={copy.cryptocomHint}

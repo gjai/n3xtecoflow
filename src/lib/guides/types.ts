@@ -13,6 +13,10 @@ export type GuideEntry = {
   siteId?: SiteId;
   fr: GuideLocaleCopy;
   en: GuideLocaleCopy;
+  it?: GuideLocaleCopy;
+  es?: GuideLocaleCopy;
+  pt?: GuideLocaleCopy;
+  de?: GuideLocaleCopy;
   imageSrc?: string;
   imageCredit?: string;
   model?: string;
@@ -167,6 +171,16 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     topicEn: "Crypto.com: buy crypto for Stake",
     angleFr: "Wallet, dépôt casino en ligne, KYC, envoi vers Stake",
     angleEn: "Wallet, online casino deposit, KYC, send to Stake",
+  },
+  {
+    slug: "guide-cryptomonnaies",
+    siteId: "casinos-crypto",
+    topicFr: "Cryptomonnaies : guide pour démarrer",
+    topicEn: "Cryptocurrencies: starter guide",
+    angleFr:
+      "BTC, ETH, wallet, risques, on-ramp Crypto.com, lien éventuel vers Stake",
+    angleEn:
+      "BTC, ETH, wallet, risks, Crypto.com on-ramp, optional path to Stake",
   },
   {
     slug: "vpn-acces-casino",

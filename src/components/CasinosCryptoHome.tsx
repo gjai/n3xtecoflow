@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
@@ -9,6 +10,7 @@ import {
 } from "@/lib/affiliates";
 import {
   CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG,
+  CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG,
   CASINOS_CRYPTO_STAKE_GUIDE_SLUG,
   CASINOS_CRYPTO_VPN_GUIDE_SLUG,
   casinosCryptoGuideCovers,
@@ -19,84 +21,82 @@ import type { NewsArticle } from "@/lib/news/types";
 import type { SiteConfig } from "@/sites/types";
 
 function buildCasinoHeroSlides(
+  t: Awaited<ReturnType<typeof getTranslations>>,
   locale: string,
   site: SiteConfig,
   latestNews: NewsArticle[],
 ): HeroSlide[] {
-  const isEn = usesEnglishFallback(locale);
   const editorial = getEditorialImages(site.id);
   const stakeCover = casinosCryptoGuideCovers[CASINOS_CRYPTO_STAKE_GUIDE_SLUG];
+  const cryptoGeneralCover =
+    casinosCryptoGuideCovers[CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG];
   const cryptoCover =
     casinosCryptoGuideCovers[CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG];
   const vpnCover = casinosCryptoGuideCovers[CASINOS_CRYPTO_VPN_GUIDE_SLUG];
   const latest = latestNews[0];
-  const newsCopy = latest ? (isEn ? latest.en : latest.fr) : null;
+  const newsCopy = latest
+    ? usesEnglishFallback(locale)
+      ? latest.en
+      : latest.fr
+    : null;
 
   return [
     {
       id: latest ? `news-${latest.slug}` : "news-fallback",
-      kind: isEn ? "News" : "Actu",
-      title:
-        newsCopy?.title ||
-        (isEn
-          ? "Online crypto casino & Stake news"
-          : "Actus casino en ligne & Stake"),
-      excerpt:
-        newsCopy?.excerpt ||
-        (isEn
-          ? "Editorial briefs on Stake, crypto deposits and VPN access."
-          : "Synthèses sur Stake, dépôt crypto et accès VPN."),
+      kind: t("heroNewsKind"),
+      title: newsCopy?.title || t("heroNewsTitle"),
+      excerpt: newsCopy?.excerpt || t("heroNewsExcerpt"),
       href: latest ? `/actualites/${latest.slug}` : "/actualites",
-      cta: isEn ? "Read the article" : "Lire l’article",
+      cta: t("heroNewsCta"),
       imageSrc: latest?.imageSrc || editorial.news.src || site.heroImage,
-      imageAlt: isEn ? editorial.news.altEn : editorial.news.altFr,
+      imageAlt: usesEnglishFallback(locale)
+        ? editorial.news.altEn
+        : editorial.news.altFr,
     },
     {
       id: "stake-guide",
       kind: "Stake",
-      title: isEn
-        ? "Stake online crypto casino: full guide"
-        : "Stake casino en ligne crypto : guide complet",
-      excerpt: isEn
-        ? "How to access Stake, deposit crypto, KYC and play responsibly — 18+."
-        : "Comment accéder à Stake, déposer en crypto, KYC et jouer responsable — 18+.",
+      title: t("heroStakeTitle"),
+      excerpt: t("heroStakeExcerpt"),
       href: `/guides/${CASINOS_CRYPTO_STAKE_GUIDE_SLUG}`,
-      cta: isEn ? "Read the Stake guide" : "Lire le guide Stake",
+      cta: t("heroStakeCta"),
       imageSrc: stakeCover.src,
-      imageAlt: isEn ? "Stake guide cover" : "Couverture guide Stake",
+      imageAlt: t("heroStakeAlt"),
+    },
+    {
+      id: "crypto-guide",
+      kind: "Crypto",
+      title: t("heroCryptoTitle"),
+      excerpt: t("heroCryptoExcerpt"),
+      href: `/guides/${CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG}`,
+      cta: t("heroCryptoCta"),
+      imageSrc: cryptoGeneralCover.src,
+      imageAlt: t("heroCryptoAlt"),
     },
     {
       id: "vpn-guide",
       kind: "VPN",
-      title: isEn
-        ? "VPN for Stake / online crypto casino"
-        : "VPN pour Stake / casino crypto",
-      excerpt: isEn
-        ? "Steadier access and connection before you play — kill-switch setup."
-        : "Accéder et jouer plus sereinement — setup kill-switch.",
+      title: t("heroVpnTitle"),
+      excerpt: t("heroVpnExcerpt"),
       href: `/guides/${CASINOS_CRYPTO_VPN_GUIDE_SLUG}`,
-      cta: isEn ? "Read the VPN guide" : "Lire le guide VPN",
+      cta: t("heroVpnCta"),
       imageSrc: vpnCover.src,
-      imageAlt: isEn ? "VPN guide cover" : "Couverture guide VPN",
+      imageAlt: t("heroVpnAlt"),
     },
     {
       id: "wallet-guide",
-      kind: isEn ? "Guide" : "Guide",
-      title: isEn
-        ? "Buy crypto for Stake with Crypto.com"
-        : "Acheter de la crypto pour Stake (Crypto.com)",
-      excerpt: isEn
-        ? "Wallet and deposit path before an online casino session."
-        : "Wallet et dépôt avant une session casino en ligne.",
+      kind: "Wallet",
+      title: t("heroWalletTitle"),
+      excerpt: t("heroWalletExcerpt"),
       href: `/guides/${CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG}`,
-      cta: isEn ? "Read the wallet guide" : "Lire le guide wallet",
+      cta: t("heroWalletCta"),
       imageSrc: cryptoCover.src,
-      imageAlt: isEn ? "Crypto.com guide cover" : "Couverture guide Crypto.com",
+      imageAlt: t("heroWalletAlt"),
     },
   ];
 }
 
-export function CasinosCryptoHome({
+export async function CasinosCryptoHome({
   site,
   locale,
   stake,
@@ -111,18 +111,34 @@ export function CasinosCryptoHome({
   cryptocom?: AffiliateOffer;
   latestNews?: NewsArticle[];
 }) {
-  const isEn = usesEnglishFallback(locale);
+  const t = await getTranslations({ locale, namespace: "home" });
   const brand = site.brand.name;
   const editorial = getEditorialImages(site.id);
   const stakeCover = casinosCryptoGuideCovers[CASINOS_CRYPTO_STAKE_GUIDE_SLUG];
+  const cryptoGeneralCover =
+    casinosCryptoGuideCovers[CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG];
   const cryptoCover =
     casinosCryptoGuideCovers[CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG];
   const vpnCover = casinosCryptoGuideCovers[CASINOS_CRYPTO_VPN_GUIDE_SLUG];
-  const heroSlides = buildCasinoHeroSlides(locale, site, latestNews);
+  const heroSlides = buildCasinoHeroSlides(t, locale, site, latestNews);
   const keywordOffers = resolveAffiliateOffers(site);
   const L = ({ text }: { text: string }) => (
     <AffiliateLinkedText text={text} offers={keywordOffers} />
   );
+  const tOffers = await getTranslations("offers");
+  const offerLabel = (offer: AffiliateOffer) =>
+    tOffers.has(offer.id)
+      ? tOffers(offer.id)
+      : usesEnglishFallback(locale)
+        ? offer.labelEn
+        : offer.labelFr;
+
+  const howSteps = [
+    t("howStart1"),
+    t("howStart2"),
+    t("howStart3"),
+    t("howStart4"),
+  ];
 
   return (
     <>
@@ -131,11 +147,7 @@ export function CasinosCryptoHome({
         slides={heroSlides}
         compact
         affiliateKeywordOffers={keywordOffers}
-        footerNote={
-          isEn
-            ? "18+ · Play responsibly · Affiliate links"
-            : "18+ · Jouez responsable · Liens d’affiliation"
-        }
+        footerNote={t("heroFooterNote")}
       />
 
       <section className="border-b border-[var(--line)]">
@@ -151,34 +163,22 @@ export function CasinosCryptoHome({
           />
           <div className="flex flex-col justify-center px-5 py-14 md:px-10 md:py-16">
             <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
-              <L
-                text={
-                  isEn
-                    ? "Stake online crypto casino"
-                    : "Stake : casino en ligne crypto"
-                }
-              />
+              <L text={t("sectionStakeTitle")} />
             </h2>
             <p className="mt-4 max-w-xl text-[var(--muted)]">
-              <L
-                text={
-                  isEn
-                    ? "How to start on Stake, prepare access and deposit crypto — if you stay within a fixed leisure budget (18+)."
-                    : "Comment démarrer sur Stake, préparer l’accès et un dépôt crypto — à condition de rester dans un budget loisir (18+)."
-                }
-              />
+              <L text={t("sectionStakeBody")} />
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href={`/guides/${CASINOS_CRYPTO_STAKE_GUIDE_SLUG}`}
                 className="inline-flex min-h-11 items-center justify-center border border-[var(--line)] px-5 py-2.5 text-sm font-semibold text-[var(--heading)] hover:bg-[var(--surface)]"
               >
-                {isEn ? "Stake guide" : "Guide Stake"}
+                {t("sectionStakeCta")}
               </Link>
               {stake ? (
                 <AffiliateOfferButton
                   href={stake.href}
-                  label={isEn ? stake.labelEn : stake.labelFr}
+                  label={offerLabel(stake)}
                   variant="secondary"
                 />
               ) : null}
@@ -191,38 +191,32 @@ export function CasinosCryptoHome({
         <div className="mx-auto grid max-w-6xl gap-0 md:grid-cols-2">
           <div className="order-2 flex flex-col justify-center px-5 py-14 md:order-1 md:px-10 md:py-16">
             <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
-              <L text={isEn ? "Crypto.com wallet" : "Wallet Crypto.com"} />
+              <L text={t("sectionCryptoTitle")} />
             </h2>
             <p className="mt-4 max-w-xl text-[var(--muted)]">
-              <L
-                text={
-                  isEn
-                    ? "Buy and hold crypto before a Stake deposit. A practical on-ramp — separate from gambling risk."
-                    : "Achetez et stockez la crypto avant un dépôt Stake. On-ramp pratique — distinct du risque de jeu."
-                }
-              />
+              <L text={t("sectionCryptoBody")} />
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                href={`/guides/${CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG}`}
+                href={`/guides/${CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG}`}
                 className="inline-flex min-h-11 items-center justify-center border border-[var(--line)] px-5 py-2.5 text-sm font-semibold text-[var(--heading)] hover:bg-[var(--surface)]"
               >
-                {isEn ? "Crypto.com guide" : "Guide Crypto.com"}
+                {t("sectionCryptoCta")}
               </Link>
               {cryptocom ? (
                 <AffiliateOfferButton
                   href={cryptocom.href}
-                  label={isEn ? cryptocom.labelEn : cryptocom.labelFr}
+                  label={offerLabel(cryptocom)}
                   variant="secondary"
                 />
               ) : null}
             </div>
           </div>
           <SmartCover
-            src={cryptoCover.src}
+            src={cryptoGeneralCover.src}
             fallback={editorial.camping}
             locale={locale}
-            credit={cryptoCover.credit}
+            credit={cryptoGeneralCover.credit}
             className="order-1 aspect-[4/3] w-full md:order-2 md:aspect-auto md:min-h-[420px]"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
@@ -232,37 +226,31 @@ export function CasinosCryptoHome({
       <section className="border-b border-[var(--line)]">
         <div className="mx-auto grid max-w-6xl gap-0 md:grid-cols-2">
           <SmartCover
-            src={vpnCover.src}
-            fallback={editorial.backup}
+            src={cryptoCover.src}
+            fallback={editorial.camping}
             locale={locale}
-            credit={vpnCover.credit}
+            credit={cryptoCover.credit}
             className="aspect-[4/3] w-full md:aspect-auto md:min-h-[420px]"
             sizes="(max-width: 768px) 100vw, 50vw"
           />
           <div className="flex flex-col justify-center px-5 py-14 md:px-10 md:py-16">
             <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
-              <L text={isEn ? "VPN companion" : "VPN compagnon"} />
+              <L text={t("sectionWalletTitle")} />
             </h2>
             <p className="mt-4 max-w-xl text-[var(--muted)]">
-              <L
-                text={
-                  isEn
-                    ? "A stable, private connection before you play — kill-switch, stable server, full session."
-                    : "Connexion stable et privée avant de jouer — kill-switch, serveur stable, session complète."
-                }
-              />
+              <L text={t("sectionWalletBody")} />
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                href={`/guides/${CASINOS_CRYPTO_VPN_GUIDE_SLUG}`}
+                href={`/guides/${CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG}`}
                 className="inline-flex min-h-11 items-center justify-center border border-[var(--line)] px-5 py-2.5 text-sm font-semibold text-[var(--heading)] hover:bg-[var(--surface)]"
               >
-                {isEn ? "VPN guide" : "Guide VPN"}
+                {t("sectionWalletCta")}
               </Link>
-              {nordvpn ? (
+              {cryptocom ? (
                 <AffiliateOfferButton
-                  href={nordvpn.href}
-                  label={isEn ? nordvpn.labelEn : nordvpn.labelFr}
+                  href={cryptocom.href}
+                  label={offerLabel(cryptocom)}
                   variant="secondary"
                 />
               ) : null}
@@ -271,26 +259,49 @@ export function CasinosCryptoHome({
         </div>
       </section>
 
+      <section className="border-b border-[var(--line)]">
+        <div className="mx-auto grid max-w-6xl gap-0 md:grid-cols-2">
+          <div className="order-2 flex flex-col justify-center px-5 py-14 md:order-1 md:px-10 md:py-16">
+            <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
+              <L text={t("sectionVpnTitle")} />
+            </h2>
+            <p className="mt-4 max-w-xl text-[var(--muted)]">
+              <L text={t("sectionVpnBody")} />
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href={`/guides/${CASINOS_CRYPTO_VPN_GUIDE_SLUG}`}
+                className="inline-flex min-h-11 items-center justify-center border border-[var(--line)] px-5 py-2.5 text-sm font-semibold text-[var(--heading)] hover:bg-[var(--surface)]"
+              >
+                {t("sectionVpnCta")}
+              </Link>
+              {nordvpn ? (
+                <AffiliateOfferButton
+                  href={nordvpn.href}
+                  label={offerLabel(nordvpn)}
+                  variant="secondary"
+                />
+              ) : null}
+            </div>
+          </div>
+          <SmartCover
+            src={vpnCover.src}
+            fallback={editorial.backup}
+            locale={locale}
+            credit={vpnCover.credit}
+            className="order-1 aspect-[4/3] w-full md:order-2 md:aspect-auto md:min-h-[420px]"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </div>
+      </section>
+
       <section className="border-b border-[var(--line)] bg-[var(--surface)]">
         <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
           <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
-            {isEn ? "How to start" : "Comment démarrer"}
+            {t("howStartTitle")}
           </h2>
           <ol className="mt-8 grid gap-5 md:grid-cols-2">
-            {(isEn
-              ? [
-                  "Set a leisure budget you can lose",
-                  "Create an account + enable 2FA",
-                  "Buy crypto via Crypto.com (small test amount)",
-                  "Deposit on Stake, then test a withdrawal early",
-                ]
-              : [
-                  "Fixez un budget loisir que vous pouvez perdre",
-                  "Créez un compte + activez la 2FA",
-                  "Achetez la crypto via Crypto.com (petit montant test)",
-                  "Déposez sur Stake, puis testez un retrait tôt",
-                ]
-            ).map((step, i) => (
+            {howSteps.map((step, i) => (
               <li
                 key={step}
                 className="flex gap-4 border-t border-[var(--line)] pt-4"
@@ -312,18 +323,20 @@ export function CasinosCryptoHome({
           <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
             <div className="flex flex-wrap items-end justify-between gap-4">
               <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
-                {isEn ? "Latest news" : "Dernières actus"}
+                {t("latestNewsTitle")}
               </h2>
               <Link
                 href="/actualites"
                 className="text-sm font-semibold text-[var(--accent)] underline-offset-4 hover:underline"
               >
-                {isEn ? "All news →" : "Toutes les actus →"}
+                {t("allNewsCta")}
               </Link>
             </div>
             <ul className="mt-10 grid gap-6 md:grid-cols-3">
               {latestNews.slice(0, 3).map((article) => {
-                const copy = isEn ? article.en : article.fr;
+                const copy = usesEnglishFallback(locale)
+                  ? article.en
+                  : article.fr;
                 return (
                   <li key={article.slug}>
                     <Link
@@ -354,7 +367,6 @@ export function CasinosCryptoHome({
           </div>
         </section>
       ) : null}
-
     </>
   );
 }

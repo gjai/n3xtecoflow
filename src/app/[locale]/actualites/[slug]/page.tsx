@@ -54,6 +54,7 @@ export default async function NewsArticlePage({
   setRequestLocale(locale);
   const t = await getTranslations("news");
   const a = await getTranslations("amazon");
+  const tOffers = await getTranslations("offers");
   const site = await getCurrentSite();
   const store = await readNewsStore();
   const article = getNewsBySlug(slug, store, site.id);
@@ -70,6 +71,12 @@ export default async function NewsArticlePage({
   const useAmazon = siteAllowsAmazon(site);
   const amazonCta = useAmazon ? amazonCtaForNews(article) : null;
   const affiCta = !useAmazon ? affiliateCtaForNews(article, site) : null;
+  const offerLabel = (offer: { id: string; labelFr: string; labelEn: string }) =>
+    tOffers.has(offer.id)
+      ? tOffers(offer.id)
+      : isEn
+        ? offer.labelEn
+        : offer.labelFr;
   const stickyHref = useAmazon
     ? amazonCta!.href
     : affiCta?.primary?.href || affiCta?.offers[0]?.href || "";
@@ -78,12 +85,12 @@ export default async function NewsArticlePage({
       ? "Buy on Amazon.fr"
       : "Acheter sur Amazon.fr"
     : affiCta?.primary
-      ? isEn
-        ? affiCta.primary.labelEn
-        : affiCta.primary.labelFr
-      : isEn
-        ? "Open offer"
-        : "Voir l’offre";
+      ? offerLabel(affiCta.primary)
+      : t.has("openOffer")
+        ? t("openOffer")
+        : isEn
+          ? "Open offer"
+          : "Voir l’offre";
   const mid = Math.max(2, Math.floor(copy.body.length / 2));
   const keywordOffers =
     site.id === "casinos-crypto" ? resolveAffiliateOffers(site) : undefined;
@@ -127,24 +134,28 @@ export default async function NewsArticlePage({
     return (
       <div className="space-y-3 border border-[var(--accent)] bg-[var(--surface)] p-5">
         <p className="text-sm font-medium text-[var(--heading)]">
-          {isEn
-            ? "Continue with our affiliate partners"
-            : "Continuer via nos partenaires affiliés"}
+          {t.has("affiliateContinue")
+            ? t("affiliateContinue")
+            : isEn
+              ? "Continue with our affiliate partners"
+              : "Continuer via nos partenaires affiliés"}
         </p>
         <div className="flex flex-wrap gap-3">
           {affiCta.offers.map((offer) => (
             <AffiliateOfferButton
               key={offer.id}
               href={offer.href}
-              label={isEn ? offer.labelEn : offer.labelFr}
+              label={offerLabel(offer)}
               variant={offer.id === affiCta.matchedId ? "primary" : "secondary"}
             />
           ))}
         </div>
         <p className="text-xs text-[var(--muted)]">
-          {isEn
-            ? "Affiliate links · 18+ · Play responsibly"
-            : "Liens d’affiliation · 18+ · Jouez responsable"}
+          {t.has("affiliateNote")
+            ? t("affiliateNote")
+            : isEn
+              ? "Affiliate links · 18+ · Play responsibly"
+              : "Liens d’affiliation · 18+ · Jouez responsable"}
         </p>
         <AffiliateDisclosure compact />
       </div>

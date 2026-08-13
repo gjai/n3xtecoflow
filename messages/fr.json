@@ -154,7 +154,8 @@
     "affiliateBody": "Les liens produits peuvent être des liens d'affiliation Amazon. Le prix payé ne change pas pour vous. Les publicités AdSense sont marquées « Publicité ».",
     "responsibleTitle": "Jeu responsable",
     "responsibleBody": "",
-    "responsibleHelp": ""
+    "responsibleHelp": "",
+    "aboutLink": "À propos de ce site éditorial"
   },
   "contact": {
     "title": "Contact",
@@ -203,7 +204,10 @@
   },
   "theme": {
     "aria": "Changer le thème d’affichage",
-    "title": "Thème : {mode} (cliquer pour changer)"
+    "title": "Thème : {mode} (cliquer pour changer)",
+    "system": "Auto",
+    "light": "Clair",
+    "dark": "Sombre"
   },
   "about": {
     "eyebrow": "Éditorial",

@@ -247,19 +247,20 @@ function fromStatic(slug: string): GuideEntry | null {
   }
   const cover = tumblerGuideCovers[slug] || casinosCryptoGuideCovers[slug];
   const site = guideSiteId(topic);
+  const loc = (copy: typeof g.fr) => ({
+    title: copy.title,
+    subtitle: copy.subtitle,
+    sections: expandStatic(copy.sections, site),
+  });
   return {
     slug,
     siteId: site,
-    fr: {
-      title: g.fr.title,
-      subtitle: g.fr.subtitle,
-      sections: expandStatic(g.fr.sections, site),
-    },
-    en: {
-      title: g.en.title,
-      subtitle: g.en.subtitle,
-      sections: expandStatic(g.en.sections, site),
-    },
+    fr: loc(g.fr),
+    en: loc(g.en),
+    ...(g.it ? { it: loc(g.it) } : {}),
+    ...(g.es ? { es: loc(g.es) } : {}),
+    ...(g.pt ? { pt: loc(g.pt) } : {}),
+    ...(g.de ? { de: loc(g.de) } : {}),
     model: "static",
     updatedAt: new Date().toISOString(),
     ...(cover

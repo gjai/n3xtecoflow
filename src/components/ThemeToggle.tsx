@@ -1,9 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { usesEnglishFallback } from "@/i18n/locales";
 import { useTheme, type ThemeMode } from "./ThemeProvider";
 
-const labels: Record<ThemeMode, { fr: string; en: string }> = {
+const FALLBACK: Record<ThemeMode, { fr: string; en: string }> = {
   system: { fr: "Auto", en: "Auto" },
   light: { fr: "Clair", en: "Light" },
   dark: { fr: "Sombre", en: "Dark" },
@@ -12,8 +13,11 @@ const labels: Record<ThemeMode, { fr: string; en: string }> = {
 export function ThemeToggle({ locale }: { locale?: string }) {
   const t = useTranslations("theme");
   const { mode, cycle } = useTheme();
-  const isEn = locale === "en";
-  const short = isEn ? labels[mode].en : labels[mode].fr;
+  const short = t.has(mode)
+    ? t(mode)
+    : usesEnglishFallback(locale || "fr")
+      ? FALLBACK[mode].en
+      : FALLBACK[mode].fr;
 
   return (
     <button

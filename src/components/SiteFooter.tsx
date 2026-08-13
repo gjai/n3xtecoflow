@@ -21,8 +21,11 @@ export function SiteFooter() {
   const site = useSite();
   const locale = useLocale();
   const year = new Date().getFullYear();
-  const blurb =
-    locale === "fr" ? site.brand.footerBlurbFr : site.brand.footerBlurbEn;
+  const blurb = t.has("blurb")
+    ? t("blurb")
+    : locale === "fr"
+      ? site.brand.footerBlurbFr
+      : site.brand.footerBlurbEn;
 
   const links = siteUsesEditorialHome(site)
     ? (

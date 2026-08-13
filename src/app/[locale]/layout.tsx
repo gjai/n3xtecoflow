@@ -2,7 +2,12 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Outfit, Sora } from "next/font/google";
-import { OG_LOCALE, pickLocalized, toAppLocale } from "@/i18n/locales";
+import {
+  OG_LOCALE,
+  pickLocalized,
+  toAppLocale,
+  usesEnglishFallback,
+} from "@/i18n/locales";
 import { routing } from "@/i18n/routing";
 import { AdSenseScript } from "@/components/AdSenseScript";
 import { AnalyticsBeacon } from "@/components/AnalyticsBeacon";
@@ -58,7 +63,9 @@ export async function generateMetadata({
   const tMeta = await getTranslations({ locale, namespace: "meta" });
   const description =
     tMeta("tagline") ||
-    (locale === "fr" ? site.brand.taglineFr : site.brand.taglineEn);
+    (usesEnglishFallback(locale)
+      ? site.brand.taglineEn
+      : site.brand.taglineFr);
   const { icons } = site.brand;
   const ogImage = site.heroImage || icons.apple || icons.favicon;
   const ogIsHero = Boolean(site.heroImage);
