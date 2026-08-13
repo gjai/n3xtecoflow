@@ -65,48 +65,62 @@ function GameDropdown({
   const current = lotteryGameFromPath(pathname);
   const active = current === game.id;
   const label = lotteryGameLabel(game, locale);
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="group relative">
+    <div
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+      onFocus={() => setOpen(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+          setOpen(false);
+        }
+      }}
+    >
       <Link
         href={game.href}
         className={`inline-flex items-center gap-0.5 whitespace-nowrap hover:text-[var(--heading)] ${
           active ? "text-[var(--heading)]" : ""
         }`}
         aria-haspopup="menu"
+        aria-expanded={open}
       >
         {label}
         <span className="text-[0.65em] opacity-70" aria-hidden>
           ▾
         </span>
       </Link>
-      <div
-        className={`invisible absolute top-full z-40 min-w-[13rem] pt-2 opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 ${
-          alignEnd ? "right-0" : "left-0"
-        }`}
-      >
-        <ul
-          role="menu"
-          className="border border-[var(--line)] bg-[var(--surface)] py-2 shadow-lg"
+      {open ? (
+        <div
+          className={`absolute top-full z-40 min-w-52 pt-2 ${
+            alignEnd ? "right-0" : "left-0"
+          }`}
         >
-          {game.tools.map((tool) => (
-            <li key={tool.id} role="none">
-              <Link
-                href={tool.href}
-                role="menuitem"
-                className={`block px-4 py-2 text-sm hover:bg-[var(--bg)] hover:text-[var(--heading)] ${
-                  toolHrefIsActive(tool.href, pathname, hash)
-                    ? "text-[var(--heading)]"
-                    : "text-[var(--muted)]"
-                }`}
-                onClick={onNavigate}
-              >
-                {toolLabel(t, tool.id)}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+          <ul
+            role="menu"
+            className="list-none border border-[var(--line)] bg-[var(--surface)] py-2 shadow-lg"
+          >
+            {game.tools.map((tool) => (
+              <li key={tool.id} role="none">
+                <Link
+                  href={tool.href}
+                  role="menuitem"
+                  className={`block px-4 py-2 text-sm hover:bg-[var(--bg)] hover:text-[var(--heading)] ${
+                    toolHrefIsActive(tool.href, pathname, hash)
+                      ? "text-[var(--heading)]"
+                      : "text-[var(--muted)]"
+                  }`}
+                  onClick={onNavigate}
+                >
+                  {toolLabel(t, tool.id)}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </div>
   );
 }
