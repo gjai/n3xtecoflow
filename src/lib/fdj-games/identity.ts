@@ -44,10 +44,6 @@ export const GAME_IDENTITY: Record<LotteryGameId, GameIdentity> = {
   },
 };
 
-export function gameMarkSrc(id: LotteryGameId) {
-  return `/brands/euromillions/games/${id}.svg`;
-}
-
 /** Remappe --accent dans un sous-arbre (boules, simulateur, liens). */
 export function gameScopeStyle(id: LotteryGameId): CSSProperties {
   const g = GAME_IDENTITY[id];

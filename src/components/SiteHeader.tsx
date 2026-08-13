@@ -101,7 +101,7 @@ export function SiteHeader() {
       }`}
     >
       <div
-        className={`mx-auto flex items-center justify-between px-5 py-4 md:px-8 ${
+        className={`em-header-row mx-auto flex items-center justify-between px-5 py-4 md:px-8 ${
           siteIsEuroMillions(site) ? "max-w-7xl" : "max-w-6xl"
         }`}
       >
@@ -125,7 +125,7 @@ export function SiteHeader() {
         )}
         <button
           type="button"
-          className="inline-flex min-h-11 min-w-11 items-center justify-center border border-[var(--line)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--heading)] lg:hidden"
+          className="em-menu-btn inline-flex min-h-11 min-w-11 items-center justify-center border border-[var(--line)] px-3 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--heading)] lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? t("closeMenu") : t("openMenu")}

@@ -75,9 +75,7 @@ export function DrawBalls({
   large?: boolean;
   animate?: boolean;
 }) {
-  const size = large
-    ? "h-12 w-12 text-base md:h-14 md:w-14 md:text-lg"
-    : "h-11 w-11 text-sm";
+  const size = large ? "lottery-ball--lg" : "";
   const ballClass = animate ? "draw-ball-in" : "";
   return (
     <div className="space-y-4">
@@ -85,11 +83,11 @@ export function DrawBalls({
         <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
           {ballsLabel}
         </p>
-        <div className="mt-2 flex flex-wrap gap-2">
+        <div className="lottery-balls">
           {draw.numbers.map((n, i) => (
             <span
               key={`n-${n}`}
-              className={`inline-flex items-center justify-center rounded-full bg-[var(--accent)] font-semibold text-[var(--accent-ink)] ${size} ${ballClass}`}
+              className={`lottery-ball lottery-ball--main ${size} ${ballClass}`}
               style={
                 animate
                   ? { ["--ball-delay" as string]: `${420 + i * 75}ms` }
@@ -105,11 +103,11 @@ export function DrawBalls({
         <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
           {starsLabel}
         </p>
-        <div className="mt-2 flex flex-wrap gap-2">
+        <div className="lottery-balls">
           {draw.stars.map((n, i) => (
             <span
               key={`s-${n}`}
-              className={`inline-flex items-center justify-center rounded-full border border-[var(--accent)] bg-[var(--surface)] font-semibold text-[var(--heading)] ${size} ${ballClass}`}
+              className={`lottery-ball lottery-ball--bonus ${size} ${ballClass}`}
               style={
                 animate
                   ? {

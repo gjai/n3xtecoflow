@@ -139,7 +139,7 @@ export function EuroMillionsDesktopNav() {
   const hash = useHash();
 
   return (
-    <nav className="hidden items-center gap-2.5 text-[13px] text-[var(--muted)] xl:gap-4 xl:text-sm lg:flex">
+    <nav className="em-desktop-nav hidden items-center gap-2.5 text-[13px] text-[var(--muted)] xl:gap-4 xl:text-sm lg:flex">
       {LOTTERY_GAMES_NAV.map((game, i) => (
         <GameDropdown
           key={game.id}
