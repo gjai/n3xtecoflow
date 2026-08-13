@@ -191,10 +191,9 @@ export default async function LocaleLayout({
         />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <UmamiScript host={requestHost} />
-        {/* AdSense loader only when inventaire/slots are enabled — meta account stays for verification */}
-        {allowAds &&
-        adsenseClient &&
-        process.env.NEXT_PUBLIC_ADSENSE_SLOTS === "1" ? (
+        {/* Snippet ca-pub toujours présent (vérification AdSense). Les blocs
+            d’annonces restent gated par NEXT_PUBLIC_ADSENSE_SLOTS + IDs. */}
+        {allowAds && adsenseClient ? (
           <script
             async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}

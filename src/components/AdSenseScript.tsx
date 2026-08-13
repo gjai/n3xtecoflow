@@ -3,8 +3,8 @@
 import Script from "next/script";
 
 /**
- * Consent Mode defaults (denied). The adsbygoogle.js tag lives in layout <head>
- * so AdSense site verification always finds it in the HTML source.
+ * Consent Mode defaults (denied). adsbygoogle.js is in layout <head>
+ * (vérification AdSense) ; les unités ne s’affichent qu’après consentement.
  */
 export function AdSenseScript() {
   return (
