@@ -170,7 +170,7 @@ function extractLocationFromTitle(title: string): string | null {
   }
 
   const m = title.match(
-    /\b(?:dans le|dans la|en|à|au)\b\s+([A-ZÀ-Ÿ][\wÀ-ÿ'’-]*(?:[\s-][A-ZÀ-Ÿ][\wÀ-ÿ'’-]*)*)/i,
+    /\b(?:dans le|dans la|en|à|au)\b\s+([A-ZÀ-Ÿ][\wÀ-ÿ'’]*(?:-[\wÀ-ÿ'’]+)*)/,
   );
   if (m?.[1]) {
     const loc = m[1].trim();
