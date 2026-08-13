@@ -2,6 +2,7 @@ import { ecoflowSite } from "./ecoflow";
 import { tumblerSite } from "./tumbler";
 import { massageGunSite } from "./massage-gun";
 import { casinosCryptoSite } from "./casinos-crypto";
+import { euromillionsSite } from "./euromillions";
 import type { SiteConfig, SiteId } from "./types";
 
 /**
@@ -10,6 +11,7 @@ import type { SiteConfig, SiteId } from "./types";
  * - tumbler → mon-tumbler.fr (La gourde isotherme)
  * - massage-gun → massage-gun.fr (Le pistolet de massage)
  * - casinos-crypto → casinos-crypto.fr (Stake + NordVPN, sans Amazon/AdSense)
+ * - euromillions → euromillions-resultats.fr (résultats + archives)
  *
  * Nouveau DOMAINE même thème → hosts[] du site.
  * Nouveau THÈME → fichier + SiteId + registry + brands/ + Coolify FQDN.
@@ -20,6 +22,7 @@ export const sites: SiteConfig[] = [
   tumblerSite,
   massageGunSite,
   casinosCryptoSite,
+  euromillionsSite,
 ];
 
 export const sitesById: Record<SiteId, SiteConfig> = {
@@ -27,6 +30,7 @@ export const sitesById: Record<SiteId, SiteConfig> = {
   tumbler: tumblerSite,
   "massage-gun": massageGunSite,
   "casinos-crypto": casinosCryptoSite,
+  euromillions: euromillionsSite,
 };
 
 export const DEFAULT_SITE_ID: SiteId = "ecoflow";

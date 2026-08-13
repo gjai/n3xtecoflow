@@ -23,7 +23,7 @@ jobs:
           # Sequential: shared news.json must not be written in parallel.
           # limit=2 per theme keeps AI rewrite under maxDuration.
           fail=0
-          for site in ecoflow tumbler massage-gun casinos-crypto; do
+          for site in ecoflow tumbler massage-gun casinos-crypto euromillions; do
             echo "=== ingest siteId=${site} ==="
             if ! curl -fsS -X POST \
               -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \

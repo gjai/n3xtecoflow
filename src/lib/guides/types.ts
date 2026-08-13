@@ -190,4 +190,28 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     angleFr: "Accès Stake, connexion stable, NordVPN, kill-switch",
     angleEn: "Stake access, stable connection, NordVPN, kill-switch",
   },
+  {
+    slug: "comprendre-euromillions",
+    siteId: "euromillions",
+    topicFr: "Comprendre l’EuroMillions",
+    topicEn: "Understanding EuroMillions",
+    angleFr: "Boules, étoiles, rangs, lecture des résultats",
+    angleEn: "Numbers, stars, prize tiers, reading results",
+  },
+  {
+    slug: "probabilites-euromillions",
+    siteId: "euromillions",
+    topicFr: "Probabilités EuroMillions",
+    topicEn: "EuroMillions odds",
+    angleFr: "Ordres de grandeur, mythes des méthodes",
+    angleEn: "Orders of magnitude, myths about systems",
+  },
+  {
+    slug: "jeu-responsable-euromillions",
+    siteId: "euromillions",
+    topicFr: "Jeu responsable & EuroMillions",
+    topicEn: "Responsible play & EuroMillions",
+    angleFr: "Budget loisir, 18+, aide Joueurs Info Service",
+    angleEn: "Leisure budget, 18+, player support resources",
+  },
 ];

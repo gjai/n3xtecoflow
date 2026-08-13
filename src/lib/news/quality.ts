@@ -66,6 +66,13 @@ const BRANDS_BY_SITE: Record<string, BrandRule[]> = {
     },
     { id: "vpn", pattern: /\bvpn\b/i },
   ],
+  euromillions: [
+    { id: "euromillions", pattern: /\beuromillions\b|\beuro\s*millions\b/i },
+    { id: "jackpot", pattern: /\bjackpot\b/i },
+    { id: "fdj", pattern: /\bfdjd?\b|\bfran[cç]aise\s+des\s+jeux\b/i },
+    { id: "mymillion", pattern: /\bmy\s*million\b/i },
+    { id: "tirage", pattern: /\btirage\b|\bdraw\b|\br[ée]sultat/i },
+  ],
 };
 
 function brandRules(siteId: SiteId): BrandRule[] {

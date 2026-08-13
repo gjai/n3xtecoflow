@@ -1,0 +1,39 @@
+name: EuroMillions draws refresh
+
+on:
+  schedule:
+    # After typical draw windows (UTC): Tue/Fri ~21:00 CET = 20:00 UTC winter / 19:00 summer
+    - cron: "15 20 * * 2,5"
+    - cron: "45 21 * * 2,5"
+    # Daily safety net (archives + next jackpot)
+    - cron: "30 7 * * *"
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refresh EuroMillions draws
+        env:
+          NEWS_CRON_SECRET: ${{ secrets.NEWS_CRON_SECRET }}
+          SITE_URL: https://euromillions-resultats.fr
+        run: |
+          set -euo pipefail
+          if [ -z "$NEWS_CRON_SECRET" ]; then
+            echo "NEWS_CRON_SECRET missing"
+            exit 1
+          fi
+          curl -fsS -X POST \
+            -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
+            "${SITE_URL}/api/euromillions/refresh"
+      - name: Alert on failure
+        if: failure()
+        env:
+          NEWS_CRON_SECRET: ${{ secrets.NEWS_CRON_SECRET }}
+          SITE_URL: https://ecoflow-stream.com
+        run: |
+          curl -fsS -X POST \
+            -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
+            -H "Content-Type: application/json" \
+            -d "{\"job\":\"euromillions\",\"workflow\":\"${{ github.workflow }}\",\"runUrl\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\",\"error\":\"workflow_failed\"}" \
+            "${SITE_URL}/api/cron/alert" || true

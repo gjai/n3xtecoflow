@@ -254,10 +254,49 @@ const casinosCryptoEditorial = {
   },
 } as const satisfies Record<string, SiteImage>;
 
+const euromillionsEditorial = {
+  guides: {
+    src: "/brands/euromillions/hero.svg",
+    altFr: "Guides EuroMillions",
+    altEn: "EuroMillions guides",
+    credit: "EuroMillions Résultats",
+    creditUrl: "https://euromillions-resultats.fr",
+  },
+  news: {
+    src: "/brands/euromillions/hero.svg",
+    altFr: "Actualités EuroMillions",
+    altEn: "EuroMillions news",
+    credit: "EuroMillions Résultats",
+    creditUrl: "https://euromillions-resultats.fr",
+  },
+  camping: {
+    src: "/brands/euromillions/hero.svg",
+    altFr: "Archives EuroMillions",
+    altEn: "EuroMillions archives",
+    credit: "EuroMillions Résultats",
+    creditUrl: "https://euromillions-resultats.fr",
+  },
+  backup: {
+    src: "/brands/euromillions/hero.svg",
+    altFr: "Stats EuroMillions",
+    altEn: "EuroMillions stats",
+    credit: "EuroMillions Résultats",
+    creditUrl: "https://euromillions-resultats.fr",
+  },
+  comparatifs: {
+    src: "/brands/euromillions/hero.svg",
+    altFr: "EuroMillions",
+    altEn: "EuroMillions",
+    credit: "EuroMillions Résultats",
+    creditUrl: "https://euromillions-resultats.fr",
+  },
+} as const satisfies Record<string, SiteImage>;
+
 export function getEditorialImages(siteId: SiteId = "ecoflow") {
   if (siteId === "tumbler") return tumblerEditorial;
   if (siteId === "massage-gun") return massageGunEditorial;
   if (siteId === "casinos-crypto") return casinosCryptoEditorial;
+  if (siteId === "euromillions") return euromillionsEditorial;
   return editorialImages;
 }
 
@@ -286,6 +325,15 @@ export function getHeroImage(siteId: SiteId = "ecoflow"): SiteImage {
       altEn: "Crypto casinos — Stake & secure access",
       credit: "Casinos Crypto (IA)",
       creditUrl: "https://casinos-crypto.fr",
+    };
+  }
+  if (siteId === "euromillions") {
+    return {
+      src: "/brands/euromillions/hero.svg",
+      altFr: "EuroMillions — résultats et archives",
+      altEn: "EuroMillions — results and archives",
+      credit: "EuroMillions Résultats",
+      creditUrl: "https://euromillions-resultats.fr",
     };
   }
   return heroImage;

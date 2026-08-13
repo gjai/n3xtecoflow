@@ -3,10 +3,11 @@
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
+  siteIsCasinosCrypto,
+  siteIsEuroMillions,
   siteShowsComparisons,
   siteShowsNews,
   siteShowsProducts,
-  siteUsesEditorialHome,
 } from "@/sites/features";
 import { CookieSettingsButton } from "./CookieSettingsButton";
 import { GamblingDisclaimer } from "./GamblingDisclaimer";
@@ -27,9 +28,11 @@ export function SiteFooter() {
       ? site.brand.footerBlurbFr
       : site.brand.footerBlurbEn;
 
-  const links = siteUsesEditorialHome(site)
+  const links = siteIsEuroMillions(site)
     ? (
         [
+          { href: "/tirages", label: t("products") },
+          { href: "/stats", label: t("comparisons") },
           { href: "/guides", label: t("guides") },
           siteShowsNews(site)
             ? { href: "/actualites", label: t("news") }
@@ -39,21 +42,35 @@ export function SiteFooter() {
           { href: "/contact", label: t("contact") },
         ] as const
       ).filter(Boolean) as { href: string; label: string }[]
-    : (
-        [
-          siteShowsProducts(site)
-            ? { href: "/produits", label: t("products") }
-            : null,
-          { href: "/guides", label: t("guides") },
-          siteShowsComparisons(site)
-            ? { href: "/comparatifs", label: t("comparisons") }
-            : null,
-          siteShowsNews(site) ? { href: "/actualites", label: t("news") } : null,
-          { href: "/a-propos", label: t("about") },
-          { href: "/mentions-legales", label: t("legal") },
-          { href: "/contact", label: t("contact") },
-        ] as const
-      ).filter(Boolean) as { href: string; label: string }[];
+    : siteIsCasinosCrypto(site)
+      ? (
+          [
+            { href: "/guides", label: t("guides") },
+            siteShowsNews(site)
+              ? { href: "/actualites", label: t("news") }
+              : null,
+            { href: "/a-propos", label: t("about") },
+            { href: "/mentions-legales", label: t("legal") },
+            { href: "/contact", label: t("contact") },
+          ] as const
+        ).filter(Boolean) as { href: string; label: string }[]
+      : (
+          [
+            siteShowsProducts(site)
+              ? { href: "/produits", label: t("products") }
+              : null,
+            { href: "/guides", label: t("guides") },
+            siteShowsComparisons(site)
+              ? { href: "/comparatifs", label: t("comparisons") }
+              : null,
+            siteShowsNews(site)
+              ? { href: "/actualites", label: t("news") }
+              : null,
+            { href: "/a-propos", label: t("about") },
+            { href: "/mentions-legales", label: t("legal") },
+            { href: "/contact", label: t("contact") },
+          ] as const
+        ).filter(Boolean) as { href: string; label: string }[];
 
   return (
     <footer className="border-t border-[var(--line)] bg-[var(--ink)] text-[var(--fog)]">

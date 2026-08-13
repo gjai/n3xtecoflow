@@ -108,6 +108,16 @@ export const NEWS_FEEDS: NewsFeed[] = [
     siteId: "casinos-crypto",
     url: "https://news.google.com/rss/search?q=(Bitcoin+OR+Ethereum+OR+cryptocurrency+OR+%22Crypto.com%22)+(market+OR+price+OR+BTC+OR+ETH+OR+ETF+OR+SEC)+-presale+-airdrop+when:14d&hl=en-US&gl=US&ceid=US:en",
   },
+  {
+    id: "euromillions-gnews-fr",
+    siteId: "euromillions",
+    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(r%C3%A9sultat+OR+tirage+OR+jackpot+OR+gagnant+OR+FDJ)+when:45d&hl=fr&gl=FR&ceid=FR:fr",
+  },
+  {
+    id: "euromillions-gnews-en",
+    siteId: "euromillions",
+    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(result+OR+draw+OR+jackpot+OR+winner)+when:45d&hl=en-GB&gl=GB&ceid=GB:en",
+  },
 ];
 
 export const MAX_NEWS_ARTICLES = 80;

@@ -10,10 +10,11 @@ import {
   CASINOS_CRYPTO_VPN_GUIDE_SLUG,
 } from "@/data/casinos-crypto-guides";
 import {
+  siteIsCasinosCrypto,
+  siteIsEuroMillions,
   siteShowsComparisons,
   siteShowsNews,
   siteShowsProducts,
-  siteUsesEditorialHome,
 } from "@/sites/features";
 import { SiteLogo } from "./SiteLogo";
 import { useSite } from "./SiteProvider";
@@ -24,46 +25,56 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Casino editorial: Guides + Stake / Crypto / VPN + actus (pas d’À propos).
-  const links = siteUsesEditorialHome(site)
+  const links = siteIsEuroMillions(site)
     ? (
         [
+          { href: "/tirages", label: t("archive") },
+          { href: "/stats", label: t("stats") },
           { href: "/guides", label: t("guides") },
-          {
-            href: `/guides/${CASINOS_CRYPTO_STAKE_GUIDE_SLUG}`,
-            label: t("stake"),
-          },
-          {
-            href: `/guides/${CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG}`,
-            label: t("crypto"),
-          },
-          {
-            href: `/guides/${CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG}`,
-            label: t("wallet"),
-          },
-          {
-            href: `/guides/${CASINOS_CRYPTO_VPN_GUIDE_SLUG}`,
-            label: t("vpn"),
-          },
           siteShowsNews(site)
             ? { href: "/actualites", label: t("news") }
             : null,
         ] as const
       ).filter(Boolean) as { href: string; label: string }[]
-    : (
-        [
-          siteShowsProducts(site)
-            ? { href: "/produits", label: t("products") }
-            : null,
-          { href: "/guides", label: t("guides") },
-          siteShowsComparisons(site)
-            ? { href: "/comparatifs", label: t("comparisons") }
-            : null,
-          siteShowsNews(site)
-            ? { href: "/actualites", label: t("news") }
-            : null,
-        ] as const
-      ).filter(Boolean) as { href: string; label: string }[];
+    : siteIsCasinosCrypto(site)
+      ? (
+          [
+            { href: "/guides", label: t("guides") },
+            {
+              href: `/guides/${CASINOS_CRYPTO_STAKE_GUIDE_SLUG}`,
+              label: t("stake"),
+            },
+            {
+              href: `/guides/${CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG}`,
+              label: t("crypto"),
+            },
+            {
+              href: `/guides/${CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG}`,
+              label: t("wallet"),
+            },
+            {
+              href: `/guides/${CASINOS_CRYPTO_VPN_GUIDE_SLUG}`,
+              label: t("vpn"),
+            },
+            siteShowsNews(site)
+              ? { href: "/actualites", label: t("news") }
+              : null,
+          ] as const
+        ).filter(Boolean) as { href: string; label: string }[]
+      : (
+          [
+            siteShowsProducts(site)
+              ? { href: "/produits", label: t("products") }
+              : null,
+            { href: "/guides", label: t("guides") },
+            siteShowsComparisons(site)
+              ? { href: "/comparatifs", label: t("comparisons") }
+              : null,
+            siteShowsNews(site)
+              ? { href: "/actualites", label: t("news") }
+              : null,
+          ] as const
+        ).filter(Boolean) as { href: string; label: string }[];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);

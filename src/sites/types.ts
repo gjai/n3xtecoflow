@@ -1,4 +1,9 @@
-export type SiteId = "ecoflow" | "tumbler" | "massage-gun" | "casinos-crypto";
+export type SiteId =
+  | "ecoflow"
+  | "tumbler"
+  | "massage-gun"
+  | "casinos-crypto"
+  | "euromillions";
 
 /** Locales exposées pour ce thème (sous-ensemble de APP_LOCALES). */
 export type SiteLocale = "fr" | "en" | "it" | "es" | "pt" | "de";

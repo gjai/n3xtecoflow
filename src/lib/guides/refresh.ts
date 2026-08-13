@@ -1,6 +1,7 @@
 import type { ArticleSection } from "@/data/articles";
 import { guides as staticGuides } from "@/data/articles";
 import { casinosCryptoGuideCovers } from "@/data/casinos-crypto-guides";
+import { euromillionsGuideCovers } from "@/data/euromillions-guides";
 import { tumblerGuideCovers } from "@/data/tumbler-guides";
 import { getEditorial, siteUsesStaticBuyingGuide } from "@/sites/editorial";
 import { getSiteById } from "@/sites/index";
@@ -245,7 +246,10 @@ function fromStatic(slug: string): GuideEntry | null {
   if (!g) {
     return topic ? fromTopic(topic) : null;
   }
-  const cover = tumblerGuideCovers[slug] || casinosCryptoGuideCovers[slug];
+  const cover =
+    tumblerGuideCovers[slug] ||
+    casinosCryptoGuideCovers[slug] ||
+    euromillionsGuideCovers[slug];
   const site = guideSiteId(topic);
   const loc = (copy: typeof g.fr) => ({
     title: copy.title,

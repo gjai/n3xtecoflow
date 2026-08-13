@@ -37,7 +37,15 @@ export function siteAllowsAdsense(site: SiteConfig): boolean {
   return site.monetization?.disableAdsense !== true;
 }
 
-/** Casino / gambling editorial themes — 18+ & responsible-play strip. */
+/** Casino / lottery editorial themes — 18+ & responsible-play strip. */
 export function siteNeedsGamblingDisclaimer(site: SiteConfig): boolean {
+  return site.id === "casinos-crypto" || site.id === "euromillions";
+}
+
+export function siteIsEuroMillions(site: SiteConfig): boolean {
+  return site.id === "euromillions";
+}
+
+export function siteIsCasinosCrypto(site: SiteConfig): boolean {
   return site.id === "casinos-crypto";
 }

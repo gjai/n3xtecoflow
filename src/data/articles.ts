@@ -2,6 +2,7 @@ import { pickLocalized } from "@/i18n/locales";
 import { tumblerGuides } from "./tumbler-guides";
 import { massageGunGuides } from "./massage-gun-guides";
 import { casinosCryptoGuides } from "./casinos-crypto-guides";
+import { euromillionsGuides } from "./euromillions-guides";
 
 export type ArticleSection = {
   heading: string;
@@ -760,6 +761,7 @@ export const guides: GuideArticle[] = [
   ...tumblerGuides,
   ...massageGunGuides,
   ...casinosCryptoGuides,
+  ...euromillionsGuides,
 ];
 
 export function getGuide(slug: string) {

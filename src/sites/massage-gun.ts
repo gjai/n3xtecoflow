@@ -95,6 +95,11 @@ export const massageGunSite: SiteConfig = {
       labelEn: "Casinos Crypto",
     },
     {
+      siteId: "euromillions",
+      labelFr: "EuroMillions Résultats",
+      labelEn: "EuroMillions Results",
+    },
+    {
       href: "https://elections2027.com",
       labelFr: "Élections 2027",
       labelEn: "Élections 2027",

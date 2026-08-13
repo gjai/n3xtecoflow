@@ -51,6 +51,25 @@ function loadNewsArticles(): {
   return [];
 }
 
+function loadEuroMillionsDates(): string[] {
+  const candidates = [
+    process.env.EUROMILLIONS_DATA_PATH?.trim(),
+    join(process.cwd(), "data", "euromillions.json"),
+  ].filter(Boolean) as string[];
+  for (const file of candidates) {
+    try {
+      const raw = readFileSync(file, "utf8");
+      const store = JSON.parse(raw) as { draws?: { date?: string }[] };
+      return (store.draws || [])
+        .map((d) => d.date)
+        .filter((d): d is string => Boolean(d));
+    } catch {
+      /* try next */
+    }
+  }
+  return [];
+}
+
 /** Entries for one theme only (canonical primaryHost). */
 export function buildSitemapForSite(
   site: SiteConfig,
@@ -64,6 +83,7 @@ export function buildSitemapForSite(
     "",
     ...(siteShowsProducts(site) ? ["/produits"] : []),
     ...(site.id === "ecoflow" ? ["/powerstream"] : []),
+    ...(site.id === "euromillions" ? ["/tirages", "/stats"] : []),
     "/guides",
     ...(siteShowsComparisons(site) ? ["/comparatifs"] : []),
     ...(siteShowsNews(site) ? ["/actualites"] : []),
@@ -103,6 +123,17 @@ export function buildSitemapForSite(
         changeFrequency: "weekly",
         priority: 0.75,
       });
+    }
+
+    if (site.id === "euromillions") {
+      for (const date of loadEuroMillionsDates().slice(0, 400)) {
+        entries.push({
+          url: `${siteUrl}/${locale}/tirages/${date}`,
+          lastModified: new Date(date),
+          changeFrequency: "monthly",
+          priority: 0.65,
+        });
+      }
     }
 
     for (const hub of comparisonHubCategories(site.id)) {

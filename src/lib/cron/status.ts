@@ -7,7 +7,8 @@ export type CronJobId =
   | "guides"
   | "amazon"
   | "stats"
-  | "alert";
+  | "alert"
+  | "euromillions";
 
 export type CronJobStatus = {
   lastOkAt?: string;

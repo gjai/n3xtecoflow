@@ -39,8 +39,12 @@ import { getCurrentSite } from "@/sites/server";
 import { siteAmazonFallbackQuery } from "@/sites/copy";
 import { affiliateOffer } from "@/lib/affiliates";
 import { CasinosCryptoHome } from "@/components/CasinosCryptoHome";
+import { EuroMillionsHome } from "@/components/EuroMillionsHome";
+import { readEuroMillionsStore } from "@/lib/euromillions/store";
 import {
   siteAllowsAmazon,
+  siteIsCasinosCrypto,
+  siteIsEuroMillions,
   siteUsesEditorialHome,
 } from "@/sites/features";
 /** Fresh news without blocking CDN cache on every request. */
@@ -54,15 +58,19 @@ export async function generateMetadata({
   const { locale } = await params;
   const site = await getCurrentSite();
   const tMeta = await getTranslations({ locale, namespace: "meta" });
-  const homeTitle =
-    site.id === "casinos-crypto"
+  const homeTitle = siteIsCasinosCrypto(site)
+    ? pickLocalized(locale, {
+        fr: "Stake & casino en ligne crypto : guides | Casinos Crypto",
+        en: "Stake & online crypto casino: guides | Casinos Crypto",
+        it: "Stake e casino crypto online: guide | Casinos Crypto",
+        es: "Stake y casino crypto online: guías | Casinos Crypto",
+        pt: "Stake e casino crypto online: guias | Casinos Crypto",
+        de: "Stake & Online-Krypto-Casino: Guides | Casinos Crypto",
+      })
+    : siteIsEuroMillions(site)
       ? pickLocalized(locale, {
-          fr: "Stake & casino en ligne crypto : guides | Casinos Crypto",
-          en: "Stake & online crypto casino: guides | Casinos Crypto",
-          it: "Stake e casino crypto online: guide | Casinos Crypto",
-          es: "Stake y casino crypto online: guías | Casinos Crypto",
-          pt: "Stake e casino crypto online: guias | Casinos Crypto",
-          de: "Stake & Online-Krypto-Casino: Guides | Casinos Crypto",
+          fr: "Résultats EuroMillions : tirages & archives | EuroMillions Résultats",
+          en: "EuroMillions results: draws & archives | EuroMillions Results",
         })
       : site.brand.name;
   return {
@@ -90,10 +98,20 @@ export default async function HomePage({
   const brandName = site.brand.name;
 
   if (siteUsesEditorialHome(site)) {
-    const casinoNews = getNewsArticles(await readNewsStore(), site.id).slice(
-      0,
-      3,
-    );
+    const editorialNews = getNewsArticles(
+      await readNewsStore(),
+      site.id,
+    ).slice(0, 3);
+    if (siteIsEuroMillions(site)) {
+      const store = await readEuroMillionsStore();
+      return (
+        <>
+          <JsonLd data={organizationJsonLd(site)} />
+          <JsonLd data={websiteJsonLd(site)} />
+          <EuroMillionsHome site={site} locale={locale} store={store} />
+        </>
+      );
+    }
     return (
       <>
         <JsonLd data={organizationJsonLd(site)} />
@@ -104,7 +122,7 @@ export default async function HomePage({
           stake={affiliateOffer(site, "stake")}
           nordvpn={affiliateOffer(site, "nordvpn")}
           cryptocom={affiliateOffer(site, "cryptocom")}
-          latestNews={casinoNews}
+          latestNews={editorialNews}
         />
       </>
     );
