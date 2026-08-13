@@ -19,9 +19,9 @@ import { usesEnglishFallback } from "@/i18n/locales";
 import type { EuroMillionsDraw, EuroMillionsStore } from "@/lib/euromillions/types";
 import { euroMillionsResultPending } from "@/lib/euromillions/datetime";
 import {
-  anyLotteryResultPending,
   lotteryFingerprint,
-} from "@/lib/euromillions/live";
+  anyLotteryResultPending,
+} from "@/lib/euromillions/fingerprint";
 import { getLatestDraw } from "@/lib/euromillions/store";
 import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import type { NewsArticle } from "@/lib/news/types";

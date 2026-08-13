@@ -5,10 +5,8 @@ import {
   fetchFdjMyMillionWinnerLocations,
 } from "./fdj";
 import { fetchPedroMealhaDraws, fetchUkLatestDraw } from "./fetch";
-import {
-  lotteryFingerprint,
-  revalidateLotteryPages,
-} from "./live";
+import { lotteryFingerprint } from "./fingerprint";
+import { revalidateLotteryPages } from "./live";
 import {
   readEuroMillionsStore,
   sortDrawsNewest,

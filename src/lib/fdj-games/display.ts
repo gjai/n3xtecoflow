@@ -101,7 +101,7 @@ export function companionResultPending(
     return false;
   }
   const { hour } = parisHourMinute(now);
-  if (gameId === "keno") return hour >= 13;
+  if (gameId === "keno") return hour >= 20;
   if (gameId === "crescendo") return hour >= 13;
   return hour >= 20;
 }

@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import {
-  readLotteryFingerprint,
-  withLotteryRefreshLock,
-} from "@/lib/euromillions/live";
+import { readLotteryFingerprint } from "@/lib/euromillions/fingerprint";
+import { withLotteryRefreshLock } from "@/lib/euromillions/live";
 import { refreshEuroMillionsData } from "@/lib/euromillions/refresh";
 
 export const dynamic = "force-dynamic";
