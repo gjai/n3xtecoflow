@@ -81,6 +81,53 @@ export function websiteJsonLd(siteOrUrl: SiteConfig | string) {
   };
 }
 
+const AMAZON_FR_RETURNS =
+  "https://www.amazon.fr/gp/help/customer/display.html?nodeId=201819200";
+
+/** Politique Amazon.fr (vendeur de l’offre Affiliates) — pas notre boutique. */
+function amazonFrMerchantOfferFields() {
+  return {
+    itemCondition: "https://schema.org/NewCondition",
+    hasMerchantReturnPolicy: {
+      "@type": "MerchantReturnPolicy",
+      applicableCountry: "FR",
+      returnPolicyCategory:
+        "https://schema.org/MerchantReturnFiniteReturnWindow",
+      merchantReturnDays: 30,
+      returnMethod: "https://schema.org/ReturnByMail",
+      returnFees: "https://schema.org/FreeReturn",
+      merchantReturnLink: AMAZON_FR_RETURNS,
+    },
+    shippingDetails: {
+      "@type": "OfferShippingDetails",
+      shippingDestination: {
+        "@type": "DefinedRegion",
+        addressCountry: "FR",
+      },
+      deliveryTime: {
+        "@type": "ShippingDeliveryTime",
+        handlingTime: {
+          "@type": "QuantitativeValue",
+          minValue: 0,
+          maxValue: 2,
+          unitCode: "DAY",
+        },
+        transitTime: {
+          "@type": "QuantitativeValue",
+          minValue: 1,
+          maxValue: 4,
+          unitCode: "DAY",
+        },
+      },
+      shippingRate: {
+        "@type": "MonetaryAmount",
+        value: 0,
+        currency: "EUR",
+      },
+    },
+  };
+}
+
 export function productJsonLd(args: {
   siteUrl: string;
   locale: string;
@@ -88,7 +135,9 @@ export function productJsonLd(args: {
   description: string;
   category: string;
   url: string;
+  image?: string | null;
   brandName?: string;
+  sku?: string;
   capacityWh?: number;
   outputW?: number;
   priceAmount?: number | null;
@@ -104,8 +153,18 @@ export function productJsonLd(args: {
           availability: "https://schema.org/InStock",
           url: args.offerUrl || args.url,
           seller: { "@type": "Organization", name: "Amazon.fr" },
+          ...amazonFrMerchantOfferFields(),
         }
       : undefined;
+
+  const extraProps = [
+    args.capacityWh
+      ? { "@type": "PropertyValue", name: "capacityWh", value: args.capacityWh }
+      : null,
+    args.outputW
+      ? { "@type": "PropertyValue", name: "outputW", value: args.outputW }
+      : null,
+  ].filter(Boolean);
 
   return {
     "@context": "https://schema.org",
@@ -113,19 +172,14 @@ export function productJsonLd(args: {
     name: args.name,
     description: args.description,
     category: args.category,
+    image: args.image || undefined,
     brand: args.brandName
       ? { "@type": "Brand", name: args.brandName }
       : undefined,
+    sku: args.sku || undefined,
     url: args.url,
     ...(offers ? { offers } : {}),
-    additionalProperty: [
-      args.capacityWh
-        ? { "@type": "PropertyValue", name: "capacityWh", value: args.capacityWh }
-        : null,
-      args.outputW
-        ? { "@type": "PropertyValue", name: "outputW", value: args.outputW }
-        : null,
-    ].filter(Boolean),
+    ...(extraProps.length ? { additionalProperty: extraProps } : {}),
   };
 }
 

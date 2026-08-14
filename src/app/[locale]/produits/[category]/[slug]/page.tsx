@@ -12,7 +12,9 @@ import { getEcoflowEntry } from "@/lib/ecoflow/catalog-store";
 import { getEcoflowEditorial } from "@/lib/ecoflow/editorial-store";
 import { resolveProductCopy } from "@/lib/product-copy";
 import {
+  absoluteMediaUrl,
   resolveDisplayPrice,
+  resolveProductBrand,
   resolveProductMedia,
 } from "@/lib/product-presentation";
 import { getRelatedEditorial } from "@/lib/product-related";
@@ -154,7 +156,9 @@ export default async function ProductPage({
           description: copy.summary,
           category: catCopy.title,
           url: productUrl,
-          brandName: site.id === "ecoflow" ? "EcoFlow" : undefined,
+          image: absoluteMediaUrl(siteUrl, media.src),
+          brandName: resolveProductBrand(product, site.id),
+          sku: product.amazonAsin,
           capacityWh: product.capacityWh,
           outputW: product.outputW,
           priceAmount: displayPrice?.amount,

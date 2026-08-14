@@ -77,6 +77,24 @@ export function resolveProductMedia(
   };
 }
 
+/** URL absolue pour JSON-LD / OG (GSC refuse les chemins relatifs sur `image`). */
+export function absoluteMediaUrl(siteUrl: string, src: string): string {
+  if (/^https?:\/\//i.test(src)) return src;
+  const base = siteUrl.replace(/\/$/, "");
+  return `${base}${src.startsWith("/") ? src : `/${src}`}`;
+}
+
+/** Marque pour Product JSON-LD : champ catalogue, sinon EcoFlow sur ce thème. */
+export function resolveProductBrand(
+  product: Pick<Product, "brand" | "siteId">,
+  siteId: string,
+): string | undefined {
+  const explicit = product.brand?.trim();
+  if (explicit) return explicit;
+  if (siteId === "ecoflow") return "EcoFlow";
+  return undefined;
+}
+
 /**
  * Prix affiché (toujours €) :
  * 1) Amazon Creators (live) si dispo

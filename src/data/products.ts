@@ -48,6 +48,8 @@ export type Product = {
   amazonQuery: string;
   /** Optional Amazon FR ASIN — speeds up price refresh via GetItems */
   amazonAsin?: string;
+  /** Marque fabricant (JSON-LD Product / identifiant GSC). Obligatoire hors EcoFlow. */
+  brand?: string;
   /** Optional real product photo (Amazon Associates / licensed). Prefer over category stock. */
   imageSrc?: string;
   /**
