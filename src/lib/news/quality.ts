@@ -5,6 +5,8 @@ export const MAX_NEWS_PER_BRAND = 4;
 /** Lottery is one editorial cluster — a cap of 4 emptied the EM news index. */
 export const MAX_NEWS_PER_BRAND_BY_SITE: Partial<Record<SiteId, number>> = {
   euromillions: 28,
+  /** Sinon tout tombe dans le cluster « ecoflow » et le store reste coincé à 4. */
+  ecoflow: 12,
 };
 /** Max same-brand picks in one ingest selection. */
 export const MAX_BRAND_PER_INGEST = 2;
@@ -58,13 +60,13 @@ const BRANDS_BY_SITE: Record<string, BrandRule[]> = {
     { id: "shiatsu", pattern: /\bshiatsu\b|\bcervical\b|\bneck\s*massager\b/i },
   ],
   ecoflow: [
-    { id: "ecoflow", pattern: /\becoflow\b/i },
     { id: "delta", pattern: /\bdelta\b/i },
     { id: "river", pattern: /\briver\b/i },
-    { id: "stream", pattern: /\bstream\b/i },
     { id: "powerstream", pattern: /\bpower\s*stream\b|\bpowerstream\b/i },
+    { id: "stream", pattern: /\bstream\b/i },
     { id: "glacier", pattern: /\bglacier\b/i },
     { id: "wave", pattern: /\bwave\b/i },
+    { id: "ecoflow", pattern: /\becoflow\b/i },
   ],
   "casinos-crypto": [
     { id: "stake", pattern: /\bstake(\.com)?\b/i },
