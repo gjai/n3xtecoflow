@@ -4,6 +4,7 @@ import { routing } from "./i18n/routing";
 import { isAppLocale } from "./i18n/locales";
 import { getSiteByHost, resolveSiteIdFromHost, SITE_HEADER } from "./sites";
 import { siteAllowsLocale, siteLocales } from "./sites/features";
+import { offThemeFallbackPath } from "./sites/off-theme";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -39,6 +40,15 @@ export default function middleware(request: NextRequest) {
     const fallback = siteLocales(site)[0] || "fr";
     const url = request.nextUrl.clone();
     url.pathname = pathname.replace(/^\/[^/]+/, `/${fallback}`) || `/${fallback}`;
+    return NextResponse.redirect(url, 308);
+  }
+
+  // Autre thème (même app) : 308 au lieu de 404+noindex (GSC).
+  const offTheme = offThemeFallbackPath(site, pathname);
+  if (offTheme && offTheme !== pathname) {
+    const url = request.nextUrl.clone();
+    url.pathname = offTheme;
+    url.search = "";
     return NextResponse.redirect(url, 308);
   }
 

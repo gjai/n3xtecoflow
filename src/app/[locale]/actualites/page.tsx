@@ -36,7 +36,8 @@ export async function generateMetadata({
   return {
     title: page > 1 ? `${t("title")} · ${page}` : t("title"),
     description: t("subtitle"),
-    robots: page > 1 ? { index: false, follow: true } : undefined,
+    // Canonical = /actualites (sans ?page=) : Google consolide sur la page 1.
+    // Pas de noindex : GSC le remontait comme exclusion alors que ce n’était pas le but.
     alternates: await siteLocaleAlternates(locale, "/actualites"),
   };
 }

@@ -118,7 +118,13 @@ export default async function GuideArticlePage({
   }
 
   const guide = await resolveGuide(slug, site.id);
-  if (!guide) notFound();
+  if (!guide) {
+    const foreign = GUIDE_TOPICS.find((t) => t.slug === slug);
+    if (foreign) {
+      redirect({ href: "/guides", locale });
+    }
+    notFound();
+  }
   const copy = getGuideCopy(guide, locale);
   const adsT = await getTranslations("home");
   const isEn = locale !== "fr";

@@ -1,6 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { articleJsonLd, JsonLd } from "@/components/JsonLd";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
@@ -58,7 +58,9 @@ export default async function NewsArticlePage({
   const site = await getCurrentSite();
   const store = await readNewsStore();
   const article = getNewsBySlug(slug, store, site.id);
-  if (!article) notFound();
+  if (!article) {
+    permanentRedirect(`/${locale}/actualites`);
+  }
 
   const isEn = usesEnglishFallback(locale);
   const copy = isEn ? article.en : article.fr;
