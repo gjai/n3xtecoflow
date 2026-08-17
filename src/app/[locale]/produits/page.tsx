@@ -55,7 +55,6 @@ export async function generateMetadata({
   if (!siteShowsProducts(site)) {
     return { alternates: await siteLocaleAlternates(locale, "/guides") };
   }
-  const isEn = locale === "en";
   const flat = usesFlatCatalog(site);
   return {
     title: flat
