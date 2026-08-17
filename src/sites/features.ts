@@ -8,6 +8,11 @@ export function siteShowsProducts(site: SiteConfig): boolean {
   return site.features?.products !== false;
 }
 
+/** Index /produits : catalogue SKU, ou accessoires Amazon EuroMillions. */
+export function siteHasProductIndex(site: SiteConfig): boolean {
+  return siteShowsProducts(site) || site.id === "euromillions";
+}
+
 /** Locales allowed for this theme (others redirect to default). */
 export function siteLocales(site: SiteConfig): AppLocale[] {
   return (site.locales?.length ? site.locales : DEFAULT_SITE_LOCALES) as AppLocale[];

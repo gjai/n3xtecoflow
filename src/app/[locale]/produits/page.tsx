@@ -3,9 +3,14 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { CoverImage } from "@/components/CoverImage";
 import {
+  EuroMillionsOffersBlock,
+  EUROMILLIONS_AMAZON_OFFERS,
+} from "@/components/EuroMillionsOffersBlock";
+import {
   FlatProductCatalog,
   type FlatCatalogItem,
 } from "@/components/FlatProductCatalog";
+import { JsonLd, itemListJsonLd } from "@/components/JsonLd";
 import { categoryImages } from "@/data/images";
 import { getAmazonOffersMap } from "@/lib/amazon/price-store";
 import { usesFlatCatalog } from "@/lib/comparisons/hub";
@@ -23,7 +28,7 @@ import {
   getProductsByCategory,
   getProductsForSite,
 } from "@/data/products";
-import { siteShowsProducts } from "@/sites/features";
+import { siteIsEuroMillions, siteShowsProducts } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
 import { redirect } from "@/i18n/navigation";
 
@@ -36,6 +41,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const site = await getCurrentSite();
+  const isEn = locale === "en";
+  if (siteIsEuroMillions(site)) {
+    return {
+      title: isEn ? "EuroMillions accessories" : "Accessoires EuroMillions",
+      description: isEn
+        ? "Ticket sleeves and notebooks — Amazon.fr accessories around the draw. Affiliate links. We do not sell tickets."
+        : "Pochettes et carnets — accessoires Amazon.fr autour du tirage. Liens d’affiliation. Nous ne vendons pas de tickets.",
+      robots: { index: true, follow: true },
+      alternates: await siteLocaleAlternates(locale, "/produits"),
+    };
+  }
   if (!siteShowsProducts(site)) {
     return { alternates: await siteLocaleAlternates(locale, "/guides") };
   }
@@ -69,6 +85,37 @@ export default async function ProductsIndexPage({
   setRequestLocale(locale);
   const isEn = locale === "en";
   const site = await getCurrentSite();
+  if (siteIsEuroMillions(site)) {
+    const siteUrl = `https://${site.primaryHost}`;
+    return (
+      <article className="pt-6">
+        <JsonLd
+          data={itemListJsonLd({
+            name: isEn ? "EuroMillions accessories" : "Accessoires EuroMillions",
+            description: isEn
+              ? "Amazon.fr accessories around the draw."
+              : "Accessoires Amazon.fr autour du tirage.",
+            url: `${siteUrl}/${locale}/produits`,
+            items: EUROMILLIONS_AMAZON_OFFERS.map((item) => ({
+              name: isEn ? item.labelEn : item.labelFr,
+              url: `${siteUrl}/${locale}/produits`,
+            })),
+          })}
+        />
+        <header className="mx-auto max-w-6xl px-5 py-12 md:px-8">
+          <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold md:text-5xl">
+            {isEn ? "EuroMillions accessories" : "Accessoires EuroMillions"}
+          </h1>
+          <p className="mt-4 max-w-3xl text-[var(--muted)]">
+            {isEn
+              ? "Sleeves and notebooks on Amazon.fr. Affiliate links — they do not improve your odds. We do not sell tickets."
+              : "Pochettes et carnets sur Amazon.fr. Liens d’affiliation — ça n’améliore pas vos chances. Nous ne vendons pas de tickets."}
+          </p>
+        </header>
+        <EuroMillionsOffersBlock site={site} locale={locale} />
+      </article>
+    );
+  }
   if (!siteShowsProducts(site)) {
     redirect({ href: "/guides", locale });
   }

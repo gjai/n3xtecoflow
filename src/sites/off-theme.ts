@@ -44,9 +44,10 @@ export function offThemeFallbackPath(
 
   if (
     !siteShowsProducts(site) &&
+    site.id !== "euromillions" &&
     startsWithPath(rest, "/produits")
   ) {
-    return withLocale(loc, site.id === "euromillions" ? "/" : "/guides");
+    return withLocale(loc, "/guides");
   }
   if (
     !siteShowsComparisons(site) &&

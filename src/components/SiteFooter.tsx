@@ -36,6 +36,7 @@ export function SiteFooter() {
           label: lotteryGameLabel(g, locale),
         })),
         { href: "/jeux", label: tNav("otherGames") },
+        { href: "/produits", label: t.has("accessories") ? t("accessories") : t("products") },
         { href: "/guides", label: t("guides") },
         { href: "/actualites", label: t("news") },
         { href: "/a-propos", label: t("about") },
