@@ -7,11 +7,14 @@ export const MAX_NEWS_PER_BRAND_BY_SITE: Partial<Record<SiteId, number>> = {
   euromillions: 28,
   /** Sinon tout tombe dans le cluster « ecoflow » et le store reste coincé à 4. */
   ecoflow: 12,
+  /** Sinon Stake / BTC / NordVPN restent coincés à 4 chacun. */
+  "casinos-crypto": 12,
 };
 /** Max same-brand picks in one ingest selection. */
 export const MAX_BRAND_PER_INGEST = 2;
 export const MAX_BRAND_PER_INGEST_BY_SITE: Partial<Record<SiteId, number>> = {
   euromillions: 4,
+  "casinos-crypto": 3,
 };
 
 export function maxNewsPerBrand(siteId: SiteId): number {
@@ -74,7 +77,8 @@ const BRANDS_BY_SITE: Record<string, BrandRule[]> = {
     { id: "nordvpn", pattern: /\bnordvpn\b|\bnord\s*vpn\b/i },
     {
       id: "casino-crypto",
-      pattern: /\bcrypto\s*casino\b|\bcasino\s*crypto\b/i,
+      pattern:
+        /\bcrypto\s*casino\b|\bcasino\s*crypto\b|\bbitcoin\s*casino\b|\bcasino\s*bitcoin\b|\bcrypto\s*gambling\b/i,
     },
     {
       id: "crypto",

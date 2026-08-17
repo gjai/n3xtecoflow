@@ -79,33 +79,7 @@ export const casinosCryptoSite: SiteConfig = {
     news: true,
     editorialHome: true,
   },
-  network: [
-    {
-      siteId: "ecoflow",
-      labelFr: "EcoFlow Stream",
-      labelEn: "EcoFlow Stream",
-    },
-    {
-      siteId: "tumbler",
-      labelFr: "La gourde isotherme",
-      labelEn: "La gourde isotherme",
-    },
-    {
-      siteId: "massage-gun",
-      labelFr: "Le pistolet de massage",
-      labelEn: "Le pistolet de massage",
-    },
-    {
-      siteId: "euromillions",
-      labelFr: "EuroMillions Résultats",
-      labelEn: "EuroMillions Results",
-    },
-    {
-      href: "https://elections2027.com",
-      labelFr: "Élections 2027",
-      labelEn: "Élections 2027",
-    },
-  ],
+  network: [],
   monetization: {
     disableAdsense: true,
     disableAmazon: true,
@@ -137,13 +111,21 @@ export const casinosCryptoSite: SiteConfig = {
     amazonQuery: "",
     knowsAbout: [
       "Casino en ligne crypto",
+      "Casino Bitcoin",
+      "Casino USDT",
       "Stake casino",
       "Accès Stake France",
+      "Dépôt crypto casino",
+      "KYC casino crypto",
+      "Bonus et wagering",
+      "Provably fair",
       "Cryptomonnaies",
       "Bitcoin",
       "Ethereum",
       "Crypto.com wallet",
       "VPN casino",
+      "DNS FAI",
+      "Blocage opérateur",
       "Jeu responsable",
     ],
     feedUserAgent:
@@ -167,9 +149,9 @@ export const casinosCryptoSite: SiteConfig = {
     checklistEn:
       "Budget, 18+, your legal framework, crypto deposit, VPN connection, bonus terms.",
     newsPerimeter:
-      "casino en ligne crypto / Stake.com / cryptomonnaies (BTC ETH) / Crypto.com / NordVPN / accès France",
+      "casino en ligne crypto / casino bitcoin / casino USDT / Stake.com / cryptomonnaies (BTC ETH) / Crypto.com / NordVPN / accès France / régulation crypto gambling — pas les casinos ANJ / slots FR génériques",
     newsTitleMustMention:
-      "casino crypto, Stake, Bitcoin, Ethereum, cryptomonnaie, Crypto.com ou NordVPN",
+      "casino crypto, Stake, Bitcoin, Ethereum, cryptomonnaie, Crypto.com, NordVPN, USDT ou bitcoin casino",
     newsBuyingCriteria:
       "accès Stake, bonus casino, marché crypto, wallet Crypto.com, VPN NordVPN, jeu responsable",
     newsDefaultTags: ["casino-en-ligne", "stake", "casino-crypto", "crypto"],
@@ -192,7 +174,7 @@ export const casinosCryptoSite: SiteConfig = {
     preferAiNewsCovers: true,
     allowWeakPackshotDefault: false,
     topicBrandPattern:
-      String.raw`\bcrypto\s*casino\b|\bcasino\s*crypto\b|\bstake(\.com)?\b|\bcrypto\.com\b|\bcryptocom\b|\bnordvpn\b|\bnord\s*vpn\b|\bcryptocurrenc|\bcryptomonnaie|\bbitcoin\b|\bethereum\b|\bbtc\b|\beth\b|\busdt\b|\bstablecoin\b|\bvpn\b`,
+      String.raw`\bcrypto\s*casino\b|\bcasino\s*crypto\b|\bbitcoin\s*casino\b|\bcasino\s*bitcoin\b|\bcrypto\s*gambling\b|\bstake(\.com)?\b|\bcrypto\.com\b|\bcryptocom\b|\bnordvpn\b|\bnord\s*vpn\b|\bcryptocurrenc|\bcryptomonnaie|\bbitcoin\b|\bethereum\b|\bbtc\b|\beth\b|\busdt\b|\bstablecoin\b|\bvpn\b`,
   },
   focusFr:
     "Casino en ligne crypto : Stake, accès depuis la France, wallet Crypto.com et VPN — sans Amazon ni AdSense.",

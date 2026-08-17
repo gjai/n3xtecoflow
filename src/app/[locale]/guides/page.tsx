@@ -7,6 +7,7 @@ import { getEditorialImages } from "@/data/images";
 import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import { resolveArticleProductImages } from "@/lib/article-images";
 import { getGuideCopy } from "@/data/articles";
+import { CASINOS_CRYPTO_GUIDE_SLUG_ORDER } from "@/data/casinos-crypto-guides";
 import { resolveAllGuides } from "@/lib/guides/refresh";
 import { pickLocalized, usesEnglishFallback } from "@/i18n/locales";
 import { siteLocaleAlternates } from "@/lib/seo";
@@ -93,10 +94,18 @@ export default async function GuidesIndexPage({
   }
 
   const ecoflowMap = await getEcoflowEntriesMap();
-  const allGuides = await resolveAllGuides(site.id);
-  const editorialImages = getEditorialImages(site.id);
   const casino = site.id === "casinos-crypto";
   const em = site.id === "euromillions";
+  const allGuidesRaw = await resolveAllGuides(site.id);
+  const allGuides = casino
+    ? [...allGuidesRaw].sort((a, b) => {
+        const order = CASINOS_CRYPTO_GUIDE_SLUG_ORDER as readonly string[];
+        const ia = order.indexOf(a.slug);
+        const ib = order.indexOf(b.slug);
+        return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+      })
+    : allGuidesRaw;
+  const editorialImages = getEditorialImages(site.id);
 
   return (
     <div className="pt-6">
@@ -128,12 +137,12 @@ export default async function GuidesIndexPage({
         <p className="mt-4 max-w-2xl text-[var(--muted)]">
           {casino
             ? pickLocalized(locale, {
-                fr: `Stake, Crypto.com et VPN : parcours clair avant de jouer — 18+, jeu responsable.`,
-                en: `Stake, Crypto.com and VPN: a clear path before you play — 18+, play responsibly.`,
-                it: `Stake, Crypto.com e VPN: percorso chiaro prima di giocare — 18+, gioco responsabile.`,
-                es: `Stake, Crypto.com y VPN: recorrido claro antes de jugar — 18+, juego responsable.`,
-                pt: `Stake, Crypto.com e VPN: percurso claro antes de jogar — 18+, jogo responsável.`,
-                de: `Stake, Crypto.com und VPN: klarer Weg vor dem Spielen — 18+, verantwortungsvoll spielen.`,
+                fr: `Stake, dépôt crypto, USDT, KYC, bonus, jeu responsable — 18+.`,
+                en: `Stake, crypto deposits, USDT, KYC, bonuses, responsible play — 18+.`,
+                it: `Stake, deposito crypto, USDT, KYC, bonus, gioco responsabile — 18+.`,
+                es: `Stake, depósito crypto, USDT, KYC, bonus, juego responsable — 18+.`,
+                pt: `Stake, depósito crypto, USDT, KYC, bónus, jogo responsável — 18+.`,
+                de: `Stake, Krypto-Einzahlung, USDT, KYC, Boni, verantwortungsvolles Spiel — 18+.`,
               })
             : em
               ? pickLocalized(locale, {

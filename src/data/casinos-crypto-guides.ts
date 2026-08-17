@@ -1,14 +1,27 @@
 import type { ArticleSection, GuideArticle, LocalizedGuideCopy } from "./articles";
 import { casinosCryptoGuideLocales } from "./casinos-crypto-guide-locales";
+import {
+  CASINOS_CRYPTO_CLUSTER_SLUGS,
+  casinosCryptoClusterCovers,
+  casinosCryptoClusterGuides,
+} from "./casinos-crypto-guides-cluster";
 
 export const CASINOS_CRYPTO_STAKE_GUIDE_SLUG = "guide-stake-casino-crypto";
 export const CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG = "guide-cryptocom-wallet";
 export const CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG = "guide-cryptomonnaies";
 export const CASINOS_CRYPTO_VPN_GUIDE_SLUG = "vpn-acces-casino";
 
+export const CASINOS_CRYPTO_GUIDE_SLUG_ORDER = [
+  CASINOS_CRYPTO_STAKE_GUIDE_SLUG,
+  CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG,
+  CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG,
+  CASINOS_CRYPTO_VPN_GUIDE_SLUG,
+  ...CASINOS_CRYPTO_CLUSTER_SLUGS,
+] as const;
+
 const AI_CREDIT = "Casinos Crypto (IA)";
 
-export const casinosCryptoGuideCovers: Record<
+const casinosCryptoPillarCovers: Record<
   string,
   { src: string; credit: string; creditUrl: string }
 > = {
@@ -32,6 +45,14 @@ export const casinosCryptoGuideCovers: Record<
     credit: AI_CREDIT,
     creditUrl: "https://casinos-crypto.fr",
   },
+};
+
+export const casinosCryptoGuideCovers: Record<
+  string,
+  { src: string; credit: string; creditUrl: string }
+> = {
+  ...casinosCryptoPillarCovers,
+  ...casinosCryptoClusterCovers,
 };
 
 /** Inline illustrations by section index (applied to FR + EN). */
@@ -528,7 +549,7 @@ const casinosCryptoGuidesRaw: GuideArticle[] = [
         {
           heading: "5. Suite",
           paragraphs: [
-            "Connexion prête → guide Stake (casino crypto) et guide Crypto.com (dépôt). Les trois liens d’affiliation sont disponibles — Stake reste le plus mis en avant. 18+, jeu responsable.",
+            "Connexion prête → guide Stake (casino crypto), guide DNS (blocage FAI / page « site bloqué »), guide Crypto.com (dépôt). Les trois liens d’affiliation sont disponibles — Stake reste le plus mis en avant. 18+, jeu responsable.",
           ],
         },
       ],
@@ -581,7 +602,7 @@ const casinosCryptoGuidesRaw: GuideArticle[] = [
         {
           heading: "5. Next",
           paragraphs: [
-            "Connection ready → Stake guide (crypto casino) and Crypto.com guide (deposit). All three affiliate links are available — Stake stays most prominent. 18+, play responsibly.",
+            "Connection ready → Stake guide (crypto casino), DNS guide (ISP blocks / “site blocked” pages) and Crypto.com guide (deposit). All three affiliate links are available — Stake stays most prominent. 18+, play responsibly.",
           ],
         },
       ],
@@ -698,6 +719,7 @@ const casinosCryptoGuidesRaw: GuideArticle[] = [
       ],
     },
   },
+  ...casinosCryptoClusterGuides,
 ];
 
 export const casinosCryptoGuides: GuideArticle[] =

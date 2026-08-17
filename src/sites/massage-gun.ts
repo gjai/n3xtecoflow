@@ -90,11 +90,6 @@ export const massageGunSite: SiteConfig = {
       labelEn: "La gourde isotherme",
     },
     {
-      siteId: "casinos-crypto",
-      labelFr: "Casinos Crypto",
-      labelEn: "Casinos Crypto",
-    },
-    {
       siteId: "euromillions",
       labelFr: "EuroMillions Résultats",
       labelEn: "EuroMillions Results",

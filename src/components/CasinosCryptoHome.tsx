@@ -15,6 +15,9 @@ import {
   CASINOS_CRYPTO_VPN_GUIDE_SLUG,
   casinosCryptoGuideCovers,
 } from "@/data/casinos-crypto-guides";
+import { CASINOS_CRYPTO_CLUSTER_SLUGS } from "@/data/casinos-crypto-guides-cluster";
+import { getGuideCopy } from "@/data/articles";
+import { resolveAllGuides } from "@/lib/guides/refresh";
 import { getEditorialImages } from "@/data/images";
 import { usesEnglishFallback } from "@/i18n/locales";
 import type { NewsArticle } from "@/lib/news/types";
@@ -132,6 +135,14 @@ export async function CasinosCryptoHome({
       : usesEnglishFallback(locale)
         ? offer.labelEn
         : offer.labelFr;
+
+  const bySlug = new Map(
+    (await resolveAllGuides(site.id)).map((guide) => [guide.slug, guide]),
+  );
+  const clusterGuides = CASINOS_CRYPTO_CLUSTER_SLUGS.flatMap((slug) => {
+    const guide = bySlug.get(slug);
+    return guide ? [guide] : [];
+  });
 
   const howSteps = [
     t("howStart1"),
@@ -317,6 +328,49 @@ export async function CasinosCryptoHome({
           </ol>
         </div>
       </section>
+
+      {clusterGuides.length ? (
+        <section className="border-b border-[var(--line)]">
+          <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
+                  {t("moreGuidesTitle")}
+                </h2>
+                <p className="mt-3 max-w-2xl text-[var(--muted)]">
+                  {t("moreGuidesBody")}
+                </p>
+              </div>
+              <Link
+                href="/guides"
+                className="text-sm font-semibold text-[var(--accent)] underline-offset-4 hover:underline"
+              >
+                {t("moreGuidesCta")}
+              </Link>
+            </div>
+            <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {clusterGuides.map((guide) => {
+                const copy = getGuideCopy(guide, locale);
+                return (
+                  <li key={guide.slug}>
+                    <Link
+                      href={`/guides/${guide.slug}`}
+                      className="block h-full border border-[var(--line)] bg-[var(--surface)] p-4 transition hover:border-[var(--accent)]"
+                    >
+                      <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)]">
+                        {copy.title}
+                      </h3>
+                      <p className="mt-2 line-clamp-2 text-sm text-[var(--muted)]">
+                        {copy.subtitle}
+                      </p>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </section>
+      ) : null}
 
       {latestNews.length ? (
         <section className="border-b border-[var(--line)]">

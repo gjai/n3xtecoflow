@@ -22,11 +22,11 @@ jobs:
           fi
           # Sequential: shared news.json must not be written in parallel.
           # limit=2 per theme keeps AI rewrite under maxDuration;
-          # euromillions takes 4 so the lottery index can fill.
+          # euromillions + casinos-crypto take 4 to fill their indexes.
           fail=0
           for site in ecoflow tumbler massage-gun casinos-crypto euromillions; do
             limit=2
-            if [ "${site}" = "euromillions" ]; then
+            if [ "${site}" = "euromillions" ] || [ "${site}" = "casinos-crypto" ]; then
               limit=4
             fi
             echo "=== ingest siteId=${site} limit=${limit} ==="

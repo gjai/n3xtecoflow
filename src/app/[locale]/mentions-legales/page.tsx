@@ -42,9 +42,10 @@ export default async function MentionsPage({
       <>{text}</>
     );
 
+  const showHost = Boolean(t("hostBody").trim());
   const toc = [
     { id: "editeur", label: t("publisherTitle") },
-    { id: "hebergeur", label: t("hostTitle") },
+    ...(showHost ? [{ id: "hebergeur", label: t("hostTitle") }] : []),
     { id: "confidentialite", label: t("privacyTitle") },
     { id: "droits", label: t("privacyRightsTitle") },
     { id: "cookies", label: t("cookiesTitle") },
@@ -134,12 +135,14 @@ export default async function MentionsPage({
           </p>
         </section>
 
-        <section id="hebergeur" className="scroll-mt-28">
-          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
-            {t("hostTitle")}
-          </h2>
-          <p className="mt-4 whitespace-pre-line">{t("hostBody")}</p>
-        </section>
+        {showHost ? (
+          <section id="hebergeur" className="scroll-mt-28">
+            <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
+              {t("hostTitle")}
+            </h2>
+            <p className="mt-4 whitespace-pre-line">{t("hostBody")}</p>
+          </section>
+        ) : null}
 
         <section id="confidentialite" className="scroll-mt-28">
           <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">

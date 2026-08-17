@@ -27,6 +27,7 @@ import {
   siteAllowsAdsense,
   siteAllowsAmazon,
   siteAllowsLocale,
+  siteIsCasinosCrypto,
   siteIsEuroMillions,
 } from "@/sites/features";
 import { siteThemeCss } from "@/sites/theme-css";
@@ -216,7 +217,7 @@ export default async function LocaleLayout({
                 <div className="flex min-h-full flex-col">
                   <SiteHeader />
                   <main className="flex-1">{children}</main>
-                  <NetworkLinks />
+                  {siteIsCasinosCrypto(site) ? null : <NetworkLinks />}
                   <SiteFooter />
                 </div>
                 <CookieBanner />

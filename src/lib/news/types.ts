@@ -109,6 +109,16 @@ export const NEWS_FEEDS: NewsFeed[] = [
     url: "https://news.google.com/rss/search?q=(Bitcoin+OR+Ethereum+OR+cryptocurrency+OR+%22Crypto.com%22)+(market+OR+price+OR+BTC+OR+ETH+OR+ETF+OR+SEC)+-presale+-airdrop+when:14d&hl=en-US&gl=US&ceid=US:en",
   },
   {
+    id: "casinos-crypto-gnews-fr-casino",
+    siteId: "casinos-crypto",
+    url: "https://news.google.com/rss/search?q=(%22casino+crypto%22+OR+%22casino+bitcoin%22+OR+%22bitcoin+casino%22+OR+%22crypto+casino%22+OR+Stake.com)+(r%C3%A9gulation+OR+licence+OR+USDT+OR+Bitcoin)+-promo+-coupon+-Drake+-Everton+-sportsbook+when:45d&hl=fr&gl=FR&ceid=FR:fr",
+  },
+  {
+    id: "casinos-crypto-gnews-en-casino",
+    siteId: "casinos-crypto",
+    url: "https://news.google.com/rss/search?q=(%22crypto+casino%22+OR+%22bitcoin+casino%22+OR+%22crypto+gambling%22+OR+Stake.com)+(regulation+OR+license+OR+USDT+OR+Bitcoin)+-promo+-coupon+-Drake+-Everton+-sportsbook+when:45d&hl=en-US&gl=US&ceid=US:en",
+  },
+  {
     id: "euromillions-gnews-fr",
     siteId: "euromillions",
     url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(r%C3%A9sultat+OR+tirage+OR+jackpot+OR+gagnant+OR+FDJ)+when:90d&hl=fr&gl=FR&ceid=FR:fr",
@@ -160,6 +170,7 @@ export const MAX_NEWS_ARTICLES = 140;
 export const DEFAULT_MAX_NEWS_PER_SITE = 24;
 export const MAX_NEWS_PER_SITE: Partial<Record<SiteId, number>> = {
   euromillions: 36,
+  "casinos-crypto": 36,
 };
 /**
  * New articles per ingest run when no `siteId` is set.
@@ -170,6 +181,7 @@ export const MAX_NEW_PER_RUN = 8;
 export const MAX_NEW_PER_SITE_RUN = 2;
 export const MAX_NEW_PER_SITE_RUN_BY_ID: Partial<Record<SiteId, number>> = {
   euromillions: 4,
+  "casinos-crypto": 4,
 };
 
 export function maxNewPerSiteRun(siteId?: SiteId): number {

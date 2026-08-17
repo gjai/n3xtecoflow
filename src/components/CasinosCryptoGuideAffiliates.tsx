@@ -10,29 +10,37 @@ import {
 } from "@/lib/affiliates";
 import type { SiteConfig } from "@/sites/types";
 import {
-  CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG,
   CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG,
-  CASINOS_CRYPTO_STAKE_GUIDE_SLUG,
   CASINOS_CRYPTO_VPN_GUIDE_SLUG,
 } from "@/data/casinos-crypto-guides";
 
 type GuideAngle = "stake" | "cryptocom" | "crypto" | "vpn";
 
+const CRYPTO_PRIMARY_SLUGS = new Set([
+  "guide-cryptomonnaies",
+  "casino-bitcoin",
+  "casino-usdt",
+  "btc-vs-usdt-pour-jouer",
+]);
+
+const WALLET_PRIMARY_SLUGS = new Set([
+  "guide-cryptocom-wallet",
+  "depot-crypto-casino",
+]);
+
 function angleForSlug(slug: string): GuideAngle {
+  if (slug.includes("vpn") || slug.includes("dns") || slug === CASINOS_CRYPTO_VPN_GUIDE_SLUG) {
+    return "vpn";
+  }
+  if (WALLET_PRIMARY_SLUGS.has(slug) || slug.includes("cryptocom")) {
+    return "cryptocom";
+  }
   if (
+    CRYPTO_PRIMARY_SLUGS.has(slug) ||
     slug.includes("cryptomonnaie") ||
     slug === CASINOS_CRYPTO_CRYPTO_GUIDE_SLUG
   ) {
     return "crypto";
-  }
-  if (slug.includes("cryptocom") || slug === CASINOS_CRYPTO_CRYPTOCOM_GUIDE_SLUG) {
-    return "cryptocom";
-  }
-  if (slug.includes("vpn") || slug === CASINOS_CRYPTO_VPN_GUIDE_SLUG) {
-    return "vpn";
-  }
-  if (slug === CASINOS_CRYPTO_STAKE_GUIDE_SLUG || slug.includes("stake")) {
-    return "stake";
   }
   return "stake";
 }

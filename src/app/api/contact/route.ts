@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getSiteByHost } from "@/sites";
 
 const CONTACT_TO = process.env.CONTACT_TO_EMAIL?.trim() || "djgjai@gmail.com";
 const recent = new Map<string, number>();
@@ -46,6 +47,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid_fields" }, { status: 400 });
   }
 
+  const site = getSiteByHost(request.headers.get("host"));
   const res = await fetch(`https://formsubmit.co/ajax/${CONTACT_TO}`, {
     method: "POST",
     headers: {
@@ -56,7 +58,7 @@ export async function POST(request: Request) {
       name,
       email,
       message,
-      _subject: `[EcoFlow Stream] Message de ${name}`,
+      _subject: `[${site.brand.name}] Message de ${name}`,
       _template: "table",
       _captcha: "false",
     }),

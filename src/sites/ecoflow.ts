@@ -86,11 +86,6 @@ export const ecoflowSite: SiteConfig = {
       labelEn: "Le pistolet de massage",
     },
     {
-      siteId: "casinos-crypto",
-      labelFr: "Casinos Crypto",
-      labelEn: "Casinos Crypto",
-    },
-    {
       siteId: "euromillions",
       labelFr: "EuroMillions Résultats",
       labelEn: "EuroMillions Results",

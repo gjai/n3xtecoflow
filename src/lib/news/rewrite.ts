@@ -230,6 +230,7 @@ function guessTags(
     if (/nordvpn|nord\s*vpn/.test(hay)) tags.add("nordvpn");
     if (/vpn/.test(hay)) tags.add("vpn");
     if (/casino|gambling|jeu\s*d.?argent/.test(hay)) tags.add("casino-crypto");
+    if (/bitcoin\s*casino|casino\s*bitcoin/.test(hay)) tags.add("casino-crypto");
     if (
       /wallet|usdt|bitcoin|btc|ethereum|eth\b|cryptocurrenc|cryptomonnaie|stablecoin/.test(
         hay,
