@@ -40,7 +40,14 @@ import { siteAmazonFallbackQuery } from "@/sites/copy";
 import { affiliateOffer } from "@/lib/affiliates";
 import { CasinosCryptoHome } from "@/components/CasinosCryptoHome";
 import { EuroMillionsHome } from "@/components/EuroMillionsHome";
-import { readEuroMillionsStore } from "@/lib/euromillions/store";
+import {
+  euroMillionsHomeDescription,
+  euroMillionsHomeTitle,
+} from "@/lib/euromillions/home-seo";
+import {
+  getLatestDraw,
+  readEuroMillionsStore,
+} from "@/lib/euromillions/store";
 import { readFdjGamesStore } from "@/lib/fdj-games/store";
 import {
   siteAllowsAmazon,
@@ -59,31 +66,28 @@ export async function generateMetadata({
   const { locale } = await params;
   const site = await getCurrentSite();
   const tMeta = await getTranslations({ locale, namespace: "meta" });
-  const homeTitle = siteIsCasinosCrypto(site)
-    ? pickLocalized(locale, {
-        fr: "Stake & casino en ligne crypto : guides | Casinos Crypto",
-        en: "Stake & online crypto casino: guides | Casinos Crypto",
-        it: "Stake e casino crypto online: guide | Casinos Crypto",
-        es: "Stake y casino crypto online: guías | Casinos Crypto",
-        pt: "Stake e casino crypto online: guias | Casinos Crypto",
-        de: "Stake & Online-Krypto-Casino: Guides | Casinos Crypto",
-      })
-    : siteIsEuroMillions(site)
-      ? pickLocalized(locale, {
-          fr: "Résultats EuroMillions : tirages & jackpots | EuroMillions Résultats",
-          en: "EuroMillions results: draws & jackpots | EuroMillions Results",
-          it: "Risultati EuroMillions: estrazioni e jackpot | EuroMillions Risultati",
-          es: "Resultados EuroMillions: sorteos y botes | EuroMillions Resultados",
-          pt: "Resultados EuroMillions: sorteios e jackpots | EuroMillions Resultados",
-          de: "EuroMillions-Ergebnisse: Ziehungen & Jackpots | EuroMillions Ergebnisse",
-          nl: "EuroMillions-resultaten: trekkingen & jackpots | EuroMillions Resultaten",
-        })
-      : site.brand.name;
+  let homeTitle = site.brand.name;
+  let homeDescription =
+    tMeta("tagline") ||
+    (locale === "fr" ? site.brand.taglineFr : site.brand.taglineEn);
+  if (siteIsCasinosCrypto(site)) {
+    homeTitle = pickLocalized(locale, {
+      fr: "Stake & casino en ligne crypto : guides | Casinos Crypto",
+      en: "Stake & online crypto casino: guides | Casinos Crypto",
+      it: "Stake e casino crypto online: guide | Casinos Crypto",
+      es: "Stake y casino crypto online: guías | Casinos Crypto",
+      pt: "Stake e casino crypto online: guias | Casinos Crypto",
+      de: "Stake & Online-Krypto-Casino: Guides | Casinos Crypto",
+    });
+  } else if (siteIsEuroMillions(site)) {
+    const store = await readEuroMillionsStore();
+    const latest = getLatestDraw(store);
+    homeTitle = euroMillionsHomeTitle(locale, latest);
+    homeDescription = euroMillionsHomeDescription(locale, latest, store);
+  }
   return {
     title: { absolute: homeTitle },
-    description:
-      tMeta("tagline") ||
-      (locale === "fr" ? site.brand.taglineFr : site.brand.taglineEn),
+    description: homeDescription,
     alternates: await siteLocaleAlternates(locale, ""),
   };
 }
@@ -117,6 +121,7 @@ export default async function HomePage({
           <JsonLd data={websiteJsonLd(site)} />
           <JsonLd
             data={faqJsonLd([
+              { question: t("faqTodayQ"), answer: t("faqTodayA") },
               { question: t("faqWhenQ"), answer: t("faqWhenA") },
               { question: t("faqCheckQ"), answer: t("faqCheckA") },
               { question: t("faqMyMillionQ"), answer: t("faqMyMillionA") },

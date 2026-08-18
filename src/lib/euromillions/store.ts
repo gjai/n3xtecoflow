@@ -36,11 +36,32 @@ export async function writeEuroMillionsStore(
   await fs.writeFile(file, JSON.stringify(store, null, 2) + "\n", "utf8");
 }
 
+/** Fiche indexable « en attente » (pas encore de boules). */
+export function isEuroMillionsDrawPublished(
+  draw: EuroMillionsDraw | null | undefined,
+): boolean {
+  return Boolean(draw && draw.numbers.length === 5 && draw.stars.length === 2);
+}
+
+export function upcomingDrawPlaceholder(
+  date: string,
+  jackpotEur?: number | null,
+): EuroMillionsDraw {
+  return {
+    date,
+    numbers: [],
+    stars: [],
+    jackpotEur: jackpotEur ?? null,
+    source: "manual",
+    fetchedAt: new Date().toISOString(),
+  };
+}
+
 export function getLatestDraw(
   store: EuroMillionsStore,
 ): EuroMillionsDraw | null {
-  if (store.latest) return store.latest;
-  return store.draws[0] || null;
+  if (isEuroMillionsDrawPublished(store.latest)) return store.latest!;
+  return store.draws.find(isEuroMillionsDrawPublished) || null;
 }
 
 export function getDrawByDate(
@@ -48,6 +69,19 @@ export function getDrawByDate(
   date: string,
 ): EuroMillionsDraw | undefined {
   return store.draws.find((d) => d.date === date);
+}
+
+/** Fiche réelle, ou placeholder si c’est le prochain tirage connu. */
+export function resolveDrawPage(
+  store: EuroMillionsStore,
+  date: string,
+): EuroMillionsDraw | undefined {
+  const found = getDrawByDate(store, date);
+  if (found) return found;
+  if (store.nextDrawDate === date) {
+    return upcomingDrawPlaceholder(date, store.nextJackpotEur);
+  }
+  return undefined;
 }
 
 export function sortDrawsNewest(draws: EuroMillionsDraw[]): EuroMillionsDraw[] {

@@ -8,12 +8,15 @@ import {
 } from "./fdj";
 import { fetchPedroMealhaDraws, fetchUkLatestDraw } from "./fetch";
 import { lotteryFingerprint } from "./fingerprint";
-import { lotteryIndexNowUrls, submitIndexNow } from "@/lib/seo/indexnow";
+import { lotteryIndexNowUrls } from "@/lib/seo/indexnow";
+import { notifySearchEngines } from "@/lib/seo/notify";
 import { revalidateLotteryPages, revalidateSitemap } from "./live";
 import {
   readEuroMillionsStore,
   sortDrawsNewest,
+  upcomingDrawPlaceholder,
   writeEuroMillionsStore,
+  isEuroMillionsDrawPublished,
 } from "./store";
 import type {
   EuroMillionsDraw,
@@ -219,7 +222,12 @@ export async function refreshEuroMillionsData(options?: {
 
   let draws = mergeDraws(store.draws, incoming);
   draws = attachWinnerLocations(draws, winners);
-  const latest = draws[0] || null;
+  if (nextDrawDate && !draws.some((d) => d.date === nextDrawDate)) {
+    draws = mergeDraws(draws, [
+      upcomingDrawPlaceholder(nextDrawDate, nextJackpotEur),
+    ]);
+  }
+  const latest = draws.find(isEuroMillionsDrawPublished) || null;
   const next: EuroMillionsStore = {
     updatedAt: new Date().toISOString(),
     latest,
@@ -234,7 +242,10 @@ export async function refreshEuroMillionsData(options?: {
   const changed = fingerprint !== beforeFp;
   revalidateLotteryPages();
   if (changed) {
-    await submitIndexNow(lotteryIndexNowUrls(next, afterFdj));
+    await notifySearchEngines(
+      lotteryIndexNowUrls(next, afterFdj),
+      "euromillions-resultats.fr",
+    );
   }
 
   return {

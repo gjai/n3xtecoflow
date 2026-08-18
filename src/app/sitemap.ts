@@ -62,7 +62,8 @@ function loadNewsArticles(): {
   return [];
 }
 
-function loadEuroMillionsDates(): string[] {
+function loadEuroMillionsDates(): { date: string; lastModified: Date }[] {
+  const today = new Date().toISOString().slice(0, 10);
   const candidates = [
     process.env.EUROMILLIONS_DATA_PATH?.trim(),
     join(process.cwd(), "data", "euromillions.json"),
@@ -70,10 +71,21 @@ function loadEuroMillionsDates(): string[] {
   for (const file of candidates) {
     try {
       const raw = readFileSync(file, "utf8");
-      const store = JSON.parse(raw) as { draws?: { date?: string }[] };
-      return (store.draws || [])
-        .map((d) => d.date)
-        .filter((d): d is string => Boolean(d));
+      const store = JSON.parse(raw) as {
+        draws?: { date?: string }[];
+        nextDrawDate?: string | null;
+      };
+      const dates = new Set<string>();
+      for (const d of store.draws || []) {
+        if (d.date) dates.add(d.date);
+      }
+      if (store.nextDrawDate) dates.add(store.nextDrawDate);
+      return [...dates]
+        .sort((a, b) => b.localeCompare(a))
+        .map((date) => ({
+          date,
+          lastModified: date > today ? new Date() : new Date(date),
+        }));
     } catch {
       /* try next */
     }
@@ -187,12 +199,15 @@ export function buildSitemapForSite(
     }
 
     if (site.id === "euromillions" && SITEMAP_EM_ARCHIVE_LOCALES.has(locale)) {
-      for (const date of loadEuroMillionsDates().slice(0, SITEMAP_EM_DRAW_DATES)) {
+      for (const { date, lastModified } of loadEuroMillionsDates().slice(
+        0,
+        SITEMAP_EM_DRAW_DATES,
+      )) {
         entries.push({
           url: `${siteUrl}/${locale}/tirages/${date}`,
-          lastModified: new Date(date),
-          changeFrequency: "monthly",
-          priority: 0.65,
+          lastModified,
+          changeFrequency: "daily",
+          priority: 0.8,
         });
       }
       for (const item of loadCompanionDrawKeys()) {

@@ -261,6 +261,32 @@ export function itemListJsonLd(args: {
   };
 }
 
+export function datasetJsonLd(args: {
+  name: string;
+  description: string;
+  url: string;
+  csvUrl: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    name: args.name,
+    description: args.description,
+    url: args.url,
+    license: "https://creativecommons.org/licenses/by/4.0/",
+    creator: {
+      "@type": "Organization",
+      name: "EuroMillions Résultats",
+      url: "https://euromillions-resultats.fr",
+    },
+    distribution: {
+      "@type": "DataDownload",
+      encodingFormat: "text/csv",
+      contentUrl: args.csvUrl,
+    },
+  };
+}
+
 export function lotteryDrawJsonLd(args: {
   siteUrl: string;
   locale: string;

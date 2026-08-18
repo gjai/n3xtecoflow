@@ -82,12 +82,24 @@ const OFF_TOPIC =
 const OFF_TOPIC_HARD =
   /\bpressoth[eé]rapie\b|\bbottes?\s+de\s+press|\bcompression\s+boots?\b|\bbalances?\s+connect|\bmassage\s+(pour\s+)?les\s+pieds\b|\bfoot\s+massager\b|\bchaise\s+de\s+massage\b|\bthermo[-\s]?pad\b|\bpad\s+chaud\b|\bchaud[-\s]?froid\b/i;
 
-/** Casino / US lottery / sports betting — hors périmètre EuroMillions-résultats. */
+/** Casino / US lottery / sports betting / UK National Lottery — hors périmètre FR. */
 const EUROMILLIONS_OFF_TOPIC =
-  /\bstake\.com\b|\bcrypto\s*casino\b|\bpowerball\b|\bmega\s*millions\b|\bsportsbook\b|\bparions\s*sport\b|\bbet365\b|\bwinamax\b/i;
+  /\bstake\.com\b|\bcrypto\s*casino\b|\bpowerball\b|\bmega\s*millions\b|\bsportsbook\b|\bparions\s*sport\b|\bbet365\b|\bwinamax\b|\bthunderball\b|\bhotpicks\b|\bset\s+for\s+life\b|\bnational\s+lottery\b|\buk\s+lotto\b|\bhealth\s+lottery\b/i;
 
 const BLOCKED_LOTTERY_SOURCE =
-  /tirage[-\s.]?gagnant/i;
+  /tirage[-\s.]?gagnant|chronicle\s*live|independent\.co\.uk|mirror\.co\.uk|thesun\.|belfasttelegraph|irishnews|metro\.co\.uk|ok\.co\.uk|express\.co\.uk/i;
+
+/** Actu qui recopie la fiche résultat (cannibalise /tirages/[date]). */
+const EUROMILLIONS_RESULT_CLONE =
+  /\b(r[ée]sultats?|num[ée]ros gagnants|winning numbers|voici les r[ée]sultats)\b[\s\S]{0,80}\b(euromillions|euro\s*millions|euromillones)\b/i;
+
+export function isEuroMillionsResultClone(title: string): boolean {
+  const t = title.trim();
+  if (!EUROMILLIONS_RESULT_CLONE.test(t)) return false;
+  return /\b(mardi|mercredi|jeudi|vendredi|samedi|dimanche|lundi|tuesday|friday|monday|wednesday|thursday|\d{1,2}[\s/.-]+\d{1,2}|janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[uû]t|aout|septembre|octobre|novembre|d[ée]cembre|january|february|august)\b/i.test(
+    t,
+  );
+}
 
 export function isBlockedLotteryNewsSource(item: {
   sourceName?: string;
@@ -124,6 +136,9 @@ export function isRelevantItem(item: RssItem, siteId: SiteId = "ecoflow") {
   if (OFF_TOPIC_HARD.test(hay)) return false;
   if (siteId === "euromillions" && EUROMILLIONS_OFF_TOPIC.test(hay)) return false;
   if (siteId === "euromillions" && isBlockedLotteryNewsSource(item)) return false;
+  if (siteId === "euromillions" && isEuroMillionsResultClone(item.title)) {
+    return false;
+  }
   if (!brand.test(hay)) return false;
   if (!brandPrimary(item.title, brand) && !brandPrimary(hay.slice(0, 160), brand)) {
     return false;
@@ -149,6 +164,9 @@ export function isOnTopicArticle(
   const excerpts = `${input.excerptFr || ""} ${input.excerptEn || ""}`;
   if (OFF_TOPIC_HARD.test(titles) || OFF_TOPIC_HARD.test(excerpts)) return false;
   if (siteId === "euromillions" && EUROMILLIONS_OFF_TOPIC.test(`${titles} ${excerpts}`)) {
+    return false;
+  }
+  if (siteId === "euromillions" && isEuroMillionsResultClone(titles)) {
     return false;
   }
   if (

@@ -10,7 +10,7 @@ import {
 import { readNewsStore, writeNewsStore } from "./store";
 import { revalidateSitemap } from "@/lib/euromillions/live";
 import { revalidatePath } from "next/cache";
-import { submitIndexNow } from "@/lib/seo/indexnow";
+import { notifySearchEngines } from "@/lib/seo/notify";
 import { sitesById } from "@/sites";
 import { siteLocales } from "@/sites/features";
 
@@ -289,7 +289,9 @@ export async function ingestNews(
       byHost.set(host, urls);
     }
     await Promise.all(
-      [...byHost.entries()].map(([host, urls]) => submitIndexNow(urls, host)),
+      [...byHost.entries()].map(([host, urls]) =>
+        notifySearchEngines(urls, host),
+      ),
     );
   }
 

@@ -12,7 +12,7 @@ import { ArchivePagination } from "@/components/ArchivePagination";
 import { DrawArchiveRow } from "@/components/DrawArchiveRow";
 import { DrawBalls } from "@/components/EuroMillionsHome";
 import { GameMark } from "@/components/GameMark";
-import { JsonLd, breadcrumbJsonLd, itemListJsonLd } from "@/components/JsonLd";
+import { JsonLd, breadcrumbJsonLd, itemListJsonLd, datasetJsonLd } from "@/components/JsonLd";
 import { archivePageHref, ARCHIVE_PAGE_SIZE, paginate, parsePageParam } from "@/lib/pagination";
 import { gameScopeStyle } from "@/lib/fdj-games/identity";
 import { siteLocaleAlternates } from "@/lib/seo";
@@ -20,6 +20,7 @@ import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
 import {
   getLatestDraw,
+  isEuroMillionsDrawPublished,
   readEuroMillionsStore,
 } from "@/lib/euromillions/store";
 import { euroMillionsResultPending } from "@/lib/euromillions/datetime";
@@ -79,10 +80,12 @@ export default async function TiragesPage({
   const latest = getLatestDraw(store);
   const draws = listed.items;
   const pending = euroMillionsResultPending({
-    latestDate: store.latest?.date || store.draws[0]?.date,
+    latestDate: latest?.date,
     nextDrawDate: store.nextDrawDate,
   });
-  const simDraws = store.draws.map((d) => ({
+  const simDraws = store.draws
+    .filter(isEuroMillionsDrawPublished)
+    .map((d) => ({
     date: d.date,
     numbers: d.numbers,
     stars: d.stars,
@@ -108,6 +111,14 @@ export default async function TiragesPage({
         ])}
       />
       <JsonLd
+        data={datasetJsonLd({
+          name: t("csvExport"),
+          description: t("subtitle"),
+          url: `${siteUrl}/${locale}/tirages`,
+          csvUrl: `${siteUrl}/api/euromillions/export`,
+        })}
+      />
+      <JsonLd
         data={itemListJsonLd({
           name: t("title"),
           description: t("meta"),
@@ -124,7 +135,7 @@ export default async function TiragesPage({
       >
         <ResultsLivePoller
           enabled={pending}
-          fingerprint={store.latest?.date || store.draws[0]?.date || "none"}
+          fingerprint={latest?.date || "none"}
         />
         <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
           EuroMillions
@@ -158,15 +169,25 @@ export default async function TiragesPage({
                   href={`/tirages/${draw.date}`}
                   title={formatDate(draw.date, locale)}
                   balls={
+                    isEuroMillionsDrawPublished(draw) ? (
                     <DrawBalls
                       draw={draw}
                       ballsLabel={homeT("ballsLabel")}
                       starsLabel={homeT("starsLabel")}
                       compact
                     />
+                    ) : (
+                      <p className="text-sm text-[var(--muted)]">
+                        {t("upcomingBadge")}
+                      </p>
+                    )
                   }
                   extra={
-                    draw.myMillionCode ? (
+                    !isEuroMillionsDrawPublished(draw) ? (
+                      <p className="mt-2 text-sm text-[var(--muted)]">
+                        {t("upcomingBadge")}
+                      </p>
+                    ) : draw.myMillionCode ? (
                       <p className="mt-2 font-mono text-sm tracking-wide text-[var(--accent)]">
                         MM {draw.myMillionCode}
                       </p>

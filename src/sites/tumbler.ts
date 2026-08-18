@@ -89,8 +89,8 @@ export const tumblerSite: SiteConfig = {
     },
     {
       siteId: "euromillions",
-      labelFr: "EuroMillions Résultats",
-      labelEn: "EuroMillions Results",
+      labelFr: "Résultats EuroMillions",
+      labelEn: "EuroMillions results",
     },
     {
       href: "https://elections2027.com",

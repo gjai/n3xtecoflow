@@ -80,33 +80,7 @@ export const euromillionsSite: SiteConfig = {
     news: true,
     editorialHome: true,
   },
-  network: [
-    {
-      siteId: "ecoflow",
-      labelFr: "EcoFlow Stream",
-      labelEn: "EcoFlow Stream",
-    },
-    {
-      siteId: "tumbler",
-      labelFr: "La gourde isotherme",
-      labelEn: "La gourde isotherme",
-    },
-    {
-      siteId: "massage-gun",
-      labelFr: "Le pistolet de massage",
-      labelEn: "Le pistolet de massage",
-    },
-    {
-      href: "https://elections2027.com",
-      labelFr: "Élections 2027",
-      labelEn: "Élections 2027",
-    },
-    {
-      href: "https://marquage-tuyauterie.com",
-      labelFr: "Marquage tuyauterie",
-      labelEn: "Pipe marking",
-    },
-  ],
+  network: [],
   monetization: {
     disableAmazon: false,
     adsenseClient: "ca-pub-4733644127583822",

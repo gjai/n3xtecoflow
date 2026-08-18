@@ -151,12 +151,12 @@ export const NEWS_FEEDS: NewsFeed[] = [
   {
     id: "euromillions-gnews-en",
     siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(result+OR+draw+OR+jackpot+OR+winner)+when:90d&hl=en-GB&gl=GB&ceid=GB:en",
+    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(result+OR+draw+OR+jackpot+OR+winner)+(France+OR+FDJ)+-Thunderball+-%22UK+Lotto%22+-%22National+Lottery%22+when:90d&hl=en&gl=FR&ceid=FR:en",
   },
   {
     id: "euromillions-gnews-en-ie",
     siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(result+OR+draw+OR+jackpot+OR+winner)+when:90d&hl=en-IE&gl=IE&ceid=IE:en",
+    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(result+OR+jackpot+OR+winner)+(France+OR+FDJ)+-Thunderball+when:90d&hl=en-IE&gl=IE&ceid=IE:en",
   },
   {
     id: "euromillions-gnews-es",

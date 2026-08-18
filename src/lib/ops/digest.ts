@@ -3,6 +3,10 @@ import { sites } from "@/sites";
 import { readAmazonPriceStore } from "@/lib/amazon/price-store";
 import { evaluateCronHealth } from "@/lib/cron/status";
 import { readNewsStore } from "@/lib/news/store";
+import {
+  fetchNetworkDomainRatings,
+  formatDomainRating,
+} from "@/lib/seo/ahrefs";
 
 export function parisDateKey(date = new Date()): string {
   return new Intl.DateTimeFormat("en-CA", {
@@ -48,6 +52,7 @@ export async function buildDailyDigest(options?: { dayKey?: string }) {
   const news = await readNewsStore();
   const prices = await readAmazonPriceStore();
   const domains = listedDomains();
+  const ahrefs = await fetchNetworkDomainRatings();
 
   const priced = Object.values(prices.offers).filter(
     (o) => o.price.display,
@@ -99,6 +104,20 @@ export async function buildDailyDigest(options?: { dayKey?: string }) {
   );
   lines.push(`Domaines déclarés : ${domains.join(", ") || "—"}`);
   lines.push("");
+
+  if (ahrefs.length) {
+    lines.push(`=== Ahrefs — Domain Rating ===`);
+    for (const row of ahrefs) {
+      const dr = formatDomainRating(row.domainRating);
+      lines.push(
+        row.error
+          ? `${row.host} · DR ${dr} · erreur=${row.error}`
+          : `${row.host} · DR ${dr}`,
+      );
+    }
+    lines.push(`Source : Domain Rating by Ahrefs (https://ahrefs.com/)`);
+    lines.push("");
+  }
 
   return {
     dayKey,

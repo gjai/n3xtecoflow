@@ -2,6 +2,17 @@ import { intlLocale } from "@/i18n/locales";
 
 const PARIS = "Europe/Paris";
 
+export function formatEuroMillionsLongDate(iso: string, locale: string): string {
+  const d = new Date(`${iso}T12:00:00Z`);
+  if (Number.isNaN(d.getTime())) return iso;
+  return new Intl.DateTimeFormat(intlLocale(locale), {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(d);
+}
+
 export function parisDateKey(date = new Date()): string {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: PARIS,

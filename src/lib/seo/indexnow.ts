@@ -22,7 +22,10 @@ export function lotteryIndexNowUrls(
 ): string[] {
   const host = "euromillions-resultats.fr";
   const origin = `https://${host}`;
-  const latest = em.latest?.date || em.draws[0]?.date;
+  const latestPublished =
+    em.draws.find((d) => d.numbers.length === 5 && d.stars.length === 2)?.date ||
+    em.latest?.date;
+  const latest = latestPublished;
   const paths = new Set<string>([
     "",
     "/tirages",
@@ -31,6 +34,7 @@ export function lotteryIndexNowUrls(
     "/jeux",
   ]);
   if (latest) paths.add(`/tirages/${latest}`);
+  if (em.nextDrawDate) paths.add(`/tirages/${em.nextDrawDate}`);
   for (const game of FDJ_COMPANION_GAMES) {
     paths.add(`/jeux/${game.slug}`);
     const draw = fdj.games[game.id]?.latest;

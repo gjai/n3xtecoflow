@@ -19,9 +19,11 @@ import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
 import { GAME_IDENTITY } from "@/lib/fdj-games/identity";
 import {
-  getDrawByDate,
+  isEuroMillionsDrawPublished,
   readEuroMillionsStore,
+  resolveDrawPage,
 } from "@/lib/euromillions/store";
+import { formatEuroMillionsLongDate } from "@/lib/euromillions/datetime";
 
 export const revalidate = 600;
 export const dynamic = "force-dynamic";
@@ -34,9 +36,14 @@ export async function generateMetadata({
   const { locale, date } = await params;
   const t = await getTranslations({ locale, namespace: "draws" });
   const pretty = formatDate(date, locale);
+  const store = await readEuroMillionsStore();
+  const draw = resolveDrawPage(store, date);
+  const published = isEuroMillionsDrawPublished(draw);
   return {
-    title: t("drawOf", { date: pretty }),
-    description: t("drawMeta", { date: pretty }),
+    title: published ? t("drawOf", { date: pretty }) : t("pendingTitle", { date: pretty }),
+    description: published
+      ? t("drawMeta", { date: pretty })
+      : t("pendingMeta", { date: pretty }),
     alternates: await siteLocaleAlternates(locale, `/tirages/${date}`),
     robots:
       locale === "fr" || locale === "en"
@@ -46,14 +53,7 @@ export async function generateMetadata({
 }
 
 function formatDate(iso: string, locale: string) {
-  const d = new Date(`${iso}T12:00:00Z`);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat(intlLocale(locale), {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(d);
+  return formatEuroMillionsLongDate(iso, locale);
 }
 
 function formatMoney(amount: number | null | undefined, locale: string) {
@@ -78,13 +78,18 @@ export default async function TirageDetailPage({
   const t = await getTranslations("draws");
   const homeT = await getTranslations("home");
   const store = await readEuroMillionsStore();
-  const draw = getDrawByDate(store, date);
-  if (!draw?.numbers?.length || !draw.stars?.length) notFound();
+  const draw = resolveDrawPage(store, date);
+  if (!draw) notFound();
+  const published = isEuroMillionsDrawPublished(draw);
 
   const jackpot = formatMoney(draw.jackpotEur, locale);
   const prettyDate = formatDate(draw.date, locale);
-  const title = t("drawOf", { date: prettyDate });
-  const description = t("drawMeta", { date: prettyDate });
+  const title = published
+    ? t("drawOf", { date: prettyDate })
+    : t("pendingTitle", { date: prettyDate });
+  const description = published
+    ? t("drawMeta", { date: prettyDate })
+    : t("pendingMeta", { date: prettyDate });
   const siteUrl = `https://${site.primaryHost}`;
 
   return (
@@ -119,27 +124,34 @@ export default async function TirageDetailPage({
         </Link>
         <GameToolsNav gameId="euromillions" />
         <h1 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
-          {t("drawOf", { date: prettyDate })}
+          {title}
         </h1>
-        {(() => {
-          const brief = euroMillionsBrief(draw, locale, prettyDate, jackpot);
-          return (
-            <>
-              <p className="mt-4 text-[var(--muted)]">{brief.lead}</p>
-              {brief.paragraphs.map((p) => (
-                <p key={p.slice(0, 28)} className="mt-3 text-[var(--muted)]">
-                  {p}
-                </p>
-              ))}
-            </>
-          );
-        })()}
-        {jackpot ? (
-          <p className="mt-3 text-[var(--muted)]">
-            {t("jackpot")} · {jackpot}
-          </p>
-        ) : null}
+        {published ? (
+          <>
+            {(() => {
+              const brief = euroMillionsBrief(draw, locale, prettyDate, jackpot);
+              return (
+                <>
+                  <p className="mt-4 text-[var(--muted)]">{brief.lead}</p>
+                  {brief.paragraphs.map((p) => (
+                    <p key={p.slice(0, 28)} className="mt-3 text-[var(--muted)]">
+                      {p}
+                    </p>
+                  ))}
+                </>
+              );
+            })()}
+            {jackpot ? (
+              <p className="mt-3 text-[var(--muted)]">
+                {t("jackpot")} · {jackpot}
+              </p>
+            ) : null}
+          </>
+        ) : (
+          <p className="mt-4 text-[var(--muted)]">{t("pendingLead")}</p>
+        )}
 
+        {published ? (
         <div className="mt-8 border border-[var(--line)] bg-[var(--surface)] p-6 md:p-8">
           <DrawBalls
             draw={draw}
@@ -177,6 +189,11 @@ export default async function TirageDetailPage({
             </div>
           ) : null}
         </div>
+        ) : (
+          <div className="mt-8 border border-[var(--line)] bg-[var(--surface)] p-6 text-[var(--muted)]">
+            {t("pendingLead")}
+          </div>
+        )}
 
         <div className="mt-8">
           <AdSenseUnit label={homeT("adsLabel")} />
