@@ -292,8 +292,10 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     siteId: "casinos-crypto",
     topicFr: "Changer de DNS contre les blocages FAI",
     topicEn: "Change DNS against ISP blocks",
-    angleFr: "Résolveur public, page site bloqué, DNS vs VPN, pas un contournement ANJ",
-    angleEn: "Public resolver, blocked-site page, DNS vs VPN, not an ANJ workaround",
+    angleFr:
+      "IPv4 vs IPv6, page SFR, 1.1.1.1 insuffisant, DNS vs VPN, pas un contournement ANJ",
+    angleEn:
+      "IPv4 vs IPv6, SFR page, 1.1.1.1 not enough, DNS vs VPN, not an ANJ workaround",
   },
   {
     slug: "comprendre-euromillions",

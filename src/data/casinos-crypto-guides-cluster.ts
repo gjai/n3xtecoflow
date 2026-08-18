@@ -1268,7 +1268,7 @@ export const casinosCryptoClusterGuides: GuideArticle[] = [
     fr: {
       title: "Changer de DNS : blocages opérateur, filtres FAI, pages « site bloqué »",
       subtitle:
-        "Quand la box Orange, SFR ou Bouygues réécrit les noms de domaine (filtre famille, anti-phishing). Réglage technique — pas un passe-droit ANJ. 18+.",
+        "Quand la box Orange, SFR ou Bouygues réécrit les noms de domaine (filtre famille, anti-phishing). 1.1.1.1 en IPv4 ne suffit pas si le FAI répond encore en IPv6. Réglage technique — pas un passe-droit ANJ. 18+.",
       sections: [
         {
           heading: "1. Le DNS, c’est l’annuaire",
@@ -1278,14 +1278,43 @@ export const casinosCryptoClusterGuides: GuideArticle[] = [
           ],
         },
         {
-          heading: "2. Ce que ça règle — et ce que ça ne règle pas",
+          heading: "2. Cas SFR : « L’accès à ce site a été bloqué »",
+          imageSrc:
+            "/images/casinos-crypto/guides/sfr-blocage-phishing.png",
+          imageAltFr:
+            "Page SFR Navigation Protégée : accès à casinos-crypto.fr bloqué pour suspicion de phishing",
+          imageAltEn:
+            "SFR Navigation Protégée page: casinos-crypto.fr blocked as suspected phishing",
+          paragraphs: [
+            "Chez SFR Fibre (et RED), le service Navigation Protégée — filtre DNS côté box, partenaire EfficientIP — peut afficher une page blanche avec cadenas : « L’accès à ce site a été bloqué », puis casinos-crypto.fr, et le motif « phishing ou fraude ». Ce n’est pas une panne du site : le serveur répond en HTTPS, le certificat Let’s Encrypt est valide, et Google Safe Browsing ne classe pas le domaine comme dangereux.",
+            "Un nom de domaine récent + les mots casino / crypto / VPN suffit souvent à un faux positif. Pour faire retirer le blocage (tous les abonnés SFR, pas seulement votre box) : Espace Client SFR → Navigation Protégée → signaler un site bloqué à tort (réponse souvent sous 72 h). Sans ligne SFR : signalement-site-bloque@sfr.fr avec l’URL https://casinos-crypto.fr et le motif (site éditorial, pas une page de connexion bancaire).",
+            "En attendant : DNS public IPv4 et IPv6 (voir la section suivante) — mettre seulement 1.1.1.1 ne suffit souvent pas. Ou une connexion hors box (4G). Ça ne contourne pas l’ANJ — ça contourne un filtre opérateur trop zélé.",
+          ],
+        },
+        {
+          heading: "3. IPv4 vs IPv6 : pourquoi « je n’utilise pas le DNS SFR »",
+          paragraphs: [
+            "Le piège classique : vous avez mis 1.1.1.1 (IPv4) sur l’ordinateur, donc vous croyez ne plus passer par le FAI. Or le Wi‑Fi est souvent encore en DNS « Automatique » (DHCP). La box pousse en plus un résolveur IPv6 opérateur. Le navigateur préfère l’IPv6 : c’est ce chemin qui affiche la page SFR, alors que l’IPv4 ouvrait déjà le vrai site.",
+            "Concrètement : la requête IPv4 (enregistrement A) peut renvoyer le serveur légitime, pendant que l’IPv6 (AAAA) renvoie une adresse « puits » du FAI (chez SFR, une plage 2a02:8400::…). Un certificat bizarre / auto-signé sur HTTPS est le même symptôme : vous n’êtes plus sur le serveur du site.",
+            "Navigation Protégée agit sur la box Fibre, pour tout le Wi‑Fi / Ethernet, même si vous n’avez jamais tapé « dns.sfr.fr » dans les réglages. Changer le DNS seulement sur un Mac ne coupe pas le DNS IPv6 de la box.",
+          ],
+          bullets: [
+            "Mettre les DNS IPv4 et IPv6 publics dans la box (pas seulement l’ordi)",
+            "IPv6 Cloudflare : 2606:4700:4700::1111 et 2606:4700:4700::1001",
+            "Ou désactiver IPv6 sur le Wi‑Fi de l’appareil (test rapide)",
+            "Ou « DNS privé » / DoH (chiffre les requêtes, n’utilise plus le port 53 en clair)",
+            "Le signalement SFR reste nécessaire pour les autres abonnés",
+          ],
+        },
+        {
+          heading: "4. Ce que ça règle — et ce que ça ne règle pas",
           paragraphs: [
             "Ça peut corriger : filtres « famille » trop zélés, réputation phishing erronée (certains FAI affichent une page type site-bloque.*), DNS lent ou en panne, pubs injectées via l’annuaire opérateur.",
             "Ça ne contourne pas une loi, un géoblocage IP, un captcha, ni une licence ANJ. Comme le guide VPN et Stake France : outil technique, pas un mode d’emploi pour jouer chez un opérateur non agréé. Si l’accès n’est pas possible dans votre cadre, n’insistez pas.",
           ],
         },
         {
-          heading: "3. Résolveurs publics courants",
+          heading: "5. Résolveurs publics courants",
           paragraphs: [
             "Notez-les avant de toucher à la box, pour pouvoir revenir en arrière (DHCP / « automatique »).",
           ],
@@ -1294,12 +1323,13 @@ export const casinosCryptoClusterGuides: GuideArticle[] = [
             "Quad9 (filtre malware) : 9.9.9.9 et 149.112.112.112",
             "Google : 8.8.8.8 et 8.8.4.4",
             "IPv6 si votre box l’affiche : 2606:4700:4700::1111 (Cloudflare) ou 2620:fe::fe (Quad9)",
+            "Sans IPv6 public sur la box, 1.1.1.1 seul ne coupe pas le filtre FAI",
           ],
         },
         {
-          heading: "4. Où le changer (repères, pas un tuto de fraude)",
+          heading: "6. Où le changer (repères, pas un tuto de fraude)",
           paragraphs: [
-            "Le plus propre : la box FAI (interface admin, champs DNS primaire / secondaire), pour tout le foyer. Sinon : l’appareil uniquement.",
+            "Le plus propre : la box FAI (interface admin, DNS IPv4 et IPv6), pour tout le foyer. Un DNS « Automatique » sur le Wi‑Fi du Mac laisse le FAI répondre en IPv6.",
           ],
           bullets: [
             "Windows : Paramètres → Réseau → Wi-Fi / Ethernet → DNS",
@@ -1309,14 +1339,14 @@ export const casinosCryptoClusterGuides: GuideArticle[] = [
           ],
         },
         {
-          heading: "5. DNS vs VPN (NordVPN)",
+          heading: "7. DNS vs VPN (NordVPN)",
           paragraphs: [
             "Si le FAI bloque encore après un DNS public (filtrage IP, proxy transparent, 4G opérateur têtue), un VPN chiffre le chemin — kill-switch, app officielle, session complète. C’est le guide VPN, pas un « DNS magique ».",
             "NordVPN embarque aussi sa propre résolution : utile contre les fuites DNS. 18+ si vous enchaînez vers Stake ; jeu responsable.",
           ],
         },
         {
-          heading: "6. Suite",
+          heading: "8. Suite",
           paragraphs: [
             "Guides : VPN, Stake France (cadre ANJ), arnaques (faux « support DNS » qui demande vos clés), Stake.",
             "Personne de légitime ne vous fait changer de DNS par SMS / Telegram. Joueurs Info Service 09 74 75 13 13.",
@@ -1327,7 +1357,7 @@ export const casinosCryptoClusterGuides: GuideArticle[] = [
     en: {
       title: "Change DNS: ISP blocks, operator filters, “site blocked” pages",
       subtitle:
-        "When the Orange, SFR or Bouygues box rewrites domain names (family filter, anti-phishing). A technical setting — not an ANJ free pass. 18+.",
+        "When the Orange, SFR or Bouygues box rewrites domain names (family filter, anti-phishing). IPv4 1.1.1.1 is not enough if the ISP still answers over IPv6. A technical setting — not an ANJ free pass. 18+.",
       sections: [
         {
           heading: "1. DNS is the phone book",
@@ -1337,14 +1367,43 @@ export const casinosCryptoClusterGuides: GuideArticle[] = [
           ],
         },
         {
-          heading: "2. What it fixes — and what it doesn’t",
+          heading: "2. SFR case: “Access to this site has been blocked”",
+          imageSrc:
+            "/images/casinos-crypto/guides/sfr-blocage-phishing.png",
+          imageAltFr:
+            "Page SFR Navigation Protégée : accès à casinos-crypto.fr bloqué pour suspicion de phishing",
+          imageAltEn:
+            "SFR Navigation Protégée page: casinos-crypto.fr blocked as suspected phishing",
+          paragraphs: [
+            "On SFR Fibre (and RED), Navigation Protégée — DNS filter on the box, partner EfficientIP — can show a white page with a padlock: “L’accès à ce site a été bloqué”, then casinos-crypto.fr, and a phishing/fraud reason. That is not an outage: the origin answers over HTTPS, the Let’s Encrypt certificate is valid, and Google Safe Browsing does not list the domain as unsafe.",
+            "A young domain plus the words casino / crypto / VPN is often enough for a false positive. To unlist it for all SFR subscribers: SFR customer area → Navigation Protégée → report a wrongly blocked site (often ~72 h). Without an SFR line: signalement-site-bloque@sfr.fr with https://casinos-crypto.fr and the reason (editorial site, not a bank login page).",
+            "Meanwhile: public DNS on IPv4 and IPv6 (next section) — 1.1.1.1 alone often is not enough. Or a connection off the box (cellular). That does not bypass ANJ — it bypasses an over-eager ISP filter.",
+          ],
+        },
+        {
+          heading: "3. IPv4 vs IPv6: why “I’m not using SFR DNS”",
+          paragraphs: [
+            "The usual trap: you set 1.1.1.1 (IPv4) on the computer, so you think you left the ISP resolver. Wi‑Fi is often still on “Automatic” DNS (DHCP). The box also pushes an operator IPv6 resolver. The browser prefers IPv6: that path shows the SFR page, while IPv4 already opened the real site.",
+            "In practice: the IPv4 query (A record) can return the legitimate server, while IPv6 (AAAA) returns an ISP “sinkhole” (on SFR, a 2a02:8400::… range). A weird / self-signed HTTPS certificate is the same symptom: you are no longer on the site’s server.",
+            "Navigation Protégée runs on the fibre box, for every Wi‑Fi / Ethernet device, even if you never typed “dns.sfr.fr” in settings. Changing DNS only on a Mac does not cut the box’s IPv6 DNS.",
+          ],
+          bullets: [
+            "Set public IPv4 and IPv6 DNS on the box (not only the computer)",
+            "Cloudflare IPv6: 2606:4700:4700::1111 and 2606:4700:4700::1001",
+            "Or disable IPv6 on that device’s Wi‑Fi (quick test)",
+            "Or “Private DNS” / DoH (encrypts queries, no longer uses clear port 53)",
+            "The SFR report is still needed for other subscribers",
+          ],
+        },
+        {
+          heading: "4. What it fixes — and what it doesn’t",
           paragraphs: [
             "It can fix: over-eager “family” filters, a wrong phishing reputation (some ISPs show a site-bloque.* page), slow or broken DNS, ads injected via the operator resolver.",
             "It does not bypass a law, an IP geoblock, a captcha, or an ANJ licence. Same as the VPN and Stake France guides: a technical tool, not a how-to for playing with an unlicensed operator. If access isn’t available in your framework, don’t push it.",
           ],
         },
         {
-          heading: "3. Common public resolvers",
+          heading: "5. Common public resolvers",
           paragraphs: [
             "Write them down before you touch the box, so you can revert (DHCP / “automatic”).",
           ],
@@ -1353,12 +1412,13 @@ export const casinosCryptoClusterGuides: GuideArticle[] = [
             "Quad9 (malware filter): 9.9.9.9 and 149.112.112.112",
             "Google: 8.8.8.8 and 8.8.4.4",
             "IPv6 if your box shows it: 2606:4700:4700::1111 (Cloudflare) or 2620:fe::fe (Quad9)",
+            "Without public IPv6 on the box, 1.1.1.1 alone does not cut the ISP filter",
           ],
         },
         {
-          heading: "4. Where to change it (landmarks, not a fraud tutorial)",
+          heading: "6. Where to change it (landmarks, not a fraud tutorial)",
           paragraphs: [
-            "Cleanest: the ISP box (admin UI, primary / secondary DNS) so the whole home uses it. Otherwise: that device only.",
+            "Cleanest: the ISP box (admin UI, IPv4 and IPv6 DNS) so the whole home uses it. “Automatic” DNS on Mac Wi‑Fi still lets the ISP answer over IPv6.",
           ],
           bullets: [
             "Windows: Settings → Network → Wi-Fi / Ethernet → DNS",
@@ -1368,14 +1428,14 @@ export const casinosCryptoClusterGuides: GuideArticle[] = [
           ],
         },
         {
-          heading: "5. DNS vs VPN (NordVPN)",
+          heading: "7. DNS vs VPN (NordVPN)",
           paragraphs: [
             "If the ISP still blocks after a public DNS (IP filter, transparent proxy, stubborn mobile data), a VPN encrypts the path — kill-switch, official app, full session. That’s the VPN guide, not “magic DNS”.",
             "NordVPN also runs its own resolution: useful against DNS leaks. 18+ if you then go to Stake; play responsibly.",
           ],
         },
         {
-          heading: "6. Next",
+          heading: "8. Next",
           paragraphs: [
             "Guides: VPN, Stake France (ANJ frame), scams (fake “DNS support” asking for keys), Stake.",
             "Nobody legitimate makes you change DNS over SMS / Telegram. Joueurs Info Service 09 74 75 13 13.",
