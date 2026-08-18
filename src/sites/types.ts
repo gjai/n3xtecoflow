@@ -222,6 +222,10 @@ export type SiteConfig = {
     labelEn: string;
   }[];
   monetization?: SiteMonetization;
+  /** Comptes publics du thème (JSON-LD sameAs + pied de page). */
+  socials?: {
+    facebook?: string;
+  };
   /** Profil éditorial (prompts, CTA Amazon, guide unique, covers) */
   editorial: SiteEditorialProfile;
   /** Legal publisher stays shared unless overridden later */

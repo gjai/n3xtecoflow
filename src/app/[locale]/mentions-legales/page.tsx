@@ -48,6 +48,7 @@ export default async function MentionsPage({
     ...(showHost ? [{ id: "hebergeur", label: t("hostTitle") }] : []),
     { id: "confidentialite", label: t("privacyTitle") },
     { id: "droits", label: t("privacyRightsTitle") },
+    { id: "suppression", label: t("deletionTitle") },
     { id: "cookies", label: t("cookiesTitle") },
     { id: "affiliation", label: t("affiliateTitle") },
     ...(showResponsible
@@ -171,6 +172,23 @@ export default async function MentionsPage({
               {t("contactLink")}
             </Link>
             .
+          </p>
+        </section>
+
+        <section id="suppression" className="scroll-mt-28">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
+            {t("deletionTitle")}
+          </h2>
+          <p className="mt-4">{t("deletionIntro")}</p>
+          <p className="mt-3">{t("deletionHow")}</p>
+          <p className="mt-3">{t("deletionFacebook")}</p>
+          <p className="mt-3">
+            <Link
+              href="/suppression-donnees"
+              className="text-[var(--accent)] underline-offset-2 hover:underline"
+            >
+              {t("deletionTitle")}
+            </Link>
           </p>
         </section>
 

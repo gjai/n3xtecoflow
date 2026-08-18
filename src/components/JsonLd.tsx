@@ -42,9 +42,9 @@ export function organizationJsonLd(siteOrUrl: SiteConfig | string) {
     description,
     foundingDate: "2026",
     knowsAbout,
-    // Comptes sociaux par thème (sameAs) : à brancher plus tard. Pas de PBN
-    // casino ↔ EcoFlow / tumbler / massage / EuroMillions.
-    sameAs: [],
+    sameAs: [site?.socials?.facebook].filter(
+      (href): href is string => Boolean(href),
+    ),
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "editorial",

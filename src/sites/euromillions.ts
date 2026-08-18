@@ -83,6 +83,9 @@ export const euromillionsSite: SiteConfig = {
     editorialHome: true,
   },
   network: [],
+  socials: {
+    facebook: "https://www.facebook.com/euromillionsresultats/",
+  },
   monetization: {
     disableAmazon: false,
     adsenseClient: "ca-pub-4733644127583822",

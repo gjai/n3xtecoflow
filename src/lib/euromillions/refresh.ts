@@ -253,6 +253,13 @@ export async function refreshEuroMillionsData(options?: {
   } catch (err) {
     console.error("alerts_notify_fail", err);
   }
+  let facebook: { posted: boolean; skipped: string } | null = null;
+  try {
+    const { notifyFacebookOnPublish } = await import("./facebook");
+    facebook = await notifyFacebookOnPublish(latest);
+  } catch (err) {
+    console.error("facebook_notify_fail", err);
+  }
 
   return {
     ok: true,
@@ -265,5 +272,6 @@ export async function refreshEuroMillionsData(options?: {
     mode: fast ? "fast" : "full",
     changed,
     fingerprint,
+    facebook,
   };
 }

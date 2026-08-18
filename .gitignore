@@ -34,8 +34,9 @@ yarn-error.log*
 .env*
 !.env.example
 
-# subscriber list (e-mails)
+# subscriber list (e-mails) + état post Facebook
 /data/em-alerts.json
+/data/em-facebook.json
 
 # vercel
 .vercel

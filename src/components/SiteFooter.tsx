@@ -95,6 +95,16 @@ export function SiteFooter() {
               {l.label}
             </Link>
           ))}
+          {site.socials?.facebook ? (
+            <a
+              href={site.socials.facebook}
+              rel="me noopener noreferrer"
+              target="_blank"
+              className="hover:text-[var(--heading)]"
+            >
+              Facebook
+            </a>
+          ) : null}
           <CookieSettingsButton label={t("manageCookies")} />
           {siteShowsNews(site) ? (
             <a

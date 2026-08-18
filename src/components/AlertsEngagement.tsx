@@ -13,7 +13,6 @@ export function AlertsEngagement({
 }) {
   const t = useTranslations("alerts");
   const site = useSite();
-  const ics = `https://${site.primaryHost}/api/euromillions/calendar`;
   const webcal = `webcal://${site.primaryHost}/api/euromillions/calendar`;
 
   if (variant === "compact") {
@@ -65,18 +64,12 @@ export function AlertsEngagement({
           {t("icsTitle")}
         </h2>
         <p className="mt-2 text-sm text-[var(--muted)]">{t("icsLead")}</p>
-        <div className="mt-4 flex flex-wrap gap-3">
+        <div className="mt-4">
           <a
             href={webcal}
             className="inline-flex min-h-11 items-center bg-[var(--accent)] px-5 text-sm font-semibold text-[var(--accent-ink)]"
           >
             {t("icsWebcal")}
-          </a>
-          <a
-            href={ics}
-            className="inline-flex min-h-11 items-center border border-[var(--line)] px-5 text-sm font-semibold text-[var(--heading)]"
-          >
-            {t("icsDownload")}
           </a>
         </div>
       </div>

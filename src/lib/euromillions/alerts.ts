@@ -1,6 +1,7 @@
 import { randomBytes } from "crypto";
 import { promises as fs } from "fs";
 import path from "path";
+import { confirmAlertHtml, resultAlertHtml } from "@/lib/mail/em-layout";
 import { mailConfigured, sendResendEmail } from "@/lib/mail/resend";
 import { formatEuroMillionsLongDate } from "./datetime";
 import { isEuroMillionsDrawPublished } from "./store";
@@ -121,30 +122,12 @@ export async function requestAlertSubscribe(args: {
   await writeAlertsStore(store);
 
   const confirmUrl = `${origin()}/api/euromillions/alerts/confirm?token=${pending.token}`;
+  const mail = confirmAlertHtml({ confirmUrl, locale });
   const sent = await sendResendEmail({
     to: email,
-    subject:
-      locale === "en"
-        ? "Confirm EuroMillions result alerts"
-        : "Confirmez l’alerte résultats EuroMillions",
-    text:
-      locale === "en"
-        ? [
-            "Confirm to get one email when EuroMillions numbers are published.",
-            "Not a newsletter. Not an invitation to play. 18+.",
-            "",
-            confirmUrl,
-            "",
-            "If you did not request this, ignore this message.",
-          ].join("\n")
-        : [
-            "Confirmez pour recevoir un e-mail lorsque les numéros EuroMillions sont en ligne.",
-            "Pas de newsletter. Pas une invitation à jouer. 18+.",
-            "",
-            confirmUrl,
-            "",
-            "Si vous n’êtes pas à l’origine de cette demande, ignorez ce message.",
-          ].join("\n"),
+    subject: mail.subject,
+    text: mail.text,
+    html: mail.html,
   });
   if (!sent.ok) {
     console.error("alert_confirm_send_fail", sent.error);
@@ -188,34 +171,16 @@ function resultEmail(args: {
   locale: string;
   draw: EuroMillionsDraw;
   unsubToken: string;
-}): { subject: string; text: string } {
-  const date = formatEuroMillionsLongDate(args.draw.date, args.locale);
-  const balls = args.draw.numbers.join(", ");
-  const stars = args.draw.stars.join(", ");
-  const url = `${origin()}/${args.locale === "en" ? "en" : "fr"}/tirages/${args.draw.date}`;
-  const unsub = `${origin()}/api/euromillions/alerts/unsubscribe?token=${args.unsubToken}`;
-  if (args.locale === "en") {
-    return {
-      subject: `EuroMillions results for ${date}`,
-      text: [
-        `Numbers ${balls} — stars ${stars}.`,
-        url,
-        "",
-        "Independent site, 18+. Play responsibly. This is not an invitation to buy a ticket.",
-        `Unsubscribe: ${unsub}`,
-      ].join("\n"),
-    };
-  }
-  return {
-    subject: `Résultats EuroMillions du ${date}`,
-    text: [
-      `Boules ${balls} — étoiles ${stars}.`,
-      url,
-      "",
-      "Site indépendant, 18+. Jeu responsable. Ceci n’est pas une invitation à jouer.",
-      `Désinscription : ${unsub}`,
-    ].join("\n"),
-  };
+}): { subject: string; text: string; html: string } {
+  const dateLabel = formatEuroMillionsLongDate(args.draw.date, args.locale);
+  return resultAlertHtml({
+    locale: args.locale,
+    dateLabel,
+    numbers: args.draw.numbers,
+    stars: args.draw.stars,
+    url: `${origin()}/${args.locale === "en" ? "en" : "fr"}/tirages?date=${args.draw.date}#simulateur`,
+    unsubUrl: `${origin()}/api/euromillions/alerts/unsubscribe?token=${args.unsubToken}`,
+  });
 }
 
 /**
@@ -251,6 +216,7 @@ export async function notifyAlertsOnPublish(
       to: sub.email,
       subject: mail.subject,
       text: mail.text,
+      html: mail.html,
     });
     if (res.ok) sent += 1;
     else console.error("alert_result_send_fail", sub.email, res.error);

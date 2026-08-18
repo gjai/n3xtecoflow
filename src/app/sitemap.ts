@@ -163,6 +163,8 @@ export function buildSitemapForSite(
     ...(siteShowsNews(site) ? ["/actualites"] : []),
     "/a-propos",
     "/mentions-legales",
+    "/confidentialite",
+    "/suppression-donnees",
     "/contact",
   ];
 
