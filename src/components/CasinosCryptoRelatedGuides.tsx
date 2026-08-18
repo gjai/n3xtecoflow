@@ -1,6 +1,6 @@
-import { getGuideCopy } from "@/data/articles";
 import { relatedCasinoGuideSlugs } from "@/data/casinos-crypto-guides-cluster";
 import { resolveGuide } from "@/lib/guides/refresh";
+import type { GuideEntry } from "@/lib/guides/types";
 import { Link } from "@/i18n/navigation";
 
 export async function CasinosCryptoRelatedGuides({
@@ -12,14 +12,15 @@ export async function CasinosCryptoRelatedGuides({
 }) {
   const related = (
     await Promise.all(
-      relatedCasinoGuideSlugs(slug).map((s) => resolveGuide(s, "casinos-crypto")),
+      relatedCasinoGuideSlugs(slug).map((s) =>
+        resolveGuide(s, "casinos-crypto"),
+      ),
     )
-  ).filter(Boolean);
+  ).filter((g): g is GuideEntry => g != null);
 
   if (!related.length) return null;
 
-  const title =
-    locale === "en" ? "Keep reading" : "Lire ensuite";
+  const title = locale === "en" ? "Keep reading" : "Lire ensuite";
 
   return (
     <nav
@@ -31,7 +32,7 @@ export async function CasinosCryptoRelatedGuides({
       </h2>
       <ul className="mt-4 grid gap-3 sm:grid-cols-2">
         {related.map((guide) => {
-          const copy = getGuideCopy(guide, locale);
+          const copy = locale === "fr" ? guide.fr : guide.en || guide.fr;
           return (
             <li key={guide.slug}>
               <Link
