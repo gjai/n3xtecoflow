@@ -2,8 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { isAppLocale } from "./i18n/locales";
+import {
+  isAiTrainingCrawler,
+  isEuroMillionsArchivePath,
+} from "./lib/crawlers/ai-training";
 import { getSiteByHost, resolveSiteIdFromHost, SITE_HEADER } from "./sites";
-import { siteAllowsLocale, siteLocales } from "./sites/features";
+import { siteAllowsLocale, siteIsEuroMillions, siteLocales } from "./sites/features";
 import { offThemeFallbackPath } from "./sites/off-theme";
 
 const intlMiddleware = createMiddleware(routing);
@@ -27,6 +31,18 @@ export default function middleware(request: NextRequest) {
   const seg = pathname.split("/").filter(Boolean)[0];
   request.headers.set("x-pathname", pathname);
   request.headers.set(SITE_HEADER, siteId);
+
+  // robots.txt seul est trop lent : ClaudeBot / Meta saturent déjà les archives.
+  if (
+    siteIsEuroMillions(site) &&
+    isEuroMillionsArchivePath(pathname) &&
+    isAiTrainingCrawler(request.headers.get("user-agent"))
+  ) {
+    return new NextResponse(null, {
+      status: 403,
+      headers: { "Cache-Control": "no-store" },
+    });
+  }
 
   // Browsers often request /favicon.ico directly — serve the theme mark.
   if (pathname === "/favicon.ico") {
