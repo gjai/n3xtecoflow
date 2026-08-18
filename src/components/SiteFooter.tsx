@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { LOTTERY_GAMES_NAV, lotteryGameLabel } from "@/lib/fdj-games/nav";
@@ -84,6 +85,10 @@ export function SiteFooter() {
             <SiteLogo variant="footer" />
           </Link>
           <p className="mt-2 max-w-md text-sm text-[var(--muted)]">{blurb}</p>
+          <SocialIcons
+            facebook={site.socials?.facebook}
+            instagram={site.socials?.instagram}
+          />
         </div>
         <div className="flex flex-wrap gap-4 text-sm">
           {links.map((l) => (
@@ -95,16 +100,6 @@ export function SiteFooter() {
               {l.label}
             </Link>
           ))}
-          {site.socials?.facebook ? (
-            <a
-              href={site.socials.facebook}
-              rel="me noopener noreferrer"
-              target="_blank"
-              className="hover:text-[var(--heading)]"
-            >
-              Facebook
-            </a>
-          ) : null}
           <CookieSettingsButton label={t("manageCookies")} />
           {siteShowsNews(site) ? (
             <a
@@ -129,5 +124,60 @@ export function SiteFooter() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function SocialIcons({
+  facebook,
+  instagram,
+}: {
+  facebook?: string;
+  instagram?: string;
+}) {
+  if (!facebook && !instagram) return null;
+  return (
+    <div className="mt-4 flex items-center gap-2">
+      {facebook ? (
+        <SocialIcon href={facebook} label="Facebook">
+          <path
+            fill="currentColor"
+            d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94z"
+          />
+        </SocialIcon>
+      ) : null}
+      {instagram ? (
+        <SocialIcon href={instagram} label="Instagram">
+          <path
+            fill="currentColor"
+            d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM17.5 6a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5z"
+          />
+        </SocialIcon>
+      ) : null}
+    </div>
+  );
+}
+
+function SocialIcon({
+  href,
+  label,
+  children,
+}: {
+  href: string;
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      rel="me noopener noreferrer"
+      target="_blank"
+      aria-label={label}
+      title={label}
+      className="inline-flex h-9 w-9 items-center justify-center rounded-full text-[var(--fog)] hover:bg-[var(--line)] hover:text-[var(--heading)]"
+    >
+      <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
+        {children}
+      </svg>
+    </a>
   );
 }

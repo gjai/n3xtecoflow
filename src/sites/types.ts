@@ -225,6 +225,7 @@ export type SiteConfig = {
   /** Comptes publics du thème (JSON-LD sameAs + pied de page). */
   socials?: {
     facebook?: string;
+    instagram?: string;
   };
   /** Profil éditorial (prompts, CTA Amazon, guide unique, covers) */
   editorial: SiteEditorialProfile;

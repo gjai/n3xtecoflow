@@ -13,6 +13,7 @@ import {
   companionShareCard,
   euroMillionsShareCard,
   lotteryShareImageResponse,
+  newsShareImageResponse,
 } from "./share-card";
 import { isEuroMillionsDrawPublished } from "./store";
 import type { EuroMillionsDraw } from "./types";
@@ -27,19 +28,28 @@ type FacebookStore = {
   updatedAt: string;
   lastPostedDrawDate?: string | null;
   lastPosted: PostedMap;
+  lastPostedIg?: PostedMap;
   pageAccessToken?: string | null;
+  newsSeeded?: boolean;
+  postedNewsSlugs?: string[];
 };
 
 export type FacebookNotifyResult = {
   posted: number;
   stories: number;
+  instagramPosted: number;
+  instagramStories: number;
+  instagramUsername: string | null;
   skipped: Record<string, string>;
 };
 
 const SEED: FacebookStore = {
   updatedAt: new Date().toISOString(),
   lastPosted: { euromillions: null, loto: null, eurodreams: null },
+  lastPostedIg: { euromillions: null, loto: null, eurodreams: null },
   pageAccessToken: null,
+  newsSeeded: false,
+  postedNewsSlugs: [],
 };
 
 const GRAPH = `https://graph.facebook.com/${
@@ -82,7 +92,16 @@ async function readState(): Promise<FacebookStore> {
         loto: parsed.lastPosted?.loto ?? null,
         eurodreams: parsed.lastPosted?.eurodreams ?? null,
       },
+      lastPostedIg: {
+        euromillions: parsed.lastPostedIg?.euromillions ?? null,
+        loto: parsed.lastPostedIg?.loto ?? null,
+        eurodreams: parsed.lastPostedIg?.eurodreams ?? null,
+      },
       pageAccessToken: parsed.pageAccessToken ?? null,
+      newsSeeded: Boolean(parsed.newsSeeded),
+      postedNewsSlugs: Array.isArray(parsed.postedNewsSlugs)
+        ? parsed.postedNewsSlugs.filter((s) => typeof s === "string")
+        : [],
     };
   } catch {
     return { ...SEED };
@@ -98,7 +117,10 @@ async function writeState(store: FacebookStore): Promise<void> {
       {
         updatedAt: new Date().toISOString(),
         lastPosted: store.lastPosted,
+        lastPostedIg: store.lastPostedIg ?? SEED.lastPostedIg,
         pageAccessToken: store.pageAccessToken ?? null,
+        newsSeeded: store.newsSeeded ?? false,
+        postedNewsSlugs: store.postedNewsSlugs ?? [],
       },
       null,
       2,
@@ -260,40 +282,289 @@ async function publishStory(
   return { ok: true };
 }
 
+const SHARE_PUBLIC = "https://euromillions-resultats.fr/api/euromillions/share-image";
+
+function shareJpegUrl(query: string): string {
+  return `${SHARE_PUBLIC}?${query}&fmt=jpg`;
+}
+
+async function graphGet(path: string, token: string, fields?: string) {
+  const q = new URLSearchParams({ access_token: token });
+  if (fields) q.set("fields", fields);
+  const res = await fetch(`${GRAPH}/${path}?${q.toString()}`);
+  return (await res.json().catch(() => ({}))) as Record<string, unknown>;
+}
+
+export type InstagramAccount = { id: string; username: string | null };
+
+export async function resolveInstagramAccount(
+  token: string,
+): Promise<InstagramAccount | null> {
+  const json = await graphGet(
+    encodeURIComponent(pageId()),
+    token,
+    "instagram_business_account{id,username}",
+  );
+  const ig = json.instagram_business_account as
+    | { id?: string; username?: string }
+    | undefined;
+  if (!ig?.id) return null;
+  return { id: ig.id, username: ig.username || null };
+}
+
+async function photoCdnUrl(
+  token: string,
+  photoId: string,
+): Promise<string | null> {
+  const json = await graphGet(encodeURIComponent(photoId), token, "images");
+  const images = (json.images as { source?: string; width?: number }[]) || [];
+  const top = [...images].sort((a, b) => (b.width || 0) - (a.width || 0))[0];
+  return top?.source || null;
+}
+
+async function waitIgContainer(
+  token: string,
+  creationId: string,
+): Promise<{ ok: boolean; error?: string }> {
+  for (let i = 0; i < 15; i += 1) {
+    const json = await graphGet(
+      encodeURIComponent(creationId),
+      token,
+      "status_code,status",
+    );
+    const code = String(json.status_code || "");
+    if (code === "ERROR" || code === "EXPIRED") {
+      return {
+        ok: false,
+        error: String(json.status || code).slice(0, 220),
+      };
+    }
+    if (code === "IN_PROGRESS") {
+      await new Promise((r) => setTimeout(r, 2000));
+      continue;
+    }
+    return { ok: true };
+  }
+  return { ok: true };
+}
+
+async function publishInstagram(args: {
+  token: string;
+  igUserId: string;
+  imageUrl: string;
+  caption?: string;
+  story: boolean;
+}): Promise<{ ok: boolean; error?: string }> {
+  const form = new FormData();
+  form.append("access_token", args.token);
+  form.append("image_url", args.imageUrl);
+  if (args.story) form.append("media_type", "STORIES");
+  else if (args.caption) form.append("caption", args.caption.slice(0, 2200));
+  const created = await graphJson(
+    `${GRAPH}/${encodeURIComponent(args.igUserId)}/media`,
+    form,
+  );
+  if (!created.id) {
+    return {
+      ok: false,
+      error: (created.error?.message || "ig_container_fail").slice(0, 220),
+    };
+  }
+  const ready = await waitIgContainer(args.token, created.id);
+  if (!ready.ok) return ready;
+  const publish = new FormData();
+  publish.append("access_token", args.token);
+  publish.append("creation_id", created.id);
+  const json = await graphJson(
+    `${GRAPH}/${encodeURIComponent(args.igUserId)}/media_publish`,
+    publish,
+  );
+  if (json.error?.message && !json.id) {
+    return { ok: false, error: json.error.message.slice(0, 220) };
+  }
+  return { ok: true };
+}
+
+async function postFeedAndStoryImages(args: {
+  token: string;
+  caption: string;
+  feed: Response;
+  story: Response;
+  publicFeedUrl?: string;
+  publicStoryUrl?: string;
+  instagram?: InstagramAccount | null;
+}): Promise<{
+  posted: boolean;
+  story: boolean;
+  igPosted: boolean;
+  igStory: boolean;
+  error?: string;
+}> {
+  const feed = await uploadPhoto({
+    token: args.token,
+    bytes: await pngBytes(args.feed),
+    caption: args.caption,
+    published: true,
+  });
+  if (!feed.ok) {
+    return {
+      posted: false,
+      story: false,
+      igPosted: false,
+      igStory: false,
+      error: feed.error,
+    };
+  }
+
+  const unpublished = await uploadPhoto({
+    token: args.token,
+    bytes: await pngBytes(args.story),
+    published: false,
+  });
+  let storyOk = false;
+  if (!unpublished.ok || !unpublished.id) {
+    console.error("facebook_story_upload_fail", unpublished.error);
+  } else {
+    const story = await publishStory(args.token, unpublished.id);
+    if (!story.ok) console.error("facebook_story_fail", story.error);
+    else storyOk = true;
+  }
+
+  let igPosted = false;
+  let igStory = false;
+  const ig = args.instagram;
+  if (ig?.id) {
+    const feedFallback = feed.id
+      ? await photoCdnUrl(args.token, feed.id)
+      : null;
+    const feedUrls = [args.publicFeedUrl, feedFallback].filter(
+      (u): u is string => Boolean(u),
+    );
+    for (const imageUrl of feedUrls) {
+      const sent = await publishInstagram({
+        token: args.token,
+        igUserId: ig.id,
+        imageUrl,
+        caption: args.caption,
+        story: false,
+      });
+      if (sent.ok) {
+        igPosted = true;
+        break;
+      }
+      console.error("instagram_feed_fail", sent.error);
+    }
+    const storyFallback = unpublished.id
+      ? await photoCdnUrl(args.token, unpublished.id)
+      : null;
+    const storyUrls = [args.publicStoryUrl, storyFallback].filter(
+      (u): u is string => Boolean(u),
+    );
+    for (const imageUrl of storyUrls) {
+      const sent = await publishInstagram({
+        token: args.token,
+        igUserId: ig.id,
+        imageUrl,
+        story: true,
+      });
+      if (sent.ok) {
+        igStory = true;
+        break;
+      }
+      console.error("instagram_story_fail", sent.error);
+    }
+  }
+
+  return { posted: true, story: storyOk, igPosted, igStory };
+}
+
+async function postInstagramOnly(args: {
+  token: string;
+  caption: string;
+  publicQuery: string;
+  instagram: InstagramAccount;
+}): Promise<{ igPosted: boolean; igStory: boolean }> {
+  const feedUrl = shareJpegUrl(`${args.publicQuery}&format=feed`);
+  const storyUrl = shareJpegUrl(`${args.publicQuery}&format=story`);
+  let igPosted = false;
+  let igStory = false;
+  const feed = await publishInstagram({
+    token: args.token,
+    igUserId: args.instagram.id,
+    imageUrl: feedUrl,
+    caption: args.caption,
+    story: false,
+  });
+  if (feed.ok) igPosted = true;
+  else console.error("instagram_feed_fail", feed.error);
+  const story = await publishInstagram({
+    token: args.token,
+    igUserId: args.instagram.id,
+    imageUrl: storyUrl,
+    story: true,
+  });
+  if (story.ok) igStory = true;
+  else console.error("instagram_story_fail", story.error);
+  return { igPosted, igStory };
+}
+
 async function postFeedAndStory(args: {
   token: string;
   caption: string;
   card: ReturnType<typeof euroMillionsShareCard>;
-}): Promise<{ posted: boolean; story: boolean; error?: string }> {
-  const feedPng = await pngBytes(
-    lotteryShareImageResponse(args.card, SHARE_FEED),
-  );
-  const feed = await uploadPhoto({
+  publicQuery: string;
+  instagram?: InstagramAccount | null;
+}): Promise<{
+  posted: boolean;
+  story: boolean;
+  igPosted: boolean;
+  igStory: boolean;
+  error?: string;
+}> {
+  return postFeedAndStoryImages({
     token: args.token,
-    bytes: feedPng,
     caption: args.caption,
-    published: true,
+    feed: lotteryShareImageResponse(args.card, SHARE_FEED),
+    story: lotteryShareImageResponse(args.card, SHARE_STORY),
+    publicFeedUrl: shareJpegUrl(`${args.publicQuery}&format=feed`),
+    publicStoryUrl: shareJpegUrl(`${args.publicQuery}&format=story`),
+    instagram: args.instagram,
   });
-  if (!feed.ok) return { posted: false, story: false, error: feed.error };
+}
 
-  const storyPng = await pngBytes(
-    lotteryShareImageResponse(args.card, SHARE_STORY),
+export async function facebookMetaStatus(): Promise<{
+  configured: boolean;
+  tokenValid: boolean;
+  instagram: InstagramAccount | null;
+  error?: string;
+}> {
+  if (!facebookConfigured()) {
+    return { configured: false, tokenValid: false, instagram: null };
+  }
+  const state = await refreshPageToken(await readState());
+  const token = await currentPageToken(state);
+  const json = await graphGet(
+    encodeURIComponent(pageId()),
+    token,
+    "id,name,instagram_business_account{id,username}",
   );
-  const unpublished = await uploadPhoto({
-    token: args.token,
-    bytes: storyPng,
-    published: false,
-  });
-  if (!unpublished.ok || !unpublished.id) {
-    console.error("facebook_story_upload_fail", unpublished.error);
-    return { posted: true, story: false };
+  const err = json.error as { message?: string } | undefined;
+  if (err?.message) {
+    return {
+      configured: true,
+      tokenValid: false,
+      instagram: null,
+      error: err.message.slice(0, 220),
+    };
   }
-  const story = await publishStory(args.token, unpublished.id);
-  if (!story.ok) {
-    console.error("facebook_story_fail", story.error);
-    return { posted: true, story: false };
-  }
-  return { posted: true, story: true };
+  const ig = json.instagram_business_account as
+    | { id?: string; username?: string }
+    | undefined;
+  return {
+    configured: true,
+    tokenValid: true,
+    instagram: ig?.id ? { id: ig.id, username: ig.username || null } : null,
+  };
 }
 
 export async function postFacebookDraw(
@@ -302,10 +573,13 @@ export async function postFacebookDraw(
 ): Promise<{ ok: boolean; id?: string; error?: string }> {
   const token = tokenOverride?.trim() || envPageToken();
   if (!token) return { ok: false, error: "facebook_unconfigured" };
+  const instagram = await resolveInstagramAccount(token);
   const sent = await postFeedAndStory({
     token,
     caption: facebookDrawMessage(draw),
     card: euroMillionsShareCard(draw),
+    publicQuery: `date=${encodeURIComponent(draw.date)}`,
+    instagram,
   });
   if (!sent.posted) return { ok: false, error: sent.error };
   return { ok: true };
@@ -321,18 +595,46 @@ export async function notifyFacebookOnPublish(
 ): Promise<FacebookNotifyResult> {
   const skipped: Record<string, string> = {};
   if (!facebookConfigured()) {
-    return { posted: 0, stories: 0, skipped: { all: "facebook_unconfigured" } };
+    return {
+      posted: 0,
+      stories: 0,
+      instagramPosted: 0,
+      instagramStories: 0,
+      instagramUsername: null,
+      skipped: { all: "facebook_unconfigured" },
+    };
   }
   let state = await refreshPageToken(await readState());
   const token = await currentPageToken(state);
+  const instagram = await resolveInstagramAccount(token);
+  if (!instagram) skipped.instagram = "unlinked";
   const fdj = await readFdjGamesStore();
   let posted = 0;
   let stories = 0;
+  let instagramPosted = 0;
+  let instagramStories = 0;
 
   const stamp = async (key: keyof PostedMap, value: string) => {
     state = {
       ...state,
       lastPosted: { ...state.lastPosted, [key]: value },
+      lastPostedIg: {
+        ...(state.lastPostedIg || SEED.lastPostedIg!),
+        [key]: state.lastPostedIg?.[key] ?? null,
+      },
+    };
+    await writeState(state);
+  };
+
+  const stampIg = async (key: keyof PostedMap, value: string) => {
+    state = {
+      ...state,
+      lastPostedIg: {
+        euromillions: state.lastPostedIg?.euromillions ?? null,
+        loto: state.lastPostedIg?.loto ?? null,
+        eurodreams: state.lastPostedIg?.eurodreams ?? null,
+        [key]: value,
+      },
     };
     await writeState(state);
   };
@@ -342,7 +644,9 @@ export async function notifyFacebookOnPublish(
     fingerprint: string,
     caption: string,
     card: ReturnType<typeof euroMillionsShareCard>,
+    publicQuery: string,
   ) => {
+    const igAlready = state.lastPostedIg?.[key] === fingerprint;
     if (!options?.force) {
       if (!state.lastPosted[key]) {
         await stamp(key, fingerprint);
@@ -350,11 +654,30 @@ export async function notifyFacebookOnPublish(
         return;
       }
       if (state.lastPosted[key] === fingerprint) {
+        if (instagram && !igAlready) {
+          const igSent = await postInstagramOnly({
+            token,
+            caption,
+            publicQuery,
+            instagram,
+          });
+          if (igSent.igPosted) instagramPosted += 1;
+          if (igSent.igStory) instagramStories += 1;
+          await stampIg(key, fingerprint);
+          skipped[key] = igSent.igPosted ? "ig_backfill" : "ig_backfill_fail";
+          return;
+        }
         skipped[key] = "already";
         return;
       }
     }
-    const sent = await postFeedAndStory({ token, caption, card });
+    const sent = await postFeedAndStory({
+      token,
+      caption,
+      card,
+      publicQuery,
+      instagram,
+    });
     if (!sent.posted) {
       skipped[key] = sent.error || "send_failed";
       console.error("facebook_draw_post_fail", key, sent.error);
@@ -362,7 +685,10 @@ export async function notifyFacebookOnPublish(
     }
     posted += 1;
     if (sent.story) stories += 1;
+    if (sent.igPosted) instagramPosted += 1;
+    if (sent.igStory) instagramStories += 1;
     await stamp(key, fingerprint);
+    if (sent.igPosted || sent.igStory) await stampIg(key, fingerprint);
     skipped[key] = "ok";
   };
 
@@ -372,6 +698,7 @@ export async function notifyFacebookOnPublish(
       latest.date,
       facebookDrawMessage(latest),
       euroMillionsShareCard(latest),
+      `date=${encodeURIComponent(latest.date)}`,
     );
   } else {
     skipped.euromillions = "unpublished";
@@ -388,8 +715,144 @@ export async function notifyFacebookOnPublish(
       companionDrawKey(draw),
       companionMessage(draw),
       companionShareCard(draw),
+      `game=${encodeURIComponent(gameId)}&key=${encodeURIComponent(companionDrawKey(draw))}`,
     );
   }
 
-  return { posted, stories, skipped };
+  return {
+    posted,
+    stories,
+    instagramPosted,
+    instagramStories,
+    instagramUsername: instagram?.username || null,
+    skipped,
+  };
+}
+
+const NEWS_PER_RUN = 2;
+
+function newsPermalink(slug: string): string {
+  return `https://euromillions-resultats.fr/fr/actualites/${slug}`;
+}
+
+function newsCaption(title: string, excerpt: string, slug: string): string {
+  return [
+    title.trim(),
+    "",
+    excerpt.trim(),
+    "",
+    newsPermalink(slug),
+    "",
+    "Site indépendant · 18+ · jeu responsable. Nous ne vendons pas de tickets.",
+    "#EuroMillions",
+  ].join("\n");
+}
+
+/**
+ * Poste fil + story pour les actus EuroMillions nouvellement ingérées.
+ * Premier amorçage : mémorise les slugs déjà en archive, n’envoie pas l’historique.
+ * Max 2 posts par ingest. Les échecs sont retentés au cron suivant.
+ */
+export async function notifyFacebookNews(
+  fresh: {
+    slug: string;
+    siteId?: string;
+    publishedAt?: string;
+    fr?: { title?: string; excerpt?: string };
+  }[],
+): Promise<FacebookNotifyResult> {
+  const skipped: Record<string, string> = {};
+  const emFresh = fresh.filter(
+    (a) => (a.siteId || "ecoflow") === "euromillions" && a.slug && a.fr?.title,
+  );
+  if (!facebookConfigured()) {
+    return {
+      posted: 0,
+      stories: 0,
+      instagramPosted: 0,
+      instagramStories: 0,
+      instagramUsername: null,
+      skipped: { news: "facebook_unconfigured" },
+    };
+  }
+  let state = await refreshPageToken(await readState());
+  const token = await currentPageToken(state);
+  const instagram = await resolveInstagramAccount(token);
+  if (!instagram) skipped.instagram = "unlinked";
+  const { readNewsStore } = await import("@/lib/news/store");
+  const { newsSiteId } = await import("@/lib/news/types");
+  const store = await readNewsStore();
+  const created = new Set(emFresh.map((a) => a.slug));
+
+  if (!state.newsSeeded) {
+    state = {
+      ...state,
+      newsSeeded: true,
+      postedNewsSlugs: store.articles
+        .filter((a) => newsSiteId(a) === "euromillions" && !created.has(a.slug))
+        .map((a) => a.slug),
+    };
+    await writeState(state);
+    skipped.news = "seed";
+  }
+
+  const already = new Set(state.postedNewsSlugs || []);
+  const queue = store.articles
+    .filter(
+      (a) =>
+        newsSiteId(a) === "euromillions" &&
+        Boolean(a.fr?.title) &&
+        !already.has(a.slug),
+    )
+    .sort((a, b) => {
+      const af = created.has(a.slug) ? 0 : 1;
+      const bf = created.has(b.slug) ? 0 : 1;
+      if (af !== bf) return af - bf;
+      return (b.publishedAt || "").localeCompare(a.publishedAt || "");
+    })
+    .slice(0, NEWS_PER_RUN);
+
+  let posted = 0;
+  let stories = 0;
+  let instagramPosted = 0;
+  let instagramStories = 0;
+  for (const article of queue) {
+    const title = article.fr?.title?.trim() || article.slug;
+    const excerpt = article.fr?.excerpt?.trim() || "";
+    const q = `kind=news&slug=${encodeURIComponent(article.slug)}`;
+    const sent = await postFeedAndStoryImages({
+      token,
+      caption: newsCaption(title, excerpt, article.slug),
+      feed: newsShareImageResponse(title, excerpt, SHARE_FEED),
+      story: newsShareImageResponse(title, excerpt, SHARE_STORY),
+      publicFeedUrl: shareJpegUrl(`${q}&format=feed`),
+      publicStoryUrl: shareJpegUrl(`${q}&format=story`),
+      instagram,
+    });
+    if (!sent.posted) {
+      skipped[article.slug] = sent.error || "send_failed";
+      console.error("facebook_news_post_fail", article.slug, sent.error);
+      continue;
+    }
+    posted += 1;
+    if (sent.story) stories += 1;
+    if (sent.igPosted) instagramPosted += 1;
+    if (sent.igStory) instagramStories += 1;
+    already.add(article.slug);
+    state = {
+      ...state,
+      newsSeeded: true,
+      postedNewsSlugs: [...already],
+    };
+    await writeState(state);
+    skipped[article.slug] = "ok";
+  }
+  return {
+    posted,
+    stories,
+    instagramPosted,
+    instagramStories,
+    instagramUsername: instagram?.username || null,
+    skipped,
+  };
 }

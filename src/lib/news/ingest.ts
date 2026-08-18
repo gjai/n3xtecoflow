@@ -45,6 +45,12 @@ export type IngestResult = {
   refreshedSlugs: string[];
   purgedSlugs: string[];
   aiUsed: boolean;
+  facebookNews?: {
+    posted: number;
+    stories: number;
+    instagramPosted?: number;
+    instagramStories?: number;
+  };
 };
 
 function articleOnTopic(article: {
@@ -295,6 +301,24 @@ export async function ingestNews(
     );
   }
 
+  let facebookNews: IngestResult["facebookNews"];
+  if (!options?.siteId || options.siteId === "euromillions") {
+    try {
+      const { notifyFacebookNews } = await import("@/lib/euromillions/facebook");
+      const fb = await notifyFacebookNews(
+        created.filter((a) => newsSiteId(a) === "euromillions"),
+      );
+      facebookNews = {
+        posted: fb.posted,
+        stories: fb.stories,
+        instagramPosted: fb.instagramPosted,
+        instagramStories: fb.instagramStories,
+      };
+    } catch (err) {
+      console.error("facebook_news_notify_fail", err);
+    }
+  }
+
   return {
     ok: true,
     fetched: collected.length,
@@ -308,5 +332,6 @@ export async function ingestNews(
     refreshedSlugs,
     purgedSlugs,
     aiUsed,
+    facebookNews,
   };
 }

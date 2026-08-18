@@ -66,7 +66,7 @@ export function lotteryShareImageResponse(
           width: "100%",
           height: "100%",
           background: "#0b1220",
-          padding: story ? "96px 72px 72px" : "52px 64px 40px",
+          padding: story ? "140px 72px 220px" : "52px 64px 40px",
           fontFamily: "sans-serif",
         }}
       >
@@ -113,16 +113,63 @@ export function lotteryShareImageResponse(
             ))}
           </div>
         ))}
-        <div
-          style={{
-            display: "flex",
-            marginTop: "auto",
-            color: "#8494ad",
-            fontSize: story ? 24 : 20,
-          }}
-        >
-          euromillions-resultats.fr · 18+ · jeu responsable
-        </div>
+        {story ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginTop: "auto",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                background: card.accent,
+                color: card.accentInk,
+                borderRadius: 28,
+                padding: "28px 36px",
+              }}
+            >
+              <div style={{ display: "flex", fontSize: 26, fontWeight: 600 }}>
+                Vérifier vos gains sur
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  fontSize: 32,
+                  fontWeight: 700,
+                  marginTop: 8,
+                }}
+              >
+                euromillions-resultats.fr
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                marginTop: 28,
+                color: "#8494ad",
+                fontSize: 22,
+              }}
+            >
+              18+ · jeu responsable · site indépendant
+            </div>
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              marginTop: "auto",
+              color: "#8494ad",
+              fontSize: 20,
+            }}
+          >
+            Vérifier vos gains sur euromillions-resultats.fr · 18+
+          </div>
+        )}
       </div>
     ),
     { width: size.width, height: size.height },
@@ -167,4 +214,80 @@ export function companionShareCard(draw: FdjGameDraw): ShareCardInput {
 
 export function euroMillionsShareImageResponse(draw: EuroMillionsDraw) {
   return lotteryShareImageResponse(euroMillionsShareCard(draw), SHARE_FEED);
+}
+
+function clip(s: string, max: number): string {
+  const t = s.replace(/\s+/g, " ").trim();
+  if (t.length <= max) return t;
+  return `${t.slice(0, max - 1).trimEnd()}…`;
+}
+
+export function newsShareImageResponse(
+  title: string,
+  excerpt: string,
+  size: { width: number; height: number },
+) {
+  const story = size.height > size.width;
+  const accent = GAME_IDENTITY.euromillions.accent;
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          height: "100%",
+          background: "#0b1220",
+          padding: story ? "96px 72px 72px" : "52px 64px 40px",
+          fontFamily: "sans-serif",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            color: accent,
+            fontSize: story ? 28 : 20,
+            letterSpacing: 5,
+            textTransform: "uppercase",
+          }}
+        >
+          Actualité
+        </div>
+        <div
+          style={{
+            display: "flex",
+            color: "#ffffff",
+            fontSize: story ? 48 : 38,
+            fontWeight: 700,
+            marginTop: story ? 28 : 16,
+            lineHeight: 1.2,
+          }}
+        >
+          {clip(title, story ? 140 : 110)}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            color: "#b8c4d8",
+            fontSize: story ? 28 : 22,
+            marginTop: story ? 36 : 20,
+            lineHeight: 1.4,
+          }}
+        >
+          {clip(excerpt, story ? 220 : 160)}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            marginTop: "auto",
+            color: "#8494ad",
+            fontSize: story ? 24 : 20,
+          }}
+        >
+          euromillions-resultats.fr · 18+ · jeu responsable
+        </div>
+      </div>
+    ),
+    { width: size.width, height: size.height },
+  );
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import {
-  facebookConfigured,
+  facebookMetaStatus,
   notifyFacebookOnPublish,
 } from "@/lib/euromillions/facebook";
 import { getLatestDraw, readEuroMillionsStore } from "@/lib/euromillions/store";
@@ -16,24 +16,27 @@ function authorized(request: Request) {
   return bearer === secret || query === secret;
 }
 
-/** Statut, ou `?force=1` pour poster le dernier tirage tout de suite. */
+/** Statut Meta (Facebook + Instagram), ou `?force=1` pour poster le dernier tirage. */
 export async function POST(request: Request) {
   if (!authorized(request)) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
-  const force = new URL(request.url).searchParams.get("force") === "1";
+  const url = new URL(request.url);
+  const force = url.searchParams.get("force") === "1";
+  const notify = url.searchParams.get("notify") === "1";
   const store = await readEuroMillionsStore();
   const latest = getLatestDraw(store);
-  if (!force) {
+  const meta = await facebookMetaStatus();
+  if (!force && !notify) {
     return NextResponse.json({
-      configured: facebookConfigured(),
+      ...meta,
       latest: latest?.date || null,
       force: false,
     });
   }
-  const result = await notifyFacebookOnPublish(latest, { force: true });
+  const result = await notifyFacebookOnPublish(latest, { force });
   return NextResponse.json({
-    configured: facebookConfigured(),
+    ...meta,
     latest: latest?.date || null,
     ...result,
   });

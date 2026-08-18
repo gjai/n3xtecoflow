@@ -42,7 +42,7 @@ export function organizationJsonLd(siteOrUrl: SiteConfig | string) {
     description,
     foundingDate: "2026",
     knowsAbout,
-    sameAs: [site?.socials?.facebook].filter(
+    sameAs: [site?.socials?.facebook, site?.socials?.instagram].filter(
       (href): href is string => Boolean(href),
     ),
     contactPoint: {

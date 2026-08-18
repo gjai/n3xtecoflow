@@ -85,6 +85,7 @@ export const euromillionsSite: SiteConfig = {
   network: [],
   socials: {
     facebook: "https://www.facebook.com/euromillionsresultats/",
+    instagram: "https://www.instagram.com/euromillionsresultats/",
   },
   monetization: {
     disableAmazon: false,
