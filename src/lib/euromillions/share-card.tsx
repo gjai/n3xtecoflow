@@ -5,7 +5,17 @@ import { formatEuroMillionsLongDate } from "./datetime";
 import type { EuroMillionsDraw } from "./types";
 
 export const SHARE_FEED = { width: 1200, height: 630 } as const;
+/** Fil Instagram : portrait 4:5 (le 1200×630 Facebook est trop large). */
+export const SHARE_IG_FEED = { width: 1080, height: 1350 } as const;
 export const SHARE_STORY = { width: 1080, height: 1920 } as const;
+
+type ShareLayout = "feed" | "ig" | "story";
+
+function shareLayout(size: { width: number; height: number }): ShareLayout {
+  if (size.height >= 1800) return "story";
+  if (size.height > size.width) return "ig";
+  return "feed";
+}
 
 export type ShareCardInput = {
   kicker: string;
@@ -55,8 +65,15 @@ export function lotteryShareImageResponse(
   card: ShareCardInput,
   size: { width: number; height: number },
 ) {
-  const story = size.height > size.width;
-  const ball = story ? 128 : 88;
+  const layout = shareLayout(size);
+  const portrait = layout !== "feed";
+  const ball = layout === "story" ? 128 : layout === "ig" ? 112 : 88;
+  const pad =
+    layout === "story"
+      ? "140px 72px 220px"
+      : layout === "ig"
+        ? "72px 64px 64px"
+        : "52px 64px 40px";
   return new ImageResponse(
     (
       <div
@@ -66,7 +83,7 @@ export function lotteryShareImageResponse(
           width: "100%",
           height: "100%",
           background: "#0b1220",
-          padding: story ? "140px 72px 220px" : "52px 64px 40px",
+          padding: pad,
           fontFamily: "sans-serif",
         }}
       >
@@ -74,7 +91,7 @@ export function lotteryShareImageResponse(
           style={{
             display: "flex",
             color: card.accent,
-            fontSize: story ? 28 : 20,
+            fontSize: portrait ? 26 : 20,
             letterSpacing: 5,
             textTransform: "uppercase",
           }}
@@ -85,9 +102,9 @@ export function lotteryShareImageResponse(
           style={{
             display: "flex",
             color: "#ffffff",
-            fontSize: story ? 52 : 42,
+            fontSize: layout === "story" ? 52 : layout === "ig" ? 44 : 42,
             fontWeight: 700,
-            marginTop: story ? 20 : 12,
+            marginTop: portrait ? 18 : 12,
           }}
         >
           {card.dateLabel}
@@ -98,7 +115,7 @@ export function lotteryShareImageResponse(
             style={{
               display: "flex",
               flexWrap: "wrap",
-              marginTop: i === 0 ? (story ? 64 : 40) : 18,
+              marginTop: i === 0 ? (portrait ? 56 : 40) : 18,
             }}
           >
             {row.values.map((n, j) => (
@@ -113,7 +130,7 @@ export function lotteryShareImageResponse(
             ))}
           </div>
         ))}
-        {story ? (
+        {portrait ? (
           <div
             style={{
               display: "flex",
@@ -130,16 +147,16 @@ export function lotteryShareImageResponse(
                 background: card.accent,
                 color: card.accentInk,
                 borderRadius: 28,
-                padding: "28px 36px",
+                padding: layout === "story" ? "28px 36px" : "24px 32px",
               }}
             >
-              <div style={{ display: "flex", fontSize: 26, fontWeight: 600 }}>
+              <div style={{ display: "flex", fontSize: 24, fontWeight: 600 }}>
                 Vérifier vos gains sur
               </div>
               <div
                 style={{
                   display: "flex",
-                  fontSize: 32,
+                  fontSize: layout === "story" ? 32 : 28,
                   fontWeight: 700,
                   marginTop: 8,
                 }}
@@ -150,9 +167,9 @@ export function lotteryShareImageResponse(
             <div
               style={{
                 display: "flex",
-                marginTop: 28,
+                marginTop: layout === "story" ? 28 : 20,
                 color: "#8494ad",
-                fontSize: 22,
+                fontSize: 20,
               }}
             >
               18+ · jeu responsable · site indépendant
@@ -227,8 +244,15 @@ export function newsShareImageResponse(
   excerpt: string,
   size: { width: number; height: number },
 ) {
-  const story = size.height > size.width;
+  const layout = shareLayout(size);
+  const portrait = layout !== "feed";
   const accent = GAME_IDENTITY.euromillions.accent;
+  const pad =
+    layout === "story"
+      ? "140px 72px 220px"
+      : layout === "ig"
+        ? "72px 64px 64px"
+        : "52px 64px 40px";
   return new ImageResponse(
     (
       <div
@@ -238,7 +262,7 @@ export function newsShareImageResponse(
           width: "100%",
           height: "100%",
           background: "#0b1220",
-          padding: story ? "96px 72px 72px" : "52px 64px 40px",
+          padding: pad,
           fontFamily: "sans-serif",
         }}
       >
@@ -246,7 +270,7 @@ export function newsShareImageResponse(
           style={{
             display: "flex",
             color: accent,
-            fontSize: story ? 28 : 20,
+            fontSize: portrait ? 26 : 20,
             letterSpacing: 5,
             textTransform: "uppercase",
           }}
@@ -257,31 +281,31 @@ export function newsShareImageResponse(
           style={{
             display: "flex",
             color: "#ffffff",
-            fontSize: story ? 48 : 38,
+            fontSize: layout === "story" ? 48 : layout === "ig" ? 40 : 38,
             fontWeight: 700,
-            marginTop: story ? 28 : 16,
+            marginTop: portrait ? 24 : 16,
             lineHeight: 1.2,
           }}
         >
-          {clip(title, story ? 140 : 110)}
+          {clip(title, portrait ? 140 : 110)}
         </div>
         <div
           style={{
             display: "flex",
             color: "#b8c4d8",
-            fontSize: story ? 28 : 22,
-            marginTop: story ? 36 : 20,
+            fontSize: portrait ? 26 : 22,
+            marginTop: portrait ? 28 : 20,
             lineHeight: 1.4,
           }}
         >
-          {clip(excerpt, story ? 220 : 160)}
+          {clip(excerpt, portrait ? 220 : 160)}
         </div>
         <div
           style={{
             display: "flex",
             marginTop: "auto",
             color: "#8494ad",
-            fontSize: story ? 24 : 20,
+            fontSize: portrait ? 22 : 20,
           }}
         >
           euromillions-resultats.fr · 18+ · jeu responsable

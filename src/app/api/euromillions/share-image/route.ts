@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import {
   SHARE_FEED,
+  SHARE_IG_FEED,
   SHARE_STORY,
   companionShareCard,
   euroMillionsShareCard,
@@ -26,7 +27,8 @@ export const dynamic = "force-dynamic";
 async function asJpeg(image: Response) {
   const sharp = (await import("sharp")).default;
   const jpg = await sharp(Buffer.from(await image.arrayBuffer()))
-    .jpeg({ quality: 88 })
+    .toColorspace("srgb")
+    .jpeg({ quality: 90, chromaSubsampling: "4:4:4" })
     .toBuffer();
   return new NextResponse(jpg, {
     headers: {
@@ -37,7 +39,9 @@ async function asJpeg(image: Response) {
 }
 
 function sizeOf(format: string | null) {
-  return format === "story" ? SHARE_STORY : SHARE_FEED;
+  if (format === "story") return SHARE_STORY;
+  if (format === "ig" || format === "instagram") return SHARE_IG_FEED;
+  return SHARE_FEED;
 }
 
 /** PNG/JPEG des cartes tirage et actus — Facebook, Instagram, Open Graph. */

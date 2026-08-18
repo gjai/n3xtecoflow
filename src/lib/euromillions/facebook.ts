@@ -484,7 +484,7 @@ async function postInstagramOnly(args: {
   publicQuery: string;
   instagram: InstagramAccount;
 }): Promise<{ igPosted: boolean; igStory: boolean }> {
-  const feedUrl = shareJpegUrl(`${args.publicQuery}&format=feed`);
+  const feedUrl = shareJpegUrl(`${args.publicQuery}&format=ig`);
   const storyUrl = shareJpegUrl(`${args.publicQuery}&format=story`);
   let igPosted = false;
   let igStory = false;
@@ -526,7 +526,7 @@ async function postFeedAndStory(args: {
     caption: args.caption,
     feed: lotteryShareImageResponse(args.card, SHARE_FEED),
     story: lotteryShareImageResponse(args.card, SHARE_STORY),
-    publicFeedUrl: shareJpegUrl(`${args.publicQuery}&format=feed`),
+    publicFeedUrl: shareJpegUrl(`${args.publicQuery}&format=ig`),
     publicStoryUrl: shareJpegUrl(`${args.publicQuery}&format=story`),
     instagram: args.instagram,
   });
@@ -825,7 +825,7 @@ export async function notifyFacebookNews(
       caption: newsCaption(title, excerpt, article.slug),
       feed: newsShareImageResponse(title, excerpt, SHARE_FEED),
       story: newsShareImageResponse(title, excerpt, SHARE_STORY),
-      publicFeedUrl: shareJpegUrl(`${q}&format=feed`),
+      publicFeedUrl: shareJpegUrl(`${q}&format=ig`),
       publicStoryUrl: shareJpegUrl(`${q}&format=story`),
       instagram,
     });
