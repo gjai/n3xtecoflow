@@ -30,8 +30,10 @@ export const euromillionsSite: SiteConfig = {
     logoMark: "/brands/euromillions/mark.svg",
     icons: {
       favicon: "/brands/euromillions/favicon.svg",
-      apple: "/brands/euromillions/apple-touch-icon.svg",
+      apple: "/brands/euromillions/icon-180.png",
       icon32: "/brands/euromillions/mark.svg",
+      icon192: "/brands/euromillions/icon-192.png",
+      icon512: "/brands/euromillions/icon-512.png",
     },
   },
   theme: {

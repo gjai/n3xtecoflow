@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sendResendEmail } from "@/lib/mail/resend";
 import { getSiteByHost } from "@/sites";
 
 const CONTACT_TO = process.env.CONTACT_TO_EMAIL?.trim() || "djgjai@gmail.com";
@@ -48,24 +49,22 @@ export async function POST(request: Request) {
   }
 
   const site = getSiteByHost(request.headers.get("host"));
-  const res = await fetch(`https://formsubmit.co/ajax/${CONTACT_TO}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      name,
-      email,
+  const sent = await sendResendEmail({
+    to: CONTACT_TO,
+    replyTo: email,
+    subject: `[${site.brand.name}] Message de ${name}`,
+    text: [
+      `Site : ${site.brand.name} (${site.primaryHost})`,
+      `Nom : ${name}`,
+      `E-mail : ${email}`,
+      "",
       message,
-      _subject: `[${site.brand.name}] Message de ${name}`,
-      _template: "table",
-      _captcha: "false",
-    }),
+    ].join("\n"),
   });
 
-  if (!res.ok) {
-    return NextResponse.json({ error: "send_failed" }, { status: 502 });
+  if (!sent.ok) {
+    const status = sent.error === "mail_unconfigured" ? 503 : 502;
+    return NextResponse.json({ error: sent.error || "send_failed" }, { status });
   }
 
   return NextResponse.json({ ok: true });

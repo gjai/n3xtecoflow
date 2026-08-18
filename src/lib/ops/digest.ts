@@ -7,6 +7,7 @@ import {
   fetchNetworkDomainRatings,
   formatDomainRating,
 } from "@/lib/seo/ahrefs";
+import { sendResendEmail } from "@/lib/mail/resend";
 
 export function parisDateKey(date = new Date()): string {
   return new Intl.DateTimeFormat("en-CA", {
@@ -139,28 +140,9 @@ export async function sendDigestEmail(digest: {
     process.env.CONTACT_TO_EMAIL?.trim() ||
     "djgjai@gmail.com";
 
-  const res = await fetch(`https://formsubmit.co/ajax/${to}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      name: "n3xtecoflow ops",
-      email: to,
-      _subject: digest.subject,
-      message: digest.text,
-      _template: "box",
-      _captcha: "false",
-    }),
+  return sendResendEmail({
+    to,
+    subject: digest.subject,
+    text: digest.text,
   });
-
-  if (!res.ok) {
-    const body = await res.text().catch(() => "");
-    return {
-      ok: false,
-      error: `formsubmit_${res.status}:${body.slice(0, 200)}`,
-    };
-  }
-  return { ok: true };
 }

@@ -247,6 +247,12 @@ export async function refreshEuroMillionsData(options?: {
       "euromillions-resultats.fr",
     );
   }
+  try {
+    const { notifyAlertsOnPublish } = await import("./alerts");
+    await notifyAlertsOnPublish(latest);
+  } catch (err) {
+    console.error("alerts_notify_fail", err);
+  }
 
   return {
     ok: true,

@@ -12,6 +12,7 @@ const EURO_MILLIONS_PREFIXES = [
   "/generateur",
   "/prochain-tirage",
   "/my-million",
+  "/alerte-email",
   "/simulateur",
   "/stats",
 ] as const;

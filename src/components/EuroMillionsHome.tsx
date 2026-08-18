@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { AdSenseUnit } from "@/components/AdSenseUnit";
+import { AlertsEngagement } from "@/components/AlertsEngagement";
 import { DrawPrizeTable } from "@/components/DrawPrizeTable";
 import { SmartCover } from "@/components/SmartCover";
 import { FdjCompanionGamesBlock } from "@/components/FdjCompanionGamesBlock";
@@ -250,6 +251,12 @@ export async function EuroMillionsHome({
                 {t("simulatorCta")}
               </Link>
               <Link
+                href="/generateur"
+                className="inline-flex min-h-11 items-center border border-[var(--line)] px-5 text-sm font-semibold text-[var(--heading)]"
+              >
+                {t("generatorCta")}
+              </Link>
+              <Link
                 href="/tirages"
                 className="inline-flex min-h-11 items-center border border-[var(--line)] px-5 text-sm font-semibold text-[var(--heading)]"
               >
@@ -381,23 +388,43 @@ export async function EuroMillionsHome({
       </div>
 
       <section className="border-b border-[var(--line)] bg-[var(--bg)]">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-8 md:px-8">
-          <div>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
-              {t("simulatorTeaserTitle")}
-            </h2>
-            <p className="mt-1 text-sm text-[var(--muted)]">
-              {t("simulatorTeaserText")}
-            </p>
+        <div className="mx-auto grid max-w-6xl gap-8 px-5 py-8 md:grid-cols-2 md:px-8">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+                {t("simulatorTeaserTitle")}
+              </h2>
+              <p className="mt-1 text-sm text-[var(--muted)]">
+                {t("simulatorTeaserText")}
+              </p>
+            </div>
+            <Link
+              href="/tirages#simulateur"
+              className="inline-flex min-h-11 items-center border border-[var(--accent)] px-5 text-sm font-semibold text-[var(--heading)]"
+            >
+              {t("simulatorCta")} →
+            </Link>
           </div>
-          <Link
-            href="/tirages#simulateur"
-            className="inline-flex min-h-11 items-center border border-[var(--accent)] px-5 text-sm font-semibold text-[var(--heading)]"
-          >
-            {t("simulatorCta")} →
-          </Link>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+                {t("generatorTeaserTitle")}
+              </h2>
+              <p className="mt-1 text-sm text-[var(--muted)]">
+                {t("generatorTeaserText")}
+              </p>
+            </div>
+            <Link
+              href="/generateur"
+              className="inline-flex min-h-11 items-center border border-[var(--accent)] px-5 text-sm font-semibold text-[var(--heading)]"
+            >
+              {t("generatorCta")} →
+            </Link>
+          </div>
         </div>
       </section>
+
+      <AlertsEngagement variant="compact" />
 
       <section className="border-b border-[var(--line)]">
         <div className="mx-auto max-w-6xl px-5 py-10 md:px-8">
@@ -572,6 +599,12 @@ export async function EuroMillionsHome({
               className="text-sm font-semibold text-[var(--accent)] hover:underline"
             >
               {t("simulatorCta")} →
+            </Link>
+            <Link
+              href="/generateur"
+              className="text-sm font-semibold text-[var(--accent)] hover:underline"
+            >
+              {t("generatorCta")} →
             </Link>
             <Link
               href="/tirages"

@@ -1,4 +1,4 @@
-/** ICS récurrent mardi + vendredi 21h Europe/Paris — pas une newsletter. */
+/** ICS récurrent mardi + vendredi 21h Europe/Paris — rappel 15 min avant. */
 export function euroMillionsDrawCalendarIcs(origin: string): string {
   const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+Z$/, "Z");
   const lines = [
@@ -9,15 +9,38 @@ export function euroMillionsDrawCalendarIcs(origin: string): string {
     "METHOD:PUBLISH",
     "X-WR-CALNAME:EuroMillions — tirages",
     "X-WR-TIMEZONE:Europe/Paris",
+    "BEGIN:VTIMEZONE",
+    "TZID:Europe/Paris",
+    "BEGIN:DAYLIGHT",
+    "TZOFFSETFROM:+0100",
+    "TZOFFSETTO:+0200",
+    "TZNAME:CEST",
+    "DTSTART:19700329T020000",
+    "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU",
+    "END:DAYLIGHT",
+    "BEGIN:STANDARD",
+    "TZOFFSETFROM:+0200",
+    "TZOFFSETTO:+0100",
+    "TZNAME:CET",
+    "DTSTART:19701025T030000",
+    "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU",
+    "END:STANDARD",
+    "END:VTIMEZONE",
     "BEGIN:VEVENT",
     "UID:euromillions-draw@euromillions-resultats.fr",
     `DTSTAMP:${stamp}`,
     "DTSTART;TZID=Europe/Paris:20260106T210000",
     "DTEND;TZID=Europe/Paris:20260106T213000",
     "RRULE:FREQ=WEEKLY;BYDAY=TU,FR",
-    "SUMMARY:Tirage EuroMillions",
-    "DESCRIPTION:Résultat vers 21h (Europe/Paris). Site indépendant, 18+\\, jeu responsable. Pas de vente de tickets.",
+    "SUMMARY:Résultat EuroMillions",
+    "DESCRIPTION:Les numéros vers 21h (Europe/Paris). Site indépendant\\, 18+\\, jeu responsable. Pas de vente de tickets. " +
+      `${origin}/fr`,
     `URL:${origin}/fr/prochain-tirage`,
+    "BEGIN:VALARM",
+    "ACTION:DISPLAY",
+    "TRIGGER:-PT15M",
+    "DESCRIPTION:Résultat EuroMillions vers 21h — euromillions-resultats.fr",
+    "END:VALARM",
     "END:VEVENT",
     "END:VCALENDAR",
   ];

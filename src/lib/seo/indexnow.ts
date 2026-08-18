@@ -31,7 +31,9 @@ export function lotteryIndexNowUrls(
     "/tirages",
     "/prochain-tirage",
     "/my-million",
+    "/alerte-email",
     "/jeux",
+    "/generateur",
   ]);
   if (latest) paths.add(`/tirages/${latest}`);
   if (em.nextDrawDate) paths.add(`/tirages/${em.nextDrawDate}`);

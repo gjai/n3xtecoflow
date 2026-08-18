@@ -57,6 +57,8 @@ export type SiteIcons = {
   icon32?: string;
   /** Optional 192×192 for Android / PWA */
   icon192?: string;
+  /** Optional 512×512 for Android / PWA */
+  icon512?: string;
 };
 
 export type SiteBrand = {

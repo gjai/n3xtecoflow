@@ -8,6 +8,7 @@ import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { GameLabel } from "@/components/GameMark";
 import { NextDrawMenuMeta } from "@/components/NextDrawMenuMeta";
 import { ResultsLivePoller } from "@/components/ResultsLivePoller";
+import { AlertsEngagement } from "@/components/AlertsEngagement";
 import { LOTTERY_GAMES_NAV, lotteryGameLabel } from "@/lib/fdj-games/nav";
 import { gameRailStyle } from "@/lib/fdj-games/identity";
 import { siteLocaleAlternates } from "@/lib/seo";
@@ -87,6 +88,7 @@ export default async function ProchainTiragePage({
         <p className="mt-3 max-w-2xl text-sm text-[var(--muted)]">
           {t("cutoffOpen", { time: "20:15" })}
         </p>
+        <AlertsEngagement />
         {pending ? (
           <p className="mt-6 border border-[var(--line)] bg-[var(--surface)] p-5 text-[var(--heading)]">
             {t("pendingHelp")}
@@ -130,6 +132,14 @@ export default async function ProchainTiragePage({
               className="font-semibold text-[var(--accent)] hover:underline"
             >
               {t("checkCta")} →
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/alerte-email"
+              className="font-semibold text-[var(--accent)] hover:underline"
+            >
+              {t("alertCta")} →
             </Link>
           </li>
           {latest ? (

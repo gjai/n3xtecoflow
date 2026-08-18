@@ -14,6 +14,7 @@ import { ConsentProvider } from "@/components/ConsentProvider";
 import { UmamiScript } from "@/components/UmamiScript";
 import { CookieBanner } from "@/components/CookieBanner";
 import { NetworkLinks } from "@/components/NetworkLinks";
+import { PwaRegister } from "@/components/PwaInstall";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteProvider } from "@/components/SiteProvider";
@@ -239,6 +240,7 @@ export default async function LocaleLayout({
             <NextDrawProvider snapshot={nextDraws}>
             <ThemeProvider>
               <ConsentProvider>
+                <PwaRegister />
                 <AdSenseScript />
                 <div className="flex min-h-full flex-col">
                   <SiteHeader />

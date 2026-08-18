@@ -27,6 +27,11 @@ import { numberPoolStats } from "@/lib/euromillions/stats";
 import { ArchivePagination } from "@/components/ArchivePagination";
 import { DrawArchiveRow } from "@/components/DrawArchiveRow";
 import { archivePageHref, ARCHIVE_PAGE_SIZE, paginate, parsePageParam } from "@/lib/pagination";
+import {
+  companionDrawDateLabel,
+  companionHubDescription,
+  companionHubTitle,
+} from "@/lib/fdj-games/hub-seo";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
@@ -45,11 +50,15 @@ export async function generateMetadata({
   const { locale, game: slug } = await params;
   const entry = getCompanionGame(slug);
   if (!entry) return {};
-  const t = await getTranslations({ locale, namespace: "games" });
   const label = locale === "en" ? entry.labelEn : entry.labelFr;
+  const store = await readFdjGamesStore();
+  const latest = getGameLatest(store, entry.id);
+  const dateLabel = latest
+    ? companionDrawDateLabel(locale, entry.id, latest)
+    : null;
   return {
-    title: t("gameTitle", { game: label }),
-    description: t("gameMeta", { game: label }),
+    title: companionHubTitle(locale, label, dateLabel),
+    description: companionHubDescription(locale, label, dateLabel),
     alternates: await siteLocaleAlternates(locale, `/jeux/${entry.slug}`),
   };
 }
@@ -137,6 +146,11 @@ export default async function JeuxGamePage({
           : "comprendre-crescendo";
   const label = locale === "en" ? entry.labelEn : entry.labelFr;
   const pending = companionResultPending(gameId, latest);
+  const hubTitle = companionHubTitle(
+    locale,
+    label,
+    latest ? companionDrawDateLabel(locale, gameId, latest) : null,
+  );
 
   function headingFor(d: NonNullable<typeof latest>) {
     const when = formatDrawWhen(d, locale);
@@ -184,7 +198,7 @@ export default async function JeuxGamePage({
       </Link>
       <h1 className="mt-6 flex items-center gap-3 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
         <GameMark gameId={gameId} size={40} />
-        {t("gameTitle", { game: label })}
+        {hubTitle}
       </h1>
       <div className="mt-4">
         <GameToolsNav gameId={gameId} />

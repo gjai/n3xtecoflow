@@ -149,6 +149,7 @@ export function buildSitemapForSite(
           "/tirages",
           "/generateur",
           "/prochain-tirage",
+          "/alerte-email",
           "/jeux",
           "/jeux/eurodreams",
           "/jeux/loto",
