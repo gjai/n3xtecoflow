@@ -22,6 +22,7 @@ import { resolveProductMedia } from "@/lib/product-presentation";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { CasinosCryptoGuideAffiliates } from "@/components/CasinosCryptoGuideAffiliates";
+import { CasinosCryptoRelatedGuides } from "@/components/CasinosCryptoRelatedGuides";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { APP_LOCALES } from "@/i18n/locales";
 import { resolveAffiliateOffers } from "@/lib/affiliates";
@@ -230,6 +231,9 @@ export default async function GuideArticlePage({
           ) : undefined
         }
       />
+      {site.id === "casinos-crypto" ? (
+        <CasinosCryptoRelatedGuides slug={slug} locale={locale} />
+      ) : null}
       {siteIsEuroMillions(site) ? (
         <EuroMillionsGuideFaq slug={slug} locale={locale} />
       ) : null}

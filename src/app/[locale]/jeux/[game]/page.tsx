@@ -111,11 +111,13 @@ export default async function JeuxGamePage({
   const store = await readFdjGamesStore();
   const latest = getGameLatest(store, gameId);
   const allDraws = getGameDraws(store, gameId);
+  const requestedPage = parsePageParam(pageParam);
   const listed = paginate(
     allDraws,
-    parsePageParam(pageParam),
+    requestedPage,
     ARCHIVE_PAGE_SIZE,
   );
+  if (pageParam && requestedPage > listed.totalPages) notFound();
   const draws = listed.items;
   const spec = COMPANION_GRID[gameId];
   const mainStats = numberPoolStats(

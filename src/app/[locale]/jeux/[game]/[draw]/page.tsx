@@ -65,6 +65,10 @@ export async function generateMetadata({
       locale,
       `/jeux/${entry.slug}/${key}`,
     ),
+    robots:
+      locale === "fr" || locale === "en"
+        ? { index: true, follow: true }
+        : { index: false, follow: true },
   };
 }
 

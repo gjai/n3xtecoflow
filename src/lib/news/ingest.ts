@@ -10,6 +10,9 @@ import {
 import { readNewsStore, writeNewsStore } from "./store";
 import { revalidateSitemap } from "@/lib/euromillions/live";
 import { revalidatePath } from "next/cache";
+import { submitIndexNow } from "@/lib/seo/indexnow";
+import { sitesById } from "@/sites";
+import { siteLocales } from "@/sites/features";
 
 export type IngestOptions = {
   limit?: number;
@@ -266,6 +269,23 @@ export async function ingestNews(
     revalidatePath("/[locale]/actualites/[slug]", "page");
     revalidatePath("/[locale]", "page");
     revalidateSitemap();
+  }
+
+  if (created.length) {
+    const byHost = new Map<string, string[]>();
+    for (const article of created) {
+      const site = sitesById[newsSiteId(article)];
+      const host = site.primaryHost;
+      const urls = byHost.get(host) || [`https://${host}/sitemap.xml`];
+      for (const loc of siteLocales(site)) {
+        if (loc !== "fr" && loc !== "en") continue;
+        urls.push(`https://${host}/${loc}/actualites/${article.slug}`);
+      }
+      byHost.set(host, urls);
+    }
+    await Promise.all(
+      [...byHost.entries()].map(([host, urls]) => submitIndexNow(urls, host)),
+    );
   }
 
   return {

@@ -69,12 +69,14 @@ export default async function TiragesPage({
   const statsT = await getTranslations("stats");
   const homeT = await getTranslations("home");
   const store = await readEuroMillionsStore();
-  const latest = getLatestDraw(store);
+  const requestedPage = parsePageParam(pageParam);
   const listed = paginate(
     store.draws,
-    parsePageParam(pageParam),
+    requestedPage,
     ARCHIVE_PAGE_SIZE,
   );
+  if (pageParam && requestedPage > listed.totalPages) notFound();
+  const latest = getLatestDraw(store);
   const draws = listed.items;
   const pending = euroMillionsResultPending({
     latestDate: store.latest?.date || store.draws[0]?.date,

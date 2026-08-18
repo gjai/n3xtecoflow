@@ -29,6 +29,11 @@ import type { SiteConfig, SiteId } from "@/sites/types";
  */
 export const dynamic = "force-dynamic";
 
+/** Archives listées : récentes + FR/EN (les autres locales = fallback EN). */
+const SITEMAP_EM_DRAW_DATES = 90;
+const SITEMAP_EM_COMPANION_PER_GAME = 40;
+const SITEMAP_EM_ARCHIVE_LOCALES = new Set(["fr", "en"]);
+
 function loadNewsArticles(): {
   slug: string;
   publishedAt: string;
@@ -95,7 +100,16 @@ function loadCompanionDrawKeys(): { slug: string; key: string; date: string }[] 
           });
         }
       }
-      return out;
+      const sorted = out.sort((a, b) => b.date.localeCompare(a.date));
+      const counts = new Map<string, number>();
+      const kept: typeof out = [];
+      for (const item of sorted) {
+        const n = counts.get(item.slug) || 0;
+        if (n >= SITEMAP_EM_COMPANION_PER_GAME) continue;
+        counts.set(item.slug, n + 1);
+        kept.push(item);
+      }
+      return kept;
     } catch {
       /* try next */
     }
@@ -172,8 +186,8 @@ export function buildSitemapForSite(
       });
     }
 
-    if (site.id === "euromillions") {
-      for (const date of loadEuroMillionsDates().slice(0, 2500)) {
+    if (site.id === "euromillions" && SITEMAP_EM_ARCHIVE_LOCALES.has(locale)) {
+      for (const date of loadEuroMillionsDates().slice(0, SITEMAP_EM_DRAW_DATES)) {
         entries.push({
           url: `${siteUrl}/${locale}/tirages/${date}`,
           lastModified: new Date(date),

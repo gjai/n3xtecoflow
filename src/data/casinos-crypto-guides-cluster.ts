@@ -19,6 +19,28 @@ export const CASINOS_CRYPTO_CLUSTER_SLUGS = [
   "changer-dns-operateur",
 ] as const;
 
+export const CASINOS_CRYPTO_PILLAR_SLUGS = [
+  "guide-stake-casino-crypto",
+  "guide-cryptomonnaies",
+  "guide-cryptocom-wallet",
+  "vpn-acces-casino",
+] as const;
+
+export function relatedCasinoGuideSlugs(slug: string, n = 4): string[] {
+  const all: string[] = [
+    ...CASINOS_CRYPTO_PILLAR_SLUGS,
+    ...CASINOS_CRYPTO_CLUSTER_SLUGS,
+  ];
+  const i = all.indexOf(slug);
+  if (i < 0) return [...CASINOS_CRYPTO_PILLAR_SLUGS].slice(0, n);
+  const out: string[] = [];
+  for (let k = 1; k < all.length && out.length < n; k += 1) {
+    const next = all[(i + k) % all.length];
+    if (next !== slug) out.push(next);
+  }
+  return out;
+}
+
 export type CasinosCryptoClusterSlug =
   (typeof CASINOS_CRYPTO_CLUSTER_SLUGS)[number];
 

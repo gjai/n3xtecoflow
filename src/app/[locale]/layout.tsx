@@ -23,6 +23,7 @@ import {
 } from "@/components/ThemeProvider";
 import { headers } from "next/headers";
 import { getCurrentSite } from "@/sites/server";
+import { googleSiteVerificationToken } from "@/lib/seo/gsc";
 import {
   siteAllowsAdsense,
   siteAllowsAmazon,
@@ -80,6 +81,7 @@ export async function generateMetadata({
   const pathname = requestHeaders.get("x-pathname") || `/${locale}`;
   const ogPath = pathname === "/" ? `/${locale}` : pathname;
   const ogUrl = `https://${site.primaryHost}${ogPath}`;
+  const gsc = googleSiteVerificationToken(requestHeaders.get("host"));
 
   return {
     title: {
@@ -99,6 +101,7 @@ export async function generateMetadata({
       follow: true,
       googleBot: { index: true, follow: true },
     },
+    ...(gsc ? { verification: { google: gsc } } : {}),
     ...(adsenseClient
       ? { other: { "google-adsense-account": adsenseClient } }
       : {}),

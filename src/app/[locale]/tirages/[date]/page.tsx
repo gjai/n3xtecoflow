@@ -38,6 +38,10 @@ export async function generateMetadata({
     title: t("drawOf", { date: pretty }),
     description: t("drawMeta", { date: pretty }),
     alternates: await siteLocaleAlternates(locale, `/tirages/${date}`),
+    robots:
+      locale === "fr" || locale === "en"
+        ? { index: true, follow: true }
+        : { index: false, follow: true },
   };
 }
 
