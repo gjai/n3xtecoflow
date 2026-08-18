@@ -240,7 +240,7 @@ export function buildSitemapForSite(
 
 /**
  * Sitemap du Host courant uniquement (tous thèmes actuels + futurs).
- * powerstream.fr → URLs canoniques ecoflow-stream.com (même thème).
+ * powerstream.fr 308 → ecoflow-stream.com (domaine abandonné).
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const host = (await headers()).get("host");

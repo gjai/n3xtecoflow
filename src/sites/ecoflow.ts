@@ -1,8 +1,8 @@
 import type { SiteConfig } from "./types";
 
 /**
- * Univers EcoFlow : ecoflow-stream.com + powerstream.fr partagent CE thème.
- * Un futur domaine avec un autre thème = nouveau fichier + SiteId (voir _template-new-theme.ts).
+ * Univers EcoFlow : canonique ecoflow-stream.com.
+ * powerstream.fr reste en hosts[] (DNS/Coolify) mais 308 vers le canonique.
  */
 export const ecoflowSite: SiteConfig = {
   id: "ecoflow",

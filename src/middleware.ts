@@ -15,6 +15,15 @@ const intlMiddleware = createMiddleware(routing);
 export default function middleware(request: NextRequest) {
   const host = (request.headers.get("host") || "").split(":")[0].toLowerCase();
 
+  // powerstream.fr abandonné : tout transférer vers le canonique EcoFlow.
+  if (host === "powerstream.fr" || host === "www.powerstream.fr") {
+    const url = request.nextUrl.clone();
+    url.hostname = "ecoflow-stream.com";
+    url.protocol = "https";
+    url.port = "";
+    return NextResponse.redirect(url, 308);
+  }
+
   // Collapse www → apex (same content, cleaner SEO)
   if (host.startsWith("www.")) {
     const apex = host.slice(4);
