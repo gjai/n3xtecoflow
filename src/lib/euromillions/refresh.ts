@@ -35,6 +35,11 @@ export type EuroMillionsRefreshResult = {
   mode: "full" | "fast";
   changed: boolean;
   fingerprint: string;
+  facebook?: {
+    posted: number;
+    stories: number;
+    skipped: Record<string, string>;
+  };
 };
 
 function mergeDraws(
@@ -253,7 +258,7 @@ export async function refreshEuroMillionsData(options?: {
   } catch (err) {
     console.error("alerts_notify_fail", err);
   }
-  let facebook: { posted: boolean; skipped: string } | null = null;
+  let facebook: EuroMillionsRefreshResult["facebook"];
   try {
     const { notifyFacebookOnPublish } = await import("./facebook");
     facebook = await notifyFacebookOnPublish(latest);

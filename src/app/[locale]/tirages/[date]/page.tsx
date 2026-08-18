@@ -49,6 +49,19 @@ export async function generateMetadata({
       locale === "fr" || locale === "en"
         ? { index: true, follow: true }
         : { index: false, follow: true },
+    ...(published
+      ? {
+          openGraph: {
+            images: [
+              {
+                url: `https://euromillions-resultats.fr/api/euromillions/share-image?date=${date}`,
+                width: 1200,
+                height: 630,
+              },
+            ],
+          },
+        }
+      : {}),
   };
 }
 
