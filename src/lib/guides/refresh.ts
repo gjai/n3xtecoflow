@@ -3,6 +3,7 @@ import { guides as staticGuides } from "@/data/articles";
 import { casinosCryptoGuideCovers } from "@/data/casinos-crypto-guides";
 import { euromillionsGuideCovers } from "@/data/euromillions-guides";
 import { tumblerGuideCovers } from "@/data/tumbler-guides";
+import { massageGunGuideCovers } from "@/data/massage-gun-guides";
 import { getEditorial, siteUsesStaticBuyingGuide } from "@/sites/editorial";
 import { getSiteById } from "@/sites/index";
 import type { SiteId } from "@/sites/types";
@@ -248,6 +249,7 @@ function fromStatic(slug: string): GuideEntry | null {
   }
   const cover =
     tumblerGuideCovers[slug] ||
+    massageGunGuideCovers[slug] ||
     casinosCryptoGuideCovers[slug] ||
     euromillionsGuideCovers[slug];
   const site = guideSiteId(topic);

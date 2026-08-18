@@ -1,10 +1,25 @@
 import type { GuideArticle } from "./articles";
+import {
+  massageGunClusterCovers,
+  massageGunClusterGuides,
+} from "./massage-gun-guides-cluster";
 
 export const MASSAGE_GUN_MAIN_GUIDE_SLUG = "choisir-pistolet-massage";
 
+export const massageGunGuideCovers: Record<
+  string,
+  { src: string; credit: string; creditUrl: string }
+> = {
+  [MASSAGE_GUN_MAIN_GUIDE_SLUG]: {
+    src: "/images/massage-gun/guides.jpg",
+    credit: "Le pistolet de massage (IA)",
+    creditUrl: "https://massage-gun.fr",
+  },
+  ...massageGunClusterCovers,
+};
+
 /**
- * Un seul guide long « Le pistolet de massage » — avec `productSlugs`
- * pour insérer des packshots cliquables vers les fiches produits.
+ * Guide pilier + cluster (amplitude, mini vs plein format, nuque/bureau, entretien).
  */
 export const massageGunGuides: GuideArticle[] = [
   {
@@ -170,4 +185,5 @@ export const massageGunGuides: GuideArticle[] = [
       ],
     },
   },
+  ...massageGunClusterGuides,
 ];

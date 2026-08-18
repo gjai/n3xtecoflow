@@ -111,7 +111,6 @@ export const tumblerSite: SiteConfig = {
       "Hydration",
       "Amazon bestsellers",
     ],
-    mainGuideSlug: "choisir-gourde-isotherme",
     feedUserAgent:
       "LaGourdeIsothermeBot/1.0 (+https://mon-tumbler.fr; editorial aggregator)",
     packshotCredit: "Amazon",

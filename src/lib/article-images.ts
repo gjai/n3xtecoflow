@@ -25,12 +25,32 @@ export const ARTICLE_PRODUCT_SLUGS: Record<string, string[]> = {
   "recharge-rapide": ["delta-3-classic", "river-3-plus"],
   "ups-coupures": ["delta-2", "delta-pro-3"],
   "premier-achat": ["river-2", "delta-2"],
-  // Tumbler — guide unique
+  "river-2-vs-river-2-max": ["river-2", "river-2-max"],
+  "river-2-vs-delta-2": ["river-2", "delta-2"],
+  "delta-2-pour-frigo": ["delta-2", "glacier-classic"],
+  "river-3-plus-camping": ["river-3-plus", "panneau-220w-bifacial"],
+  "panneau-220w-bifacial-quelle-station": ["panneau-220w-bifacial", "delta-2"],
+  "stream-ultra-x-vs-pro": ["stream-ultra-x", "stream-pro"],
+  "delta-3-classic-vs-delta-2": ["delta-3-classic", "delta-2"],
+  // Tumbler
   "choisir-gourde-isotherme": [
     "super-sparrow-500",
     "stanley-quencher-12l",
     "owala-freesip-710",
   ],
+  "gourde-vs-tumbler": ["super-sparrow-500", "stanley-quencher-12l"],
+  "volume-capacite-gourde": ["qwetch-originals-500", "qwetch-active-1l"],
+  "entretien-gourde": ["qwetch-originals-500", "owala-freesip-710"],
+  "isolation-froid-chaud": ["hydro-flask-710", "stanley-quencher-12l"],
+  // Massage
+  "choisir-pistolet-massage": ["theragun-elite", "aerlang-massage-gun"],
+  "amplitude-force-pistolet": ["theragun-elite", "renpho-extend"],
+  "mini-vs-plein-format": ["theragun-mini", "theragun-elite"],
+  "pistolet-massage-nuque-bureau": [
+    "brelley-masseur-cervical",
+    "theragun-mini",
+  ],
+  "entretien-pistolet-massage": ["theragun-mini", "aerlang-massage-gun"],
   // Hubs comparatifs (cover)
   river: ["river-2", "river-3-plus"],
   delta: ["delta-2", "delta-3-classic"],

@@ -129,6 +129,9 @@ const MANUAL: Record<string, { guides?: string[]; comparisons?: string[] }> = {
       "camping-van",
       "dimensionnement-wh",
       "premier-achat",
+      "river-2-vs-river-2-max",
+      "river-2-vs-delta-2",
+      "river-3-plus-camping",
     ],
     comparisons: ["delta", "river"],
   },
@@ -139,6 +142,9 @@ const MANUAL: Record<string, { guides?: string[]; comparisons?: string[] }> = {
       "dimensionnement-wh",
       "ups-coupures",
       "recharge-rapide",
+      "delta-2-pour-frigo",
+      "delta-3-classic-vs-delta-2",
+      "river-2-vs-delta-2",
     ],
     comparisons: ["delta", "delta-pro"],
   },
@@ -147,7 +153,12 @@ const MANUAL: Record<string, { guides?: string[]; comparisons?: string[] }> = {
     comparisons: ["delta-pro", "delta"],
   },
   stream: {
-    guides: ["stream-balcon", "solaire-portable", "premier-achat"],
+    guides: [
+      "stream-balcon",
+      "stream-ultra-x-vs-pro",
+      "solaire-portable",
+      "premier-achat",
+    ],
     comparisons: ["stream"],
   },
   powerstream: {
@@ -155,7 +166,11 @@ const MANUAL: Record<string, { guides?: string[]; comparisons?: string[] }> = {
     comparisons: ["stream", "powerstream"],
   },
   solaire: {
-    guides: ["solaire-portable", "stream-balcon", "dimensionnement-wh"],
+    guides: [
+      "solaire-portable",
+      "panneau-220w-bifacial-quelle-station",
+      "stream-balcon",
+    ],
     comparisons: ["solaire", "stream"],
   },
   outdoor: {
@@ -171,11 +186,47 @@ const MANUAL: Record<string, { guides?: string[]; comparisons?: string[] }> = {
     comparisons: [],
   },
   gourdes: {
-    guides: ["choisir-gourde-isotherme"],
+    guides: [
+      "choisir-gourde-isotherme",
+      "gourde-vs-tumbler",
+      "volume-capacite-gourde",
+      "entretien-gourde",
+      "isolation-froid-chaud",
+    ],
     comparisons: [],
   },
   tumblers: {
-    guides: ["choisir-gourde-isotherme"],
+    guides: [
+      "choisir-gourde-isotherme",
+      "gourde-vs-tumbler",
+      "volume-capacite-gourde",
+      "isolation-froid-chaud",
+    ],
+    comparisons: [],
+  },
+  pistolets: {
+    guides: [
+      "choisir-pistolet-massage",
+      "amplitude-force-pistolet",
+      "mini-vs-plein-format",
+      "entretien-pistolet-massage",
+    ],
+    comparisons: [],
+  },
+  mini: {
+    guides: [
+      "mini-vs-plein-format",
+      "choisir-pistolet-massage",
+      "pistolet-massage-nuque-bureau",
+    ],
+    comparisons: [],
+  },
+  masseurs: {
+    guides: [
+      "pistolet-massage-nuque-bureau",
+      "choisir-pistolet-massage",
+      "mini-vs-plein-format",
+    ],
     comparisons: [],
   },
 };

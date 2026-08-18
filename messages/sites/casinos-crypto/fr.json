@@ -101,7 +101,16 @@
     "heroWalletTitle": "Acheter de la crypto pour Stake (Crypto.com)",
     "heroWalletExcerpt": "Wallet et dépôt avant une session casino en ligne.",
     "heroWalletCta": "Lire le guide wallet",
-    "heroWalletAlt": "Couverture guide Crypto.com"
+    "heroWalletAlt": "Couverture guide Crypto.com",
+    "faqTitle": "Questions fréquentes",
+    "faqLegalQ": "Stake est-il autorisé en France ?",
+    "faqLegalA": "Stake n’est pas un opérateur licencié ANJ. Ce site est éditorial : pas de conseil juridique, pas de mode d’emploi pour contourner la loi. 18+ · jeu responsable · Joueurs Info Service 09 74 75 13 13.",
+    "faqVpnQ": "Faut-il un VPN pour jouer sur Stake ?",
+    "faqVpnA": "Un VPN sert à une connexion plus stable et privée (kill-switch). Ce n’est pas un outil présenté ici pour contourner un blocage ANJ. Voir le guide VPN et, côté FAI, le guide DNS.",
+    "faqDepositQ": "Comment déposer en crypto sur un casino en ligne ?",
+    "faqDepositA": "Achetez un petit montant via un on-ramp (ex. Crypto.com), envoyez sur le bon réseau (BTC, ERC-20, TRC-20…), testez un dépôt puis un retrait. Une erreur de réseau peut faire perdre les fonds.",
+    "faqSiteQ": "Casinos Crypto est-il un casino ?",
+    "faqSiteA": "Non. C’est un site de guides (Stake, wallet, VPN, DNS, jeu responsable) avec des liens d’affiliation. Nous ne tenons pas de caisse, ne validons pas de KYC et ne payons aucun gain."
   },
   "guides": {
     "subtitle": "Casino en ligne crypto : Stake, wallet Crypto.com et VPN pour démarrer clairement.",

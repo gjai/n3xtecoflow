@@ -30,6 +30,7 @@ import {
   siteAllowsLocale,
   siteIsCasinosCrypto,
   siteIsEuroMillions,
+  siteShowsNews,
 } from "@/sites/features";
 import { siteThemeCss } from "@/sites/theme-css";
 import { NextDrawProvider } from "@/components/NextDrawProvider";
@@ -126,6 +127,28 @@ export async function generateMetadata({
       description,
       images: [ogImage],
     },
+    ...(siteShowsNews(site)
+      ? {
+          alternates: {
+            types: {
+              "application/rss+xml": [
+                {
+                  url: `https://${site.primaryHost}/feed.xml`,
+                  title: `${title} RSS`,
+                },
+                ...(locale !== "fr" && siteAllowsLocale(site, locale)
+                  ? [
+                      {
+                        url: `https://${site.primaryHost}/${locale}/feed.xml`,
+                        title: `${title} RSS (${locale})`,
+                      },
+                    ]
+                  : []),
+              ],
+            },
+          },
+        }
+      : {}),
     appleWebApp: {
       capable: true,
       title,

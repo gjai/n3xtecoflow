@@ -3,6 +3,7 @@ import { tumblerGuides } from "./tumbler-guides";
 import { massageGunGuides } from "./massage-gun-guides";
 import { casinosCryptoGuides } from "./casinos-crypto-guides";
 import { euromillionsGuides } from "./euromillions-guides";
+import { ecoflowClusterGuides } from "./ecoflow-guides-cluster";
 
 export type ArticleSection = {
   heading: string;
@@ -762,6 +763,7 @@ export const comparisons: GuideArticle[] = [
 
 export const guides: GuideArticle[] = [
   ...ecoflowGuides,
+  ...ecoflowClusterGuides,
   ...tumblerGuides,
   ...massageGunGuides,
   ...casinosCryptoGuides,

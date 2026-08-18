@@ -94,6 +94,15 @@ export function SiteFooter() {
             </Link>
           ))}
           <CookieSettingsButton label={t("manageCookies")} />
+          {siteShowsNews(site) ? (
+            <a
+              href={locale === "fr" ? "/feed.xml" : `/${locale}/feed.xml`}
+              type="application/rss+xml"
+              className="hover:text-[var(--heading)]"
+            >
+              {t.has("rss") ? t("rss") : "RSS"}
+            </a>
+          ) : null}
         </div>
       </div>
       <div className="border-t border-[var(--line)] px-5 py-4 md:px-8">

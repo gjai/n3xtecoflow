@@ -1,21 +1,20 @@
 import type { GuideArticle } from "./articles";
+import {
+  tumblerClusterCovers,
+  tumblerClusterGuides,
+} from "./tumbler-guides-cluster";
 
-/** Anciens slugs → guide unique (redirections). */
 export const TUMBLER_MAIN_GUIDE_SLUG = "choisir-gourde-isotherme";
 
+/** Anciens slugs encore redirigés vers le guide pilier. */
 export const LEGACY_TUMBLER_GUIDE_SLUGS = [
-  "gourde-vs-tumbler",
-  "entretien-gourde",
-  "isolation-froid-chaud",
   "premier-achat-gourde",
-  "volume-capacite-gourde",
   "bouchon-paille-etancheite",
   "gourde-au-quotidien",
 ] as const;
 
 /**
- * Un seul guide long « La gourde isotherme » — avec `productSlugs`
- * pour insérer des packshots cliquables vers les fiches produits.
+ * Guide pilier + cluster longue traîne (volume, isolation, entretien, gourde vs tumbler).
  */
 export const tumblerGuides: GuideArticle[] = [
   {
@@ -271,6 +270,7 @@ export const tumblerGuides: GuideArticle[] = [
       ],
     },
   },
+  ...tumblerClusterGuides,
 ];
 
 export const tumblerGuideCovers: Record<
@@ -282,4 +282,5 @@ export const tumblerGuideCovers: Record<
     credit: "Unsplash",
     creditUrl: "https://unsplash.com/license",
   },
+  ...tumblerClusterCovers,
 };

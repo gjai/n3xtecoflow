@@ -329,6 +329,29 @@ export async function CasinosCryptoHome({
         </div>
       </section>
 
+      <section className="border-b border-[var(--line)]">
+        <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
+          <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
+            {t("faqTitle")}
+          </h2>
+          <dl className="mt-8 grid gap-6 md:grid-cols-2">
+            {[
+              { q: t("faqLegalQ"), a: t("faqLegalA") },
+              { q: t("faqVpnQ"), a: t("faqVpnA") },
+              { q: t("faqDepositQ"), a: t("faqDepositA") },
+              { q: t("faqSiteQ"), a: t("faqSiteA") },
+            ].map((item) => (
+              <div key={item.q} className="border-t border-[var(--line)] pt-4">
+                <dt className="font-semibold text-[var(--heading)]">{item.q}</dt>
+                <dd className="mt-2 text-sm text-[var(--muted)]">
+                  <L text={item.a} />
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
       {clusterGuides.length ? (
         <section className="border-b border-[var(--line)]">
           <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">

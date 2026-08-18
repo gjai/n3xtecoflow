@@ -200,7 +200,8 @@
     "products": "Products",
     "guides": "Guides",
     "comparisons": "Comparisons",
-    "powerstream": "PowerStream"
+    "powerstream": "PowerStream",
+    "rss": "RSS feed"
   },
   "amazon": {
     "badge": "Amazon affiliate link",
@@ -252,6 +253,7 @@
     "catalogCta": "Compare EcoFlow products →",
     "aiBadge": "Editorial article",
     "count": "{count} articles",
+    "rssCta": "RSS feed",
     "prev": "Previous",
     "next": "Next",
     "pageOf": "Page {page} / {total}"

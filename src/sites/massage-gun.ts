@@ -116,7 +116,6 @@ export const massageGunSite: SiteConfig = {
       "Muscle recovery",
       "Amazon bestsellers",
     ],
-    mainGuideSlug: "choisir-pistolet-massage",
     feedUserAgent:
       "LePistoletDeMassageBot/1.0 (+https://massage-gun.fr; editorial aggregator)",
     packshotCredit: "Amazon",

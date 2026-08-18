@@ -268,6 +268,8 @@ export async function ingestNews(
     revalidatePath("/[locale]/actualites", "page");
     revalidatePath("/[locale]/actualites/[slug]", "page");
     revalidatePath("/[locale]", "page");
+    revalidatePath("/feed.xml");
+    revalidatePath("/[locale]/feed.xml");
     revalidateSitemap();
   }
 
@@ -276,7 +278,10 @@ export async function ingestNews(
     for (const article of created) {
       const site = sitesById[newsSiteId(article)];
       const host = site.primaryHost;
-      const urls = byHost.get(host) || [`https://${host}/sitemap.xml`];
+      const urls = byHost.get(host) || [
+        `https://${host}/sitemap.xml`,
+        `https://${host}/feed.xml`,
+      ];
       for (const loc of siteLocales(site)) {
         if (loc !== "fr" && loc !== "en") continue;
         urls.push(`https://${host}/${loc}/actualites/${article.slug}`);

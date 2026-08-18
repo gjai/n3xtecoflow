@@ -92,6 +92,14 @@ export default async function NewsIndexPage({
         {total > 0 ? (
           <p className="mt-3 text-sm text-[var(--muted)]">
             {t("count", { count: total })}
+            {" · "}
+            <a
+              href={locale === "fr" ? "/feed.xml" : `/${locale}/feed.xml`}
+              type="application/rss+xml"
+              className="font-semibold text-[var(--accent)] underline-offset-4 hover:underline"
+            >
+              {t("rssCta")}
+            </a>
           </p>
         ) : null}
       </header>

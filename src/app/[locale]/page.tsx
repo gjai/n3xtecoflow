@@ -137,6 +137,14 @@ export default async function HomePage({
       <>
         <JsonLd data={organizationJsonLd(site)} />
         <JsonLd data={websiteJsonLd(site)} />
+        <JsonLd
+          data={faqJsonLd([
+            { question: t("faqLegalQ"), answer: t("faqLegalA") },
+            { question: t("faqVpnQ"), answer: t("faqVpnA") },
+            { question: t("faqDepositQ"), answer: t("faqDepositA") },
+            { question: t("faqSiteQ"), answer: t("faqSiteA") },
+          ])}
+        />
         <CasinosCryptoHome
           site={site}
           locale={locale}
