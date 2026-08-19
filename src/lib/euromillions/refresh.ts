@@ -8,6 +8,7 @@ import {
 } from "./fdj";
 import { mergeDraws } from "./merge-draws";
 import { fetchPedroMealhaDraws, fetchUkLatestDraw } from "./fetch";
+import { lotteryFingerprint } from "./fingerprint";
 import { recordFirstPublish } from "./timing";
 import { lotteryIndexNowUrls } from "@/lib/seo/indexnow";
 import { notifySearchEngines } from "@/lib/seo/notify";
@@ -286,6 +287,11 @@ export async function refreshEuroMillionsData(options?: {
         lotteryIndexNowUrls(next, afterFdj),
         "euromillions-resultats.fr",
       );
+      const { inspectEuroMillionsPublish } = await import("@/lib/seo/gsc-api");
+      await inspectEuroMillionsPublish({
+        latest: next.latest?.date,
+        nextDrawDate: next.nextDrawDate,
+      });
     }
   }
 
