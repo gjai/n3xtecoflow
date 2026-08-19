@@ -71,6 +71,7 @@ export function DrawBalls({
   large = false,
   animate = false,
   compact = false,
+  inline = false,
 }: {
   draw: EuroMillionsDraw;
   ballsLabel: string;
@@ -78,19 +79,25 @@ export function DrawBalls({
   large?: boolean;
   animate?: boolean;
   compact?: boolean;
+  /** Boules + étoiles sur une seule ligne, sans libellés (hero). */
+  inline?: boolean;
 }) {
   const size = large ? "lottery-ball--lg" : compact ? "lottery-ball--sm" : "";
   const ballClass = animate ? "draw-ball-in" : "";
+  const singleLine = compact || inline;
+  const mainKind = inline && large ? "lottery-ball--em" : "lottery-ball--main";
+  const starKind = inline && large ? "lottery-ball--star" : "lottery-ball--bonus";
+
   const balls = (
     <div
       className={
-        compact ? "lottery-balls lottery-balls--compact" : "lottery-balls"
+        singleLine ? "lottery-balls lottery-balls--compact" : "lottery-balls"
       }
     >
       {draw.numbers.map((n, i) => (
         <span
           key={`n-${n}`}
-          className={`lottery-ball lottery-ball--main ${size} ${ballClass}`}
+          className={`lottery-ball ${mainKind} ${size} ${ballClass}`}
           style={
             animate
               ? { ["--ball-delay" as string]: `${420 + i * 75}ms` }
@@ -103,7 +110,7 @@ export function DrawBalls({
       {draw.stars.map((n, i) => (
         <span
           key={`s-${n}`}
-          className={`lottery-ball lottery-ball--bonus ${size} ${ballClass}`}
+          className={`lottery-ball ${starKind} ${size} ${ballClass}`}
           style={
             animate
               ? {
@@ -117,7 +124,7 @@ export function DrawBalls({
       ))}
     </div>
   );
-  if (compact) return balls;
+  if (singleLine) return balls;
   return (
     <div className="space-y-4">
       <div>
@@ -307,25 +314,23 @@ export async function EuroMillionsHome({
                   ballsLabel={t("ballsLabel")}
                   starsLabel={t("starsLabel")}
                   large
+                  inline
                   animate
                 />
                 {latest.myMillionCode ? (
-                  <div className="mt-6 border-t border-[var(--line)] pt-5">
+                  <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1">
                     <p
-                      className="flex items-center gap-2 text-xs uppercase tracking-[0.18em]"
+                      className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide"
                       style={{ color: GAME_IDENTITY["my-million"].accent }}
                     >
                       <GameMark gameId="my-million" size={16} />
                       {t("myMillionLabel")}
                     </p>
-                    <p
-                      className="mt-2 font-[family-name:var(--font-display)] text-xl font-semibold tracking-wide"
-                      style={{ color: GAME_IDENTITY["my-million"].accent }}
-                    >
+                    <p className="font-[family-name:var(--font-display)] text-xl font-semibold tracking-wider text-[var(--accent-ink)]">
                       {latest.myMillionCode}
                     </p>
                     {latest.myMillionLocation ? (
-                      <p className="mt-1 text-sm text-[var(--muted)]">
+                      <p className="w-full text-sm text-[var(--muted)]">
                         {t("myMillionLocation")} · {latest.myMillionLocation}
                       </p>
                     ) : null}

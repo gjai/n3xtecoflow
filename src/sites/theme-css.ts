@@ -78,13 +78,15 @@ a{color:inherit;text-decoration:none}
   .em-desktop-nav{display:flex;align-items:center;flex-wrap:wrap;gap:.65rem}
   .em-menu-btn{display:none!important}
 }
-.lottery-balls{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+.lottery-balls{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.5rem}
 .lottery-balls--compact{gap:.35rem;margin-top:.4rem}
 .lottery-ball{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;width:2.75rem;height:2.75rem;border-radius:9999px;font-weight:600;font-size:.875rem;line-height:1}
 .lottery-ball--lg{width:3.5rem;height:3.5rem;font-size:1.125rem}
 .lottery-ball--sm{width:2.15rem;height:2.15rem;font-size:.75rem}
 .lottery-ball--main{background:var(--accent);color:var(--accent-ink)}
+.lottery-ball--em{background:var(--accent-ink);color:#fff}
 .lottery-ball--bonus{border:1px solid var(--accent);background:var(--surface);color:var(--heading)}
+.lottery-ball--star{border:none;border-radius:0;background:var(--accent);color:var(--accent-ink);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
 .lottery-ball--letter{border:2px solid var(--accent);background:var(--surface);color:var(--heading)}
 .lottery-code{display:inline-flex;align-items:center;min-height:2.25rem;padding:0 .75rem;font-family:ui-monospace,monospace;font-size:.875rem;font-weight:600;letter-spacing:.04em;border:1px solid var(--line);background:var(--surface);color:var(--heading)}
 `.trim();
