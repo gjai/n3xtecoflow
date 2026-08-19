@@ -27,10 +27,14 @@ function Table({
   winnersLabel: string;
   extraLabel?: string;
 }) {
+  const normalizeRank = (r: string) =>
+    r.replace(/^.*?(\d)/,"$1").trim();
   const eplusMap = new Map(
-    (extraTiers || []).map((t) => [t.rank, t]),
+    (extraTiers || []).map((t) => [normalizeRank(t.rank), t]),
   );
-  const hasEplus = eplusMap.size > 0;
+  const hasEplus = eplusMap.size > 0 &&
+    tiers.some((t) => eplusMap.has(normalizeRank(t.rank))) &&
+    (extraTiers || []).some((t) => t.amountEur > 0);
   return (
     <div className="overflow-x-auto border border-[var(--line)]">
       <table className="w-full min-w-[320px] text-left text-sm">
@@ -46,7 +50,7 @@ function Table({
         </thead>
         <tbody>
           {tiers.map((tier, i) => {
-            const ep = eplusMap.get(tier.rank);
+            const ep = eplusMap.get(normalizeRank(tier.rank));
             return (
               <tr key={`${tier.rank}-${i}`} className="border-t border-[var(--line)]">
                 <td className="px-3 py-2 font-semibold text-[var(--heading)]">

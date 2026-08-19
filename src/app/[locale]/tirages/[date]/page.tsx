@@ -220,10 +220,14 @@ export default async function TirageDetailPage({
               {t("prizesTitle")}
             </h2>
             {(() => {
+              const normalizeRank = (r: string) =>
+                r.replace(/^.*?(\d)/, "$1").trim();
               const eplusMap = new Map(
-                (draw.prizeTiersEtoilePlus || []).map((t) => [t.rank, t]),
+                (draw.prizeTiersEtoilePlus || []).map((t) => [normalizeRank(t.rank), t]),
               );
-              const hasEplus = eplusMap.size > 0;
+              const hasEplus = eplusMap.size > 0 &&
+                draw.prizeTiers.some((t) => eplusMap.has(normalizeRank(t.rank))) &&
+                (draw.prizeTiersEtoilePlus || []).some((t) => t.amountEur > 0);
               return (
                 <div className="mt-4 overflow-x-auto border border-[var(--line)]">
                   <table className="w-full min-w-[320px] text-left text-sm">
@@ -239,7 +243,7 @@ export default async function TirageDetailPage({
                     </thead>
                     <tbody>
                       {draw.prizeTiers.map((tier, i) => {
-                        const ep = eplusMap.get(tier.rank);
+                        const ep = eplusMap.get(normalizeRank(tier.rank));
                         return (
                           <tr
                             key={`${tier.rank}-${i}`}

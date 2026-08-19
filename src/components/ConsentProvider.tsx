@@ -24,7 +24,7 @@ type ConsentContextValue = {
   setPreferencesOpen: (open: boolean) => void;
 };
 
-const STORAGE_KEY = "efs-cookie-consent-v1";
+const STORAGE_KEY = "efs-cookie-consent-v2";
 
 const defaultConsent: ConsentState = {
   necessary: true,
