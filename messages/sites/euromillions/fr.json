@@ -109,7 +109,7 @@
     "locationUnknown": "Localisation non précisée",
     "empty": "Les résultats seront synchronisés au prochain refresh.",
     "pendingLatest": "Dernier résultat connu : {date}. Le rapport du tirage du jour est en attente.",
-    "disclaimer": "Site indépendant, non affilié à la FDJ ni aux opérateurs EuroMillions. Contient des liens d’affiliation Amazon. 18+ · Jeu responsable.",
+    "disclaimer": "Site indépendant, non affilié à la FDJ ni aux opérateurs EuroMillions. 18+ · Jeu responsable.",
     "featuresTitle": "Pourquoi ce site",
     "feature1Title": "Résultats en avant",
     "feature1Text": "Dernier tirage, boules, étoiles, jackpot et My Million dès l’accueil.",
@@ -364,7 +364,7 @@
     "independenceTitle": "Indépendance",
     "independenceBody": "Nous ne sommes pas la FDJ ni un opérateur EuroMillions. Aucune vente de tickets.",
     "monetizationTitle": "Monétisation",
-    "monetizationBody": "Publicité Google AdSense (après consentement cookies). Affiliation Amazon (accessoires) clairement signalée. Lien FDJ possible via le programme Kwanko. Nous ne vendons pas de tickets."
+    "monetizationBody": "Publicité Google AdSense (après consentement cookies). Lien FDJ possible via le programme Kwanko. Nous ne vendons pas de tickets."
   },
   "nextDraw": {
     "eyebrow": "Prochain tirage",
@@ -438,7 +438,7 @@
     "cookiesIntro": "Cette section décrit les cookies utilisés sur EuroMillions Résultats. Vous pouvez gérer les cookies via le bandeau (lien en bas de page).",
     "independent": "EuroMillions Résultats est un site éditorial indépendant. Il n'est pas exploité par la FDJ ni par les opérateurs EuroMillions.",
     "affiliateTitle": "Affiliation & publicité",
-    "affiliateBody": "Les liens produits peuvent être des liens d'affiliation Amazon. Le prix payé ne change pas pour vous. Les publicités AdSense sont marquées « Publicité ». Pas de vente de tickets EuroMillions. Non affilié à la FDJ ni aux opérateurs EuroMillions.",
+    "affiliateBody": "Les liens produits peuvent être des liens d’affiliation FDJ (Kwanko). Le prix payé ne change pas pour vous. Les publicités AdSense sont marquées « Publicité ». Pas de vente de tickets EuroMillions. Non affilié à la FDJ ni aux opérateurs EuroMillions.",
     "adsense": "Ce site peut afficher des annonces Google AdSense. Google peut utiliser des cookies pour personnaliser les pubs, uniquement après votre consentement.",
     "cookiesAdsTitle": "Cookies publicitaires",
     "cookiesAdsBody": "Uniquement après votre accord : Google AdSense peut déposer des cookies pour mesurer et personnaliser les annonces. Si vous refusez, le site reste utilisable sans pubs personnalisées.",
@@ -490,8 +490,8 @@
   "amazon": {
     "badge": "Indépendance",
     "cta": "Voir",
-    "disclosure": "Site indépendant — liens d’affiliation Amazon. Pas de vente de tickets EuroMillions.",
-    "disclosureShort": "Affiliation Amazon — pas de vente de tickets.",
+    "disclosure": "Site indépendant — liens d’affiliation FDJ. Pas de vente de tickets EuroMillions.",
+    "disclosureShort": "Affiliation FDJ — pas de vente de tickets.",
     "disclosureLink": "En savoir plus"
   },
   "network": {
