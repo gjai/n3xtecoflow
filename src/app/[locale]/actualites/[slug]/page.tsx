@@ -66,9 +66,24 @@ export default async function NewsArticlePage({
   const copy = isEn ? article.en : article.fr;
   const siteUrl = `https://${site.primaryHost}`;
   const editorialImages = getEditorialImages(site.id);
-  const date = new Date(article.publishedAt).toLocaleDateString(
+  const published = new Date(article.publishedAt);
+  const date = published.toLocaleDateString(
     DATE_LOCALE[toAppLocale(locale)],
-    { year: "numeric", month: "long", day: "numeric" },
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "Europe/Paris",
+    },
+  );
+  const time = published.toLocaleTimeString(
+    DATE_LOCALE[toAppLocale(locale)],
+    {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Europe/Paris",
+    },
   );
   const useAmazon = siteAllowsAmazon(site);
   const amazonCta = useAmazon ? amazonCtaForNews(article) : null;
@@ -203,7 +218,9 @@ export default async function NewsArticlePage({
             {linkify(copy.excerpt)}
           </p>
           <p className="mt-4 text-sm text-[var(--muted)]">
-            <time dateTime={article.publishedAt}>{date}</time>
+            <time dateTime={article.publishedAt}>
+              {date} · {time}
+            </time>
             {" · "}
             {t("source")}{" "}
             <a

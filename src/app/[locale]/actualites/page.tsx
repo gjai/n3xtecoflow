@@ -110,9 +110,24 @@ export default async function NewsIndexPage({
         ) : (
           items.map((article) => {
             const copy = isEn ? article.en : article.fr;
-            const date = new Date(article.publishedAt).toLocaleDateString(
+            const published = new Date(article.publishedAt);
+            const date = published.toLocaleDateString(
               DATE_LOCALE[toAppLocale(locale)],
-              { year: "numeric", month: "short", day: "numeric" },
+              {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                timeZone: "Europe/Paris",
+              },
+            );
+            const time = published.toLocaleTimeString(
+              DATE_LOCALE[toAppLocale(locale)],
+              {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+                timeZone: "Europe/Paris",
+              },
             );
             return (
               <Link
@@ -130,7 +145,9 @@ export default async function NewsIndexPage({
                 />
                 <div className="p-5">
                   <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
-                    <time dateTime={article.publishedAt}>{date}</time>
+                    <time dateTime={article.publishedAt}>
+                      {date} · {time}
+                    </time>
                     <span>·</span>
                     <span>{article.sourceName}</span>
                     {article.rewrittenBy === "ai" ? (
