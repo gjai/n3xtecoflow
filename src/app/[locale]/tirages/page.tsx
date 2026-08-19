@@ -24,6 +24,8 @@ import {
   readEuroMillionsStore,
 } from "@/lib/euromillions/store";
 import { euroMillionsResultPending } from "@/lib/euromillions/datetime";
+import { KwankoBanner } from "@/components/KwankoBanner";
+import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 
 export const revalidate = 600;
 
@@ -245,6 +247,10 @@ export default async function TiragesPage({
           <EuroMillionsStatsPanel locale={locale} store={store} />
         </section>
       </main>
+      <KwankoBanner
+        desktop={KWANKO_SLOTS.euromillions.desktop}
+        mobile={KWANKO_SLOTS.euromillions.mobile}
+      />
       <EuroMillionsOffersBlock site={site} locale={locale} variant="compact" />
     </>
   );

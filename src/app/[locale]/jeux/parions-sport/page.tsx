@@ -5,6 +5,8 @@ import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
 import { notFound } from "next/navigation";
+import { KwankoBanner } from "@/components/KwankoBanner";
+import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 
 export async function generateMetadata({
   params,
@@ -65,6 +67,11 @@ export default async function ParionsSportPage({
           Parier sur Parions Sport →
         </a>
       </div>
+      <KwankoBanner
+        desktop={KWANKO_SLOTS.bienvenue.desktop}
+        mobile={KWANKO_SLOTS.bienvenue.mobile}
+        className="mt-8"
+      />
       <p className="mt-8 text-xs text-[var(--muted)]">
         Site indépendant · 18+ · Les paris comportent des risques :
         endettement, isolement, dépendance. Appelez le 09 74 75 13 13 (appel

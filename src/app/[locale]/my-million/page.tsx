@@ -16,6 +16,8 @@ import { siteIsEuroMillions } from "@/sites/features";
 import { gameScopeStyle } from "@/lib/fdj-games/identity";
 import { euroMillionsResultPending } from "@/lib/euromillions/datetime";
 import { readEuroMillionsStore } from "@/lib/euromillions/store";
+import { KwankoBanner } from "@/components/KwankoBanner";
+import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 
 export const revalidate = 600;
 
@@ -187,6 +189,10 @@ export default async function MyMillionPage({
           </ul>
         )}
       </main>
+      <KwankoBanner
+        desktop={KWANKO_SLOTS.euromillions.desktop}
+        mobile={KWANKO_SLOTS.euromillions.mobile}
+      />
       <EuroMillionsOffersBlock site={site} locale={locale} variant="compact" />
     </>
   );

@@ -15,6 +15,8 @@ import { siteMainGuideSlug } from "@/sites/copy";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
+import { KwankoBanner } from "@/components/KwankoBanner";
+import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 
 export const revalidate = 600;
 
@@ -216,6 +218,11 @@ export default async function GuidesIndexPage({
           })
         )}
       </div>
+      <KwankoBanner
+        desktop={KWANKO_SLOTS.bienvenue.desktop}
+        mobile={KWANKO_SLOTS.bienvenue.mobile}
+        className="mt-8"
+      />
     </div>
   );
 }

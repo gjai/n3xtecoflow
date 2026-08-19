@@ -6,6 +6,8 @@ import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
+import { KwankoBanner } from "@/components/KwankoBanner";
+import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 
 export const revalidate = 3600;
 
@@ -60,6 +62,11 @@ export default async function AlerteEmailPage({
           {banner}
         </p>
       ) : null}
+      <KwankoBanner
+        desktop={KWANKO_SLOTS.bienvenue.desktop}
+        mobile={KWANKO_SLOTS.bienvenue.mobile}
+        className="mt-8"
+      />
       <AlertsEngagement />
     </main>
   );

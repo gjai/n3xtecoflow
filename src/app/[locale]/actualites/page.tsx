@@ -17,6 +17,8 @@ import { siteLocaleAlternates } from "@/lib/seo";
 import { siteIsEuroMillions, siteShowsNews } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
 import { redirect } from "@/i18n/navigation";
+import { KwankoBanner } from "@/components/KwankoBanner";
+import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 
 export const revalidate = 600;
 
@@ -169,6 +171,12 @@ export default async function NewsIndexPage({
           })
         )}
       </div>
+
+      <KwankoBanner
+        desktop={KWANKO_SLOTS.bienvenue.desktop}
+        mobile={KWANKO_SLOTS.bienvenue.mobile}
+        className="mt-8"
+      />
 
       <Pagination
         pathname="/actualites"

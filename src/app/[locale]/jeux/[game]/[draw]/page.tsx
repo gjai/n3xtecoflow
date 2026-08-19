@@ -23,6 +23,8 @@ import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
 import { gameScopeStyle } from "@/lib/fdj-games/identity";
+import { KwankoBanner } from "@/components/KwankoBanner";
+import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 
 export const revalidate = 600;
 export const dynamic = "force-dynamic";
@@ -194,6 +196,11 @@ export default async function CompanionDrawPage({
             />
           </div>
         </section>
+      <KwankoBanner
+        desktop={KWANKO_SLOTS.bienvenue.desktop}
+        mobile={KWANKO_SLOTS.bienvenue.mobile}
+        className="mt-8"
+      />
       </main>
     </>
   );

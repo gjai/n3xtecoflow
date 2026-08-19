@@ -111,6 +111,7 @@ export function confirmAlertHtml(args: { confirmUrl: string; locale: string }): 
     heading,
     bodyHtml: `<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:${FG}">${esc(lead)}</p>
       ${ctaButton(args.confirmUrl, button)}
+      ${mailBannerHtml("euromillions")}
       <p style="margin:16px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:${MUTED}">${esc(ignore)}</p>`,
     footerHtml: footer,
   });

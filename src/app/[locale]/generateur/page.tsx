@@ -7,6 +7,8 @@ import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
 import { Link } from "@/i18n/navigation";
+import { KwankoBanner } from "@/components/KwankoBanner";
+import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 
 export const revalidate = 3600;
 
@@ -59,6 +61,11 @@ export default async function GenerateurPage({
           {t("simulatorCta")} →
         </Link>
       </p>
+      <KwankoBanner
+        desktop={KWANKO_SLOTS.euromillions.desktop}
+        mobile={KWANKO_SLOTS.euromillions.mobile}
+        className="mt-8"
+      />
     </main>
   );
 }
