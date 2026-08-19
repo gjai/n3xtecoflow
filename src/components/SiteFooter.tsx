@@ -11,6 +11,7 @@ import {
   siteShowsNews,
   siteShowsProducts,
 } from "@/sites/features";
+import { nextDrawAffiliateHref, nextDrawAffiliateRel } from "@/lib/fdj-play-links";
 import { CookieSettingsButton } from "./CookieSettingsButton";
 import { GamblingDisclaimer } from "./GamblingDisclaimer";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -91,13 +92,25 @@ export function SiteFooter() {
         </div>
         <div className="flex flex-wrap gap-4 text-sm">
           {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="hover:text-[var(--heading)]"
-            >
-              {l.label}
-            </Link>
+            siteIsEuroMillions(site) && l.href === "/prochain-tirage" ? (
+              <a
+                key={l.href}
+                href={nextDrawAffiliateHref("euromillions")}
+                rel={nextDrawAffiliateRel("euromillions")}
+                target="_blank"
+                className="hover:text-[var(--heading)]"
+              >
+                {l.label}
+              </a>
+            ) : (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="hover:text-[var(--heading)]"
+              >
+                {l.label}
+              </Link>
+            )
           ))}
           <CookieSettingsButton label={t("manageCookies")} />
           {siteShowsNews(site) ? (

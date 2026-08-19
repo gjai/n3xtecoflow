@@ -40,6 +40,7 @@ import type { NewsArticle } from "@/lib/news/types";
 import { isBlockedLotteryNewsSource, isEuroMillionsResultClone } from "@/lib/news/rss";
 import { affiliateOffer } from "@/lib/affiliates";
 import { fdjAffiliateTracked, fdjAffiliateUrl } from "@/lib/fdj-affiliate";
+import { nextDrawAffiliateHref, nextDrawAffiliateRel } from "@/lib/fdj-play-links";
 import type { SiteConfig } from "@/sites/types";
 
 function formatMoney(amount: number | null | undefined, locale: string) {
@@ -429,12 +430,14 @@ export async function EuroMillionsHome({
 
             {(store.nextDrawDate || nextJackpot) && !pending ? (
               <div className="mt-6 border-t border-[var(--line)] pt-5 text-sm text-[var(--muted)]">
-                <Link
-                  href="/prochain-tirage"
+                <a
+                  href={nextDrawAffiliateHref("euromillions")}
+                  rel={nextDrawAffiliateRel("euromillions")}
+                  target="_blank"
                   className="font-semibold text-[var(--heading)] hover:underline"
                 >
                   {t("nextDrawLabel")}
-                </Link>
+                </a>
                 {store.nextDrawDate
                   ? ` · ${formatDate(store.nextDrawDate, locale)}`
                   : null}

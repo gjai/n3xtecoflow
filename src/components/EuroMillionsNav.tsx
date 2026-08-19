@@ -15,6 +15,7 @@ import {
   type LotteryGameId,
   type LotteryGameNav,
 } from "@/lib/fdj-games/nav";
+import { nextDrawAffiliateHref, nextDrawAffiliateRel } from "@/lib/fdj-play-links";
 import { GameLabel, gameUnderline } from "./GameMark";
 import { NextDrawMenuMeta } from "./NextDrawMenuMeta";
 
@@ -72,6 +73,8 @@ function GameDropdown({
   const active = current === game.id;
   const label = lotteryGameLabel(game, locale);
   const [open, setOpen] = useState(false);
+  const nextDrawHref = nextDrawAffiliateHref(game.id);
+  const nextDrawRel = nextDrawAffiliateRel(game.id);
 
   return (
     <div
@@ -113,21 +116,32 @@ function GameDropdown({
           >
             {game.tools.map((tool) => (
               <li key={tool.id} role="none">
-                <Link
-                  href={tool.href}
-                  role="menuitem"
-                  className={`block px-4 py-2 text-sm hover:bg-[var(--bg)] hover:text-[var(--heading)] ${
-                    toolHrefIsActive(tool.href, pathname, hash)
-                      ? "text-[var(--heading)]"
-                      : "text-[var(--muted)]"
-                  }`}
-                  onClick={onNavigate}
-                >
-                  {toolLabel(t, tool.id)}
-                  {tool.id === "nextDraw" ? (
+                {tool.id === "nextDraw" ? (
+                  <a
+                    href={nextDrawHref}
+                    rel={nextDrawRel}
+                    target="_blank"
+                    role="menuitem"
+                    className="block px-4 py-2 text-sm text-[var(--heading)] hover:bg-[var(--bg)] hover:text-[var(--heading)]"
+                    onClick={onNavigate}
+                  >
+                    {toolLabel(t, tool.id)}
                     <NextDrawMenuMeta gameId={game.id} compact />
-                  ) : null}
-                </Link>
+                  </a>
+                ) : (
+                  <Link
+                    href={tool.href}
+                    role="menuitem"
+                    className={`block px-4 py-2 text-sm hover:bg-[var(--bg)] hover:text-[var(--heading)] ${
+                      toolHrefIsActive(tool.href, pathname, hash)
+                        ? "text-[var(--heading)]"
+                        : "text-[var(--muted)]"
+                    }`}
+                    onClick={onNavigate}
+                  >
+                    {toolLabel(t, tool.id)}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
@@ -248,6 +262,8 @@ export function EuroMillionsMobileNav({
       {LOTTERY_GAMES_NAV.map((game) => {
         const expanded = openId === game.id;
         const label = lotteryGameLabel(game, locale);
+        const nextDrawHref = nextDrawAffiliateHref(game.id);
+        const nextDrawRel = nextDrawAffiliateRel(game.id);
         return (
           <div key={game.id} className="border-b border-[var(--line)]">
             <div className="flex items-center justify-between gap-2">
@@ -274,20 +290,30 @@ export function EuroMillionsMobileNav({
               <ul className="pb-3 pl-3">
                 {game.tools.map((tool) => (
                   <li key={tool.id}>
-                    <Link
-                      href={tool.href}
-                      className={`block min-h-10 py-2 ${
-                        toolHrefIsActive(tool.href, pathname, hash)
-                          ? "text-[var(--heading)]"
-                          : "text-[var(--muted)]"
-                      }`}
-                      onClick={onNavigate}
-                    >
-                      {toolLabel(t, tool.id)}
-                      {tool.id === "nextDraw" ? (
+                    {tool.id === "nextDraw" ? (
+                      <a
+                        href={nextDrawHref}
+                        rel={nextDrawRel}
+                        target="_blank"
+                        className="block min-h-10 py-2 text-[var(--heading)]"
+                        onClick={onNavigate}
+                      >
+                        {toolLabel(t, tool.id)}
                         <NextDrawMenuMeta gameId={game.id} compact />
-                      ) : null}
-                    </Link>
+                      </a>
+                    ) : (
+                      <Link
+                        href={tool.href}
+                        className={`block min-h-10 py-2 ${
+                          toolHrefIsActive(tool.href, pathname, hash)
+                            ? "text-[var(--heading)]"
+                            : "text-[var(--muted)]"
+                        }`}
+                        onClick={onNavigate}
+                      >
+                        {toolLabel(t, tool.id)}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -335,6 +361,20 @@ export function GameToolsNav({ gameId }: { gameId: LotteryGameId }) {
     >
       {game.tools.map((tool) => {
         const active = toolHrefIsActive(tool.href, pathname, hash);
+        if (tool.id === "nextDraw") {
+          return (
+            <a
+              key={tool.id}
+              href={nextDrawAffiliateHref(gameId)}
+              rel={nextDrawAffiliateRel(gameId)}
+              target="_blank"
+              className="inline-flex min-h-9 flex-col items-start justify-center border border-[var(--line)] px-3 py-1.5 text-[var(--heading)] hover:border-[var(--accent)]"
+            >
+              {toolLabel(t, tool.id)}
+              <NextDrawMenuMeta gameId={gameId} compact />
+            </a>
+          );
+        }
         return (
           <Link
             key={tool.id}
@@ -346,9 +386,6 @@ export function GameToolsNav({ gameId }: { gameId: LotteryGameId }) {
             }`}
           >
             {toolLabel(t, tool.id)}
-            {tool.id === "nextDraw" ? (
-              <NextDrawMenuMeta gameId={gameId} compact inverted={active} />
-            ) : null}
           </Link>
         );
       })}

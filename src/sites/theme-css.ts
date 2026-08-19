@@ -95,6 +95,14 @@ a{color:inherit;text-decoration:none}
 .lottery-star__shape{position:absolute;inset:0;width:100%;height:100%;fill:currentColor}
 .lottery-star__num{position:relative;top:.2rem;font-weight:700;font-size:1.125rem;line-height:1;color:#fff}
 @media(min-width:1024px){.lottery-star__num{font-size:1.25rem}}
+.lottery-balls--fdj .lottery-ball--lg{width:2.8rem;height:2.8rem;font-size:1rem}
+.lottery-balls--fdj .lottery-star.lottery-ball--lg{width:2.8rem;height:2.8rem}
+.lottery-balls--fdj .lottery-star__num{font-size:1rem}
+@media(min-width:768px){
+  .lottery-balls--fdj .lottery-ball--lg{width:3.5rem;height:3.5rem;font-size:1.125rem}
+  .lottery-balls--fdj .lottery-star.lottery-ball--lg{width:3.5rem;height:3.5rem}
+  .lottery-balls--fdj .lottery-star__num{font-size:1.125rem}
+}
 .lottery-ball--letter{border:2px solid var(--accent);background:var(--surface);color:var(--heading)}
 .lottery-code{display:inline-flex;align-items:center;min-height:2.25rem;padding:0 .75rem;font-family:ui-monospace,monospace;font-size:.875rem;font-weight:600;letter-spacing:.04em;border:1px solid var(--line);background:var(--surface);color:var(--heading)}
 `.trim();

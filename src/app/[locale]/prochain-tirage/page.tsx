@@ -12,6 +12,7 @@ import { AlertsEngagement } from "@/components/AlertsEngagement";
 import { KwankoBanner } from "@/components/KwankoBanner";
 import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import { LOTTERY_GAMES_NAV, lotteryGameLabel } from "@/lib/fdj-games/nav";
+import { nextDrawAffiliateHref, nextDrawAffiliateTracked } from "@/lib/fdj-play-links";
 import { gameRailStyle } from "@/lib/fdj-games/identity";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
@@ -77,7 +78,8 @@ export default async function ProchainTiragePage({
         nextJackpot={jackpot}
         pending={pending}
         locale={locale}
-        showPlayLink={false}
+        playHref={nextDrawAffiliateHref("euromillions")}
+        playTracked={nextDrawAffiliateTracked("euromillions")}
       />
       <div className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-20">
         <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
@@ -101,23 +103,23 @@ export default async function ProchainTiragePage({
           <p className="mt-2 text-sm text-[var(--muted)]">{t("allLead")}</p>
           <ul className="mt-6 space-y-3">
             {LOTTERY_GAMES_NAV.map((game) => {
-              const nextHref =
-                game.tools.find((tool) => tool.id === "nextDraw")?.href ||
-                game.href;
+              const nextHref = nextDrawAffiliateHref(game.id);
               return (
                 <li
                   key={game.id}
                   className="border border-[var(--line)] bg-[var(--surface)] px-4 py-3"
                   style={gameRailStyle(game.id)}
                 >
-                  <Link
+                  <a
                     href={nextHref}
+                    rel="sponsored noopener noreferrer"
+                    target="_blank"
                     className="font-semibold text-[var(--heading)] hover:text-[var(--accent)]"
                   >
                     <GameLabel gameId={game.id} size={20}>
                       {lotteryGameLabel(game, locale)}
                     </GameLabel>
-                  </Link>
+                  </a>
                   <NextDrawMenuMeta gameId={game.id} variant="block" />
                 </li>
               );
