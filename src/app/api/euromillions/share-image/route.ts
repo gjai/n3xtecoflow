@@ -72,7 +72,12 @@ export async function GET(request: Request) {
     );
   } else {
     const game = url.searchParams.get("game")?.trim();
-    if (game === "loto" || game === "eurodreams") {
+    if (
+      game === "loto" ||
+      game === "eurodreams" ||
+      game === "keno" ||
+      game === "crescendo"
+    ) {
       const fdj = await readFdjGamesStore();
       const key = url.searchParams.get("key")?.trim();
       const draw = key

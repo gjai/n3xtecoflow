@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { GAME_IDENTITY } from "@/lib/fdj-games/identity";
+import { formatDrawWhen } from "@/lib/fdj-games/display";
 import type { FdjGameDraw } from "@/lib/fdj-games/types";
 import { formatEuroMillionsLongDate } from "./datetime";
 import type { EuroMillionsDraw } from "./types";
@@ -67,7 +68,18 @@ export function lotteryShareImageResponse(
 ) {
   const layout = shareLayout(size);
   const portrait = layout !== "feed";
-  const ball = layout === "story" ? 128 : layout === "ig" ? 112 : 88;
+  const crowded = Math.max(0, ...card.rows.map((r) => r.values.length)) >= 12;
+  const ball = crowded
+    ? layout === "story"
+      ? 72
+      : layout === "ig"
+        ? 64
+        : 52
+    : layout === "story"
+      ? 128
+      : layout === "ig"
+        ? 112
+        : 88;
   const pad =
     layout === "story"
       ? "140px 72px 220px"
@@ -214,15 +226,27 @@ export function companionShareCard(draw: FdjGameDraw): ShareCardInput {
       ? "Loto"
       : draw.gameId === "eurodreams"
         ? "EuroDreams"
-        : draw.gameId;
-  const numbers = draw.groups.find((g) => g.kind === "numbers");
-  const bonus = draw.groups.find((g) => g.kind === "bonus");
+        : draw.gameId === "keno"
+          ? "Keno"
+          : draw.gameId === "crescendo"
+            ? "Crescendo"
+            : draw.gameId;
+  const when = formatDrawWhen(draw, "fr");
+  let dateLabel = formatEuroMillionsLongDate(draw.date, "fr");
+  if (when.kenoSlot === "midi") dateLabel += " · Midi";
+  else if (when.kenoSlot === "soir") dateLabel += " · Soir";
+  else if (when.time) dateLabel += ` · ${when.time}`;
+  const numbers = draw.groups.filter((g) => g.kind === "numbers" && g.values.length);
+  const bonus = draw.groups.find((g) => g.kind === "bonus" && g.values.length);
+  const letter = draw.groups.find((g) => g.kind === "letter" && g.values.length);
   const rows: ShareCardInput["rows"] = [];
-  if (numbers?.values.length) rows.push({ values: numbers.values });
+  const main = numbers.find((g) => g.labelKey !== "secondDraw") || numbers[0];
+  if (main?.values.length) rows.push({ values: main.values });
   if (bonus?.values.length) rows.push({ values: bonus.values, outlined: true });
+  if (letter?.values.length) rows.push({ values: letter.values, outlined: true });
   return {
     kicker: `${title} · Résultats`,
-    dateLabel: formatEuroMillionsLongDate(draw.date, "fr"),
+    dateLabel,
     accent: id.accent,
     accentInk: id.accentInk,
     rows,

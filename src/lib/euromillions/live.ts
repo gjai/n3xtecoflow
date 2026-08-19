@@ -2,7 +2,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { revalidatePath } from "next/cache";
 
-const LOCK_STALE_MS = 90_000;
+const LOCK_STALE_MS = 170_000;
 const MIN_FETCH_GAP_MS = 15_000;
 
 function dataDir() {

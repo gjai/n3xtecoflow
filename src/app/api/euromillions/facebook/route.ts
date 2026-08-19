@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import {
   facebookMetaStatus,
+  facebookPublishSnapshot,
   notifyFacebookOnPublish,
 } from "@/lib/euromillions/facebook";
 import { getLatestDraw, readEuroMillionsStore } from "@/lib/euromillions/store";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 180;
 
 function authorized(request: Request) {
   const secret = process.env.NEWS_CRON_SECRET?.trim();
@@ -26,17 +28,23 @@ export async function POST(request: Request) {
   const notify = url.searchParams.get("notify") === "1";
   const store = await readEuroMillionsStore();
   const latest = getLatestDraw(store);
-  const meta = await facebookMetaStatus();
+  const [meta, snapshot] = await Promise.all([
+    facebookMetaStatus(),
+    facebookPublishSnapshot(),
+  ]);
   if (!force && !notify) {
     return NextResponse.json({
       ...meta,
+      ...snapshot,
       latest: latest?.date || null,
       force: false,
     });
   }
   const result = await notifyFacebookOnPublish(latest, { force });
+  const after = await facebookPublishSnapshot();
   return NextResponse.json({
     ...meta,
+    ...after,
     latest: latest?.date || null,
     ...result,
   });

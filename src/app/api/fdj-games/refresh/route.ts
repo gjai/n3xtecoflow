@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { markCronFail, markCronOk } from "@/lib/cron/status";
+import { notifyFacebookOnPublish } from "@/lib/euromillions/facebook";
 import { revalidateLotteryPages } from "@/lib/euromillions/live";
+import { getLatestDraw, readEuroMillionsStore } from "@/lib/euromillions/store";
 import { refreshFdjCompanionGames } from "@/lib/fdj-games/refresh";
 
-export const maxDuration = 60;
+export const maxDuration = 180;
 
 function authorized(request: Request) {
   const secret = process.env.NEWS_CRON_SECRET?.trim();
@@ -21,13 +23,20 @@ export async function POST(request: Request) {
   try {
     const result = await refreshFdjCompanionGames();
     revalidateLotteryPages();
+    let facebook: Awaited<ReturnType<typeof notifyFacebookOnPublish>> | undefined;
+    try {
+      const em = await readEuroMillionsStore();
+      facebook = await notifyFacebookOnPublish(getLatestDraw(em));
+    } catch (err) {
+      console.error("facebook_notify_fail", err);
+    }
     await markCronOk(
       "fdj-games",
       Object.entries(result.games)
         .map(([id, n]) => `${id}=${n}`)
         .join(","),
     );
-    return NextResponse.json(result);
+    return NextResponse.json({ ...result, facebook });
   } catch (err) {
     console.error(err);
     await markCronFail(

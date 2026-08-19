@@ -1,13 +1,16 @@
 import { promises as fs } from "fs";
 import path from "path";
+import { getCompanionGame } from "@/lib/fdj-games/catalog";
+import { formatDrawWhen } from "@/lib/fdj-games/display";
 import { companionDrawKey } from "@/lib/fdj-games/keys";
 import {
+  getGameDraws,
   getGameLatest,
   readFdjGamesStore,
 } from "@/lib/fdj-games/store";
 import type { FdjCompanionGameId, FdjGameDraw } from "@/lib/fdj-games/types";
 import { fdjAffiliateUrl } from "@/lib/fdj-affiliate";
-import { formatEuroMillionsLongDate } from "./datetime";
+import { formatEuroMillionsLongDate, parisDateKey } from "./datetime";
 import {
   SHARE_FEED,
   SHARE_STORY,
@@ -15,21 +18,31 @@ import {
   euroMillionsShareCard,
   lotteryShareImageResponse,
   newsShareImageResponse,
+  type ShareCardInput,
 } from "./share-card";
 import { isEuroMillionsDrawPublished } from "./store";
 import type { EuroMillionsDraw } from "./types";
 
-type PostedMap = {
-  euromillions: string | null;
-  loto: string | null;
-  eurodreams: string | null;
-};
+export const SOCIAL_DRAW_GAMES = [
+  "euromillions",
+  "loto",
+  "eurodreams",
+  "keno",
+  "crescendo",
+] as const;
+
+export type SocialDrawGameId = (typeof SOCIAL_DRAW_GAMES)[number];
+
+type PostedMap = Record<SocialDrawGameId, string | null>;
+type PostedOkMap = Record<SocialDrawGameId, boolean>;
 
 type FacebookStore = {
   updatedAt: string;
   lastPostedDrawDate?: string | null;
   lastPosted: PostedMap;
   lastPostedIg?: PostedMap;
+  lastPostedOk?: PostedOkMap;
+  lastErrors?: Record<string, string>;
   pageAccessToken?: string | null;
   newsSeeded?: boolean;
   postedNewsSlugs?: string[];
@@ -44,14 +57,70 @@ export type FacebookNotifyResult = {
   skipped: Record<string, string>;
 };
 
+export type FacebookPublishSnapshot = {
+  lastPosted: PostedMap;
+  lastPostedIg: PostedMap;
+  lastPostedOk: PostedOkMap;
+  lastErrors: Record<string, string>;
+};
+
+function emptyPosted(): PostedMap {
+  return {
+    euromillions: null,
+    loto: null,
+    eurodreams: null,
+    keno: null,
+    crescendo: null,
+  };
+}
+
+function emptyPostedOk(): PostedOkMap {
+  return {
+    euromillions: false,
+    loto: false,
+    eurodreams: false,
+    keno: false,
+    crescendo: false,
+  };
+}
+
+function mergePosted(
+  raw?: Partial<PostedMap> | null,
+  legacyDate?: string | null,
+): PostedMap {
+  return {
+    ...emptyPosted(),
+    ...raw,
+    euromillions: raw?.euromillions ?? legacyDate ?? null,
+  };
+}
+
+function mergePostedOk(raw?: Partial<PostedOkMap> | null): PostedOkMap {
+  return { ...emptyPostedOk(), ...raw };
+}
+
 const SEED: FacebookStore = {
   updatedAt: new Date().toISOString(),
-  lastPosted: { euromillions: null, loto: null, eurodreams: null },
-  lastPostedIg: { euromillions: null, loto: null, eurodreams: null },
+  lastPosted: emptyPosted(),
+  lastPostedIg: emptyPosted(),
+  lastPostedOk: emptyPostedOk(),
+  lastErrors: {},
   pageAccessToken: null,
   newsSeeded: false,
   postedNewsSlugs: [],
 };
+
+const COMPANION_SOCIAL_GAMES: FdjCompanionGameId[] = [
+  "loto",
+  "eurodreams",
+  "keno",
+  "crescendo",
+];
+
+/** Instagram waits used to eat the 180s refresh budget before Loto/Keno posted. */
+const MAX_DRAW_POSTS_PER_RUN = 3;
+const IG_WAIT_TRIES = 8;
+const IG_WAIT_MS = 1000;
 
 const GRAPH = `https://graph.facebook.com/${
   process.env.FACEBOOK_GRAPH_VERSION?.trim() || "v26.0"
@@ -85,19 +154,13 @@ async function readState(): Promise<FacebookStore> {
     const parsed = JSON.parse(raw) as FacebookStore;
     return {
       ...SEED,
-      lastPosted: {
-        euromillions:
-          parsed.lastPosted?.euromillions ??
-          parsed.lastPostedDrawDate ??
-          null,
-        loto: parsed.lastPosted?.loto ?? null,
-        eurodreams: parsed.lastPosted?.eurodreams ?? null,
-      },
-      lastPostedIg: {
-        euromillions: parsed.lastPostedIg?.euromillions ?? null,
-        loto: parsed.lastPostedIg?.loto ?? null,
-        eurodreams: parsed.lastPostedIg?.eurodreams ?? null,
-      },
+      lastPosted: mergePosted(parsed.lastPosted, parsed.lastPostedDrawDate),
+      lastPostedIg: mergePosted(parsed.lastPostedIg),
+      lastPostedOk: mergePostedOk(parsed.lastPostedOk),
+      lastErrors:
+        parsed.lastErrors && typeof parsed.lastErrors === "object"
+          ? parsed.lastErrors
+          : {},
       pageAccessToken: parsed.pageAccessToken ?? null,
       newsSeeded: Boolean(parsed.newsSeeded),
       postedNewsSlugs: Array.isArray(parsed.postedNewsSlugs)
@@ -118,7 +181,9 @@ async function writeState(store: FacebookStore): Promise<void> {
       {
         updatedAt: new Date().toISOString(),
         lastPosted: store.lastPosted,
-        lastPostedIg: store.lastPostedIg ?? SEED.lastPostedIg,
+        lastPostedIg: store.lastPostedIg ?? emptyPosted(),
+        lastPostedOk: store.lastPostedOk ?? emptyPostedOk(),
+        lastErrors: store.lastErrors ?? {},
         pageAccessToken: store.pageAccessToken ?? null,
         newsSeeded: store.newsSeeded ?? false,
         postedNewsSlugs: store.postedNewsSlugs ?? [],
@@ -168,8 +233,12 @@ function formatJackpot(n: number): string {
   }).format(n);
 }
 
-function legalLines(url: string, tag: string, gameId?: string): string[] {
-  const playUrl = fdjAffiliateUrl(gameId as "euromillions" || "euromillions", "");
+function legalLines(
+  url: string,
+  tag: string,
+  gameId?: SocialDrawGameId,
+): string[] {
+  const playUrl = fdjAffiliateUrl(gameId || "euromillions", "");
   return [
     "",
     "Vérifier vos gains :",
@@ -205,26 +274,113 @@ function companionPermalink(draw: FdjGameDraw): string {
   return `https://euromillions-resultats.fr/fr/jeux/${draw.gameId}/${companionDrawKey(draw)}`;
 }
 
-function companionMessage(draw: FdjGameDraw): string {
+function companionTitle(draw: FdjGameDraw): string {
+  return getCompanionGame(draw.gameId)?.labelFr || draw.gameId;
+}
+
+function companionHashtag(gameId: FdjCompanionGameId): string {
+  if (gameId === "loto") return "#Loto";
+  if (gameId === "eurodreams") return "#EuroDreams";
+  if (gameId === "keno") return "#Keno";
+  return "#Crescendo";
+}
+
+function companionHeadline(draw: FdjGameDraw): string {
   const date = formatEuroMillionsLongDate(draw.date, "fr");
-  const title = draw.gameId === "loto" ? "Loto" : "EuroDreams";
-  const tag = draw.gameId === "loto" ? "#Loto" : "#EuroDreams";
-  const lines = [`Résultats ${title} du ${date}`, ""];
+  const title = companionTitle(draw);
+  const when = formatDrawWhen(draw, "fr");
+  if (when.kenoSlot === "midi") return `Résultats ${title} du ${date} — Midi`;
+  if (when.kenoSlot === "soir") return `Résultats ${title} du ${date} — Soir`;
+  if (when.time) return `Résultats ${title} du ${date} — ${when.time}`;
+  return `Résultats ${title} du ${date}`;
+}
+
+function groupCaptionLabel(labelKey: string): string {
+  if (labelKey === "chance") return "Chance";
+  if (labelKey === "dream") return "Dream";
+  if (labelKey === "secondDraw") return "2nd tirage";
+  if (labelKey === "multiplier") return "Multiplicateur";
+  if (labelKey === "letter") return "Lettre";
+  if (labelKey === "joker") return "Joker";
+  return "Numéros";
+}
+
+function companionMessage(draw: FdjGameDraw): string {
+  const tag = companionHashtag(draw.gameId);
+  const lines = [companionHeadline(draw), ""];
   for (const g of draw.groups) {
-    if (g.kind !== "numbers" && g.kind !== "bonus") continue;
-    const label = g.labelKey === "chance" ? "Chance" : g.labelKey === "dream" ? "Dream" : "Numéros";
-    lines.push(`${label} : ${g.values.join(" · ")}`);
+    if (!g.values.length) continue;
+    if (g.kind === "other") continue;
+    lines.push(`${groupCaptionLabel(g.labelKey)} : ${g.values.join(" · ")}`);
   }
   if (typeof draw.jackpotEur === "number" && draw.jackpotEur > 0) {
     lines.push(`Jackpot : ${formatJackpot(draw.jackpotEur)}`);
   }
-  return [...lines, ...legalLines(companionPermalink(draw), tag, draw.gameId)].join("\n");
+  return [...lines, ...legalLines(companionPermalink(draw), tag, draw.gameId)].join(
+    "\n",
+  );
 }
 
 function companionPublished(draw: FdjGameDraw | null | undefined): boolean {
-  return Boolean(
-    draw?.groups.some((g) => g.kind === "numbers" && g.values.length >= 5),
+  if (!draw) return false;
+  const numbers = draw.groups.filter(
+    (g) => g.kind === "numbers" && g.values.length > 0,
   );
+  if (draw.gameId === "keno") {
+    return numbers.some((g) => g.values.length >= 10);
+  }
+  if (draw.gameId === "crescendo") {
+    return numbers.some((g) => g.values.length >= 8);
+  }
+  return numbers.some((g) => g.values.length >= 5);
+}
+
+function isTodayParis(date: string): boolean {
+  return date === parisDateKey();
+}
+
+/** Catch up missed nights without dumping the archive. */
+function isRecentDrawDate(date: string): boolean {
+  const today = parisDateKey();
+  if (date >= today) return true;
+  return date >= parisDateKey(new Date(Date.now() - 36 * 3600 * 1000));
+}
+
+function companionJobsForGame(
+  gameId: FdjCompanionGameId,
+  draws: FdjGameDraw[],
+  lastKey: string | null,
+  lastOk: boolean,
+  force: boolean,
+): FdjGameDraw[] {
+  const published = draws
+    .filter(companionPublished)
+    .sort((a, b) => a.plannedAt.localeCompare(b.plannedAt));
+  if (!published.length) return [];
+  const latest = published[published.length - 1]!;
+
+  if (force) return [latest];
+
+  if (!lastKey) {
+    const todayDraws = published.filter((d) => isTodayParis(d.date));
+    if (todayDraws.length) return todayDraws;
+    return isRecentDrawDate(latest.date) ? [latest] : [];
+  }
+
+  const idx = published.findIndex((d) => companionDrawKey(d) === lastKey);
+  if (idx >= 0) {
+    const newer = published.slice(idx + 1);
+    if (newer.length) return newer;
+    if (!lastOk && isTodayParis(latest.date) && companionDrawKey(latest) === lastKey) {
+      return [latest];
+    }
+    return [];
+  }
+
+  if (companionDrawKey(latest) !== lastKey && isRecentDrawDate(latest.date)) {
+    return [latest];
+  }
+  return [];
 }
 
 async function pngBytes(image: Response): Promise<Uint8Array> {
@@ -331,7 +487,7 @@ async function waitIgContainer(
   token: string,
   creationId: string,
 ): Promise<{ ok: boolean; error?: string }> {
-  for (let i = 0; i < 15; i += 1) {
+  for (let i = 0; i < IG_WAIT_TRIES; i += 1) {
     const json = await graphGet(
       encodeURIComponent(creationId),
       token,
@@ -345,7 +501,7 @@ async function waitIgContainer(
       };
     }
     if (code === "IN_PROGRESS") {
-      await new Promise((r) => setTimeout(r, 2000));
+      await new Promise((r) => setTimeout(r, IG_WAIT_MS));
       continue;
     }
     return { ok: true };
@@ -399,6 +555,7 @@ async function postFeedAndStoryImages(args: {
   publicStoryUrl?: string;
   storyLinkUrl?: string;
   instagram?: InstagramAccount | null;
+  onFacebookPosted?: () => Promise<void>;
 }): Promise<{
   posted: boolean;
   story: boolean;
@@ -421,6 +578,7 @@ async function postFeedAndStoryImages(args: {
       error: feed.error,
     };
   }
+  if (args.onFacebookPosted) await args.onFacebookPosted();
 
   const unpublished = await uploadPhoto({
     token: args.token,
@@ -517,10 +675,11 @@ async function postInstagramOnly(args: {
 async function postFeedAndStory(args: {
   token: string;
   caption: string;
-  card: ReturnType<typeof euroMillionsShareCard>;
+  card: ShareCardInput;
   publicQuery: string;
   storyLinkUrl?: string;
   instagram?: InstagramAccount | null;
+  onFacebookPosted?: () => Promise<void>;
 }): Promise<{
   posted: boolean;
   story: boolean;
@@ -537,6 +696,7 @@ async function postFeedAndStory(args: {
     publicStoryUrl: shareJpegUrl(`${args.publicQuery}&format=story`),
     storyLinkUrl: args.storyLinkUrl,
     instagram: args.instagram,
+    onFacebookPosted: args.onFacebookPosted,
   });
 }
 
@@ -594,9 +754,32 @@ export async function postFacebookDraw(
   return { ok: true };
 }
 
+export async function facebookPublishSnapshot(): Promise<FacebookPublishSnapshot> {
+  const state = await readState();
+  return {
+    lastPosted: state.lastPosted,
+    lastPostedIg: state.lastPostedIg ?? emptyPosted(),
+    lastPostedOk: state.lastPostedOk ?? emptyPostedOk(),
+    lastErrors: state.lastErrors ?? {},
+  };
+}
+
+type DrawPostJob = {
+  key: SocialDrawGameId;
+  fingerprint: string;
+  caption: string;
+  card: ShareCardInput;
+  publicQuery: string;
+  storyLinkUrl?: string;
+  sortAt: string;
+};
+
 /**
- * Poste fil + story au passage d’un nouveau tirage (EuroMillions, Loto, EuroDreams).
- * Premier amorçage par jeu : mémorise la date, n’envoie pas l’historique.
+ * Poste fil + story au passage d’un nouveau tirage
+ * (EuroMillions, Loto, EuroDreams, Keno, Crescendo).
+ * Facebook est tamponné dès le succès fil — Instagram ne bloque plus le suivant.
+ * Jeux jamais postés : tirages du jour seulement (pas l’archive).
+ * Si un amorçage a avalé le tirage du jour sans poster, on retente.
  */
 export async function notifyFacebookOnPublish(
   latest: EuroMillionsDraw | null,
@@ -622,114 +805,188 @@ export async function notifyFacebookOnPublish(
   let stories = 0;
   let instagramPosted = 0;
   let instagramStories = 0;
+  const force = Boolean(options?.force);
 
-  const stamp = async (key: keyof PostedMap, value: string) => {
-    state = {
-      ...state,
+  const persist = async (patch: Partial<FacebookStore>) => {
+    state = { ...state, ...patch };
+    await writeState(state);
+  };
+
+  const stampFb = async (key: SocialDrawGameId, value: string) => {
+    await persist({
       lastPosted: { ...state.lastPosted, [key]: value },
+      lastPostedOk: { ...(state.lastPostedOk ?? emptyPostedOk()), [key]: true },
       lastPostedIg: {
-        ...(state.lastPostedIg || SEED.lastPostedIg!),
+        ...(state.lastPostedIg ?? emptyPosted()),
         [key]: state.lastPostedIg?.[key] ?? null,
       },
-    };
-    await writeState(state);
+      lastErrors: { ...(state.lastErrors || {}), [key]: "ok" },
+    });
   };
 
-  const stampIg = async (key: keyof PostedMap, value: string) => {
-    state = {
-      ...state,
+  const stampIg = async (key: SocialDrawGameId, value: string) => {
+    await persist({
       lastPostedIg: {
-        euromillions: state.lastPostedIg?.euromillions ?? null,
-        loto: state.lastPostedIg?.loto ?? null,
-        eurodreams: state.lastPostedIg?.eurodreams ?? null,
+        ...(state.lastPostedIg ?? emptyPosted()),
         [key]: value,
       },
-    };
-    await writeState(state);
+    });
   };
 
-  const run = async (
-    key: keyof PostedMap,
-    fingerprint: string,
-    caption: string,
-    card: ReturnType<typeof euroMillionsShareCard>,
-    publicQuery: string,
-    storyLinkUrl?: string,
-  ) => {
-    const igAlready = state.lastPostedIg?.[key] === fingerprint;
-    if (!options?.force) {
-      if (!state.lastPosted[key]) {
-        await stamp(key, fingerprint);
-        skipped[key] = "seed";
-        return;
-      }
-      if (state.lastPosted[key] === fingerprint) {
-        if (instagram && !igAlready) {
-          const igSent = await postInstagramOnly({
-            token,
-            caption,
-            publicQuery,
-            instagram,
-          });
-          if (igSent.igPosted) instagramPosted += 1;
-          if (igSent.igStory) instagramStories += 1;
-          await stampIg(key, fingerprint);
-          skipped[key] = igSent.igPosted ? "ig_backfill" : "ig_backfill_fail";
-          return;
-        }
-        skipped[key] = "already";
-        return;
-      }
+  const stampError = async (key: string, error: string) => {
+    await persist({
+      lastErrors: { ...(state.lastErrors || {}), [key]: error.slice(0, 220) },
+    });
+  };
+
+  const confirmSeed = async (key: SocialDrawGameId) => {
+    await persist({
+      lastPostedOk: { ...(state.lastPostedOk ?? emptyPostedOk()), [key]: true },
+    });
+  };
+
+  const jobs: DrawPostJob[] = [];
+
+  if (isEuroMillionsDrawPublished(latest) && latest) {
+    const fingerprint = latest.date;
+    const last = state.lastPosted.euromillions;
+    const lastOk = Boolean(state.lastPostedOk?.euromillions);
+    const needsPost =
+      force ||
+      last !== fingerprint ||
+      (!lastOk && isTodayParis(latest.date)) ||
+      (!last && isRecentDrawDate(latest.date));
+    if (needsPost) {
+      jobs.push({
+        key: "euromillions",
+        fingerprint,
+        caption: facebookDrawMessage(latest),
+        card: euroMillionsShareCard(latest),
+        publicQuery: `date=${encodeURIComponent(latest.date)}`,
+        storyLinkUrl: fdjAffiliateUrl("euromillions", ""),
+        sortAt: `${latest.date}T21:00:00`,
+      });
+    } else {
+      if (last === fingerprint && !lastOk) await confirmSeed("euromillions");
+      skipped.euromillions = "already";
     }
+  } else {
+    skipped.euromillions = "unpublished";
+  }
+
+  for (const gameId of COMPANION_SOCIAL_GAMES) {
+    const pending = companionJobsForGame(
+      gameId,
+      getGameDraws(fdj, gameId),
+      state.lastPosted[gameId],
+      Boolean(state.lastPostedOk?.[gameId]),
+      force,
+    );
+    if (!pending.length) {
+      const latestCompanion = getGameLatest(fdj, gameId);
+      if (!companionPublished(latestCompanion)) skipped[gameId] = "unpublished";
+      else if (
+        latestCompanion &&
+        state.lastPosted[gameId] === companionDrawKey(latestCompanion)
+      ) {
+        if (!state.lastPostedOk?.[gameId]) await confirmSeed(gameId);
+        skipped[gameId] = skipped[gameId] || "already";
+      } else skipped[gameId] = skipped[gameId] || "not_due";
+      continue;
+    }
+    for (const draw of pending) {
+      const fingerprint = companionDrawKey(draw);
+      jobs.push({
+        key: gameId,
+        fingerprint,
+        caption: companionMessage(draw),
+        card: companionShareCard(draw),
+        publicQuery: `game=${encodeURIComponent(gameId)}&key=${encodeURIComponent(fingerprint)}`,
+        storyLinkUrl: fdjAffiliateUrl(gameId, ""),
+        sortAt: draw.plannedAt,
+      });
+    }
+  }
+
+  jobs.sort((a, b) => a.sortAt.localeCompare(b.sortAt));
+  const queue = jobs.slice(0, MAX_DRAW_POSTS_PER_RUN);
+  if (jobs.length > queue.length) {
+    skipped.queued = `${jobs.length - queue.length}_deferred`;
+  }
+
+  const run = async (job: DrawPostJob) => {
+    const skipKey = `${job.key}:${job.fingerprint}`;
     const sent = await postFeedAndStory({
       token,
-      caption,
-      card,
-      publicQuery,
-      storyLinkUrl,
+      caption: job.caption,
+      card: job.card,
+      publicQuery: job.publicQuery,
+      storyLinkUrl: job.storyLinkUrl,
       instagram,
+      onFacebookPosted: () => stampFb(job.key, job.fingerprint),
     });
     if (!sent.posted) {
-      skipped[key] = sent.error || "send_failed";
-      console.error("facebook_draw_post_fail", key, sent.error);
+      skipped[skipKey] = sent.error || "send_failed";
+      await stampError(skipKey, sent.error || "send_failed");
+      console.error("facebook_draw_post_fail", job.key, job.fingerprint, sent.error);
       return;
     }
     posted += 1;
     if (sent.story) stories += 1;
     if (sent.igPosted) instagramPosted += 1;
     if (sent.igStory) instagramStories += 1;
-    await stamp(key, fingerprint);
-    if (sent.igPosted || sent.igStory) await stampIg(key, fingerprint);
-    skipped[key] = "ok";
+    if (sent.igPosted || sent.igStory) await stampIg(job.key, job.fingerprint);
+    skipped[skipKey] = "ok";
   };
 
-  if (isEuroMillionsDrawPublished(latest) && latest) {
-    await run(
-      "euromillions",
-      latest.date,
-      facebookDrawMessage(latest),
-      euroMillionsShareCard(latest),
-      `date=${encodeURIComponent(latest.date)}`,
-      fdjAffiliateUrl("euromillions", ""),
-    );
-  } else {
-    skipped.euromillions = "unpublished";
+  for (const job of queue) {
+    await run(job);
   }
 
-  for (const gameId of ["loto", "eurodreams"] as const) {
-    const draw = getGameLatest(fdj, gameId as FdjCompanionGameId);
-    if (!companionPublished(draw) || !draw) {
-      skipped[gameId] = "unpublished";
-      continue;
+  if (instagram && posted < MAX_DRAW_POSTS_PER_RUN) {
+    const backfillBudget = MAX_DRAW_POSTS_PER_RUN - posted;
+    let filled = 0;
+    const candidates: DrawPostJob[] = [];
+    if (isEuroMillionsDrawPublished(latest) && latest) {
+      candidates.push({
+        key: "euromillions",
+        fingerprint: latest.date,
+        caption: facebookDrawMessage(latest),
+        card: euroMillionsShareCard(latest),
+        publicQuery: `date=${encodeURIComponent(latest.date)}`,
+        storyLinkUrl: fdjAffiliateUrl("euromillions", ""),
+        sortAt: `${latest.date}T21:00:00`,
+      });
     }
-    await run(
-      gameId,
-      companionDrawKey(draw),
-      companionMessage(draw),
-      companionShareCard(draw),
-      `game=${encodeURIComponent(gameId)}&key=${encodeURIComponent(companionDrawKey(draw))}`,
-      fdjAffiliateUrl(gameId, ""),
-    );
+    for (const gameId of COMPANION_SOCIAL_GAMES) {
+      const draw = getGameLatest(fdj, gameId);
+      if (!companionPublished(draw) || !draw) continue;
+      candidates.push({
+        key: gameId,
+        fingerprint: companionDrawKey(draw),
+        caption: companionMessage(draw),
+        card: companionShareCard(draw),
+        publicQuery: `game=${encodeURIComponent(gameId)}&key=${encodeURIComponent(companionDrawKey(draw))}`,
+        storyLinkUrl: fdjAffiliateUrl(gameId, ""),
+        sortAt: draw.plannedAt,
+      });
+    }
+    for (const job of candidates) {
+      if (filled >= backfillBudget) break;
+      if (state.lastPosted[job.key] !== job.fingerprint) continue;
+      if (state.lastPostedIg?.[job.key] === job.fingerprint) continue;
+      const igSent = await postInstagramOnly({
+        token,
+        caption: job.caption,
+        publicQuery: job.publicQuery,
+        instagram,
+      });
+      if (igSent.igPosted) instagramPosted += 1;
+      if (igSent.igStory) instagramStories += 1;
+      await stampIg(job.key, job.fingerprint);
+      skipped[`${job.key}:ig`] = igSent.igPosted ? "ig_backfill" : "ig_backfill_fail";
+      filled += 1;
+    }
   }
 
   return {
