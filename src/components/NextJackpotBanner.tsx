@@ -13,6 +13,23 @@ import {
   parisLocalToUtc,
 } from "@/lib/euromillions/datetime";
 
+function EuroMillionsOfficialLogo() {
+  return (
+    <span className="em-official-logo" aria-hidden>
+      <img
+        src="/brands/euromillions/games/euromillions-officiel-on-light.svg"
+        alt=""
+        className="em-official-logo__on-light"
+      />
+      <img
+        src="/brands/euromillions/games/euromillions-officiel-on-dark.svg"
+        alt=""
+        className="em-official-logo__on-dark"
+      />
+    </span>
+  );
+}
+
 function pad(n: number) {
   return String(Math.max(0, n)).padStart(2, "0");
 }
@@ -94,22 +111,12 @@ export function NextJackpotBanner({
           <p className="mt-1 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)] md:text-xl">
               {pending ? (
                 <span className="inline-flex items-center gap-2">
-                  <img
-                    src="/brands/euromillions/games/euromillions-officiel.svg"
-                    alt=""
-                    aria-hidden
-                    className="h-7 w-auto max-w-[7.5rem] shrink-0 rounded-sm bg-[#0b1220] px-1.5 py-0.5"
-                  />
+                  <EuroMillionsOfficialLogo />
                   <span>{t("pendingTitle")}</span>
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-2">
-                  <img
-                    src="/brands/euromillions/games/euromillions-officiel.svg"
-                    alt=""
-                    aria-hidden
-                    className="h-7 w-auto max-w-[7.5rem] shrink-0 rounded-sm bg-[#0b1220] px-1.5 py-0.5"
-                  />
+                  <EuroMillionsOfficialLogo />
                   <span className="sr-only">{t("title")}</span>
                 </span>
               )}

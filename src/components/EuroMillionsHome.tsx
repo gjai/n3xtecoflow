@@ -339,8 +339,8 @@ export async function EuroMillionsHome({
             </div>
             <div className="mt-6 overflow-hidden">
               <KwankoBanner
-                desktop={KWANKO_SLOTS.valorisationSquare.desktop}
-                mobile={KWANKO_SLOTS.valorisationSquare.mobile}
+                desktop={KWANKO_SLOTS.valorisationMrec.desktop}
+                mobile={KWANKO_SLOTS.valorisationMrec.mobile}
                 className="justify-start py-0"
               />
             </div>
@@ -389,7 +389,7 @@ export async function EuroMillionsHome({
                       <GameMark gameId="my-million" size={16} />
                       {t("myMillionLabel")}
                     </p>
-                    <p className="font-[family-name:var(--font-display)] text-xl font-semibold tracking-wider text-[var(--accent-ink)]">
+                    <p className="font-[family-name:var(--font-display)] text-xl font-semibold tracking-wider text-[var(--heading)]">
                       {latest.myMillionCode}
                     </p>
                     {latest.myMillionLocation ? (
@@ -411,20 +411,6 @@ export async function EuroMillionsHome({
                   winnersLabel={tDraws("prizeWinners")}
                   heading="h2"
                 />
-                <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-                  <Link
-                    href={`/tirages/${latest.date}`}
-                    className="font-semibold text-[var(--accent)] hover:underline"
-                  >
-                    {t("resultOf", { date: formatDate(latest.date, locale) })} →
-                  </Link>
-                  <Link
-                    href="/my-million"
-                    className="font-semibold text-[var(--accent)] hover:underline"
-                  >
-                    {t("myMillionCta")} →
-                  </Link>
-                </div>
               </div>
             ) : (
               <p className="mt-6 text-[var(--muted)]">{t("empty")}</p>

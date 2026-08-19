@@ -119,5 +119,9 @@ a{color:inherit;text-decoration:none}
 #dernier-tirage table{width:100%;table-layout:fixed;min-width:0}
 .lottery-ball--letter{border:2px solid var(--accent);background:var(--surface);color:var(--heading)}
 .lottery-code{display:inline-flex;align-items:center;min-height:2.25rem;padding:0 .75rem;font-family:ui-monospace,monospace;font-size:.875rem;font-weight:600;letter-spacing:.04em;border:1px solid var(--line);background:var(--surface);color:var(--heading)}
+.em-official-logo{display:inline-flex;align-items:center;height:1.75rem;flex-shrink:0}
+.em-official-logo img{display:none;height:1.75rem;width:auto;max-width:7.5rem}
+html.light .em-official-logo__on-light{display:block}
+html:not(.light) .em-official-logo__on-dark{display:block}
 `.trim();
 }
