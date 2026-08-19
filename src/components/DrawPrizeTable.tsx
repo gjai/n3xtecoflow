@@ -38,20 +38,20 @@ function Table({
     (extraTiers || []).some((t) => t.amountEur > 0);
   return (
     <div className="overflow-x-auto max-w-full border border-[var(--line)]">
-      <table className="w-full min-w-0 text-left text-sm">
+      <table className="w-full min-w-[420px] text-left text-sm">
         <thead className="bg-[var(--surface)] text-xs uppercase tracking-[0.12em] text-[var(--muted)]">
           <tr>
-            <th className="px-2 py-2 font-medium break-all whitespace-normal">
+            <th className="px-2 py-2 font-medium whitespace-nowrap">
               {rankLabel}
             </th>
-            <th className="px-2 py-2 font-medium break-all whitespace-normal">
+            <th className="px-2 py-2 font-medium whitespace-nowrap">
               {amountLabel}
             </th>
-            <th className="px-2 py-2 font-medium break-all whitespace-normal">
+            <th className="px-2 py-2 font-medium whitespace-nowrap">
               {winnersLabel}
             </th>
             {hasEplus ? (
-              <th className="px-2 py-2 font-medium break-all whitespace-normal">
+              <th className="px-2 py-2 font-medium whitespace-nowrap">
                 {extraLabel}
               </th>
             ) : null}
@@ -62,17 +62,17 @@ function Table({
             const ep = eplusMap.get(normalizeRank(tier.rank));
             return (
               <tr key={`${tier.rank}-${i}`} className="border-t border-[var(--line)]">
-                <td className="px-2 py-2 font-semibold text-[var(--heading)] break-all whitespace-normal">
+                <td className="px-2 py-2 font-semibold text-[var(--heading)] whitespace-nowrap">
                   {tier.rank}
                 </td>
-                <td className="px-2 py-2 text-[var(--heading)] break-all whitespace-normal">
+                <td className="px-2 py-2 text-[var(--heading)] whitespace-nowrap">
                   {formatMoney(tier.amountEur, locale) || "—"}
                 </td>
-                <td className="px-2 py-2 text-[var(--muted)] break-all whitespace-normal">
+                <td className="px-2 py-2 text-[var(--muted)] whitespace-nowrap">
                   {tier.winners}
                 </td>
                 {hasEplus ? (
-                  <td className="px-2 py-2 text-[var(--heading)] break-all whitespace-normal">
+                  <td className="px-2 py-2 text-[var(--heading)] whitespace-nowrap">
                     {ep ? formatMoney(ep.amountEur, locale) || "—" : "—"}
                   </td>
                 ) : null}
