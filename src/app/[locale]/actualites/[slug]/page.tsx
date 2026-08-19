@@ -14,6 +14,7 @@ import { getEditorialImages } from "@/data/images";
 import { resolveAffiliateOffers } from "@/lib/affiliates";
 import { affiliateCtaForNews } from "@/lib/news/affiliate-cta";
 import { amazonCtaForNews } from "@/lib/news/amazon-cta";
+import { isEuroMillionsResultClone } from "@/lib/news/rss";
 import { getNewsBySlug, readNewsStore } from "@/lib/news/store";
 import {
   DATE_LOCALE,
@@ -37,10 +38,14 @@ export async function generateMetadata({
   const article = getNewsBySlug(slug, store, site.id);
   if (!article) return {};
   const copy = usesEnglishFallback(locale) ? article.en : article.fr;
+  const resultClone =
+    site.id === "euromillions" &&
+    isEuroMillionsResultClone(`${article.fr.title} ${article.en.title}`);
   return {
     title: copy.title,
     description: copy.excerpt,
     alternates: await siteLocaleAlternates(locale, `/actualites/${slug}`),
+    robots: resultClone ? { index: false, follow: true } : undefined,
     openGraph: article.imageSrc
       ? { images: [{ url: article.imageSrc }] }
       : undefined,

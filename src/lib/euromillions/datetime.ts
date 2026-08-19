@@ -22,6 +22,29 @@ export function parisDateKey(date = new Date()): string {
   }).format(date);
 }
 
+/**
+ * lastmod sitemap d’une fiche `/tirages/{date}`.
+ * Le soir du tirage (date = aujourd’hui Paris) doit être « maintenant »,
+ * pas minuit UTC — sinon Google croit que la page n’a pas bougé depuis le matin.
+ */
+export function sitemapLastModifiedForDrawDate(
+  date: string,
+  today = parisDateKey(),
+  now = new Date(),
+): Date {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return now;
+  return date >= today ? now : new Date(`${date}T12:00:00Z`);
+}
+
+/** Jour civil Paris. Un `planned_at` 00:15 Paris ne doit pas basculer J−1 (UTC). */
+export function toParisIsoDate(input: string): string {
+  const trimmed = String(input || "").trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return trimmed;
+  const d = new Date(trimmed);
+  if (Number.isNaN(d.getTime())) return trimmed.slice(0, 10);
+  return parisDateKey(d);
+}
+
 /** Convert a Paris wall-clock (date + hour) to a UTC Date. */
 export function parisLocalToUtc(
   isoDate: string,

@@ -89,16 +89,18 @@ const EUROMILLIONS_OFF_TOPIC =
 const BLOCKED_LOTTERY_SOURCE =
   /tirage[-\s.]?gagnant|chronicle\s*live|independent\.co\.uk|mirror\.co\.uk|thesun\.|belfasttelegraph|irishnews|metro\.co\.uk|ok\.co\.uk|express\.co\.uk/i;
 
-/** Actu qui recopie la fiche résultat (cannibalise /tirages/[date]). */
-const EUROMILLIONS_RESULT_CLONE =
-  /\b(r[ée]sultats?|num[ée]ros gagnants|winning numbers|voici les r[ée]sultats)\b[\s\S]{0,80}\b(euromillions|euro\s*millions|euromillones)\b/i;
+/** Actu qui recopie la fiche résultat (cannibalise home / `/tirages/[date]`). */
+const RESULT_WORD =
+  /r[ée]sultats?|\bresults?\b|num[ée]ros gagnants|winning numbers|voici les r[ée]sultats|resultados?/i;
+const EM_BRAND = /euromillions|euro\s*millions|euromillones/i;
 
 export function isEuroMillionsResultClone(title: string): boolean {
   const t = title.trim();
-  if (!EUROMILLIONS_RESULT_CLONE.test(t)) return false;
-  return /\b(mardi|mercredi|jeudi|vendredi|samedi|dimanche|lundi|tuesday|friday|monday|wednesday|thursday|\d{1,2}[\s/.-]+\d{1,2}|janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[uû]t|aout|septembre|octobre|novembre|d[ée]cembre|january|february|august)\b/i.test(
-    t,
-  );
+  if (!t || !RESULT_WORD.test(t) || !EM_BRAND.test(t)) return false;
+  const resultIdx = t.search(RESULT_WORD);
+  const brandIdx = t.search(EM_BRAND);
+  if (resultIdx < 0 || brandIdx < 0) return false;
+  return Math.abs(resultIdx - brandIdx) <= 80;
 }
 
 export function isBlockedLotteryNewsSource(item: {

@@ -42,11 +42,13 @@ export async function siteLocaleAlternates(
   pathWithoutLocale = "",
 ) {
   const site = await getCurrentSite();
+  const locales =
+    site.id === "euromillions" ? (["fr", "en"] as const) : siteLocales(site);
   return localeAlternates(
     locale,
     pathWithoutLocale,
     `https://${site.primaryHost}`,
-    siteLocales(site),
+    locales,
   );
 }
 

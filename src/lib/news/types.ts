@@ -121,7 +121,7 @@ export const NEWS_FEEDS: NewsFeed[] = [
   {
     id: "euromillions-gnews-fr",
     siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(r%C3%A9sultat+OR+tirage+OR+jackpot+OR+gagnant+OR+FDJ)+when:90d&hl=fr&gl=FR&ceid=FR:fr",
+    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(jackpot+OR+gagnant+OR+millionnaire+OR+%22My+Million%22+OR+FDJ)+-r%C3%A9sultat+-r%C3%A9sultats+when:90d&hl=fr&gl=FR&ceid=FR:fr",
   },
   {
     id: "euromillions-gnews-fr-gagnants",
@@ -151,17 +151,17 @@ export const NEWS_FEEDS: NewsFeed[] = [
   {
     id: "euromillions-gnews-en",
     siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(result+OR+draw+OR+jackpot+OR+winner)+(France+OR+FDJ)+-Thunderball+-%22UK+Lotto%22+-%22National+Lottery%22+when:90d&hl=en&gl=FR&ceid=FR:en",
+    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(jackpot+OR+winner+OR+%22My+Million%22)+(France+OR+FDJ)+-result+-results+-Thunderball+-%22UK+Lotto%22+-%22National+Lottery%22+when:90d&hl=en&gl=FR&ceid=FR:en",
   },
   {
     id: "euromillions-gnews-en-ie",
     siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(result+OR+jackpot+OR+winner)+(France+OR+FDJ)+-Thunderball+when:90d&hl=en-IE&gl=IE&ceid=IE:en",
+    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(jackpot+OR+winner)+(France+OR+FDJ)+-result+-results+-Thunderball+when:90d&hl=en-IE&gl=IE&ceid=IE:en",
   },
   {
     id: "euromillions-gnews-es",
     siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(Euromillones+OR+EuroMillions)+(resultado+OR+bote+OR+ganador+OR+sorteo)+when:60d&hl=es&gl=ES&ceid=ES:es",
+    url: "https://news.google.com/rss/search?q=(Euromillones+OR+EuroMillions)+(bote+OR+ganador+OR+millonario)+-resultado+-resultados+when:60d&hl=es&gl=ES&ceid=ES:es",
   },
 ];
 

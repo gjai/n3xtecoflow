@@ -99,9 +99,12 @@ export async function generateMetadata({
       apple: icons.apple || icons.favicon,
     },
     robots: {
-      index: true,
+      index: !(siteIsEuroMillions(site) && locale !== "fr" && locale !== "en"),
       follow: true,
-      googleBot: { index: true, follow: true },
+      googleBot: {
+        index: !(siteIsEuroMillions(site) && locale !== "fr" && locale !== "en"),
+        follow: true,
+      },
     },
     ...(gsc ? { verification: { google: gsc } } : {}),
     ...(adsenseClient

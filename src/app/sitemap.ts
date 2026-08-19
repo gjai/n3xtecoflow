@@ -9,7 +9,12 @@ import {
   productSiteId,
 } from "@/data/products";
 import { comparisonHubCategories } from "@/lib/comparisons/hub";
+import {
+  parisDateKey,
+  sitemapLastModifiedForDrawDate,
+} from "@/lib/euromillions/datetime";
 import { GUIDE_TOPICS, guideSiteId } from "@/lib/guides/types";
+import { isEuroMillionsResultClone } from "@/lib/news/rss";
 import { newsSiteId } from "@/lib/news/types";
 import { FDJ_COMPANION_GAMES } from "@/lib/fdj-games/catalog";
 import { companionDrawKey } from "@/lib/fdj-games/keys";
@@ -38,6 +43,8 @@ function loadNewsArticles(): {
   slug: string;
   publishedAt: string;
   siteId?: SiteId;
+  titleFr?: string;
+  titleEn?: string;
 }[] {
   const candidates = [
     process.env.NEWS_DATA_PATH?.trim(),
@@ -52,9 +59,17 @@ function loadNewsArticles(): {
           slug: string;
           publishedAt: string;
           siteId?: SiteId;
+          fr?: { title?: string };
+          en?: { title?: string };
         }[];
       };
-      return store.articles || [];
+      return (store.articles || []).map((a) => ({
+        slug: a.slug,
+        publishedAt: a.publishedAt,
+        siteId: a.siteId,
+        titleFr: a.fr?.title,
+        titleEn: a.en?.title,
+      }));
     } catch {
       /* try next */
     }
@@ -62,8 +77,13 @@ function loadNewsArticles(): {
   return [];
 }
 
-function loadEuroMillionsDates(): { date: string; lastModified: Date }[] {
-  const today = new Date().toISOString().slice(0, 10);
+function loadEuroMillionsDates(): {
+  date: string;
+  lastModified: Date;
+  fresh: boolean;
+}[] {
+  const today = parisDateKey();
+  const now = new Date();
   const candidates = [
     process.env.EUROMILLIONS_DATA_PATH?.trim(),
     join(process.cwd(), "data", "euromillions.json"),
@@ -84,7 +104,8 @@ function loadEuroMillionsDates(): { date: string; lastModified: Date }[] {
         .sort((a, b) => b.localeCompare(a))
         .map((date) => ({
           date,
-          lastModified: date > today ? new Date() : new Date(date),
+          lastModified: sitemapLastModifiedForDrawDate(date, today, now),
+          fresh: date >= today,
         }));
     } catch {
       /* try next */
@@ -132,7 +153,13 @@ function loadCompanionDrawKeys(): { slug: string; key: string; date: string }[] 
 /** Entries for one theme only (canonical primaryHost). */
 export function buildSitemapForSite(
   site: SiteConfig,
-  news: { slug: string; publishedAt: string; siteId?: SiteId }[],
+  news: {
+    slug: string;
+    publishedAt: string;
+    siteId?: SiteId;
+    titleFr?: string;
+    titleEn?: string;
+  }[],
 ): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
   const siteUrl = `https://${site.primaryHost}`;
@@ -145,7 +172,6 @@ export function buildSitemapForSite(
     ...(site.id === "euromillions"
       ? [
           "/tirages",
-          "/generateur",
           "/prochain-tirage",
           "/alerte-email",
           "/jeux",
@@ -170,25 +196,43 @@ export function buildSitemapForSite(
     "/contact",
   ];
 
-  for (const locale of siteLocales(site)) {
+  const emNewsDeweighted = site.id === "euromillions";
+  const sitemapLocales =
+    site.id === "euromillions" ? ["fr", "en"] : siteLocales(site);
+
+  for (const locale of sitemapLocales) {
     for (const path of staticPaths) {
+      const isNewsHub = path === "/actualites";
       entries.push({
         url: `${siteUrl}/${locale}${path}`,
         lastModified: new Date(),
         changeFrequency:
-          path === "" || path === "/actualites" ? "daily" : "monthly",
-        priority: path === "" ? 1 : path === "/actualites" ? 0.85 : 0.7,
+          path === "" ? "daily" : isNewsHub && !emNewsDeweighted ? "daily" : "monthly",
+        priority:
+          path === ""
+            ? 1
+            : isNewsHub
+              ? emNewsDeweighted
+                ? 0.45
+                : 0.85
+              : 0.7,
       });
     }
 
     if (siteShowsNews(site)) {
       for (const article of news) {
         if (newsSiteId(article) !== site.id) continue;
+        if (
+          emNewsDeweighted &&
+          isEuroMillionsResultClone(`${article.titleFr || ""} ${article.titleEn || ""}`)
+        ) {
+          continue;
+        }
         entries.push({
           url: `${siteUrl}/${locale}/actualites/${article.slug}`,
           lastModified: new Date(article.publishedAt),
           changeFrequency: "weekly",
-          priority: 0.7,
+          priority: emNewsDeweighted ? 0.45 : 0.7,
         });
       }
     }
@@ -204,7 +248,7 @@ export function buildSitemapForSite(
     }
 
     if (site.id === "euromillions" && SITEMAP_EM_ARCHIVE_LOCALES.has(locale)) {
-      for (const { date, lastModified } of loadEuroMillionsDates().slice(
+      for (const { date, lastModified, fresh } of loadEuroMillionsDates().slice(
         0,
         SITEMAP_EM_DRAW_DATES,
       )) {
@@ -212,7 +256,7 @@ export function buildSitemapForSite(
           url: `${siteUrl}/${locale}/tirages/${date}`,
           lastModified,
           changeFrequency: "daily",
-          priority: 0.8,
+          priority: fresh ? 0.9 : 0.8,
         });
       }
       for (const item of loadCompanionDrawKeys()) {

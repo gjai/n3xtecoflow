@@ -6,14 +6,14 @@ import {
   fetchFdjMyMillionWinnerLocations,
   fetchFdjNextEuroMillions,
 } from "./fdj";
+import { mergeDraws } from "./merge-draws";
 import { fetchPedroMealhaDraws, fetchUkLatestDraw } from "./fetch";
-import { lotteryFingerprint } from "./fingerprint";
+import { recordFirstPublish } from "./timing";
 import { lotteryIndexNowUrls } from "@/lib/seo/indexnow";
 import { notifySearchEngines } from "@/lib/seo/notify";
-import { revalidateLotteryPages, revalidateSitemap } from "./live";
+import { revalidateLotteryPages } from "./live";
 import {
   readEuroMillionsStore,
-  sortDrawsNewest,
   upcomingDrawPlaceholder,
   writeEuroMillionsStore,
   isEuroMillionsDrawPublished,
@@ -45,43 +45,6 @@ export type EuroMillionsRefreshResult = {
   };
 };
 
-function mergeDraws(
-  existing: EuroMillionsDraw[],
-  incoming: EuroMillionsDraw[],
-): EuroMillionsDraw[] {
-  const byDate = new Map<string, EuroMillionsDraw>();
-  for (const d of existing) byDate.set(d.date, d);
-  for (const d of incoming) {
-    const prev = byDate.get(d.date);
-    if (!prev) {
-      byDate.set(d.date, d);
-      continue;
-    }
-    byDate.set(d.date, {
-      ...prev,
-      ...d,
-      numbers: d.numbers.length === 5 ? d.numbers : prev.numbers,
-      stars: d.stars.length === 2 ? d.stars : prev.stars,
-      jackpotEur: d.jackpotEur ?? prev.jackpotEur,
-      hasWinner: d.hasWinner ?? prev.hasWinner,
-      drawId: d.drawId ?? prev.drawId,
-      myMillionCode: d.myMillionCode ?? prev.myMillionCode,
-      myMillionLocation: d.myMillionLocation ?? prev.myMillionLocation,
-      prizeTiers:
-        d.prizeTiers?.length ? d.prizeTiers : prev.prizeTiers,
-      prizeTiersEtoilePlus: d.prizeTiersEtoilePlus?.length
-        ? d.prizeTiersEtoilePlus
-        : prev.prizeTiersEtoilePlus,
-      // Prefer FDJ when it has My Million / FR jackpot
-      source:
-        d.source === "fdj" || prev.source === "fdj"
-          ? "fdj"
-          : d.source || prev.source,
-    });
-  }
-  return sortDrawsNewest([...byDate.values()]);
-}
-
 function attachWinnerLocations(
   draws: EuroMillionsDraw[],
   winners: MyMillionWinner[],
@@ -95,6 +58,73 @@ function attachWinnerLocations(
     if (!w?.location) return d;
     return { ...d, myMillionLocation: d.myMillionLocation || w.location };
   });
+}
+
+function assembleStore(
+  store: EuroMillionsStore,
+  incoming: EuroMillionsDraw[],
+  nextDrawDate: string | null,
+  nextJackpotEur: number | null,
+  winners: MyMillionWinner[],
+): EuroMillionsStore {
+  let draws = mergeDraws(store.draws, incoming);
+  draws = attachWinnerLocations(draws, winners);
+  if (nextDrawDate && !draws.some((d) => d.date === nextDrawDate)) {
+    draws = mergeDraws(draws, [
+      upcomingDrawPlaceholder(nextDrawDate, nextJackpotEur),
+    ]);
+  }
+  const latest = draws.find(isEuroMillionsDrawPublished) || null;
+  return {
+    updatedAt: new Date().toISOString(),
+    latest,
+    nextDrawDate,
+    nextJackpotEur,
+    draws,
+    myMillionWinners: winners,
+  };
+}
+
+async function notifyDrawPublish(
+  latest: EuroMillionsDraw | null,
+): Promise<EuroMillionsRefreshResult["facebook"]> {
+  try {
+    const { notifyAlertsOnPublish } = await import("./alerts");
+    await notifyAlertsOnPublish(latest);
+  } catch (err) {
+    console.error("alerts_notify_fail", err);
+  }
+  try {
+    const { notifyFacebookOnPublish } = await import("./facebook");
+    return await notifyFacebookOnPublish(latest);
+  } catch (err) {
+    console.error("facebook_notify_fail", err);
+  }
+}
+
+async function persistEuroMillions(
+  next: EuroMillionsStore,
+  fdj: Awaited<ReturnType<typeof readFdjGamesStore>>,
+  beforeFp: string,
+  prev: EuroMillionsStore,
+): Promise<{ fingerprint: string; changed: boolean }> {
+  await writeEuroMillionsStore(next);
+  await recordFirstPublish(prev, next);
+  revalidateLotteryPages();
+  const fingerprint = lotteryFingerprint(next, fdj);
+  const changed = fingerprint !== beforeFp;
+  if (changed) {
+    await notifySearchEngines(
+      lotteryIndexNowUrls(next, fdj),
+      "euromillions-resultats.fr",
+    );
+    const { inspectEuroMillionsPublish } = await import("@/lib/seo/gsc-api");
+    await inspectEuroMillionsPublish({
+      latest: next.latest?.date,
+      nextDrawDate: next.nextDrawDate,
+    });
+  }
+  return { fingerprint, changed };
 }
 
 const EM_ARCHIVE_START = 2004;
@@ -146,8 +176,40 @@ export async function refreshEuroMillionsData(options?: {
   const beforeFdj = await readFdjGamesStore();
   const beforeFp = lotteryFingerprint(store, beforeFdj);
 
-  // Companions first: Keno / Loto / EuroDreams must not wait on PedroMealha
-  // archives (the 120s route budget often killed them before write).
+  // EuroMillions d’abord : écrire + revalider avant Keno/Loto (même lock live).
+  try {
+    const fdj = await fetchFdjEuroMillionsDraws(fast ? 8 : 20, fast ? 1 : 8);
+    incoming = incoming.concat(fdj);
+    sources.push(`fdj:${fdj.length}`);
+  } catch (err) {
+    console.error("euromillions_fdj_fail", err);
+  }
+
+  let nextDrawDate = store.nextDrawDate ?? null;
+  let nextJackpotEur = store.nextJackpotEur ?? null;
+  try {
+    const fdjNext = await fetchFdjNextEuroMillions();
+    if (fdjNext) {
+      nextDrawDate = fdjNext.date;
+      if (fdjNext.jackpotEur != null) nextJackpotEur = fdjNext.jackpotEur;
+      sources.push(
+        `fdj-next:${fdjNext.date}:${fdjNext.jackpotEur ?? "na"}`,
+      );
+    }
+  } catch (err) {
+    console.error("euromillions_fdj_next_fail", err);
+  }
+
+  let winners = store.myMillionWinners || [];
+  let next = assembleStore(store, incoming, nextDrawDate, nextJackpotEur, winners);
+  let { fingerprint, changed } = await persistEuroMillions(
+    next,
+    beforeFdj,
+    beforeFp,
+    store,
+  );
+  let facebook = await notifyDrawPublish(next.latest ?? null);
+
   let companionGames: Record<string, number> | undefined;
   try {
     const companions = await refreshFdjCompanionGames(
@@ -165,14 +227,6 @@ export async function refreshEuroMillionsData(options?: {
     console.error("euromillions_companions_fail", err);
   }
 
-  try {
-    const fdj = await fetchFdjEuroMillionsDraws(fast ? 8 : 20, fast ? 1 : 8);
-    incoming = incoming.concat(fdj);
-    sources.push(`fdj:${fdj.length}`);
-  } catch (err) {
-    console.error("euromillions_fdj_fail", err);
-  }
-
   if (!fast) {
     try {
       const archives = await fetchFdjEuroMillionsArchiveDraws();
@@ -181,104 +235,64 @@ export async function refreshEuroMillionsData(options?: {
     } catch (err) {
       console.error("euromillions_fdj_archive_fail", err);
     }
-  }
 
-  for (const year of years) {
-    try {
-      const batch = await fetchPedroMealhaDraws(year);
-      incoming = incoming.concat(batch);
-      yearsFetched.push(year);
-      sources.push(`pedromealha:${year}`);
-      await new Promise((r) => setTimeout(r, 6000));
-    } catch (err) {
-      console.error("euromillions_pedro_year_fail", year, err);
-      await new Promise((r) => setTimeout(r, 8000));
+    for (const year of years) {
+      try {
+        const batch = await fetchPedroMealhaDraws(year);
+        incoming = incoming.concat(batch);
+        yearsFetched.push(year);
+        sources.push(`pedromealha:${year}`);
+        await new Promise((r) => setTimeout(r, 6000));
+      } catch (err) {
+        console.error("euromillions_pedro_year_fail", year, err);
+        await new Promise((r) => setTimeout(r, 8000));
+      }
     }
-  }
 
-  let nextDrawDate = store.nextDrawDate ?? null;
-  let nextJackpotEur = store.nextJackpotEur ?? null;
-  try {
-    const fdjNext = await fetchFdjNextEuroMillions();
-    if (fdjNext) {
-      nextDrawDate = fdjNext.date;
-      if (fdjNext.jackpotEur != null) nextJackpotEur = fdjNext.jackpotEur;
-      sources.push(
-        `fdj-next:${fdjNext.date}:${fdjNext.jackpotEur ?? "na"}`,
-      );
-    }
-  } catch (err) {
-    console.error("euromillions_fdj_next_fail", err);
-  }
-  if (!fast) {
     try {
       const uk = await fetchUkLatestDraw();
       if (uk?.draw) {
         incoming.push(uk.draw);
         sources.push("uk-lottery:latest");
         nextDrawDate = nextDrawDate ?? uk.nextDrawDate ?? null;
-        nextJackpotEur = nextJackpotEur ?? uk.nextJackpotEur ?? null;
       }
     } catch (err) {
       console.error("euromillions_uk_fail", err);
     }
-  }
 
-  let winners = store.myMillionWinners || [];
-  if (!fast) {
     try {
       winners = await fetchFdjMyMillionWinnerLocations();
       sources.push(`fdj-mag-winners:${winners.length}`);
     } catch (err) {
       console.error("euromillions_fdj_mag_fail", err);
     }
-  }
 
-  let draws = mergeDraws(store.draws, incoming);
-  draws = attachWinnerLocations(draws, winners);
-  if (nextDrawDate && !draws.some((d) => d.date === nextDrawDate)) {
-    draws = mergeDraws(draws, [
-      upcomingDrawPlaceholder(nextDrawDate, nextJackpotEur),
-    ]);
-  }
-  const latest = draws.find(isEuroMillionsDrawPublished) || null;
-  const next: EuroMillionsStore = {
-    updatedAt: new Date().toISOString(),
-    latest,
-    nextDrawDate,
-    nextJackpotEur,
-    draws,
-    myMillionWinners: winners,
-  };
-  await writeEuroMillionsStore(next);
-  const afterFdj = await readFdjGamesStore();
-  const fingerprint = lotteryFingerprint(next, afterFdj);
-  const changed = fingerprint !== beforeFp;
-  revalidateLotteryPages();
-  if (changed) {
-    await notifySearchEngines(
-      lotteryIndexNowUrls(next, afterFdj),
-      "euromillions-resultats.fr",
+    next = assembleStore(store, incoming, nextDrawDate, nextJackpotEur, winners);
+    const afterExtra = await persistEuroMillions(
+      next,
+      await readFdjGamesStore(),
+      beforeFp,
+      store,
     );
-  }
-  try {
-    const { notifyAlertsOnPublish } = await import("./alerts");
-    await notifyAlertsOnPublish(latest);
-  } catch (err) {
-    console.error("alerts_notify_fail", err);
-  }
-  let facebook: EuroMillionsRefreshResult["facebook"];
-  try {
-    const { notifyFacebookOnPublish } = await import("./facebook");
-    facebook = await notifyFacebookOnPublish(latest);
-  } catch (err) {
-    console.error("facebook_notify_fail", err);
+    fingerprint = afterExtra.fingerprint;
+    changed = afterExtra.changed;
+    facebook = (await notifyDrawPublish(next.latest ?? null)) ?? facebook;
+  } else {
+    const afterFdj = await readFdjGamesStore();
+    fingerprint = lotteryFingerprint(next, afterFdj);
+    changed = fingerprint !== beforeFp;
+    if (changed) {
+      await notifySearchEngines(
+        lotteryIndexNowUrls(next, afterFdj),
+        "euromillions-resultats.fr",
+      );
+    }
   }
 
   return {
     ok: true,
-    draws: draws.length,
-    latest: latest?.date || null,
+    draws: next.draws.length,
+    latest: next.latest?.date || null,
     sources,
     yearsFetched,
     myMillionWinners: winners.length,
