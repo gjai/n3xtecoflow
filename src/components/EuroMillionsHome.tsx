@@ -642,7 +642,7 @@ export async function EuroMillionsHome({
           <div className="mt-8 max-w-2xl space-y-4">
             <p className="text-xs text-[var(--muted)]">{t("disclaimer")}</p>
             <KwankoBanner
-              desktop={KWANKO_SLOTS.anj.mobile}
+              desktop={KWANKO_SLOTS.anj.desktop}
               mobile={KWANKO_SLOTS.anj.mobile}
               className="justify-start py-0"
               label="Prévention jeu responsable"
