@@ -394,7 +394,7 @@ export async function EuroMillionsHome({
                   tiers={latest.prizeTiers}
                   extraTiers={latest.prizeTiersEtoilePlus}
                   locale={locale}
-                  title={tDraws("prizesTitle")}
+                  title=""
                   extraTitle={tDraws("prizesEtoilePlus")}
                   extraHelp={tDraws("prizesEtoilePlusHelp")}
                   rankLabel={tDraws("prizeRank")}

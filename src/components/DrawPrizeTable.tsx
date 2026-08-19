@@ -112,10 +112,12 @@ export function DrawPrizeTable({
   const Heading = heading;
   return (
     <div className="mt-8">
-      <Heading className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
-        {title}
-      </Heading>
-      <div className="mt-4">
+      {title ? (
+        <Heading className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+          {title}
+        </Heading>
+      ) : null}
+      <div className={title ? "mt-4" : ""}>
         <Table
           tiers={tiers}
           extraTiers={extraTiers}
