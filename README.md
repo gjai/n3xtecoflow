@@ -31,7 +31,7 @@ Voir `.env.example` (extrait) :
 - `GEMINI_API_KEY` / `OPENAI_*` (rewrite actu)
 - `AMAZON_CREATORS_*` (prix live — dès éligibilité Associates)
 - `NEXT_PUBLIC_ADSENSE_CLIENT` (snippet revue). **`NEXT_PUBLIC_ADSENSE_SLOTS=1` seulement après approbation AdSense**, avec les IDs d’unités
-- `FDJ_AFFILIATE_URL` (lien Kwanko FDJ — tant que vide, le CTA pointe vers fdj.fr)
+- `FDJ_AFFILIATE_URL` (+ `_LOTO`, `_EURODREAMS`, `_CRESCENDO`, `_KENO`) — liens Kwanko par jeu ; tant que vide, le CTA pointe vers fdj.fr
 
 ## Déploiement Coolify
 

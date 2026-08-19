@@ -19,6 +19,11 @@ import {
   readFdjGamesStore,
 } from "@/lib/fdj-games/store";
 import { FdjCompanionSimulator } from "@/components/FdjCompanionSimulator";
+import {
+  fdjAffiliateRel,
+  fdjAffiliateTracked,
+  fdjAffiliateUrl,
+} from "@/lib/fdj-affiliate";
 import { NextDrawMenuMeta } from "@/components/NextDrawMenuMeta";
 import { companionDrawKey } from "@/lib/fdj-games/keys";
 import { gameScopeStyle } from "@/lib/fdj-games/identity";
@@ -145,6 +150,8 @@ export default async function JeuxGamePage({
           ? "comprendre-keno"
           : "comprendre-crescendo";
   const label = locale === "en" ? entry.labelEn : entry.labelFr;
+  const fdjPlayUrl = fdjAffiliateUrl(gameId, entry.fdjUrl);
+  const fdjTracked = fdjAffiliateTracked(gameId);
   const pending = companionResultPending(gameId, latest);
   const hubTitle = companionHubTitle(
     locale,
@@ -345,9 +352,9 @@ export default async function JeuxGamePage({
           {t("gameGuideCta")} →
         </Link>
         <a
-          href={entry.fdjUrl}
+          href={fdjPlayUrl}
           target="_blank"
-          rel="noopener noreferrer"
+          rel={fdjAffiliateRel(fdjTracked)}
           className="font-semibold text-[var(--accent)] hover:underline"
         >
           {t("officialCta")} →

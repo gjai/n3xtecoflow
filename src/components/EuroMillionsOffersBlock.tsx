@@ -5,6 +5,7 @@ import { AmazonButton } from "@/components/AmazonButton";
 import {
   affiliateOffer,
 } from "@/lib/affiliates";
+import { fdjAffiliateTracked } from "@/lib/fdj-affiliate";
 import {
   amazonProductImageUrl,
   buildAmazonProductUrl,
@@ -138,7 +139,7 @@ export async function EuroMillionsOffersBlock({
             <AffiliateOfferButton
               href={fdj.href}
               label={isEn ? fdj.labelEn : fdj.labelFr}
-              tracked={Boolean(process.env.FDJ_AFFILIATE_URL?.trim())}
+              tracked={fdjAffiliateTracked("euromillions")}
             />
             <p className="max-w-md text-xs text-[var(--muted)]">{t("fdjNote")}</p>
           </div>
