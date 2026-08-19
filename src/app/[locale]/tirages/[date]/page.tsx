@@ -266,11 +266,6 @@ export default async function TirageDetailPage({
                 </div>
               );
             })()}
-            {draw.prizeTiersEtoilePlus && draw.prizeTiersEtoilePlus.length > 0 ? (
-              <p className="mt-3 text-sm text-[var(--muted)]">
-                {t("prizesEtoilePlusHelp")}
-              </p>
-            ) : null}
             <p className="mt-4">
               <Link
                 href={`/tirages?date=${draw.date}#simulateur`}

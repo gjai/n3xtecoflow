@@ -396,7 +396,7 @@ export async function EuroMillionsHome({
                   locale={locale}
                   title=""
                   extraTitle={tDraws("prizesEtoilePlus")}
-                  extraHelp={tDraws("prizesEtoilePlusHelp")}
+                  extraHelp=""
                   rankLabel={tDraws("prizeRank")}
                   amountLabel={tDraws("prizeAmount")}
                   winnersLabel={tDraws("prizeWinners")}

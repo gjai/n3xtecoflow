@@ -102,7 +102,7 @@ export function DrawPrizeTable({
   locale: string;
   title: string;
   extraTitle: string;
-  extraHelp: string;
+  extraHelp?: string;
   rankLabel: string;
   amountLabel: string;
   winnersLabel: string;
@@ -128,7 +128,7 @@ export function DrawPrizeTable({
           extraLabel={extraTitle}
         />
       </div>
-      {extraTiers && extraTiers.length > 0 ? (
+      {extraTiers && extraTiers.length > 0 && extraHelp?.trim() ? (
         <p className="mt-3 text-sm text-[var(--muted)]">{extraHelp}</p>
       ) : null}
     </div>
