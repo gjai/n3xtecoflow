@@ -1,30 +1,10 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useConsent } from "@/components/ConsentProvider";
 
 const SCRIPT_URL =
   "https://img.metaffiliation.com/na/na/res/trk/script.js";
-
-let scriptLoaded = false;
-let scriptPromise: Promise<void> | null = null;
-
-function loadKwankoScript(): Promise<void> {
-  if (scriptLoaded) return Promise.resolve();
-  if (scriptPromise) return scriptPromise;
-  scriptPromise = new Promise<void>((resolve, reject) => {
-    const s = document.createElement("script");
-    s.src = SCRIPT_URL;
-    s.async = true;
-    s.onload = () => {
-      scriptLoaded = true;
-      resolve();
-    };
-    s.onerror = () => reject(new Error("kwanko_script_failed"));
-    document.head.appendChild(s);
-  });
-  return scriptPromise;
-}
 
 type SlotDef = {
   id: string;
@@ -40,30 +20,29 @@ export type KwankoBannerProps = {
 };
 
 function SlotRenderer({ slot }: { slot: SlotDef }) {
-  const uid = useId().replace(/:/g, "_");
-  const containerId = `kwanko_${uid}`;
+  const ref = useRef<HTMLDivElement>(null);
   const rendered = useRef(false);
 
   useEffect(() => {
-    if (rendered.current) return;
+    if (rendered.current || !ref.current) return;
     rendered.current = true;
-    loadKwankoScript().then(() => {
-      try {
-        // @ts-expect-error Kwanko global
-        new KwankoSDKLoader.getSlot(slot.id);
-      } catch {
-        /* slot may already exist */
-      }
-    });
+    const container = ref.current;
+    const script1 = document.createElement("script");
+    script1.src = SCRIPT_URL;
+    script1.async = true;
+    container.appendChild(script1);
+    script1.onload = () => {
+      const script2 = document.createElement("script");
+      script2.textContent = `try { new KwankoSDKLoader.getSlot("${slot.id}"); } catch(e) {}`;
+      container.appendChild(script2);
+    };
   }, [slot.id]);
 
-  const noscriptSrc = `https://action.metaffiliation.com/trk.php?maff=N${slot.id.slice(1)}`;
-
   return (
-    <div id={containerId}>
+    <div ref={ref} style={{ minHeight: slot.h, minWidth: slot.w }}>
       <noscript>
         <iframe
-          src={noscriptSrc}
+          src={`https://action.metaffiliation.com/trk.php?maff=N${slot.id.slice(1)}`}
           width={slot.w}
           height={slot.h}
           frameBorder={0}
