@@ -478,6 +478,8 @@ const euromillionsCoreGuidesRaw: GuideArticle[] = [
   },
   {
     slug: EUROMILLIONS_WELCOME_OFFER_GUIDE_SLUG,
+    imageSrc: "/brands/euromillions/icon-512.png",
+    imageCredit: CREDIT,
     fr: {
       title: "Offre de bienvenue FDJ pour EuroMillions : ce qu’il faut vérifier",
       subtitle:
