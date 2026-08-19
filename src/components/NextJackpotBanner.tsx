@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
-import { GameMark } from "@/components/GameMark";
 import { intlLocale } from "@/i18n/locales";
 import {
   EM_DRAW_HOUR,
@@ -95,12 +94,24 @@ export function NextJackpotBanner({
           <p className="mt-1 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)] md:text-xl">
               {pending ? (
                 <span className="inline-flex items-center gap-2">
-                  <GameMark gameId="euromillions" size={18} />
+                  {/* Logo du jeu (asset), pas logo du site */}
+                  <img
+                    src="/brands/euromillions/games/euromillions.svg"
+                    alt=""
+                    aria-hidden
+                    className="h-[18px] w-[18px] shrink-0"
+                  />
                   <span>{t("pendingTitle")}</span>
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-2">
-                  <GameMark gameId="euromillions" size={18} />
+                  {/* Logo du jeu (asset), pas logo du site */}
+                  <img
+                    src="/brands/euromillions/games/euromillions.svg"
+                    alt=""
+                    aria-hidden
+                    className="h-[18px] w-[18px] shrink-0"
+                  />
                   <span className="sr-only">{t("title")}</span>
                 </span>
               )}
