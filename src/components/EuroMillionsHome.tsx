@@ -310,7 +310,8 @@ export async function EuroMillionsHome({
             <p className="mt-4 max-w-lg text-[var(--muted)]">{t("subhead")}</p>
             <div className="hero-offer-banner mt-6">
               <KwankoBanner
-                desktop={KWANKO_SLOTS.bienvenueLarge.mobile}
+                desktop={KWANKO_SLOTS.bienvenueLarge.desktop}
+                mobile={KWANKO_SLOTS.bienvenueLarge.mobile}
                 className="justify-start py-0"
               />
             </div>
