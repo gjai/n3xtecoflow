@@ -287,8 +287,8 @@ export async function EuroMillionsHome({
           <span className="hero-orb hero-orb-2" />
           <span className="hero-orb hero-orb-3" />
         </div>
-        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1fr_1.05fr] md:items-center md:px-8 md:py-20">
-          <div className="reveal">
+        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[minmax(0,640px)_minmax(0,1fr)] md:items-start md:px-8 md:py-20">
+          <div className="reveal min-w-0">
             <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
               {brand}
             </p>
@@ -308,6 +308,11 @@ export async function EuroMillionsHome({
               </p>
             ) : null}
             <p className="mt-4 max-w-lg text-[var(--muted)]">{t("subhead")}</p>
+            <KwankoBanner
+              desktop={KWANKO_SLOTS.bienvenueLarge.desktop}
+              mobile={KWANKO_SLOTS.bienvenueLarge.mobile}
+              className="mt-6 justify-start py-0"
+            />
             <div className="reveal-delay mt-8 flex flex-wrap gap-3">
               <Link
                 href="/tirages#simulateur"
@@ -390,9 +395,6 @@ export async function EuroMillionsHome({
                   title={tDraws("prizesTitle")}
                   extraTitle={tDraws("prizesEtoilePlus")}
                   extraHelp={tDraws("prizesEtoilePlusHelp")}
-                  extraShowLabel={tDraws("prizesEtoilePlusShow")}
-                  extraHideLabel={tDraws("prizesEtoilePlusHide")}
-                  extraHiddenByDefault
                   rankLabel={tDraws("prizeRank")}
                   amountLabel={tDraws("prizeAmount")}
                   winnersLabel={tDraws("prizeWinners")}
@@ -450,13 +452,6 @@ export async function EuroMillionsHome({
           </div>
         </div>
       </section>
-
-      <div className="mx-auto max-w-6xl px-5 py-8 md:px-8">
-        <KwankoBanner
-          desktop={KWANKO_SLOTS.bienvenueLarge.desktop}
-          mobile={KWANKO_SLOTS.bienvenueLarge.mobile}
-        />
-      </div>
 
       <section className="border-b border-[var(--line)] bg-[var(--bg)]">
         <div className="mx-auto grid max-w-6xl gap-8 px-5 py-8 md:grid-cols-2 md:px-8">

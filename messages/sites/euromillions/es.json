@@ -271,8 +271,6 @@
     "companionOf": "Resultado {game} del {date}",
     "companionMeta": "Números y detalles del sorteo {game} del {date}. Sitio independiente, 18+.",
     "prizesEtoilePlus": "Étoile+ prizes",
-    "prizesEtoilePlusShow": "Show Étoile+",
-    "prizesEtoilePlusHide": "Hide Étoile+",
     "prizesEtoilePlusHelp": "Extra tiers if the Étoile+ option was played — same 5+2 combination.",
     "csvExport": "Descargar archivo (CSV)",
     "claimCta": "Cobrar un premio"
