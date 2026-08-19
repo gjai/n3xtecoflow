@@ -287,7 +287,7 @@ export async function EuroMillionsHome({
           <span className="hero-orb hero-orb-2" />
           <span className="hero-orb hero-orb-3" />
         </div>
-        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1fr_1.05fr] md:items-start md:px-8 md:py-20">
+        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[minmax(0,640px)_minmax(0,1fr)] md:items-start md:px-8 md:py-20">
           <div className="reveal min-w-0">
             <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
               {brand}
