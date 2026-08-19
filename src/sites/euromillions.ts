@@ -3,7 +3,7 @@ import type { SiteConfig } from "./types";
 
 /**
  * Thème « EuroMillions Résultats » — euromillions-resultats.fr
- * Résultats, archives, stats. AdSense + affiliation FDJ (Kwanko). Pas de vente de tickets.
+ * Résultats, archives, stats. Affiliation FDJ (Kwanko). Pas de vente de tickets.
  */
 export const euromillionsSite: SiteConfig = {
   id: "euromillions",
@@ -89,7 +89,7 @@ export const euromillionsSite: SiteConfig = {
   },
   monetization: {
     disableAmazon: true,
-    adsenseClient: "ca-pub-4733644127583822",
+    disableAdsense: true,
     offers: [
       {
         id: "fdj",

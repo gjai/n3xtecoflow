@@ -2,14 +2,14 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { siteAllowsAdsense } from "@/sites/features";
+import { siteNeedsAdvertisingConsent } from "@/sites/features";
 import { useConsent } from "./ConsentProvider";
 import { useSite } from "./SiteProvider";
 
 export function CookieBanner() {
   const t = useTranslations("cookies");
   const site = useSite();
-  const allowAds = siteAllowsAdsense(site);
+  const allowAds = siteNeedsAdvertisingConsent(site);
   const {
     consent,
     acceptAll,

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
+import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
 import { intlLocale } from "@/i18n/locales";
 import {
   EM_DRAW_HOUR,
@@ -31,13 +31,17 @@ export function NextJackpotBanner({
   nextJackpot,
   pending,
   locale,
-  showPageLink = true,
+  playHref,
+  playTracked = false,
+  showPlayLink = true,
 }: {
   nextDrawDate: string | null;
   nextJackpot: string | null;
   pending: boolean;
   locale: string;
-  showPageLink?: boolean;
+  playHref?: string;
+  playTracked?: boolean;
+  showPlayLink?: boolean;
 }) {
   const t = useTranslations("nextDraw");
   const target = useMemo(() => {
@@ -120,13 +124,14 @@ export function NextJackpotBanner({
               {pad(parts.hours)}:{pad(parts.minutes)}:{pad(parts.seconds)}
             </p>
           ) : null}
-          {showPageLink ? (
-            <Link
-              href="/prochain-tirage"
-              className="inline-flex min-h-10 items-center border border-[var(--accent)] px-4 text-sm font-semibold text-[var(--heading)]"
-            >
-              {t("pageCta")} →
-            </Link>
+          {showPlayLink && playHref ? (
+            <AffiliateOfferButton
+              href={playHref}
+              label={t("pageCta")}
+              tracked={playTracked}
+              variant="primary"
+              className="min-h-10"
+            />
           ) : null}
         </div>
       </div>

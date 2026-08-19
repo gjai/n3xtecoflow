@@ -42,6 +42,11 @@ export function siteAllowsAdsense(site: SiteConfig): boolean {
   return site.monetization?.disableAdsense !== true;
 }
 
+/** Cookie consent for ads / affiliate banners (AdSense, Kwanko, etc.). */
+export function siteNeedsAdvertisingConsent(site: SiteConfig): boolean {
+  return siteAllowsAdsense(site) || siteIsEuroMillions(site);
+}
+
 /** Casino / lottery editorial themes — 18+ & responsible-play strip. */
 export function siteNeedsGamblingDisclaimer(site: SiteConfig): boolean {
   return site.id === "casinos-crypto" || site.id === "euromillions";

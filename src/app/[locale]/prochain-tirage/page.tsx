@@ -77,7 +77,7 @@ export default async function ProchainTiragePage({
         nextJackpot={jackpot}
         pending={pending}
         locale={locale}
-        showPageLink={false}
+        showPlayLink={false}
       />
       <div className="mx-auto max-w-3xl px-5 py-14 md:px-8 md:py-20">
         <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">

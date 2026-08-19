@@ -32,7 +32,9 @@ export default async function ConfidentialitePage({
         {t("privacyTitle")}
       </h1>
       <p className="mt-4 leading-relaxed text-[var(--fog)]">{t("privacyBody")}</p>
-      <p className="mt-3 leading-relaxed text-[var(--fog)]">{t("adsense")}</p>
+      {t("adsense").trim() ? (
+        <p className="mt-3 leading-relaxed text-[var(--fog)]">{t("adsense")}</p>
+      ) : null}
       <p className="mt-3 leading-relaxed text-[var(--fog)]">
         {t("privacyConsent")}
       </p>

@@ -150,7 +150,9 @@ export default async function MentionsPage({
             {t("privacyTitle")}
           </h2>
           <p className="mt-4">{t("privacyBody")}</p>
-          <p className="mt-3">{t("adsense")}</p>
+          {t("adsense").trim() ? (
+            <p className="mt-3">{t("adsense")}</p>
+          ) : null}
           <p className="mt-3">{t("privacyConsent")}</p>
           <h3 className="mt-6 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)]">
             {t("privacyBasisTitle")}
@@ -205,7 +207,9 @@ export default async function MentionsPage({
             {t("cookiesAdsTitle")}
           </h3>
           <p className="mt-2">{t("cookiesAdsBody")}</p>
-          <p className="mt-3">{t("adsense")}</p>
+          {t("adsense").trim() ? (
+            <p className="mt-3">{t("adsense")}</p>
+          ) : null}
         </section>
 
         <section id="affiliation" className="scroll-mt-28">
@@ -215,13 +219,17 @@ export default async function MentionsPage({
           <p className="mt-4">
             <L text={t("independent")} />
           </p>
-          <p className="mt-3">
-            <L text={t("amazon")} />
-          </p>
+          {t("amazon").trim() ? (
+            <p className="mt-3">
+              <L text={t("amazon")} />
+            </p>
+          ) : null}
           <p className="mt-3">
             <L text={t("affiliateBody")} />
           </p>
-          <p className="mt-3">{t("adsense")}</p>
+          {t("adsense").trim() ? (
+            <p className="mt-3">{t("adsense")}</p>
+          ) : null}
         </section>
 
         {showResponsible ? (

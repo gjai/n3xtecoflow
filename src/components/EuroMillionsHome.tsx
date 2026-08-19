@@ -1,6 +1,5 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { AlertsEngagement } from "@/components/AlertsEngagement";
 import { KwankoBanner } from "@/components/KwankoBanner";
 import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
@@ -39,6 +38,8 @@ import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import { GAME_IDENTITY } from "@/lib/fdj-games/identity";
 import type { NewsArticle } from "@/lib/news/types";
 import { isBlockedLotteryNewsSource, isEuroMillionsResultClone } from "@/lib/news/rss";
+import { affiliateOffer } from "@/lib/affiliates";
+import { fdjAffiliateTracked, fdjAffiliateUrl } from "@/lib/fdj-affiliate";
 import type { SiteConfig } from "@/sites/types";
 
 function formatMoney(amount: number | null | undefined, locale: string) {
@@ -206,6 +207,12 @@ export async function EuroMillionsHome({
       ),
   );
 
+  const fdjOffer = affiliateOffer(site, "fdj");
+  const playHref = fdjAffiliateUrl(
+    "euromillions",
+    fdjOffer?.href ?? "https://www.fdj.fr/jeux-de-tirage/euromillions-my-million",
+  );
+
   return (
     <>
       <ResultsLivePoller
@@ -217,6 +224,8 @@ export async function EuroMillionsHome({
         nextJackpot={nextJackpot}
         pending={pending}
         locale={locale}
+        playHref={playHref}
+        playTracked={fdjAffiliateTracked("euromillions")}
       />
       <section className="hero-grid relative overflow-hidden border-b border-[var(--line)]">
         <div className="hero-orbs hidden md:block" aria-hidden>
@@ -386,7 +395,6 @@ export async function EuroMillionsHome({
       </section>
 
       <div className="mx-auto max-w-6xl px-5 py-8 md:px-8">
-        <AdSenseUnit label={t("adsLabel")} />
         <KwankoBanner
           desktop={KWANKO_SLOTS.bienvenueLarge.desktop}
           mobile={KWANKO_SLOTS.bienvenueLarge.mobile}

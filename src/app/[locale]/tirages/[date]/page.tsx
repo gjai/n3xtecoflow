@@ -3,7 +3,6 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
-import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { KwankoBanner } from "@/components/KwankoBanner";
 import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import {
@@ -209,9 +208,6 @@ export default async function TirageDetailPage({
           </div>
         )}
 
-        <div className="mt-8">
-          <AdSenseUnit label={homeT("adsLabel")} />
-        </div>
 
         {draw.prizeTiers && draw.prizeTiers.length > 0 ? (
           <div className="mt-8">

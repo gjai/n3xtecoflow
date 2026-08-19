@@ -3,7 +3,6 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
-import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { FdjGameBalls } from "@/components/FdjGameBalls";
 import { GameMark } from "@/components/GameMark";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
@@ -92,7 +91,6 @@ export default async function CompanionDrawPage({
 
   const t = await getTranslations("draws");
   const gamesT = await getTranslations("games");
-  const homeT = await getTranslations("home");
   const label = locale === "en" ? entry.labelEn : entry.labelFr;
   const pretty = formatDate(draw.date, locale);
   const when = formatDrawWhen(draw, locale);
@@ -177,10 +175,6 @@ export default async function CompanionDrawPage({
 
         <div className="mt-8 border border-[var(--line)] bg-[var(--surface)] p-6">
           <FdjGameBalls draw={draw} labels={groupLabels} />
-        </div>
-
-        <div className="mt-8">
-          <AdSenseUnit label={homeT("adsLabel")} />
         </div>
 
         <section id="simulateur" className="mt-12 scroll-mt-28">

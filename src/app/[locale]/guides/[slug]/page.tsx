@@ -1,7 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { KwankoBanner } from "@/components/KwankoBanner";
 import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import { ArticleBody, type ArticleProductCard } from "@/components/ArticleBody";
@@ -129,7 +128,6 @@ export default async function GuideArticlePage({
     notFound();
   }
   const copy = getGuideCopy(guide, locale);
-  const adsT = await getTranslations("home");
   const isEn = locale !== "fr";
   const ecoflowMap =
     site.id === "ecoflow" ? await getEcoflowEntriesMap() : {};
@@ -203,7 +201,6 @@ export default async function GuideArticlePage({
       ) : null}
       {siteIsEuroMillions(site) ? (
         <div className="mx-auto max-w-3xl px-5 pt-8 md:px-8">
-          <AdSenseUnit label={adsT("adsLabel")} />
           <KwankoBanner
             desktop={KWANKO_SLOTS.incontent.desktop}
             mobile={KWANKO_SLOTS.incontent.mobile}
