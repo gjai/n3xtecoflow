@@ -514,4 +514,12 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     angleFr: "Forclusion 60 jours, FDJ, ce que le site ne paie pas",
     angleEn: "60-day time limit, FDJ, this site does not pay prizes",
   },
+  {
+    slug: "offre-bienvenue-fdj-euromillions",
+    siteId: "euromillions",
+    topicFr: "Offre de bienvenue FDJ pour EuroMillions",
+    topicEn: "FDJ welcome offer for EuroMillions",
+    angleFr: "Bonus, conditions, compte joueur, dépôt et jeu responsable",
+    angleEn: "Bonus, terms, player account, deposit, and responsible play",
+  },
 ];

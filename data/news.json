@@ -2,6 +2,44 @@
   "updatedAt": "2026-08-12T13:16:59.851092Z",
   "articles": [
     {
+      "slug": "2026-08-19-offre-bienvenue-fdj-euromillions",
+      "siteId": "euromillions",
+      "sourceUrl": "https://www.fdj.fr/",
+      "sourceName": "FDJ",
+      "sourceGuid": "editorial-euromillions-offre-bienvenue-2026-08-19",
+      "publishedAt": "2026-08-19T10:15:00.000Z",
+      "ingestedAt": "2026-08-19T10:15:00.000Z",
+      "rewrittenBy": "ai",
+      "tags": [
+        "euromillions",
+        "fdj",
+        "offre-bienvenue",
+        "actualite"
+      ],
+      "fr": {
+        "title": "Offre de bienvenue FDJ : notre guide pour vérifier les bonnes conditions avant de jouer à EuroMillions",
+        "excerpt": "Un nouveau guide éditorial met en avant l’offre de bienvenue FDJ, avec les vérifications utiles avant ouverture de compte.",
+        "body": [
+          "Nous avons publié un nouveau guide consacré à l’offre de bienvenue FDJ mise en avant autour d’EuroMillions. L’objectif n’est pas de promettre un gain, mais d’aider à lire correctement une campagne de bienvenue avant inscription.",
+          "Le point central reste toujours le même : vérifier la page officielle affichée par l’opérateur. Montant du bonus, jeux concernés, dépôt minimum, durée de validité et éventuelles restrictions peuvent varier selon la campagne active.",
+          "Le guide rappelle aussi qu’une offre promotionnelle ne change pas la nature du jeu. EuroMillions reste un jeu de hasard réservé aux majeurs, avec un risque de perte d’argent. Une promotion doit rester un élément d’information, pas un prétexte pour augmenter sa mise.",
+          "Si vous cherchez l’offre du moment, nous recommandons de passer par la page FDJ suivie par affiliation puis de relire les conditions affichées avant validation du compte. C’est aussi le meilleur moyen d’arriver sur la bonne landing sans casser le tracking.",
+          "Retrouvez le guide complet dans la rubrique Guides pour comparer calmement les conditions avant de jouer."
+        ]
+      },
+      "en": {
+        "title": "FDJ welcome offer: our guide to checking the right terms before playing EuroMillions",
+        "excerpt": "A new editorial guide highlights the FDJ welcome offer and the key checks to make before opening an account.",
+        "body": [
+          "We have published a new guide focused on the FDJ welcome offer highlighted around EuroMillions. The goal is not to promise winnings, but to help readers understand a welcome campaign before signing up.",
+          "The key point is always the same: check the operator's official landing page. Bonus amount, eligible games, minimum deposit, validity period, and possible restrictions can vary with the active campaign.",
+          "The guide also reminds readers that a promotion does not change the nature of the game. EuroMillions remains a game of chance for adults only, with a risk of loss. A promo should stay an information point, not a reason to raise the stake.",
+          "If you are looking for the current offer, we recommend using the tracked FDJ page and then re-reading the displayed terms before confirming the account. It is also the best way to land on the right campaign without breaking affiliate tracking.",
+          "You can find the full guide in the Guides section and compare the terms calmly before playing."
+        ]
+      }
+    },
+    {
       "slug": "2026-08-12-amazon-court-circuite-le-prix-de-l-ecoflow-delta-2-c-est-le-moment-ou-ja-1ac661",
       "sourceUrl": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQc2tvY1lvZjdOUkhuZjRRdS0wYWZpcFhTc0hDRWd6alRBakNpVHgwWFZvRzNQcGxuSUY3YW1VQTg4cExtLWVqN3lwdHgwc1lHazFnc1djdXpXNFZfSExYZmRuVGhsNVlmWHN3V0pIbWN2TXVFeVR5emN4ZlgwdmlFVnVQc2dEaENWVHBrRW9n?oc=5",
       "sourceName": "iPhon.fr",

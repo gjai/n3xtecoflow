@@ -639,18 +639,17 @@ export async function EuroMillionsHome({
               {t("statsCta")} →
             </Link>
           </div>
-          <p className="mt-8 max-w-2xl text-xs text-[var(--muted)]">
-            {t("disclaimer")}
-          </p>
+          <div className="mt-8 max-w-2xl space-y-4">
+            <p className="text-xs text-[var(--muted)]">{t("disclaimer")}</p>
+            <KwankoBanner
+              desktop={KWANKO_SLOTS.anj.mobile}
+              mobile={KWANKO_SLOTS.anj.mobile}
+              className="justify-start py-0"
+              label="Prévention jeu responsable"
+            />
+          </div>
         </div>
       </section>
-
-      <div className="mx-auto max-w-6xl px-5 py-4 md:px-8">
-        <KwankoBanner
-          desktop={KWANKO_SLOTS.anj.desktop}
-          mobile={KWANKO_SLOTS.anj.mobile}
-        />
-      </div>
     </>
   );
 }

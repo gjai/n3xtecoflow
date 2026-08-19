@@ -27,6 +27,8 @@ export const EUROMILLIONS_MY_MILLION_GUIDE_SLUG = "comprendre-my-million";
 export const EUROMILLIONS_TIERS_GUIDE_SLUG = "rangs-gains-euromillions";
 export const EUROMILLIONS_OTHER_GAMES_GUIDE_SLUG = "euromillions-et-autres-tirages";
 export const EUROMILLIONS_CLAIM_GUIDE_SLUG = "toucher-un-gain-euromillions";
+export const EUROMILLIONS_WELCOME_OFFER_GUIDE_SLUG =
+  "offre-bienvenue-fdj-euromillions";
 
 const CREDIT = "EuroMillions Résultats (IA)";
 
@@ -469,6 +471,103 @@ const euromillionsCoreGuidesRaw: GuideArticle[] = [
           heading: "What we do not do",
           paragraphs: [
             "No “magic combo” across games, no ticket sales, no promise of winnings. To play: licensed operator, 18+, leisure budget.",
+          ],
+        },
+      ],
+    },
+  },
+  {
+    slug: EUROMILLIONS_WELCOME_OFFER_GUIDE_SLUG,
+    fr: {
+      title: "Offre de bienvenue FDJ pour EuroMillions : ce qu’il faut vérifier",
+      subtitle:
+        "Bonus, conditions, dépôt, délais et réflexes utiles avant de jouer votre première grille.",
+      sections: [
+        {
+          heading: "L’offre de bienvenue peut varier",
+          paragraphs: [
+            "La FDJ et ses campagnes partenaires peuvent mettre en avant une offre de bienvenue pour les nouveaux inscrits, mais son montant, sa mécanique et sa durée changent selon les périodes.",
+            "Avant de cliquer, vérifiez toujours la page de destination officielle : montant du bonus, jeux éligibles, éventuel code promo, dépôt minimum, et date de fin de l’opération.",
+          ],
+          bullets: [
+            "Réservée aux nouveaux comptes éligibles",
+            "Conditions et durée limitées dans le temps",
+            "Le détail contractuel affiché par l’opérateur fait foi",
+          ],
+        },
+        {
+          heading: "Ce qu’il faut regarder avant l’inscription",
+          paragraphs: [
+            "Une offre attractive n’a de valeur que si vous comprenez ses conditions réelles. Regardez si le bonus concerne seulement le premier dépôt, la première grille, ou un ensemble de jeux FDJ.",
+            "Lisez aussi les éventuelles limites : montant minimum pour activer l’offre, plafond maximum, mode de versement, et délai pour utiliser le crédit promotionnel s’il existe.",
+          ],
+        },
+        {
+          heading: "EuroMillions, My Million et autres jeux FDJ",
+          paragraphs: [
+            "Même si vous venez pour l’EuroMillions, une offre de bienvenue peut parfois s’appliquer plus largement à l’univers FDJ. Cela ne veut pas dire que tous les jeux ont les mêmes règles ni les mêmes horaires.",
+            "Sur ce site, nous couvrons surtout les résultats et guides EuroMillions, ainsi que Loto, EuroDreams, Crescendo, Keno et Illiko quand cela aide à comprendre l’écosystème FDJ.",
+          ],
+        },
+        {
+          heading: "Budget, vérification et jeu responsable",
+          paragraphs: [
+            "Une offre de bienvenue ne transforme pas un jeu de hasard en investissement. Définissez un budget loisir avant l’inscription, et ne déposez jamais davantage pour “rentabiliser” une promotion.",
+            "Réservé aux majeurs (18+). Les jeux d’argent comportent un risque de perte. Si le jeu n’est plus un divertissement, rapprochez-vous de Joueurs Info Service.",
+          ],
+        },
+        {
+          heading: "Le bon réflexe pratique",
+          paragraphs: [
+            "Si vous souhaitez ouvrir un compte, passez uniquement par un lien traqué et par la page officielle FDJ associée à l’offre du moment. C’est le moyen le plus simple d’arriver sur la bonne campagne sans perdre le suivi d’affiliation.",
+            "Ensuite, relisez une dernière fois les conditions affichées sur FDJ avant validation. Notre rôle est d’expliquer et d’orienter ; l’opérateur reste seul responsable de l’offre et de son application.",
+          ],
+        },
+      ],
+    },
+    en: {
+      title: "FDJ welcome offer for EuroMillions: what to check first",
+      subtitle:
+        "Bonus, conditions, deposit, timing, and useful checks before you play your first ticket.",
+      sections: [
+        {
+          heading: "The welcome offer can change",
+          paragraphs: [
+            "FDJ and its partner campaigns may highlight a welcome offer for new sign-ups, but the amount, mechanics, and duration can change over time.",
+            "Before clicking through, always check the official landing page: bonus amount, eligible games, any promo code, minimum deposit, and end date.",
+          ],
+          bullets: [
+            "Usually reserved for eligible new accounts",
+            "Conditions and timing are limited",
+            "The operator’s displayed terms are authoritative",
+          ],
+        },
+        {
+          heading: "What to check before registering",
+          paragraphs: [
+            "An attractive offer only matters if you understand the real conditions. Check whether the bonus applies to the first deposit, the first ticket, or a wider set of FDJ games.",
+            "Also read any limits: minimum amount, cap, payout format, and the time window to use any promotional credit.",
+          ],
+        },
+        {
+          heading: "EuroMillions, My Million, and other FDJ games",
+          paragraphs: [
+            "Even if you come for EuroMillions, a welcome offer may sometimes apply more broadly across FDJ products. That does not mean all games share the same rules or schedules.",
+            "On this site, we mainly cover EuroMillions results and guides, plus Loto, EuroDreams, Crescendo, Keno, and Illiko when that helps explain the wider FDJ ecosystem.",
+          ],
+        },
+        {
+          heading: "Budget, verification, and responsible play",
+          paragraphs: [
+            "A welcome offer does not turn a game of chance into an investment. Set a leisure budget before registering, and never deposit more just to “make a promo worth it”.",
+            "Adults only (18+). Gambling involves a risk of loss. If it stops being entertainment, seek support.",
+          ],
+        },
+        {
+          heading: "The practical takeaway",
+          paragraphs: [
+            "If you want to create an account, use a tracked link and the official FDJ landing page tied to the current offer. That is the simplest way to land on the right campaign without losing affiliate attribution.",
+            "Then read the displayed terms one last time before confirming. Our role is to explain and guide; the operator alone is responsible for the offer and its enforcement.",
           ],
         },
       ],
