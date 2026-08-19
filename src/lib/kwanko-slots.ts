@@ -39,6 +39,31 @@ export const KWANKO_SLOTS: Record<string, SlotPair> = {
     desktop: { id: "S51261158C3EF23D9", w: 728, h: 90 },
     mobile: { id: "S51261158C3EF23D5", w: 320, h: 50 },
   },
+  // Valorisation gagnants
+  valorisation: {
+    desktop: { id: "S51261158C3EF28117", w: 728, h: 90 },
+    mobile: { id: "S51261158C3EF2819", w: 320, h: 170 },
+  },
+  // Valorisation gagnants — grand format
+  valorisationLarge: {
+    desktop: { id: "S51261158C3EF28119", w: 970, h: 250 },
+    mobile: { id: "S51261158C3EF28111", w: 320, h: 480 },
+  },
+  // ANJ (jeu responsable)
+  anj: {
+    desktop: { id: "S51261158C3EF22B3", w: 982, h: 36 },
+    mobile: { id: "S51261158C3EF22B1", w: 322, h: 70 },
+  },
+  // Bienvenue — grand format (640x340 / 320x170)
+  bienvenueLarge: {
+    desktop: { id: "S51261158C3EF2179", w: 640, h: 340 },
+    mobile: { id: "S51261158C3EF2177", w: 320, h: 170 },
+  },
+  // EuroMillions — format carré (300x250)
+  euromillionsSquare: {
+    desktop: { id: "S51261158C3EF2135", w: 300, h: 250 },
+    mobile: { id: "S51261158C3EF2137", w: 320, h: 100 },
+  },
   // In-content 300x250 (Bonus_ete26 — guides / actus)
   incontent: {
     desktop: { id: "S51261158C3EF2173", w: 300, h: 250 },

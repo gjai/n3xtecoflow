@@ -388,8 +388,8 @@ export async function EuroMillionsHome({
       <div className="mx-auto max-w-6xl px-5 py-8 md:px-8">
         <AdSenseUnit label={t("adsLabel")} />
         <KwankoBanner
-          desktop={KWANKO_SLOTS.bienvenue.desktop}
-          mobile={KWANKO_SLOTS.bienvenue.mobile}
+          desktop={KWANKO_SLOTS.bienvenueLarge.desktop}
+          mobile={KWANKO_SLOTS.bienvenueLarge.mobile}
         />
       </div>
 
@@ -487,6 +487,13 @@ export async function EuroMillionsHome({
         </div>
       </section>
 
+      <div className="mx-auto max-w-6xl px-5 py-6 md:px-8">
+        <KwankoBanner
+          desktop={KWANKO_SLOTS.valorisation.desktop}
+          mobile={KWANKO_SLOTS.valorisation.mobile}
+        />
+      </div>
+
       <FdjCompanionGamesBlock store={fdjGames} locale={locale} variant="home" />
 
       {news.length > 0 ? (
@@ -582,6 +589,13 @@ export async function EuroMillionsHome({
         </section>
       ) : null}
 
+      <div className="mx-auto max-w-6xl px-5 py-6 md:px-8">
+        <KwankoBanner
+          desktop={KWANKO_SLOTS.euromillionsSquare.desktop}
+          mobile={KWANKO_SLOTS.euromillionsSquare.mobile}
+        />
+      </div>
+
       <section className="border-b border-[var(--line)] bg-[var(--surface)]">
         <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
           <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
@@ -630,6 +644,13 @@ export async function EuroMillionsHome({
           </p>
         </div>
       </section>
+
+      <div className="mx-auto max-w-6xl px-5 py-4 md:px-8">
+        <KwankoBanner
+          desktop={KWANKO_SLOTS.anj.desktop}
+          mobile={KWANKO_SLOTS.anj.mobile}
+        />
+      </div>
     </>
   );
 }
