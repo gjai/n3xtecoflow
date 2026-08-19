@@ -16,7 +16,10 @@
     "helpLink": "joueurs-info-service.fr",
     "helpUrl": "https://www.joueurs-info-service.fr",
     "showHelp": "1",
-    "legalLink": "Mentions légales"
+    "legalLink": "Mentions légales",
+    "anjMinor": "Interdit aux moins de 18 ans",
+    "anjWarning": "Les jeux d’argent et de hasard peuvent être dangereux : pertes d’argent, conflits familiaux, addiction… Retrouvez nos conseils sur",
+    "anjCallFree": "appel non surtaxé"
   },
   "nav": {
     "home": "Accueil",

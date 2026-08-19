@@ -16,7 +16,10 @@
     "helpLink": "joueurs-info-service.fr",
     "helpUrl": "https://www.joueurs-info-service.fr",
     "showHelp": "1",
-    "legalLink": "Wettelijke vermeldingen"
+    "legalLink": "Wettelijke vermeldingen",
+    "anjMinor": "Niet toegestaan onder 18 jaar",
+    "anjWarning": "Gokken kan gevaarlijk zijn: geldverlies, familieconflicten, verslaving… Advies op",
+    "anjCallFree": "gratis telefoonnummer"
   },
   "nav": {
     "home": "Home",

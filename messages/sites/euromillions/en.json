@@ -16,7 +16,10 @@
     "helpLink": "joueurs-info-service.fr",
     "helpUrl": "https://www.joueurs-info-service.fr",
     "showHelp": "1",
-    "legalLink": "Legal notice"
+    "legalLink": "Legal notice",
+    "anjMinor": "Not for under-18s",
+    "anjWarning": "Gambling can be dangerous: loss of money, family conflict, addiction… Find advice at",
+    "anjCallFree": "non-premium rate call"
   },
   "nav": {
     "home": "Home",

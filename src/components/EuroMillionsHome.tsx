@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { AlertsEngagement } from "@/components/AlertsEngagement";
+import { AnjResponsibleStrip } from "@/components/AnjResponsibleStrip";
 import { KwankoBanner } from "@/components/KwankoBanner";
 import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import { DrawPrizeTable } from "@/components/DrawPrizeTable";
@@ -641,12 +642,7 @@ export async function EuroMillionsHome({
           </div>
           <div className="mt-8 max-w-2xl space-y-4">
             <p className="text-xs text-[var(--muted)]">{t("disclaimer")}</p>
-            <KwankoBanner
-              desktop={KWANKO_SLOTS.anj.desktop}
-              mobile={KWANKO_SLOTS.anj.mobile}
-              className="justify-start py-0"
-              label="Prévention jeu responsable"
-            />
+            <AnjResponsibleStrip />
           </div>
         </div>
       </section>

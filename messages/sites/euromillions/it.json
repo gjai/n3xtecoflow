@@ -16,7 +16,10 @@
     "helpLink": "joueurs-info-service.fr",
     "helpUrl": "https://www.joueurs-info-service.fr",
     "showHelp": "1",
-    "legalLink": "Note legali"
+    "legalLink": "Note legali",
+    "anjMinor": "Vietato ai minori di 18 anni",
+    "anjWarning": "Il gioco d’azzardo può essere pericoloso: perdite di denaro, conflitti familiari, dipendenza… Consigli su",
+    "anjCallFree": "chiamata non a pagamento"
   },
   "nav": {
     "home": "Home",

@@ -16,7 +16,10 @@
     "helpLink": "joueurs-info-service.fr",
     "helpUrl": "https://www.joueurs-info-service.fr",
     "showHelp": "1",
-    "legalLink": "Impressum"
+    "legalLink": "Impressum",
+    "anjMinor": "Nur für Volljährige (18+)",
+    "anjWarning": "Glücksspiel kann gefährlich sein: Geldverlust, familiäre Konflikte, Sucht… Beratung unter",
+    "anjCallFree": "gebührenfreier Anruf"
   },
   "nav": {
     "home": "Start",

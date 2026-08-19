@@ -49,11 +49,6 @@ export const KWANKO_SLOTS: Record<string, SlotPair> = {
     desktop: { id: "S51261158C3EF28119", w: 970, h: 250 },
     mobile: { id: "S51261158C3EF28111", w: 320, h: 480 },
   },
-  // ANJ (jeu responsable)
-  anj: {
-    desktop: { id: "S51261158C3EF22B3", w: 982, h: 36 },
-    mobile: { id: "S51261158C3EF22B1", w: 322, h: 70 },
-  },
   // Bienvenue — grand format (640x340 / 320x170)
   bienvenueLarge: {
     desktop: { id: "S51261158C3EF2179", w: 640, h: 340 },

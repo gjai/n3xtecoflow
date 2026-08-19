@@ -16,7 +16,10 @@
     "helpLink": "joueurs-info-service.fr",
     "helpUrl": "https://www.joueurs-info-service.fr",
     "showHelp": "1",
-    "legalLink": "Aviso legal"
+    "legalLink": "Aviso legal",
+    "anjMinor": "Proibido a menores de 18 anos",
+    "anjWarning": "O jogo pode ser perigoso: perdas de dinheiro, conflitos familiares, dependência… Aconselhamento em",
+    "anjCallFree": "chamada não sobretaxada"
   },
   "nav": {
     "home": "Início",
