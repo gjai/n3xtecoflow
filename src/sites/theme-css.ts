@@ -79,8 +79,8 @@ a{color:inherit;text-decoration:none}
   .em-menu-btn{display:none!important}
 }
 .lottery-balls{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.5rem}
-.lottery-balls--compact{gap:.35rem;margin-top:.4rem}
-.lottery-balls--fdj{gap:.25rem}
+.lottery-balls--compact{gap:.35rem;margin-top:.4rem;flex-wrap:nowrap}
+.lottery-balls--fdj{gap:.25rem;flex-wrap:nowrap}
 @media(min-width:768px){.lottery-balls--fdj{gap:.5rem}}
 .lottery-ball{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;width:2.75rem;height:2.75rem;border-radius:9999px;font-weight:600;font-size:.875rem;line-height:1;flex-shrink:0}
 .lottery-ball--lg{width:3.5rem;height:3.5rem;font-size:1.125rem}
