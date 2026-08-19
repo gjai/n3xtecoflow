@@ -104,6 +104,18 @@ a{color:inherit;text-decoration:none}
   .lottery-balls--fdj .lottery-star.lottery-ball--lg{width:3.5rem;height:3.5rem}
   .lottery-balls--fdj .lottery-star__num{top:.2rem;font-size:1.125rem}
 }
+#dernier-tirage .lottery-balls--fdj{flex-wrap:nowrap;max-width:100%}
+@media(max-width:767px){#dernier-tirage .lottery-balls--fdj{flex-wrap:wrap}}
+#dernier-tirage .lottery-balls--fdj .lottery-ball--lg{width:2.2rem;height:2.2rem;font-size:.95rem}
+#dernier-tirage .lottery-balls--fdj .lottery-star.lottery-ball--lg{width:2.2rem;height:2.2rem}
+#dernier-tirage .lottery-balls--fdj .lottery-star__num{top:.13rem;font-size:.9rem}
+@media(min-width:1280px){
+  #dernier-tirage .lottery-balls--fdj .lottery-ball--lg{width:2.75rem;height:2.75rem;font-size:1rem}
+  #dernier-tirage .lottery-balls--fdj .lottery-star.lottery-ball--lg{width:2.75rem;height:2.75rem}
+  #dernier-tirage .lottery-balls--fdj .lottery-star__num{top:.15rem;font-size:1rem}
+}
+.hero-offer-banner{width:100%;max-width:640px}
+.hero-offer-banner aside{justify-content:flex-start!important;padding-top:0!important;padding-bottom:0!important}
 .lottery-ball--letter{border:2px solid var(--accent);background:var(--surface);color:var(--heading)}
 .lottery-code{display:inline-flex;align-items:center;min-height:2.25rem;padding:0 .75rem;font-family:ui-monospace,monospace;font-size:.875rem;font-weight:600;letter-spacing:.04em;border:1px solid var(--line);background:var(--surface);color:var(--heading)}
 `.trim();

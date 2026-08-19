@@ -287,7 +287,7 @@ export async function EuroMillionsHome({
           <span className="hero-orb hero-orb-2" />
           <span className="hero-orb hero-orb-3" />
         </div>
-        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[minmax(0,640px)_minmax(0,1fr)] md:items-start md:px-8 md:py-20">
+        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1fr_1.05fr] md:items-start md:px-8 md:py-20">
           <div className="reveal min-w-0">
             <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
               {brand}
@@ -308,11 +308,21 @@ export async function EuroMillionsHome({
               </p>
             ) : null}
             <p className="mt-4 max-w-lg text-[var(--muted)]">{t("subhead")}</p>
-            <KwankoBanner
-              desktop={KWANKO_SLOTS.bienvenueLarge.desktop}
-              mobile={KWANKO_SLOTS.bienvenueLarge.mobile}
-              className="mt-6 justify-start py-0"
-            />
+            <div className="hero-offer-banner mt-6">
+              <div className="xl:hidden">
+                <KwankoBanner
+                  desktop={KWANKO_SLOTS.bienvenueLarge.mobile}
+                  className="justify-start py-0"
+                />
+              </div>
+              <div className="hidden xl:block">
+                <KwankoBanner
+                  desktop={KWANKO_SLOTS.bienvenueLarge.desktop}
+                  mobile={KWANKO_SLOTS.bienvenueLarge.mobile}
+                  className="justify-start py-0"
+                />
+              </div>
+            </div>
             <div className="reveal-delay mt-8 flex flex-wrap gap-3">
               <Link
                 href="/tirages#simulateur"
@@ -337,7 +347,7 @@ export async function EuroMillionsHome({
 
           <div
             id="dernier-tirage"
-            className="reveal-delay-2 border border-[var(--line)] bg-[var(--surface)]/90 p-6 backdrop-blur md:p-8"
+            className="reveal-delay-2 min-w-0 border border-[var(--line)] bg-[var(--surface)]/90 p-5 backdrop-blur md:p-8"
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>

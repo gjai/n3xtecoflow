@@ -7,6 +7,7 @@ import { siteIsEuroMillions } from "@/sites/features";
 import { notFound } from "next/navigation";
 import { KwankoBanner } from "@/components/KwankoBanner";
 import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
+import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
 
 export async function generateMetadata({
   params,
@@ -58,14 +59,12 @@ export default async function ParionsSportPage({
         des gains importants.
       </p>
       <div className="mt-8">
-        <a
+        <AffiliateOfferButton
           href={affiliateUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex min-h-12 items-center bg-[var(--accent)] px-6 text-sm font-semibold text-[var(--accent-ink)]"
-        >
-          Parier sur Parions Sport →
-        </a>
+          tracked
+          label="Parier sur Parions Sport →"
+          className="min-h-12"
+        />
       </div>
       <KwankoBanner
         desktop={KWANKO_SLOTS.bienvenue.desktop}

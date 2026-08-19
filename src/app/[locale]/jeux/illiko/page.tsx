@@ -7,6 +7,7 @@ import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
 import { notFound } from "next/navigation";
+import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
 
 export async function generateMetadata({
   params,
@@ -58,14 +59,12 @@ export default async function IllikoPage({
         découvrez immédiatement si vous avez gagné.
       </p>
       <div className="mt-8">
-        <a
+        <AffiliateOfferButton
           href={affiliateUrl}
-          target="_blank"
-          rel="sponsored noopener noreferrer"
-          className="inline-flex min-h-12 items-center bg-[var(--accent)] px-6 text-sm font-semibold text-[var(--accent-ink)]"
-        >
-          Jouer sur Illiko →
-        </a>
+          tracked
+          label="Jouer sur Illiko →"
+          className="min-h-12"
+        />
       </div>
       <KwankoBanner
         desktop={KWANKO_SLOTS.illiko?.desktop || KWANKO_SLOTS.bienvenue.desktop}
