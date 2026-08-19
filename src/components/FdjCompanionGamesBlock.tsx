@@ -137,7 +137,7 @@ export async function FdjCompanionGamesBlock({
             return (
               <li
                 key={game.id}
-                className="border border-[var(--line)] bg-[var(--surface)] p-5"
+                className="min-w-0 border border-[var(--line)] bg-[var(--surface)] p-5"
                 style={gameRailStyle(game.id)}
               >
                 <div className="flex flex-wrap items-start justify-between gap-2">
@@ -205,11 +205,11 @@ export async function FdjCompanionGamesBlock({
                   </Link>
                 </div>
                 {showBalls ? (
-                  <div className="mt-4">
+                  <div className="mt-4 min-w-0">
                     <FdjGameBalls
                       draw={showBalls}
                       labels={groupLabels}
-                      compact
+                      card
                     />
                   </div>
                 ) : pending ? (

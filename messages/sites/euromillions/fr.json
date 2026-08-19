@@ -271,6 +271,8 @@
     "companionOf": "Résultat {game} du {date}",
     "companionMeta": "Numéros et détails du tirage {game} du {date}. Site indépendant, 18+.",
     "prizesEtoilePlus": "Gains Étoile+",
+    "prizesEtoilePlusShow": "Afficher Étoile+",
+    "prizesEtoilePlusHide": "Masquer Étoile+",
     "prizesEtoilePlusHelp": "Rangs extra si l’option Étoile+ a été jouée — même combinaison 5+2.",
     "csvExport": "Télécharger les archives (CSV)",
     "claimCta": "Toucher un gain"

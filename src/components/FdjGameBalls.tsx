@@ -52,15 +52,39 @@ export function FdjGameBalls({
   draw,
   labels,
   compact = false,
+  card = false,
 }: {
   draw: FdjGameDraw;
   labels: Record<string, string>;
   /** Une seule rangée (listes d’archives) — mêmes boules que le détail. */
   compact?: boolean;
+  /** Cartes home : un rang par groupe, retour à la ligne dans la carte. */
+  card?: boolean;
 }) {
+  if (card) {
+    return (
+      <div className="lottery-balls-card min-w-0 space-y-2">
+        {draw.groups.map((g) => (
+          <div
+            key={`${g.type}-${g.labelKey}`}
+            className="lottery-balls lottery-balls--compact min-w-0"
+          >
+            {g.values.map((v, i) => (
+              <Ball
+                key={`${g.labelKey}-${v}-${i}`}
+                value={v}
+                variant={groupVariant(g)}
+                size="sm"
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  }
   if (compact) {
     return (
-      <div className="lottery-balls lottery-balls--compact">
+      <div className="lottery-balls lottery-balls--compact min-w-0">
         {draw.groups.flatMap((g) =>
           g.values.map((v, i) => (
             <Ball

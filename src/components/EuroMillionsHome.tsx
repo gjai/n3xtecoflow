@@ -390,6 +390,9 @@ export async function EuroMillionsHome({
                   title={tDraws("prizesTitle")}
                   extraTitle={tDraws("prizesEtoilePlus")}
                   extraHelp={tDraws("prizesEtoilePlusHelp")}
+                  extraShowLabel={tDraws("prizesEtoilePlusShow")}
+                  extraHideLabel={tDraws("prizesEtoilePlusHide")}
+                  extraHiddenByDefault
                   rankLabel={tDraws("prizeRank")}
                   amountLabel={tDraws("prizeAmount")}
                   winnersLabel={tDraws("prizeWinners")}

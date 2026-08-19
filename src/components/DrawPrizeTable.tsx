@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { intlLocale } from "@/i18n/locales";
 import type { EuroMillionsPrizeTier } from "@/lib/euromillions/types";
 
@@ -10,6 +13,24 @@ function formatMoney(amount: number | null | undefined, locale: string) {
   }).format(amount);
 }
 
+function normalizeRank(r: string) {
+  return r.replace(/^.*?(\d)/, "$1").trim();
+}
+
+function hasEtoilePlusData(
+  tiers: EuroMillionsPrizeTier[],
+  extraTiers?: EuroMillionsPrizeTier[],
+) {
+  const eplusMap = new Map(
+    (extraTiers || []).map((t) => [normalizeRank(t.rank), t]),
+  );
+  return (
+    eplusMap.size > 0 &&
+    tiers.some((t) => eplusMap.has(normalizeRank(t.rank))) &&
+    (extraTiers || []).some((t) => t.amountEur > 0)
+  );
+}
+
 function Table({
   tiers,
   extraTiers,
@@ -18,6 +39,7 @@ function Table({
   amountLabel,
   winnersLabel,
   extraLabel,
+  showExtraColumn,
 }: {
   tiers: EuroMillionsPrizeTier[];
   extraTiers?: EuroMillionsPrizeTier[];
@@ -26,15 +48,12 @@ function Table({
   amountLabel: string;
   winnersLabel: string;
   extraLabel?: string;
+  showExtraColumn: boolean;
 }) {
-  const normalizeRank = (r: string) =>
-    r.replace(/^.*?(\d)/,"$1").trim();
   const eplusMap = new Map(
     (extraTiers || []).map((t) => [normalizeRank(t.rank), t]),
   );
-  const hasEplus = eplusMap.size > 0 &&
-    tiers.some((t) => eplusMap.has(normalizeRank(t.rank))) &&
-    (extraTiers || []).some((t) => t.amountEur > 0);
+  const showEplus = showExtraColumn && hasEtoilePlusData(tiers, extraTiers);
   return (
     <div className="overflow-x-auto border border-[var(--line)]">
       <table className="w-full min-w-[320px] text-left text-sm">
@@ -43,7 +62,7 @@ function Table({
             <th className="px-3 py-2 font-medium">{rankLabel}</th>
             <th className="px-3 py-2 font-medium">{amountLabel}</th>
             <th className="px-3 py-2 font-medium">{winnersLabel}</th>
-            {hasEplus ? (
+            {showEplus ? (
               <th className="px-3 py-2 font-medium">{extraLabel}</th>
             ) : null}
           </tr>
@@ -60,7 +79,7 @@ function Table({
                   {formatMoney(tier.amountEur, locale) || "—"}
                 </td>
                 <td className="px-3 py-2 text-[var(--muted)]">{tier.winners}</td>
-                {hasEplus ? (
+                {showEplus ? (
                   <td className="px-3 py-2 text-[var(--heading)]">
                     {ep ? formatMoney(ep.amountEur, locale) || "—" : "—"}
                   </td>
@@ -81,6 +100,9 @@ export function DrawPrizeTable({
   title,
   extraTitle,
   extraHelp,
+  extraShowLabel,
+  extraHideLabel,
+  extraHiddenByDefault = false,
   rankLabel,
   amountLabel,
   winnersLabel,
@@ -92,18 +114,35 @@ export function DrawPrizeTable({
   title: string;
   extraTitle: string;
   extraHelp: string;
+  extraShowLabel: string;
+  extraHideLabel: string;
+  extraHiddenByDefault?: boolean;
   rankLabel: string;
   amountLabel: string;
   winnersLabel: string;
   heading?: "h2" | "h3";
 }) {
+  const [showExtra, setShowExtra] = useState(!extraHiddenByDefault);
   if (!tiers?.length) return null;
   const Heading = heading;
+  const canToggleEplus = hasEtoilePlusData(tiers, extraTiers);
   return (
     <div className="mt-8">
-      <Heading className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
-        {title}
-      </Heading>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <Heading className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+          {title}
+        </Heading>
+        {canToggleEplus ? (
+          <button
+            type="button"
+            onClick={() => setShowExtra((open) => !open)}
+            className="text-xs text-[var(--muted)] transition-colors hover:text-[var(--accent)] hover:underline"
+            aria-expanded={showExtra}
+          >
+            {showExtra ? extraHideLabel : extraShowLabel}
+          </button>
+        ) : null}
+      </div>
       <div className="mt-4">
         <Table
           tiers={tiers}
@@ -113,9 +152,10 @@ export function DrawPrizeTable({
           amountLabel={amountLabel}
           winnersLabel={winnersLabel}
           extraLabel={extraTitle}
+          showExtraColumn={showExtra}
         />
       </div>
-      {extraTiers && extraTiers.length > 0 ? (
+      {showExtra && extraTiers && extraTiers.length > 0 ? (
         <p className="mt-3 text-sm text-[var(--muted)]">{extraHelp}</p>
       ) : null}
     </div>

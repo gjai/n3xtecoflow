@@ -271,6 +271,8 @@
     "companionOf": "{game}-Ergebnis vom {date}",
     "companionMeta": "Zahlen und Details der {game}-Ziehung vom {date}. Unabhängige Seite, 18+.",
     "prizesEtoilePlus": "Étoile+ prizes",
+    "prizesEtoilePlusShow": "Show Étoile+",
+    "prizesEtoilePlusHide": "Hide Étoile+",
     "prizesEtoilePlusHelp": "Extra tiers if the Étoile+ option was played — same 5+2 combination.",
     "csvExport": "Archiv als CSV laden",
     "claimCta": "Gewinn einlösen"
