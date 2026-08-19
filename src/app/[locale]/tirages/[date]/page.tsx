@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { AdSenseUnit } from "@/components/AdSenseUnit";
-import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
 import { KwankoBanner } from "@/components/KwankoBanner";
 import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import {
@@ -315,7 +314,6 @@ export default async function TirageDetailPage({
         desktop={KWANKO_SLOTS.bienvenue.desktop}
         mobile={KWANKO_SLOTS.bienvenue.mobile}
       />
-      <EuroMillionsOffersBlock site={site} locale={locale} variant="compact" />
     </>
   );
 }

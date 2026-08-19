@@ -43,11 +43,7 @@ export function offThemeFallbackPath(
   ) || "/";
   const loc = locale || siteLocalesFallback(site);
 
-  if (
-    !siteShowsProducts(site) &&
-    site.id !== "euromillions" &&
-    startsWithPath(rest, "/produits")
-  ) {
+  if (!siteShowsProducts(site) && startsWithPath(rest, "/produits")) {
     return withLocale(loc, "/guides");
   }
   if (

@@ -8,9 +8,9 @@ export function siteShowsProducts(site: SiteConfig): boolean {
   return site.features?.products !== false;
 }
 
-/** Index /produits : catalogue SKU, ou accessoires Amazon EuroMillions. */
+/** Index /produits : catalogue SKU des thèmes produits. */
 export function siteHasProductIndex(site: SiteConfig): boolean {
-  return siteShowsProducts(site) || site.id === "euromillions";
+  return siteShowsProducts(site);
 }
 
 /** Locales allowed for this theme (others redirect to default). */

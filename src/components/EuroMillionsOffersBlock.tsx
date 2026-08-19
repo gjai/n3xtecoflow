@@ -87,7 +87,7 @@ export async function EuroMillionsOffersBlock({
     amazonIds.includes(o.id),
   );
 
-  if (!allowAmazon && !fdj) return null;
+  if (!allowAmazon) return null;
 
   return (
     <section className="border-y border-[var(--line)] bg-[var(--surface)]">

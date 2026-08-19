@@ -2,7 +2,6 @@ import { intlLocale } from "@/i18n/locales";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
 import { EuroMillionsSimulator } from "@/components/EuroMillionsSimulator";
 import { EuroMillionsStatsPanel } from "@/components/EuroMillionsStatsPanel";
 import { FlashGridGenerator } from "@/components/FlashGridGenerator";
@@ -251,7 +250,6 @@ export default async function TiragesPage({
         desktop={KWANKO_SLOTS.euromillions.desktop}
         mobile={KWANKO_SLOTS.euromillions.mobile}
       />
-      <EuroMillionsOffersBlock site={site} locale={locale} variant="compact" />
     </>
   );
 }

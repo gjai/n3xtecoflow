@@ -140,9 +140,7 @@ export function buildSitemapForSite(
   const prods = getProductsForSite(site.id);
   const staticPaths = [
     "",
-    ...(siteShowsProducts(site) || site.id === "euromillions"
-      ? ["/produits"]
-      : []),
+    ...(siteShowsProducts(site) ? ["/produits"] : []),
     ...(site.id === "ecoflow" ? ["/powerstream"] : []),
     ...(site.id === "euromillions"
       ? [

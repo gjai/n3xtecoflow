@@ -1,7 +1,6 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
 import { resolveAffiliateOffers } from "@/lib/affiliates";
 import { siteNeedsGamblingDisclaimer } from "@/sites/features";
 import { AffiliateLinkedText } from "./AffiliateLinkedText";
@@ -95,14 +94,6 @@ export function GamblingDisclaimer({
               </a>
             </p>
           ) : null}
-          <p>
-            <Link
-              href="/mentions-legales#affiliation"
-              className="text-[var(--accent)] underline-offset-2 hover:underline"
-            >
-              {t("legalLink")}
-            </Link>
-          </p>
         </div>
       </div>
     </aside>

@@ -3,7 +3,7 @@ import type { SiteConfig } from "./types";
 
 /**
  * Thème « EuroMillions Résultats » — euromillions-resultats.fr
- * Résultats, archives, stats. AdSense + Amazon accessoires. Pas de vente de tickets.
+ * Résultats, archives, stats. AdSense + affiliation FDJ (Kwanko). Pas de vente de tickets.
  */
 export const euromillionsSite: SiteConfig = {
   id: "euromillions",
@@ -153,7 +153,7 @@ export const euromillionsSite: SiteConfig = {
       "eurodreams",
     ],
     newsExtraRules: [
-      "Pas de promesse de gains ; Amazon = accessoires seulement",
+      "Pas de promesse de gains",
       "Ne jamais promettre de méthode pour gagner",
       "Rappeler 18+ et jeu responsable",
       "Rester factuel sur les montants de jackpot et codes My Million",

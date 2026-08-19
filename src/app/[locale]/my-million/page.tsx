@@ -2,7 +2,6 @@ import { intlLocale } from "@/i18n/locales";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { EuroMillionsOffersBlock } from "@/components/EuroMillionsOffersBlock";
 import { GameMark } from "@/components/GameMark";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { ResultsLivePoller } from "@/components/ResultsLivePoller";
@@ -193,7 +192,6 @@ export default async function MyMillionPage({
         desktop={KWANKO_SLOTS.euromillions.desktop}
         mobile={KWANKO_SLOTS.euromillions.mobile}
       />
-      <EuroMillionsOffersBlock site={site} locale={locale} variant="compact" />
     </>
   );
 }
