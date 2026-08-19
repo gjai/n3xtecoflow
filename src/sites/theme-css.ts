@@ -114,7 +114,7 @@ a{color:inherit;text-decoration:none}
   #dernier-tirage .lottery-balls--fdj .lottery-star.lottery-ball--lg{width:2.75rem;height:2.75rem}
   #dernier-tirage .lottery-balls--fdj .lottery-star__num{top:.15rem;font-size:1rem}
 }
-.hero-offer-banner{width:100%;max-width:640px}
+.hero-offer-banner{width:100%;max-width:320px}
 .hero-offer-banner aside{justify-content:flex-start!important;padding-top:0!important;padding-bottom:0!important}
 .lottery-ball--letter{border:2px solid var(--accent);background:var(--surface);color:var(--heading)}
 .lottery-code{display:inline-flex;align-items:center;min-height:2.25rem;padding:0 .75rem;font-family:ui-monospace,monospace;font-size:.875rem;font-weight:600;letter-spacing:.04em;border:1px solid var(--line);background:var(--surface);color:var(--heading)}

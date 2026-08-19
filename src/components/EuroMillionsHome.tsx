@@ -309,19 +309,10 @@ export async function EuroMillionsHome({
             ) : null}
             <p className="mt-4 max-w-lg text-[var(--muted)]">{t("subhead")}</p>
             <div className="hero-offer-banner mt-6">
-              <div className="xl:hidden">
-                <KwankoBanner
-                  desktop={KWANKO_SLOTS.bienvenueLarge.mobile}
-                  className="justify-start py-0"
-                />
-              </div>
-              <div className="hidden xl:block">
-                <KwankoBanner
-                  desktop={KWANKO_SLOTS.bienvenueLarge.desktop}
-                  mobile={KWANKO_SLOTS.bienvenueLarge.mobile}
-                  className="justify-start py-0"
-                />
-              </div>
+              <KwankoBanner
+                desktop={KWANKO_SLOTS.bienvenueLarge.mobile}
+                className="justify-start py-0"
+              />
             </div>
             <div className="reveal-delay mt-8 flex flex-wrap gap-3">
               <Link
