@@ -195,7 +195,7 @@
       "other": "Otro"
     },
     "simTitle": "Simulador {game}",
-    "simLead": "Compare una combinación con un sorteo ya publicado. No es un pronóstico.",
+    "simLead": "Compare una combinación con un sorteo ya publicado: categoría y importe del baremo FDJ cuando esté disponible. No es un pronóstico.",
     "genTitle": "Generador {game}",
     "genLead": "1 a 10 combinaciones aleatorias. No aumenta sus probabilidades.",
     "genPickLabel": "Números a jugar",
@@ -204,6 +204,7 @@
     "statsCount": "{count} apariciones",
     "statsDelay": "retraso {delay}",
     "gameGuideCta": "Guía de este juego",
+    "prizesSecondTitle": "Premios 2.º sorteo",
     "crescendoHour": "{hour}:00",
     "pendingShort": "en espera"
   },
@@ -542,8 +543,15 @@
     "bonusMiss": "bonus fallado",
     "letterHit": "letra acertada",
     "letterMiss": "letra fallada",
+    "rankWin": "Categoría {rank}",
+    "rankLose": "Sin categoría ganadora en este baremo",
+    "gain": "Premio publicado: {amount}",
+    "gainAnnuity": "Renta publicada: {amount} / mes durante {years} años",
+    "secondDrawWin": "2.º sorteo · categoría {rank} · {amount}",
+    "secondDrawLose": "2.º sorteo: sin categoría ganadora",
+    "noTable": "Tabla de premios aún no disponible para este sorteo.",
     "archiveNear": "{count} otro(s) sorteo(s) con al menos 3 números en común",
     "seeDraw": "Ver la ficha",
-    "disclaimer": "Herramienta informativa. 18+ · juego responsable — ningún sistema vence a las probabilidades."
+    "disclaimer": "Herramienta informativa. Importes del baremo publicado, sin opciones (multiplicador Keno, etc.). 18+ · juego responsable — ningún sistema vence a las probabilidades."
   }
 }

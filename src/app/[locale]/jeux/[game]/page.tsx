@@ -18,6 +18,7 @@ import {
   getGameLatest,
   readFdjGamesStore,
 } from "@/lib/fdj-games/store";
+import { DrawPrizeTable } from "@/components/DrawPrizeTable";
 import { FdjCompanionSimulator } from "@/components/FdjCompanionSimulator";
 import { FlashGridGenerator } from "@/components/FlashGridGenerator";
 import {
@@ -261,6 +262,29 @@ export default async function JeuxGamePage({
           <div className="mt-6">
             <FdjGameBalls draw={latest} labels={groupLabels} />
           </div>
+          <DrawPrizeTable
+            tiers={latest.prizeTiers}
+            locale={locale}
+            title={drawsT("prizesTitle")}
+            extraTitle=""
+            rankLabel={drawsT("prizeRank")}
+            amountLabel={drawsT("prizeAmount")}
+            winnersLabel={drawsT("prizeWinners")}
+            heading="h3"
+            annuityNote={(vars) => t("annuityNote", vars)}
+          />
+          {latest.prizeTiersExtra?.length ? (
+            <DrawPrizeTable
+              tiers={latest.prizeTiersExtra}
+              locale={locale}
+              title={t("prizesSecondTitle")}
+              extraTitle=""
+              rankLabel={drawsT("prizeRank")}
+              amountLabel={drawsT("prizeAmount")}
+              winnersLabel={drawsT("prizeWinners")}
+              heading="h3"
+            />
+          ) : null}
         </div>
       ) : (
         <p className="mt-8 text-[var(--muted)]">{t("emptyGame")}</p>
@@ -321,6 +345,7 @@ export default async function JeuxGamePage({
           <FdjCompanionSimulator
             draws={getGameDraws(store, gameId)}
             spec={spec}
+            gameId={gameId}
             gameSlug={entry.slug}
             initialKey={latest ? companionDrawKey(latest) : null}
           />

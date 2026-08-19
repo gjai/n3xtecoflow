@@ -46,7 +46,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
         {
           heading: "Simulateur et archives",
           paragraphs: [
-            "Sur la page Loto, le simulateur vous fait choisir 5 numéros et un Chance, puis compare au tirage choisi. Un compteur indique combien d’autres tirages de l’archive locale partagent au moins 3 numéros — lecture historique, pas un pronostic.",
+            "Sur la page Loto, le simulateur vous fait choisir 5 numéros et un Chance, puis compare au tirage choisi : rang et montant du barème publié (y compris le 2e tirage s’il est dans la source). Un compteur indique combien d’autres tirages de l’archive locale partagent au moins 3 numéros — lecture historique, pas un pronostic.",
             "Les archives compagnons sont plus courtes que l’historique EuroMillions : l’API publique FDJ ne remonte pas à 2004. Nous paginons ce que la source autorise et conservons jusqu’à 250 tirages.",
           ],
         },
@@ -95,7 +95,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
         {
           heading: "Simulator and archives",
           paragraphs: [
-            "On the Loto page, the simulator lets you pick 5 numbers and a Chance, then compares them with the chosen draw. A counter shows how many other local draws share at least 3 numbers — historical reading, not a forecast.",
+            "On the Loto page, the simulator lets you pick 5 numbers and a Chance, then compares them with the chosen draw: published tier and amount (including the 2nd draw if the source has it). A counter shows how many other local draws share at least 3 numbers — historical reading, not a forecast.",
             "Companion archives are shorter than the EuroMillions history: the public FDJ API does not go back to 2004. We paginate what the source allows and keep up to 250 draws.",
           ],
         },
@@ -134,7 +134,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
           heading: "Rangs et Dream",
           paragraphs: [
             "Les rangs dépendent du nombre de numéros justes et du Dream. Trouver le Dream sans assez de numéros ne suffit pas ; inversement, 6 numéros sans le Dream n’est pas le rang 1.",
-            "Les barèmes exacts relèvent de l’opérateur. Notre simulateur compte les numéros en commun et indique si le Dream correspond — pour vérifier une grille, pas pour « optimiser » un rang.",
+            "Le tableau de gains publié (dont la rente 6+0 / 6+1) figure sur chaque fiche. Le simulateur affiche le rang et le montant ou la rente de ce barème — pour vérifier une grille, pas pour « optimiser » un rang.",
           ],
         },
         {
@@ -183,7 +183,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
           heading: "Tiers and Dream",
           paragraphs: [
             "Tiers depend on how many numbers you match and on the Dream. Matching the Dream without enough numbers is not enough; conversely, 6 numbers without the Dream is not rank 1.",
-            "Exact prize tables are set by the operator. Our simulator counts matching numbers and whether the Dream matches — to check a grid, not to “optimise” a tier.",
+            "The published prize table (including the 6+0 / 6+1 annuity) is on each card. The simulator shows the tier and the amount or annuity from that table — to check a grid, not to “optimise” a tier.",
           ],
         },
         {
@@ -215,13 +215,13 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
     fr: {
       title: "Comprendre le Keno",
       subtitle:
-        "Tirages midi et soir, 20 numéros parmi 70, vous en jouez 2 à 10 — lecture et simulateur.",
+        "Tirages midi et soir, 16 numéros parmi 70, vous en jouez 4 à 10 — lecture et simulateur.",
       sections: [
         {
           heading: "Le principe",
           paragraphs: [
-            "Au Keno, l’opérateur tire 20 numéros parmi 70. Vous choisissez combien de numéros jouer (souvent 2 à 10). Le gain dépend du nombre de numéros trouvés et du format de mise — barème FDJ, pas un jackpot unique type EuroMillions.",
-            "Ce site affiche les numéros publiés pour chaque créneau (midi / soir). Nous ne vendons pas de tickets et ne calculons pas un tableau de gains officiel complet.",
+            "Au Keno (formule 2025), l’opérateur tire 16 numéros parmi 70. Vous choisissez combien de numéros jouer (4 à 10). Le gain dépend du nombre de numéros trouvés et du format de mise — barème FDJ publié sur chaque fiche, pas un jackpot unique type EuroMillions.",
+            "Ce site affiche les numéros et le tableau de gains publiés pour chaque créneau (midi / soir). Nous ne vendons pas de tickets.",
           ],
         },
         {
@@ -241,8 +241,8 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
         {
           heading: "Simulateur",
           paragraphs: [
-            "Choisissez d’abord combien de numéros vous « jouez » (2 à 10, défaut 7), puis cochez-les (1–70). Comparez au tirage midi ou soir choisi. L’outil compte les numéros en commun.",
-            "Ce n’est pas un barème de paiement. Pour un ticket réel, seul l’opérateur fait foi.",
+            "Choisissez d’abord combien de numéros vous « jouez » (4 à 10, défaut 7), puis cochez-les (1–70). Comparez au tirage midi ou soir choisi. L’outil compte les numéros en commun et affiche le rang / montant du barème publié.",
+            "Le multiplicateur option n’est pas appliqué dans le simulateur. Pour un ticket réel, seul l’opérateur fait foi.",
           ],
         },
         {
@@ -264,13 +264,13 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
     en: {
       title: "Understanding Keno",
       subtitle:
-        "Lunchtime and evening draws, 20 numbers from 70, you play 2 to 10 — reading and simulator.",
+        "Lunchtime and evening draws, 16 numbers from 70, you play 4 to 10 — reading and simulator.",
       sections: [
         {
           heading: "The idea",
           paragraphs: [
-            "In Keno, the operator draws 20 numbers from 70. You choose how many numbers to play (often 2 to 10). The prize depends on how many you match and on the stake format — FDJ’s table, not a single EuroMillions-style jackpot.",
-            "This site shows the published numbers for each slot (lunchtime / evening). We do not sell tickets and we do not compute a full official payout table.",
+            "In Keno (2025 formula), the operator draws 16 numbers from 70. You choose how many numbers to play (4 to 10). The prize depends on how many you match and on the stake format — the FDJ table published on each card, not a single EuroMillions-style jackpot.",
+            "This site shows the published numbers and prize table for each slot (lunchtime / evening). We do not sell tickets.",
           ],
         },
         {
@@ -290,8 +290,8 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
         {
           heading: "Simulator",
           paragraphs: [
-            "First choose how many numbers you “play” (2 to 10, default 7), then tick them (1–70). Compare with the chosen lunchtime or evening draw. The tool counts matching numbers.",
-            "It is not a payout table. For a real ticket, only the operator is authoritative.",
+            "First choose how many numbers you “play” (4 to 10, default 7), then tick them (1–70). Compare with the chosen lunchtime or evening draw. The tool counts matching numbers and shows the published tier / amount.",
+            "The optional multiplier is not applied in the simulator. For a real ticket, only the operator is authoritative.",
           ],
         },
         {
@@ -335,8 +335,8 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
         {
           heading: "Lire les numéros et la lettre",
           paragraphs: [
-            "La fiche affiche les 10 numéros et la lettre tirée. Les rangs officiels combinent le nombre de numéros justes et la lettre ; le barème relève de la FDJ.",
-            "Notre simulateur compte les numéros en commun et indique si la lettre correspond. Ce n’est pas un calcul de gain en euros.",
+            "La fiche affiche les 10 numéros et la lettre tirée. Les rangs officiels combinent le nombre de numéros justes et la lettre ; le barème publié est sur la fiche.",
+            "Notre simulateur compte les numéros en commun, la lettre, et affiche le rang / montant de ce barème.",
           ],
         },
         {
@@ -384,8 +384,8 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
         {
           heading: "Reading numbers and the letter",
           paragraphs: [
-            "The card shows the 10 numbers and the drawn letter. Official tiers combine how many numbers you match and the letter; the table is set by FDJ.",
-            "Our simulator counts matching numbers and whether the letter matches. It is not a euro prize calculation.",
+            "The card shows the 10 numbers and the drawn letter. Official tiers combine how many numbers you match and the letter; the published table is on the card.",
+            "Our simulator counts matching numbers, the letter, and shows the tier / amount from that table.",
           ],
         },
         {
@@ -429,7 +429,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
         {
           heading: "Ce que montre une fiche",
           paragraphs: [
-            "Date (et créneau si besoin), numéros dans l’ordre croissant, bonus (étoiles, Chance, Dream, lettre), jackpot ou rente quand la source le fournit. Pour l’EuroMillions : code My Million et parfois les gains par rang.",
+            "Date (et créneau si besoin), numéros dans l’ordre croissant, bonus (étoiles, Chance, Dream, lettre), jackpot ou rente quand la source le fournit. Pour l’EuroMillions : code My Million et les 13 rangs. Pour Loto, EuroDreams, Keno et Crescendo : tableau de gains du tirage quand la source le publie.",
             "Les montants sont informatifs. Seul l’opérateur légal valide un ticket et un paiement.",
           ],
         },
@@ -444,7 +444,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
           heading: "Simulateur",
           paragraphs: [
             "Le simulateur compare une grille à un tirage déjà publié. Il ne « tire » pas le futur. Pour l’EuroMillions, il indique aussi le rang (5+2 jusqu’à 2+0) et, si la source l’a, le gain unitaire.",
-            "Pour Loto, EuroDreams, Keno et Crescendo, il compte les numéros (et le bonus / la lettre). Ce n’est pas un barème de paiement complet.",
+            "Pour Loto, EuroDreams, Keno et Crescendo, il affiche aussi le rang et le montant du barème publié pour ce tirage (hors options comme le multiplicateur Keno).",
           ],
         },
         {
@@ -477,7 +477,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
         {
           heading: "What a card shows",
           paragraphs: [
-            "Date (and slot if needed), numbers in ascending order, bonus (stars, Chance, Dream, letter), jackpot or annuity when the source provides it. For EuroMillions: My Million code and sometimes prizes per tier.",
+            "Date (and slot if needed), numbers in ascending order, bonus (stars, Chance, Dream, letter), jackpot or annuity when the source provides it. For EuroMillions: My Million code and the 13 tiers. For Loto, EuroDreams, Keno and Crescendo: the draw’s prize table when the source publishes it.",
             "Amounts are informational. Only the licensed operator validates a ticket and a payout.",
           ],
         },
@@ -492,7 +492,7 @@ export const euromillionsCompanionGuidesRaw: GuideArticle[] = [
           heading: "Simulator",
           paragraphs: [
             "The simulator compares a grid with a published draw. It does not “draw” the future. For EuroMillions it also shows the tier (5+2 down to 2+0) and, if the source has it, the unit prize.",
-            "For Loto, EuroDreams, Keno and Crescendo it counts numbers (and bonus / letter). It is not a full payout table.",
+            "For Loto, EuroDreams, Keno and Crescendo it also shows the published tier and amount for that draw (excluding options such as the Keno multiplier).",
           ],
         },
         {

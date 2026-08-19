@@ -195,7 +195,7 @@
       "other": "Overig"
     },
     "simTitle": "{game}-simulator",
-    "simLead": "Vergelijk een grid met een al gepubliceerde trekking. Dit is geen prognose.",
+    "simLead": "Vergelijk een grid met een gepubliceerde trekking: rang en bedrag van de FDJ-tabel wanneer beschikbaar. Dit is geen prognose.",
     "genTitle": "{game}-generator",
     "genLead": "1 tot 10 willekeurige grids. Dit verhoogt uw kansen niet.",
     "genPickLabel": "Te spelen nummers",
@@ -204,6 +204,7 @@
     "statsCount": "{count} treffers",
     "statsDelay": "achterstand {delay}",
     "gameGuideCta": "Gids van dit spel",
+    "prizesSecondTitle": "Prijzen 2e trekking",
     "crescendoHour": "{hour}:00",
     "pendingShort": "in afwachting"
   },
@@ -542,8 +543,15 @@
     "bonusMiss": "bonus mis",
     "letterHit": "letter raak",
     "letterMiss": "letter mis",
+    "rankWin": "Rang {rank}",
+    "rankLose": "Geen winnende rang op deze tabel",
+    "gain": "Gepubliceerde winst: {amount}",
+    "gainAnnuity": "Gepubliceerde rente: {amount} / maand gedurende {years} jaar",
+    "secondDrawWin": "2e trekking · rang {rank} · {amount}",
+    "secondDrawLose": "2e trekking: geen winnende rang",
+    "noTable": "Prijzentabel nog niet beschikbaar voor deze trekking.",
     "archiveNear": "{count} andere trekking(en) met minstens 3 gemeenschappelijke nummers",
     "seeDraw": "Fiche bekijken",
-    "disclaimer": "Informatief hulpmiddel. 18+ · speel verantwoord — geen systeem verslaat de kansen."
+    "disclaimer": "Informatief hulpmiddel. Bedragen uit de gepubliceerde tabel, zonder opties (Keno-multiplicator, enz.). 18+ · speel verantwoord — geen systeem verslaat de kansen."
   }
 }

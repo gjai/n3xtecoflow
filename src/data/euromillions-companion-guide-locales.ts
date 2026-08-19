@@ -495,12 +495,12 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
     it: {
       title: "Capire il Keno",
       subtitle:
-        "Estrazioni mezzogiorno e sera, 20 numeri su 70, se ne giocano 2–10 — lettura e simulatore.",
+        "Estrazioni mezzogiorno e sera, 16 numeri su 70, se ne giocano 4–10 — lettura e simulatore.",
       sections: [
         {
           heading: "Il principio",
           paragraphs: [
-            "Al Keno l’operatore estrae 20 numeri su 70. Voi scegliete quanti numeri giocare (spesso 2–10). Il premio dipende dai numeri indovinati e dal formato di puntata — barème FDJ, non un jackpot unico tipo EuroMillions.",
+            "Al Keno (formula 2025) l’operatore estrae 16 numeri su 70. Voi scegliete quanti numeri giocare (4–10). Il premio dipende dai numeri indovinati e dal formato di puntata — barème FDJ pubblicato su ogni scheda.",
             "Mostriamo i numeri pubblicati per ogni fascia (mezzogiorno / sera). Non vendiamo biglietti.",
           ],
         },
@@ -520,7 +520,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
         {
           heading: "Simulatore",
           paragraphs: [
-            "Scegliete quanti numeri «giocate» (2–10, default 7), poi spuntateli (1–70). Lo strumento conta i numeri in comune. Non è una tabella di pagamento.",
+            "Scegliete quanti numeri «giocate» (4–10, default 7), poi spuntateli (1–70). Lo strumento conta i numeri in comune e mostra categoria / importo pubblicati.",
           ],
         },
         {
@@ -541,12 +541,12 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
     es: {
       title: "Entender el Keno",
       subtitle:
-        "Sorteos mediodía y noche, 20 números de 70, se juegan 2–10 — lectura y simulador.",
+        "Sorteos mediodía y noche, 16 números de 70, se juegan 4–10 — lectura y simulador.",
       sections: [
         {
           heading: "El principio",
           paragraphs: [
-            "En el Keno el operador extrae 20 números de 70. Usted elige cuántos jugar (a menudo 2–10). El premio depende de los aciertos y del formato de apuesta — baremo FDJ, no un bote único tipo EuroMillions.",
+            "En el Keno (fórmula 2025) el operador extrae 16 números de 70. Usted elige cuántos jugar (4–10). El premio depende de los aciertos y del formato de apuesta — baremo FDJ publicado en cada ficha.",
             "Mostramos los números publicados por franja (mediodía / noche). No vendemos boletos.",
           ],
         },
@@ -566,7 +566,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
         {
           heading: "Simulador",
           paragraphs: [
-            "Elija cuántos números «juega» (2–10, por defecto 7), luego márquelos (1–70). La herramienta cuenta coincidencias. No es una tabla de pagos.",
+            "Elija cuántos números «juega» (4–10, por defecto 7), luego márquelos (1–70). La herramienta cuenta coincidencias y muestra categoría / importe publicados.",
           ],
         },
         {
@@ -587,12 +587,12 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
     pt: {
       title: "Compreender o Keno",
       subtitle:
-        "Sorteios de meio-dia e noite, 20 números em 70, jogam-se 2–10 — leitura e simulador.",
+        "Sorteios de meio-dia e noite, 16 números em 70, jogam-se 4–10 — leitura e simulador.",
       sections: [
         {
           heading: "O princípio",
           paragraphs: [
-            "No Keno o operador tira 20 números em 70. Escolhe quantos jogar (muitas vezes 2–10). O prémio depende dos acertos e do formato de aposta — tabela FDJ, não um jackpot único tipo EuroMillions.",
+            "No Keno (fórmula 2025) o operador tira 16 números em 70. Escolhe quantos jogar (4–10). O prémio depende dos acertos e do formato de aposta — tabela FDJ publicada em cada ficha.",
             "Mostramos os números publicados por faixa (meio-dia / noite). Não vendemos bilhetes.",
           ],
         },
@@ -612,7 +612,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
         {
           heading: "Simulador",
           paragraphs: [
-            "Escolha quantos números «joga» (2–10, predefinição 7), depois marque-os (1–70). A ferramenta conta coincidências. Não é uma tabela de pagamentos.",
+            "Escolha quantos números «joga» (4–10, predefinição 7), depois marque-os (1–70). A ferramenta conta coincidências e mostra escalão / montante publicados.",
           ],
         },
         {
@@ -633,12 +633,12 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
     de: {
       title: "Keno verstehen",
       subtitle:
-        "Mittags- und Abendziehungen, 20 Zahlen aus 70, Sie spielen 2–10 — Lesen und Simulator.",
+        "Mittags- und Abendziehungen, 16 Zahlen aus 70, Sie spielen 4–10 — Lesen und Simulator.",
       sections: [
         {
           heading: "Das Prinzip",
           paragraphs: [
-            "Beim Keno zieht der Betreiber 20 Zahlen aus 70. Sie wählen, wie viele Sie spielen (oft 2–10). Der Gewinn hängt von Treffern und Einsatzformat ab — FDJ-Tabelle, kein einzigartiger Jackpot wie EuroMillions.",
+            "Beim Keno (Formel 2025) zieht der Betreiber 16 Zahlen aus 70. Sie wählen, wie viele Sie spielen (4–10). Der Gewinn hängt von Treffern und Einsatzformat ab — FDJ-Tabelle auf jeder Karte.",
             "Wir zeigen die veröffentlichten Zahlen je Slot (Mittag / Abend). Kein Tippscheinverkauf.",
           ],
         },
@@ -658,7 +658,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
         {
           heading: "Simulator",
           paragraphs: [
-            "Wählen Sie, wie viele Zahlen Sie «spielen» (2–10, Standard 7), dann kreuzen Sie sie an (1–70). Das Tool zählt Treffer. Keine Auszahlungstabelle.",
+            "Wählen Sie, wie viele Zahlen Sie «spielen» (4–10, Standard 7), dann kreuzen Sie sie an (1–70). Das Tool zählt Treffer und zeigt Rang / Betrag.",
           ],
         },
         {
@@ -679,12 +679,12 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
     nl: {
       title: "Keno begrijpen",
       subtitle:
-        "Middag- en avondtrekkingen, 20 nummers uit 70, u speelt 2–10 — lezen en simulator.",
+        "Middag- en avondtrekkingen, 16 nummers uit 70, u speelt 4–10 — lezen en simulator.",
       sections: [
         {
           heading: "Het principe",
           paragraphs: [
-            "Bij Keno trekt de operator 20 nummers uit 70. U kiest hoeveel u speelt (vaak 2–10). De winst hangt af van treffers en inzetformaat — FDJ-tabel, geen unieke jackpot zoals EuroMillions.",
+            "Bij Keno (formule 2025) trekt de operator 16 nummers uit 70. U kiest hoeveel u speelt (4–10). De winst hangt af van treffers en inzetformaat — FDJ-tabel op elke fiche.",
             "We tonen de gepubliceerde nummers per slot (middag / avond). Geen lotverkoop.",
           ],
         },
@@ -704,7 +704,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
         {
           heading: "Simulator",
           paragraphs: [
-            "Kies hoeveel nummers u «speelt» (2–10, standaard 7), vink ze dan aan (1–70). De tool telt treffers. Geen uitbetalingstabel.",
+            "Kies hoeveel nummers u «speelt» (4–10, standaard 7), vink ze dan aan (1–70). De tool telt treffers en toont rang / bedrag.",
           ],
         },
         {
@@ -979,7 +979,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
         {
           heading: "Simulatore",
           paragraphs: [
-            "Confronta una griglia con un’estrazione già pubblicata. Per l’EuroMillions indica anche la categoria. Per gli altri giochi conta i numeri (e bonus / lettera).",
+            "Confronta una griglia con un’estrazione già pubblicata. Per l’EuroMillions indica anche la categoria. Per gli altri giochi mostra categoria e importo del barème pubblicato.",
           ],
         },
         {
@@ -1022,7 +1022,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
         {
           heading: "Simulador",
           paragraphs: [
-            "Compara una combinación con un sorteo ya publicado. En EuroMillions indica también la categoría. En los demás cuenta números (y bonus / letra).",
+            "Compara una combinación con un sorteo ya publicado. En EuroMillions indica también la categoría. En los demás muestra categoría e importe del baremo publicado.",
           ],
         },
         {
@@ -1065,7 +1065,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
         {
           heading: "Simulador",
           paragraphs: [
-            "Compara uma grelha com um sorteio já publicado. No EuroMillions indica também o escalão. Nos outros conta números (e bónus / letra).",
+            "Compara uma grelha com um sorteio já publicado. No EuroMillions indica também o escalão. Nos outros mostra escalão e montante da tabela publicada.",
           ],
         },
         {
@@ -1108,7 +1108,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
         {
           heading: "Simulator",
           paragraphs: [
-            "Vergleicht ein Grid mit einer bereits veröffentlichten Ziehung. Bei EuroMillions auch den Rang. Bei den anderen zählt er Zahlen (und Bonus / Buchstabe).",
+            "Vergleicht ein Grid mit einer bereits veröffentlichten Ziehung. Bei EuroMillions auch den Rang. Bei den anderen zeigt er Rang und Betrag der veröffentlichten Tabelle.",
           ],
         },
         {
@@ -1151,7 +1151,7 @@ export const euromillionsCompanionGuideLocales: EmGuideLocaleMap = {
         {
           heading: "Simulator",
           paragraphs: [
-            "Vergelijkt een grid met een al gepubliceerde trekking. Bij EuroMillions ook de rang. Bij de andere telt hij nummers (en bonus / letter).",
+            "Vergelijkt een grid met een al gepubliceerde trekking. Bij EuroMillions ook de rang. Bij de andere toont hij rang en bedrag van de gepubliceerde tabel.",
           ],
         },
         {

@@ -1,3 +1,5 @@
+import type { EuroMillionsPrizeTier } from "@/lib/euromillions/types";
+
 /** Jeux FDJ compagnons (EuroMillions reste le focus du site). */
 export type FdjCompanionGameId =
   | "eurodreams"
@@ -31,6 +33,10 @@ export type FdjGameDraw = {
   /** Ex. rente EuroDreams */
   jackpotNote?: string | null;
   groups: FdjResultGroup[];
+  /** Barème Regular (FDJ shares) */
+  prizeTiers?: EuroMillionsPrizeTier[];
+  /** Barème extra (ex. 2e tirage Loto) */
+  prizeTiersExtra?: EuroMillionsPrizeTier[];
   source: "fdj";
   fetchedAt: string;
 };

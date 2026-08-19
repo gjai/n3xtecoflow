@@ -1,8 +1,9 @@
-import type {
-  EuroMillionsDraw,
-  EuroMillionsPrizeTier,
-  MyMillionWinner,
-} from "./types";
+import {
+  parseRegularPrizeTiers,
+  parseWinsetTiers,
+  type FdjShareSet,
+} from "@/lib/fdj/shares";
+import type { EuroMillionsDraw, MyMillionWinner } from "./types";
 
 function toIsoDate(input: string): string {
   const d = new Date(input);
@@ -23,20 +24,6 @@ function normalizeMyMillionCode(raw: string): string {
 
 type FdjAmount = { value?: number; currency?: string; scale?: number };
 type FdjResult = { type?: string; numbers?: string[] };
-type FdjBoard = {
-  count?: number;
-  amount?: number;
-  currency?: string;
-  scale?: number;
-};
-type FdjPrizeLevel = {
-  division_name?: string;
-  winning_boards?: FdjBoard[];
-};
-type FdjShareSet = {
-  winset_name?: string;
-  prize_levels?: FdjPrizeLevel[];
-};
 type FdjDraw = {
   id?: string;
   external_id?: string;
@@ -46,38 +33,6 @@ type FdjDraw = {
   guaranteed_amounts?: FdjAmount[];
   shares?: FdjShareSet[];
 };
-
-function parseWinsetTiers(
-  shares: FdjShareSet[] | undefined,
-  needle: string,
-): EuroMillionsPrizeTier[] {
-  const set = (shares || []).find((s) =>
-    String(s.winset_name || "")
-      .toLowerCase()
-      .includes(needle),
-  );
-  if (!set?.prize_levels?.length) return [];
-  const out: EuroMillionsPrizeTier[] = [];
-  for (const level of set.prize_levels) {
-    const rank = String(level.division_name || "").trim();
-    if (!rank) continue;
-    const eur = (level.winning_boards || []).find((b) => b.currency === "EUR");
-    if (!eur || typeof eur.amount !== "number") continue;
-    const scale = typeof eur.scale === "number" ? eur.scale : 0;
-    out.push({
-      rank,
-      winners: typeof eur.count === "number" ? eur.count : 0,
-      amountEur: eur.amount / 10 ** scale,
-    });
-  }
-  return out;
-}
-
-function parsePrizeTiers(shares?: FdjShareSet[]): EuroMillionsPrizeTier[] {
-  const regular = parseWinsetTiers(shares, "regular");
-  if (regular.length) return regular;
-  return parseWinsetTiers(shares, "");
-}
 
 function amountEur(list?: FdjAmount[]): number | null {
   const eur = (list || []).find((a) => a.currency === "EUR");
@@ -103,7 +58,7 @@ function mapFdjApiDraws(data: FdjDraw[], sourceUrl: string): EuroMillionsDraw[] 
     const starNums = nums(stars?.numbers || []);
     if (numbers.length !== 5 || starNums.length !== 2) continue;
     const codeRaw = mm?.numbers?.[0];
-    const prizeTiers = parsePrizeTiers(d.shares);
+    const prizeTiers = parseRegularPrizeTiers(d.shares);
     const prizeTiersEtoilePlus = parseWinsetTiers(d.shares, "etoile");
     out.push({
       date: toIsoDate(d.planned_at),

@@ -1,14 +1,5 @@
-import { intlLocale } from "@/i18n/locales";
+import { formatPrizeTierAmount } from "@/lib/lottery/prize-format";
 import type { EuroMillionsPrizeTier } from "@/lib/euromillions/types";
-
-function formatMoney(amount: number | null | undefined, locale: string) {
-  if (amount == null || !Number.isFinite(amount)) return null;
-  return new Intl.NumberFormat(intlLocale(locale), {
-    style: "currency",
-    currency: "EUR",
-    maximumFractionDigits: amount < 10 ? 2 : 0,
-  }).format(amount);
-}
 
 function Table({
   tiers,
@@ -18,6 +9,7 @@ function Table({
   amountLabel,
   winnersLabel,
   extraLabel,
+  annuityNote,
 }: {
   tiers: EuroMillionsPrizeTier[];
   extraTiers?: EuroMillionsPrizeTier[];
@@ -26,6 +18,7 @@ function Table({
   amountLabel: string;
   winnersLabel: string;
   extraLabel?: string;
+  annuityNote?: (vars: { amount: string; years: number }) => string;
 }) {
   const normalizeRank = (r: string) =>
     r.replace(/^.*?(\d)/, "$1").trim();
@@ -66,14 +59,16 @@ function Table({
                   {tier.rank}
                 </td>
                 <td className="px-1 py-1.5 text-[var(--heading)] sm:px-2 sm:py-2">
-                  {formatMoney(tier.amountEur, locale) || "—"}
+                  {formatPrizeTierAmount(tier, locale, annuityNote) || "—"}
                 </td>
                 <td className="px-1 py-1.5 text-[var(--muted)] sm:px-2 sm:py-2">
                   {tier.winners}
                 </td>
                 {hasEplus ? (
                   <td className="px-1 py-1.5 text-[var(--heading)] sm:px-2 sm:py-2">
-                    {ep ? formatMoney(ep.amountEur, locale) || "—" : "—"}
+                    {ep
+                      ? formatPrizeTierAmount(ep, locale, annuityNote) || "—"
+                      : "—"}
                   </td>
                 ) : null}
               </tr>
@@ -96,6 +91,7 @@ export function DrawPrizeTable({
   amountLabel,
   winnersLabel,
   heading = "h2",
+  annuityNote,
 }: {
   tiers?: EuroMillionsPrizeTier[];
   extraTiers?: EuroMillionsPrizeTier[];
@@ -107,6 +103,7 @@ export function DrawPrizeTable({
   amountLabel: string;
   winnersLabel: string;
   heading?: "h2" | "h3";
+  annuityNote?: (vars: { amount: string; years: number }) => string;
 }) {
   if (!tiers?.length) return null;
   const Heading = heading;
@@ -126,6 +123,7 @@ export function DrawPrizeTable({
           amountLabel={amountLabel}
           winnersLabel={winnersLabel}
           extraLabel={extraTitle}
+          annuityNote={annuityNote}
         />
       </div>
       {extraTiers && extraTiers.length > 0 && extraHelp?.trim() ? (

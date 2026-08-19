@@ -1,3 +1,9 @@
+import {
+  fillEmptyJackpotTier,
+  parseExtraPrizeTiers,
+  parseRegularPrizeTiers,
+  type FdjShareSet,
+} from "@/lib/fdj/shares";
 import { FDJ_COMPANION_GAMES, mapResultMeta, type FdjGameCatalogEntry } from "./catalog";
 import type { FdjCompanionGameId, FdjGameDraw, FdjResultGroup } from "./types";
 
@@ -23,6 +29,7 @@ type FdjDraw = {
   results?: FdjResult[];
   estimated_jackpot?: FdjAmount[];
   guaranteed_amounts?: FdjAmount[];
+  shares?: FdjShareSet[];
 };
 
 function amountEur(list?: FdjAmount[]): number | null {
@@ -106,6 +113,12 @@ function parseDraw(
   const jackpotEur =
     amountEur(d.estimated_jackpot) ?? amountEur(d.guaranteed_amounts);
   const note = annuityNote(d.guaranteed_amounts);
+  const prizeTiers = fillEmptyJackpotTier(
+    parseRegularPrizeTiers(d.shares),
+    jackpotEur,
+    note,
+  );
+  const prizeTiersExtra = parseExtraPrizeTiers(d.shares);
   return {
     gameId: game.id,
     date: toIsoDate(d.planned_at),
@@ -114,6 +127,8 @@ function parseDraw(
     jackpotEur,
     jackpotNote: note,
     groups,
+    prizeTiers: prizeTiers?.length ? prizeTiers : undefined,
+    prizeTiersExtra: prizeTiersExtra.length ? prizeTiersExtra : undefined,
     source: "fdj",
     fetchedAt,
   };

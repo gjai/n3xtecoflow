@@ -20,7 +20,20 @@ function mergeDraws(
   for (const d of incoming) {
     const key = `${d.date}|${d.plannedAt}|${d.drawId ?? ""}`;
     const prev = byKey.get(key);
-    byKey.set(key, prev ? { ...prev, ...d, groups: d.groups.length ? d.groups : prev.groups } : d);
+    byKey.set(
+      key,
+      prev
+        ? {
+            ...prev,
+            ...d,
+            groups: d.groups.length ? d.groups : prev.groups,
+            prizeTiers: d.prizeTiers?.length ? d.prizeTiers : prev.prizeTiers,
+            prizeTiersExtra: d.prizeTiersExtra?.length
+              ? d.prizeTiersExtra
+              : prev.prizeTiersExtra,
+          }
+        : d,
+    );
   }
   return [...byKey.values()].sort((a, b) => {
     const t = b.plannedAt.localeCompare(a.plannedAt);

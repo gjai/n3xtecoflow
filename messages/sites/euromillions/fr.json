@@ -195,7 +195,7 @@
       "other": "Autre"
     },
     "simTitle": "Simulateur {game}",
-    "simLead": "Comparez une grille à un tirage déjà publié. Ce n’est pas un pronostic.",
+    "simLead": "Comparez une grille à un tirage déjà publié : rang et montant du barème FDJ quand il est disponible. Ce n’est pas un pronostic.",
     "genTitle": "Générateur {game}",
     "genLead": "1 à 10 grilles flash, 100 % aléatoires. Ça n’augmente pas vos chances.",
     "genPickLabel": "Numéros à jouer",
@@ -204,6 +204,7 @@
     "statsCount": "{count} sorties",
     "statsDelay": "écart {delay}",
     "gameGuideCta": "Guide de ce jeu",
+    "prizesSecondTitle": "Gains 2e tirage",
     "crescendoHour": "{hour}h",
     "pendingShort": "en attente"
   },
@@ -542,8 +543,15 @@
     "bonusMiss": "bonus manqué",
     "letterHit": "lettre juste",
     "letterMiss": "lettre manquée",
+    "rankWin": "Rang {rank}",
+    "rankLose": "Pas de rang gagnant sur ce barème",
+    "gain": "Gain publié : {amount}",
+    "gainAnnuity": "Rente publiée : {amount} / mois pendant {years} ans",
+    "secondDrawWin": "2e tirage · rang {rank} · {amount}",
+    "secondDrawLose": "2e tirage : pas de rang gagnant",
+    "noTable": "Tableau de gains pas encore disponible pour ce tirage.",
     "archiveNear": "{count} autre(s) tirage(s) avec au moins 3 numéros en commun",
     "seeDraw": "Voir la fiche",
-    "disclaimer": "Outil informatif. 18+ · jeu responsable — aucun système ne bat les probabilités."
+    "disclaimer": "Outil informatif. Montants issus du barème publié, hors options (multiplicateur Keno, etc.). 18+ · jeu responsable — aucun système ne bat les probabilités."
   }
 }

@@ -195,7 +195,7 @@
       "other": "Other"
     },
     "simTitle": "{game} simulator",
-    "simLead": "Compare a grid with a published draw. This is not a forecast.",
+    "simLead": "Compare a grid with a published draw: the FDJ tier and amount when the table is available. This is not a forecast.",
     "genTitle": "{game} generator",
     "genLead": "1 to 10 random flash grids. This does not improve your odds.",
     "genPickLabel": "Numbers to play",
@@ -204,6 +204,7 @@
     "statsCount": "{count} appearances",
     "statsDelay": "gap {delay}",
     "gameGuideCta": "Guide for this game",
+    "prizesSecondTitle": "2nd draw prizes",
     "crescendoHour": "{hour}:00",
     "pendingShort": "pending"
   },
@@ -542,8 +543,15 @@
     "bonusMiss": "bonus missed",
     "letterHit": "letter matched",
     "letterMiss": "letter missed",
+    "rankWin": "Tier {rank}",
+    "rankLose": "No winning tier on this table",
+    "gain": "Published prize: {amount}",
+    "gainAnnuity": "Published annuity: {amount} / month for {years} years",
+    "secondDrawWin": "2nd draw · tier {rank} · {amount}",
+    "secondDrawLose": "2nd draw: no winning tier",
+    "noTable": "Prize table not yet available for this draw.",
     "archiveNear": "{count} other draw(s) with at least 3 numbers in common",
     "seeDraw": "View draw",
-    "disclaimer": "Informational tool. 18+ · play responsibly — no system beats the odds."
+    "disclaimer": "Informational tool. Amounts come from the published table, excluding options (Keno multiplier, etc.). 18+ · play responsibly — no system beats the odds."
   }
 }

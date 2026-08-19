@@ -195,7 +195,7 @@
       "other": "Outro"
     },
     "simTitle": "Simulador {game}",
-    "simLead": "Compare uma grelha com um sorteio já publicado. Não é um prognóstico.",
+    "simLead": "Compare uma grelha com um sorteio já publicado: escalão e montante da tabela FDJ quando disponível. Não é um prognóstico.",
     "genTitle": "Gerador {game}",
     "genLead": "1 a 10 grelhas aleatórias. Isto não aumenta as suas hipóteses.",
     "genPickLabel": "Números a jogar",
@@ -204,6 +204,7 @@
     "statsCount": "{count} saídas",
     "statsDelay": "atraso {delay}",
     "gameGuideCta": "Guia deste jogo",
+    "prizesSecondTitle": "Prémios 2.º sorteio",
     "crescendoHour": "{hour}:00",
     "pendingShort": "em espera"
   },
@@ -542,8 +543,15 @@
     "bonusMiss": "bónus falhado",
     "letterHit": "letra certa",
     "letterMiss": "letra falhada",
+    "rankWin": "Escalão {rank}",
+    "rankLose": "Sem escalão vencedor nesta tabela",
+    "gain": "Prémio publicado: {amount}",
+    "gainAnnuity": "Renda publicada: {amount} / mês durante {years} anos",
+    "secondDrawWin": "2.º sorteio · escalão {rank} · {amount}",
+    "secondDrawLose": "2.º sorteio: sem escalão vencedor",
+    "noTable": "Tabela de prémios ainda não disponível para este sorteio.",
     "archiveNear": "{count} outro(s) sorteio(s) com pelo menos 3 números em comum",
     "seeDraw": "Ver a ficha",
-    "disclaimer": "Ferramenta informativa. 18+ · jogo responsável — nenhum sistema vence as probabilidades."
+    "disclaimer": "Ferramenta informativa. Montantes da tabela publicada, excluindo opções (multiplicador Keno, etc.). 18+ · jogo responsável — nenhum sistema vence as probabilidades."
   }
 }

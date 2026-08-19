@@ -24,9 +24,10 @@ export const COMPANION_GRID: Record<FdjCompanionGameId, CompanionGridSpec> = {
     bonus: { count: 1, max: 5, labelKey: "dream" },
   },
   keno: {
-    mainCount: 20,
+    /** Formule Keno 2025 : 16 numéros tirés parmi 70. */
+    mainCount: 16,
     mainMax: 70,
-    pickMin: 2,
+    pickMin: 4,
     pickMax: 10,
     pickDefault: 7,
   },

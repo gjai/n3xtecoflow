@@ -195,7 +195,7 @@
       "other": "Altro"
     },
     "simTitle": "Simulatore {game}",
-    "simLead": "Confrontate una griglia con un’estrazione già pubblicata. Non è un pronostico.",
+    "simLead": "Confrontate una griglia con un’estrazione già pubblicata: categoria e importo del barème FDJ quando disponibile. Non è un pronostico.",
     "genTitle": "Generatore {game}",
     "genLead": "Da 1 a 10 griglie casuali. Non aumenta le probabilità.",
     "genPickLabel": "Numeri da giocare",
@@ -204,6 +204,7 @@
     "statsCount": "{count} uscite",
     "statsDelay": "scarto {delay}",
     "gameGuideCta": "Guida di questo gioco",
+    "prizesSecondTitle": "Premi 2ª estrazione",
     "crescendoHour": "{hour}:00",
     "pendingShort": "in attesa"
   },
@@ -542,8 +543,15 @@
     "bonusMiss": "bonus mancato",
     "letterHit": "lettera indovinata",
     "letterMiss": "lettera mancata",
+    "rankWin": "Categoria {rank}",
+    "rankLose": "Nessuna categoria vincente su questo barème",
+    "gain": "Premio pubblicato: {amount}",
+    "gainAnnuity": "Rendita pubblicata: {amount} / mese per {years} anni",
+    "secondDrawWin": "2ª estrazione · categoria {rank} · {amount}",
+    "secondDrawLose": "2ª estrazione: nessuna categoria vincente",
+    "noTable": "Tabella premi non ancora disponibile per questa estrazione.",
     "archiveNear": "{count} altra/e estrazione/i con almeno 3 numeri in comune",
     "seeDraw": "Vedi la scheda",
-    "disclaimer": "Strumento informativo. 18+ · gioco responsabile — nessun sistema batte le probabilità."
+    "disclaimer": "Strumento informativo. Importi dal barème pubblicato, escluse opzioni (moltiplicatore Keno, ecc.). 18+ · gioco responsabile — nessun sistema batte le probabilità."
   }
 }

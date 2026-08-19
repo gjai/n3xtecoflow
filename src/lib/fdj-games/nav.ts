@@ -63,9 +63,7 @@ export const LOTTERY_GAMES_NAV: LotteryGameNav[] = [
     labelEn: "My Million",
     tools: [
       { id: "archive", href: "/my-million#archives" },
-      { id: "simulator", href: "/my-million" },
       { id: "nextDraw", href: "/prochain-tirage" },
-      { id: "stats", href: "/tirages#stats" },
       { id: "guides", href: "/guides/comprendre-my-million" },
       { id: "news", href: "/actualites" },
     ],

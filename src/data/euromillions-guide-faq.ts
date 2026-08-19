@@ -264,7 +264,7 @@ const FAQ: Record<string, { fr: GuideFaqItem[]; en: GuideFaqItem[] }> = {
       {
         question: "Le simulateur calcule-t-il ma rente ?",
         answer:
-          "Non. Il compte les numéros et le Dream. Seul l’opérateur calcule un paiement.",
+          "Il affiche le rang et le montant (ou la rente) du barème publié. Ce n’est pas un paiement : seul l’opérateur calcule un ticket réel.",
       },
     ],
     en: [
@@ -280,7 +280,7 @@ const FAQ: Record<string, { fr: GuideFaqItem[]; en: GuideFaqItem[] }> = {
       {
         question: "Does the simulator compute my annuity?",
         answer:
-          "No. It counts numbers and the Dream. Only the operator computes a payout.",
+          "It shows the published tier and amount (or annuity). It is not a payout: only the operator settles a real ticket.",
       },
     ],
   },
@@ -289,7 +289,7 @@ const FAQ: Record<string, { fr: GuideFaqItem[]; en: GuideFaqItem[] }> = {
       {
         question: "Combien de numéros sont tirés ?",
         answer:
-          "20 parmi 70. Vous en jouez 2 à 10 selon votre mise.",
+          "16 parmi 70 (formule 2025). Vous en jouez 4 à 10 selon votre mise.",
       },
       {
         question: "Midi ou soir ?",
@@ -299,13 +299,13 @@ const FAQ: Record<string, { fr: GuideFaqItem[]; en: GuideFaqItem[] }> = {
       {
         question: "Le simulateur paie-t-il comme la FDJ ?",
         answer:
-          "Non. Il compte les numéros en commun. Le barème officiel relève de l’opérateur.",
+          "Non. Il compte les numéros en commun et affiche le rang / montant du barème publié. Le multiplicateur n’est pas appliqué. Seul l’opérateur fait foi pour un ticket réel.",
       },
     ],
     en: [
       {
         question: "How many numbers are drawn?",
-        answer: "20 from 70. You play 2 to 10 depending on your stake.",
+        answer: "16 from 70 (2025 formula). You play 4 to 10 depending on your stake.",
       },
       {
         question: "Lunchtime or evening?",
@@ -315,7 +315,7 @@ const FAQ: Record<string, { fr: GuideFaqItem[]; en: GuideFaqItem[] }> = {
       {
         question: "Does the simulator pay like FDJ?",
         answer:
-          "No. It counts matching numbers. The official table is set by the operator.",
+          "No. It counts matching numbers and shows the published tier / amount. The multiplier is not applied. Only the operator is authoritative for a real ticket.",
       },
     ],
   },
@@ -333,7 +333,7 @@ const FAQ: Record<string, { fr: GuideFaqItem[]; en: GuideFaqItem[] }> = {
       {
         question: "Le simulateur donne-t-il un gain en euros ?",
         answer:
-          "Non. Il compte les numéros et la lettre. Pas un barème de paiement.",
+          "Oui : rang et montant du barème publié pour ce tirage. Ce n’est pas un paiement FDJ.",
       },
     ],
     en: [
@@ -349,7 +349,7 @@ const FAQ: Record<string, { fr: GuideFaqItem[]; en: GuideFaqItem[] }> = {
       {
         question: "Does the simulator give a euro prize?",
         answer:
-          "No. It counts numbers and the letter. Not a payout table.",
+          "Yes: the published tier and amount for that draw. It is not an FDJ payout.",
       },
     ],
   },

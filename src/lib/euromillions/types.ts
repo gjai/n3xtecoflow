@@ -12,6 +12,9 @@ export type EuroMillionsPrizeTier = {
   rank: string;
   winners: number;
   amountEur: number;
+  /** Rente mensuelle (EuroDreams, parfois Keno rang 1). */
+  annuityMonthlyEur?: number;
+  annuityMonths?: number;
 };
 
 export type EuroMillionsDraw = {

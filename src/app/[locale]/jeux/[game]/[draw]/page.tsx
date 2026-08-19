@@ -17,6 +17,7 @@ import {
 } from "@/lib/fdj-games/store";
 import { companionBrief } from "@/lib/lottery/brief";
 import { COMPANION_GRID } from "@/lib/lottery/rules";
+import { DrawPrizeTable } from "@/components/DrawPrizeTable";
 import { FdjCompanionSimulator } from "@/components/FdjCompanionSimulator";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
@@ -177,6 +178,30 @@ export default async function CompanionDrawPage({
           <FdjGameBalls draw={draw} labels={groupLabels} />
         </div>
 
+        <DrawPrizeTable
+          tiers={draw.prizeTiers}
+          locale={locale}
+          title={t("prizesTitle")}
+          extraTitle=""
+          rankLabel={t("prizeRank")}
+          amountLabel={t("prizeAmount")}
+          winnersLabel={t("prizeWinners")}
+          heading="h2"
+          annuityNote={(vars) => gamesT("annuityNote", vars)}
+        />
+        {draw.prizeTiersExtra?.length ? (
+          <DrawPrizeTable
+            tiers={draw.prizeTiersExtra}
+            locale={locale}
+            title={gamesT("prizesSecondTitle")}
+            extraTitle=""
+            rankLabel={t("prizeRank")}
+            amountLabel={t("prizeAmount")}
+            winnersLabel={t("prizeWinners")}
+            heading="h3"
+          />
+        ) : null}
+
         <section id="simulateur" className="mt-12 scroll-mt-28">
           <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
             {gamesT("simTitle", { game: label })}
@@ -185,6 +210,7 @@ export default async function CompanionDrawPage({
             <FdjCompanionSimulator
               draws={allDraws}
               spec={spec}
+              gameId={entry.id}
               gameSlug={entry.slug}
               initialKey={companionDrawKey(draw)}
             />

@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo, useState, type FormEvent } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import type { FdjGameDraw } from "@/lib/fdj-games/types";
+import type { FdjCompanionGameId, FdjGameDraw } from "@/lib/fdj-games/types";
 import { companionDrawKey } from "@/lib/fdj-games/keys";
+import { checkCompanionTicket } from "@/lib/lottery/companion-prize";
+import { formatMoneyEur } from "@/lib/lottery/prize-format";
 import {
   countMatches,
   groupLetter,
@@ -80,15 +82,18 @@ function PickGrid({
 export function FdjCompanionSimulator({
   draws,
   spec,
+  gameId,
   gameSlug,
   initialKey,
 }: {
   draws: FdjGameDraw[];
   spec: CompanionGridSpec;
+  gameId: FdjCompanionGameId;
   gameSlug: string;
   initialKey?: string | null;
 }) {
   const t = useTranslations("gameSim");
+  const locale = useLocale();
   const keys = useMemo(() => draws.map(companionDrawKey), [draws]);
   const [main, setMain] = useState<number[]>([]);
   const [bonus, setBonus] = useState<number[]>([]);
@@ -119,6 +124,18 @@ export function FdjCompanionSimulator({
       ? drawnBonus.includes(bonus[0])
       : false;
   const letterHit = spec.letter && letter ? letter === drawnLetter : false;
+
+  const prize =
+    submitted && valid && draw
+      ? checkCompanionTicket(
+          gameId,
+          draw,
+          main,
+          bonusHit,
+          Boolean(letterHit),
+          mainNeed,
+        )
+      : null;
 
   const archiveHits = useMemo(() => {
     if (!submitted || !valid) return 0;
@@ -287,6 +304,43 @@ export function FdjCompanionSimulator({
               ? ` · ${letterHit ? t("letterHit") : t("letterMiss")}`
               : ""}
           </p>
+          {prize?.rank ? (
+            <p className="mt-2 font-semibold">
+              {t("rankWin", { rank: prize.rank })}
+              {prize.amountEur != null && prize.amountEur > 0
+                ? ` · ${t("gain", { amount: formatMoneyEur(prize.amountEur, locale) || "—" })}`
+                : prize.annuityMonthlyEur
+                  ? ` · ${t("gainAnnuity", {
+                      amount:
+                        formatMoneyEur(prize.annuityMonthlyEur, locale) || "—",
+                      years: Math.max(
+                        1,
+                        Math.round((prize.annuityMonths || 12) / 12),
+                      ),
+                    })}`
+                  : prize.hasTable
+                    ? ""
+                    : ""}
+            </p>
+          ) : (
+            <p className="mt-2">{t("rankLose")}</p>
+          )}
+          {!prize?.hasTable ? (
+            <p className="mt-1 text-[var(--muted)]">{t("noTable")}</p>
+          ) : null}
+          {gameId === "loto" && groupNumbers(draw, "secondDraw").length ? (
+            <p className="mt-2 text-[var(--muted)]">
+              {prize?.extraRank
+                ? t("secondDrawWin", {
+                    rank: prize.extraRank,
+                    amount:
+                      prize.extraAmountEur != null
+                        ? formatMoneyEur(prize.extraAmountEur, locale) || "—"
+                        : "—",
+                  })
+                : t("secondDrawLose")}
+            </p>
+          ) : null}
           <p className="mt-2 text-[var(--muted)]">
             {t("archiveNear", { count: archiveHits })}
           </p>

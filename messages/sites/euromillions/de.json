@@ -195,7 +195,7 @@
       "other": "Sonstiges"
     },
     "simTitle": "{game}-Simulator",
-    "simLead": "Vergleichen Sie ein Grid mit einer bereits veröffentlichten Ziehung. Keine Prognose.",
+    "simLead": "Vergleichen Sie ein Grid mit einer veröffentlichten Ziehung: Rang und Betrag der FDJ-Tabelle, wenn verfügbar. Keine Prognose.",
     "genTitle": "{game}-Generator",
     "genLead": "1 bis 10 zufällige Grids. Das verbessert Ihre Chancen nicht.",
     "genPickLabel": "Zahlen zum Spielen",
@@ -204,6 +204,7 @@
     "statsCount": "{count} Treffer",
     "statsDelay": "Abstand {delay}",
     "gameGuideCta": "Guide zu diesem Spiel",
+    "prizesSecondTitle": "Gewinne 2. Ziehung",
     "crescendoHour": "{hour}:00",
     "pendingShort": "ausstehend"
   },
@@ -542,8 +543,15 @@
     "bonusMiss": "Bonus verfehlt",
     "letterHit": "Buchstabe getroffen",
     "letterMiss": "Buchstabe verfehlt",
+    "rankWin": "Rang {rank}",
+    "rankLose": "Kein Gewinnrang in dieser Tabelle",
+    "gain": "Veröffentlichter Gewinn: {amount}",
+    "gainAnnuity": "Veröffentlichte Rente: {amount} / Monat für {years} Jahre",
+    "secondDrawWin": "2. Ziehung · Rang {rank} · {amount}",
+    "secondDrawLose": "2. Ziehung: kein Gewinnrang",
+    "noTable": "Gewinntabelle für diese Ziehung noch nicht verfügbar.",
     "archiveNear": "{count} andere Ziehung(en) mit mindestens 3 gemeinsamen Zahlen",
     "seeDraw": "Karte ansehen",
-    "disclaimer": "Informationswerkzeug. 18+ · verantwortungsvoll spielen — kein System schlägt die Wahrscheinlichkeiten."
+    "disclaimer": "Informationswerkzeug. Beträge aus der veröffentlichten Tabelle, ohne Optionen (Keno-Multiplikator usw.). 18+ · verantwortungsvoll spielen — kein System schlägt die Wahrscheinlichkeiten."
   }
 }
