@@ -12,17 +12,25 @@ function formatMoney(amount: number | null | undefined, locale: string) {
 
 function Table({
   tiers,
+  extraTiers,
   locale,
   rankLabel,
   amountLabel,
   winnersLabel,
+  extraLabel,
 }: {
   tiers: EuroMillionsPrizeTier[];
+  extraTiers?: EuroMillionsPrizeTier[];
   locale: string;
   rankLabel: string;
   amountLabel: string;
   winnersLabel: string;
+  extraLabel?: string;
 }) {
+  const eplusMap = new Map(
+    (extraTiers || []).map((t) => [t.rank, t]),
+  );
+  const hasEplus = eplusMap.size > 0;
   return (
     <div className="overflow-x-auto border border-[var(--line)]">
       <table className="w-full min-w-[320px] text-left text-sm">
@@ -31,20 +39,31 @@ function Table({
             <th className="px-3 py-2 font-medium">{rankLabel}</th>
             <th className="px-3 py-2 font-medium">{amountLabel}</th>
             <th className="px-3 py-2 font-medium">{winnersLabel}</th>
+            {hasEplus ? (
+              <th className="px-3 py-2 font-medium">{extraLabel}</th>
+            ) : null}
           </tr>
         </thead>
         <tbody>
-          {tiers.map((tier, i) => (
-            <tr key={`${tier.rank}-${i}`} className="border-t border-[var(--line)]">
-              <td className="px-3 py-2 font-semibold text-[var(--heading)]">
-                {tier.rank}
-              </td>
-              <td className="px-3 py-2 text-[var(--heading)]">
-                {formatMoney(tier.amountEur, locale) || "—"}
-              </td>
-              <td className="px-3 py-2 text-[var(--muted)]">{tier.winners}</td>
-            </tr>
-          ))}
+          {tiers.map((tier, i) => {
+            const ep = eplusMap.get(tier.rank);
+            return (
+              <tr key={`${tier.rank}-${i}`} className="border-t border-[var(--line)]">
+                <td className="px-3 py-2 font-semibold text-[var(--heading)]">
+                  {tier.rank}
+                </td>
+                <td className="px-3 py-2 text-[var(--heading)]">
+                  {formatMoney(tier.amountEur, locale) || "—"}
+                </td>
+                <td className="px-3 py-2 text-[var(--muted)]">{tier.winners}</td>
+                {hasEplus ? (
+                  <td className="px-3 py-2 text-[var(--heading)]">
+                    {ep ? formatMoney(ep.amountEur, locale) || "—" : "—"}
+                  </td>
+                ) : null}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -84,28 +103,16 @@ export function DrawPrizeTable({
       <div className="mt-4">
         <Table
           tiers={tiers}
+          extraTiers={extraTiers}
           locale={locale}
           rankLabel={rankLabel}
           amountLabel={amountLabel}
           winnersLabel={winnersLabel}
+          extraLabel={extraTitle}
         />
       </div>
       {extraTiers && extraTiers.length > 0 ? (
-        <>
-          <Heading className="mt-8 font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
-            {extraTitle}
-          </Heading>
-          <p className="mt-2 text-sm text-[var(--muted)]">{extraHelp}</p>
-          <div className="mt-4">
-            <Table
-              tiers={extraTiers}
-              locale={locale}
-              rankLabel={rankLabel}
-              amountLabel={amountLabel}
-              winnersLabel={winnersLabel}
-            />
-          </div>
-        </>
+        <p className="mt-3 text-sm text-[var(--muted)]">{extraHelp}</p>
       ) : null}
     </div>
   );

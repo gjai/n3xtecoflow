@@ -4,7 +4,9 @@ import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import {
+  EXTERNAL_GAMES_NAV,
   LOTTERY_GAMES_NAV,
+  externalGameLabel,
   getLotteryGame,
   lotteryGameFromPath,
   lotteryGameLabel,
@@ -135,6 +137,73 @@ function GameDropdown({
   );
 }
 
+function OtherGamesDropdown({
+  locale,
+  pathname,
+  t,
+  onNavigate,
+}: {
+  locale: string;
+  pathname: string;
+  t: ReturnType<typeof useTranslations<"nav">>;
+  onNavigate?: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const active = pathname.startsWith("/jeux/illiko") || pathname.startsWith("/jeux/pmu") || pathname.startsWith("/jeux/parions-sport");
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+      onFocus={() => setOpen(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+          setOpen(false);
+        }
+      }}
+    >
+      <Link
+        href="/jeux"
+        className={`inline-flex items-center gap-1 whitespace-nowrap pb-0.5 hover:text-[var(--heading)] ${
+          active ? "text-[var(--heading)]" : ""
+        }`}
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        {t("otherGames")}
+        <span className="text-[0.65em] opacity-70" aria-hidden>
+          ▾
+        </span>
+      </Link>
+      {open ? (
+        <div className="absolute right-0 top-full z-40 min-w-52 pt-2">
+          <ul
+            role="menu"
+            className="list-none border border-[var(--line)] bg-[var(--surface)] py-2 shadow-lg"
+          >
+            {EXTERNAL_GAMES_NAV.map((game) => (
+              <li key={game.id} role="none">
+                <Link
+                  href={game.href}
+                  role="menuitem"
+                  className={`block px-4 py-2 text-sm hover:bg-[var(--bg)] hover:text-[var(--heading)] ${
+                    pathname.startsWith(game.href)
+                      ? "text-[var(--heading)]"
+                      : "text-[var(--muted)]"
+                  }`}
+                  onClick={onNavigate}
+                >
+                  {externalGameLabel(game, locale)}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export function EuroMillionsDesktopNav() {
   const locale = useLocale();
   const t = useTranslations("nav");
@@ -153,14 +222,7 @@ export function EuroMillionsDesktopNav() {
           alignEnd={i >= LOTTERY_GAMES_NAV.length - 2}
         />
       ))}
-      <Link
-        href="/jeux"
-        className={`whitespace-nowrap pb-0.5 hover:text-[var(--heading)] ${
-          pathname.replace(/\/+$/, "") === "/jeux" ? "text-[var(--heading)]" : ""
-        }`}
-      >
-        {t("otherGames")}
-      </Link>
+      <OtherGamesDropdown locale={locale} pathname={pathname} t={t} />
     </nav>
   );
 }
@@ -233,17 +295,28 @@ export function EuroMillionsMobileNav({
           </div>
         );
       })}
-      <Link
-        href="/jeux"
-        className={`min-h-11 py-3 font-semibold ${
-          pathname.replace(/\/+$/, "") === "/jeux"
-            ? "text-[var(--heading)]"
-            : ""
-        }`}
-        onClick={onNavigate}
-      >
-        {t("otherGames")}
-      </Link>
+      <div className="border-b border-[var(--line)]">
+        <p className="min-h-11 py-3 font-semibold text-[var(--muted)]">
+          {t("otherGames")}
+        </p>
+        <ul className="pb-3 pl-3">
+          {EXTERNAL_GAMES_NAV.map((game) => (
+            <li key={game.id}>
+              <Link
+                href={game.href}
+                className={`block min-h-10 py-2 ${
+                  pathname.startsWith(game.href)
+                    ? "text-[var(--heading)]"
+                    : "text-[var(--muted)]"
+                }`}
+                onClick={onNavigate}
+              >
+                {externalGameLabel(game, locale)}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

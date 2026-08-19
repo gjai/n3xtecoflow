@@ -243,6 +243,7 @@ export function newsShareImageResponse(
   title: string,
   excerpt: string,
   size: { width: number; height: number },
+  coverUrl?: string,
 ) {
   const layout = shareLayout(size);
   const portrait = layout !== "feed";
@@ -262,53 +263,91 @@ export function newsShareImageResponse(
           width: "100%",
           height: "100%",
           background: "#0b1220",
-          padding: pad,
           fontFamily: "sans-serif",
+          position: "relative",
         }}
       >
+        {coverUrl ? (
+          <img
+            src={coverUrl}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+        ) : null}
+        {coverUrl ? (
+          <div
+            style={{
+              display: "flex",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              background: "linear-gradient(to bottom, rgba(11,18,32,0.35) 0%, rgba(11,18,32,0.92) 60%, rgba(11,18,32,0.98) 100%)",
+            }}
+          />
+        ) : null}
         <div
           style={{
             display: "flex",
-            color: accent,
-            fontSize: portrait ? 26 : 20,
-            letterSpacing: 5,
-            textTransform: "uppercase",
+            flexDirection: "column",
+            width: "100%",
+            height: "100%",
+            padding: pad,
+            position: "relative",
+            justifyContent: coverUrl ? "flex-end" : "flex-start",
           }}
         >
-          Actualité
-        </div>
-        <div
-          style={{
-            display: "flex",
-            color: "#ffffff",
-            fontSize: layout === "story" ? 48 : layout === "ig" ? 40 : 38,
-            fontWeight: 700,
-            marginTop: portrait ? 24 : 16,
-            lineHeight: 1.2,
-          }}
-        >
-          {clip(title, portrait ? 140 : 110)}
-        </div>
-        <div
-          style={{
-            display: "flex",
-            color: "#b8c4d8",
-            fontSize: portrait ? 26 : 22,
-            marginTop: portrait ? 28 : 20,
-            lineHeight: 1.4,
-          }}
-        >
-          {clip(excerpt, portrait ? 220 : 160)}
-        </div>
-        <div
-          style={{
-            display: "flex",
-            marginTop: "auto",
-            color: "#8494ad",
-            fontSize: portrait ? 22 : 20,
-          }}
-        >
-          euromillions-resultats.fr · 18+ · jeu responsable
+          <div
+            style={{
+              display: "flex",
+              color: accent,
+              fontSize: portrait ? 26 : 20,
+              letterSpacing: 5,
+              textTransform: "uppercase",
+            }}
+          >
+            Actualité
+          </div>
+          <div
+            style={{
+              display: "flex",
+              color: "#ffffff",
+              fontSize: layout === "story" ? 48 : layout === "ig" ? 40 : 38,
+              fontWeight: 700,
+              marginTop: portrait ? 24 : 16,
+              lineHeight: 1.2,
+            }}
+          >
+            {clip(title, portrait ? 140 : 110)}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              color: "#b8c4d8",
+              fontSize: portrait ? 26 : 22,
+              marginTop: portrait ? 28 : 20,
+              lineHeight: 1.4,
+            }}
+          >
+            {clip(excerpt, portrait ? 220 : 160)}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              marginTop: coverUrl ? 24 : "auto",
+              color: "#8494ad",
+              fontSize: portrait ? 22 : 20,
+            }}
+          >
+            euromillions-resultats.fr · 18+ · jeu responsable
+          </div>
         </div>
       </div>
     ),

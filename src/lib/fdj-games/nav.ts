@@ -116,6 +116,45 @@ export function lotteryGameFromPath(pathname: string): LotteryGameId | null {
   return null;
 }
 
+export type ExternalGameNav = {
+  id: string;
+  href: string;
+  labelFr: string;
+  labelEn: string;
+  external: string;
+};
+
+export const EXTERNAL_GAMES_NAV: ExternalGameNav[] = [
+  {
+    id: "illiko",
+    href: "/jeux/illiko",
+    labelFr: "Illiko",
+    labelEn: "Illiko",
+    external: "https://www.fdj.fr/jeux-instantanes",
+  },
+  {
+    id: "pmu",
+    href: "/jeux/pmu",
+    labelFr: "PMU",
+    labelEn: "PMU",
+    external: "https://www.pmu.fr",
+  },
+  {
+    id: "parions-sport",
+    href: "/jeux/parions-sport",
+    labelFr: "Parions Sport",
+    labelEn: "Parions Sport",
+    external: "https://www.enligne.parionssport.fdj.fr",
+  },
+];
+
+export function externalGameLabel(
+  game: ExternalGameNav,
+  locale: string,
+): string {
+  return locale === "en" ? game.labelEn : game.labelFr;
+}
+
 export function toolHrefIsActive(
   href: string,
   pathname: string,

@@ -219,80 +219,58 @@ export default async function TirageDetailPage({
             <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
               {t("prizesTitle")}
             </h2>
-            <div className="mt-4 overflow-x-auto border border-[var(--line)]">
-              <table className="w-full min-w-[320px] text-left text-sm">
-                <thead className="bg-[var(--surface)] text-xs uppercase tracking-[0.12em] text-[var(--muted)]">
-                  <tr>
-                    <th className="px-3 py-2 font-medium">{t("prizeRank")}</th>
-                    <th className="px-3 py-2 font-medium">{t("prizeAmount")}</th>
-                    <th className="px-3 py-2 font-medium">{t("prizeWinners")}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {draw.prizeTiers.map((tier, i) => (
-                    <tr
-                      key={`${tier.rank}-${i}`}
-                      className="border-t border-[var(--line)]"
-                    >
-                      <td className="px-3 py-2 font-semibold text-[var(--heading)]">
-                        {tier.rank}
-                      </td>
-                      <td className="px-3 py-2 text-[var(--heading)]">
-                        {formatMoney(tier.amountEur, locale) || "—"}
-                      </td>
-                      <td className="px-3 py-2 text-[var(--muted)]">
-                        {tier.winners}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {draw.prizeTiersEtoilePlus &&
-            draw.prizeTiersEtoilePlus.length > 0 ? (
-              <>
-                <h2 className="mt-10 font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
-                  {t("prizesEtoilePlus")}
-                </h2>
-                <p className="mt-2 text-sm text-[var(--muted)]">
-                  {t("prizesEtoilePlusHelp")}
-                </p>
+            {(() => {
+              const eplusMap = new Map(
+                (draw.prizeTiersEtoilePlus || []).map((t) => [t.rank, t]),
+              );
+              const hasEplus = eplusMap.size > 0;
+              return (
                 <div className="mt-4 overflow-x-auto border border-[var(--line)]">
                   <table className="w-full min-w-[320px] text-left text-sm">
                     <thead className="bg-[var(--surface)] text-xs uppercase tracking-[0.12em] text-[var(--muted)]">
                       <tr>
-                        <th className="px-3 py-2 font-medium">
-                          {t("prizeRank")}
-                        </th>
-                        <th className="px-3 py-2 font-medium">
-                          {t("prizeAmount")}
-                        </th>
-                        <th className="px-3 py-2 font-medium">
-                          {t("prizeWinners")}
-                        </th>
+                        <th className="px-3 py-2 font-medium">{t("prizeRank")}</th>
+                        <th className="px-3 py-2 font-medium">{t("prizeAmount")}</th>
+                        <th className="px-3 py-2 font-medium">{t("prizeWinners")}</th>
+                        {hasEplus ? (
+                          <th className="px-3 py-2 font-medium">{t("prizesEtoilePlus")}</th>
+                        ) : null}
                       </tr>
                     </thead>
                     <tbody>
-                      {draw.prizeTiersEtoilePlus.map((tier, i) => (
-                        <tr
-                          key={`eplus-${tier.rank}-${i}`}
-                          className="border-t border-[var(--line)]"
-                        >
-                          <td className="px-3 py-2 font-semibold text-[var(--heading)]">
-                            {tier.rank}
-                          </td>
-                          <td className="px-3 py-2 text-[var(--heading)]">
-                            {formatMoney(tier.amountEur, locale) || "—"}
-                          </td>
-                          <td className="px-3 py-2 text-[var(--muted)]">
-                            {tier.winners}
-                          </td>
-                        </tr>
-                      ))}
+                      {draw.prizeTiers.map((tier, i) => {
+                        const ep = eplusMap.get(tier.rank);
+                        return (
+                          <tr
+                            key={`${tier.rank}-${i}`}
+                            className="border-t border-[var(--line)]"
+                          >
+                            <td className="px-3 py-2 font-semibold text-[var(--heading)]">
+                              {tier.rank}
+                            </td>
+                            <td className="px-3 py-2 text-[var(--heading)]">
+                              {formatMoney(tier.amountEur, locale) || "—"}
+                            </td>
+                            <td className="px-3 py-2 text-[var(--muted)]">
+                              {tier.winners}
+                            </td>
+                            {hasEplus ? (
+                              <td className="px-3 py-2 text-[var(--heading)]">
+                                {ep ? formatMoney(ep.amountEur, locale) || "—" : "—"}
+                              </td>
+                            ) : null}
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
-              </>
+              );
+            })()}
+            {draw.prizeTiersEtoilePlus && draw.prizeTiersEtoilePlus.length > 0 ? (
+              <p className="mt-3 text-sm text-[var(--muted)]">
+                {t("prizesEtoilePlusHelp")}
+              </p>
             ) : null}
             <p className="mt-4">
               <Link

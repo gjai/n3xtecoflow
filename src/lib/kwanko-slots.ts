@@ -34,6 +34,11 @@ export const KWANKO_SLOTS: Record<string, SlotPair> = {
     desktop: { id: "S51261158C3EF27921", w: 728, h: 90 },
     mobile: { id: "S51261158C3EF27911", w: 320, h: 50 },
   },
+  // Illiko fil rouge
+  illiko: {
+    desktop: { id: "S51261158C3EF23D9", w: 728, h: 90 },
+    mobile: { id: "S51261158C3EF23D5", w: 320, h: 50 },
+  },
   // In-content 300x250 (Bonus_ete26 — guides / actus)
   incontent: {
     desktop: { id: "S51261158C3EF2173", w: 300, h: 250 },

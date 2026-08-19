@@ -59,10 +59,16 @@ export async function GET(request: Request) {
     const store = await readNewsStore();
     const article = getNewsBySlug(slug, store, "euromillions");
     if (!article?.fr?.title) return new NextResponse("not found", { status: 404 });
+    const coverUrl = article.imageSrc
+      ? article.imageSrc.startsWith("http")
+        ? article.imageSrc
+        : `https://euromillions-resultats.fr${article.imageSrc}`
+      : undefined;
     image = newsShareImageResponse(
       article.fr.title,
       article.fr.excerpt || "",
       size,
+      coverUrl,
     );
   } else {
     const game = url.searchParams.get("game")?.trim();

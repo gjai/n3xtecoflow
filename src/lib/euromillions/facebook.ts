@@ -834,12 +834,17 @@ export async function notifyFacebookNews(
   for (const article of queue) {
     const title = article.fr?.title?.trim() || article.slug;
     const excerpt = article.fr?.excerpt?.trim() || "";
+    const coverUrl = article.imageSrc
+      ? article.imageSrc.startsWith("http")
+        ? article.imageSrc
+        : `https://euromillions-resultats.fr${article.imageSrc}`
+      : undefined;
     const q = `kind=news&slug=${encodeURIComponent(article.slug)}`;
     const sent = await postFeedAndStoryImages({
       token,
       caption: newsCaption(title, excerpt, article.slug),
-      feed: newsShareImageResponse(title, excerpt, SHARE_FEED),
-      story: newsShareImageResponse(title, excerpt, SHARE_STORY),
+      feed: newsShareImageResponse(title, excerpt, SHARE_FEED, coverUrl),
+      story: newsShareImageResponse(title, excerpt, SHARE_STORY, coverUrl),
       publicFeedUrl: shareJpegUrl(`${q}&format=ig`),
       publicStoryUrl: shareJpegUrl(`${q}&format=story`),
       storyLinkUrl: fdjAffiliateUrl("euromillions", ""),
