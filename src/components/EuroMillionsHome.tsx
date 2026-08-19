@@ -40,7 +40,6 @@ import type { NewsArticle } from "@/lib/news/types";
 import { isBlockedLotteryNewsSource, isEuroMillionsResultClone } from "@/lib/news/rss";
 import { affiliateOffer } from "@/lib/affiliates";
 import { fdjAffiliateTracked, fdjAffiliateUrl } from "@/lib/fdj-affiliate";
-import { nextDrawAffiliateHref, nextDrawAffiliateRel } from "@/lib/fdj-play-links";
 import type { SiteConfig } from "@/sites/types";
 
 function formatMoney(amount: number | null | undefined, locale: string) {
@@ -417,26 +416,19 @@ export async function EuroMillionsHome({
                 })}
               </p>
             ) : null}
-
-            {(store.nextDrawDate || nextJackpot) && !pending ? (
-              <div className="mt-6 border-t border-[var(--line)] pt-5 text-sm text-[var(--muted)]">
-                <a
-                  href={nextDrawAffiliateHref("euromillions")}
-                  rel={nextDrawAffiliateRel("euromillions")}
-                  target="_blank"
-                  className="font-semibold text-[var(--heading)] hover:underline"
-                >
-                  {t("nextDrawLabel")}
-                </a>
-                {store.nextDrawDate
-                  ? ` · ${formatDate(store.nextDrawDate, locale)}`
-                  : null}
-                {nextJackpot ? ` · ${nextJackpot}` : null}
-              </div>
-            ) : null}
           </div>
         </div>
       </section>
+
+      <div className="border-b border-[var(--line)]">
+        <div className="mx-auto max-w-6xl overflow-hidden px-5 py-3 md:px-8">
+          <KwankoBanner
+            desktop={KWANKO_SLOTS.euromillions.desktop}
+            mobile={KWANKO_SLOTS.euromillions.mobile}
+            className="py-0"
+          />
+        </div>
+      </div>
 
       <section className="border-b border-[var(--line)] bg-[var(--bg)]">
         <div className="mx-auto grid max-w-6xl gap-8 px-5 py-8 md:grid-cols-2 md:px-8">
