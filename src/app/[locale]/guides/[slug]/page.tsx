@@ -2,6 +2,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AdSenseUnit } from "@/components/AdSenseUnit";
+import { KwankoBanner } from "@/components/KwankoBanner";
+import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import { ArticleBody, type ArticleProductCard } from "@/components/ArticleBody";
 import { ArticleCover } from "@/components/ArticleCover";
 import {
@@ -202,6 +204,10 @@ export default async function GuideArticlePage({
       {siteIsEuroMillions(site) ? (
         <div className="mx-auto max-w-3xl px-5 pt-8 md:px-8">
           <AdSenseUnit label={adsT("adsLabel")} />
+          <KwankoBanner
+            desktop={KWANKO_SLOTS.incontent.desktop}
+            mobile={KWANKO_SLOTS.incontent.mobile}
+          />
         </div>
       ) : null}
       <ArticleBody

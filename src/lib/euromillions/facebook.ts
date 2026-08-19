@@ -6,6 +6,7 @@ import {
   readFdjGamesStore,
 } from "@/lib/fdj-games/store";
 import type { FdjCompanionGameId, FdjGameDraw } from "@/lib/fdj-games/types";
+import { fdjAffiliateUrl } from "@/lib/fdj-affiliate";
 import { formatEuroMillionsLongDate } from "./datetime";
 import {
   SHARE_FEED,
@@ -167,11 +168,13 @@ function formatJackpot(n: number): string {
   }).format(n);
 }
 
-function legalLines(url: string, tag: string): string[] {
+function legalLines(url: string, tag: string, gameId?: string): string[] {
+  const playUrl = fdjAffiliateUrl(gameId as "euromillions" || "euromillions", "");
   return [
     "",
     "Vérifier vos gains :",
     url,
+    ...(playUrl ? ["", "Jouer sur FDJ.fr :", playUrl] : []),
     "",
     "Site indépendant · 18+ · jeu responsable. Nous ne vendons pas de tickets.",
     tag,
@@ -195,7 +198,7 @@ export function facebookDrawMessage(draw: EuroMillionsDraw): string {
   if (typeof draw.jackpotEur === "number" && draw.jackpotEur > 0) {
     lines.push(`Jackpot : ${formatJackpot(draw.jackpotEur)}`);
   }
-  return [...lines, ...legalLines(url, "#EuroMillions")].join("\n");
+  return [...lines, ...legalLines(url, "#EuroMillions", "euromillions")].join("\n");
 }
 
 function companionPermalink(draw: FdjGameDraw): string {
@@ -215,7 +218,7 @@ function companionMessage(draw: FdjGameDraw): string {
   if (typeof draw.jackpotEur === "number" && draw.jackpotEur > 0) {
     lines.push(`Jackpot : ${formatJackpot(draw.jackpotEur)}`);
   }
-  return [...lines, ...legalLines(companionPermalink(draw), tag)].join("\n");
+  return [...lines, ...legalLines(companionPermalink(draw), tag, draw.gameId)].join("\n");
 }
 
 function companionPublished(draw: FdjGameDraw | null | undefined): boolean {
@@ -268,10 +271,12 @@ async function uploadPhoto(args: {
 async function publishStory(
   token: string,
   photoId: string,
+  linkUrl?: string,
 ): Promise<{ ok: boolean; error?: string }> {
   const form = new FormData();
   form.append("access_token", token);
   form.append("photo_id", photoId);
+  if (linkUrl) form.append("link_url", linkUrl);
   const json = await graphJson(
     `${GRAPH}/${encodeURIComponent(pageId())}/photo_stories`,
     form,
@@ -392,6 +397,7 @@ async function postFeedAndStoryImages(args: {
   story: Response;
   publicFeedUrl?: string;
   publicStoryUrl?: string;
+  storyLinkUrl?: string;
   instagram?: InstagramAccount | null;
 }): Promise<{
   posted: boolean;
@@ -425,7 +431,7 @@ async function postFeedAndStoryImages(args: {
   if (!unpublished.ok || !unpublished.id) {
     console.error("facebook_story_upload_fail", unpublished.error);
   } else {
-    const story = await publishStory(args.token, unpublished.id);
+    const story = await publishStory(args.token, unpublished.id, args.storyLinkUrl);
     if (!story.ok) console.error("facebook_story_fail", story.error);
     else storyOk = true;
   }
@@ -513,6 +519,7 @@ async function postFeedAndStory(args: {
   caption: string;
   card: ReturnType<typeof euroMillionsShareCard>;
   publicQuery: string;
+  storyLinkUrl?: string;
   instagram?: InstagramAccount | null;
 }): Promise<{
   posted: boolean;
@@ -528,6 +535,7 @@ async function postFeedAndStory(args: {
     story: lotteryShareImageResponse(args.card, SHARE_STORY),
     publicFeedUrl: shareJpegUrl(`${args.publicQuery}&format=ig`),
     publicStoryUrl: shareJpegUrl(`${args.publicQuery}&format=story`),
+    storyLinkUrl: args.storyLinkUrl,
     instagram: args.instagram,
   });
 }
@@ -579,6 +587,7 @@ export async function postFacebookDraw(
     caption: facebookDrawMessage(draw),
     card: euroMillionsShareCard(draw),
     publicQuery: `date=${encodeURIComponent(draw.date)}`,
+    storyLinkUrl: fdjAffiliateUrl("euromillions", ""),
     instagram,
   });
   if (!sent.posted) return { ok: false, error: sent.error };
@@ -645,6 +654,7 @@ export async function notifyFacebookOnPublish(
     caption: string,
     card: ReturnType<typeof euroMillionsShareCard>,
     publicQuery: string,
+    storyLinkUrl?: string,
   ) => {
     const igAlready = state.lastPostedIg?.[key] === fingerprint;
     if (!options?.force) {
@@ -676,6 +686,7 @@ export async function notifyFacebookOnPublish(
       caption,
       card,
       publicQuery,
+      storyLinkUrl,
       instagram,
     });
     if (!sent.posted) {
@@ -699,6 +710,7 @@ export async function notifyFacebookOnPublish(
       facebookDrawMessage(latest),
       euroMillionsShareCard(latest),
       `date=${encodeURIComponent(latest.date)}`,
+      fdjAffiliateUrl("euromillions", ""),
     );
   } else {
     skipped.euromillions = "unpublished";
@@ -716,6 +728,7 @@ export async function notifyFacebookOnPublish(
       companionMessage(draw),
       companionShareCard(draw),
       `game=${encodeURIComponent(gameId)}&key=${encodeURIComponent(companionDrawKey(draw))}`,
+      fdjAffiliateUrl(gameId, ""),
     );
   }
 
@@ -736,12 +749,14 @@ function newsPermalink(slug: string): string {
 }
 
 function newsCaption(title: string, excerpt: string, slug: string): string {
+  const playUrl = fdjAffiliateUrl("euromillions", "");
   return [
     title.trim(),
     "",
     excerpt.trim(),
     "",
     newsPermalink(slug),
+    ...(playUrl ? ["", "Jouer sur FDJ.fr :", playUrl] : []),
     "",
     "Site indépendant · 18+ · jeu responsable. Nous ne vendons pas de tickets.",
     "#EuroMillions",
@@ -827,6 +842,7 @@ export async function notifyFacebookNews(
       story: newsShareImageResponse(title, excerpt, SHARE_STORY),
       publicFeedUrl: shareJpegUrl(`${q}&format=ig`),
       publicStoryUrl: shareJpegUrl(`${q}&format=story`),
+      storyLinkUrl: fdjAffiliateUrl("euromillions", ""),
       instagram,
     });
     if (!sent.posted) {

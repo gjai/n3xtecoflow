@@ -88,7 +88,7 @@ export const euromillionsSite: SiteConfig = {
     instagram: "https://www.instagram.com/euromillionsresultats/",
   },
   monetization: {
-    disableAmazon: false,
+    disableAmazon: true,
     adsenseClient: "ca-pub-4733644127583822",
     offers: [
       {

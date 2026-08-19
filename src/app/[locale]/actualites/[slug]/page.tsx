@@ -7,6 +7,8 @@ import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
 import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
 import { AmazonButton } from "@/components/AmazonButton";
+import { KwankoBanner } from "@/components/KwankoBanner";
+import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import { SmartCover } from "@/components/SmartCover";
 import { getEditorialImages } from "@/data/images";
 import { resolveAffiliateOffers } from "@/lib/affiliates";
@@ -243,6 +245,10 @@ export default async function NewsArticlePage({
         {copy.body.slice(0, mid).map((p) => (
           <p key={p.slice(0, 48)}>{linkify(p)}</p>
         ))}
+        <KwankoBanner
+          desktop={KWANKO_SLOTS.incontent.desktop}
+          mobile={KWANKO_SLOTS.incontent.mobile}
+        />
         <CtaBlock />
         {copy.body.slice(mid).map((p) => (
           <p key={p.slice(0, 48)}>{linkify(p)}</p>

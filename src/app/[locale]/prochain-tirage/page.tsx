@@ -9,6 +9,8 @@ import { GameLabel } from "@/components/GameMark";
 import { NextDrawMenuMeta } from "@/components/NextDrawMenuMeta";
 import { ResultsLivePoller } from "@/components/ResultsLivePoller";
 import { AlertsEngagement } from "@/components/AlertsEngagement";
+import { KwankoBanner } from "@/components/KwankoBanner";
+import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import { LOTTERY_GAMES_NAV, lotteryGameLabel } from "@/lib/fdj-games/nav";
 import { gameRailStyle } from "@/lib/fdj-games/identity";
 import { siteLocaleAlternates } from "@/lib/seo";
@@ -178,6 +180,11 @@ export default async function ProchainTiragePage({
           </li>
         </ul>
         <p className="mt-10 text-xs text-[var(--muted)]">{t("disclaimer")}</p>
+        <KwankoBanner
+          desktop={KWANKO_SLOTS.bienvenue.desktop}
+          mobile={KWANKO_SLOTS.bienvenue.mobile}
+          className="mt-8"
+        />
       </div>
     </main>
   );

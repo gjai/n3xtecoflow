@@ -24,6 +24,8 @@ import {
   fdjAffiliateTracked,
   fdjAffiliateUrl,
 } from "@/lib/fdj-affiliate";
+import { KwankoBanner } from "@/components/KwankoBanner";
+import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import { NextDrawMenuMeta } from "@/components/NextDrawMenuMeta";
 import { companionDrawKey } from "@/lib/fdj-games/keys";
 import { gameScopeStyle } from "@/lib/fdj-games/identity";
@@ -367,6 +369,11 @@ export default async function JeuxGamePage({
         </Link>
       </div>
       <p className="mt-6 text-xs text-[var(--muted)]">{t("disclaimer")}</p>
+      <KwankoBanner
+        desktop={(KWANKO_SLOTS[gameId] || KWANKO_SLOTS.bienvenue).desktop}
+        mobile={(KWANKO_SLOTS[gameId] || KWANKO_SLOTS.bienvenue).mobile}
+        className="mt-8"
+      />
     </main>
   );
 }

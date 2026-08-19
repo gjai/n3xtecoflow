@@ -1,3 +1,5 @@
+import { KWANKO_MAIL_BANNERS } from "@/lib/kwanko-slots";
+
 const ORIGIN = "https://euromillions-resultats.fr";
 const LOGO = `${ORIGIN}/brands/euromillions/icon-192.png`;
 const NAVY = "#0b1220";
@@ -11,6 +13,23 @@ function esc(s: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+export function mailBannerHtml(campaign: string): string {
+  const b = KWANKO_MAIL_BANNERS[campaign];
+  if (!b) return "";
+  return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:24px 0 0;width:100%">
+  <tr>
+    <td align="center">
+      <a href="${esc(b.click)}" target="_blank" rel="sponsored noopener noreferrer" style="display:block;text-decoration:none">
+        <img src="${esc(b.img)}" width="${b.w}" height="${b.h}" alt="${esc(b.alt)}" style="display:block;border:0;max-width:100%;height:auto">
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding:4px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;color:${MUTED};text-align:center">Publicité · 18+ · Jeu responsable</td>
+  </tr>
+</table>`;
 }
 
 function ctaButton(href: string, label: string): string {
@@ -155,7 +174,8 @@ export function resultAlertHtml(args: {
       <table role="presentation" cellpadding="0" cellspacing="0"><tr>${ballsRow}</tr></table>
       <p style="margin:16px 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:${GOLD}">${esc(starsLabel)}</p>
       <table role="presentation" cellpadding="0" cellspacing="0"><tr>${starsRow}</tr></table>
-      ${ctaButton(args.url, button)}`,
+      ${ctaButton(args.url, button)}
+      ${mailBannerHtml("euromillions")}`,
     footerHtml: `${esc(legal)}<br><a href="${esc(args.unsubUrl)}" style="color:${GOLD}">${esc(unsub)}</a>`,
   });
   const text = en

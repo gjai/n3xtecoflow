@@ -2,6 +2,8 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { AdSenseUnit } from "@/components/AdSenseUnit";
 import { AlertsEngagement } from "@/components/AlertsEngagement";
+import { KwankoBanner } from "@/components/KwankoBanner";
+import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import { DrawPrizeTable } from "@/components/DrawPrizeTable";
 import { SmartCover } from "@/components/SmartCover";
 import { FdjCompanionGamesBlock } from "@/components/FdjCompanionGamesBlock";
@@ -385,6 +387,10 @@ export async function EuroMillionsHome({
 
       <div className="mx-auto max-w-6xl px-5 py-8 md:px-8">
         <AdSenseUnit label={t("adsLabel")} />
+        <KwankoBanner
+          desktop={KWANKO_SLOTS.bienvenue.desktop}
+          mobile={KWANKO_SLOTS.bienvenue.mobile}
+        />
       </div>
 
       <section className="border-b border-[var(--line)] bg-[var(--bg)]">
