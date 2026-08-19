@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
+import { GameMark } from "@/components/GameMark";
 import { intlLocale } from "@/i18n/locales";
 import {
   EM_DRAW_HOUR,
@@ -92,7 +93,17 @@ export function NextJackpotBanner({
             {pending ? t("pendingEyebrow") : t("eyebrow")}
           </p>
           <p className="mt-1 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)] md:text-xl">
-            {pending ? t("pendingTitle") : t("title")}
+              {pending ? (
+                <span className="inline-flex items-center gap-2">
+                  <GameMark gameId="euromillions" size={18} />
+                  <span>{t("pendingTitle")}</span>
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-2">
+                  <GameMark gameId="euromillions" size={18} />
+                  <span className="sr-only">{t("title")}</span>
+                </span>
+              )}
             {nextJackpot ? (
               <span className="text-[var(--accent)]"> · {nextJackpot}</span>
             ) : null}
