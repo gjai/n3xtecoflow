@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { LOTTERY_GAMES_NAV, lotteryGameLabel } from "@/lib/fdj-games/nav";
+import { LOTTERY_GAMES_NAV, OTHER_GAMES_HUB_HREF, lotteryGameLabel } from "@/lib/fdj-games/nav";
 import {
   siteIsCasinosCrypto,
   siteIsEuroMillions,
@@ -39,7 +39,7 @@ export function SiteFooter() {
         })),
         { href: "/prochain-tirage", label: tNav("nextDraw") },
         { href: "/alerte-email", label: tNav("alert") },
-        { href: "/jeux", label: tNav("otherGames") },
+        { href: OTHER_GAMES_HUB_HREF, label: tNav("otherGames") },
         { href: "/guides", label: t("guides") },
         { href: "/actualites", label: t("news") },
         { href: "/a-propos", label: t("about") },

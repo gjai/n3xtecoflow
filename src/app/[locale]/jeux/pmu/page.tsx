@@ -1,4 +1,4 @@
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { siteLocaleAlternates } from "@/lib/seo";
@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import { KwankoBanner } from "@/components/KwankoBanner";
 import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
+import { OTHER_GAMES_HUB_HREF } from "@/lib/fdj-games/nav";
 
 export async function generateMetadata({
   params,
@@ -32,6 +33,7 @@ export default async function PmuPage({
   setRequestLocale(locale);
   const site = await getCurrentSite();
   if (!siteIsEuroMillions(site)) notFound();
+  const t = await getTranslations("games");
 
   const affiliateUrl =
     process.env.PMU_AFFILIATE_URL?.trim() || "https://www.pmu.fr";
@@ -39,10 +41,10 @@ export default async function PmuPage({
   return (
     <main className="mx-auto max-w-3xl px-5 pb-16 pt-14 md:px-8 md:pt-20">
       <Link
-        href="/jeux"
+        href={OTHER_GAMES_HUB_HREF}
         className="text-sm font-semibold text-[var(--accent)] hover:underline"
       >
-        ← Tous les jeux
+        ← {t("otherBack")}
       </Link>
       <h1 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
         PMU — Paris hippiques et sportifs

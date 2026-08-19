@@ -637,35 +637,6 @@ export async function EuroMillionsHome({
               </div>
             ))}
           </div>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link
-              href="/tirages#simulateur"
-              className="text-sm font-semibold text-[var(--accent)] hover:underline"
-            >
-              {t("simulatorCta")} →
-            </Link>
-            <Link
-              href="/tirages#generateur"
-              className="text-sm font-semibold text-[var(--accent)] hover:underline"
-            >
-              {t("generatorCta")} →
-            </Link>
-            <Link
-              href="/jeux"
-              className="text-sm font-semibold text-[var(--accent)] hover:underline"
-            >
-              {t("gamesCta")} →
-            </Link>
-            <Link
-              href="/guides"
-              className="text-sm font-semibold text-[var(--accent)] hover:underline"
-            >
-              {t("allGuidesCta")} →
-            </Link>
-          </div>
-          <p className="mt-8 max-w-2xl text-xs text-[var(--muted)]">
-            {t("disclaimer")}
-          </p>
         </div>
       </section>
     </>

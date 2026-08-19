@@ -153,6 +153,10 @@ export function buildSitemapForSite(
           "/jeux/loto",
           "/jeux/crescendo",
           "/jeux/keno",
+          "/jeux/illiko",
+          "/jeux/pmu",
+          "/jeux/parions-sport",
+          "/autres-jeux",
           "/my-million",
         ]
       : []),

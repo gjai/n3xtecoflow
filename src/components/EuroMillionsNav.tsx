@@ -6,6 +6,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import {
   EXTERNAL_GAMES_NAV,
   LOTTERY_GAMES_NAV,
+  OTHER_GAMES_HUB_HREF,
   externalGameLabel,
   getLotteryGame,
   lotteryGameFromPath,
@@ -163,7 +164,11 @@ function OtherGamesDropdown({
   onNavigate?: () => void;
 }) {
   const [open, setOpen] = useState(false);
-  const active = pathname.startsWith("/jeux/illiko") || pathname.startsWith("/jeux/pmu") || pathname.startsWith("/jeux/parions-sport");
+  const active =
+    pathname === OTHER_GAMES_HUB_HREF ||
+    pathname.startsWith("/jeux/illiko") ||
+    pathname.startsWith("/jeux/pmu") ||
+    pathname.startsWith("/jeux/parions-sport");
   return (
     <div
       className="relative"
@@ -177,7 +182,7 @@ function OtherGamesDropdown({
       }}
     >
       <Link
-        href="/jeux"
+        href={OTHER_GAMES_HUB_HREF}
         className={`inline-flex items-center gap-1 whitespace-nowrap pb-0.5 hover:text-[var(--heading)] ${
           active ? "text-[var(--heading)]" : ""
         }`}
@@ -322,9 +327,13 @@ export function EuroMillionsMobileNav({
         );
       })}
       <div className="border-b border-[var(--line)]">
-        <p className="min-h-11 py-3 font-semibold text-[var(--muted)]">
+        <Link
+          href={OTHER_GAMES_HUB_HREF}
+          className="block min-h-11 py-3 font-semibold"
+          onClick={onNavigate}
+        >
           {t("otherGames")}
-        </p>
+        </Link>
         <ul className="pb-3 pl-3">
           {EXTERNAL_GAMES_NAV.map((game) => (
             <li key={game.id}>

@@ -9,6 +9,7 @@ import type { SiteConfig } from "@/sites/types";
 const EURO_MILLIONS_PREFIXES = [
   "/tirages",
   "/jeux",
+  "/autres-jeux",
   "/generateur",
   "/prochain-tirage",
   "/my-million",

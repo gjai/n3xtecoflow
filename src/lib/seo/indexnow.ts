@@ -33,6 +33,7 @@ export function lotteryIndexNowUrls(
     "/my-million",
     "/alerte-email",
     "/jeux",
+    "/autres-jeux",
     "/generateur",
   ]);
   if (latest) paths.add(`/tirages/${latest}`);

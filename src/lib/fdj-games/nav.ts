@@ -117,6 +117,8 @@ export function lotteryGameFromPath(pathname: string): LotteryGameId | null {
   return null;
 }
 
+export const OTHER_GAMES_HUB_HREF = "/autres-jeux";
+
 export type ExternalGameNav = {
   id: string;
   href: string;
