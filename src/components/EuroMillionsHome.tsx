@@ -64,6 +64,36 @@ const GUIDE_GAME: Partial<Record<string, LotteryGameId>> = {
   [EUROMILLIONS_MY_MILLION_GUIDE_SLUG]: "my-million",
 };
 
+/** Path SVG étoile FDJ (viewBox 0 0 21 21). */
+const FDJ_STAR_PATH =
+  "M20.423 8.033a1.045 1.045 0 0 0-.832-.734l-5.661-.86-2.532-5.365a1.028 1.028 0 0 0-.924-.601c-.393 0-.751.233-.925.6L7.018 6.44l-5.661.86c-.389.06-.712.344-.833.734s-.02.82.26 1.106l4.097 4.176-.967 5.897c-.066.404.093.814.41 1.055a.994.994 0 0 0 1.087.082l5.063-2.784 5.063 2.784a.996.996 0 0 0 1.086-.082c.317-.241.476-.65.41-1.055l-.967-5.897 4.096-4.176c.281-.287.382-.716.261-1.106Z";
+
+function EuroMillionsStarBall({
+  value,
+  sizeClass,
+  animate,
+  delay,
+}: {
+  value: number;
+  sizeClass: string;
+  animate: boolean;
+  delay?: string;
+}) {
+  return (
+    <span
+      className={`lottery-star ${sizeClass} ${animate ? "draw-ball-in" : ""}`}
+      aria-label={`Étoile ${value}`}
+      role="img"
+      style={delay ? { ["--ball-delay" as string]: delay } : undefined}
+    >
+      <svg viewBox="0 0 21 21" aria-hidden className="lottery-star__shape">
+        <path fillRule="evenodd" d={FDJ_STAR_PATH} />
+      </svg>
+      <span className="lottery-star__num">{value}</span>
+    </span>
+  );
+}
+
 export function DrawBalls({
   draw,
   ballsLabel,
@@ -85,13 +115,15 @@ export function DrawBalls({
   const size = large ? "lottery-ball--lg" : compact ? "lottery-ball--sm" : "";
   const ballClass = animate ? "draw-ball-in" : "";
   const singleLine = compact || inline;
-  const mainKind = inline && large ? "lottery-ball--em" : "lottery-ball--main";
-  const starKind = inline && large ? "lottery-ball--star" : "lottery-ball--bonus";
+  const fdjStyle = inline && large;
+  const mainKind = fdjStyle ? "lottery-ball--em" : "lottery-ball--main";
 
   const balls = (
     <div
       className={
-        singleLine ? "lottery-balls lottery-balls--compact" : "lottery-balls"
+        singleLine
+          ? "lottery-balls lottery-balls--fdj lottery-balls--compact"
+          : "lottery-balls"
       }
     >
       {draw.numbers.map((n, i) => (
@@ -107,21 +139,35 @@ export function DrawBalls({
           {n}
         </span>
       ))}
-      {draw.stars.map((n, i) => (
-        <span
-          key={`s-${n}`}
-          className={`lottery-ball ${starKind} ${size} ${ballClass}`}
-          style={
-            animate
-              ? {
-                  ["--ball-delay" as string]: `${420 + (draw.numbers.length + i) * 75}ms`,
-                }
-              : undefined
-          }
-        >
-          {n}
-        </span>
-      ))}
+      {draw.stars.map((n, i) =>
+        fdjStyle ? (
+          <EuroMillionsStarBall
+            key={`s-${n}`}
+            value={n}
+            sizeClass={size}
+            animate={animate}
+            delay={
+              animate
+                ? `${420 + (draw.numbers.length + i) * 75}ms`
+                : undefined
+            }
+          />
+        ) : (
+          <span
+            key={`s-${n}`}
+            className={`lottery-ball lottery-ball--bonus ${size} ${ballClass}`}
+            style={
+              animate
+                ? {
+                    ["--ball-delay" as string]: `${420 + (draw.numbers.length + i) * 75}ms`,
+                  }
+                : undefined
+            }
+          >
+            {n}
+          </span>
+        ),
+      )}
     </div>
   );
   if (singleLine) return balls;
