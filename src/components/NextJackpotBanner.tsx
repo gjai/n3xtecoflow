@@ -94,23 +94,21 @@ export function NextJackpotBanner({
           <p className="mt-1 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)] md:text-xl">
               {pending ? (
                 <span className="inline-flex items-center gap-2">
-                  {/* Logo du jeu (asset), pas logo du site */}
                   <img
-                    src="/brands/euromillions/games/euromillions.svg"
+                    src="/brands/euromillions/games/euromillions-officiel.svg"
                     alt=""
                     aria-hidden
-                    className="h-[18px] w-[18px] shrink-0"
+                    className="h-7 w-auto max-w-[7.5rem] shrink-0 rounded-sm bg-[#0b1220] px-1.5 py-0.5"
                   />
                   <span>{t("pendingTitle")}</span>
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-2">
-                  {/* Logo du jeu (asset), pas logo du site */}
                   <img
-                    src="/brands/euromillions/games/euromillions.svg"
+                    src="/brands/euromillions/games/euromillions-officiel.svg"
                     alt=""
                     aria-hidden
-                    className="h-[18px] w-[18px] shrink-0"
+                    className="h-7 w-auto max-w-[7.5rem] shrink-0 rounded-sm bg-[#0b1220] px-1.5 py-0.5"
                   />
                   <span className="sr-only">{t("title")}</span>
                 </span>

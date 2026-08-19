@@ -281,6 +281,15 @@ export async function EuroMillionsHome({
         playHref={playHref}
         playTracked={fdjAffiliateTracked("euromillions")}
       />
+      <div className="border-b border-[var(--line)]">
+        <div className="mx-auto max-w-6xl overflow-hidden px-5 py-3 md:px-8">
+          <KwankoBanner
+            desktop={KWANKO_SLOTS.bienvenue.desktop}
+            mobile={KWANKO_SLOTS.bienvenue.mobile}
+            className="py-0"
+          />
+        </div>
+      </div>
       <section className="hero-grid relative overflow-hidden border-b border-[var(--line)]">
         <div className="hero-orbs hidden md:block" aria-hidden>
           <span className="hero-orb hero-orb-1" />
@@ -308,13 +317,6 @@ export async function EuroMillionsHome({
               </p>
             ) : null}
             <p className="mt-4 max-w-lg text-[var(--muted)]">{t("subhead")}</p>
-            <div className="hero-offer-banner mt-6">
-              <KwankoBanner
-                desktop={KWANKO_SLOTS.bienvenueLarge.desktop}
-                mobile={KWANKO_SLOTS.bienvenueLarge.mobile}
-                className="justify-start py-0"
-              />
-            </div>
             <div className="reveal-delay mt-8 flex flex-wrap gap-3">
               <Link
                 href="/tirages#simulateur"
@@ -334,6 +336,13 @@ export async function EuroMillionsHome({
               >
                 {t("ctaSecondary")}
               </Link>
+            </div>
+            <div className="mt-6 overflow-hidden">
+              <KwankoBanner
+                desktop={KWANKO_SLOTS.valorisationSquare.desktop}
+                mobile={KWANKO_SLOTS.valorisationSquare.mobile}
+                className="justify-start py-0"
+              />
             </div>
           </div>
 
@@ -395,7 +404,7 @@ export async function EuroMillionsHome({
                   extraTiers={latest.prizeTiersEtoilePlus}
                   locale={locale}
                   title=""
-                  extraTitle={tDraws("prizesEtoilePlus")}
+                  extraTitle="Étoile+"
                   extraHelp=""
                   rankLabel={tDraws("prizeRank")}
                   amountLabel={tDraws("prizeAmount")}
@@ -543,13 +552,6 @@ export async function EuroMillionsHome({
         </div>
       </section>
 
-      <div className="mx-auto max-w-6xl px-5 py-6 md:px-8">
-        <KwankoBanner
-          desktop={KWANKO_SLOTS.valorisation.desktop}
-          mobile={KWANKO_SLOTS.valorisation.mobile}
-        />
-      </div>
-
       <FdjCompanionGamesBlock store={fdjGames} locale={locale} variant="home" />
 
       {news.length > 0 ? (
@@ -644,13 +646,6 @@ export async function EuroMillionsHome({
           </div>
         </section>
       ) : null}
-
-      <div className="mx-auto max-w-6xl px-5 py-6 md:px-8">
-        <KwankoBanner
-          desktop={KWANKO_SLOTS.euromillionsSquare.desktop}
-          mobile={KWANKO_SLOTS.euromillionsSquare.mobile}
-        />
-      </div>
 
       <section className="border-b border-[var(--line)] bg-[var(--surface)]">
         <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">

@@ -39,7 +39,10 @@ function SlotRenderer({ slot }: { slot: SlotDef }) {
   }, [slot.id]);
 
   return (
-    <div ref={ref} style={{ minHeight: slot.h, minWidth: slot.w }}>
+    <div
+      ref={ref}
+      style={{ minHeight: slot.h, width: "100%", maxWidth: slot.w }}
+    >
       <noscript>
         <iframe
           src={`https://action.metaffiliation.com/trk.php?maff=N${slot.id.slice(1)}`}

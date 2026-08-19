@@ -116,6 +116,7 @@ a{color:inherit;text-decoration:none}
 }
 .hero-offer-banner{width:100%}
 .hero-offer-banner aside{justify-content:flex-start!important;padding-top:0!important;padding-bottom:0!important}
+#dernier-tirage table{width:100%;table-layout:fixed;min-width:0}
 .lottery-ball--letter{border:2px solid var(--accent);background:var(--surface);color:var(--heading)}
 .lottery-code{display:inline-flex;align-items:center;min-height:2.25rem;padding:0 .75rem;font-family:ui-monospace,monospace;font-size:.875rem;font-weight:600;letter-spacing:.04em;border:1px solid var(--line);background:var(--surface);color:var(--heading)}
 `.trim();
