@@ -296,7 +296,7 @@ export async function EuroMillionsHome({
           <span className="hero-orb hero-orb-2" />
           <span className="hero-orb hero-orb-3" />
         </div>
-        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[minmax(0,640px)_minmax(0,1fr)] md:items-start md:px-8 md:py-20">
+        <div className="relative mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] md:items-start md:px-8 md:py-20">
           <div className="reveal min-w-0">
             <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
               {brand}
@@ -323,12 +323,6 @@ export async function EuroMillionsHome({
                 className="inline-flex min-h-11 items-center bg-[var(--accent)] px-5 text-sm font-semibold text-[var(--accent-ink)]"
               >
                 {t("simulatorCta")}
-              </Link>
-              <Link
-                href="/generateur"
-                className="inline-flex min-h-11 items-center border border-[var(--line)] px-5 text-sm font-semibold text-[var(--heading)]"
-              >
-                {t("generatorCta")}
               </Link>
               <Link
                 href="/tirages"
