@@ -19,6 +19,7 @@ import {
   readFdjGamesStore,
 } from "@/lib/fdj-games/store";
 import { FdjCompanionSimulator } from "@/components/FdjCompanionSimulator";
+import { FlashGridGenerator } from "@/components/FlashGridGenerator";
 import {
   fdjAffiliateRel,
   fdjAffiliateTracked,
@@ -323,6 +324,16 @@ export default async function JeuxGamePage({
             gameSlug={entry.slug}
             initialKey={latest ? companionDrawKey(latest) : null}
           />
+        </div>
+      </section>
+
+      <section id="generateur" className="mt-16 max-w-3xl scroll-mt-28">
+        <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
+          {t("genTitle", { game: label })}
+        </h2>
+        <p className="mt-2 text-sm text-[var(--muted)]">{t("genLead")}</p>
+        <div className="mt-6">
+          <FlashGridGenerator spec={spec} help={t("genLead")} />
         </div>
       </section>
 

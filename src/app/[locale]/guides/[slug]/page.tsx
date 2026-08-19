@@ -25,6 +25,7 @@ import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { CasinosCryptoGuideAffiliates } from "@/components/CasinosCryptoGuideAffiliates";
 import { CasinosCryptoRelatedGuides } from "@/components/CasinosCryptoRelatedGuides";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
+import { GuideMark } from "@/components/GuideMark";
 import { APP_LOCALES } from "@/i18n/locales";
 import { resolveAffiliateOffers } from "@/lib/affiliates";
 import { siteAmazonFallbackQuery } from "@/sites/copy";
@@ -156,7 +157,10 @@ export default async function GuideArticlePage({
       <header className="hero-grid border-b border-[var(--line)]">
         <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-[1.1fr_0.9fr] md:items-center md:px-8">
           <div>
-            <h1 className="font-[family-name:var(--font-display)] text-4xl font-semibold md:text-5xl">
+            <h1 className="flex items-start gap-3 font-[family-name:var(--font-display)] text-4xl font-semibold md:text-5xl">
+              {siteIsEuroMillions(site) ? (
+                <GuideMark slug={slug} size={40} className="mt-1" />
+              ) : null}
               {keywordOffers ? (
                 <AffiliateLinkedText text={copy.title} offers={keywordOffers} />
               ) : (

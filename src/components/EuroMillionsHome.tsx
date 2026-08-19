@@ -7,6 +7,7 @@ import { DrawPrizeTable } from "@/components/DrawPrizeTable";
 import { SmartCover } from "@/components/SmartCover";
 import { FdjCompanionGamesBlock } from "@/components/FdjCompanionGamesBlock";
 import { GameMark } from "@/components/GameMark";
+import { GuideMark, guideAccent } from "@/components/GuideMark";
 import { NextJackpotBanner } from "@/components/NextJackpotBanner";
 import {
   EUROMILLIONS_CRESCENDO_GUIDE_SLUG,
@@ -33,7 +34,6 @@ import {
   anyLotteryResultPending,
 } from "@/lib/euromillions/fingerprint";
 import { getLatestDraw, isEuroMillionsDrawPublished } from "@/lib/euromillions/store";
-import type { LotteryGameId } from "@/lib/fdj-games/nav";
 import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import { GAME_IDENTITY } from "@/lib/fdj-games/identity";
 import type { NewsArticle } from "@/lib/news/types";
@@ -54,15 +54,6 @@ function formatMoney(amount: number | null | undefined, locale: string) {
 function formatDate(iso: string, locale: string) {
   return formatEuroMillionsLongDate(iso, locale);
 }
-
-const GUIDE_GAME: Partial<Record<string, LotteryGameId>> = {
-  [EUROMILLIONS_MAIN_GUIDE_SLUG]: "euromillions",
-  [EUROMILLIONS_LOTO_GUIDE_SLUG]: "loto",
-  [EUROMILLIONS_EURODREAMS_GUIDE_SLUG]: "eurodreams",
-  [EUROMILLIONS_KENO_GUIDE_SLUG]: "keno",
-  [EUROMILLIONS_CRESCENDO_GUIDE_SLUG]: "crescendo",
-  [EUROMILLIONS_MY_MILLION_GUIDE_SLUG]: "my-million",
-};
 
 /** Path SVG étoile FDJ (viewBox 0 0 21 21). */
 const FDJ_STAR_PATH =
@@ -458,7 +449,7 @@ export async function EuroMillionsHome({
               </p>
             </div>
             <Link
-              href="/generateur"
+              href="/tirages#generateur"
               className="inline-flex min-h-11 items-center border border-[var(--accent)] px-5 text-sm font-semibold text-[var(--heading)]"
             >
               {t("generatorCta")} →
@@ -501,25 +492,21 @@ export async function EuroMillionsHome({
                 EUROMILLIONS_MY_MILLION_GUIDE_SLUG,
                 EUROMILLIONS_RESPONSIBLE_GUIDE_SLUG,
               ] as const
-            ).map((slug) => {
-              const gameId = GUIDE_GAME[slug];
-              return (
+            ).map((slug) => (
               <li key={slug}>
                 <Link
                   href={`/guides/${slug}`}
                   className="flex items-center gap-2 border border-[var(--line)] bg-[var(--surface)] px-4 py-3 text-sm font-semibold text-[var(--heading)] hover:border-[var(--accent)]"
-                  style={
-                    gameId
-                      ? { borderLeftWidth: 3, borderLeftColor: GAME_IDENTITY[gameId].accent }
-                      : undefined
-                  }
+                  style={{
+                    borderLeftWidth: 3,
+                    borderLeftColor: guideAccent(slug),
+                  }}
                 >
-                  {gameId ? <GameMark gameId={gameId} size={20} /> : null}
+                  <GuideMark slug={slug} size={20} />
                   {t(`guideCard.${slug}`)}
                 </Link>
               </li>
-              );
-            })}
+            ))}
           </ul>
         </div>
       </section>
@@ -621,18 +608,32 @@ export async function EuroMillionsHome({
 
       <section className="border-b border-[var(--line)] bg-[var(--surface)]">
         <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
-          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
+          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
             {t("featuresTitle")}
           </h2>
-          <div className="mt-8 grid gap-8 md:grid-cols-3">
+          <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("featuresLead")}</p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { title: t("feature1Title"), text: t("feature1Text") },
               { title: t("feature2Title"), text: t("feature2Text") },
               { title: t("feature3Title"), text: t("feature3Text") },
-            ].map((f) => (
-              <div key={f.title}>
-                <h3 className="font-semibold text-[var(--heading)]">{f.title}</h3>
-                <p className="mt-2 text-sm text-[var(--muted)]">{f.text}</p>
+              { title: t("feature4Title"), text: t("feature4Text") },
+              { title: t("feature5Title"), text: t("feature5Text") },
+              { title: t("feature6Title"), text: t("feature6Text") },
+            ].map((f, i) => (
+              <div
+                key={f.title}
+                className="border border-[var(--line)] bg-[var(--bg)] px-5 py-5"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+                  {String(i + 1).padStart(2, "0")}
+                </p>
+                <h3 className="mt-2 font-semibold text-[var(--heading)]">
+                  {f.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
+                  {f.text}
+                </p>
               </div>
             ))}
           </div>
@@ -644,22 +645,22 @@ export async function EuroMillionsHome({
               {t("simulatorCta")} →
             </Link>
             <Link
-              href="/generateur"
+              href="/tirages#generateur"
               className="text-sm font-semibold text-[var(--accent)] hover:underline"
             >
               {t("generatorCta")} →
             </Link>
             <Link
-              href="/tirages"
+              href="/jeux"
               className="text-sm font-semibold text-[var(--accent)] hover:underline"
             >
-              {t("archiveCta")} →
+              {t("gamesCta")} →
             </Link>
             <Link
-              href="/tirages#stats"
+              href="/guides"
               className="text-sm font-semibold text-[var(--accent)] hover:underline"
             >
-              {t("statsCta")} →
+              {t("allGuidesCta")} →
             </Link>
           </div>
           <p className="mt-8 max-w-2xl text-xs text-[var(--muted)]">

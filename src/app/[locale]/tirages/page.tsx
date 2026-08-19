@@ -234,9 +234,10 @@ export default async function TiragesPage({
               initialDate={initialDate}
             />
           </div>
-          <div className="mt-12">
-            <FlashGridGenerator />
-          </div>
+        </section>
+
+        <section id="generateur" className="mt-16 max-w-3xl scroll-mt-28">
+          <FlashGridGenerator />
         </section>
 
         <section id="stats" className="mt-16 scroll-mt-28">

@@ -16,6 +16,7 @@ import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { KwankoBanner } from "@/components/KwankoBanner";
+import { GuideMark } from "@/components/GuideMark";
 import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 
 export const revalidate = 600;
@@ -208,7 +209,8 @@ export default async function GuidesIndexPage({
                   }
                 />
                 <div className="p-6">
-                  <h2 className="text-xl font-semibold text-[var(--heading)]">
+                  <h2 className="flex items-start gap-2.5 text-xl font-semibold text-[var(--heading)]">
+                    {em ? <GuideMark slug={guide.slug} size={28} /> : null}
                     {copy.title}
                   </h2>
                   <p className="mt-3 text-sm text-[var(--muted)]">{copy.subtitle}</p>

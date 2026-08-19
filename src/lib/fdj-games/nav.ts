@@ -33,6 +33,7 @@ export type LotteryGameNav = {
 const COMPANION_TOOLS = (slug: string): GameToolLink[] => [
   { id: "archive", href: `/jeux/${slug}#archives` },
   { id: "simulator", href: `/jeux/${slug}#simulateur` },
+  { id: "generator", href: `/jeux/${slug}#generateur` },
   { id: "nextDraw", href: `/jeux/${slug}#prochain` },
   { id: "stats", href: `/jeux/${slug}#stats` },
   { id: "guides", href: `/guides/comprendre-${slug}` },
@@ -48,7 +49,7 @@ export const LOTTERY_GAMES_NAV: LotteryGameNav[] = [
     tools: [
       { id: "archive", href: "/tirages#archives" },
       { id: "simulator", href: "/tirages#simulateur" },
-      { id: "generator", href: "/generateur" },
+      { id: "generator", href: "/tirages#generateur" },
       { id: "nextDraw", href: "/prochain-tirage" },
       { id: "stats", href: "/tirages#stats" },
       { id: "guides", href: "/guides" },
