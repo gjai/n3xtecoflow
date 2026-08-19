@@ -386,8 +386,8 @@
     "disclaimer": "Horaires indicatifs. 18+ · Jeu responsable.",
     "allTitle": "Tous les jeux",
     "allLead": "Jour, heure (Europe/Paris) et compte à rebours — horaires indicatifs.",
-    "cutoffOpen": "Prise de jeu jusqu’à {time} (Europe/Paris) le jour du tirage.",
-    "cutoffClosed": "Prises closes (20h15) — tirage vers 21h.",
+    "cutoffOpen": "Prise de jeu jusqu’à {time}",
+    "cutoffClosed": "Prises closes",
     "calendarCta": "Ajouter les tirages à l’agenda (ICS)",
     "alertCta": "Alerte e-mail des résultats",
     "claimCta": "Toucher un gain"

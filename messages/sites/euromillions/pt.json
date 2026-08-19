@@ -386,8 +386,8 @@
     "disclaimer": "Horários indicativos. 18+ · Jogue com responsabilidade.",
     "allTitle": "Todos os jogos",
     "allLead": "Dia, hora (Europa/Paris) e contagem decrescente — horários indicativos.",
-    "cutoffOpen": "Tickets accepted until {time} (Europe/Paris) on draw day.",
-    "cutoffClosed": "Sales closed (8:15 pm) — draw around 9 pm.",
+    "cutoffOpen": "Jogo até {time}",
+    "cutoffClosed": "Vendas encerradas",
     "calendarCta": "Adicionar sorteios ao calendário (ICS)",
     "alertCta": "Alerta de resultados por e-mail",
     "claimCta": "Receber um prémio"

@@ -386,8 +386,8 @@
     "disclaimer": "Tijden zijn indicatief. 18+ · Speel verantwoord.",
     "allTitle": "Alle spellen",
     "allLead": "Dag, uur (Europa/Parijs) en countdown — indicatieve tijden.",
-    "cutoffOpen": "Tickets accepted until {time} (Europe/Paris) on draw day.",
-    "cutoffClosed": "Sales closed (8:15 pm) — draw around 9 pm.",
+    "cutoffOpen": "Spelen tot {time}",
+    "cutoffClosed": "Verkoop gesloten",
     "calendarCta": "Trekkingen in de agenda (ICS)",
     "alertCta": "E-mailalert voor uitslagen",
     "claimCta": "Winst innen"

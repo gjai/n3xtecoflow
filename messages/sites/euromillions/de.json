@@ -386,8 +386,8 @@
     "disclaimer": "Zeiten sind Richtwerte. 18+ · Verantwortungsvoll spielen.",
     "allTitle": "Alle Spiele",
     "allLead": "Tag, Uhrzeit (Europa/Paris) und Countdown — Richtzeiten.",
-    "cutoffOpen": "Tickets accepted until {time} (Europe/Paris) on draw day.",
-    "cutoffClosed": "Sales closed (8:15 pm) — draw around 9 pm.",
+    "cutoffOpen": "Spiel bis {time}",
+    "cutoffClosed": "Annahme geschlossen",
     "calendarCta": "Ziehungen in den Kalender (ICS)",
     "alertCta": "E-Mail-Alarm für Ergebnisse",
     "claimCta": "Gewinn einlösen"

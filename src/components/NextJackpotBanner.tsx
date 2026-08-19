@@ -94,13 +94,16 @@ export function NextJackpotBanner({
             ) : null}
           </p>
           {dateLabel ? (
-            <p className="mt-1 text-sm text-[var(--muted)]">{dateLabel}</p>
-          ) : null}
-          {!pending ? (
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              {salesOpen
-                ? t("cutoffOpen", { time: cutoffLabel })
-                : t("cutoffClosed")}
+            <p className="mt-1 text-sm text-[var(--muted)]">
+              {dateLabel}
+              {!pending ? (
+                <span className="text-xs text-[var(--muted)]/80">
+                  {" · "}
+                  {salesOpen
+                    ? t("cutoffOpen", { time: cutoffLabel })
+                    : t("cutoffClosed")}
+                </span>
+              ) : null}
             </p>
           ) : null}
           {pending ? (
