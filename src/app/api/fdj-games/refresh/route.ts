@@ -23,6 +23,14 @@ export async function POST(request: Request) {
   try {
     const result = await refreshFdjCompanionGames();
     revalidateLotteryPages();
+    try {
+      const { notifyCompanionAlertsOnPublish } = await import(
+        "@/lib/euromillions/alerts"
+      );
+      await notifyCompanionAlertsOnPublish();
+    } catch (err) {
+      console.error("companion_alerts_fail", err);
+    }
     let facebook: Awaited<ReturnType<typeof notifyFacebookOnPublish>> | undefined;
     try {
       const em = await readEuroMillionsStore();

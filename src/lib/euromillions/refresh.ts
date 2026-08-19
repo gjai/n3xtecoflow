@@ -155,6 +155,12 @@ export async function refreshEuroMillionsData(options?: {
     );
     companionGames = companions.games;
     sources.push(...companions.sources.map((s) => `companion:${s}`));
+    try {
+      const { notifyCompanionAlertsOnPublish } = await import("./alerts");
+      await notifyCompanionAlertsOnPublish();
+    } catch (err) {
+      console.error("companion_alerts_fail", err);
+    }
   } catch (err) {
     console.error("euromillions_companions_fail", err);
   }

@@ -91,9 +91,6 @@ export async function FdjCompanionGamesBlock({
             <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
               {t("title")}
             </h2>
-            <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
-              {t("subtitle")}
-            </p>
           </div>
           {variant === "home" ? (
             <Link

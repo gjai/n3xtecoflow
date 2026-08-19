@@ -236,7 +236,6 @@ export async function EuroMillionsHome({
   });
   const livePending = anyLotteryResultPending(store, fdjGames);
   const brand = site.brand.name;
-  const recentWinners = (store.myMillionWinners || []).slice(0, 4);
   const editorial = getEditorialImages(site.id);
   const isEn = usesEnglishFallback(locale);
   const news = latestNews.filter(
@@ -566,52 +565,11 @@ export async function EuroMillionsHome({
         </section>
       ) : null}
 
-      {recentWinners.length > 0 ? (
-        <section className="border-b border-[var(--line)] bg-[var(--bg)]">
-          <div className="mx-auto max-w-6xl px-5 py-12 md:px-8">
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <div>
-                <p
-                  className="flex items-center gap-2 text-xs uppercase tracking-[0.2em]"
-                  style={{ color: GAME_IDENTITY["my-million"].accent }}
-                >
-                  <GameMark gameId="my-million" size={16} />
-                  My Million
-                </p>
-                <h2 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
-                  {t("winnersTitle")}
-                </h2>
-              </div>
-              <Link
-                href="/my-million"
-                className="text-sm font-semibold text-[var(--accent)] hover:underline"
-              >
-                {t("myMillionCta")} →
-              </Link>
-            </div>
-            <ul className="mt-6 grid gap-3 md:grid-cols-2">
-              {recentWinners.map((w) => (
-                <li
-                  key={w.sourceUrl}
-                  className="border border-[var(--line)] bg-[var(--surface)] px-4 py-3"
-                >
-                  <p className="text-sm font-semibold text-[var(--heading)]">
-                    {w.location || t("locationUnknown")}
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--muted)]">{w.title}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      ) : null}
-
       <section className="border-b border-[var(--line)] bg-[var(--surface)]">
         <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
           <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
             {t("featuresTitle")}
           </h2>
-          <p className="mt-3 max-w-2xl text-[var(--muted)]">{t("featuresLead")}</p>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { title: t("feature1Title"), text: t("feature1Text") },

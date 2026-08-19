@@ -12,6 +12,7 @@ type Body = {
   locale?: string;
   age?: boolean;
   website?: string;
+  games?: unknown;
 };
 
 function clientIp(request: Request) {
@@ -50,12 +51,15 @@ export async function POST(request: Request) {
     email: body.email || "",
     locale: body.locale || "fr",
     ageConfirmed: body.age === true,
+    games: body.games,
   });
   if (!result.ok) {
     const status =
       result.error === "mail_unconfigured"
         ? 503
-        : result.error === "age" || result.error === "invalid"
+        : result.error === "age" ||
+            result.error === "invalid" ||
+            result.error === "games"
           ? 400
           : 502;
     return NextResponse.json({ error: result.error }, { status });

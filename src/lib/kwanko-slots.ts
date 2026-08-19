@@ -193,8 +193,8 @@ export function kwankoBanner(
 }
 
 /**
- * Bannières email (image statique hébergée Kwanko + lien mclic).
- * Les clients mail bloquent JS → on utilise une image + <a>.
+ * Bannières email : visuel `maff=` + clic `mclic=` du même support (export Kwanko).
+ * Les JPEG statiques `mail_37_49_1_2.jpg` mélangeaient EuroDreams et EuroMillions.
  */
 type MailBanner = {
   img: string;
@@ -204,47 +204,40 @@ type MailBanner = {
   alt: string;
 };
 
+function mailBannerFromSlot(slot: SlotDef, alt: string): MailBanner {
+  const clickId = slot.id.replace(/^S/, "P");
+  return {
+    img: `https://action.metaffiliation.com/trk.php?maff=${clickId}`,
+    click: `https://action.metaffiliation.com/trk.php?mclic=${clickId}`,
+    w: slot.w,
+    h: slot.h,
+    alt,
+  };
+}
+
 export const KWANKO_MAIL_BANNERS: Record<string, MailBanner> = {
-  euromillions: {
-    img: "https://img.metaffiliation.com/11/75281/mail_37_49_1_2.jpg",
-    click: "https://action.metaffiliation.com/trk.php?mclic=P51261158C3EF21323",
-    w: 560,
-    h: 298,
-    alt: "Jouez à EuroMillions sur FDJ.fr",
-  },
-  loto: {
-    img: "https://img.metaffiliation.com/11/75281/mail_37_107_1_4.png",
-    click: "https://action.metaffiliation.com/trk.php?mclic=P51261158C3EF2119",
-    w: 560,
-    h: 298,
-    alt: "Jouez au Loto sur FDJ.fr",
-  },
-  eurodreams: {
-    img: "https://img.metaffiliation.com/11/75281/mail_37_49_1_2.jpg",
-    click: "https://action.metaffiliation.com/trk.php?mclic=P51261158C3EF22549",
-    w: 560,
-    h: 298,
-    alt: "Jouez à EuroDreams sur FDJ.fr",
-  },
-  crescendo: {
-    img: "https://img.metaffiliation.com/11/75281/mail_37_107_1_4.png",
-    click: "https://action.metaffiliation.com/trk.php?mclic=P51261158C3EF225184549483",
-    w: 560,
-    h: 298,
-    alt: "Jouez à Crescendo sur FDJ.fr",
-  },
-  bienvenue: {
-    img: "https://img.metaffiliation.com/11/75281/mail_37_107_1_4.png",
-    click: "https://action.metaffiliation.com/trk.php?mclic=P51261158C3EF2179",
-    w: 560,
-    h: 298,
-    alt: "Offre de bienvenue FDJ – 10€ offerts",
-  },
-  illiko: {
-    img: "https://img.metaffiliation.com/11/75281/mail_37_131_1_1.png",
-    click: "https://action.metaffiliation.com/trk.php?mclic=P51261158C3EF22533554563",
-    w: 560,
-    h: 298,
-    alt: "Jouez à Illiko sur FDJ.fr",
-  },
+  euromillions: mailBannerFromSlot(
+    KWANKO_BANNERS.FilRouge_EUML_2025["640x340"],
+    "Jouez à EuroMillions sur FDJ.fr",
+  ),
+  loto: mailBannerFromSlot(
+    KWANKO_BANNERS.FilRouge_LOTO_2025["640x340"],
+    "Jouez au Loto sur FDJ.fr",
+  ),
+  eurodreams: mailBannerFromSlot(
+    KWANKO_BANNERS.Fil_Rouge_EDMS["640x340"],
+    "Jouez à EuroDreams sur FDJ.fr",
+  ),
+  crescendo: mailBannerFromSlot(
+    KWANKO_BANNERS.CRDO["640x340"],
+    "Jouez à Crescendo sur FDJ.fr",
+  ),
+  bienvenue: mailBannerFromSlot(
+    KWANKO_BANNERS.Bonus_ete26["640x340"],
+    "Offre de bienvenue FDJ – 10€ offerts",
+  ),
+  illiko: mailBannerFromSlot(
+    KWANKO_BANNERS.Illiko["300x250"],
+    "Jouez à Illiko sur FDJ.fr",
+  ),
 };

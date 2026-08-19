@@ -86,19 +86,25 @@ export function wrapEuroMillionsEmail(args: {
 </html>`;
 }
 
-export function confirmAlertHtml(args: { confirmUrl: string; locale: string }): {
+export function confirmAlertHtml(args: {
+  confirmUrl: string;
+  locale: string;
+  gameLabels?: string[];
+}): {
   html: string;
   text: string;
   subject: string;
 } {
   const en = args.locale === "en";
+  const games =
+    args.gameLabels?.length ? args.gameLabels.join(", ") : "EuroMillions";
   const subject = en
-    ? "Confirm EuroMillions result alerts"
-    : "Confirmez l’alerte résultats EuroMillions";
+    ? "Confirm your result alerts"
+    : "Confirmez l’alerte résultats";
   const heading = en ? "Confirm your alert" : "Confirmez l’alerte";
   const lead = en
-    ? "One click to get an email when the EuroMillions numbers are published. Not a newsletter. Not an invitation to play."
-    : "Un clic pour recevoir un e-mail lorsque les numéros EuroMillions sont en ligne. Pas de newsletter. Pas une invitation à jouer.";
+    ? `One click to get an email when the numbers are published (${games}). Not a newsletter. Not an invitation to play.`
+    : `Un clic pour recevoir un e-mail lorsque les numéros sont en ligne (${games}). Pas de newsletter. Pas une invitation à jouer.`;
   const button = en ? "Confirm the alert" : "Confirmer l’alerte";
   const ignore = en
     ? "If you did not request this, ignore this message."
@@ -117,7 +123,7 @@ export function confirmAlertHtml(args: { confirmUrl: string; locale: string }): 
   });
   const text = en
     ? [
-        "Confirm to get one email when EuroMillions numbers are published.",
+        `Confirm to get one email when numbers are published (${games}).`,
         "Not a newsletter. Not an invitation to play. 18+.",
         "",
         args.confirmUrl,
@@ -125,7 +131,7 @@ export function confirmAlertHtml(args: { confirmUrl: string; locale: string }): 
         "If you did not request this, ignore this message.",
       ].join("\n")
     : [
-        "Confirmez pour recevoir un e-mail lorsque les numéros EuroMillions sont en ligne.",
+        `Confirmez pour recevoir un e-mail lorsque les numéros sont en ligne (${games}).`,
         "Pas de newsletter. Pas une invitation à jouer. 18+.",
         "",
         args.confirmUrl,
@@ -142,6 +148,15 @@ function ballCell(n: number, star: boolean): string {
   return `<td style="padding:4px">
     <div style="width:36px;height:36px;line-height:36px;text-align:center;border-radius:18px;background:${bg};${border}font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;color:${color}">${n}</div>
   </td>`;
+}
+
+function ballsTable(nums: number[], star: boolean): string {
+  const cells = nums.map((n) => ballCell(n, star));
+  const rows: string[] = [];
+  for (let i = 0; i < cells.length; i += 8) {
+    rows.push(`<tr>${cells.slice(i, i + 8).join("")}</tr>`);
+  }
+  return `<table role="presentation" cellpadding="0" cellspacing="0">${rows.join("")}</table>`;
 }
 
 export function resultAlertHtml(args: {
@@ -194,5 +209,75 @@ export function resultAlertHtml(args: {
         legal,
         `Désinscription : ${args.unsubUrl}`,
       ].join("\n");
+  return { html, text, subject };
+}
+
+export type CompanionMailGroup = {
+  label: string;
+  numbers?: number[];
+  text?: string;
+};
+
+export function companionResultAlertHtml(args: {
+  locale: string;
+  gameLabel: string;
+  dateLabel: string;
+  slotLabel: string | null;
+  groups: CompanionMailGroup[];
+  url: string;
+  unsubUrl: string;
+  banner: string;
+}): { html: string; text: string; subject: string } {
+  const en = args.locale === "en";
+  const when = args.slotLabel
+    ? `${args.dateLabel} — ${args.slotLabel}`
+    : args.dateLabel;
+  const subject = en
+    ? `${args.gameLabel} results for ${when}`
+    : `Résultats ${args.gameLabel} du ${when}`;
+  const heading = `${args.gameLabel} · ${when}`;
+  const button = en ? "Check your grid" : "Vérifier votre grille";
+  const legal = en
+    ? "Independent site, 18+. Play responsibly. This is not an invitation to buy a ticket."
+    : "Site indépendant, 18+. Jeu responsable. Ceci n’est pas une invitation à jouer.";
+  const unsub = en ? "Unsubscribe" : "Désinscription";
+  const preview = args.groups
+    .map((g) =>
+      g.numbers?.length
+        ? `${g.label} ${g.numbers.join(", ")}`
+        : `${g.label} ${g.text || ""}`,
+    )
+    .join(" — ");
+  const bodyParts: string[] = [];
+  const textParts: string[] = [];
+  for (const g of args.groups) {
+    bodyParts.push(
+      `<p style="margin:16px 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:${GOLD}">${esc(g.label)}</p>`,
+    );
+    if (g.numbers?.length) {
+      bodyParts.push(ballsTable(g.numbers, false));
+      textParts.push(`${g.label} ${g.numbers.join(" · ")}`);
+    } else if (g.text) {
+      bodyParts.push(
+        `<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:700;color:#ffffff">${esc(g.text)}</p>`,
+      );
+      textParts.push(`${g.label} ${g.text}`);
+    }
+  }
+  const html = wrapEuroMillionsEmail({
+    preview: preview || heading,
+    heading,
+    bodyHtml: `${bodyParts.join("")}
+      ${ctaButton(args.url, button)}
+      ${mailBannerHtml(args.banner)}`,
+    footerHtml: `${esc(legal)}<br><a href="${esc(args.unsubUrl)}" style="color:${GOLD}">${esc(unsub)}</a>`,
+  });
+  const text = [
+    ...textParts,
+    `${button} : ${args.url}`,
+    "",
+    legal,
+    en ? `Unsubscribe: ${args.unsubUrl}` : `Désinscription : ${args.unsubUrl}`,
+  ].join("\n");
   return { html, text, subject };
 }
