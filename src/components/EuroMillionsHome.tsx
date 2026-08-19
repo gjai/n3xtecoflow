@@ -402,22 +402,16 @@ export async function EuroMillionsHome({
                   winnersLabel={tDraws("prizeWinners")}
                   heading="h2"
                 />
-                <div className="mt-6 flex flex-wrap gap-4">
-                  <Link
-                    href={`/tirages?date=${latest.date}#simulateur`}
-                    className="inline-flex min-h-10 items-center bg-[var(--accent)] px-4 text-sm font-semibold text-[var(--accent-ink)]"
-                  >
-                    {t("simulatorCta")}
-                  </Link>
+                <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
                   <Link
                     href={`/tirages/${latest.date}`}
-                    className="text-sm font-semibold text-[var(--accent)] hover:underline"
+                    className="font-semibold text-[var(--accent)] hover:underline"
                   >
                     {t("resultOf", { date: formatDate(latest.date, locale) })} →
                   </Link>
                   <Link
                     href="/my-million"
-                    className="text-sm font-semibold text-[var(--accent)] hover:underline"
+                    className="font-semibold text-[var(--accent)] hover:underline"
                   >
                     {t("myMillionCta")} →
                   </Link>
