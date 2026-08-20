@@ -7,7 +7,14 @@ import { AmazonButton } from "@/components/AmazonButton";
 import { CoverImage } from "@/components/CoverImage";
 import { SmartCover } from "@/components/SmartCover";
 import { HeroSlider, type HeroSlide } from "@/components/HeroSlider";
-import { JsonLd, faqJsonLd, organizationJsonLd, websiteJsonLd } from "@/components/JsonLd";
+import {
+  JsonLd,
+  faqJsonLd,
+  itemListJsonLd,
+  lotteryDrawJsonLd,
+  organizationJsonLd,
+  websiteJsonLd,
+} from "@/components/JsonLd";
 import { AMAZON_QUERIES, buildAmazonSearchUrl } from "@/lib/amazon";
 import {
   categoryImages,
@@ -40,12 +47,14 @@ import { siteAmazonFallbackQuery } from "@/sites/copy";
 import { affiliateOffer } from "@/lib/affiliates";
 import { CasinosCryptoHome } from "@/components/CasinosCryptoHome";
 import { EuroMillionsHome } from "@/components/EuroMillionsHome";
+import { formatEuroMillionsLongDate } from "@/lib/euromillions/datetime";
 import {
   euroMillionsHomeDescription,
   euroMillionsHomeTitle,
 } from "@/lib/euromillions/home-seo";
 import {
   getLatestDraw,
+  isEuroMillionsDrawPublished,
   readEuroMillionsStore,
 } from "@/lib/euromillions/store";
 import { readFdjGamesStore } from "@/lib/fdj-games/store";
@@ -115,6 +124,23 @@ export default async function HomePage({
     if (siteIsEuroMillions(site)) {
       const store = await readEuroMillionsStore();
       const fdjGames = await readFdjGamesStore();
+      const latest = getLatestDraw(store);
+      const recent = store.draws.filter(isEuroMillionsDrawPublished).slice(0, 8);
+      const drawListItems: { name: string; url: string }[] = [];
+      const seenDrawUrls = new Set<string>();
+      for (const date of [
+        store.nextDrawDate,
+        ...recent.map((d) => d.date),
+      ]) {
+        if (!date) continue;
+        const url = `${siteUrl}/${locale}/tirages/${date}`;
+        if (seenDrawUrls.has(url)) continue;
+        seenDrawUrls.add(url);
+        drawListItems.push({
+          name: `EuroMillions ${formatEuroMillionsLongDate(date, locale)}`,
+          url,
+        });
+      }
       return (
         <>
           <JsonLd data={organizationJsonLd(site)} />
@@ -128,6 +154,35 @@ export default async function HomePage({
               { question: t("faqTicketsQ"), answer: t("faqTicketsA") },
             ])}
           />
+          {isEuroMillionsDrawPublished(latest) && latest ? (
+            <JsonLd
+              data={lotteryDrawJsonLd({
+                siteUrl,
+                locale,
+                date: latest.date,
+                title: euroMillionsHomeTitle(locale, latest),
+                description: euroMillionsHomeDescription(
+                  locale,
+                  latest,
+                  store,
+                ),
+                numbers: latest.numbers,
+                stars: latest.stars,
+                jackpotEur: latest.jackpotEur,
+                myMillionCode: latest.myMillionCode,
+                publisherName: site.brand.name,
+              })}
+            />
+          ) : null}
+          {drawListItems.length > 0 ? (
+            <JsonLd
+              data={itemListJsonLd({
+                name: t("ctaSecondary"),
+                url: `${siteUrl}/${locale}/tirages`,
+                items: drawListItems,
+              })}
+            />
+          ) : null}
           <EuroMillionsHome
             site={site}
             locale={locale}

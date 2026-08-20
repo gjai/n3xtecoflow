@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
 import { intlLocale } from "@/i18n/locales";
 import {
@@ -126,7 +127,16 @@ export function NextJackpotBanner({
           </p>
           {dateLabel ? (
             <p className="mt-1 text-sm text-[var(--muted)]">
-              {dateLabel}
+              {nextDrawDate ? (
+                <Link
+                  href={`/tirages/${nextDrawDate}`}
+                  className="hover:underline"
+                >
+                  {dateLabel}
+                </Link>
+              ) : (
+                dateLabel
+              )}
               {!pending ? (
                 <span className="text-xs text-[var(--muted)]/80">
                   {" · "}

@@ -29,10 +29,7 @@ import {
   formatEuroMillionsLongDate,
   euroMillionsResultPending,
 } from "@/lib/euromillions/datetime";
-import {
-  lotteryFingerprint,
-  anyLotteryResultPending,
-} from "@/lib/euromillions/fingerprint";
+import { lotteryFingerprint } from "@/lib/euromillions/fingerprint";
 import { getLatestDraw, isEuroMillionsDrawPublished } from "@/lib/euromillions/store";
 import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import { GAME_IDENTITY } from "@/lib/fdj-games/identity";
@@ -228,13 +225,18 @@ export async function EuroMillionsHome({
   const newsT = await getTranslations({ locale, namespace: "news" });
   const latest = getLatestDraw(store);
   const published = isEuroMillionsDrawPublished(latest);
+  const ficheHref = latest ? `/tirages/${latest.date}` : "/tirages";
+  const tonightHref =
+    store.nextDrawDate && store.nextDrawDate !== latest?.date
+      ? `/tirages/${store.nextDrawDate}`
+      : null;
+  const recentDraws = store.draws.filter(isEuroMillionsDrawPublished).slice(0, 6);
   const jackpot = latest ? formatMoney(latest.jackpotEur, locale) : null;
   const nextJackpot = formatMoney(store.nextJackpotEur, locale);
   const pending = euroMillionsResultPending({
     latestDate: latest?.date,
     nextDrawDate: store.nextDrawDate,
   });
-  const livePending = anyLotteryResultPending(store, fdjGames);
   const brand = site.brand.name;
   const editorial = getEditorialImages(site.id);
   const isEn = usesEnglishFallback(locale);
@@ -259,7 +261,7 @@ export async function EuroMillionsHome({
   return (
     <>
       <ResultsLivePoller
-        enabled={livePending}
+        enabled={pending}
         fingerprint={lotteryFingerprint(store, fdjGames)}
       />
       <NextJackpotBanner
@@ -314,11 +316,19 @@ export async function EuroMillionsHome({
                 {t("simulatorCta")}
               </Link>
               <Link
-                href="/tirages"
+                href={ficheHref}
                 className="inline-flex min-h-11 items-center border border-[var(--line)] px-5 text-sm font-semibold text-[var(--heading)]"
               >
-                {t("ctaSecondary")}
+                {latest ? t("archiveCta") : t("ctaSecondary")}
               </Link>
+              {tonightHref ? (
+                <Link
+                  href={tonightHref}
+                  className="inline-flex min-h-11 items-center border border-[var(--line)] px-5 text-sm font-semibold text-[var(--heading)]"
+                >
+                  {tDraws("upcomingBadge")}
+                </Link>
+              ) : null}
             </div>
             <div className="mt-6 overflow-hidden">
               <KwankoBanner
@@ -339,7 +349,13 @@ export async function EuroMillionsHome({
                   {t("latestTitle")}
                 </p>
                 <p className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
-                  {latest ? formatDate(latest.date, locale) : t("empty")}
+                  {latest ? (
+                    <Link href={`/tirages/${latest.date}`} className="hover:underline">
+                      {formatDate(latest.date, locale)}
+                    </Link>
+                  ) : (
+                    t("empty")
+                  )}
                 </p>
               </div>
               {jackpot ? (
@@ -399,6 +415,30 @@ export async function EuroMillionsHome({
               <p className="mt-6 text-[var(--muted)]">{t("empty")}</p>
             )}
 
+            {latest ? (
+              <p className="mt-4">
+                <Link
+                  href={`/tirages/${latest.date}`}
+                  className="text-sm font-semibold text-[var(--accent)] hover:underline"
+                >
+                  {t("archiveCta")} →
+                </Link>
+              </p>
+            ) : null}
+            {recentDraws.length > 1 ? (
+              <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+                {recentDraws.map((draw) => (
+                  <li key={draw.date}>
+                    <Link
+                      href={`/tirages/${draw.date}`}
+                      className="text-[var(--muted)] hover:text-[var(--heading)] hover:underline"
+                    >
+                      {formatDate(draw.date, locale)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
             {pending && latest ? (
               <p className="mt-6 text-sm text-[var(--muted)]">
                 {t("pendingLatest", {
