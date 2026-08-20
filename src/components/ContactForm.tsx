@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useTranslations } from "next-intl";
 
-export function ContactForm() {
+export function ContactForm({ guard }: { guard: string }) {
   const t = useTranslations("contact");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">(
     "idle",
@@ -24,6 +24,7 @@ export function ContactForm() {
           email: String(data.get("email") || ""),
           message: String(data.get("message") || ""),
           website: String(data.get("website") || ""),
+          guard,
         }),
       });
       if (!res.ok) throw new Error("fail");
@@ -35,16 +36,20 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="mt-8 space-y-5" noValidate>
-      {/* Honeypot */}
-      <input
-        type="text"
-        name="website"
-        tabIndex={-1}
-        autoComplete="off"
-        className="hidden"
+    <form onSubmit={onSubmit} className="relative mt-8 space-y-5" noValidate>
+      <div
         aria-hidden="true"
-      />
+        className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+      >
+        <label htmlFor="website">Site</label>
+        <input
+          id="website"
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       <div>
         <label htmlFor="name" className="mb-2 block text-sm text-[var(--muted)]">
           {t("name")}

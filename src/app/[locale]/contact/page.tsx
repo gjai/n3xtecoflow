@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/ContactForm";
+import { issueContactGuard } from "@/lib/http/form-guard";
 import { siteLocaleAlternates } from "@/lib/seo";
 
 export async function generateMetadata({
@@ -32,7 +33,7 @@ export default async function ContactPage({
         {t("title")}
       </h1>
       <p className="mt-4 text-lg text-[var(--muted)]">{t("subtitle")}</p>
-      <ContactForm />
+      <ContactForm guard={issueContactGuard()} />
     </article>
   );
 }

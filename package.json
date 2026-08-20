@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --import ./scripts/node-test-register.mjs --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/fdj/shares.test.ts src/lib/lottery/keno.test.ts src/lib/kwanko-slots.test.ts src/lib/euromillions/merge-draws.test.ts src/lib/euromillions/datetime.test.ts src/lib/euromillions/fetch.test.ts src/lib/http/rate-limit.test.ts src/lib/news/rss.test.ts",
+    "test": "node --import ./scripts/node-test-register.mjs --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/fdj/shares.test.ts src/lib/lottery/keno.test.ts src/lib/kwanko-slots.test.ts src/lib/euromillions/merge-draws.test.ts src/lib/euromillions/datetime.test.ts src/lib/euromillions/fetch.test.ts src/lib/http/rate-limit.test.ts src/lib/http/form-guard.test.ts src/lib/news/rss.test.ts",
     "news:seed": "node scripts/seed-news.mjs",
     "news:seed:casinos": "node scripts/seed-casinos-news.mjs"
   },
