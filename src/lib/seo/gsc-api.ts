@@ -61,10 +61,20 @@ function loadServiceAccount(): ServiceAccount {
     const raw = inline.replace(/^['"]|['"]$/g, "");
     return JSON.parse(raw) as ServiceAccount;
   }
-  const fromEnv = process.env.GSC_SERVICE_ACCOUNT_PATH?.trim();
-  const path = fromEnv || join(process.cwd(), "secrets", "gsc-sa.json");
-  const file = readFileSync(path, "utf8");
-  return JSON.parse(file) as ServiceAccount;
+  const candidates = [
+    process.env.GSC_SERVICE_ACCOUNT_PATH?.trim(),
+    join(process.cwd(), "secrets", "gsc-sa.json"),
+    "/app/data/gsc-sa.json",
+  ].filter(Boolean) as string[];
+  for (const path of candidates) {
+    try {
+      const file = readFileSync(/* turbopackIgnore: true */ path, "utf8");
+      return JSON.parse(file) as ServiceAccount;
+    } catch {
+      /* try next */
+    }
+  }
+  throw new Error("gsc_no_credentials");
 }
 
 export function gscEnabled(): boolean {
