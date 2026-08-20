@@ -20,10 +20,34 @@ export function GamblingDisclaimer({
 
   const helpUrl = t("helpUrl");
   const showFrHelp = locale === "fr" || t("showHelp") === "1";
+  const showAnj = t.has("anjMinor") && t.has("anjWarning");
+  const callFree = t.has("anjCallFree") ? t("anjCallFree") : "";
   const offers = resolveAffiliateOffers(site);
   const L = ({ text }: { text: string }) => (
     <AffiliateLinkedText text={text} offers={offers} />
   );
+
+  const helpLinks = showFrHelp ? (
+    <>
+      {t("helpLabel")}{" "}
+      <a
+        href={`tel:${t("helpPhone").replace(/\s/g, "")}`}
+        className="text-[var(--accent)] underline-offset-2 hover:underline"
+      >
+        {t("helpPhone")}
+      </a>
+      {callFree ? ` (${callFree})` : null}
+      {" · "}
+      <a
+        href={helpUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[var(--accent)] underline-offset-2 hover:underline"
+      >
+        {t("helpLink")}
+      </a>
+    </>
+  ) : null;
 
   if (compact) {
     return (
@@ -31,18 +55,13 @@ export function GamblingDisclaimer({
         <span className="mr-2 inline-flex min-h-6 min-w-8 items-center justify-center border border-[var(--accent)] px-1.5 font-semibold text-[var(--accent)]">
           {t("badge18")}
         </span>
-        <L text={t("bodyShort")} />{" "}
-        <L text={t("affiliateShort")} />{" "}
-        {showFrHelp ? (
+        {showAnj ? (
           <>
-            {t("helpLabel")}{" "}
-            <a
-              href={`tel:${t("helpPhone").replace(/\s/g, "")}`}
-              className="text-[var(--accent)] underline-offset-2 hover:underline"
-            >
-              {t("helpPhone")}
-            </a>
-            {" · "}
+            <span className="font-semibold text-[var(--heading)]">
+              {t("anjMinor")}
+            </span>
+            {" — "}
+            {t("anjWarning")}{" "}
             <a
               href={helpUrl}
               target="_blank"
@@ -51,8 +70,12 @@ export function GamblingDisclaimer({
             >
               {t("helpLink")}
             </a>
+            .{" "}
           </>
         ) : null}
+        <L text={t("bodyShort")} />{" "}
+        <L text={t("affiliateShort")} />{" "}
+        {helpLinks}
       </p>
     );
   }
@@ -68,6 +91,25 @@ export function GamblingDisclaimer({
         </p>
         <div className="min-w-0 space-y-2 text-sm leading-relaxed text-[var(--muted)]">
           <p className="font-semibold text-[var(--heading)]">{t("title")}</p>
+          {showAnj ? (
+            <>
+              <p className="font-semibold text-[var(--heading)]">
+                {t("anjMinor")}
+              </p>
+              <p>
+                {t("anjWarning")}{" "}
+                <a
+                  href={helpUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-[var(--accent)] underline-offset-2 hover:underline"
+                >
+                  {t("helpLink")}
+                </a>
+                .
+              </p>
+            </>
+          ) : null}
           <p>
             <L text={t("body")} />
           </p>
@@ -83,6 +125,9 @@ export function GamblingDisclaimer({
               >
                 {t("helpPhone")}
               </a>
+              {callFree ? (
+                <span className="text-[var(--muted)]"> ({callFree})</span>
+              ) : null}
               {" · "}
               <a
                 href={helpUrl}

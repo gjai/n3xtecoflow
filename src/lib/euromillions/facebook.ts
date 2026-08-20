@@ -43,7 +43,6 @@ type FacebookStore = {
   lastPostedIg?: PostedMap;
   lastPostedOk?: PostedOkMap;
   lastErrors?: Record<string, string>;
-  pageAccessToken?: string | null;
   newsSeeded?: boolean;
   postedNewsSlugs?: string[];
 };
@@ -105,7 +104,6 @@ const SEED: FacebookStore = {
   lastPostedIg: emptyPosted(),
   lastPostedOk: emptyPostedOk(),
   lastErrors: {},
-  pageAccessToken: null,
   newsSeeded: false,
   postedNewsSlugs: [],
 };
@@ -161,7 +159,6 @@ async function readState(): Promise<FacebookStore> {
         parsed.lastErrors && typeof parsed.lastErrors === "object"
           ? parsed.lastErrors
           : {},
-      pageAccessToken: parsed.pageAccessToken ?? null,
       newsSeeded: Boolean(parsed.newsSeeded),
       postedNewsSlugs: Array.isArray(parsed.postedNewsSlugs)
         ? parsed.postedNewsSlugs.filter((s) => typeof s === "string")
@@ -184,7 +181,6 @@ async function writeState(store: FacebookStore): Promise<void> {
         lastPostedIg: store.lastPostedIg ?? emptyPosted(),
         lastPostedOk: store.lastPostedOk ?? emptyPostedOk(),
         lastErrors: store.lastErrors ?? {},
-        pageAccessToken: store.pageAccessToken ?? null,
         newsSeeded: store.newsSeeded ?? false,
         postedNewsSlugs: store.postedNewsSlugs ?? [],
       },
@@ -192,37 +188,6 @@ async function writeState(store: FacebookStore): Promise<void> {
       2,
     ) + "\n",
   );
-}
-
-async function currentPageToken(state: FacebookStore): Promise<string> {
-  return state.pageAccessToken?.trim() || envPageToken();
-}
-
-async function refreshPageToken(state: FacebookStore): Promise<FacebookStore> {
-  const token = await currentPageToken(state);
-  const appId = process.env.FACEBOOK_APP_ID?.trim();
-  const secret = process.env.FACEBOOK_APP_SECRET?.trim();
-  if (!token || !appId || !secret) return state;
-  const url =
-    `${GRAPH}/oauth/access_token?` +
-    new URLSearchParams({
-      grant_type: "fb_exchange_token",
-      client_id: appId,
-      client_secret: secret,
-      fb_exchange_token: token,
-    }).toString();
-  try {
-    const res = await fetch(url);
-    const json = (await res.json().catch(() => ({}))) as {
-      access_token?: string;
-    };
-    if (!res.ok || !json.access_token) return state;
-    const next = { ...state, pageAccessToken: json.access_token };
-    await writeState(next);
-    return next;
-  } catch {
-    return state;
-  }
 }
 
 function formatJackpot(n: number): string {
@@ -709,8 +674,7 @@ export async function facebookMetaStatus(): Promise<{
   if (!facebookConfigured()) {
     return { configured: false, tokenValid: false, instagram: null };
   }
-  const state = await refreshPageToken(await readState());
-  const token = await currentPageToken(state);
+  const token = envPageToken();
   const json = await graphGet(
     encodeURIComponent(pageId()),
     token,
@@ -796,8 +760,8 @@ export async function notifyFacebookOnPublish(
       skipped: { all: "facebook_unconfigured" },
     };
   }
-  let state = await refreshPageToken(await readState());
-  const token = await currentPageToken(state);
+  let state = await readState();
+  const token = envPageToken();
   const instagram = await resolveInstagramAccount(token);
   if (!instagram) skipped.instagram = "unlinked";
   const fdj = await readFdjGamesStore();
@@ -1047,8 +1011,8 @@ export async function notifyFacebookNews(
       skipped: { news: "facebook_unconfigured" },
     };
   }
-  let state = await refreshPageToken(await readState());
-  const token = await currentPageToken(state);
+  let state = await readState();
+  const token = envPageToken();
   const instagram = await resolveInstagramAccount(token);
   if (!instagram) skipped.instagram = "unlinked";
   const { readNewsStore } = await import("@/lib/news/store");

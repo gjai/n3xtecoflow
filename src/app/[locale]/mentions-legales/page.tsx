@@ -203,6 +203,14 @@ export default async function MentionsPage({
             {t("cookiesNecessaryTitle")}
           </h3>
           <p className="mt-2">{t("cookiesNecessaryBody")}</p>
+          {t.has("cookiesAudienceTitle") && t.has("cookiesAudienceBody") ? (
+            <>
+              <h3 className="mt-6 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)]">
+                {t("cookiesAudienceTitle")}
+              </h3>
+              <p className="mt-2">{t("cookiesAudienceBody")}</p>
+            </>
+          ) : null}
           <h3 className="mt-6 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--heading)]">
             {t("cookiesAdsTitle")}
           </h3>

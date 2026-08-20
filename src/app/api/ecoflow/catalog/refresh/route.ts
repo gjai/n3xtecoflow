@@ -2,22 +2,17 @@ import { NextResponse } from "next/server";
 import { refreshEcoflowCatalog } from "@/lib/ecoflow/refresh";
 import { refreshEcoflowEditorial } from "@/lib/ecoflow/editorial-refresh";
 import { markCronFail, markCronOk } from "@/lib/cron/status";
+import { cronAuthorized } from "@/lib/http/cron-auth";
 
 export const maxDuration = 300;
 
-function authorized(request: Request) {
-  const secret =
-    process.env.AMAZON_CRON_SECRET?.trim() ||
-    process.env.NEWS_CRON_SECRET?.trim();
-  if (!secret) return false;
-  const header = request.headers.get("authorization") || "";
-  const bearer = header.startsWith("Bearer ") ? header.slice(7) : "";
-  const query = new URL(request.url).searchParams.get("secret") || "";
-  return bearer === secret || query === secret;
-}
-
 export async function POST(request: Request) {
-  if (!authorized(request)) {
+  if (
+    !cronAuthorized(
+      request,
+      process.env.AMAZON_CRON_SECRET || process.env.NEWS_CRON_SECRET,
+    )
+  ) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 

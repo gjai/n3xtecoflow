@@ -21,6 +21,9 @@ function resolveWebsiteId(host: string | null | undefined): string | null {
 /**
  * Native <script defer> (not next/script): Umami needs document.currentScript
  * to read data-website-id. CSP must allow the Umami origin (see next.config.ts).
+ *
+ * Hors CMP : mesure d’audience self-hébergée, sans cookie pub, sans revente.
+ * Le bandeau cookies ne gère que Kwanko / AdSense. Respecte Do Not Track.
  */
 export function UmamiScript({ host }: { host?: string | null }) {
   const scriptUrl = process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL?.trim();
@@ -33,6 +36,7 @@ export function UmamiScript({ host }: { host?: string | null }) {
       src={scriptUrl}
       data-website-id={websiteId}
       data-auto-track="true"
+      data-do-not-track="true"
     />
   );
 }

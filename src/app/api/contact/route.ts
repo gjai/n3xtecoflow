@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { sendResendEmail } from "@/lib/mail/resend";
 import { getSiteByHost } from "@/sites";
+import { clientIp } from "@/lib/http/rate-limit";
 
 const CONTACT_TO = process.env.CONTACT_TO_EMAIL?.trim() || "djgjai@gmail.com";
 const recent = new Map<string, number>();
@@ -11,14 +12,6 @@ type Body = {
   message?: string;
   website?: string;
 };
-
-function clientIp(request: Request) {
-  return (
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "unknown"
-  );
-}
 
 export async function POST(request: Request) {
   const ip = clientIp(request);

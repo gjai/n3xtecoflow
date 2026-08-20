@@ -45,9 +45,10 @@ export function CookieBanner() {
             </Link>
             .
           </p>
-          {preferencesOpen || !allowAds ? (
+          {preferencesOpen || !allowAds || t.has("audience") ? (
             <ul className="mt-3 space-y-1 text-sm text-[var(--muted)]">
               <li>{t("necessary")}</li>
+              {t.has("audience") ? <li>{t("audience")}</li> : null}
               {allowAds ? <li>{t("advertising")}</li> : null}
             </ul>
           ) : null}

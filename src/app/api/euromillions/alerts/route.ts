@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 import { requestAlertSubscribe } from "@/lib/euromillions/alerts";
+import { clientIp, isRateLimited } from "@/lib/http/rate-limit";
 import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
 
 export const dynamic = "force-dynamic";
-
-const recent = new Map<string, number>();
 
 type Body = {
   email?: string;
@@ -15,14 +14,6 @@ type Body = {
   games?: unknown;
 };
 
-function clientIp(request: Request) {
-  return (
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "unknown"
-  );
-}
-
 export async function POST(request: Request) {
   const site = await getCurrentSite();
   if (!siteIsEuroMillions(site)) {
@@ -30,12 +21,12 @@ export async function POST(request: Request) {
   }
 
   const ip = clientIp(request);
-  const now = Date.now();
-  const last = recent.get(ip) || 0;
-  if (now - last < 15_000) {
+  if (
+    isRateLimited(`alert-ip:${ip}`, { windowMs: 45_000, max: 1 }) ||
+    isRateLimited(`alert-ip-hour:${ip}`, { windowMs: 3600_000, max: 6 })
+  ) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
-  recent.set(ip, now);
 
   let body: Body;
   try {
@@ -57,11 +48,13 @@ export async function POST(request: Request) {
     const status =
       result.error === "mail_unconfigured"
         ? 503
-        : result.error === "age" ||
-            result.error === "invalid" ||
-            result.error === "games"
-          ? 400
-          : 502;
+        : result.error === "rate_limited"
+          ? 429
+          : result.error === "age" ||
+              result.error === "invalid" ||
+              result.error === "games"
+            ? 400
+            : 502;
     return NextResponse.json({ error: result.error }, { status });
   }
   return NextResponse.json({ ok: true, already: result.already });

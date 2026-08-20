@@ -1,3 +1,4 @@
+import { toParisIsoDate } from "@/lib/euromillions/datetime";
 import {
   fillEmptyJackpotTier,
   parseExtraPrizeTiers,
@@ -6,12 +7,6 @@ import {
 } from "@/lib/fdj/shares";
 import { FDJ_COMPANION_GAMES, mapResultMeta, type FdjGameCatalogEntry } from "./catalog";
 import type { FdjCompanionGameId, FdjGameDraw, FdjResultGroup } from "./types";
-
-function toIsoDate(input: string): string {
-  const d = new Date(input);
-  if (Number.isNaN(d.getTime())) return input.slice(0, 10);
-  return d.toISOString().slice(0, 10);
-}
 
 type FdjAmount = {
   value?: number;
@@ -121,7 +116,7 @@ function parseDraw(
   const prizeTiersExtra = parseExtraPrizeTiers(d.shares);
   return {
     gameId: game.id,
-    date: toIsoDate(d.planned_at),
+    date: toParisIsoDate(d.planned_at),
     plannedAt: d.planned_at,
     drawId: d.external_id || d.id,
     jackpotEur,

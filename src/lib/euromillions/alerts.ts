@@ -8,17 +8,20 @@ import { companionDrawKey } from "@/lib/fdj-games/keys";
 import { getGameDraws, readFdjGamesStore } from "@/lib/fdj-games/store";
 import type { FdjCompanionGameId, FdjGameDraw } from "@/lib/fdj-games/types";
 import { formatEuroMillionsLongDate, parisDateKey } from "./datetime";
+import { isAppLocale } from "@/i18n/locales";
+import { isRateLimited } from "@/lib/http/rate-limit";
 import { isEuroMillionsDrawPublished } from "./store";
 import type { EuroMillionsDraw } from "./types";
 import {
   type AlertGameId,
+  ALERT_GAME_IDS,
   alertGameLabel,
   companionAlertSlug,
-  defaultAlertGames,
   gamesEqual,
   parseAlertGames,
   subscriberGames,
 } from "./alert-games";
+import { FileLockError, withFileLock } from "@/lib/http/file-lock";
 
 export type { AlertGameId } from "./alert-games";
 export {
@@ -41,6 +44,8 @@ export type AlertConfirmed = {
   locale: string;
   games: AlertGameId[];
   confirmedAt: string;
+  /** Curseur par jeu : évite un renvoi si crash au milieu de la boucle. */
+  lastNotified?: Record<AlertGameId, string | null>;
 };
 
 export type AlertsStore = {
@@ -72,12 +77,67 @@ const SEED: AlertsStore = {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PENDING_MS = 7 * 24 * 3600_000;
+const CONFIRM_COOLDOWN_MS = 15 * 60_000;
 
 function dataPath() {
   return (
     process.env.EM_ALERTS_PATH?.trim() ||
     path.join(process.cwd(), "data", "em-alerts.json")
   );
+}
+
+function lockPath() {
+  return `${dataPath()}.lock`;
+}
+
+function withAlertsLock<T>(fn: () => Promise<T>): Promise<T> {
+  return withFileLock(lockPath(), fn, {
+    staleMs: 25_000,
+    retries: 30,
+    delayMs: 80,
+  });
+}
+
+function setSubCursor(
+  sub: AlertConfirmed,
+  game: AlertGameId,
+  key: string,
+): AlertConfirmed {
+  return {
+    ...sub,
+    lastNotified: {
+      ...emptyLastNotified(),
+      ...sub.lastNotified,
+      [game]: key,
+    },
+  };
+}
+
+function subNeedsKey(
+  sub: AlertConfirmed,
+  game: AlertGameId,
+  key: string,
+  global: string | null,
+): boolean {
+  if (!subscriberGames(sub.games).includes(game)) return false;
+  const cursor = sub.lastNotified?.[game] ?? global;
+  return cursor !== key;
+}
+
+function normalizeSubLastNotified(
+  raw: AlertConfirmed["lastNotified"] | undefined,
+): Record<AlertGameId, string | null> | undefined {
+  if (!raw || typeof raw !== "object") return undefined;
+  const out = emptyLastNotified();
+  let any = false;
+  for (const id of ALERT_GAME_IDS) {
+    const v = raw[id];
+    if (typeof v === "string" && v) {
+      out[id] = v;
+      any = true;
+    }
+  }
+  return any ? out : undefined;
 }
 
 function token(): string {
@@ -124,6 +184,7 @@ function normalizeStore(parsed: Partial<AlertsStore>): AlertsStore {
       locale: c.locale,
       games: withGames(c),
       confirmedAt: c.confirmedAt,
+      lastNotified: normalizeSubLastNotified(c.lastNotified),
     })),
   };
 }
@@ -164,8 +225,16 @@ function origin(): string {
   return "https://euromillions-resultats.fr";
 }
 
-function localePath(locale: string): "en" | "fr" {
+function mailLocale(locale: string): "en" | "fr" {
   return locale === "en" ? "en" : "fr";
+}
+
+function storeLocale(locale: string): string {
+  return isAppLocale(locale) ? locale : "fr";
+}
+
+export function alertPageLocale(locale: string): string {
+  return storeLocale(locale);
 }
 
 export async function requestAlertSubscribe(args: {
@@ -177,7 +246,13 @@ export async function requestAlertSubscribe(args: {
   | { ok: true; already: boolean }
   | {
       ok: false;
-      error: "invalid" | "age" | "games" | "mail_unconfigured" | "send_failed";
+      error:
+        | "invalid"
+        | "age"
+        | "games"
+        | "mail_unconfigured"
+        | "send_failed"
+        | "rate_limited";
     }
 > {
   if (!args.ageConfirmed) return { ok: false, error: "age" };
@@ -187,28 +262,62 @@ export async function requestAlertSubscribe(args: {
   if (!games.length) return { ok: false, error: "games" };
   if (!mailConfigured()) return { ok: false, error: "mail_unconfigured" };
 
-  const locale = localePath(args.locale);
-  let store = prunePending(await readAlertsStore());
-  const existing = store.confirmed.find((c) => c.email === email);
-  if (existing && gamesEqual(subscriberGames(existing.games), games)) {
-    return { ok: true, already: true };
+  const locale = storeLocale(args.locale);
+  const mailLoc = mailLocale(locale);
+  let pending: AlertPending;
+  try {
+    pending = await withAlertsLock(async () => {
+      let store = prunePending(await readAlertsStore());
+      const existing = store.confirmed.find((c) => c.email === email);
+      if (existing && gamesEqual(subscriberGames(existing.games), games)) {
+        throw Object.assign(new Error("already"), { code: "already" });
+      }
+      const existingPending = store.pending.find((p) => p.email === email);
+      if (existingPending) {
+        const age = Date.now() - Date.parse(existingPending.createdAt);
+        if (Number.isFinite(age) && age >= 0 && age < CONFIRM_COOLDOWN_MS) {
+          throw Object.assign(new Error("cooldown"), { code: "cooldown" });
+        }
+      }
+      if (
+        isRateLimited(`alert-mail:${email}`, {
+          windowMs: CONFIRM_COOLDOWN_MS,
+          max: 1,
+        }) ||
+        isRateLimited(`alert-mail-day:${email}`, {
+          windowMs: 24 * 3600_000,
+          max: 4,
+        })
+      ) {
+        throw Object.assign(new Error("rate_limited"), { code: "rate_limited" });
+      }
+      store.pending = store.pending.filter((p) => p.email !== email);
+      const row: AlertPending = {
+        email,
+        token: token(),
+        locale,
+        games,
+        createdAt: new Date().toISOString(),
+      };
+      store.pending.push(row);
+      await writeAlertsStore(store);
+      return row;
+    });
+  } catch (err) {
+    const code = (err as { code?: string }).code;
+    if (code === "already") return { ok: true, already: true };
+    if (code === "cooldown") return { ok: true, already: false };
+    if (code === "rate_limited" || err instanceof FileLockError) {
+      return { ok: false, error: "rate_limited" };
+    }
+    throw err;
   }
-  store.pending = store.pending.filter((p) => p.email !== email);
-  const pending: AlertPending = {
-    email,
-    token: token(),
-    locale,
-    games,
-    createdAt: new Date().toISOString(),
-  };
-  store.pending.push(pending);
-  await writeAlertsStore(store);
 
   const confirmUrl = `${origin()}/api/euromillions/alerts/confirm?token=${pending.token}`;
   const mail = confirmAlertHtml({
     confirmUrl,
-    locale,
-    gameLabels: games.map((id) => alertGameLabel(id, locale)),
+    locale: mailLoc,
+    gameLabels: games.map((id) => alertGameLabel(id, mailLoc)),
   });
   const sent = await sendResendEmail({
     to: email,
@@ -223,37 +332,58 @@ export async function requestAlertSubscribe(args: {
   return { ok: true, already: false };
 }
 
-export async function confirmAlert(rawToken: string): Promise<boolean> {
+export async function confirmAlert(
+  rawToken: string,
+): Promise<{ ok: boolean; locale: string }> {
   const t = rawToken.trim();
-  if (!t) return false;
-  let store = prunePending(await readAlertsStore());
-  const pending = store.pending.find((p) => p.token === t);
-  if (!pending) return false;
-  store.pending = store.pending.filter((p) => p.token !== t);
-  const prev = store.confirmed.find((c) => c.email === pending.email);
-  store.confirmed = store.confirmed.filter((c) => c.email !== pending.email);
-  store.confirmed.push({
-    email: pending.email,
-    unsubToken: prev?.unsubToken || token(),
-    locale: pending.locale,
-    games: subscriberGames(pending.games),
-    confirmedAt: new Date().toISOString(),
-  });
-  await writeAlertsStore(store);
-  return true;
+  if (!t) return { ok: false, locale: "fr" };
+  try {
+    return await withAlertsLock(async () => {
+      let store = prunePending(await readAlertsStore());
+      const pending = store.pending.find((p) => p.token === t);
+      if (!pending) return { ok: false, locale: "fr" };
+      store.pending = store.pending.filter((p) => p.token !== t);
+      const prev = store.confirmed.find((c) => c.email === pending.email);
+      store.confirmed = store.confirmed.filter((c) => c.email !== pending.email);
+      store.confirmed.push({
+        email: pending.email,
+        unsubToken: prev?.unsubToken || token(),
+        locale: pending.locale,
+        games: subscriberGames(pending.games),
+        confirmedAt: new Date().toISOString(),
+        lastNotified: prev?.lastNotified,
+      });
+      await writeAlertsStore(store);
+      return { ok: true, locale: pending.locale };
+    });
+  } catch (err) {
+    if (err instanceof FileLockError) return { ok: false, locale: "fr" };
+    throw err;
+  }
 }
 
-export async function unsubscribeAlert(rawToken: string): Promise<boolean> {
+export async function unsubscribeAlert(
+  rawToken: string,
+): Promise<{ ok: boolean; locale: string }> {
   const t = rawToken.trim();
-  if (!t) return false;
-  const store = await readAlertsStore();
-  const had =
-    store.confirmed.some((c) => c.unsubToken === t) ||
-    store.pending.some((p) => p.token === t);
-  store.confirmed = store.confirmed.filter((c) => c.unsubToken !== t);
-  store.pending = store.pending.filter((p) => p.token !== t);
-  await writeAlertsStore(store);
-  return had;
+  if (!t) return { ok: false, locale: "fr" };
+  try {
+    return await withAlertsLock(async () => {
+      const store = await readAlertsStore();
+      const row =
+        store.confirmed.find((c) => c.unsubToken === t) ||
+        store.pending.find((p) => p.token === t);
+      const locale = row?.locale || "fr";
+      const had = Boolean(row);
+      store.confirmed = store.confirmed.filter((c) => c.unsubToken !== t);
+      store.pending = store.pending.filter((p) => p.token !== t);
+      if (had) await writeAlertsStore(store);
+      return { ok: had, locale };
+    });
+  } catch (err) {
+    if (err instanceof FileLockError) return { ok: false, locale: "fr" };
+    throw err;
+  }
 }
 
 function resultEmail(args: {
@@ -262,7 +392,7 @@ function resultEmail(args: {
   unsubToken: string;
 }): { subject: string; text: string; html: string } {
   const dateLabel = formatEuroMillionsLongDate(args.draw.date, args.locale);
-  const loc = localePath(args.locale);
+  const loc = mailLocale(args.locale);
   return resultAlertHtml({
     locale: args.locale,
     dateLabel,
@@ -288,7 +418,7 @@ function companionResultEmail(args: {
   draw: FdjGameDraw;
   unsubToken: string;
 }): { subject: string; text: string; html: string } {
-  const loc = localePath(args.locale);
+  const loc = mailLocale(args.locale);
   const dateLabel = formatEuroMillionsLongDate(args.draw.date, loc);
   const when = formatDrawWhen(args.draw, loc);
   const gameId = args.draw.gameId as Exclude<AlertGameId, "euromillions">;
@@ -348,19 +478,39 @@ export async function notifyAlertsOnPublish(
   if (!mailConfigured()) {
     return { sent: 0, skipped: "mail_unconfigured" };
   }
-  const store = prunePending(await readAlertsStore());
-  if (!store.lastNotified.euromillions) {
-    store.lastNotified.euromillions = latest.date;
-    store.lastNotifiedDrawDate = latest.date;
+  const date = latest.date;
+  const seeded = await withAlertsLock(async () => {
+    const store = prunePending(await readAlertsStore());
+    if (store.lastNotified.euromillions) return false;
+    store.lastNotified.euromillions = date;
+    store.lastNotifiedDrawDate = date;
+    store.confirmed = store.confirmed.map((c) =>
+      setSubCursor(c, "euromillions", date),
+    );
     await writeAlertsStore(store);
-    return { sent: 0, skipped: "seed" };
-  }
-  if (store.lastNotified.euromillions === latest.date) {
-    return { sent: 0, skipped: "already" };
-  }
+    return true;
+  });
+  if (seeded) return { sent: 0, skipped: "seed" };
+
   let sent = 0;
-  for (const sub of store.confirmed) {
-    if (!subscriberGames(sub.games).includes("euromillions")) continue;
+  const failed = new Set<string>();
+  for (;;) {
+    const sub = await withAlertsLock(async () => {
+      const store = prunePending(await readAlertsStore());
+      return (
+        store.confirmed.find(
+          (s) =>
+            !failed.has(s.email) &&
+            subNeedsKey(
+              s,
+              "euromillions",
+              date,
+              store.lastNotified.euromillions,
+            ),
+        ) || null
+      );
+    });
+    if (!sub) break;
     const mail = resultEmail({
       locale: sub.locale,
       draw: latest,
@@ -372,13 +522,33 @@ export async function notifyAlertsOnPublish(
       text: mail.text,
       html: mail.html,
     });
-    if (res.ok) sent += 1;
-    else console.error("alert_result_send_fail", sub.email, res.error);
+    if (!res.ok) {
+      failed.add(sub.email);
+      console.error("alert_result_send_fail", sub.email, res.error);
+      continue;
+    }
+    sent += 1;
+    await withAlertsLock(async () => {
+      const store = prunePending(await readAlertsStore());
+      store.confirmed = store.confirmed.map((c) =>
+        c.email === sub.email ? setSubCursor(c, "euromillions", date) : c,
+      );
+      await writeAlertsStore(store);
+    });
   }
-  store.lastNotified.euromillions = latest.date;
-  store.lastNotifiedDrawDate = latest.date;
-  await writeAlertsStore(store);
-  return { sent, skipped: "ok" };
+
+  await withAlertsLock(async () => {
+    const store = prunePending(await readAlertsStore());
+    const pending = store.confirmed.some((s) =>
+      subNeedsKey(s, "euromillions", date, store.lastNotified.euromillions),
+    );
+    if (!pending) {
+      store.lastNotified.euromillions = date;
+      store.lastNotifiedDrawDate = date;
+      await writeAlertsStore(store);
+    }
+  });
+  return { sent, skipped: sent ? "ok" : failed.size ? "send_failed" : "already" };
 }
 
 function companionPublished(draw: FdjGameDraw | null | undefined): boolean {
@@ -432,7 +602,6 @@ export async function notifyCompanionAlertsOnPublish(): Promise<{
     return { sent: 0, skipped: "mail_unconfigured" };
   }
   const fdj = await readFdjGamesStore();
-  const store = prunePending(await readAlertsStore());
   const gameIds: FdjCompanionGameId[] = [
     "loto",
     "eurodreams",
@@ -450,15 +619,38 @@ export async function notifyCompanionAlertsOnPublish(): Promise<{
     const latest = published[published.length - 1];
     if (!latest) continue;
     const latestKey = companionDrawKey(latest);
-    if (!store.lastNotified[gameId]) {
+    const justSeeded = await withAlertsLock(async () => {
+      const store = prunePending(await readAlertsStore());
+      if (store.lastNotified[gameId]) return false;
       store.lastNotified[gameId] = latestKey;
+      store.confirmed = store.confirmed.map((c) =>
+        setSubCursor(c, gameId, latestKey),
+      );
+      await writeAlertsStore(store);
+      return true;
+    });
+    if (justSeeded) {
       seeded = true;
       continue;
     }
-    const jobs = companionDrawsToNotify(draws, store.lastNotified[gameId]);
+
+    const snap = prunePending(await readAlertsStore());
+    const jobs = companionDrawsToNotify(draws, snap.lastNotified[gameId]);
     for (const draw of jobs) {
-      for (const sub of store.confirmed) {
-        if (!subscriberGames(sub.games).includes(gameId)) continue;
+      const key = companionDrawKey(draw);
+      const failed = new Set<string>();
+      for (;;) {
+        const sub = await withAlertsLock(async () => {
+          const store = prunePending(await readAlertsStore());
+          return (
+            store.confirmed.find(
+              (s) =>
+                !failed.has(s.email) &&
+                subNeedsKey(s, gameId, key, store.lastNotified[gameId]),
+            ) || null
+          );
+        });
+        if (!sub) break;
         const mail = companionResultEmail({
           locale: sub.locale,
           draw,
@@ -470,17 +662,48 @@ export async function notifyCompanionAlertsOnPublish(): Promise<{
           text: mail.text,
           html: mail.html,
         });
-        if (res.ok) sent += 1;
-        else console.error("alert_companion_send_fail", gameId, sub.email, res.error);
+        if (!res.ok) {
+          failed.add(sub.email);
+          console.error(
+            "alert_companion_send_fail",
+            gameId,
+            sub.email,
+            res.error,
+          );
+          continue;
+        }
+        sent += 1;
+        await withAlertsLock(async () => {
+          const store = prunePending(await readAlertsStore());
+          store.confirmed = store.confirmed.map((c) =>
+            c.email === sub.email ? setSubCursor(c, gameId, key) : c,
+          );
+          await writeAlertsStore(store);
+        });
       }
-      store.lastNotified[gameId] = companionDrawKey(draw);
+      await withAlertsLock(async () => {
+        const store = prunePending(await readAlertsStore());
+        const pending = store.confirmed.some((s) =>
+          subNeedsKey(s, gameId, key, store.lastNotified[gameId]),
+        );
+        if (!pending) {
+          store.lastNotified[gameId] = key;
+          await writeAlertsStore(store);
+        }
+      });
     }
-    if (!jobs.length && store.lastNotified[gameId] !== latestKey && !isRecentDrawDate(latest.date)) {
-      store.lastNotified[gameId] = latestKey;
-    }
-  }
 
-  await writeAlertsStore(store);
+    await withAlertsLock(async () => {
+      const store = prunePending(await readAlertsStore());
+      if (
+        store.lastNotified[gameId] !== latestKey &&
+        !isRecentDrawDate(latest.date)
+      ) {
+        store.lastNotified[gameId] = latestKey;
+        await writeAlertsStore(store);
+      }
+    });
+  }
   if (seeded && sent === 0) return { sent: 0, skipped: "seed" };
   return { sent, skipped: sent ? "ok" : "already" };
 }

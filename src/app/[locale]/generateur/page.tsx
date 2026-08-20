@@ -17,6 +17,7 @@ export async function generateMetadata({
   return {
     title: t("pageTitle"),
     description: t("pageMeta"),
+    robots: { index: false, follow: true },
     alternates: await siteLocaleAlternates(locale, "/tirages"),
   };
 }

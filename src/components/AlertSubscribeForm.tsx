@@ -14,7 +14,14 @@ export function AlertSubscribeForm() {
   const locale = useLocale();
   const [games, setGames] = useState<AlertGameId[]>(defaultAlertGames);
   const [status, setStatus] = useState<
-    "idle" | "loading" | "ok" | "already" | "error" | "unconfigured" | "games"
+    | "idle"
+    | "loading"
+    | "ok"
+    | "already"
+    | "error"
+    | "unconfigured"
+    | "games"
+    | "rate"
   >("idle");
 
   function toggleGame(id: AlertGameId) {
@@ -55,6 +62,10 @@ export function AlertSubscribeForm() {
       }
       if (json.error === "games") {
         setStatus("games");
+        return;
+      }
+      if (res.status === 429 || json.error === "rate_limited") {
+        setStatus("rate");
         return;
       }
       if (!res.ok) throw new Error(json.error || "fail");
@@ -136,6 +147,9 @@ export function AlertSubscribeForm() {
       ) : null}
       {status === "games" ? (
         <p className="text-sm text-red-400">{t("gamesNeedOne")}</p>
+      ) : null}
+      {status === "rate" ? (
+        <p className="text-sm text-red-400">{t("rateLimited")}</p>
       ) : null}
       {status === "error" ? (
         <p className="text-sm text-red-400">{t("error")}</p>
