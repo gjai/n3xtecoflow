@@ -4,7 +4,6 @@ import { AlertsEngagement } from "@/components/AlertsEngagement";
 import { KwankoBanner } from "@/components/KwankoBanner";
 import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import { DrawPrizeTable } from "@/components/DrawPrizeTable";
-import { RecentEuroMillionsDraws } from "@/components/RecentEuroMillionsDraws";
 import { SmartCover } from "@/components/SmartCover";
 import { FdjCompanionGamesBlock } from "@/components/FdjCompanionGamesBlock";
 import { GameMark } from "@/components/GameMark";
@@ -233,7 +232,6 @@ export async function EuroMillionsHome({
     store.nextDrawDate && store.nextDrawDate !== latest?.date
       ? `/tirages/${store.nextDrawDate}`
       : null;
-  const recentDraws = store.draws.filter(isEuroMillionsDrawPublished).slice(0, 6);
   const drawNo = sequentialDrawId(latest?.drawId);
   const faqs = euroMillionsResultsFaq({ locale, store, draw: latest });
   const hasEuropeWinners = Boolean(
@@ -445,30 +443,6 @@ export async function EuroMillionsHome({
                 </Link>
               </p>
             ) : null}
-            <RecentEuroMillionsDraws
-              draws={recentDraws}
-              locale={locale}
-              title={tDraws("lastFiveTitle")}
-            />
-            {faqs.length > 0 ? (
-              <section className="mt-8 border-t border-[var(--line)] pt-6">
-                <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
-                  {t("faqTitle")}
-                </h2>
-                <dl className="mt-4 space-y-4">
-                  {faqs.map((item) => (
-                    <div key={item.question}>
-                      <dt className="text-sm font-semibold text-[var(--heading)]">
-                        {item.question}
-                      </dt>
-                      <dd className="mt-1 text-sm text-[var(--muted)]">
-                        {item.answer}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </section>
-            ) : null}
             {pending && latest ? (
               <p className="mt-6 text-sm text-[var(--muted)]">
                 {t("pendingLatest", {
@@ -667,6 +641,28 @@ export async function EuroMillionsHome({
           </div>
         </div>
       </section>
+
+      {faqs.length > 0 ? (
+        <section className="border-b border-[var(--line)] bg-[var(--bg)]">
+          <div className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
+            <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)] md:text-3xl">
+              {t("faqTitle")}
+            </h2>
+            <dl className="mt-8 grid gap-6 md:grid-cols-2">
+              {faqs.map((item) => (
+                <div key={item.question}>
+                  <dt className="font-semibold text-[var(--heading)]">
+                    {item.question}
+                  </dt>
+                  <dd className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
+                    {item.answer}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </section>
+      ) : null}
     </>
   );
 }
