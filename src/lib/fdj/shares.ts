@@ -77,6 +77,42 @@ export function parseRegularPrizeTiers(
   return parseWinsetTiers(shares, "");
 }
 
+export type FdjEuropeanShareSet = {
+  winset_name?: string;
+  prize_levels?: { division_name?: string; count?: number }[];
+};
+
+/** Comptes Europe par rang (winset Regular). */
+export function parseEuropeanWinnerCounts(
+  europeanShares?: FdjEuropeanShareSet[],
+): Map<string, number> {
+  const want = "regular";
+  const set =
+    (europeanShares || []).find((s) =>
+      String(s.winset_name || "")
+        .toLowerCase()
+        .includes(want),
+    ) || europeanShares?.[0];
+  const out = new Map<string, number>();
+  for (const level of set?.prize_levels || []) {
+    const rank = String(level.division_name || "").trim();
+    if (!rank || SKIP_RANK.test(rank)) continue;
+    if (typeof level.count === "number") out.set(rank, level.count);
+  }
+  return out;
+}
+
+export function attachEuropeWinners(
+  tiers: EuroMillionsPrizeTier[],
+  counts: Map<string, number>,
+): EuroMillionsPrizeTier[] {
+  if (!counts.size) return tiers;
+  return tiers.map((t) => {
+    const n = counts.get(t.rank);
+    return n == null ? t : { ...t, winnersEurope: n };
+  });
+}
+
 export function parseExtraPrizeTiers(
   shares?: FdjShareSet[],
 ): EuroMillionsPrizeTier[] {

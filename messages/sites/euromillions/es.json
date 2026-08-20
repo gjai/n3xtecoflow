@@ -135,6 +135,7 @@
     "faqMyMillionA": "My Million es un código único asociado a las combinaciones EuroMillions jugadas en Francia. El premio My Million es independiente del bote. La página My Million lista los códigos publicados y permite comparar los tuyos.",
     "faqTicketsQ": "¿Este sitio vende boletos?",
     "faqTicketsA": "No. EuroMillions Resultados es un sitio editorial independiente: resultados, archivos y herramientas. Para jugar, usa un operador autorizado en tu país. 18+ · juega con responsabilidad.",
+    "faqTitle": "Preguntas frecuentes",
     "resultOf": "Resultado del {date}",
     "digestEyebrow": "Resultado del día"
   },
@@ -284,6 +285,10 @@
     "prizeRank": "Categoría",
     "prizeAmount": "Premio",
     "prizeWinners": "Ganadores",
+    "winnersFr": "Ganadores FR",
+    "winnersEu": "Ganadores EU",
+    "drawNumber": "Sorteo n.º {id}",
+    "lastFiveTitle": "Los 5 últimos sorteos",
     "simulatorCta": "Comprobar mi combinación en este sorteo",
     "checkCta": "Comprobar",
     "companionOf": "Resultado {game} del {date}",

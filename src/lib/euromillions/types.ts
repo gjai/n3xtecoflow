@@ -10,7 +10,10 @@ export type MyMillionWinner = {
 /** Rang de gain « Regular » (ex. 5+2, 5+1, 2) avec montant FR. */
 export type EuroMillionsPrizeTier = {
   rank: string;
+  /** Gagnants France (FDJ `shares`, devise EUR). */
   winners: number;
+  /** Gagnants Europe (FDJ `european_shares`). */
+  winnersEurope?: number;
   amountEur: number;
   /** Rente mensuelle (EuroDreams, parfois Keno rang 1). */
   annuityMonthlyEur?: number;

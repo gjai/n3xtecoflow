@@ -1,15 +1,13 @@
+import { toParisIsoDate } from "@/lib/euromillions/datetime";
 import {
+  attachEuropeWinners,
+  parseEuropeanWinnerCounts,
   parseRegularPrizeTiers,
   parseWinsetTiers,
+  type FdjEuropeanShareSet,
   type FdjShareSet,
 } from "@/lib/fdj/shares";
 import type { EuroMillionsDraw, MyMillionWinner } from "./types";
-
-function toIsoDate(input: string): string {
-  const d = new Date(input);
-  if (Number.isNaN(d.getTime())) return input.slice(0, 10);
-  return d.toISOString().slice(0, 10);
-}
 
 function nums(values: Array<string | number>): number[] {
   return values
@@ -32,6 +30,7 @@ type FdjDraw = {
   estimated_jackpot?: FdjAmount[];
   guaranteed_amounts?: FdjAmount[];
   shares?: FdjShareSet[];
+  european_shares?: FdjEuropeanShareSet[];
 };
 
 function amountEur(list?: FdjAmount[]): number | null {
@@ -58,10 +57,13 @@ function mapFdjApiDraws(data: FdjDraw[], sourceUrl: string): EuroMillionsDraw[] 
     const starNums = nums(stars?.numbers || []);
     if (numbers.length !== 5 || starNums.length !== 2) continue;
     const codeRaw = mm?.numbers?.[0];
-    const prizeTiers = parseRegularPrizeTiers(d.shares);
+    const prizeTiers = attachEuropeWinners(
+      parseRegularPrizeTiers(d.shares),
+      parseEuropeanWinnerCounts(d.european_shares),
+    );
     const prizeTiersEtoilePlus = parseWinsetTiers(d.shares, "etoile");
     out.push({
-      date: toIsoDate(d.planned_at),
+        date: toParisIsoDate(d.planned_at),
       drawId: d.external_id || d.id,
       numbers,
       stars: starNums,
@@ -129,7 +131,7 @@ export async function fetchFdjNextEuroMillions(): Promise<{
   const next = upcoming[0];
   if (!next?.planned_at) return null;
   return {
-    date: toIsoDate(next.planned_at),
+    date: toParisIsoDate(next.planned_at),
     jackpotEur:
       amountEur(next.estimated_jackpot) ?? amountEur(next.guaranteed_amounts),
   };

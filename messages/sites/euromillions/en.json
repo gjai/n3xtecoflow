@@ -135,6 +135,7 @@
     "faqMyMillionA": "My Million is a unique code attached to EuroMillions grids played in France. The My Million prize is separate from the jackpot. The My Million page lists published codes and lets you compare yours.",
     "faqTicketsQ": "Does this site sell tickets?",
     "faqTicketsA": "No. EuroMillions Results is an independent editorial site: results, archives and tools. To play, use a licensed operator in your country. 18+ · play responsibly.",
+    "faqTitle": "Frequently asked questions",
     "resultOf": "Result of {date}",
     "digestEyebrow": "Today’s result"
   },
@@ -284,6 +285,10 @@
     "prizeRank": "Tier",
     "prizeAmount": "Prize",
     "prizeWinners": "Winners",
+    "winnersFr": "FR winners",
+    "winnersEu": "EU winners",
+    "drawNumber": "Draw no. {id}",
+    "lastFiveTitle": "Last 5 draws",
     "simulatorCta": "Check my grid on this draw",
     "checkCta": "Check",
     "companionOf": "{game} result for {date}",

@@ -4,6 +4,7 @@ import { AlertsEngagement } from "@/components/AlertsEngagement";
 import { KwankoBanner } from "@/components/KwankoBanner";
 import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import { DrawPrizeTable } from "@/components/DrawPrizeTable";
+import { RecentEuroMillionsDraws } from "@/components/RecentEuroMillionsDraws";
 import { SmartCover } from "@/components/SmartCover";
 import { FdjCompanionGamesBlock } from "@/components/FdjCompanionGamesBlock";
 import { GameMark } from "@/components/GameMark";
@@ -31,6 +32,8 @@ import {
 } from "@/lib/euromillions/datetime";
 import { lotteryFingerprint } from "@/lib/euromillions/fingerprint";
 import { getLatestDraw, isEuroMillionsDrawPublished } from "@/lib/euromillions/store";
+import { sequentialDrawId } from "@/lib/euromillions/draw-id";
+import { euroMillionsResultsFaq } from "@/lib/euromillions/home-faq";
 import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import { GAME_IDENTITY } from "@/lib/fdj-games/identity";
 import type { NewsArticle } from "@/lib/news/types";
@@ -231,6 +234,11 @@ export async function EuroMillionsHome({
       ? `/tirages/${store.nextDrawDate}`
       : null;
   const recentDraws = store.draws.filter(isEuroMillionsDrawPublished).slice(0, 6);
+  const drawNo = sequentialDrawId(latest?.drawId);
+  const faqs = euroMillionsResultsFaq({ locale, store, draw: latest });
+  const hasEuropeWinners = Boolean(
+    latest?.prizeTiers?.some((t) => t.winnersEurope != null),
+  );
   const jackpot = latest ? formatMoney(latest.jackpotEur, locale) : null;
   const nextJackpot = formatMoney(store.nextJackpotEur, locale);
   const pending = euroMillionsResultPending({
@@ -357,6 +365,11 @@ export async function EuroMillionsHome({
                     t("empty")
                   )}
                 </p>
+                {drawNo ? (
+                  <p className="mt-1 text-sm text-[var(--muted)]">
+                    {tDraws("drawNumber", { id: String(drawNo) })}
+                  </p>
+                ) : null}
               </div>
               {jackpot ? (
                 <p className="text-right text-sm text-[var(--muted)]">
@@ -407,7 +420,14 @@ export async function EuroMillionsHome({
                   extraHelp=""
                   rankLabel={tDraws("prizeRank")}
                   amountLabel={tDraws("prizeAmount")}
-                  winnersLabel={tDraws("prizeWinners")}
+                  winnersLabel={
+                    hasEuropeWinners
+                      ? tDraws("winnersFr")
+                      : tDraws("prizeWinners")
+                  }
+                  winnersEuropeLabel={
+                    hasEuropeWinners ? tDraws("winnersEu") : undefined
+                  }
                   heading="h2"
                 />
               </div>
@@ -425,19 +445,29 @@ export async function EuroMillionsHome({
                 </Link>
               </p>
             ) : null}
-            {recentDraws.length > 1 ? (
-              <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-sm">
-                {recentDraws.map((draw) => (
-                  <li key={draw.date}>
-                    <Link
-                      href={`/tirages/${draw.date}`}
-                      className="text-[var(--muted)] hover:text-[var(--heading)] hover:underline"
-                    >
-                      {formatDate(draw.date, locale)}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+            <RecentEuroMillionsDraws
+              draws={recentDraws}
+              locale={locale}
+              title={tDraws("lastFiveTitle")}
+            />
+            {faqs.length > 0 ? (
+              <section className="mt-8 border-t border-[var(--line)] pt-6">
+                <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
+                  {t("faqTitle")}
+                </h2>
+                <dl className="mt-4 space-y-4">
+                  {faqs.map((item) => (
+                    <div key={item.question}>
+                      <dt className="text-sm font-semibold text-[var(--heading)]">
+                        {item.question}
+                      </dt>
+                      <dd className="mt-1 text-sm text-[var(--muted)]">
+                        {item.answer}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
             ) : null}
             {pending && latest ? (
               <p className="mt-6 text-sm text-[var(--muted)]">

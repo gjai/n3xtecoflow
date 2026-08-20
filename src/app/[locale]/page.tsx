@@ -48,6 +48,7 @@ import { affiliateOffer } from "@/lib/affiliates";
 import { CasinosCryptoHome } from "@/components/CasinosCryptoHome";
 import { EuroMillionsHome } from "@/components/EuroMillionsHome";
 import { formatEuroMillionsLongDate } from "@/lib/euromillions/datetime";
+import { euroMillionsResultsFaq } from "@/lib/euromillions/home-faq";
 import {
   euroMillionsHomeDescription,
   euroMillionsHomeTitle,
@@ -146,13 +147,9 @@ export default async function HomePage({
           <JsonLd data={organizationJsonLd(site)} />
           <JsonLd data={websiteJsonLd(site)} />
           <JsonLd
-            data={faqJsonLd([
-              { question: t("faqTodayQ"), answer: t("faqTodayA") },
-              { question: t("faqWhenQ"), answer: t("faqWhenA") },
-              { question: t("faqCheckQ"), answer: t("faqCheckA") },
-              { question: t("faqMyMillionQ"), answer: t("faqMyMillionA") },
-              { question: t("faqTicketsQ"), answer: t("faqTicketsA") },
-            ])}
+            data={faqJsonLd(
+              euroMillionsResultsFaq({ locale, store, draw: latest }),
+            )}
           />
           {isEuroMillionsDrawPublished(latest) && latest ? (
             <JsonLd

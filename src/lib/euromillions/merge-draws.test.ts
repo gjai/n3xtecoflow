@@ -60,4 +60,20 @@ describe("mergeDraws", () => {
     assert.equal(out.prizeTiers?.[0].amountEur, 17_000_000);
     assert.equal(out.prizeTiers?.[0].winners, 1);
   });
+
+  it("garde le n° de tirage séquentiel quand FDJ écrase avec un external_id", () => {
+    const pedro = draw({ source: "pedromealha", drawId: 1973 });
+    const fdj = draw({ source: "fdj", drawId: 26066 });
+    const [out] = mergeDraws([pedro], [fdj]);
+    assert.equal(out.drawId, 1973);
+    assert.equal(out.source, "fdj");
+  });
+
+  it("récupère le n° séquentiel Pedro sur un tirage déjà FDJ", () => {
+    const fdj = draw({ source: "fdj", drawId: 26066 });
+    const pedro = draw({ source: "pedromealha", drawId: 1973 });
+    const [out] = mergeDraws([fdj], [pedro]);
+    assert.equal(out.drawId, 1973);
+    assert.equal(out.source, "fdj");
+  });
 });

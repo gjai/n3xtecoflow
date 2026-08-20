@@ -1,5 +1,28 @@
+import { preferredDrawId } from "./draw-id";
 import { sortDrawsNewest } from "./store";
-import type { EuroMillionsDraw } from "./types";
+import type { EuroMillionsDraw, EuroMillionsPrizeTier } from "./types";
+
+function mergePrizeTiers(
+  incoming?: EuroMillionsPrizeTier[],
+  prev?: EuroMillionsPrizeTier[],
+): EuroMillionsPrizeTier[] | undefined {
+  if (incoming?.length) {
+    if (
+      incoming.some((t) => t.winnersEurope != null) ||
+      !prev?.length
+    ) {
+      return incoming;
+    }
+    const byRank = new Map(prev.map((t) => [t.rank, t]));
+    return incoming.map((t) => {
+      const old = byRank.get(t.rank);
+      return t.winnersEurope == null && old?.winnersEurope != null
+        ? { ...t, winnersEurope: old.winnersEurope }
+        : t;
+    });
+  }
+  return prev;
+}
 
 function hasGrid(d: EuroMillionsDraw): boolean {
   return d.numbers.length === 5 && d.stars.length === 2;
@@ -28,7 +51,7 @@ export function mergeDraws(
     if (isFdjPublished(prev) && d.source !== "fdj") {
       byDate.set(d.date, {
         ...prev,
-        drawId: prev.drawId ?? d.drawId,
+        drawId: preferredDrawId(prev.drawId, d.drawId),
         myMillionCode: prev.myMillionCode ?? d.myMillionCode,
         myMillionLocation: prev.myMillionLocation ?? d.myMillionLocation,
         hasWinner: prev.hasWinner ?? d.hasWinner,
@@ -50,10 +73,10 @@ export function mergeDraws(
       stars: d.stars.length === 2 ? d.stars : prev.stars,
       jackpotEur,
       hasWinner: d.hasWinner ?? prev.hasWinner,
-      drawId: d.drawId ?? prev.drawId,
+      drawId: preferredDrawId(d.drawId, prev.drawId),
       myMillionCode: d.myMillionCode ?? prev.myMillionCode,
       myMillionLocation: d.myMillionLocation ?? prev.myMillionLocation,
-      prizeTiers: d.prizeTiers?.length ? d.prizeTiers : prev.prizeTiers,
+      prizeTiers: mergePrizeTiers(d.prizeTiers, prev.prizeTiers),
       prizeTiersEtoilePlus: d.prizeTiersEtoilePlus?.length
         ? d.prizeTiersEtoilePlus
         : prev.prizeTiersEtoilePlus,

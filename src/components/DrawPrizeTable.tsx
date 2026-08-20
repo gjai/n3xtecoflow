@@ -1,5 +1,10 @@
 import { formatPrizeTierAmount } from "@/lib/lottery/prize-format";
+import { intlLocale } from "@/i18n/locales";
 import type { EuroMillionsPrizeTier } from "@/lib/euromillions/types";
+
+function formatCount(n: number, locale: string): string {
+  return new Intl.NumberFormat(intlLocale(locale)).format(n);
+}
 
 function Table({
   tiers,
@@ -8,6 +13,7 @@ function Table({
   rankLabel,
   amountLabel,
   winnersLabel,
+  winnersEuropeLabel,
   extraLabel,
   annuityNote,
 }: {
@@ -17,6 +23,7 @@ function Table({
   rankLabel: string;
   amountLabel: string;
   winnersLabel: string;
+  winnersEuropeLabel?: string;
   extraLabel?: string;
   annuityNote?: (vars: { amount: string; years: number }) => string;
 }) {
@@ -29,22 +36,30 @@ function Table({
     eplusMap.size > 0 &&
     tiers.some((t) => eplusMap.has(normalizeRank(t.rank))) &&
     (extraTiers || []).some((t) => t.amountEur > 0);
+  const hasEurope =
+    Boolean(winnersEuropeLabel) &&
+    tiers.some((t) => t.winnersEurope != null);
   return (
     <div className="max-w-full overflow-hidden border border-[var(--line)]">
       <table className="w-full table-fixed text-left text-[11px] leading-tight sm:text-sm">
         <thead className="bg-[var(--surface)] text-[10px] uppercase tracking-wide text-[var(--muted)] sm:text-xs sm:tracking-[0.08em]">
           <tr>
-            <th className="w-[18%] px-1 py-1.5 font-medium sm:px-2 sm:py-2">
+            <th className="w-[16%] px-1 py-1.5 font-medium sm:px-2 sm:py-2">
               {rankLabel}
             </th>
-            <th className="w-[28%] px-1 py-1.5 font-medium sm:px-2 sm:py-2">
+            <th className="w-[24%] px-1 py-1.5 font-medium sm:px-2 sm:py-2">
               {amountLabel}
             </th>
-            <th className="w-[26%] px-1 py-1.5 font-medium sm:px-2 sm:py-2">
+            <th className="px-1 py-1.5 font-medium sm:px-2 sm:py-2">
               {winnersLabel}
             </th>
+            {hasEurope ? (
+              <th className="px-1 py-1.5 font-medium sm:px-2 sm:py-2">
+                {winnersEuropeLabel}
+              </th>
+            ) : null}
             {hasEplus ? (
-              <th className="w-[28%] px-1 py-1.5 font-medium sm:px-2 sm:py-2">
+              <th className="w-[22%] px-1 py-1.5 font-medium sm:px-2 sm:py-2">
                 {extraLabel}
               </th>
             ) : null}
@@ -62,8 +77,15 @@ function Table({
                   {formatPrizeTierAmount(tier, locale, annuityNote) || "—"}
                 </td>
                 <td className="px-1 py-1.5 text-[var(--muted)] sm:px-2 sm:py-2">
-                  {tier.winners}
+                  {formatCount(tier.winners, locale)}
                 </td>
+                {hasEurope ? (
+                  <td className="px-1 py-1.5 text-[var(--muted)] sm:px-2 sm:py-2">
+                    {tier.winnersEurope != null
+                      ? formatCount(tier.winnersEurope, locale)
+                      : "—"}
+                  </td>
+                ) : null}
                 {hasEplus ? (
                   <td className="px-1 py-1.5 text-[var(--heading)] sm:px-2 sm:py-2">
                     {ep
@@ -90,6 +112,7 @@ export function DrawPrizeTable({
   rankLabel,
   amountLabel,
   winnersLabel,
+  winnersEuropeLabel,
   heading = "h2",
   annuityNote,
 }: {
@@ -102,6 +125,7 @@ export function DrawPrizeTable({
   rankLabel: string;
   amountLabel: string;
   winnersLabel: string;
+  winnersEuropeLabel?: string;
   heading?: "h2" | "h3";
   annuityNote?: (vars: { amount: string; years: number }) => string;
 }) {
@@ -122,6 +146,7 @@ export function DrawPrizeTable({
           rankLabel={rankLabel}
           amountLabel={amountLabel}
           winnersLabel={winnersLabel}
+          winnersEuropeLabel={winnersEuropeLabel}
           extraLabel={extraTitle}
           annuityNote={annuityNote}
         />

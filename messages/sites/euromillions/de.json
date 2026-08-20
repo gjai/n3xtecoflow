@@ -135,6 +135,7 @@
     "faqMyMillionA": "My Million ist ein eindeutiger Code, der an in Frankreich gespielte EuroMillions-Tipps gekoppelt ist. Der My-Million-Gewinn ist vom Jackpot getrennt. Die My-Million-Seite listet veröffentlichte Codes und lässt Sie die Ihren vergleichen.",
     "faqTicketsQ": "Verkauft diese Website Tippscheine?",
     "faqTicketsA": "Nein. EuroMillions Ergebnisse ist eine unabhängige redaktionelle Website: Ergebnisse, Archiv und Tools. Zum Spielen nutzen Sie einen lizenzierten Betreiber in Ihrem Land. 18+ · verantwortungsvoll spielen.",
+    "faqTitle": "Häufige Fragen",
     "resultOf": "Ergebnis vom {date}",
     "digestEyebrow": "Ergebnis des Tages"
   },
@@ -284,6 +285,10 @@
     "prizeRank": "Rang",
     "prizeAmount": "Gewinn",
     "prizeWinners": "Gewinner",
+    "winnersFr": "Gewinner FR",
+    "winnersEu": "Gewinner EU",
+    "drawNumber": "Ziehung Nr. {id}",
+    "lastFiveTitle": "Die letzten 5 Ziehungen",
     "simulatorCta": "Tipp bei dieser Ziehung prüfen",
     "checkCta": "Prüfen",
     "companionOf": "{game}-Ergebnis vom {date}",

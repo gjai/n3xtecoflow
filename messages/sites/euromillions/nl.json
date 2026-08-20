@@ -135,6 +135,7 @@
     "faqMyMillionA": "My Million is een unieke code gekoppeld aan EuroMillions-roosters die in Frankrijk gespeeld worden. De My Million-prijs is los van de jackpot. De My Million-pagina somt gepubliceerde codes op en laat u de uwe vergelijken.",
     "faqTicketsQ": "Verkoopt deze site loten?",
     "faqTicketsA": "Nee. EuroMillions Resultaten is een onafhankelijke redactionele site: uitslagen, archieven en tools. Om te spelen, gebruik een vergunde operator in uw land. 18+ · speel verantwoord.",
+    "faqTitle": "Veelgestelde vragen",
     "resultOf": "Uitslag van {date}",
     "digestEyebrow": "Uitslag van de dag"
   },
@@ -284,6 +285,10 @@
     "prizeRank": "Rang",
     "prizeAmount": "Prijs",
     "prizeWinners": "Winnaars",
+    "winnersFr": "Winnaars FR",
+    "winnersEu": "Winnaars EU",
+    "drawNumber": "Trekking nr. {id}",
+    "lastFiveTitle": "De 5 laatste trekkingen",
     "simulatorCta": "Mijn rooster op deze trekking controleren",
     "checkCta": "Controleren",
     "companionOf": "{game}-uitslag van {date}",

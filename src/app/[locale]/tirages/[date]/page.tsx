@@ -5,6 +5,8 @@ import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { KwankoBanner } from "@/components/KwankoBanner";
 import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
+import { DrawPrizeTable } from "@/components/DrawPrizeTable";
+import { RecentEuroMillionsDraws } from "@/components/RecentEuroMillionsDraws";
 import {
   JsonLd,
   breadcrumbJsonLd,
@@ -24,6 +26,7 @@ import {
   resolveDrawPage,
 } from "@/lib/euromillions/store";
 import { formatEuroMillionsLongDate } from "@/lib/euromillions/datetime";
+import { sequentialDrawId } from "@/lib/euromillions/draw-id";
 
 export const revalidate = 600;
 export const dynamic = "force-dynamic";
@@ -97,6 +100,10 @@ export default async function TirageDetailPage({
 
   const jackpot = formatMoney(draw.jackpotEur, locale);
   const prettyDate = formatDate(draw.date, locale);
+  const drawNo = sequentialDrawId(draw.drawId);
+  const hasEuropeWinners = Boolean(
+    draw.prizeTiers?.some((tier) => tier.winnersEurope != null),
+  );
   const title = published
     ? t("drawOf", { date: prettyDate })
     : t("pendingTitle", { date: prettyDate });
@@ -139,6 +146,11 @@ export default async function TirageDetailPage({
         <h1 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
           {title}
         </h1>
+        {drawNo ? (
+          <p className="mt-2 text-sm text-[var(--muted)]">
+            {t("drawNumber", { id: String(drawNo) })}
+          </p>
+        ) : null}
         {published ? (
           <>
             {(() => {
@@ -210,62 +222,23 @@ export default async function TirageDetailPage({
 
 
         {draw.prizeTiers && draw.prizeTiers.length > 0 ? (
-          <div className="mt-8">
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--heading)]">
-              {t("prizesTitle")}
-            </h2>
-            {(() => {
-              const normalizeRank = (r: string) =>
-                r.replace(/^.*?(\d)/, "$1").trim();
-              const eplusMap = new Map(
-                (draw.prizeTiersEtoilePlus || []).map((t) => [normalizeRank(t.rank), t]),
-              );
-              const hasEplus = eplusMap.size > 0 &&
-                draw.prizeTiers.some((t) => eplusMap.has(normalizeRank(t.rank))) &&
-                (draw.prizeTiersEtoilePlus || []).some((t) => t.amountEur > 0);
-              return (
-                <div className="mt-4 overflow-x-auto border border-[var(--line)]">
-                  <table className="w-full min-w-[320px] text-left text-sm">
-                    <thead className="bg-[var(--surface)] text-xs uppercase tracking-[0.12em] text-[var(--muted)]">
-                      <tr>
-                        <th className="px-3 py-2 font-medium">{t("prizeRank")}</th>
-                        <th className="px-3 py-2 font-medium">{t("prizeAmount")}</th>
-                        <th className="px-3 py-2 font-medium">{t("prizeWinners")}</th>
-                        {hasEplus ? (
-                          <th className="px-3 py-2 font-medium">{t("prizesEtoilePlus")}</th>
-                        ) : null}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {draw.prizeTiers.map((tier, i) => {
-                        const ep = eplusMap.get(normalizeRank(tier.rank));
-                        return (
-                          <tr
-                            key={`${tier.rank}-${i}`}
-                            className="border-t border-[var(--line)]"
-                          >
-                            <td className="px-3 py-2 font-semibold text-[var(--heading)]">
-                              {tier.rank}
-                            </td>
-                            <td className="px-3 py-2 text-[var(--heading)]">
-                              {formatMoney(tier.amountEur, locale) || "—"}
-                            </td>
-                            <td className="px-3 py-2 text-[var(--muted)]">
-                              {tier.winners}
-                            </td>
-                            {hasEplus ? (
-                              <td className="px-3 py-2 text-[var(--heading)]">
-                                {ep ? formatMoney(ep.amountEur, locale) || "—" : "—"}
-                              </td>
-                            ) : null}
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              );
-            })()}
+          <div>
+            <DrawPrizeTable
+              tiers={draw.prizeTiers}
+              extraTiers={draw.prizeTiersEtoilePlus}
+              locale={locale}
+              title={t("prizesTitle")}
+              extraTitle={t("prizesEtoilePlus")}
+              extraHelp={t("prizesEtoilePlusHelp")}
+              rankLabel={t("prizeRank")}
+              amountLabel={t("prizeAmount")}
+              winnersLabel={
+                hasEuropeWinners ? t("winnersFr") : t("prizeWinners")
+              }
+              winnersEuropeLabel={
+                hasEuropeWinners ? t("winnersEu") : undefined
+              }
+            />
             <p className="mt-4">
               <Link
                 href={`/tirages?date=${draw.date}#simulateur`}
@@ -285,6 +258,12 @@ export default async function TirageDetailPage({
             </Link>
           </p>
         )}
+
+        <RecentEuroMillionsDraws
+          draws={store.draws.filter((item) => item.date !== draw.date)}
+          locale={locale}
+          title={t("lastFiveTitle")}
+        />
 
         <p className="mt-6 text-xs text-[var(--muted)]">
           {t("source")} · {draw.source}
