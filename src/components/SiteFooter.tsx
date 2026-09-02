@@ -89,7 +89,7 @@ export function SiteFooter() {
               siteShowsNews(site)
                 ? locale === "fr"
                   ? "/feed.xml"
-                  : `/${locale}/feed.xml`
+                  : "/en/feed.xml"
                 : undefined
             }
             rssLabel={t.has("rss") ? t("rss") : "RSS"}

@@ -16,8 +16,9 @@ export function escapeXml(value: string): string {
     .replace(/'/g, "&apos;");
 }
 
+/** FR = /feed.xml ; toute autre locale = /en/feed.xml (copie news uniquement fr/en). */
 export function publicFeedPath(locale: string): string {
-  return locale === "fr" ? "/feed.xml" : `/${locale}/feed.xml`;
+  return locale === "fr" ? "/feed.xml" : "/en/feed.xml";
 }
 
 export function publicFeedUrl(host: string, locale: string): string {
@@ -139,11 +140,30 @@ function enclosureType(url: string): string {
   return "image/jpeg";
 }
 
+/** Origin public (Traefik) — pas 0.0.0.0 du listen Next. */
+export function requestOrigin(request: Request): string {
+  const host = (
+    request.headers.get("x-forwarded-host") ||
+    request.headers.get("host") ||
+    ""
+  )
+    .split(",")[0]
+    .trim();
+  const proto = (request.headers.get("x-forwarded-proto") || "https")
+    .split(",")[0]
+    .trim();
+  if (host && !/^0\.0\.0\.0(?::\d+)?$/.test(host)) {
+    return `${proto === "http" ? "http" : "https"}://${host}`;
+  }
+  return new URL(request.url).origin;
+}
+
 export function rssFeedResponse(xml: string): Response {
   return new Response(xml, {
     headers: {
       "Content-Type": "application/rss+xml; charset=utf-8",
       "Cache-Control": "public, s-maxage=600, stale-while-revalidate=3600",
+      "X-Robots-Tag": "noindex, follow",
     },
   });
 }

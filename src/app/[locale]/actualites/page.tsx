@@ -96,7 +96,7 @@ export default async function NewsIndexPage({
             {t("count", { count: total })}
             {" · "}
             <a
-              href={locale === "fr" ? "/feed.xml" : `/${locale}/feed.xml`}
+              href={locale === "fr" ? "/feed.xml" : "/en/feed.xml"}
               type="application/rss+xml"
               className="font-semibold text-[var(--accent)] underline-offset-4 hover:underline"
             >
