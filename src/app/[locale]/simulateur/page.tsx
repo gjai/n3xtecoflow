@@ -33,6 +33,8 @@ export default async function SimulateurPage({
   setRequestLocale(locale);
   const site = await getCurrentSite();
   if (!siteIsEuroMillions(site)) notFound();
-  const qs = date ? `?date=${encodeURIComponent(date)}` : "";
-  permanentRedirect(`/${locale}/tirages${qs}#simulateur`);
+  if (date && /^\d{4}-\d{2}-\d{2}$/.test(date.trim())) {
+    permanentRedirect(`/${locale}/tirages/${date.trim()}`);
+  }
+  permanentRedirect(`/${locale}/tirages#simulateur`);
 }

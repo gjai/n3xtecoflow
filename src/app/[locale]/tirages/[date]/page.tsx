@@ -241,7 +241,7 @@ export default async function TirageDetailPage({
             />
             <p className="mt-4">
               <Link
-                href={`/tirages?date=${draw.date}#simulateur`}
+                href="/tirages#simulateur"
                 className="inline-flex min-h-11 items-center bg-[var(--accent)] px-5 text-sm font-semibold text-[var(--accent-ink)]"
               >
                 {t("simulatorCta")}
@@ -251,7 +251,7 @@ export default async function TirageDetailPage({
         ) : (
           <p className="mt-6">
             <Link
-              href={`/tirages?date=${draw.date}#simulateur`}
+              href="/tirages#simulateur"
               className="inline-flex min-h-11 items-center bg-[var(--accent)] px-5 text-sm font-semibold text-[var(--accent-ink)]"
             >
               {t("simulatorCta")}

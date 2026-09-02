@@ -1,7 +1,7 @@
 import { intlLocale } from "@/i18n/locales";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { EuroMillionsSimulator } from "@/components/EuroMillionsSimulator";
 import { EuroMillionsStatsPanel } from "@/components/EuroMillionsStatsPanel";
 import { FlashGridGenerator } from "@/components/FlashGridGenerator";
@@ -16,6 +16,7 @@ import { archivePageHref, ARCHIVE_PAGE_SIZE, paginate, parsePageParam } from "@/
 import { gameScopeStyle } from "@/lib/fdj-games/identity";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
+import { tiragesDateQueryPath } from "@/lib/euromillions/tirages-query";
 import { siteIsEuroMillions } from "@/sites/features";
 import {
   getLatestDraw,
@@ -62,6 +63,8 @@ export default async function TiragesPage({
   const { locale } = await params;
   const { date: dateParam, page: pageParam } = await searchParams;
   setRequestLocale(locale);
+  const datedPath = tiragesDateQueryPath(`/${locale}/tirages`, dateParam);
+  if (datedPath) permanentRedirect(datedPath);
   const site = await getCurrentSite();
   if (!siteIsEuroMillions(site)) notFound();
 
@@ -95,10 +98,7 @@ export default async function TiragesPage({
     source: d.source,
     fetchedAt: d.fetchedAt,
   }));
-  const initialDate =
-    dateParam && store.draws.some((d) => d.date === dateParam)
-      ? dateParam
-      : latest?.date || null;
+  const initialDate = latest?.date || null;
 
   const siteUrl = `https://${site.primaryHost}`;
   const listDraws = draws;
@@ -194,7 +194,7 @@ export default async function TiragesPage({
                       </p>
                     ) : null
                   }
-                  actionHref={`/tirages?date=${draw.date}#simulateur`}
+                  actionHref="/tirages#simulateur"
                   actionLabel={t("checkCta")}
                 />
               ))}
@@ -203,7 +203,7 @@ export default async function TiragesPage({
               page={listed.page}
               totalPages={listed.totalPages}
               hrefForPage={(p) =>
-                archivePageHref("/tirages", p, { date: dateParam })
+                archivePageHref("/tirages", p)
               }
               prevLabel={pageT("prev")}
               nextLabel={pageT("next")}

@@ -9,6 +9,7 @@ import {
 import { getSiteByHost, resolveSiteIdFromHost, SITE_HEADER } from "./sites";
 import { siteAllowsLocale, siteIsEuroMillions, siteLocales } from "./sites/features";
 import { offThemeFallbackPath } from "./sites/off-theme";
+import { tiragesDateQueryPath } from "./lib/euromillions/tirages-query";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -51,6 +52,20 @@ export default function middleware(request: NextRequest) {
       status: 403,
       headers: { "Cache-Control": "no-store" },
     });
+  }
+
+  // Hub ?date= → fiche /tirages/{date} (GSC : doublons canoniques du hub).
+  if (siteIsEuroMillions(site)) {
+    const dated = tiragesDateQueryPath(
+      pathname,
+      request.nextUrl.searchParams.get("date"),
+    );
+    if (dated) {
+      const url = request.nextUrl.clone();
+      url.pathname = dated;
+      url.search = "";
+      return NextResponse.redirect(url, 308);
+    }
   }
 
   // Browsers often request /favicon.ico directly — serve the theme mark.
