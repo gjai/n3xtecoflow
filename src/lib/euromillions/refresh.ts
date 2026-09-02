@@ -9,6 +9,7 @@ import {
 import { mergeDraws } from "./merge-draws";
 import { fetchPedroMealhaDraws, fetchUkLatestDraw } from "./fetch";
 import { lotteryFingerprint } from "./fingerprint";
+import { parisDateKey } from "./datetime";
 import { recordFirstPublish } from "./timing";
 import { lotteryIndexNowUrls } from "@/lib/seo/indexnow";
 import { notifySearchEngines } from "@/lib/seo/notify";
@@ -33,7 +34,7 @@ export type EuroMillionsRefreshResult = {
   yearsFetched: number[];
   myMillionWinners: number;
   companionGames?: Record<string, number>;
-  mode: "full" | "fast";
+  mode: "full" | "fast" | "live";
   changed: boolean;
   fingerprint: string;
   facebook?: {
@@ -160,9 +161,11 @@ function yearsNeedingBackfill(
 
 export async function refreshEuroMillionsData(options?: {
   years?: number[];
-  mode?: "full" | "fast";
+  mode?: "full" | "fast" | "live";
 }): Promise<EuroMillionsRefreshResult> {
-  const fast = options?.mode === "fast";
+  const mode = options?.mode ?? "full";
+  const live = mode === "live";
+  const fast = mode === "fast" || live;
   const store = await readEuroMillionsStore();
   const yearNow = new Date().getFullYear();
   const years = fast
@@ -201,6 +204,24 @@ export async function refreshEuroMillionsData(options?: {
     console.error("euromillions_fdj_next_fail", err);
   }
 
+  if (live) {
+    const today = parisDateKey();
+    const fdjHasToday = incoming.some(
+      (d) => d.date === today && isEuroMillionsDrawPublished(d),
+    );
+    if (!fdjHasToday) {
+      try {
+        const uk = await fetchUkLatestDraw();
+        if (uk?.draw && isEuroMillionsDrawPublished(uk.draw)) {
+          incoming.push(uk.draw);
+          sources.push("uk-lottery:live");
+        }
+      } catch (err) {
+        console.error("euromillions_uk_live_fail", err);
+      }
+    }
+  }
+
   let winners = store.myMillionWinners || [];
   let next = assembleStore(store, incoming, nextDrawDate, nextJackpotEur, winners);
   let { fingerprint, changed } = await persistEuroMillions(
@@ -212,20 +233,22 @@ export async function refreshEuroMillionsData(options?: {
   let facebook = await notifyDrawPublish(next.latest ?? null);
 
   let companionGames: Record<string, number> | undefined;
-  try {
-    const companions = await refreshFdjCompanionGames(
-      fast ? { parallel: true, size: 8 } : { size: 80 },
-    );
-    companionGames = companions.games;
-    sources.push(...companions.sources.map((s) => `companion:${s}`));
+  if (!live) {
     try {
-      const { notifyCompanionAlertsOnPublish } = await import("./alerts");
-      await notifyCompanionAlertsOnPublish();
+      const companions = await refreshFdjCompanionGames(
+        fast ? { parallel: true, size: 8 } : { size: 80 },
+      );
+      companionGames = companions.games;
+      sources.push(...companions.sources.map((s) => `companion:${s}`));
+      try {
+        const { notifyCompanionAlertsOnPublish } = await import("./alerts");
+        await notifyCompanionAlertsOnPublish();
+      } catch (err) {
+        console.error("companion_alerts_fail", err);
+      }
     } catch (err) {
-      console.error("companion_alerts_fail", err);
+      console.error("euromillions_companions_fail", err);
     }
-  } catch (err) {
-    console.error("euromillions_companions_fail", err);
   }
 
   if (!fast) {
@@ -303,7 +326,7 @@ export async function refreshEuroMillionsData(options?: {
     yearsFetched,
     myMillionWinners: winners.length,
     companionGames,
-    mode: fast ? "fast" : "full",
+    mode,
     changed,
     fingerprint,
     facebook,

@@ -19,7 +19,9 @@ export async function POST(request: Request) {
           .map((y) => Number(y.trim()))
           .filter((n) => Number.isFinite(n) && n >= 2004)
       : undefined;
-    const mode = url.searchParams.get("mode") === "fast" ? "fast" : "full";
+    const modeRaw = url.searchParams.get("mode");
+    const mode =
+      modeRaw === "fast" || modeRaw === "live" ? modeRaw : "full";
     const locked = await withLotteryRefreshLock(
       () => refreshEuroMillionsData({ years, mode }),
       { ignoreThrottle: mode === "full" },

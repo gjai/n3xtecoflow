@@ -2,7 +2,7 @@ name: EuroMillions draws refresh
 
 on:
   schedule:
-    # After typical draw windows (UTC): Tue/Fri ~21:00 CET = 20:00 UTC winter / 19:00 summer
+    # Full catch-up (VPS does the 21h15 live poll every 30s).
     - cron: "15 20 * * 2,5"
     - cron: "45 21 * * 2,5"
     # Daily safety net (archives + next jackpot)
@@ -14,8 +14,6 @@ on:
     # Live FDJ-only: every 10 min around Keno midi + evening draws (covers CET/CEST)
     - cron: "*/10 11-13 * * *"
     - cron: "*/10 18-22 * * *"
-    # Serré 20h50–21h40 Paris mar/ven (CEST 18:50–19:40 UTC, CET 19:50–20:40 UTC)
-    - cron: "*/2 18-20 * * 2,5"
   workflow_dispatch:
 
 jobs:

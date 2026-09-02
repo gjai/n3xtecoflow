@@ -112,6 +112,15 @@ export function parisHourMinute(date = new Date()): { hour: number; minute: numb
   return { hour, minute };
 }
 
+/** Mar/ven 21h05–22h25 Paris : poll VPS, pas GitHub Actions. */
+export function isEuroMillionsLiveWindow(now = new Date()): boolean {
+  const wd = parisWeekday(parisDateKey(now));
+  if (wd !== 2 && wd !== 5) return false;
+  const { hour, minute } = parisHourMinute(now);
+  const t = hour * 60 + minute;
+  return t >= 21 * 60 + 5 && t < 22 * 60 + 25;
+}
+
 export function formatParisTime(iso: string, locale: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
