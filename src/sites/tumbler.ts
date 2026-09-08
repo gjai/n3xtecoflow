@@ -102,6 +102,11 @@ export const tumblerSite: SiteConfig = {
       labelFr: "Marquage tuyauterie",
       labelEn: "Pipe marking",
     },
+    {
+      href: "https://creationaffiche.com",
+      labelFr: "CreationAffiche",
+      labelEn: "CreationAffiche",
+    },
   ],
   editorial: {
     amazonQuery: "gourde isotherme",

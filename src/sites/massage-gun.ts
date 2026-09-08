@@ -104,6 +104,11 @@ export const massageGunSite: SiteConfig = {
       labelFr: "Marquage tuyauterie",
       labelEn: "Pipe marking",
     },
+    {
+      href: "https://creationaffiche.com",
+      labelFr: "CreationAffiche",
+      labelEn: "CreationAffiche",
+    },
   ],
   monetization: {
     adsenseClient: "ca-pub-4733644127583822",
