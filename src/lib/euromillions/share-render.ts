@@ -136,14 +136,14 @@ export async function rasterShare(
 
 export async function lotterySharePng(
   card: ShareCardInput,
-  size = SHARE_FEED,
+  size: { width: number; height: number } = SHARE_FEED,
 ): Promise<Uint8Array> {
   return new Uint8Array(await rasterShare(lotteryShareSvg(card, size), "png"));
 }
 
 export async function lotteryShareJpeg(
   card: ShareCardInput,
-  size = SHARE_FEED,
+  size: { width: number; height: number } = SHARE_FEED,
 ): Promise<Buffer> {
   return rasterShare(lotteryShareSvg(card, size), "jpeg");
 }
@@ -151,7 +151,7 @@ export async function lotteryShareJpeg(
 export async function newsSharePng(
   title: string,
   excerpt: string,
-  size = SHARE_FEED,
+  size: { width: number; height: number } = SHARE_FEED,
 ): Promise<Uint8Array> {
   return new Uint8Array(
     await rasterShare(newsShareSvg(title, excerpt, size), "png"),
@@ -161,7 +161,7 @@ export async function newsSharePng(
 export async function newsShareJpeg(
   title: string,
   excerpt: string,
-  size = SHARE_FEED,
+  size: { width: number; height: number } = SHARE_FEED,
 ): Promise<Buffer> {
   return rasterShare(newsShareSvg(title, excerpt, size), "jpeg");
 }

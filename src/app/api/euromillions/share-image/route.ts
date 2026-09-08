@@ -44,7 +44,7 @@ function pngResponse(bytes: Uint8Array) {
 }
 
 function jpegResponse(bytes: Buffer) {
-  return new NextResponse(bytes, {
+  return new NextResponse(new Uint8Array(bytes), {
     headers: {
       "Content-Type": "image/jpeg",
       "Cache-Control": "public, max-age=120, s-maxage=300",
