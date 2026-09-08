@@ -742,7 +742,7 @@ type DrawPostJob = {
  */
 export async function notifyFacebookOnPublish(
   latest: EuroMillionsDraw | null,
-  options?: { force?: boolean },
+  options?: { force?: boolean; games?: SocialDrawGameId[] },
 ): Promise<FacebookNotifyResult> {
   const skipped: Record<string, string> = {};
   if (!facebookConfigured()) {
@@ -765,6 +765,8 @@ export async function notifyFacebookOnPublish(
   let instagramPosted = 0;
   let instagramStories = 0;
   const force = Boolean(options?.force);
+  const only = options?.games;
+  const want = (id: SocialDrawGameId) => !only || only.includes(id);
 
   const persist = async (patch: Partial<FacebookStore>) => {
     state = { ...state, ...patch };
@@ -806,6 +808,7 @@ export async function notifyFacebookOnPublish(
 
   const jobs: DrawPostJob[] = [];
 
+  if (want("euromillions")) {
   if (isEuroMillionsDrawPublished(latest) && latest) {
     const fingerprint = latest.date;
     const last = state.lastPosted.euromillions;
@@ -832,8 +835,10 @@ export async function notifyFacebookOnPublish(
   } else {
     skipped.euromillions = "unpublished";
   }
+  }
 
   for (const gameId of COMPANION_SOCIAL_GAMES) {
+    if (!want(gameId)) continue;
     const pending = companionJobsForGame(
       gameId,
       getGameDraws(fdj, gameId),

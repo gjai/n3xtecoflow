@@ -29,20 +29,36 @@ export async function generateMetadata({
   const site = await getCurrentSite();
   const brand = site.brand.name;
   const em = site.id === "euromillions";
-  return {
-    title: em
+  const title = em
+    ? pickLocalized(locale, {
+        fr: "Guides EuroMillions : rangs, probabilités, My Million",
+        en: "EuroMillions guides: tiers, odds, My Million",
+      })
+    : site.id === "ecoflow"
+      ? pickLocalized(locale, {
+          fr: "Guides EcoFlow : choisir une station, Wh, solaire, backup",
+          en: "EcoFlow guides: pick a station, Wh, solar, backup",
+        })
+      : site.id === "massage-gun"
         ? pickLocalized(locale, {
-            fr: "Guides EuroMillions : rangs, probabilités, My Million",
-            en: "EuroMillions guides: tiers, odds, My Million",
+            fr: "Guides pistolet de massage : amplitude, force, mini vs format",
+            en: "Massage gun guides: amplitude, stall force, mini vs full-size",
           })
-      : pickLocalized(locale, {
-          fr: "Guides d'achat",
-          en: "Buying guides",
-          it: "Guide all'acquisto",
-          es: "Guías de compra",
-          pt: "Guias de compra",
-          de: "Kaufguides",
-        }),
+        : site.id === "tumbler"
+          ? pickLocalized(locale, {
+              fr: "Guides gourde isotherme : isolation, contenance, bouchon",
+              en: "Insulated bottle guides: insulation, capacity, lid",
+            })
+          : pickLocalized(locale, {
+              fr: "Guides d'achat",
+              en: "Buying guides",
+              it: "Guide all'acquisto",
+              es: "Guías de compra",
+              pt: "Guias de compra",
+              de: "Kaufguides",
+            });
+  return {
+    title,
     description: em
         ? pickLocalized(locale, {
             fr: `Guides ${brand} : lire un résultat, rangs de gains, probabilités, My Million et jeu responsable — 18+.`,

@@ -7,7 +7,7 @@ import {
   isEuroMillionsArchivePath,
 } from "./lib/crawlers/ai-training";
 import { getSiteByHost, resolveSiteIdFromHost, SITE_HEADER } from "./sites";
-import { siteAllowsLocale, siteIsEuroMillions, siteLocales } from "./sites/features";
+import { siteAllowsLocale, siteIndexesLocale, siteIsEuroMillions, siteLocales } from "./sites/features";
 import { offThemeFallbackPath } from "./sites/off-theme";
 import { tiragesDateQueryPath } from "./lib/euromillions/tirages-query";
 
@@ -110,6 +110,9 @@ export default function middleware(request: NextRequest) {
   const response = intlMiddleware(request);
   response.headers.set(SITE_HEADER, siteId);
   response.headers.set("x-pathname", pathname);
+  if (seg && isAppLocale(seg) && !siteIndexesLocale(site, seg)) {
+    response.headers.set("X-Robots-Tag", "noindex, follow");
+  }
   response.headers.set(
     "Vary",
     [response.headers.get("Vary"), "Host"].filter(Boolean).join(", "),

@@ -32,15 +32,29 @@ export async function generateMetadata({
   }
   const isEn = locale === "en";
   const flat = usesFlatCatalog(site);
-  return {
-    title: isEn ? "Comparisons" : "Comparatifs",
-    description: flat
+  const title =
+    site.id === "ecoflow"
       ? isEn
-        ? `Compare any two ${site.brand.name} products side by side — specs and indicative prices.`
-        : `Comparez deux produits ${site.brand.name} côte à côte — specs et prix indicatifs.`
+        ? "EcoFlow comparison: DELTA, RIVER, PowerStream, solar"
+        : "Comparatif EcoFlow : DELTA, RIVER, PowerStream, solaire"
       : isEn
-        ? `Compare ${site.brand.name} products by category: pick any X vs Y and compare specs.`
-        : `Comparez les produits ${site.brand.name} par catégorie : choisissez X vs Y et comparez les specs.`,
+        ? "Comparisons"
+        : "Comparatifs";
+  const description =
+    site.id === "ecoflow"
+      ? isEn
+        ? "Compare EcoFlow DELTA vs RIVER, PowerStream and solar kits side by side — Wh, watts, price."
+        : "Comparez EcoFlow DELTA vs RIVER, PowerStream et kits solaires — Wh, watts, prix."
+      : flat
+        ? isEn
+          ? `Compare any two ${site.brand.name} products side by side — specs and indicative prices.`
+          : `Comparez deux produits ${site.brand.name} côte à côte — specs et prix indicatifs.`
+        : isEn
+          ? `Compare ${site.brand.name} products by category: pick any X vs Y and compare specs.`
+          : `Comparez les produits ${site.brand.name} par catégorie : choisissez X vs Y et comparez les specs.`;
+  return {
+    title,
+    description,
     alternates: await siteLocaleAlternates(locale, "/comparatifs"),
   };
 }

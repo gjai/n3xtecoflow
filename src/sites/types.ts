@@ -108,6 +108,12 @@ export type SiteFeatures = {
   news?: boolean;
   /** Home éditoriale (pas de hero produit / grille catalogue) */
   editorialHome?: boolean;
+  /**
+   * Indexer l’anglais. `false` sur les .fr Amazon (tumbler, pistolet) :
+   * l’EN prend des impressions sans clic France.
+   * Défaut : true (ecoflow .com, EuroMillions FR+EN).
+   */
+  indexEnglish?: boolean;
 };
 
 /**

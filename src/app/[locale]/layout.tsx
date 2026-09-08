@@ -29,6 +29,7 @@ import {
   siteAllowsAdsense,
   siteAllowsAmazon,
   siteAllowsLocale,
+  siteIndexesLocale,
   siteIsEuroMillions,
   siteShowsNews,
 } from "@/sites/features";
@@ -98,10 +99,10 @@ export async function generateMetadata({
       apple: icons.apple || icons.favicon,
     },
     robots: {
-      index: !(siteIsEuroMillions(site) && locale !== "fr" && locale !== "en"),
+      index: siteIndexesLocale(site, locale),
       follow: true,
       googleBot: {
-        index: !(siteIsEuroMillions(site) && locale !== "fr" && locale !== "en"),
+        index: siteIndexesLocale(site, locale),
         follow: true,
       },
     },

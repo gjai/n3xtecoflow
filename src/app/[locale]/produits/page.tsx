@@ -41,21 +41,33 @@ export async function generateMetadata({
     return { alternates: await siteLocaleAlternates(locale, "/guides") };
   }
   const flat = usesFlatCatalog(site);
+  const title =
+    site.id === "ecoflow"
+      ? isEn
+        ? "EcoFlow catalog: DELTA, RIVER, PowerStream, solar"
+        : "Catalogue EcoFlow : DELTA, RIVER, PowerStream, solaire"
+      : flat
+        ? isEn
+          ? `${site.brand.name} catalog`
+          : `Catalogue ${site.brand.name}`
+        : isEn
+          ? "EcoFlow product catalog"
+          : "Catalogue produits EcoFlow";
+  const description =
+    site.id === "ecoflow"
+      ? isEn
+        ? "EcoFlow portable power stations and PowerStream: specs, Wh/W and independent buying notes."
+        : "Stations EcoFlow et PowerStream : specs, Wh/W et notes d’achat indépendantes."
+      : flat
+        ? isEn
+          ? `Product catalog for ${site.brand.name}.`
+          : `Catalogue produits ${site.brand.name}.`
+        : isEn
+          ? "RIVER, DELTA, DELTA Pro, PowerStream, solar panels and accessories."
+          : "RIVER, DELTA, DELTA Pro, PowerStream, panneaux solaires et accessoires.";
   return {
-    title: flat
-      ? isEn
-        ? `${site.brand.name} catalog`
-        : `Catalogue ${site.brand.name}`
-      : isEn
-        ? "EcoFlow product catalog"
-        : "Catalogue produits EcoFlow",
-    description: flat
-      ? isEn
-        ? `Product catalog for ${site.brand.name}.`
-        : `Catalogue produits ${site.brand.name}.`
-      : isEn
-        ? "RIVER, DELTA, DELTA Pro, PowerStream, solar panels and accessories."
-        : "RIVER, DELTA, DELTA Pro, PowerStream, panneaux solaires et accessoires.",
+    title,
+    description,
     alternates: await siteLocaleAlternates(locale, "/produits"),
   };
 }

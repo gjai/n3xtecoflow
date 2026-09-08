@@ -68,6 +68,7 @@ export const tumblerSite: SiteConfig = {
   heroImage: "/images/tumbler/hero.jpg",
   featuredCategoryIds: ["gourdes", "tumblers"],
   catalogLayout: "flat",
+  features: { indexEnglish: false },
   featuredProductSlugs: [
     "super-sparrow-500",
     "stanley-quencher-12l",

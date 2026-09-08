@@ -68,6 +68,7 @@ export const massageGunSite: SiteConfig = {
   heroImage: "/images/massage-gun/hero.jpg",
   featuredCategoryIds: ["masseurs", "pistolets", "mini"],
   catalogLayout: "flat",
+  features: { indexEnglish: false },
   featuredProductSlugs: [
     "aerlang-massage-gun",
     "brelley-masseur-cervical",

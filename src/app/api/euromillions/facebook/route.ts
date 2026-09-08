@@ -3,6 +3,7 @@ import {
   facebookMetaStatus,
   facebookPublishSnapshot,
   notifyFacebookOnPublish,
+  SOCIAL_DRAW_GAMES,
 } from "@/lib/euromillions/facebook";
 import { getLatestDraw, readEuroMillionsStore } from "@/lib/euromillions/store";
 import { cronAuthorized } from "@/lib/http/cron-auth";
@@ -10,7 +11,7 @@ import { cronAuthorized } from "@/lib/http/cron-auth";
 export const dynamic = "force-dynamic";
 export const maxDuration = 180;
 
-/** Statut Meta (Facebook + Instagram), ou `?force=1` pour poster le dernier tirage. */
+/** Statut Meta, `?force=1` dernier tirage, `?game=euromillions` pour éviter le backlog Keno. */
 export async function POST(request: Request) {
   if (!cronAuthorized(request)) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
@@ -18,6 +19,12 @@ export async function POST(request: Request) {
   const url = new URL(request.url);
   const force = url.searchParams.get("force") === "1";
   const notify = url.searchParams.get("notify") === "1";
+  const gameRaw = url.searchParams.get("game")?.trim();
+  const games = SOCIAL_DRAW_GAMES.includes(
+    gameRaw as (typeof SOCIAL_DRAW_GAMES)[number],
+  )
+    ? [gameRaw as (typeof SOCIAL_DRAW_GAMES)[number]]
+    : undefined;
   const store = await readEuroMillionsStore();
   const latest = getLatestDraw(store);
   const [meta, snapshot] = await Promise.all([
@@ -32,7 +39,7 @@ export async function POST(request: Request) {
       force: false,
     });
   }
-  const result = await notifyFacebookOnPublish(latest, { force });
+  const result = await notifyFacebookOnPublish(latest, { force, games });
   const after = await facebookPublishSnapshot();
   return NextResponse.json({
     ...meta,

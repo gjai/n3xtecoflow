@@ -229,7 +229,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
   {
     slug: "choisir-pistolet-massage",
     siteId: "massage-gun",
-    topicFr: "Guide complet pistolet de massage musculaire",
+    topicFr: "Meilleur pistolet de massage 2026 : amplitude, force, bruit",
     topicEn: "Complete percussion massage gun guide",
     angleFr:
       "Amplitude, force, bruit, embouts, autonomie, sélections produits Amazon",

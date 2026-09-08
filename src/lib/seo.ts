@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { DEFAULT_SITE_LOCALES, type AppLocale } from "@/i18n/locales";
-import { siteLocales } from "@/sites/features";
+import { siteIndexedLocales } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
 
 /**
@@ -42,8 +42,7 @@ export async function siteLocaleAlternates(
   pathWithoutLocale = "",
 ) {
   const site = await getCurrentSite();
-  const locales =
-    site.id === "euromillions" ? (["fr", "en"] as const) : siteLocales(site);
+  const locales = siteIndexedLocales(site);
   return localeAlternates(
     locale,
     pathWithoutLocale,

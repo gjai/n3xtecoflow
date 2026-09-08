@@ -81,6 +81,33 @@ export async function generateMetadata({
     const latest = getLatestDraw(store);
     homeTitle = euroMillionsHomeTitle(locale, latest);
     homeDescription = euroMillionsHomeDescription(locale, latest, store);
+  } else if (site.id === "ecoflow") {
+    homeTitle =
+      locale === "en"
+        ? "EcoFlow comparison 2026: DELTA, RIVER, PowerStream"
+        : "Comparatif EcoFlow 2026 : DELTA, RIVER, PowerStream";
+    homeDescription =
+      locale === "en"
+        ? "Independent EcoFlow comparison: DELTA vs RIVER, PowerStream balcony solar, specs and buying criteria. Not the official shop."
+        : "Comparatif EcoFlow indépendant : DELTA vs RIVER, PowerStream solaire balcon, specs et critères d’achat. Pas la boutique officielle.";
+  } else if (site.id === "tumbler") {
+    homeTitle =
+      locale === "en"
+        ? "Insulated bottle comparison 2026: capacity, lid, insulation"
+        : "Gourde isotherme 2026 : comparatif isolation, contenance, bouchon";
+    homeDescription =
+      locale === "en"
+        ? "Compare insulated bottles and tumblers: volume, hot/cold insulation, straw vs lid. Independent picks with Amazon links."
+        : "Comparez gourdes et tumblers isothermes : volume, isolation chaud/froid, paille vs bouchon. Sélections indépendantes, liens Amazon.";
+  } else if (site.id === "massage-gun") {
+    homeTitle =
+      locale === "en"
+        ? "Best massage gun 2026: amplitude, stall force, noise"
+        : "Meilleur pistolet de massage 2026 : amplitude, force, bruit";
+    homeDescription =
+      locale === "en"
+        ? "Compare percussion massage guns: amplitude, stall force, noise and heads. Independent guide, Amazon bestsellers."
+        : "Comparatif pistolet de massage : amplitude, stall force, bruit et embouts. Guide indépendant, meilleures ventes Amazon.";
   }
   return {
     title: { absolute: homeTitle },

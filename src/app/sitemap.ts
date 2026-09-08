@@ -21,7 +21,7 @@ import { companionDrawKey } from "@/lib/fdj-games/keys";
 import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import { getSiteByHost } from "@/sites";
 import {
-  siteLocales,
+  siteIndexedLocales,
   siteShowsComparisons,
   siteShowsNews,
   siteShowsProducts,
@@ -197,8 +197,7 @@ export function buildSitemapForSite(
   ];
 
   const emNewsDeweighted = site.id === "euromillions";
-  const sitemapLocales =
-    site.id === "euromillions" ? ["fr", "en"] : siteLocales(site);
+  const sitemapLocales = siteIndexedLocales(site);
 
   for (const locale of sitemapLocales) {
     for (const path of staticPaths) {
