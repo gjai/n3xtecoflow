@@ -24,7 +24,7 @@ export function revalidateSitemap() {
   revalidatePath("/sitemap.xml");
 }
 
-export function revalidateLotteryPages() {
+export function revalidateLotteryPagesInRequest() {
   const paths = [
     "/[locale]",
     "/[locale]/tirages",
@@ -42,6 +42,31 @@ export function revalidateLotteryPages() {
     revalidatePath(p, "page");
   }
   revalidateSitemap();
+}
+
+/** Hors requête (poll VPS) : revalidatePath jette — on ping la route HTTP. */
+export async function revalidateLotteryPages(): Promise<void> {
+  try {
+    revalidateLotteryPagesInRequest();
+  } catch (err) {
+    console.error("revalidate_path_fail", err);
+    await revalidateLotteryPagesViaHttp();
+  }
+}
+
+async function revalidateLotteryPagesViaHttp(): Promise<void> {
+  const secret = process.env.NEWS_CRON_SECRET?.trim();
+  if (!secret) return;
+  const port = process.env.PORT?.trim() || "3000";
+  const origin = `http://127.0.0.1:${port}`;
+  const res = await fetch(`${origin}/api/euromillions/revalidate`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${secret}` },
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!res.ok) {
+    console.error("revalidate_http_fail", res.status);
+  }
 }
 
 export async function withLotteryRefreshLock<T>(

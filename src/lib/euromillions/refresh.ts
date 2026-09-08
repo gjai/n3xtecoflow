@@ -112,7 +112,7 @@ async function persistEuroMillions(
 ): Promise<{ fingerprint: string; changed: boolean }> {
   await writeEuroMillionsStore(next);
   await recordFirstPublish(prev, next);
-  revalidateLotteryPages();
+  await revalidateLotteryPages();
   const fingerprint = lotteryFingerprint(next, fdj);
   const changed = fingerprint !== beforeFp;
   if (changed) {

@@ -14,7 +14,7 @@ export async function POST(request: Request) {
   }
   try {
     const result = await refreshFdjCompanionGames();
-    revalidateLotteryPages();
+    await revalidateLotteryPages();
     try {
       const { notifyCompanionAlertsOnPublish } = await import(
         "@/lib/euromillions/alerts"

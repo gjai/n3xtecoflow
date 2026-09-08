@@ -16,10 +16,9 @@ import {
   SHARE_STORY,
   companionShareCard,
   euroMillionsShareCard,
-  lotteryShareImageResponse,
-  newsShareImageResponse,
   type ShareCardInput,
 } from "./share-card";
+import { lotterySharePng, newsSharePng } from "./share-render";
 import { isEuroMillionsDrawPublished } from "./store";
 import type { EuroMillionsDraw } from "./types";
 
@@ -348,10 +347,6 @@ function companionJobsForGame(
   return [];
 }
 
-async function pngBytes(image: Response): Promise<Uint8Array> {
-  return new Uint8Array(await image.arrayBuffer());
-}
-
 async function graphJson(
   url: string,
   body: FormData,
@@ -514,8 +509,8 @@ async function publishInstagram(args: {
 async function postFeedAndStoryImages(args: {
   token: string;
   caption: string;
-  feed: Response;
-  story: Response;
+  feedBytes: Uint8Array;
+  storyBytes: Uint8Array;
   publicFeedUrl?: string;
   publicStoryUrl?: string;
   storyLinkUrl?: string;
@@ -530,7 +525,7 @@ async function postFeedAndStoryImages(args: {
 }> {
   const feed = await uploadPhoto({
     token: args.token,
-    bytes: await pngBytes(args.feed),
+    bytes: args.feedBytes,
     caption: args.caption,
     published: true,
   });
@@ -547,7 +542,7 @@ async function postFeedAndStoryImages(args: {
 
   const unpublished = await uploadPhoto({
     token: args.token,
-    bytes: await pngBytes(args.story),
+    bytes: args.storyBytes,
     published: false,
   });
   let storyOk = false;
@@ -655,8 +650,8 @@ async function postFeedAndStory(args: {
   return postFeedAndStoryImages({
     token: args.token,
     caption: args.caption,
-    feed: lotteryShareImageResponse(args.card, SHARE_FEED),
-    story: lotteryShareImageResponse(args.card, SHARE_STORY),
+    feedBytes: await lotterySharePng(args.card, SHARE_FEED),
+    storyBytes: await lotterySharePng(args.card, SHARE_STORY),
     publicFeedUrl: shareJpegUrl(`${args.publicQuery}&format=ig`),
     publicStoryUrl: shareJpegUrl(`${args.publicQuery}&format=story`),
     storyLinkUrl: args.storyLinkUrl,
@@ -1055,17 +1050,12 @@ export async function notifyFacebookNews(
   for (const article of queue) {
     const title = article.fr?.title?.trim() || article.slug;
     const excerpt = article.fr?.excerpt?.trim() || "";
-    const coverUrl = article.imageSrc
-      ? article.imageSrc.startsWith("http")
-        ? article.imageSrc
-        : `https://euromillions-resultats.fr${article.imageSrc}`
-      : undefined;
     const q = `kind=news&slug=${encodeURIComponent(article.slug)}`;
     const sent = await postFeedAndStoryImages({
       token,
       caption: newsCaption(title, excerpt, article.slug),
-      feed: newsShareImageResponse(title, excerpt, SHARE_FEED, coverUrl),
-      story: newsShareImageResponse(title, excerpt, SHARE_STORY, coverUrl),
+      feedBytes: await newsSharePng(title, excerpt, SHARE_FEED),
+      storyBytes: await newsSharePng(title, excerpt, SHARE_STORY),
       publicFeedUrl: shareJpegUrl(`${q}&format=ig`),
       publicStoryUrl: shareJpegUrl(`${q}&format=story`),
       storyLinkUrl: fdjAffiliateUrl("euromillions", ""),
