@@ -87,7 +87,7 @@ export function buildNewsRssXml(args: {
     .toLowerCase();
   const latest = articles[0]?.publishedAt || new Date().toISOString();
   const extra =
-    site.id === "casinos-crypto" || site.id === "euromillions"
+    site.id === "euromillions"
       ? enSuffix18(locale)
       : "";
 

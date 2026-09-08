@@ -224,23 +224,6 @@ function guessTags(
     if (tags.size === 0) tags.add("gourde");
     return [...tags];
   }
-  if (siteId === "casinos-crypto") {
-    if (/\bstake(\.com)?\b/.test(hay)) tags.add("stake");
-    if (/crypto\.com|cryptocom/.test(hay)) tags.add("cryptocom");
-    if (/nordvpn|nord\s*vpn/.test(hay)) tags.add("nordvpn");
-    if (/vpn/.test(hay)) tags.add("vpn");
-    if (/casino|gambling|jeu\s*d.?argent/.test(hay)) tags.add("casino-crypto");
-    if (/bitcoin\s*casino|casino\s*bitcoin/.test(hay)) tags.add("casino-crypto");
-    if (
-      /wallet|usdt|bitcoin|btc|ethereum|eth\b|cryptocurrenc|cryptomonnaie|stablecoin/.test(
-        hay,
-      )
-    ) {
-      tags.add("crypto");
-    }
-    if (tags.size === 0) tags.add("crypto");
-    return [...tags];
-  }
   if (siteId === "massage-gun") {
     if (/theragun|therabody/.test(hay)) tags.add("theragun");
     if (/hypervolt|hyperice/.test(hay)) tags.add("hyperice");
@@ -268,15 +251,8 @@ function guessTags(
   return [...tags];
 }
 
-function normalizeCopy(
-  copy: NewsLocaleCopy,
-  siteId: SiteId = "ecoflow",
-): NewsLocaleCopy {
-  // Casinos / crypto : ne pas convertir les cours BTC/ETH ($) en euros Amazon.
-  const money =
-    siteId === "casinos-crypto"
-      ? (s: string) => s
-      : (s: string) => pricesToEuroText(s);
+function normalizeCopy(copy: NewsLocaleCopy): NewsLocaleCopy {
+  const money = (s: string) => pricesToEuroText(s);
   return {
     title: money(copy.title).slice(0, 180),
     excerpt: money(copy.excerpt || "").slice(0, 320),
@@ -326,7 +302,7 @@ async function translateArticleToFrench(
       {
         role: "user",
         content: `Traduis cet article d’actualité en français pour un site sur ${brand}.
-Garde les faits, noms propres (Stake, Bitcoin, NordVPN, Crypto.com) et chiffres.
+Garde les faits, noms propres et chiffres.
 Réponds JSON: {"title":"...","excerpt":"...","body":["..."]}
 
 EN:
@@ -394,18 +370,16 @@ export async function buildArticleFromRss(
     !aiSkipped && ai && ai.fr && ai.en ? "ai" : "template";
   let fr = normalizeCopy(
     !aiSkipped && ai?.fr ? ai.fr : templateCopy("fr", item, source, siteId),
-    siteId,
   );
   const en = normalizeCopy(
     !aiSkipped && ai?.en ? ai.en : templateCopy("en", item, source, siteId),
-    siteId,
   );
 
   // Garantir le français par défaut (surtout sources RSS EN / templates).
   if (needsFrenchUpgrade(fr, en)) {
     const translated = await translateArticleToFrench(en, siteId);
     if (translated) {
-      fr = normalizeCopy(translated, siteId);
+      fr = normalizeCopy(translated);
       if (rewrittenBy === "template") rewrittenBy = "ai";
     }
   }

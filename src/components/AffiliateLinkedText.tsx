@@ -1,6 +1,6 @@
 import type { AffiliateOffer } from "@/lib/affiliates";
 import {
-  CASINO_AFFILIATE_KEYWORD_RULES,
+  DEFAULT_AFFILIATE_KEYWORD_RULES,
   splitAffiliateKeywordParts,
   type AffiliateKeywordRule,
 } from "@/lib/affiliates/keyword-links";
@@ -8,11 +8,11 @@ import {
 const LINK_CLASS =
   "font-medium text-[var(--accent)] underline-offset-2 hover:underline";
 
-/** Inline affiliate links on Stake / VPN / crypto keywords (casino theme). */
+/** Inline affiliate links on configured keyword rules (no-op without offers/rules). */
 export function AffiliateLinkedText({
   text,
   offers,
-  rules = CASINO_AFFILIATE_KEYWORD_RULES,
+  rules = DEFAULT_AFFILIATE_KEYWORD_RULES,
 }: {
   text: string;
   offers?: AffiliateOffer[] | null;

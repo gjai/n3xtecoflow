@@ -21,13 +21,9 @@ import { GUIDE_TOPICS } from "@/lib/guides/types";
 import { resolveGuide } from "@/lib/guides/refresh";
 import { resolveProductMedia } from "@/lib/product-presentation";
 import { siteLocaleAlternates } from "@/lib/seo";
-import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
-import { CasinosCryptoGuideAffiliates } from "@/components/CasinosCryptoGuideAffiliates";
-import { CasinosCryptoRelatedGuides } from "@/components/CasinosCryptoRelatedGuides";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { GuideMark } from "@/components/GuideMark";
 import { APP_LOCALES } from "@/i18n/locales";
-import { resolveAffiliateOffers } from "@/lib/affiliates";
 import { siteAmazonFallbackQuery } from "@/sites/copy";
 import { siteAllowsAmazon, siteIsEuroMillions, siteShowsProducts } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
@@ -149,8 +145,6 @@ export default async function GuideArticlePage({
     : productImages;
   const editorialImages = getEditorialImages(site.id);
   const productCards = buildProductCards(copy.sections, locale);
-  const keywordOffers =
-    site.id === "casinos-crypto" ? resolveAffiliateOffers(site) : undefined;
 
   return (
     <article>
@@ -161,21 +155,10 @@ export default async function GuideArticlePage({
               {siteIsEuroMillions(site) ? (
                 <GuideMark slug={slug} size={40} className="mt-1" />
               ) : null}
-              {keywordOffers ? (
-                <AffiliateLinkedText text={copy.title} offers={keywordOffers} />
-              ) : (
-                copy.title
-              )}
+              {copy.title}
             </h1>
             <p className="mt-4 text-lg text-[var(--muted)]">
-              {keywordOffers ? (
-                <AffiliateLinkedText
-                  text={copy.subtitle}
-                  offers={keywordOffers}
-                />
-              ) : (
-                copy.subtitle
-              )}
+              {copy.subtitle}
             </p>
             {siteIsEuroMillions(site) ? (
               <div className="mt-6">
@@ -194,15 +177,6 @@ export default async function GuideArticlePage({
           />
         </div>
       </header>
-      {!siteAllowsAmazon(site) ? (
-        <div className="mx-auto max-w-3xl px-5 pt-10 md:px-8">
-          <CasinosCryptoGuideAffiliates
-            site={site}
-            slug={slug}
-            locale={locale}
-          />
-        </div>
-      ) : null}
       {siteIsEuroMillions(site) ? (
         <div className="mx-auto max-w-3xl px-5 pt-8 md:px-8">
           <KwankoBanner
@@ -227,20 +201,7 @@ export default async function GuideArticlePage({
         }
         productCards={productCards}
         hideCatalogLink={!siteShowsProducts(site)}
-        affiliateKeywordOffers={keywordOffers}
-        footerActions={
-          !siteAllowsAmazon(site) ? (
-            <CasinosCryptoGuideAffiliates
-              site={site}
-              slug={slug}
-              locale={locale}
-            />
-          ) : undefined
-        }
       />
-      {site.id === "casinos-crypto" ? (
-        <CasinosCryptoRelatedGuides slug={slug} locale={locale} />
-      ) : null}
       {siteIsEuroMillions(site) ? (
         <EuroMillionsGuideFaq slug={slug} locale={locale} />
       ) : null}

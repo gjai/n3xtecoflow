@@ -113,7 +113,7 @@ export async function ingestNews(
   }
 
   // Balanced intake per theme (anti-promo / anti-doublons / diversité marques).
-  // Avoid starving casinos-crypto / tumbler when ecoflow RSS is fresher.
+  // Avoid starving tumbler when ecoflow RSS is fresher.
   const bySite = new Map<SiteId, Collected[]>();
   for (const item of byGuid.values()) {
     if (known.has(item.guid)) continue;

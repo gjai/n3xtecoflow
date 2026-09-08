@@ -429,7 +429,7 @@ export async function resolveNewsCover(args: {
 
   const title = args.title || args.slug;
 
-  // Thèmes flat / casino : après scrape OG, IA pour couvertures uniques
+  // Thèmes flat : après scrape OG, IA pour couvertures uniques
   // (pas de catalogue packshot fiable — éviter les listicles sans image).
   if (getEditorial(siteId).preferAiNewsCovers) {
     const aiFirst = await generateCoverWithGemini({

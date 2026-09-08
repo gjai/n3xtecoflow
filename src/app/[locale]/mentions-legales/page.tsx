@@ -1,9 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
-import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { LegalScroll } from "@/components/LegalScroll";
-import { resolveAffiliateOffers } from "@/lib/affiliates";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { siteNeedsGamblingDisclaimer } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
@@ -33,14 +31,6 @@ export default async function MentionsPage({
   const site = await getCurrentSite();
   const showResponsible =
     siteNeedsGamblingDisclaimer(site) && Boolean(t("responsibleBody").trim());
-  const keywordOffers =
-    site.id === "casinos-crypto" ? resolveAffiliateOffers(site) : undefined;
-  const L = ({ text }: { text: string }) =>
-    keywordOffers ? (
-      <AffiliateLinkedText text={text} offers={keywordOffers} />
-    ) : (
-      <>{text}</>
-    );
 
   const showHost = Boolean(t("hostBody").trim());
   const toc = [
@@ -88,7 +78,7 @@ export default async function MentionsPage({
             {t("publisherTitle")}
           </h2>
           <p className="mt-4">
-            <L text={t("independent")} />
+            {t("independent")}
           </p>
           {t("publisherName").trim() ? (
             <p className="mt-2 font-medium text-[var(--heading)]">
@@ -225,15 +215,15 @@ export default async function MentionsPage({
             {t("affiliateTitle")}
           </h2>
           <p className="mt-4">
-            <L text={t("independent")} />
+            {t("independent")}
           </p>
           {t("amazon").trim() ? (
             <p className="mt-3">
-              <L text={t("amazon")} />
+              {t("amazon")}
             </p>
           ) : null}
           <p className="mt-3">
-            <L text={t("affiliateBody")} />
+            {t("affiliateBody")}
           </p>
           {t("adsense").trim() ? (
             <p className="mt-3">{t("adsense")}</p>
@@ -246,7 +236,7 @@ export default async function MentionsPage({
               {t("responsibleTitle")}
             </h2>
             <p className="mt-4">
-              <L text={t("responsibleBody")} />
+              {t("responsibleBody")}
             </p>
             <p className="mt-3">
               {t("responsibleHelp")}{" "}

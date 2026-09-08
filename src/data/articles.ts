@@ -1,7 +1,6 @@
 import { pickLocalized } from "@/i18n/locales";
 import { tumblerGuides } from "./tumbler-guides";
 import { massageGunGuides } from "./massage-gun-guides";
-import { casinosCryptoGuides } from "./casinos-crypto-guides";
 import { euromillionsGuides } from "./euromillions-guides";
 import { ecoflowClusterGuides } from "./ecoflow-guides-cluster";
 
@@ -11,7 +10,7 @@ export type ArticleSection = {
   bullets?: string[];
   /** Product slugs to show as linked packshot cards under the section */
   productSlugs?: string[];
-  /** Inline editorial illustration (casino guides, etc.) */
+  /** Inline editorial illustration */
   imageSrc?: string;
   imageAltFr?: string;
   imageAltEn?: string;
@@ -766,7 +765,6 @@ export const guides: GuideArticle[] = [
   ...ecoflowClusterGuides,
   ...tumblerGuides,
   ...massageGunGuides,
-  ...casinosCryptoGuides,
   ...euromillionsGuides,
 ];
 

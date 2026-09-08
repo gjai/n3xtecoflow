@@ -30,7 +30,7 @@ function startsWithPath(pathname: string, prefix: string): boolean {
 /**
  * URLs d’un autre thème (même app Next) → 308 vers une page indexable du Host.
  * Évite les 404 + noindex que Search Console remonte (ex. /powerstream sur
- * casinos-crypto.fr).
+ * un autre host).
  */
 export function offThemeFallbackPath(
   site: SiteConfig,

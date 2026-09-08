@@ -9,7 +9,6 @@ App Next.js multi-domaine : thèmes EcoFlow + La gourde isotherme (et futurs th�
 | `ecoflow-stream.com`, `www.*`, `powerstream.fr`, `www.*` | **ecoflow** | `ecoflow-stream.com` |
 | `mon-tumbler.fr`, `www.*` | **tumbler** | `mon-tumbler.fr` |
 | `massage-gun.fr`, `www.*` | **massage-gun** | `massage-gun.fr` |
-| `casinos-crypto.fr`, `www.*` | **casinos-crypto** | `casinos-crypto.fr` |
 | `euromillions-resultats.fr`, `www.*` | **euromillions** | `euromillions-resultats.fr` |
 
 - `www.*` → apex (308)
@@ -40,7 +39,7 @@ Voir `.env.example` (extrait) :
 3. **Volume persistant** monté sur `/app/data` (news, images, prix, euromillions, fdj-games)
 3b. **Umami** (service Coolify one-click) + env build `NEXT_PUBLIC_UMAMI_SCRIPT_URL` / `NEXT_PUBLIC_UMAMI_WEBSITE_ID`
 4. FQDN (même app) :
-   `ecoflow-stream.com,www.ecoflow-stream.com,powerstream.fr,www.powerstream.fr,mon-tumbler.fr,www.mon-tumbler.fr,massage-gun.fr,www.massage-gun.fr,casinos-crypto.fr,www.casinos-crypto.fr,euromillions-resultats.fr,www.euromillions-resultats.fr`
+   `ecoflow-stream.com,www.ecoflow-stream.com,powerstream.fr,www.powerstream.fr,mon-tumbler.fr,www.mon-tumbler.fr,massage-gun.fr,www.massage-gun.fr,euromillions-resultats.fr,www.euromillions-resultats.fr`
 5. Let's Encrypt
 6. Healthcheck : `GET /api/health`
 
@@ -48,6 +47,6 @@ Nouveau thème : checklist `src/sites/_template-new-theme.ts` + `.cursor/rules/d
 
 ## Crons (GitHub Actions)
 
-- `news-ingest.yml` → toutes les 4 h, `POST /api/news/ingest?siteId=…` en séquence (ecoflow, tumbler, massage-gun, casinos-crypto : `limit=2` ; euromillions : `limit=4`)
+- `news-ingest.yml` → toutes les 4 h, `POST /api/news/ingest?siteId=…` en séquence (ecoflow, tumbler, massage-gun : `limit=2` ; euromillions : `limit=4`)
 - `euromillions-refresh.yml` → live FDJ toutes les 10 min aux heures de tirage (`?mode=fast`) + refresh complet après tirages / daily, `POST /api/euromillions/refresh`
 - `amazon-prices.yml` → `POST /api/amazon/prices/refresh`

@@ -2,7 +2,7 @@ name: Ingest news (all themes)
 
 on:
   schedule:
-    # Every 4 hours — fair per-theme ingest (incl. casinos-crypto)
+    # Every 4 hours — fair per-theme ingest
     - cron: "20 */4 * * *"
   workflow_dispatch:
 
@@ -22,11 +22,11 @@ jobs:
           fi
           # Sequential: shared news.json must not be written in parallel.
           # limit=2 per theme keeps AI rewrite under maxDuration;
-          # euromillions + casinos-crypto take 4 to fill their indexes.
+          # euromillions takes 4 to fill its index.
           fail=0
-          for site in ecoflow tumbler massage-gun casinos-crypto euromillions; do
+          for site in ecoflow tumbler massage-gun euromillions; do
             limit=2
-            if [ "${site}" = "euromillions" ] || [ "${site}" = "casinos-crypto" ]; then
+            if [ "${site}" = "euromillions" ]; then
               limit=4
             fi
             echo "=== ingest siteId=${site} limit=${limit} ==="

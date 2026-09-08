@@ -40,12 +40,9 @@ import {
 import { resolveAllGuides } from "@/lib/guides/refresh";
 import { resolveProductCopy } from "@/lib/product-copy";
 import { resolveProductMedia } from "@/lib/product-presentation";
-import { pickLocalized } from "@/i18n/locales";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 import { siteAmazonFallbackQuery } from "@/sites/copy";
-import { affiliateOffer } from "@/lib/affiliates";
-import { CasinosCryptoHome } from "@/components/CasinosCryptoHome";
 import { EuroMillionsHome } from "@/components/EuroMillionsHome";
 import { formatEuroMillionsLongDate } from "@/lib/euromillions/datetime";
 import { euroMillionsResultsFaq } from "@/lib/euromillions/home-faq";
@@ -61,7 +58,6 @@ import {
 import { readFdjGamesStore } from "@/lib/fdj-games/store";
 import {
   siteAllowsAmazon,
-  siteIsCasinosCrypto,
   siteIsEuroMillions,
   siteUsesEditorialHome,
 } from "@/sites/features";
@@ -80,16 +76,7 @@ export async function generateMetadata({
   let homeDescription =
     tMeta("tagline") ||
     (locale === "fr" ? site.brand.taglineFr : site.brand.taglineEn);
-  if (siteIsCasinosCrypto(site)) {
-    homeTitle = pickLocalized(locale, {
-      fr: "Stake & casino en ligne crypto : guides | Casinos Crypto",
-      en: "Stake & online crypto casino: guides | Casinos Crypto",
-      it: "Stake e casino crypto online: guide | Casinos Crypto",
-      es: "Stake y casino crypto online: guías | Casinos Crypto",
-      pt: "Stake e casino crypto online: guias | Casinos Crypto",
-      de: "Stake & Online-Krypto-Casino: Guides | Casinos Crypto",
-    });
-  } else if (siteIsEuroMillions(site)) {
+  if (siteIsEuroMillions(site)) {
     const store = await readEuroMillionsStore();
     const latest = getLatestDraw(store);
     homeTitle = euroMillionsHomeTitle(locale, latest);
@@ -117,97 +104,73 @@ export default async function HomePage({
   const siteUrl = `https://${site.primaryHost}`;
   const brandName = site.brand.name;
 
-  if (siteUsesEditorialHome(site)) {
+  if (siteUsesEditorialHome(site) && siteIsEuroMillions(site)) {
     const editorialNews = getNewsArticles(
       await readNewsStore(),
       site.id,
     ).slice(0, 3);
-    if (siteIsEuroMillions(site)) {
-      const store = await readEuroMillionsStore();
-      const fdjGames = await readFdjGamesStore();
-      const latest = getLatestDraw(store);
-      const recent = store.draws.filter(isEuroMillionsDrawPublished).slice(0, 8);
-      const drawListItems: { name: string; url: string }[] = [];
-      const seenDrawUrls = new Set<string>();
-      for (const date of [
-        store.nextDrawDate,
-        ...recent.map((d) => d.date),
-      ]) {
-        if (!date) continue;
-        const url = `${siteUrl}/${locale}/tirages/${date}`;
-        if (seenDrawUrls.has(url)) continue;
-        seenDrawUrls.add(url);
-        drawListItems.push({
-          name: `EuroMillions ${formatEuroMillionsLongDate(date, locale)}`,
-          url,
-        });
-      }
-      return (
-        <>
-          <JsonLd data={organizationJsonLd(site)} />
-          <JsonLd data={websiteJsonLd(site)} />
-          <JsonLd
-            data={faqJsonLd(
-              euroMillionsResultsFaq({ locale, store, draw: latest }),
-            )}
-          />
-          {isEuroMillionsDrawPublished(latest) && latest ? (
-            <JsonLd
-              data={lotteryDrawJsonLd({
-                siteUrl,
-                locale,
-                date: latest.date,
-                title: euroMillionsHomeTitle(locale, latest),
-                description: euroMillionsHomeDescription(
-                  locale,
-                  latest,
-                  store,
-                ),
-                numbers: latest.numbers,
-                stars: latest.stars,
-                jackpotEur: latest.jackpotEur,
-                myMillionCode: latest.myMillionCode,
-                publisherName: site.brand.name,
-              })}
-            />
-          ) : null}
-          {drawListItems.length > 0 ? (
-            <JsonLd
-              data={itemListJsonLd({
-                name: t("ctaSecondary"),
-                url: `${siteUrl}/${locale}/tirages`,
-                items: drawListItems,
-              })}
-            />
-          ) : null}
-          <EuroMillionsHome
-            site={site}
-            locale={locale}
-            store={store}
-            fdjGames={fdjGames}
-            latestNews={editorialNews}
-          />
-        </>
-      );
+    const store = await readEuroMillionsStore();
+    const fdjGames = await readFdjGamesStore();
+    const latest = getLatestDraw(store);
+    const recent = store.draws.filter(isEuroMillionsDrawPublished).slice(0, 8);
+    const drawListItems: { name: string; url: string }[] = [];
+    const seenDrawUrls = new Set<string>();
+    for (const date of [
+      store.nextDrawDate,
+      ...recent.map((d) => d.date),
+    ]) {
+      if (!date) continue;
+      const url = `${siteUrl}/${locale}/tirages/${date}`;
+      if (seenDrawUrls.has(url)) continue;
+      seenDrawUrls.add(url);
+      drawListItems.push({
+        name: `EuroMillions ${formatEuroMillionsLongDate(date, locale)}`,
+        url,
+      });
     }
     return (
       <>
         <JsonLd data={organizationJsonLd(site)} />
         <JsonLd data={websiteJsonLd(site)} />
         <JsonLd
-          data={faqJsonLd([
-            { question: t("faqLegalQ"), answer: t("faqLegalA") },
-            { question: t("faqVpnQ"), answer: t("faqVpnA") },
-            { question: t("faqDepositQ"), answer: t("faqDepositA") },
-            { question: t("faqSiteQ"), answer: t("faqSiteA") },
-          ])}
+          data={faqJsonLd(
+            euroMillionsResultsFaq({ locale, store, draw: latest }),
+          )}
         />
-        <CasinosCryptoHome
+        {isEuroMillionsDrawPublished(latest) && latest ? (
+          <JsonLd
+            data={lotteryDrawJsonLd({
+              siteUrl,
+              locale,
+              date: latest.date,
+              title: euroMillionsHomeTitle(locale, latest),
+              description: euroMillionsHomeDescription(
+                locale,
+                latest,
+                store,
+              ),
+              numbers: latest.numbers,
+              stars: latest.stars,
+              jackpotEur: latest.jackpotEur,
+              myMillionCode: latest.myMillionCode,
+              publisherName: site.brand.name,
+            })}
+          />
+        ) : null}
+        {drawListItems.length > 0 ? (
+          <JsonLd
+            data={itemListJsonLd({
+              name: t("ctaSecondary"),
+              url: `${siteUrl}/${locale}/tirages`,
+              items: drawListItems,
+            })}
+          />
+        ) : null}
+        <EuroMillionsHome
           site={site}
           locale={locale}
-          stake={affiliateOffer(site, "stake")}
-          nordvpn={affiliateOffer(site, "nordvpn")}
-          cryptocom={affiliateOffer(site, "cryptocom")}
+          store={store}
+          fdjGames={fdjGames}
           latestNews={editorialNews}
         />
       </>

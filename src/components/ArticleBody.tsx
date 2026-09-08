@@ -36,7 +36,7 @@ export function ArticleBody({
   productCards?: Record<string, ArticleProductCard>;
   hideCatalogLink?: boolean;
   footerActions?: ReactNode;
-  /** Casino: auto-lien Stake / VPN / crypto dans le corps. */
+  /** Optional inline affiliate keyword links in the body. */
   affiliateKeywordOffers?: AffiliateOffer[];
 }) {
   const t = useTranslations("amazon");

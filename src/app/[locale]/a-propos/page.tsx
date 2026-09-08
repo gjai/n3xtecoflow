@@ -1,9 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
-import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { JsonLd, organizationJsonLd } from "@/components/JsonLd";
-import { resolveAffiliateOffers } from "@/lib/affiliates";
 import { siteLocaleAlternates } from "@/lib/seo";
 import { getCurrentSite } from "@/sites/server";
 
@@ -31,14 +29,6 @@ export default async function AboutPage({
   const t = await getTranslations("about");
   const site = await getCurrentSite();
   const siteUrl = `https://${site.primaryHost}`;
-  const keywordOffers =
-    site.id === "casinos-crypto" ? resolveAffiliateOffers(site) : undefined;
-  const L = ({ text }: { text: string }) =>
-    keywordOffers ? (
-      <AffiliateLinkedText text={text} offers={keywordOffers} />
-    ) : (
-      <>{text}</>
-    );
 
   return (
     <article className="mx-auto max-w-3xl px-5 pb-16 pt-10 md:px-8">
@@ -55,10 +45,10 @@ export default async function AboutPage({
         {t("eyebrow")}
       </p>
       <h1 className="mt-3 font-[family-name:var(--font-display)] text-4xl font-semibold text-[var(--heading)] md:text-5xl">
-        <L text={t("title")} />
+        {t("title")}
       </h1>
       <p className="mt-5 text-lg leading-relaxed text-[var(--fog)]">
-        <L text={t("lead")} />
+        {t("lead")}
       </p>
 
       <div className="mt-10 space-y-8 leading-relaxed text-[var(--fog)]">
@@ -67,7 +57,7 @@ export default async function AboutPage({
             {t("missionTitle")}
           </h2>
           <p className="mt-3">
-            <L text={t("missionBody")} />
+            {t("missionBody")}
           </p>
         </section>
 
@@ -76,20 +66,20 @@ export default async function AboutPage({
             {t("methodTitle")}
           </h2>
           <p className="mt-3">
-            <L text={t("methodBody")} />
+            {t("methodBody")}
           </p>
           <ul className="mt-4 list-disc space-y-2 pl-5">
             <li>
-              <L text={t("method1")} />
+              {t("method1")}
             </li>
             <li>
-              <L text={t("method2")} />
+              {t("method2")}
             </li>
             <li>
-              <L text={t("method3")} />
+              {t("method3")}
             </li>
             <li>
-              <L text={t("method4")} />
+              {t("method4")}
             </li>
           </ul>
         </section>
@@ -99,7 +89,7 @@ export default async function AboutPage({
             {t("independenceTitle")}
           </h2>
           <p className="mt-3">
-            <L text={t("independenceBody")} />
+            {t("independenceBody")}
           </p>
         </section>
 
@@ -108,7 +98,7 @@ export default async function AboutPage({
             {t("monetizationTitle")}
           </h2>
           <p className="mt-3">
-            <L text={t("monetizationBody")} />
+            {t("monetizationBody")}
           </p>
           <p className="mt-3">
             {t("seeAlso")}{" "}

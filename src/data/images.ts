@@ -216,44 +216,6 @@ const massageGunEditorial = {
   },
 } as const satisfies Record<string, SiteImage>;
 
-const casinosCryptoEditorial = {
-  guides: {
-    src: "/images/casinos-crypto/stake.jpg",
-    altFr: "Guides casinos crypto",
-    altEn: "Crypto casino guides",
-    credit: "Casinos Crypto (IA)",
-    creditUrl: "https://casinos-crypto.fr",
-  },
-  news: {
-    src: "/images/casinos-crypto/hero.jpg",
-    altFr: "Casinos crypto",
-    altEn: "Crypto casinos",
-    credit: "Casinos Crypto (IA)",
-    creditUrl: "https://casinos-crypto.fr",
-  },
-  camping: {
-    src: "/images/casinos-crypto/cryptocom.jpg",
-    altFr: "Wallet crypto",
-    altEn: "Crypto wallet",
-    credit: "Casinos Crypto (IA)",
-    creditUrl: "https://casinos-crypto.fr",
-  },
-  backup: {
-    src: "/images/casinos-crypto/vpn.jpg",
-    altFr: "Connexion sécurisée",
-    altEn: "Secure connection",
-    credit: "Casinos Crypto (IA)",
-    creditUrl: "https://casinos-crypto.fr",
-  },
-  comparatifs: {
-    src: "/images/casinos-crypto/hero.jpg",
-    altFr: "Casino crypto",
-    altEn: "Crypto casino",
-    credit: "Casinos Crypto (IA)",
-    creditUrl: "https://casinos-crypto.fr",
-  },
-} as const satisfies Record<string, SiteImage>;
-
 const euromillionsEditorial = {
   guides: {
     src: "/brands/euromillions/hero.svg",
@@ -295,7 +257,6 @@ const euromillionsEditorial = {
 export function getEditorialImages(siteId: SiteId = "ecoflow") {
   if (siteId === "tumbler") return tumblerEditorial;
   if (siteId === "massage-gun") return massageGunEditorial;
-  if (siteId === "casinos-crypto") return casinosCryptoEditorial;
   if (siteId === "euromillions") return euromillionsEditorial;
   return editorialImages;
 }
@@ -316,15 +277,6 @@ export function getHeroImage(siteId: SiteId = "ecoflow"): SiteImage {
       altEn: "Massage gun — recovery",
       credit: "Le pistolet de massage (IA)",
       creditUrl: "https://massage-gun.fr",
-    };
-  }
-  if (siteId === "casinos-crypto") {
-    return {
-      src: "/images/casinos-crypto/hero.jpg",
-      altFr: "Casinos crypto — Stake & accès sécurisé",
-      altEn: "Crypto casinos — Stake & secure access",
-      credit: "Casinos Crypto (IA)",
-      creditUrl: "https://casinos-crypto.fr",
     };
   }
   if (siteId === "euromillions") {

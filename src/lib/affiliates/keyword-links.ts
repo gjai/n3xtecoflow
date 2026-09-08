@@ -6,18 +6,8 @@ export type AffiliateKeywordRule = {
   pattern: RegExp;
 };
 
-/** Casino theme: every Stake / VPN / crypto mention → affiliate. */
-export const CASINO_AFFILIATE_KEYWORD_RULES: AffiliateKeywordRule[] = [
-  { offerId: "cryptocom", pattern: /Crypto\.com/gi },
-  { offerId: "cryptocom", pattern: /CryptoCom/gi },
-  { offerId: "nordvpn", pattern: /Nord\s*VPN/gi },
-  { offerId: "stake", pattern: /Stake\.com/gi },
-  { offerId: "stake", pattern: /\bcrypto\s*casinos?\b/gi },
-  { offerId: "stake", pattern: /\bcasinos?\s*crypto\b/gi },
-  { offerId: "stake", pattern: /\bStake\b/gi },
-  { offerId: "nordvpn", pattern: /\bVPN\b/gi },
-  { offerId: "cryptocom", pattern: /\bcrypto\b/gi },
-];
+/** Default: no inline keyword linking. Themes can pass custom rules. */
+export const DEFAULT_AFFILIATE_KEYWORD_RULES: AffiliateKeywordRule[] = [];
 
 type MatchHit = {
   start: number;
@@ -50,7 +40,7 @@ function collectHits(
       });
     }
   }
-  // Same start → longer match wins (Crypto.com before crypto).
+  // Same start → longer match wins.
   hits.sort(
     (a, b) =>
       a.start - b.start || b.end - b.start - (a.end - a.start),
@@ -73,7 +63,7 @@ export type AffiliateTextPart =
 export function splitAffiliateKeywordParts(
   text: string,
   offers: AffiliateOffer[],
-  rules: AffiliateKeywordRule[] = CASINO_AFFILIATE_KEYWORD_RULES,
+  rules: AffiliateKeywordRule[] = DEFAULT_AFFILIATE_KEYWORD_RULES,
 ): AffiliateTextPart[] {
   if (!text || !offers.length) return [{ type: "text", value: text }];
 

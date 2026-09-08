@@ -7,14 +7,11 @@ export const MAX_NEWS_PER_BRAND_BY_SITE: Partial<Record<SiteId, number>> = {
   euromillions: 28,
   /** Sinon tout tombe dans le cluster « ecoflow » et le store reste coincé à 4. */
   ecoflow: 12,
-  /** Sinon Stake / BTC / NordVPN restent coincés à 4 chacun. */
-  "casinos-crypto": 12,
 };
 /** Max same-brand picks in one ingest selection. */
 export const MAX_BRAND_PER_INGEST = 2;
 export const MAX_BRAND_PER_INGEST_BY_SITE: Partial<Record<SiteId, number>> = {
   euromillions: 4,
-  "casinos-crypto": 3,
 };
 
 export function maxNewsPerBrand(siteId: SiteId): number {
@@ -30,10 +27,6 @@ const PROMO_HEAVY =
 
 const EDITORIAL_HINT =
   /\b(guide|comparatif|test|avis|review|vs\b|choisir|how\s+to|entretien|buying|meilleure?s?|best\b|nouveaut[ée]|lancement|launch|collection|march[ée]|market|prix|price|ETF|SEC|staking|breach|malware|extension|tokenis)\b/i;
-
-/** Listicles / sports-sponsorship noise for casino-crypto feeds. */
-const CASINO_LOW_SIGNAL =
-  /\b(best\s+vpn\s+for|coupon|%\s*off|sleeve\s+deal|everton|luton\s+town|drake|sportsbook|machines?\s*[àa]\s*sous)\b/i;
 
 type BrandRule = { id: string; pattern: RegExp };
 
@@ -70,22 +63,6 @@ const BRANDS_BY_SITE: Record<string, BrandRule[]> = {
     { id: "glacier", pattern: /\bglacier\b/i },
     { id: "wave", pattern: /\bwave\b/i },
     { id: "ecoflow", pattern: /\becoflow\b/i },
-  ],
-  "casinos-crypto": [
-    { id: "stake", pattern: /\bstake(\.com)?\b/i },
-    { id: "cryptocom", pattern: /\bcrypto\.com\b|\bcryptocom\b/i },
-    { id: "nordvpn", pattern: /\bnordvpn\b|\bnord\s*vpn\b/i },
-    {
-      id: "casino-crypto",
-      pattern:
-        /\bcrypto\s*casino\b|\bcasino\s*crypto\b|\bbitcoin\s*casino\b|\bcasino\s*bitcoin\b|\bcrypto\s*gambling\b/i,
-    },
-    {
-      id: "crypto",
-      pattern:
-        /\bcryptocurrenc|\bcryptomonnaie|\bbitcoin\b|\bethereum\b|\bbtc\b|\beth\b|\busdt\b|\bstablecoin\b/i,
-    },
-    { id: "vpn", pattern: /\bvpn\b/i },
   ],
   euromillions: [
     { id: "euromillions", pattern: /\beuromillions\b|\beuro\s*millions\b|\beuromillones\b/i },
@@ -266,12 +243,6 @@ export function rankNewsCandidates<T extends NewsQualityInput>(
       let qualityScore = 0;
       if (EDITORIAL_HINT.test(item.title)) qualityScore += 3;
       if (promoHeavy) qualityScore -= 4;
-      if (
-        item.siteId === "casinos-crypto" &&
-        CASINO_LOW_SIGNAL.test(`${item.title} ${item.description || ""}`)
-      ) {
-        qualityScore -= 6;
-      }
       if (existingKeys.has(dupKey)) qualityScore -= 8;
       const publishedMs = item.publishedAt
         ? new Date(item.publishedAt).getTime()

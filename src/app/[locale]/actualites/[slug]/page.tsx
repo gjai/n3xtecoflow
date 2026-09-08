@@ -4,14 +4,12 @@ import { permanentRedirect } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { articleJsonLd, JsonLd } from "@/components/JsonLd";
 import { AffiliateDisclosure } from "@/components/AffiliateDisclosure";
-import { AffiliateLinkedText } from "@/components/AffiliateLinkedText";
 import { AffiliateOfferButton } from "@/components/AffiliateOfferButton";
 import { AmazonButton } from "@/components/AmazonButton";
 import { KwankoBanner } from "@/components/KwankoBanner";
 import { KWANKO_SLOTS } from "@/lib/kwanko-slots";
 import { SmartCover } from "@/components/SmartCover";
 import { getEditorialImages } from "@/data/images";
-import { resolveAffiliateOffers } from "@/lib/affiliates";
 import { affiliateCtaForNews } from "@/lib/news/affiliate-cta";
 import { amazonCtaForNews } from "@/lib/news/amazon-cta";
 import { isEuroMillionsResultClone } from "@/lib/news/rss";
@@ -116,14 +114,6 @@ export default async function NewsArticlePage({
           ? "Open offer"
           : "Voir l’offre";
   const mid = Math.max(2, Math.floor(copy.body.length / 2));
-  const keywordOffers =
-    site.id === "casinos-crypto" ? resolveAffiliateOffers(site) : undefined;
-  const linkify = (text: string) =>
-    keywordOffers ? (
-      <AffiliateLinkedText text={text} offers={keywordOffers} />
-    ) : (
-      text
-    );
 
   function AmazonCtaBlock() {
     if (!amazonCta) return null;
@@ -219,10 +209,10 @@ export default async function NewsArticlePage({
             priority
           />
           <h1 className="mt-6 font-[family-name:var(--font-display)] text-4xl font-semibold text-[var(--heading)] md:text-5xl">
-            {linkify(copy.title)}
+            {copy.title}
           </h1>
           <p className="mt-4 text-lg text-[var(--muted)]">
-            {linkify(copy.excerpt)}
+            {copy.excerpt}
           </p>
           <p className="mt-4 text-sm text-[var(--muted)]">
             <time dateTime={article.publishedAt}>
@@ -248,7 +238,7 @@ export default async function NewsArticlePage({
 
       <div className="mx-auto max-w-3xl space-y-5 px-5 py-12 text-[var(--fog)] leading-relaxed md:px-8">
         {copy.body.slice(0, mid).map((p) => (
-          <p key={p.slice(0, 48)}>{linkify(p)}</p>
+          <p key={p.slice(0, 48)}>{p}</p>
         ))}
         <KwankoBanner
           desktop={KWANKO_SLOTS.incontent.desktop}
@@ -256,7 +246,7 @@ export default async function NewsArticlePage({
         />
         <CtaBlock />
         {copy.body.slice(mid).map((p) => (
-          <p key={p.slice(0, 48)}>{linkify(p)}</p>
+          <p key={p.slice(0, 48)}>{p}</p>
         ))}
         <p className="border-t border-[var(--line)] pt-6">
           <a

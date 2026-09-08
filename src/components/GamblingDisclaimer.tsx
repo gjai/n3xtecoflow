@@ -6,7 +6,7 @@ import { siteNeedsGamblingDisclaimer } from "@/sites/features";
 import { AffiliateLinkedText } from "./AffiliateLinkedText";
 import { useSite } from "./SiteProvider";
 
-/** Site-wide 18+ / responsible gambling / affiliate strip (casinos-crypto). */
+/** Site-wide 18+ / responsible gambling strip (euromillions). */
 export function GamblingDisclaimer({
   compact = false,
 }: {

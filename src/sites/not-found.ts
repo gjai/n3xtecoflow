@@ -2,7 +2,6 @@ import { pickLocalized } from "@/i18n/locales";
 import type { SiteConfig } from "./types";
 import {
   siteAllowsLocale,
-  siteIsCasinosCrypto,
   siteIsEuroMillions,
   siteLocales,
   siteShowsNews,
@@ -126,14 +125,6 @@ export function siteNotFoundCopy(
   const isEn = locale === "en";
   if (siteIsEuroMillions(site)) {
     return pickLocalized(locale, EM_COPY);
-  }
-  if (siteIsCasinosCrypto(site)) {
-    return {
-      title: isEn ? "Page not found" : "Page introuvable",
-      body: isEn
-        ? "This address does not exist — back to the Casinos Crypto guides."
-        : "Cette adresse n’existe pas — retour aux guides Casinos Crypto.",
-    };
   }
   if (site.id === "tumbler" || site.id === "massage-gun") {
     return {

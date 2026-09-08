@@ -2,7 +2,6 @@ export type SiteId =
   | "ecoflow"
   | "tumbler"
   | "massage-gun"
-  | "casinos-crypto"
   | "euromillions";
 
 /** Locales exposées pour ce thème (sous-ensemble de APP_LOCALES). */
@@ -88,16 +87,16 @@ export type SiteMonetization = {
   /** Désactive CTAs / disclosures Amazon */
   disableAmazon?: boolean;
   /**
-   * Offres d’affiliation hors Amazon (Stake, NordVPN…).
+   * Offres d’affiliation hors Amazon (ex. FDJ / Kwanko).
    * `url` peut être surchargée par la variable d’env indiquée.
    */
   offers?: {
-    id: "stake" | "nordvpn" | "cryptocom" | string;
+    id: string;
     labelFr: string;
     labelEn: string;
     /** URL de secours si env absente */
     url: string;
-    /** Ex. STAKE_AFFILIATE_URL */
+    /** Ex. FDJ_AFFILIATE_URL */
     envKey?: string;
   }[];
 };

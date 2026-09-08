@@ -5,7 +5,7 @@ import { siteAllowsAdsense } from "@/sites/features";
 const ADS_TXT =
   "google.com, pub-4733644127583822, DIRECT, f08c47fec0942fa0\n";
 
-/** Pas d’ads.txt AdSense sur les thèmes sans pubs (ex. casinos-crypto). */
+/** Pas d’ads.txt AdSense sur les thèmes sans pubs (ex. euromillions). */
 export function GET(request: Request) {
   const host = request.headers.get("host");
   const site = getSiteByHost(host);

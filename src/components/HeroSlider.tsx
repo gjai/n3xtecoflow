@@ -29,7 +29,7 @@ export function HeroSlider({
 }: {
   brandName: string;
   slides: HeroSlide[];
-  /** Shorter hero (editorial / casino themes). */
+  /** Shorter hero (editorial themes). */
   compact?: boolean;
   footerNote?: string;
   affiliateKeywordOffers?: AffiliateOffer[];

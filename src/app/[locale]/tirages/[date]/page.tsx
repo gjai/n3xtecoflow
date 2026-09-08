@@ -1,4 +1,4 @@
-import { intlLocale } from "@/i18n/locales";
+import { intlLocale, pickLocalized } from "@/i18n/locales";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
@@ -21,6 +21,13 @@ import { getCurrentSite } from "@/sites/server";
 import { siteIsEuroMillions } from "@/sites/features";
 import { GAME_IDENTITY } from "@/lib/fdj-games/identity";
 import {
+  euroMillionsAdjacentDraws,
+  euroMillionsAdjacentLabel,
+  euroMillionsComboText,
+  euroMillionsDrawPageDescription,
+  euroMillionsDrawPageTitle,
+} from "@/lib/euromillions/draw-seo";
+import {
   isEuroMillionsDrawPublished,
   readEuroMillionsStore,
   resolveDrawPage,
@@ -37,16 +44,15 @@ export async function generateMetadata({
   params: Promise<{ locale: string; date: string }>;
 }): Promise<Metadata> {
   const { locale, date } = await params;
-  const t = await getTranslations({ locale, namespace: "draws" });
   const pretty = formatDate(date, locale);
   const store = await readEuroMillionsStore();
   const draw = resolveDrawPage(store, date);
   const published = isEuroMillionsDrawPublished(draw);
+  const title = euroMillionsDrawPageTitle(locale, pretty, draw);
+  const description = euroMillionsDrawPageDescription(locale, pretty, draw);
   return {
-    title: published ? t("drawOf", { date: pretty }) : t("pendingTitle", { date: pretty }),
-    description: published
-      ? t("drawMeta", { date: pretty })
-      : t("pendingMeta", { date: pretty }),
+    title,
+    description,
     alternates: await siteLocaleAlternates(locale, `/tirages/${date}`),
     robots:
       locale === "fr" || locale === "en"
@@ -55,6 +61,8 @@ export async function generateMetadata({
     ...(published
       ? {
           openGraph: {
+            title,
+            description,
             images: [
               {
                 url: `https://euromillions-resultats.fr/api/euromillions/share-image?date=${date}`,
@@ -101,15 +109,15 @@ export default async function TirageDetailPage({
   const jackpot = formatMoney(draw.jackpotEur, locale);
   const prettyDate = formatDate(draw.date, locale);
   const drawNo = sequentialDrawId(draw.drawId);
+  const combo = published
+    ? euroMillionsComboText(draw.numbers, draw.stars)
+    : "";
+  const { newer, older } = euroMillionsAdjacentDraws(store.draws, draw.date);
   const hasEuropeWinners = Boolean(
     draw.prizeTiers?.some((tier) => tier.winnersEurope != null),
   );
-  const title = published
-    ? t("drawOf", { date: prettyDate })
-    : t("pendingTitle", { date: prettyDate });
-  const description = published
-    ? t("drawMeta", { date: prettyDate })
-    : t("pendingMeta", { date: prettyDate });
+  const title = euroMillionsDrawPageTitle(locale, prettyDate, draw);
+  const description = euroMillionsDrawPageDescription(locale, prettyDate, draw);
   const siteUrl = `https://${site.primaryHost}`;
 
   return (
@@ -144,7 +152,16 @@ export default async function TirageDetailPage({
         </Link>
         <GameToolsNav gameId="euromillions" />
         <h1 className="mt-6 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--heading)] md:text-4xl">
-          {title}
+          <span className="block">
+            {published
+              ? t("drawOf", { date: prettyDate })
+              : t("pendingTitle", { date: prettyDate })}
+          </span>
+          {combo ? (
+            <span className="mt-3 block font-mono text-2xl font-semibold tabular-nums tracking-wide md:text-3xl">
+              {combo}
+            </span>
+          ) : null}
         </h1>
         {drawNo ? (
           <p className="mt-2 text-sm text-[var(--muted)]">
@@ -264,6 +281,52 @@ export default async function TirageDetailPage({
           locale={locale}
           title={t("lastFiveTitle")}
         />
+        {newer || older ? (
+          <nav
+            className="mt-8 flex flex-col gap-3 border-t border-[var(--line)] pt-6 sm:flex-row sm:justify-between"
+            aria-label={pickLocalized(locale, {
+              fr: "Tirages voisins",
+              en: "Adjacent draws",
+            })}
+          >
+            {older ? (
+              <Link
+                href={`/tirages/${older.date}`}
+                className="text-sm text-[var(--muted)] hover:text-[var(--accent)]"
+              >
+                <span className="block text-xs uppercase tracking-[0.14em]">
+                  {pickLocalized(locale, {
+                    fr: "Tirage précédent",
+                    en: "Previous draw",
+                  })}
+                </span>
+                <span className="mt-1 block font-semibold text-[var(--heading)]">
+                  {euroMillionsAdjacentLabel(locale, older)}
+                </span>
+              </Link>
+            ) : (
+              <span />
+            )}
+            {newer ? (
+              <Link
+                href={`/tirages/${newer.date}`}
+                className="text-sm text-[var(--muted)] hover:text-[var(--accent)] sm:text-right"
+              >
+                <span className="block text-xs uppercase tracking-[0.14em]">
+                  {pickLocalized(locale, {
+                    fr: "Tirage suivant",
+                    en: "Next draw",
+                  })}
+                </span>
+                <span className="mt-1 block font-semibold text-[var(--heading)]">
+                  {euroMillionsAdjacentLabel(locale, newer)}
+                </span>
+              </Link>
+            ) : (
+              <span />
+            )}
+          </nav>
+        ) : null}
 
         <p className="mt-6 text-xs text-[var(--muted)]">
           {t("source")} · {draw.source}

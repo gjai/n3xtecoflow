@@ -29,7 +29,6 @@ import {
   siteAllowsAdsense,
   siteAllowsAmazon,
   siteAllowsLocale,
-  siteIsCasinosCrypto,
   siteIsEuroMillions,
   siteShowsNews,
 } from "@/sites/features";
@@ -200,8 +199,8 @@ export default async function LocaleLayout({
         en: "Independent editorial site. Contains Amazon affiliate links.",
       })
     : pickLocalized(locale, {
-        fr: "18+. Jeu responsable. Risque de perte. Liens d'affiliation Stake, Crypto.com, NordVPN. Aide : Joueurs Info Service 09 74 75 13 13 / joueurs-info-service.fr.",
-        en: "18+. Play responsibly. Risk of loss. Affiliate links: Stake, Crypto.com, NordVPN. France help: Joueurs Info Service 09 74 75 13 13 / joueurs-info-service.fr.",
+        fr: "18+. Jeu responsable. Risque de perte. Aide : Joueurs Info Service 09 74 75 13 13 / joueurs-info-service.fr.",
+        en: "18+. Play responsibly. Risk of loss. France help: Joueurs Info Service 09 74 75 13 13 / joueurs-info-service.fr.",
       });
 
   const nextDraws = siteIsEuroMillions(site)
@@ -248,7 +247,7 @@ export default async function LocaleLayout({
                 <div className="flex min-h-full flex-col">
                   <SiteHeader />
                   <main className="flex-1">{children}</main>
-                  {siteIsCasinosCrypto(site) ? null : <NetworkLinks />}
+                  <NetworkLinks />
                   <SiteFooter />
                 </div>
                 <CookieBanner />

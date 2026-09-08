@@ -1,6 +1,5 @@
 import type { ArticleSection } from "@/data/articles";
 import { guides as staticGuides } from "@/data/articles";
-import { casinosCryptoGuideCovers } from "@/data/casinos-crypto-guides";
 import { euromillionsGuideCovers } from "@/data/euromillions-guides";
 import { tumblerGuideCovers } from "@/data/tumbler-guides";
 import { massageGunGuideCovers } from "@/data/massage-gun-guides";
@@ -250,7 +249,6 @@ function fromStatic(slug: string): GuideEntry | null {
   const cover =
     tumblerGuideCovers[slug] ||
     massageGunGuideCovers[slug] ||
-    casinosCryptoGuideCovers[slug] ||
     euromillionsGuideCovers[slug];
   const site = guideSiteId(topic);
   const loc = (copy: typeof g.fr) => ({

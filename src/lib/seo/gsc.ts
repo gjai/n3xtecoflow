@@ -2,11 +2,9 @@ import { normalizeHost } from "@/sites";
 
 /**
  * Jetons HTML Search Console (publics, pas des secrets).
- * Surcharge Coolify : GSC_CASINOS_CRYPTO_FR=… etc.
+ * Surcharge Coolify : GSC_ECOFLOW_STREAM_COM=… etc.
  */
 const GSC_BY_HOST: Record<string, string> = {
-  "casinos-crypto.fr": "FnVESwCvBBXlZctXyzKjS_2dv0OYJWdAqZT-QvGNz68",
-  "www.casinos-crypto.fr": "FnVESwCvBBXlZctXyzKjS_2dv0OYJWdAqZT-QvGNz68",
   "ecoflow-stream.com": "VRiYY6231DlRK0OXRP5FFv54y4AMnuQAoKoBD7z2dak",
   "www.ecoflow-stream.com": "VRiYY6231DlRK0OXRP5FFv54y4AMnuQAoKoBD7z2dak",
   "mon-tumbler.fr": "KRG1-sJbfqRYEtBdZdjNKXvlorbBrSrLn39-y5MvsXE",

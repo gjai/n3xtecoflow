@@ -5,7 +5,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { LOTTERY_GAMES_NAV, OTHER_GAMES_HUB_HREF, lotteryGameLabel } from "@/lib/fdj-games/nav";
 import {
-  siteIsCasinosCrypto,
   siteIsEuroMillions,
   siteShowsComparisons,
   siteShowsNews,
@@ -45,18 +44,7 @@ export function SiteFooter() {
         { href: "/a-propos", label: t("about") },
         { href: "/mentions-legales", label: t("legal") },
       ]
-    : siteIsCasinosCrypto(site)
-      ? (
-          [
-            { href: "/guides", label: t("guides") },
-            siteShowsNews(site)
-              ? { href: "/actualites", label: t("news") }
-              : null,
-            { href: "/a-propos", label: t("about") },
-            { href: "/mentions-legales", label: t("legal") },
-          ] as const
-        ).filter(Boolean) as { href: string; label: string }[]
-      : (
+    : (
           [
             siteShowsProducts(site)
               ? { href: "/produits", label: t("products") }
