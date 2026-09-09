@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { SHARE_FEED, euroMillionsShareCard } from "./share-card.ts";
-import { lotteryShareSvg, rasterShare } from "./share-render.ts";
+import { lotteryShareSvg, rasterShare, wrapLines } from "./share-render.ts";
 
 describe("lotteryShareSvg", () => {
   it("inclut kicker, date et boules", () => {
@@ -20,9 +20,10 @@ describe("lotteryShareSvg", () => {
     assert.match(svg, />11</);
     assert.match(svg, />46</);
     assert.match(svg, />4</);
+    assert.match(svg, /font-family="Inter"/);
   });
 
-  it("rasterise un PNG via sharp", async () => {
+  it("rasterise un PNG via resvg (texte réel, pas des tofu)", async () => {
     const svg = lotteryShareSvg(
       {
         kicker: "Test",
@@ -36,6 +37,18 @@ describe("lotteryShareSvg", () => {
     const png = await rasterShare(svg, "png");
     assert.equal(png[0], 0x89);
     assert.equal(png[1], 0x50);
-    assert.ok(png.length > 200);
+    assert.ok(png.length > 4000, `png trop léger (${png.length}) — police manquante ?`);
+  });
+});
+
+describe("wrapLines", () => {
+  it("casse un titre long sans déborder", () => {
+    const lines = wrapLines(
+      "EuroMillions : le jackpot grimpe après un tirage sans grand gagnant",
+      28,
+      4,
+    );
+    assert.ok(lines.length >= 2);
+    assert.ok(lines.every((l) => l.length <= 28));
   });
 });

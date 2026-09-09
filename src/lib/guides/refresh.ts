@@ -6,6 +6,7 @@ import { massageGunGuideCovers } from "@/data/massage-gun-guides";
 import { getEditorial, siteUsesStaticBuyingGuide } from "@/sites/editorial";
 import { getSiteById } from "@/sites/index";
 import type { SiteId } from "@/sites/types";
+import { completeChat } from "@/lib/ai/chat";
 import { generateGuideCoverAi } from "./images";
 import { readGuidesStore, writeGuidesStore } from "./store";
 import {
@@ -42,26 +43,6 @@ async function rewriteGuideWithAi(topic: GuideTopic): Promise<{
   en: GuideLocaleCopy;
   model: string;
 } | null> {
-  const apiKey =
-    process.env.GEMINI_API_KEY?.trim() ||
-    process.env.OPENAI_API_KEY?.trim() ||
-    process.env.AI_API_KEY?.trim();
-  if (!apiKey) return null;
-
-  const usingGemini =
-    Boolean(process.env.GEMINI_API_KEY?.trim()) ||
-    (process.env.OPENAI_BASE_URL || "").includes(
-      "generativelanguage.googleapis.com",
-    );
-  const base =
-    process.env.OPENAI_BASE_URL?.trim() ||
-    (usingGemini
-      ? "https://generativelanguage.googleapis.com/v1beta/openai/"
-      : "https://api.openai.com/v1");
-  const model =
-    process.env.OPENAI_MODEL?.trim() ||
-    (usingGemini ? "gemini-2.5-flash-lite" : "gpt-4o-mini");
-
   const existing = staticGuides.find((g) => g.slug === topic.slug);
 
   const site = guideSiteId(topic);
@@ -92,49 +73,22 @@ Règles:
 Format:
 {"fr":{"title":"...","subtitle":"...","sections":[{"heading":"...","paragraphs":["..."],"bullets":["..."]}]},"en":{"title":"...","subtitle":"...","sections":[{"heading":"...","paragraphs":["..."],"bullets":["..."]}]}}`;
 
-  const payload: Record<string, unknown> = {
-    model,
+  const result = await completeChat({
+    job: "guides-rewrite",
+    logTag: "guide_ai_failed",
     temperature: 0.45,
-    max_tokens: 8192,
-    messages: [
-      {
-        role: "system",
-        content: `You write long bilingual ${brand} buying guides as strict JSON only. No markdown fences.`,
-      },
-      { role: "user", content: prompt },
-    ],
-  };
-  if (!usingGemini) payload.response_format = { type: "json_object" };
-
-  const res = await fetch(`${base.replace(/\/$/, "")}/chat/completions`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
+    maxTokens: 8192,
+    system: `You write long bilingual ${brand} buying guides as strict JSON only. No markdown fences.`,
+    user: prompt,
   });
-  if (!res.ok) {
-    console.error("guide_ai_failed", res.status, await res.text());
-    return null;
-  }
-  const json = (await res.json()) as {
-    choices?: { message?: { content?: string } }[];
-  };
-  let content = json.choices?.[0]?.message?.content;
-  if (!content) return null;
-  content = content
-    .replace(/^```json\s*/i, "")
-    .replace(/^```\s*/i, "")
-    .replace(/\s*```$/i, "")
-    .trim();
+  if (!result) return null;
   try {
-    const parsed = JSON.parse(content) as {
+    const parsed = JSON.parse(result.content) as {
       fr: GuideLocaleCopy;
       en: GuideLocaleCopy;
     };
     if (!isValidCopy(parsed.fr) || !isValidCopy(parsed.en)) return null;
-    return { fr: parsed.fr, en: parsed.en, model };
+    return { fr: parsed.fr, en: parsed.en, model: result.model };
   } catch {
     return null;
   }

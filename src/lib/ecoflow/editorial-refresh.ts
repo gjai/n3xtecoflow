@@ -1,4 +1,5 @@
 import type { LocaleCopy, Product } from "@/data/products";
+import { completeChat } from "@/lib/ai/chat";
 import { ECOFLOW_HANDLES } from "./handles";
 import {
   readEcoflowEditorialStore,
@@ -35,27 +36,6 @@ async function rewriteEditorialWithAi(
   sourceTitle: string,
   sourceText: string,
 ): Promise<{ copy: AiPayload; model: string } | null> {
-  const apiKey =
-    process.env.GEMINI_API_KEY?.trim() ||
-    process.env.OPENAI_API_KEY?.trim() ||
-    process.env.AI_API_KEY?.trim();
-  if (!apiKey) return null;
-
-  const usingGemini =
-    Boolean(process.env.GEMINI_API_KEY?.trim()) ||
-    (process.env.OPENAI_BASE_URL || "").includes(
-      "generativelanguage.googleapis.com",
-    );
-
-  const base =
-    process.env.OPENAI_BASE_URL?.trim() ||
-    (usingGemini
-      ? "https://generativelanguage.googleapis.com/v1beta/openai/"
-      : "https://api.openai.com/v1");
-  const model =
-    process.env.OPENAI_MODEL?.trim() ||
-    (usingGemini ? "gemini-2.5-flash-lite" : "gpt-4o-mini");
-
   const prompt = `Tu rédiges des fiches produit pour EcoFlow Stream (site éditorial indépendant FR/EN, affiliation Amazon).
 
 Mission: fiche ORIGINAL bilingue à partir de la fiche officielle EcoFlow (pas de copier-coller).
@@ -84,52 +64,21 @@ ${sourceText.slice(0, 6000)}
 Format:
 {"fr":{"tagline":"...","summary":"...","bestFor":"...","pros":["..."],"cons":["..."],"body":["..."]},"en":{"tagline":"...","summary":"...","bestFor":"...","pros":["..."],"cons":["..."],"body":["..."]}}`;
 
-  const payload: Record<string, unknown> = {
-    model,
+  const result = await completeChat({
+    job: "editorial-rewrite",
+    logTag: "editorial_ai_failed",
     temperature: 0.4,
-    max_tokens: 4096,
-    messages: [
-      {
-        role: "system",
-        content:
-          "You write bilingual product editorial sheets as strict JSON only. No markdown fences.",
-      },
-      { role: "user", content: prompt },
-    ],
-  };
-  if (!usingGemini) {
-    payload.response_format = { type: "json_object" };
-  }
-
-  const res = await fetch(`${base.replace(/\/$/, "")}/chat/completions`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
+    maxTokens: 4096,
+    system:
+      "You write bilingual product editorial sheets as strict JSON only. No markdown fences.",
+    user: prompt,
   });
-
-  if (!res.ok) {
-    console.error("editorial_ai_failed", res.status, await res.text());
-    return null;
-  }
-
-  const json = (await res.json()) as {
-    choices?: { message?: { content?: string } }[];
-  };
-  let content = json.choices?.[0]?.message?.content;
-  if (!content) return null;
-  content = content
-    .replace(/^```json\s*/i, "")
-    .replace(/^```\s*/i, "")
-    .replace(/\s*```$/i, "")
-    .trim();
+  if (!result) return null;
 
   try {
-    const parsed = JSON.parse(content) as AiPayload;
+    const parsed = JSON.parse(result.content) as AiPayload;
     if (!isValidCopy(parsed.fr) || !isValidCopy(parsed.en)) return null;
-    return { copy: parsed, model };
+    return { copy: parsed, model: result.model };
   } catch {
     return null;
   }

@@ -49,6 +49,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
+  serverExternalPackages: ["@resvg/resvg-js", "sharp"],
   experimental: {
     globalNotFound: true,
     /** CSS dans le HTML : plus de 404 /_next/static/*.css au redeploy Coolify. */

@@ -31,6 +31,8 @@ ENV NEWS_MEDIA_PATH=/app/data/news-images
 ENV AMAZON_PRICES_PATH=/app/data/amazon-prices.json
 ENV EUROMILLIONS_DATA_PATH=/app/data/euromillions.json
 ENV FDJ_GAMES_DATA_PATH=/app/data/fdj-games.json
+ENV AI_USAGE_PATH=/app/data/ai-usage.json
+ENV SHARE_FONT_PATH=/app/public/fonts/Inter-Bold.ttf
 
 RUN addgroup -S nodejs && adduser -S nextjs -G nodejs \
   && mkdir -p /app/data /app/data/news-images /app/data-seed \

@@ -8,6 +8,7 @@ import {
   formatDomainRating,
 } from "@/lib/seo/ahrefs";
 import { sendResendEmail } from "@/lib/mail/resend";
+import { formatAiUsageDigest, summarizeAiUsage } from "@/lib/ai/usage";
 
 export function parisDateKey(date = new Date()): string {
   return new Intl.DateTimeFormat("en-CA", {
@@ -120,6 +121,10 @@ export async function buildDailyDigest(options?: { dayKey?: string }) {
     lines.push("");
   }
 
+  const aiUsage = await summarizeAiUsage(dayKey);
+  lines.push(...formatAiUsageDigest(aiUsage));
+  lines.push("");
+
   return {
     dayKey,
     subject,
@@ -128,6 +133,7 @@ export async function buildDailyDigest(options?: { dayKey?: string }) {
     pricedCount: priced,
     productCount: products.length,
     cronHealth,
+    aiUsage,
   };
 }
 

@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { buildGuideCoverPrompt, getEditorial } from "@/sites/editorial";
 import type { SiteId } from "@/sites/types";
+import { recordGeminiImageUsage } from "@/lib/ai/usage";
 
 function mediaDir() {
   return (
@@ -57,8 +58,10 @@ export async function generateGuideCoverAi(args: {
           }[];
         };
       }[];
+      usageMetadata?: Record<string, unknown>;
     };
     const parts = json.candidates?.[0]?.content?.parts || [];
+    let billed = false;
     for (const part of parts) {
       const data = part.inlineData?.data || part.inline_data?.data;
       const mime =
@@ -66,6 +69,14 @@ export async function generateGuideCoverAi(args: {
         part.inline_data?.mime_type ||
         "image/png";
       if (!data) continue;
+      if (!billed) {
+        billed = true;
+        await recordGeminiImageUsage({
+          job: "guides-image",
+          model,
+          json,
+        });
+      }
       const buf = Buffer.from(data, "base64");
       if (buf.length < 4_000) continue;
       const size = readPngSize(buf);

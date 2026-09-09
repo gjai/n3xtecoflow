@@ -12,7 +12,7 @@ import type { FdjCompanionGameId, FdjGameDraw } from "@/lib/fdj-games/types";
 import { fdjAffiliateUrl } from "@/lib/fdj-affiliate";
 import { formatEuroMillionsLongDate, parisDateKey } from "./datetime";
 import {
-  SHARE_FEED,
+  SHARE_IG_FEED,
   SHARE_STORY,
   companionShareCard,
   euroMillionsShareCard,
@@ -650,7 +650,7 @@ async function postFeedAndStory(args: {
   return postFeedAndStoryImages({
     token: args.token,
     caption: args.caption,
-    feedBytes: await lotterySharePng(args.card, SHARE_FEED),
+    feedBytes: await lotterySharePng(args.card, SHARE_IG_FEED),
     storyBytes: await lotterySharePng(args.card, SHARE_STORY),
     publicFeedUrl: shareJpegUrl(`${args.publicQuery}&format=ig`),
     publicStoryUrl: shareJpegUrl(`${args.publicQuery}&format=story`),
@@ -1059,7 +1059,7 @@ export async function notifyFacebookNews(
     const sent = await postFeedAndStoryImages({
       token,
       caption: newsCaption(title, excerpt, article.slug),
-      feedBytes: await newsSharePng(title, excerpt, SHARE_FEED),
+      feedBytes: await newsSharePng(title, excerpt, SHARE_IG_FEED),
       storyBytes: await newsSharePng(title, excerpt, SHARE_STORY),
       publicFeedUrl: shareJpegUrl(`${q}&format=ig`),
       publicStoryUrl: shareJpegUrl(`${q}&format=story`),

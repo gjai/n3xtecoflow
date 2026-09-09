@@ -6,6 +6,7 @@ import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import { resolveProductMedia } from "@/lib/product-presentation";
 import { buildNewsCoverPrompt, getEditorial } from "@/sites/editorial";
 import type { SiteId } from "@/sites/types";
+import { recordGeminiImageUsage } from "@/lib/ai/usage";
 import { fetchSourcePage } from "./source";
 
 function mediaDir() {
@@ -252,8 +253,10 @@ Unique variation id: ${args.slug.slice(-18)}.`;
           }[];
         };
       }[];
+      usageMetadata?: Record<string, unknown>;
     };
     const parts = json.candidates?.[0]?.content?.parts || [];
+    let billed = false;
     for (const part of parts) {
       const data = part.inlineData?.data || part.inline_data?.data;
       const mime =
@@ -261,6 +264,14 @@ Unique variation id: ${args.slug.slice(-18)}.`;
         part.inline_data?.mime_type ||
         "image/png";
       if (!data) continue;
+      if (!billed) {
+        billed = true;
+        await recordGeminiImageUsage({
+          job: "news-image",
+          model,
+          json,
+        });
+      }
       const buf = Buffer.from(data, "base64");
       if (buf.length < 4_000) continue;
       // AI covers can be square; only reject known tiny logos via hash/size floors

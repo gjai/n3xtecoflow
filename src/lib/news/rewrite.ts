@@ -1,5 +1,6 @@
 import { buildNewsRewritePrompt, getEditorial } from "@/sites/editorial";
 import type { SiteId } from "@/sites/types";
+import { completeChat } from "@/lib/ai/chat";
 import { pricesToEuroText } from "@/lib/money";
 import type { NewsArticle, NewsLocaleCopy } from "./types";
 import type { RssItem } from "./rss";
@@ -119,71 +120,20 @@ async function rewriteWithAi(
   source: SourcePage | null,
   siteId: SiteId,
 ): Promise<AiPayload | null> {
-  const apiKey =
-    process.env.GEMINI_API_KEY?.trim() ||
-    process.env.OPENAI_API_KEY?.trim() ||
-    process.env.AI_API_KEY?.trim();
-  if (!apiKey) return null;
-
-  const usingGemini =
-    Boolean(process.env.GEMINI_API_KEY?.trim()) ||
-    (process.env.OPENAI_BASE_URL || "").includes(
-      "generativelanguage.googleapis.com",
-    );
-
-  const base =
-    process.env.OPENAI_BASE_URL?.trim() ||
-    (usingGemini
-      ? "https://generativelanguage.googleapis.com/v1beta/openai/"
-      : "https://api.openai.com/v1");
-  const model =
-    process.env.OPENAI_MODEL?.trim() ||
-    (usingGemini ? "gemini-2.5-flash-lite" : "gpt-4o-mini");
-
   const sourceText = (source?.text || item.description || "").slice(0, 5500);
   const prompt = aiPromptForSite(siteId, item, source, sourceText);
 
-  const payload: Record<string, unknown> = {
-    model,
+  const result = await completeChat({
+    job: "news-rewrite",
+    logTag: "ai_rewrite_failed",
     temperature: 0.45,
-    max_tokens: 8192,
-    messages: [
-      {
-        role: "system",
-        content:
-          "You write full original bilingual news articles as strict JSON only. No markdown fences. Substantial paragraphs, not short blurbs. French (fr) is the primary locale: fr.title/excerpt/body must be natural French, never a copy of the English RSS headline.",
-      },
-      { role: "user", content: prompt },
-    ],
-  };
-  if (!usingGemini) {
-    payload.response_format = { type: "json_object" };
-  }
-
-  const res = await fetch(`${base.replace(/\/$/, "")}/chat/completions`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
+    maxTokens: 8192,
+    system:
+      "You write full original bilingual news articles as strict JSON only. No markdown fences. Substantial paragraphs, not short blurbs. French (fr) is the primary locale: fr.title/excerpt/body must be natural French, never a copy of the English RSS headline.",
+    user: prompt,
   });
-
-  if (!res.ok) {
-    console.error("ai_rewrite_failed", res.status, await res.text());
-    return null;
-  }
-
-  const json = (await res.json()) as {
-    choices?: { message?: { content?: string } }[];
-  };
-  let content = json.choices?.[0]?.message?.content;
-  if (!content) return null;
-  content = content
-    .replace(/^```json\s*/i, "")
-    .replace(/^```\s*/i, "")
-    .replace(/\s*```$/i, "")
-    .trim();
+  if (!result) return null;
+  const content = result.content;
 
   try {
     const parsed = JSON.parse(content) as AiPayload;
@@ -268,73 +218,25 @@ async function translateArticleToFrench(
   en: NewsLocaleCopy,
   siteId: SiteId,
 ): Promise<NewsLocaleCopy | null> {
-  const apiKey =
-    process.env.GEMINI_API_KEY?.trim() ||
-    process.env.OPENAI_API_KEY?.trim() ||
-    process.env.AI_API_KEY?.trim();
-  if (!apiKey) return null;
-
-  const usingGemini =
-    Boolean(process.env.GEMINI_API_KEY?.trim()) ||
-    (process.env.OPENAI_BASE_URL || "").includes(
-      "generativelanguage.googleapis.com",
-    );
-  const base =
-    process.env.OPENAI_BASE_URL?.trim() ||
-    (usingGemini
-      ? "https://generativelanguage.googleapis.com/v1beta/openai/"
-      : "https://api.openai.com/v1");
-  const model =
-    process.env.OPENAI_MODEL?.trim() ||
-    (usingGemini ? "gemini-2.5-flash-lite" : "gpt-4o-mini");
-
   const brand = getEditorial(siteId).topicLabelFr;
-  const payload: Record<string, unknown> = {
-    model,
-    temperature: 0.3,
-    max_tokens: 4096,
-    messages: [
-      {
-        role: "system",
-        content:
-          "Tu traduis / reformules en français journalistique naturel. JSON strict uniquement, sans markdown.",
-      },
-      {
-        role: "user",
-        content: `Traduis cet article d’actualité en français pour un site sur ${brand}.
+  try {
+    const result = await completeChat({
+      job: "news-translate",
+      logTag: "fr_translate_failed",
+      temperature: 0.3,
+      maxTokens: 4096,
+      timeoutMs: 60_000,
+      system:
+        "Tu traduis / reformules en français journalistique naturel. JSON strict uniquement, sans markdown.",
+      user: `Traduis cet article d’actualité en français pour un site sur ${brand}.
 Garde les faits, noms propres et chiffres.
 Réponds JSON: {"title":"...","excerpt":"...","body":["..."]}
 
 EN:
 ${JSON.stringify(en)}`,
-      },
-    ],
-  };
-  if (!usingGemini) {
-    payload.response_format = { type: "json_object" };
-  }
-
-  try {
-    const res = await fetch(`${base.replace(/\/$/, "")}/chat/completions`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(60_000),
     });
-    if (!res.ok) return null;
-    const json = (await res.json()) as {
-      choices?: { message?: { content?: string } }[];
-    };
-    let content = json.choices?.[0]?.message?.content || "";
-    content = content
-      .replace(/^```json\s*/i, "")
-      .replace(/^```\s*/i, "")
-      .replace(/\s*```$/i, "")
-      .trim();
-    const parsed = JSON.parse(content) as NewsLocaleCopy;
+    if (!result) return null;
+    const parsed = JSON.parse(result.content) as NewsLocaleCopy;
     if (!parsed?.title || !Array.isArray(parsed.body) || parsed.body.length < 2) {
       return null;
     }
