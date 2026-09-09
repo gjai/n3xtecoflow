@@ -54,10 +54,10 @@ export async function generateMetadata({
     title,
     description,
     alternates: await siteLocaleAlternates(locale, `/tirages/${date}`),
-    robots:
-      locale === "fr" || locale === "en"
-        ? { index: true, follow: true }
-        : { index: false, follow: true },
+    robots: {
+      index: locale === "fr",
+      follow: true,
+    },
     ...(published
       ? {
           openGraph: {

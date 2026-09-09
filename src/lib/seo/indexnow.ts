@@ -5,8 +5,8 @@ import type { EuroMillionsStore } from "@/lib/euromillions/types";
 
 const DEFAULT_KEY = "a4e8c1b27f9d40e6b3c5d8a1f6e2b490";
 const ENDPOINT = "https://api.indexnow.org/indexnow";
-/** Locales réellement rédigées (les autres = fallback EN, pas la peine de pinger). */
-const INDEX_LOCALES = ["fr", "en"] as const;
+/** EuroMillions = FR only (les /en 308 vers /fr). */
+const INDEX_LOCALES = ["fr"] as const;
 
 function indexNowKey(): string {
   return process.env.INDEXNOW_KEY?.trim() || DEFAULT_KEY;

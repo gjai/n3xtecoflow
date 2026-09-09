@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --import ./scripts/node-test-register.mjs --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/fdj/shares.test.ts src/lib/lottery/keno.test.ts src/lib/kwanko-slots.test.ts src/lib/euromillions/merge-draws.test.ts src/lib/euromillions/datetime.test.ts src/lib/euromillions/fetch.test.ts src/lib/euromillions/tirages-query.test.ts src/lib/euromillions/share-render.test.ts src/lib/euromillions/draw-seo.test.ts src/lib/http/rate-limit.test.ts src/lib/http/form-guard.test.ts src/lib/news/rss.test.ts src/lib/news/public-feed.test.ts src/sites/features.test.ts src/lib/ai/usage.test.ts",
+    "test": "node --import ./scripts/node-test-register.mjs --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/fdj/shares.test.ts src/lib/lottery/keno.test.ts src/lib/kwanko-slots.test.ts src/lib/euromillions/merge-draws.test.ts src/lib/euromillions/datetime.test.ts src/lib/euromillions/fetch.test.ts src/lib/euromillions/tirages-query.test.ts src/lib/euromillions/share-render.test.ts src/lib/euromillions/draw-seo.test.ts src/lib/http/rate-limit.test.ts src/lib/http/form-guard.test.ts src/lib/news/rss.test.ts src/lib/news/public-feed.test.ts src/sites/features.test.ts src/lib/ai/usage.test.ts src/lib/seo/indexnow.test.ts",
     "news:seed": "node scripts/seed-news.mjs"
   },
   "dependencies": {

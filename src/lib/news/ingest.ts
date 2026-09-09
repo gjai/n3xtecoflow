@@ -12,7 +12,7 @@ import { revalidateSitemap } from "@/lib/euromillions/live";
 import { revalidatePath } from "next/cache";
 import { notifySearchEngines } from "@/lib/seo/notify";
 import { sitesById } from "@/sites";
-import { siteLocales } from "@/sites/features";
+import { siteIndexedLocales } from "@/sites/features";
 
 export type IngestOptions = {
   limit?: number;
@@ -288,8 +288,7 @@ export async function ingestNews(
         `https://${host}/sitemap.xml`,
         `https://${host}/feed.xml`,
       ];
-      for (const loc of siteLocales(site)) {
-        if (loc !== "fr" && loc !== "en") continue;
+      for (const loc of siteIndexedLocales(site)) {
         urls.push(`https://${host}/${loc}/actualites/${article.slug}`);
       }
       byHost.set(host, urls);

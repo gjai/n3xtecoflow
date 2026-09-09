@@ -14,7 +14,7 @@ import {
   usesEnglishFallback,
 } from "@/i18n/locales";
 import { siteLocaleAlternates } from "@/lib/seo";
-import { siteIsEuroMillions, siteShowsNews } from "@/sites/features";
+import { siteIndexesLocale, siteIsEuroMillions, siteShowsNews } from "@/sites/features";
 import { getCurrentSite } from "@/sites/server";
 import { redirect } from "@/i18n/navigation";
 import { KwankoBanner } from "@/components/KwankoBanner";
@@ -96,7 +96,11 @@ export default async function NewsIndexPage({
             {t("count", { count: total })}
             {" · "}
             <a
-              href={locale === "fr" ? "/feed.xml" : "/en/feed.xml"}
+              href={
+                locale === "fr" || !siteIndexesLocale(site, "en")
+                  ? "/feed.xml"
+                  : "/en/feed.xml"
+              }
               type="application/rss+xml"
               className="font-semibold text-[var(--accent)] underline-offset-4 hover:underline"
             >

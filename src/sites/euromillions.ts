@@ -3,7 +3,7 @@ import type { SiteConfig } from "./types";
 
 /**
  * Thème « EuroMillions Résultats » — euromillions-resultats.fr
- * Résultats, archives, stats. Affiliation FDJ (Kwanko). Pas de vente de tickets.
+ * FR only : /en /de /es… 308 vers /fr. Affiliation FDJ (Kwanko). Pas de vente de tickets.
  */
 export const euromillionsSite: SiteConfig = {
   id: "euromillions",
@@ -81,6 +81,7 @@ export const euromillionsSite: SiteConfig = {
     comparisons: false,
     news: true,
     editorialHome: true,
+    indexEnglish: false,
   },
   network: [
     {

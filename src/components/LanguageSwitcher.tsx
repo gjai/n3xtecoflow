@@ -13,6 +13,7 @@ export function LanguageSwitcher({ label }: { label: string }) {
   const router = useRouter();
   const site = useSite();
   const options = siteLocales(site);
+  if (options.length < 2) return null;
 
   return (
     <label className="inline-flex items-center gap-2 text-sm text-[var(--muted)]">

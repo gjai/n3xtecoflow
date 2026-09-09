@@ -34,10 +34,9 @@ import type { SiteConfig, SiteId } from "@/sites/types";
  */
 export const dynamic = "force-dynamic";
 
-/** Archives listées : récentes + FR/EN (les autres locales = fallback EN). */
+/** Archives listées : 90 tirages + 40 companion (locales = siteIndexedLocales). */
 const SITEMAP_EM_DRAW_DATES = 90;
 const SITEMAP_EM_COMPANION_PER_GAME = 40;
-const SITEMAP_EM_ARCHIVE_LOCALES = new Set(["fr", "en"]);
 
 function loadNewsArticles(): {
   slug: string;
@@ -246,7 +245,7 @@ export function buildSitemapForSite(
       });
     }
 
-    if (site.id === "euromillions" && SITEMAP_EM_ARCHIVE_LOCALES.has(locale)) {
+    if (site.id === "euromillions") {
       for (const { date, lastModified, fresh } of loadEuroMillionsDates().slice(
         0,
         SITEMAP_EM_DRAW_DATES,

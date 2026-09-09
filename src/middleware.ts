@@ -54,6 +54,50 @@ export default function middleware(request: NextRequest) {
     });
   }
 
+  // Browsers often request /favicon.ico directly — serve the theme mark.
+  if (pathname === "/favicon.ico") {
+    const url = request.nextUrl.clone();
+    url.pathname = site.brand.icons.favicon;
+    return NextResponse.rewrite(url);
+  }
+
+  // EM FR-only : /, chemins sans locale, et /en|/de|… → /fr
+  // (sinon next-intl envoie les navigateurs EN vers /en).
+  if (siteIsEuroMillions(site) && (pathname === "/" || pathname === "")) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/fr";
+    return NextResponse.redirect(url, 308);
+  }
+  if (
+    siteIsEuroMillions(site) &&
+    seg &&
+    !isAppLocale(seg)
+  ) {
+    const prefixed = `/fr${pathname}`;
+    const dated = tiragesDateQueryPath(
+      prefixed,
+      request.nextUrl.searchParams.get("date"),
+    );
+    const url = request.nextUrl.clone();
+    url.pathname = dated || prefixed;
+    if (dated) url.search = "";
+    return NextResponse.redirect(url, 308);
+  }
+
+  // Theme allow-list: /en on EM, /it on ecoflow → /fr/...
+  if (seg && isAppLocale(seg) && !siteAllowsLocale(site, seg)) {
+    const fallback = siteLocales(site)[0] || "fr";
+    let nextPath = pathname.replace(/^\/[^/]+/, `/${fallback}`) || `/${fallback}`;
+    if (nextPath === "/fr/feed.xml") nextPath = "/feed.xml";
+    const dated = siteIsEuroMillions(site)
+      ? tiragesDateQueryPath(nextPath, request.nextUrl.searchParams.get("date"))
+      : null;
+    const url = request.nextUrl.clone();
+    url.pathname = dated || nextPath;
+    if (dated) url.search = "";
+    return NextResponse.redirect(url, 308);
+  }
+
   // Hub ?date= → fiche /tirages/{date} (GSC : doublons canoniques du hub).
   if (siteIsEuroMillions(site)) {
     const dated = tiragesDateQueryPath(
@@ -66,21 +110,6 @@ export default function middleware(request: NextRequest) {
       url.search = "";
       return NextResponse.redirect(url, 308);
     }
-  }
-
-  // Browsers often request /favicon.ico directly — serve the theme mark.
-  if (pathname === "/favicon.ico") {
-    const url = request.nextUrl.clone();
-    url.pathname = site.brand.icons.favicon;
-    return NextResponse.rewrite(url);
-  }
-
-  // Theme allow-list: /it on ecoflow → /fr/...
-  if (seg && isAppLocale(seg) && !siteAllowsLocale(site, seg)) {
-    const fallback = siteLocales(site)[0] || "fr";
-    const url = request.nextUrl.clone();
-    url.pathname = pathname.replace(/^\/[^/]+/, `/${fallback}`) || `/${fallback}`;
-    return NextResponse.redirect(url, 308);
   }
 
   // Autre thème (même app) : 308 au lieu de 404+noindex (GSC).

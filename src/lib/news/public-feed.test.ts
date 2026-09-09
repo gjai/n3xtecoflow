@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { publicFeedPath, requestOrigin } from "./public-feed.ts";
+import { publicFeedPath, requestOrigin, sitePublicFeedPath } from "./public-feed.ts";
+import { ecoflowSite } from "@/sites/ecoflow.ts";
+import { euromillionsSite } from "@/sites/euromillions.ts";
 
 describe("publicFeedPath", () => {
   it("ne crée qu’un flux FR et un flux EN", () => {
@@ -8,6 +10,12 @@ describe("publicFeedPath", () => {
     assert.equal(publicFeedPath("en"), "/en/feed.xml");
     assert.equal(publicFeedPath("it"), "/en/feed.xml");
     assert.equal(publicFeedPath("de"), "/en/feed.xml");
+  });
+
+  it("EuroMillions n’expose que /feed.xml", () => {
+    assert.equal(sitePublicFeedPath(euromillionsSite, "fr"), "/feed.xml");
+    assert.equal(sitePublicFeedPath(euromillionsSite, "en"), "/feed.xml");
+    assert.equal(sitePublicFeedPath(ecoflowSite, "en"), "/en/feed.xml");
   });
 });
 

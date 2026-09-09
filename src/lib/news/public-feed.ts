@@ -2,7 +2,13 @@ import { DATE_LOCALE, usesEnglishFallback } from "@/i18n/locales";
 import { isBlockedLotteryNewsSource } from "@/lib/news/rss";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 import type { NewsArticle } from "@/lib/news/types";
-import { siteAllowsLocale, siteIsEuroMillions, siteLocales, siteShowsNews } from "@/sites/features";
+import {
+  siteAllowsLocale,
+  siteIndexesLocale,
+  siteIsEuroMillions,
+  siteLocales,
+  siteShowsNews,
+} from "@/sites/features";
 import type { SiteConfig } from "@/sites/types";
 
 const FEED_LIMIT = 40;
@@ -19,6 +25,12 @@ export function escapeXml(value: string): string {
 /** FR = /feed.xml ; toute autre locale = /en/feed.xml (copie news uniquement fr/en). */
 export function publicFeedPath(locale: string): string {
   return locale === "fr" ? "/feed.xml" : "/en/feed.xml";
+}
+
+/** Sites FR-only (EM, tumbler…) : un seul flux /feed.xml. */
+export function sitePublicFeedPath(site: SiteConfig, locale: string): string {
+  if (locale === "fr" || !siteIndexesLocale(site, "en")) return "/feed.xml";
+  return publicFeedPath(locale);
 }
 
 export function publicFeedUrl(host: string, locale: string): string {

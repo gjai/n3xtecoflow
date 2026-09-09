@@ -25,18 +25,10 @@ export const CASINO_LOCALES: AppLocale[] = [
 ];
 
 /**
- * Pays où l’on peut jouer à l’EuroMillions :
- * FR, UK/IE (en), ES, PT, AT/CH/LU/BE (de), CH-TI (it), BE-VL (nl).
+ * EuroMillions = FR only. Les /en /de /es… 308 vers /fr (middleware allow-list).
+ * Cannibalisation EN (GSC) : l’anglais captait les clics des fiches datées.
  */
-export const EUROMILLIONS_LOCALES: AppLocale[] = [
-  "fr",
-  "en",
-  "it",
-  "es",
-  "pt",
-  "de",
-  "nl",
-];
+export const EUROMILLIONS_LOCALES: AppLocale[] = ["fr"];
 
 export const LOCALE_LABELS: Record<AppLocale, string> = {
   fr: "Français",

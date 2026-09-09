@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { LOTTERY_GAMES_NAV, OTHER_GAMES_HUB_HREF, lotteryGameLabel } from "@/lib/fdj-games/nav";
 import {
+  siteIndexesLocale,
   siteIsEuroMillions,
   siteShowsComparisons,
   siteShowsNews,
@@ -75,7 +76,7 @@ export function SiteFooter() {
             instagram={site.socials?.instagram}
             rssHref={
               siteShowsNews(site)
-                ? locale === "fr"
+                ? locale === "fr" || !siteIndexesLocale(site, "en")
                   ? "/feed.xml"
                   : "/en/feed.xml"
                 : undefined

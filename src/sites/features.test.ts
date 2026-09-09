@@ -4,7 +4,11 @@ import { ecoflowSite } from "./ecoflow.ts";
 import { euromillionsSite } from "./euromillions.ts";
 import { massageGunSite } from "./massage-gun.ts";
 import { tumblerSite } from "./tumbler.ts";
-import { siteIndexedLocales, siteIndexesLocale } from "./features.ts";
+import {
+  siteIndexedLocales,
+  siteIndexesLocale,
+  siteLocales,
+} from "./features.ts";
 
 describe("siteIndexesLocale", () => {
   it("noindex l’EN sur tumbler et pistolet", () => {
@@ -15,9 +19,12 @@ describe("siteIndexesLocale", () => {
     assert.deepEqual(siteIndexedLocales(tumblerSite), ["fr"]);
   });
 
-  it("garde FR+EN sur ecoflow et EuroMillions", () => {
+  it("garde FR+EN sur ecoflow, FR only sur EuroMillions", () => {
     assert.equal(siteIndexesLocale(ecoflowSite, "en"), true);
-    assert.equal(siteIndexesLocale(euromillionsSite, "en"), true);
+    assert.equal(siteIndexesLocale(euromillionsSite, "fr"), true);
+    assert.equal(siteIndexesLocale(euromillionsSite, "en"), false);
     assert.equal(siteIndexesLocale(euromillionsSite, "it"), false);
+    assert.deepEqual(siteIndexedLocales(euromillionsSite), ["fr"]);
+    assert.deepEqual(siteLocales(euromillionsSite), ["fr"]);
   });
 });

@@ -140,7 +140,7 @@ export async function generateMetadata({
                   url: `https://${site.primaryHost}/feed.xml`,
                   title: `${title} RSS`,
                 },
-                ...(locale !== "fr"
+                ...(siteIndexesLocale(site, "en") && locale !== "fr"
                   ? [
                       {
                         url: `https://${site.primaryHost}/en/feed.xml`,

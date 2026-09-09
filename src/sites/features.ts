@@ -22,7 +22,7 @@ export function siteAllowsLocale(site: SiteConfig, locale: string): boolean {
   return siteLocales(site).includes(locale as AppLocale);
 }
 
-/** Locales servies aux visiteurs (le sélecteur EN peut rester). */
+/** Locales servies aux visiteurs. */
 export function siteIndexesEnglish(site: SiteConfig): boolean {
   return site.features?.indexEnglish !== false;
 }
@@ -30,7 +30,6 @@ export function siteIndexesEnglish(site: SiteConfig): boolean {
 /** Google : quelles locales indexer pour ce thème. */
 export function siteIndexesLocale(site: SiteConfig, locale: string): boolean {
   if (!siteAllowsLocale(site, locale)) return false;
-  if (siteIsEuroMillions(site)) return locale === "fr" || locale === "en";
   if (!siteIndexesEnglish(site) && locale !== "fr") return false;
   return true;
 }
