@@ -5,6 +5,7 @@ import {
   isJackpotBuysDrawDay,
   isJackpotBuysSlot,
   isNewsShortSlot,
+  newsShortBlockedByOtherReel,
   parisHourKey,
   isoWeekKeyFromParisDate,
   parisIsoWeekKey,
@@ -123,6 +124,46 @@ describe("isJackpotBuysSlot", () => {
     );
     assert.equal(isJackpotBuysDrawDay(new Date("2026-09-12T08:00:00+02:00")), true);
     assert.equal(isJackpotBuysDrawDay(new Date("2026-09-14T08:00:00+02:00")), true);
+  });
+});
+
+describe("newsShortBlockedByOtherReel", () => {
+  it("cede la place au Ticket gagnant à 10h un jour de tirage", () => {
+    assert.equal(
+      newsShortBlockedByOtherReel(new Date("2026-09-11T10:05:00+02:00")),
+      true,
+    );
+    assert.equal(
+      newsShortBlockedByOtherReel(new Date("2026-09-11T11:05:00+02:00")),
+      false,
+    );
+    assert.equal(
+      newsShortBlockedByOtherReel(new Date("2026-09-10T10:05:00+02:00")),
+      false,
+    );
+  });
+
+  it("cede la place aux Reels résultats le soir", () => {
+    assert.equal(
+      newsShortBlockedByOtherReel(new Date("2026-09-11T21:05:00+02:00")),
+      true,
+    );
+    assert.equal(
+      newsShortBlockedByOtherReel(new Date("2026-09-11T22:05:00+02:00")),
+      true,
+    );
+    assert.equal(
+      newsShortBlockedByOtherReel(new Date("2026-09-14T21:05:00+02:00")),
+      true,
+    );
+    assert.equal(
+      newsShortBlockedByOtherReel(new Date("2026-09-13T21:05:00+02:00")),
+      false,
+    );
+    assert.equal(
+      newsShortBlockedByOtherReel(new Date("2026-09-13T15:05:00+02:00")),
+      false,
+    );
   });
 });
 

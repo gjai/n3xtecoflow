@@ -14,6 +14,7 @@ import {
   formatEuroMillionsLongDate,
   isJackpotBuysSlot,
   isNewsShortSlot,
+  newsShortBlockedByOtherReel,
   parisHourKey,
   parisDateKey,
   parisIsoWeekKey,
@@ -1951,6 +1952,10 @@ async function notifyWeeklyNewsShortBody(
   }
   if (!options?.force && !isNewsShortSlot()) {
     skipped.newsShort = "outside_hourly_slot";
+    return emptyNotify(skipped);
+  }
+  if (!options?.force && newsShortBlockedByOtherReel()) {
+    skipped.newsShort = "other_reel_slot";
     return emptyNotify(skipped);
   }
   const dayKey = parisDateKey();
