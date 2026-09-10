@@ -1,4 +1,4 @@
-import { NextResponse, after } from "next/server";
+import { after as runAfter, NextResponse } from "next/server";
 import {
   facebookMetaStatus,
   facebookPublishSnapshot,
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     facebookPublishSnapshot(),
   ]);
   if (newsShort) {
-    after(async () => {
+    runAfter(async () => {
       try {
         const result = await notifyWeeklyNewsShort({ force });
         console.error(
@@ -78,10 +78,10 @@ export async function POST(request: Request) {
     });
   }
   const result = await notifyFacebookOnPublish(latest, { force, games });
-  const after = await facebookPublishSnapshot();
+  const afterSnap = await facebookPublishSnapshot();
   return NextResponse.json({
     ...meta,
-    ...after,
+    ...afterSnap,
     youtube: youtubeConfigured(),
     tiktok: tiktokConfigured(),
     latest: latest?.date || null,
