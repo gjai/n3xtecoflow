@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import {
   facebookMetaStatus,
   facebookPublishSnapshot,
@@ -36,8 +36,9 @@ export async function POST(request: Request) {
     facebookPublishSnapshot(),
   ]);
   if (newsShort) {
-    void notifyWeeklyNewsShort({ force })
-      .then((result) => {
+    after(async () => {
+      try {
+        const result = await notifyWeeklyNewsShort({ force });
         console.error(
           "news_short_done",
           result.skipped?.newsShort,
@@ -50,13 +51,13 @@ export async function POST(request: Request) {
           "tt",
           result.tiktokPosts,
         );
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error(
           "news_short_fail",
           err instanceof Error ? err.message : err,
         );
-      });
+      }
+    });
     return NextResponse.json({
       ok: true,
       accepted: true,
