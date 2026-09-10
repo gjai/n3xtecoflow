@@ -36,15 +36,34 @@ export async function POST(request: Request) {
     facebookPublishSnapshot(),
   ]);
   if (newsShort) {
-    const result = await notifyWeeklyNewsShort({ force });
-    const after = await facebookPublishSnapshot();
+    void notifyWeeklyNewsShort({ force })
+      .then((result) => {
+        console.error(
+          "news_short_done",
+          result.skipped?.newsShort,
+          "fb",
+          result.reels,
+          "ig",
+          result.instagramReels,
+          "yt",
+          result.youtubeShorts,
+          "tt",
+          result.tiktokPosts,
+        );
+      })
+      .catch((err) => {
+        console.error(
+          "news_short_fail",
+          err instanceof Error ? err.message : err,
+        );
+      });
     return NextResponse.json({
-      ...meta,
-      ...after,
+      ok: true,
+      accepted: true,
+      newsShort: true,
+      force,
       youtube: youtubeConfigured(),
       tiktok: tiktokConfigured(),
-      latest: latest?.date || null,
-      ...result,
     });
   }
   if (!force && !notify) {

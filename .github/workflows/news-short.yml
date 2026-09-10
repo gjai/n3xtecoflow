@@ -21,7 +21,7 @@ jobs:
             echo "NEWS_CRON_SECRET missing"
             exit 1
           fi
-          curl -fsS --max-time 540 -X POST \
+          curl -fsS --max-time 30 -X POST \
             -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
             "${SITE_URL}/api/euromillions/facebook?newsShort=1"
       - name: Alert on failure

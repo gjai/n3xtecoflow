@@ -1883,6 +1883,8 @@ export function pickWeeklyNewsArticle(
   };
 }
 
+let newsShortRunning = false;
+
 /**
  * Un Short/Reel histoire chaque heure : scénario IA (anecdote + visuels).
  * Désactivé tant que `NEWS_SHORT_ENABLED` n’est pas `1`. `force` ignore créneau et flag.
@@ -1891,6 +1893,21 @@ export async function notifyWeeklyNewsShort(options?: {
   force?: boolean;
 }): Promise<FacebookNotifyResult> {
   const skipped: Record<string, string> = {};
+  if (newsShortRunning) {
+    return emptyNotify({ newsShort: "in_flight" });
+  }
+  newsShortRunning = true;
+  try {
+    return await notifyWeeklyNewsShortBody(options, skipped);
+  } finally {
+    newsShortRunning = false;
+  }
+}
+
+async function notifyWeeklyNewsShortBody(
+  options: { force?: boolean } | undefined,
+  skipped: Record<string, string>,
+): Promise<FacebookNotifyResult> {
   const enabled = process.env.NEWS_SHORT_ENABLED?.trim() === "1";
   if (!options?.force && !enabled) {
     return emptyNotify({ newsShort: "disabled" });
