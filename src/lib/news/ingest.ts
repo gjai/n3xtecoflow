@@ -50,6 +50,9 @@ export type IngestResult = {
     stories: number;
     instagramPosted?: number;
     instagramStories?: number;
+    reels?: number;
+    instagramReels?: number;
+    youtubeShorts?: number;
   };
 };
 
@@ -341,6 +344,9 @@ export async function ingestNews(
         stories: fb.stories,
         instagramPosted: fb.instagramPosted,
         instagramStories: fb.instagramStories,
+        reels: fb.reels,
+        instagramReels: fb.instagramReels,
+        youtubeShorts: fb.youtubeShorts,
       };
     } catch (err) {
       console.error("facebook_news_notify_fail", err);

@@ -2,6 +2,10 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   isEuroMillionsLiveWindow,
+  isNewsShortSlot,
+  parisHourKey,
+  isoWeekKeyFromParisDate,
+  parisIsoWeekKey,
   sitemapLastModifiedForDrawDate,
   toParisIsoDate,
 } from "./datetime.ts";
@@ -34,6 +38,58 @@ describe("sitemapLastModifiedForDrawDate", () => {
       new Date("2026-08-21T21:12:00+02:00"),
     );
     assert.equal(last.toISOString(), "2026-08-18T12:00:00.000Z");
+  });
+});
+
+describe("parisIsoWeekKey", () => {
+  it("classe le jeudi 10 septembre 2026 en 2026-W37", () => {
+    assert.equal(isoWeekKeyFromParisDate("2026-09-10"), "2026-W37");
+    assert.equal(isoWeekKeyFromParisDate("2026-09-07"), "2026-W37");
+    assert.equal(isoWeekKeyFromParisDate("2026-09-13"), "2026-W37");
+  });
+
+  it("bascule le lundi suivant", () => {
+    assert.equal(isoWeekKeyFromParisDate("2026-09-14"), "2026-W38");
+  });
+
+  it("utilise le jour civil Paris, pas UTC", () => {
+    assert.equal(
+      parisIsoWeekKey(new Date("2026-09-13T22:30:00Z")),
+      "2026-W38",
+    );
+  });
+});
+
+describe("isNewsShortSlot", () => {
+  it("ouvre chaque heure Paris, minutes 00–19", () => {
+    assert.equal(
+      isNewsShortSlot(new Date("2026-09-13T10:00:00+02:00")),
+      true,
+    );
+    assert.equal(
+      isNewsShortSlot(new Date("2026-09-13T10:19:00+02:00")),
+      true,
+    );
+    assert.equal(
+      isNewsShortSlot(new Date("2026-09-13T10:20:00+02:00")),
+      false,
+    );
+    assert.equal(
+      isNewsShortSlot(new Date("2026-09-13T11:00:00+02:00")),
+      true,
+    );
+    assert.equal(
+      isNewsShortSlot(new Date("2026-09-13T03:05:00+02:00")),
+      true,
+    );
+    assert.equal(
+      isNewsShortSlot(new Date("2026-09-13T09:59:00+02:00")),
+      false,
+    );
+    assert.equal(
+      parisHourKey(new Date("2026-09-13T11:07:00+02:00")),
+      "2026-09-13T11",
+    );
   });
 });
 

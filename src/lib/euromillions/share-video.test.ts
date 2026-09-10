@@ -72,6 +72,99 @@ describe("lotteryShareMp4", () => {
   });
 });
 
+describe("newsShareMp4", () => {
+  it("encode un H.264 9:16 actu (peu de frames)", async () => {
+    const { newsShareMp4, newsBackgroundFiles } = await import("./share-video.ts");
+    assert.ok(newsBackgroundFiles().length >= 2);
+    const buf = await newsShareMp4("Le jackpot grimpe", "Aucun rang 1.", {
+      size: { width: 540, height: 960 },
+      frames: 8,
+      fps: 8,
+      body: "Les rapports de gains sont publiés. Site indépendant, 18+.",
+      mood: "tension",
+      sfx: ["whoosh", "sting"],
+      fond: "cold",
+      visuelSeed: "ticket-slips",
+      visuels: [
+        { at: "accroche", plan: "ticket", fond: "cold" },
+        { at: "corps", plan: "slips", fond: "warm" },
+        { at: "chute", plan: "closeup", fond: "gold" },
+      ],
+    });
+    assert.ok(buf.length > 8000, `mp4 trop léger (${buf.length})`);
+    assert.equal(buf.subarray(4, 8).toString("ascii"), "ftyp");
+  });
+});
+
+describe("pickWeeklyNewsArticle", () => {
+  it("prend la plus récente de la semaine, ignore l'archive", async () => {
+    const { pickWeeklyNewsArticle } = await import("./facebook.ts");
+    const pick = pickWeeklyNewsArticle(
+      [
+        {
+          slug: "archive",
+          siteId: "euromillions",
+          publishedAt: "2026-08-20T10:00:00.000Z",
+          fr: { title: "Vieux", excerpt: "" },
+        },
+        {
+          slug: "lundi",
+          siteId: "euromillions",
+          publishedAt: "2026-09-07T08:00:00.000Z",
+          fr: { title: "Lundi", excerpt: "un" },
+        },
+        {
+          slug: "jeudi",
+          siteId: "euromillions",
+          publishedAt: "2026-09-10T12:00:00.000Z",
+          fr: { title: "Jeudi", excerpt: "deux" },
+        },
+        {
+          slug: "autre-site",
+          siteId: "ecoflow",
+          publishedAt: "2026-09-10T18:00:00.000Z",
+          fr: { title: "Batterie", excerpt: "" },
+        },
+      ],
+      "2026-W37",
+    );
+    assert.equal(pick?.slug, "jeudi");
+    assert.equal(pick?.title, "Jeudi");
+    assert.equal(pickWeeklyNewsArticle([], "2026-W37"), null);
+  });
+
+  it("injecte les faits tirage et ignore le boilerplate", async () => {
+    const { pickWeeklyNewsArticle } = await import("./facebook.ts");
+    const pick = pickWeeklyNewsArticle(
+      [
+        {
+          slug: "tirage",
+          siteId: "euromillions",
+          publishedAt: "2026-09-09T08:00:00.000Z",
+          fr: {
+            title: "Le jackpot grimpe",
+            excerpt: "Revue de presse (FDJ, 9 septembre 2026).",
+            body: [
+              "Vérifiez votre grille avec le simulateur avant de jeter le reçu.",
+              "Site indépendant : nous ne vendons pas de tickets. 18+ · jeu responsable.",
+            ],
+          },
+        },
+      ],
+      "2026-W37",
+      [
+        "Tirage du mardi 8 septembre 2026 : 13, 17, 33, 35, 39 — étoiles 7 et 12.",
+        "Jackpot de 98 M€ non remporté.",
+        "Code My Million : DC 157 3553.",
+      ],
+    );
+    assert.match(pick?.excerpt || "", /13, 17, 33/);
+    assert.match(pick?.body || "", /98 M€/);
+    assert.match(pick?.body || "", /DC 157 3553/);
+    assert.ok(!/simulateur|18\+|tickets/.test(`${pick?.excerpt} ${pick?.body}`));
+  });
+});
+
 describe("facebookReelMessage", () => {
   it("accroche jackpot en première ligne", async () => {
     const { facebookReelMessage } = await import("./facebook.ts");
@@ -168,6 +261,16 @@ describe("lotteryShareWav", () => {
     assert.equal(wav.subarray(0, 4).toString("ascii"), "RIFF");
     assert.equal(wav.subarray(8, 12).toString("ascii"), "WAVE");
     assert.ok(wav.length > 44 + 1000);
+  });
+
+  it("fond musical actu : WAV plus long qu’un jingle", async () => {
+    const { newsShareWav } = await import("./share-audio.ts");
+    const wav = newsShareWav(2);
+    assert.equal(wav.subarray(0, 4).toString("ascii"), "RIFF");
+    assert.ok(wav.length > 44 + 80000);
+    const ironie = newsShareWav(2, "ironie", ["whoosh"]);
+    const tension = newsShareWav(2, "tension", ["sting"]);
+    assert.notEqual(ironie.compare(tension), 0);
   });
 
   it("charge les clips voix du tirage", async () => {

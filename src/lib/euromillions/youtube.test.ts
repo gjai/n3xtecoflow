@@ -141,3 +141,26 @@ describe("youtube playlists", () => {
     assert.equal(YOUTUBE_PLAYLIST_TITLES.mymillion, "My Million");
   });
 });
+
+describe("youtube news Shorts meta", () => {
+  it("titre ≤ 100 avec #Shorts", async () => {
+    const { youtubeNewsShortTitle, youtubeNewsShortDescription } = await import(
+      "./youtube.ts"
+    );
+    const title = youtubeNewsShortTitle(
+      "EuroMillions : le jackpot franchit les 200 millions d'euros après un tirage sans gagnant",
+    );
+    assert.ok(title.length <= 100);
+    assert.match(title, /#Shorts/);
+    assert.match(title, /Histoire/);
+    const text = youtubeNewsShortDescription({
+      title: "Le jackpot grimpe",
+      excerpt: "Aucun rang 1 mardi.",
+      slug: "jackpot-grimpe",
+    });
+    assert.match(text, /#Shorts/);
+    assert.match(text, /euromillions-resultats\.fr\/fr\/actualites\/jackpot-grimpe/);
+    assert.match(text, /18\+/);
+    assert.match(text, /Abonne-toi/);
+  });
+});

@@ -23,6 +23,31 @@ export function parisDateKey(date = new Date()): string {
 }
 
 /**
+ * Semaine ISO (lundi–dimanche) du jour civil Paris. Ex. `2026-W37`.
+ * Sert de tampon « un Short actu / semaine ».
+ */
+export function isoWeekKeyFromParisDate(ymd: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(ymd.trim());
+  if (!m) return isoWeekKeyFromParisDate(parisDateKey());
+  const y = Number(m[1]);
+  const mo = Number(m[2]);
+  const d = Number(m[3]);
+  const utc = new Date(Date.UTC(y, mo - 1, d));
+  const day = utc.getUTCDay() || 7;
+  utc.setUTCDate(utc.getUTCDate() + 4 - day);
+  const isoYear = utc.getUTCFullYear();
+  const yearStart = new Date(Date.UTC(isoYear, 0, 1));
+  const week = Math.ceil(
+    ((utc.getTime() - yearStart.getTime()) / 86_400_000 + 1) / 7,
+  );
+  return `${isoYear}-W${String(week).padStart(2, "0")}`;
+}
+
+export function parisIsoWeekKey(date = new Date()): string {
+  return isoWeekKeyFromParisDate(parisDateKey(date));
+}
+
+/**
  * lastmod sitemap d’une fiche `/tirages/{date}`.
  * Le soir du tirage (date = aujourd’hui Paris) doit être « maintenant »,
  * pas minuit UTC — sinon Google croit que la page n’a pas bougé depuis le matin.
@@ -119,6 +144,18 @@ export function isEuroMillionsLiveWindow(now = new Date()): boolean {
   const { hour, minute } = parisHourMinute(now);
   const t = hour * 60 + minute;
   return t >= 21 * 60 + 5 && t < 22 * 60 + 25;
+}
+
+/** Clé Paris `YYYY-MM-DDTHH` : un Short histoire par heure civile. */
+export function parisHourKey(date = new Date()): string {
+  const { hour } = parisHourMinute(date);
+  return `${parisDateKey(date)}T${String(hour).padStart(2, "0")}`;
+}
+
+/** Toutes les heures, minutes 00–19 Paris (cron GitHub `0 * * * *`). */
+export function isNewsShortSlot(now = new Date()): boolean {
+  const { minute } = parisHourMinute(now);
+  return minute < 20;
 }
 
 export function formatParisTime(iso: string, locale: string): string {

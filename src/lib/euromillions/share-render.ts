@@ -1,7 +1,9 @@
 import path from "path";
 import { existsSync } from "fs";
+import { formatEuroMillionsLongDate, isoWeekKeyFromParisDate } from "./datetime";
 import {
   SHARE_FEED,
+  formatShareJackpot,
   type ShareCardInput,
   shareLayout,
 } from "./share-card";
@@ -13,10 +15,12 @@ import {
   clamp01,
   dropReveal,
   fadeSlide,
+  holdFade,
   announceCallout,
   starStart,
   windowT,
 } from "./share-motion";
+import type { EuroMillionsDraw } from "./types";
 
 const FONT_FAMILY = "Inter";
 
@@ -57,15 +61,17 @@ export function wrapLines(
   maxChars: number,
   maxLines: number,
 ): string[] {
-  const words = clip(text, maxChars * maxLines).split(/\s+/).filter(Boolean);
+  const words = text.replace(/\s+/g, " ").trim().split(/\s+/).filter(Boolean);
   const lines: string[] = [];
   let cur = "";
+  let overflow = false;
   for (const w of words) {
     const next = cur ? `${cur} ${w}` : w;
     if (next.length > maxChars && cur) {
       lines.push(cur);
       cur = w;
       if (lines.length >= maxLines) {
+        overflow = true;
         cur = "";
         break;
       }
@@ -74,7 +80,346 @@ export function wrapLines(
     }
   }
   if (cur && lines.length < maxLines) lines.push(cur);
+  else if (cur) overflow = true;
+  if (overflow && lines.length) {
+    const last = lines[lines.length - 1]!;
+    lines[lines.length - 1] = last.endsWith("…")
+      ? last
+      : `${clip(last, Math.max(4, maxChars - 1))}`;
+  }
   return lines.length ? lines : [clip(text, maxChars)];
+}
+
+const NEWS_FLUFF =
+  /site indépendant|ne vend(ons|ez)? pas|jeu responsable|18\s*\+|simulateur|jeter le reçu|FDJ\.fr si vous|affiliation|tracking|consultez la source|rédigé à partir|synthèse indépendante|revue de presse|selon .{0,80}(l[’']actualité porte sur|the story focuses)|aucune promesse de gain|le jeu reste du hasard|jouez responsable|nous ne vendons|budget fixe|aucun système ne bat|play responsibly|no system beats|vérifiez le texte d[’']origine|jouez sur fdj|rapports? de gains|sont publiés sur la fiche|vérifiez votre grille|en même temps que l[’']euromillions|indépendamment des 5\+2|cagnotte continue de monter|jackpot est reporté/i;
+
+function splitNewsSentences(text: string): string[] {
+  return text
+    .replace(/\s+/g, " ")
+    .trim()
+    .split(/(?<=[.!?…])\s+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 12);
+}
+
+function isNewsFluff(s: string): boolean {
+  return NEWS_FLUFF.test(s);
+}
+
+function newsFactScore(s: string): number {
+  if (isNewsFluff(s)) return -10;
+  let n = 0;
+  if (/\d/.test(s)) n += 2;
+  if (/€|M€|\beuros?\b/i.test(s)) n += 3;
+  if (
+    /jackpot|gagnant|rang\b|étoiles?|numéros?|million|cagnotte|tirage|My Million|boules?/i.test(
+      s,
+    )
+  ) {
+    n += 3;
+  }
+  if (s.length > 40 && s.length < 280) n += 1;
+  return n;
+}
+
+function newsFactCovered(hay: string, fact: string): boolean {
+  const h = hay.toLowerCase();
+  const f = fact.toLowerCase();
+  const code = fact.match(/[A-Z]{2}\s+\d{3}\s+\d{4}/);
+  if (code && h.includes(code[0].toLowerCase())) return true;
+  if (/étoiles/.test(f)) {
+    const nums = fact.match(/\b\d{1,2}\b/g) || [];
+    if (
+      nums.length >= 5 &&
+      nums.slice(0, 5).every((n) => h.includes(n)) &&
+      /étoile/.test(h)
+    ) {
+      return true;
+    }
+  }
+  if (/rang 5\+1/.test(f) && /5\+1/.test(h)) return true;
+  if (/rang 5\b/.test(f) && /rang 5\b/.test(h)) return true;
+  if (/my million/.test(f) && /my million/.test(h)) return true;
+  if (/prochain tirage/.test(f) && /prochain tirage/.test(h)) return true;
+  if (/non remporté/.test(f) && /non remporté|aucun rang 1/.test(h)) return true;
+  const head = f.replace(/[^a-z0-9àâäéèêëïîôùûüçœæ€]+/gi, " ").trim().slice(0, 40);
+  return head.length > 20 && h.includes(head);
+}
+
+function normalizePrizeRank(rank: string): string {
+  return rank.replace(/\s+/g, "");
+}
+
+function formatNewsEur(n: number): string {
+  const digits = Number.isInteger(n) ? 0 : 2;
+  return new Intl.NumberFormat("fr-FR", {
+    style: "currency",
+    currency: "EUR",
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  })
+    .format(n)
+    .replace(/[\u00a0\u202f]/g, " ");
+}
+
+function joueursFr(n: number): string {
+  return n === 1 ? "1 joueur" : `${n} joueurs`;
+}
+
+function jackpotShort(n: number): string {
+  return formatShareJackpot(n).replace(/^Jackpot\s+/, "");
+}
+
+/** Phrases factuelles d’un tirage (boules, rangs, jackpot, My Million). */
+export function newsDrawFacts(
+  draw: EuroMillionsDraw,
+  next?: { date?: string | null; jackpotEur?: number | null },
+): string[] {
+  if (draw.numbers.length !== 5 || draw.stars.length !== 2) return [];
+  const date = formatEuroMillionsLongDate(draw.date, "fr");
+  const combo = `${draw.numbers.join(", ")} — étoiles ${draw.stars.join(" et ")}`;
+  const out: string[] = [`Tirage du ${date} : ${combo}.`];
+
+  const r1 = draw.prizeTiers?.find((t) => normalizePrizeRank(t.rank) === "5+2");
+  const r2 = draw.prizeTiers?.find((t) => normalizePrizeRank(t.rank) === "5+1");
+  const r5 = draw.prizeTiers?.find((t) => {
+    const r = normalizePrizeRank(t.rank);
+    return r === "5" || r === "5+0";
+  });
+  const r1Eu = r1?.winnersEurope ?? r1?.winners;
+  const jackpot =
+    typeof draw.jackpotEur === "number" && draw.jackpotEur > 0
+      ? jackpotShort(draw.jackpotEur)
+      : null;
+  const notWon =
+    typeof r1Eu === "number" ? r1Eu === 0 : draw.hasWinner === false;
+  const won = typeof r1Eu === "number" ? r1Eu > 0 : draw.hasWinner === true;
+
+  if (notWon && jackpot) {
+    out.push(`Jackpot de ${jackpot} non remporté.`);
+  } else if (won && r1 && typeof r1Eu === "number" && r1Eu > 0) {
+    const amt = r1.amountEur > 0 ? ` (${formatNewsEur(r1.amountEur)} chacun)` : "";
+    out.push(
+      `${r1Eu} gagnant${r1Eu > 1 ? "s" : ""} au rang 1${amt}.`,
+    );
+  } else if (jackpot) {
+    out.push(`Jackpot ${jackpot} mis en jeu.`);
+  }
+
+  if (next?.date && next.date > draw.date) {
+    const nd = formatEuroMillionsLongDate(next.date, "fr");
+    const jp =
+      typeof next.jackpotEur === "number" && next.jackpotEur > 0
+        ? ` — Jackpot ${jackpotShort(next.jackpotEur)}`
+        : "";
+    out.push(`Prochain tirage : ${nd}${jp}.`);
+  }
+
+  if (r2 && r2.amountEur > 0) {
+    const fr = r2.winners;
+    if (r2.winnersEurope != null && r2.winnersEurope > 0) {
+      const frBit =
+        fr === 0
+          ? ", aucun en France"
+          : `, dont ${joueursFr(fr)} en France`;
+      out.push(
+        `Rang 5+1 : ${joueursFr(r2.winnersEurope)} en Europe pour ${formatNewsEur(r2.amountEur)} chacun${frBit}.`,
+      );
+    } else if (fr > 0) {
+      out.push(
+        `Rang 5+1 : ${joueursFr(fr)} en France pour ${formatNewsEur(r2.amountEur)} chacun.`,
+      );
+    }
+  }
+
+  if (r5 && r5.amountEur > 0) {
+    const fr = r5.winners;
+    if (r5.winnersEurope != null && r5.winnersEurope > 0) {
+      out.push(
+        `Rang 5 : ${joueursFr(r5.winnersEurope)} en Europe (${joueursFr(fr)} en France) pour ${formatNewsEur(r5.amountEur)}.`,
+      );
+    } else if (fr > 0) {
+      out.push(
+        `Rang 5 : ${joueursFr(fr)} en France pour ${formatNewsEur(r5.amountEur)}.`,
+      );
+    }
+  }
+
+  if (draw.myMillionCode) {
+    out.push(`Code My Million : ${draw.myMillionCode}.`);
+  }
+
+  return out;
+}
+
+/** Faits du dernier tirage publié dans la semaine ISO (ex. `2026-W37`). */
+export function newsShareFacts(
+  draws: Array<EuroMillionsDraw | null | undefined>,
+  weekKey: string,
+  next?: { date?: string | null; jackpotEur?: number | null },
+): string[] {
+  const seen = new Set<string>();
+  const inWeek: EuroMillionsDraw[] = [];
+  for (const d of draws) {
+    if (!d || seen.has(d.date) || d.numbers.length !== 5 || d.stars.length !== 2) {
+      continue;
+    }
+    seen.add(d.date);
+    if (isoWeekKeyFromParisDate(d.date) === weekKey) inWeek.push(d);
+  }
+  inWeek.sort((a, b) => b.date.localeCompare(a.date));
+  const draw = inWeek[0];
+  if (!draw) return [];
+  return newsDrawFacts(draw, next);
+}
+
+/**
+ * Phrases factuelles seulement (chiffres, €, rangs). Le remplissage 18+ / simulateur saute.
+ * `extraFacts` (tirage FDJ) passe devant le corps d’article.
+ */
+export function newsBodyForShare(
+  body?: string[] | null,
+  extraFacts?: string[] | null,
+): string {
+  const fromArticle = (body || [])
+    .flatMap((p) => splitNewsSentences(p))
+    .filter((s) => newsFactScore(s) >= 4);
+  const extras = (extraFacts || [])
+    .map((s) => s.replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+  const extraHay = extras.join(" ");
+  const articleKept = fromArticle.filter((s) => !newsFactCovered(extraHay, s));
+  return [...extras, ...articleKept].slice(0, 6).join(" ");
+}
+
+export function newsExcerptForShare(excerpt: string, factsBody: string): string {
+  const e = excerpt.replace(/\s+/g, " ").trim();
+  if (e.length > 30 && newsFactScore(e) >= 4) return e;
+  return splitNewsSentences(factsBody)[0] || e;
+}
+
+function stripLeadingExcerpt(body: string, excerpt: string): string {
+  const e = excerpt.replace(/\s+/g, " ").trim();
+  const b = body.replace(/\s+/g, " ").trim();
+  if (!e || !b.startsWith(e)) return b;
+  return b.slice(e.length).trim();
+}
+
+/** Extrait + corps prêts pour le Short : faits tirage, sans doublon d’accroche. */
+export function newsCopyForShare(args: {
+  excerpt?: string | null;
+  body?: string[] | null;
+  extraFacts?: string[] | null;
+}): { excerpt: string; body: string } {
+  const full = newsBodyForShare(args.body, args.extraFacts);
+  const excerpt = newsExcerptForShare(args.excerpt || "", full);
+  return { excerpt, body: stripLeadingExcerpt(full, excerpt) };
+}
+
+/** Coupe le corps en deux blocs (phrases), pour l’enchaînement 9:16. */
+export function newsBodyBeats(body?: string | null): [string, string] {
+  const [a, b, c] = newsStoryBeats(body);
+  if (!c) return [a, b];
+  return [a, [b, c].filter(Boolean).join(" ")];
+}
+
+/** Trois scènes d’histoire (corps 1, corps 2, chute). */
+export function newsStoryBeats(body?: string | null): [string, string, string] {
+  const text = (body || "").replace(/\s+/g, " ").trim();
+  if (!text) return ["", "", ""];
+  const sentences = text.split(/(?<=[.!?…])\s+/).filter(Boolean);
+  if (sentences.length <= 1) {
+    const mid = Math.ceil(text.length / 3);
+    const a = text.lastIndexOf(" ", mid);
+    const b = text.lastIndexOf(" ", mid * 2);
+    if (a < 24) return [text, "", ""];
+    if (b <= a) return [text.slice(0, a).trim(), text.slice(a).trim(), ""];
+    return [
+      text.slice(0, a).trim(),
+      text.slice(a, b).trim(),
+      text.slice(b).trim(),
+    ];
+  }
+  if (sentences.length === 2) return [sentences[0]!, sentences[1]!, ""];
+  const n = sentences.length;
+  const i = Math.max(1, Math.floor(n / 3));
+  const j = Math.max(i + 1, Math.floor((2 * n) / 3));
+  return [
+    sentences.slice(0, i).join(" "),
+    sentences.slice(i, j).join(" "),
+    sentences.slice(j).join(" "),
+  ];
+}
+
+const NEWS_WPS = 3.4;
+const NEWS_INTRO_SEC = 0.4;
+const NEWS_CTA_SEC = 3.1;
+const NEWS_CROSS_SEC = 0.22;
+const NEWS_MIN_SEC = 16;
+const NEWS_MAX_SEC = 40;
+
+function newsReadSec(text: string, min: number, max: number): number {
+  const w = (text || "").trim().split(/\s+/).filter(Boolean).length;
+  if (!w) return 0;
+  return Math.min(max, Math.max(min, w / NEWS_WPS + 0.12));
+}
+
+export type NewsShareTimeline = {
+  seconds: number;
+  hookStart: number;
+  bodyAStart: number;
+  hookEnd: number;
+  storyStart: number;
+  bodyCStart: number;
+  storyEnd: number;
+  ctaStart: number;
+};
+
+/** Durée et fenêtres 0..1 calées sur le volume de texte. */
+export function newsShareTimeline(
+  excerpt: string,
+  body?: string | null,
+): NewsShareTimeline {
+  const [a, b, c] = newsStoryBeats(body);
+  const excerptSec = newsReadSec(excerpt, 1.7, 16);
+  const aSec = newsReadSec(a, a ? 1.3 : 0, 16);
+  const bSec = newsReadSec(b, b ? 1.5 : 0, 16);
+  const cSec = newsReadSec(c, c ? 1.3 : 0, 18);
+  const bodyADelay = a ? 0.38 : 0;
+  const bodyCDelay = c ? Math.min(1.1, Math.max(0.4, bSec * 0.28)) : 0;
+  let hookDur = excerptSec + aSec;
+  let storyDur = (bSec + cSec) || 1.6;
+  let seconds =
+    NEWS_INTRO_SEC + hookDur + NEWS_CROSS_SEC + storyDur + NEWS_CTA_SEC;
+  if (seconds > NEWS_MAX_SEC) {
+    const scale =
+      (NEWS_MAX_SEC - NEWS_INTRO_SEC - NEWS_CROSS_SEC - NEWS_CTA_SEC) /
+      (hookDur + storyDur);
+    hookDur *= scale;
+    storyDur *= scale;
+    seconds = NEWS_MAX_SEC;
+  } else if (seconds < NEWS_MIN_SEC) {
+    const pad = NEWS_MIN_SEC - seconds;
+    storyDur += pad;
+    seconds = NEWS_MIN_SEC;
+  }
+  const hookStart = NEWS_INTRO_SEC / seconds;
+  const hookEnd = (NEWS_INTRO_SEC + hookDur) / seconds;
+  const bodyAStart = (NEWS_INTRO_SEC + bodyADelay) / seconds;
+  const storyStart = (NEWS_INTRO_SEC + hookDur - NEWS_CROSS_SEC * 0.4) / seconds;
+  const storyEnd = (seconds - NEWS_CTA_SEC) / seconds;
+  const bodyCStart =
+    (NEWS_INTRO_SEC + hookDur + NEWS_CROSS_SEC * 0.5 + bodyCDelay) / seconds;
+  return {
+    seconds,
+    hookStart,
+    bodyAStart: Math.min(bodyAStart, hookEnd - 0.02),
+    hookEnd,
+    storyStart: Math.min(storyStart, storyEnd - 0.08),
+    bodyCStart: Math.min(Math.max(bodyCStart, storyStart + 0.02), storyEnd - 0.04),
+    storyEnd,
+    ctaStart: storyEnd,
+  };
 }
 
 function shareFontPath(): string | null {
@@ -403,39 +748,151 @@ export function newsShareSvg(
   title: string,
   excerpt: string,
   size: { width: number; height: number },
+  anim?: {
+    t?: number;
+    overlay?: boolean;
+    body?: string;
+    mood?: "ironie" | "tension" | "mystere" | "chaleur";
+    fond?: "navy" | "gold" | "cold" | "warm";
+  },
 ): string {
   const layout = shareLayout(size);
   const portrait = layout !== "feed";
-  const pad = layout === "story" ? 72 : 56;
-  const top = layout === "story" ? 280 : 64;
-  const titleSize = layout === "story" ? 52 : layout === "ig" ? 44 : 40;
-  const excerptSize = portrait ? 28 : 24;
-  const titleLines = wrapLines(title, portrait ? 28 : 36, portrait ? 5 : 3);
-  const excerptLines = wrapLines(excerpt, portrait ? 34 : 42, portrait ? 4 : 2);
+  const pad = layout === "story" ? 56 : 48;
+  const logoS = portrait ? 56 : 40;
+  const headerY = layout === "story" ? 64 : 36;
+  const top = headerY + logoS + (portrait ? 36 : 24);
+  const live = anim?.t !== undefined;
+  const overlay = Boolean(anim?.overlay);
+  const t = live ? clamp01(anim.t ?? 1) : 1;
+  const titleSize = layout === "story" ? 58 : layout === "ig" ? 48 : 42;
+  const excerptSize = portrait ? 36 : 26;
+  const bodySize = portrait ? 36 : 26;
+  const titleLines = wrapLines(title, portrait ? 22 : 34, portrait ? 4 : 3);
+  const excerptLines = wrapLines(excerpt, portrait ? 38 : 44, portrait ? 8 : 5);
+  const [beatA, beatB, beatC] = newsStoryBeats(anim?.body);
+  const wrapBody = (s: string) =>
+    wrapLines(s, portrait ? 38 : 44, portrait ? 14 : 6);
+  const bodyALines = wrapBody(beatA);
+  const bodyBLines = wrapBody(beatB);
+  const bodyCLines = wrapBody(beatC);
+  const tl = newsShareTimeline(excerpt, anim?.body);
+  const fade = live ? Math.min(0.02, 0.22 / tl.seconds) : 0.02;
+  const loopFade = live ? windowT(t, LOOP_FADE_START, 1 - LOOP_FADE_START) : 0;
+  const kickerM = live ? fadeSlide(t, 0.01, 0.035, 12) : { opacity: 1, dy: 0 };
+  const titleHold = live ? holdFade(t, 0.03, tl.ctaStart, fade) : 1;
+  const excerptOp = live ? holdFade(t, tl.hookStart, tl.hookEnd, fade) : 1;
+  const bodyAOp = live
+    ? holdFade(t, tl.bodyAStart, tl.hookEnd, fade)
+    : beatA
+      ? 1
+      : 0;
+  const bodyBOp = live ? holdFade(t, tl.storyStart, tl.storyEnd, fade) : 0;
+  const bodyCOp = live ? holdFade(t, tl.bodyCStart, tl.storyEnd, fade) : 0;
+  const footM = live ? fadeSlide(t, 0.08, 0.05, 0) : { opacity: 1, dy: 0 };
+  const ctaM = live ? fadeSlide(t, tl.ctaStart, 0.03, 28) : { opacity: 0, dy: 0 };
+  const veil =
+    anim?.fond === "gold"
+      ? "#1a1408"
+      : anim?.fond === "cold"
+        ? "#07141c"
+        : anim?.fond === "warm"
+          ? "#1c100c"
+          : "#0b1220";
+  const accent =
+    anim?.mood === "tension"
+      ? "#ff7a59"
+      : anim?.mood === "mystere"
+        ? "#c4b5fd"
+        : anim?.mood === "chaleur"
+          ? "#f0b36a"
+          : "#f5c542";
 
+  const bg = overlay
+    ? `<defs>
+        <linearGradient id="newsVeil" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="${veil}" stop-opacity="0.48"/>
+          <stop offset="0.32" stop-color="${veil}" stop-opacity="0.78"/>
+          <stop offset="1" stop-color="${veil}" stop-opacity="0.92"/>
+        </linearGradient>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#newsVeil)"/>`
+    : `<rect width="100%" height="100%" fill="${veil}"/>`;
+
+  const logoScale = logoS / 32;
   const parts: string[] = [
-    `<text x="${pad}" y="${top}" fill="#f5c542" font-size="${portrait ? 28 : 22}" font-family="${FONT_FAMILY}" font-weight="700">ACTUALITÉ</text>`,
+    `<g opacity="${kickerM.opacity.toFixed(3)}" transform="translate(0 ${kickerM.dy.toFixed(1)})">
+      <g transform="translate(${pad} ${headerY}) scale(${logoScale.toFixed(3)})">
+        <rect width="32" height="32" rx="7" fill="${accent}"/>
+        <circle cx="16" cy="16" r="8" fill="none" stroke="#0b1220" stroke-width="2"/>
+        <path d="M16 11.2l1.2 2.5 2.7.4-2 1.9.5 2.7-2.4-1.3-2.4 1.3.5-2.7-2-1.9 2.7-.4L16 11.2z" fill="#0b1220"/>
+      </g>
+      <text x="${pad + logoS + 16}" y="${headerY + (portrait ? 26 : 18)}" fill="${accent}" font-size="${portrait ? 28 : 20}" font-family="${FONT_FAMILY}" font-weight="700">HISTOIRE</text>
+      <text x="${pad + logoS + 16}" y="${headerY + (portrait ? 52 : 36)}" fill="#e8eef8" font-size="${portrait ? 22 : 16}" font-family="${FONT_FAMILY}" font-weight="700">euromillions-resultats.fr</text>
+    </g>`,
   ];
-  let y = top + 56;
-  for (const line of titleLines) {
-    y += titleSize + 8;
+  let titleY = top + 36;
+  for (let i = 0; i < titleLines.length; i += 1) {
+    const line = titleLines[i]!;
+    titleY += titleSize + 8;
+    const lineM = live
+      ? fadeSlide(t, 0.03 + i * 0.018, 0.06, 18)
+      : { opacity: 1, dy: 0 };
+    const op = Math.min(lineM.opacity, titleHold) * (1 - loopFade * 0.25);
     parts.push(
-      `<text x="${pad}" y="${y}" fill="#ffffff" font-size="${titleSize}" font-family="${FONT_FAMILY}" font-weight="700">${xml(line)}</text>`,
+      `<text opacity="${op.toFixed(3)}" transform="translate(0 ${lineM.dy.toFixed(1)})" x="${pad}" y="${titleY}" fill="#ffffff" font-size="${titleSize}" font-family="${FONT_FAMILY}" font-weight="700">${xml(line)}</text>`,
     );
   }
-  y += 36;
-  for (const line of excerptLines) {
-    y += excerptSize + 10;
+  const ctaBoxH = layout === "story" ? 200 : 150;
+  const ctaBoxY = size.height - (layout === "story" ? 280 : 210);
+  const textLimit = portrait ? size.height - 88 : size.height - 48;
+  const storyTop = titleY + (portrait ? 36 : 22);
+  const stackTableau = (
+    blocks: {
+      lines: string[];
+      opacity: number;
+      fontSize: number;
+      fill: string;
+    }[],
+  ) => {
+    let y = storyTop;
+    let any = false;
+    for (const block of blocks) {
+      if (!block.lines[0] || block.opacity < 0.03) continue;
+      if (any) y += 16;
+      any = true;
+      for (const line of block.lines) {
+        y += block.fontSize + 12;
+        if (y > textLimit) break;
+        parts.push(
+          `<text data-news-block="1" opacity="${block.opacity.toFixed(3)}" x="${pad}" y="${y}" fill="${block.fill}" font-size="${block.fontSize}" font-family="${FONT_FAMILY}" font-weight="700">${xml(line)}</text>`,
+        );
+      }
+    }
+  };
+  stackTableau([
+    { lines: excerptLines, opacity: excerptOp, fontSize: excerptSize, fill: "#e8eef8" },
+    { lines: bodyALines, opacity: bodyAOp, fontSize: bodySize, fill: "#f2f6fc" },
+  ]);
+  stackTableau([
+    { lines: bodyBLines, opacity: bodyBOp, fontSize: bodySize, fill: "#f2f6fc" },
+    { lines: bodyCLines, opacity: bodyCOp, fontSize: bodySize, fill: "#f2f6fc" },
+  ]);
+  if (portrait && live && ctaM.opacity > 0.02) {
     parts.push(
-      `<text x="${pad}" y="${y}" fill="#d5deec" font-size="${excerptSize}" font-family="${FONT_FAMILY}">${xml(line)}</text>`,
+      `<g opacity="${(ctaM.opacity * (1 - loopFade)).toFixed(3)}" transform="translate(0 ${ctaM.dy.toFixed(1)})">
+        <rect x="${pad}" y="${ctaBoxY}" width="${size.width - pad * 2}" height="${ctaBoxH}" rx="32" fill="${accent}"/>
+        <text x="${size.width / 2}" y="${ctaBoxY + 70}" fill="#0b1220" font-size="${layout === "story" ? 48 : 36}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle">Abonne-toi</text>
+        <text x="${size.width / 2}" y="${ctaBoxY + 128}" fill="#0b1220" font-size="${layout === "story" ? 28 : 22}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle">pour d'autres histoires</text>
+      </g>`,
     );
   }
   parts.push(
-    `<text x="${pad}" y="${size.height - 48}" fill="#c5d0e0" font-size="${portrait ? 22 : 20}" font-family="${FONT_FAMILY}">euromillions-resultats.fr · 18+ · jeu responsable</text>`,
+    `<text opacity="${(footM.opacity * (1 - loopFade * 0.4)).toFixed(3)}" x="${pad}" y="${size.height - 48}" fill="#c5d0e0" font-size="${portrait ? 22 : 20}" font-family="${FONT_FAMILY}">18+ · jeu responsable</text>`,
   );
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size.width}" height="${size.height}" viewBox="0 0 ${size.width} ${size.height}">
-  <rect width="100%" height="100%" fill="#0b1220"/>
+  ${bg}
   ${parts.join("\n  ")}
 </svg>`;
 }

@@ -135,6 +135,56 @@ export const YOUTUBE_TAGS_EURODREAMS = [
   "Shorts",
 ];
 
+export const YOUTUBE_TAGS_NEWS = [
+  "EuroMillions",
+  "actualité",
+  "FDJ",
+  "Shorts",
+];
+
+function clipYoutubeTitle(full: string, compact: string): string {
+  if (full.length <= 100) return full;
+  return compact.length <= 100 ? compact : compact.slice(0, 100);
+}
+
+export function youtubeNewsShortTitle(title: string): string {
+  const hook = title.replace(/\s+/g, " ").trim() || "une histoire";
+  const suffix = " #Shorts";
+  const full = `Histoire — ${hook}${suffix}`;
+  if (full.length <= 100) return full;
+  const prefix = "Histoire — ";
+  const room = 100 - prefix.length - suffix.length;
+  const clipped =
+    hook.length <= room
+      ? hook
+      : `${hook.slice(0, Math.max(8, room - 1)).trimEnd()}…`;
+  return clipYoutubeTitle(full, `${prefix}${clipped}${suffix}`);
+}
+
+export function youtubeNewsShortDescription(args: {
+  title: string;
+  excerpt: string;
+  slug?: string;
+  url?: string;
+}): string {
+  const lines = [args.title.trim(), ""];
+  const excerpt = args.excerpt.replace(/\s+/g, " ").trim();
+  if (excerpt) lines.push(excerpt, "");
+  const url =
+    args.url ||
+    (args.slug
+      ? `https://euromillions-resultats.fr/fr/actualites/${args.slug}`
+      : "https://euromillions-resultats.fr/fr");
+  lines.push(
+    url,
+    "Abonne-toi pour d'autres histoires.",
+    "18+ · jeu responsable · site indépendant. Nous ne vendons pas de tickets.",
+    "",
+    "#Shorts #EuroMillions #Histoire #FDJ",
+  );
+  return lines.join("\n").slice(0, 5000);
+}
+
 export type YoutubePlaylistKey =
   | "euromillions"
   | "loto"

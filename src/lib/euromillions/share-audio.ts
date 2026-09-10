@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import {
   DROP_REVEAL_DUR,
+  SHARE_NEWS_SECONDS,
   SHARE_VIDEO_SECONDS,
   TITLE_END,
   ballStart,
@@ -251,6 +252,139 @@ export function lotteryShareWav(
     out[i] = Math.tanh(out[i] * 1.15) * g * 0.92;
   }
 
+  return encodeWav(out, SAMPLE_RATE);
+}
+
+export type NewsShareMood = "ironie" | "tension" | "mystere" | "chaleur";
+
+const NEWS_MOOD: Record<
+  NewsShareMood,
+  { bpm: number; chords: number[][]; melody: number[] }
+> = {
+  ironie: {
+    bpm: 116,
+    chords: [
+      [130.81, 164.81, 196.0, 261.63],
+      [110.0, 164.81, 220.0, 261.63],
+      [174.61, 220.0, 261.63, 349.23],
+      [196.0, 246.94, 293.66, 392.0],
+    ],
+    melody: [523.25, 659.25, 783.99, 659.25, 587.33, 523.25, 392.0, 523.25],
+  },
+  tension: {
+    bpm: 96,
+    chords: [
+      [146.83, 174.61, 220.0, 293.66],
+      [116.54, 174.61, 233.08, 349.23],
+      [174.61, 220.0, 261.63, 349.23],
+      [130.81, 196.0, 261.63, 329.63],
+    ],
+    melody: [440.0, 392.0, 349.23, 392.0, 329.63, 293.66, 349.23, 440.0],
+  },
+  mystere: {
+    bpm: 88,
+    chords: [
+      [110.0, 164.81, 220.0, 261.63],
+      [174.61, 220.0, 261.63, 349.23],
+      [130.81, 164.81, 196.0, 261.63],
+      [164.81, 207.65, 329.63, 415.3],
+    ],
+    melody: [440.0, 523.25, 415.3, 349.23, 329.63, 440.0, 261.63, 415.3],
+  },
+  chaleur: {
+    bpm: 108,
+    chords: [
+      [174.61, 220.0, 261.63, 349.23],
+      [130.81, 164.81, 196.0, 261.63],
+      [146.83, 174.61, 220.0, 293.66],
+      [116.54, 174.61, 233.08, 349.23],
+    ],
+    melody: [349.23, 392.0, 440.0, 523.25, 440.0, 392.0, 349.23, 261.63],
+  },
+};
+
+function mixWhoosh(out: Float32Array, startSec: number) {
+  mixTone(out, startSec, 0.22, (lt) => {
+    const env = Math.sin(Math.PI * Math.min(1, lt / 0.22));
+    const f = 400 + lt * 2800;
+    return Math.sin(2 * Math.PI * f * lt) * env * 0.07;
+  });
+}
+
+function mixSting(out: Float32Array, startSec: number) {
+  pluck(out, startSec, 783.99, 0.28, 0.16);
+  pluck(out, startSec, 1174.66, 0.22, 0.08);
+}
+
+function mixTick(out: Float32Array, startSec: number) {
+  mixTone(out, startSec, 0.04, (lt) => {
+    const env = Math.exp(-lt / 0.008);
+    return Math.sin(2 * Math.PI * 1800 * lt) * env * 0.06;
+  });
+}
+
+/**
+ * Fond original (pas de morceau tiers). Mood + SFX varient selon le scénario.
+ */
+export function newsShareWav(
+  durationSec = SHARE_NEWS_SECONDS,
+  mood: NewsShareMood = "ironie",
+  sfx: string[] = [],
+): Buffer {
+  const samples = Math.max(1, Math.ceil(durationSec * SAMPLE_RATE));
+  const out = new Float32Array(samples);
+  const spec = NEWS_MOOD[mood] || NEWS_MOOD.ironie;
+  const beat = 60 / spec.bpm;
+  const chords = spec.chords;
+  const melody = spec.melody;
+
+  pluck(out, 0.02, melody[0]!, 0.18, 0.14);
+  pluck(out, 0.12, melody[1] || melody[0]!, 0.2, 0.12);
+
+  const chordDur = durationSec / chords.length;
+  for (let c = 0; c < chords.length; c += 1) {
+    const start = c * chordDur;
+    const chord = chords[c]!;
+    for (let b = 0; b * beat < chordDur - 0.02; b += 1) {
+      const at = start + b * beat;
+      if (b % 2 === 0) {
+        for (const f of chord) {
+          pluck(out, at, f, 0.22, f < 180 ? 0.09 : 0.045);
+        }
+      } else {
+        pluck(out, at, chord[0]!, 0.16, 0.07);
+      }
+      mixTone(out, at, 0.04, (lt) => {
+        const env = Math.exp(-lt / 0.007);
+        return Math.sin(2 * Math.PI * 7200 * lt) * env * 0.024;
+      });
+      const note = melody[b % melody.length]!;
+      mixTone(out, at + 0.02, 0.18, (lt) => {
+        const env = Math.min(1, lt / 0.008) * Math.exp(-lt / 0.11);
+        return (
+          Math.sin(2 * Math.PI * note * lt) * env * 0.05 +
+          Math.sin(2 * Math.PI * note * 2 * lt) * env * 0.01
+        );
+      });
+    }
+  }
+
+  const tags = sfx.map((s) => s.toLowerCase());
+  if (tags.includes("whoosh")) mixWhoosh(out, 0.08);
+  if (tags.includes("tick")) {
+    mixTick(out, durationSec * 0.32);
+    mixTick(out, durationSec * 0.52);
+  }
+  if (tags.includes("sting")) mixSting(out, durationSec * 0.84);
+
+  const fadeIn = Math.floor(0.04 * SAMPLE_RATE);
+  const fadeOut = Math.floor(0.9 * SAMPLE_RATE);
+  for (let i = 0; i < samples; i += 1) {
+    let g = 1;
+    if (i < fadeIn) g *= i / fadeIn;
+    if (i > samples - fadeOut) g *= Math.max(0, (samples - i) / fadeOut);
+    out[i] = Math.tanh(out[i] * 1.08) * g * 0.88;
+  }
   return encodeWav(out, SAMPLE_RATE);
 }
 

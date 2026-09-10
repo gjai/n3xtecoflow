@@ -89,6 +89,11 @@ export const NEWS_FEEDS: NewsFeed[] = [
     url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(gagnant+OR+millionnaire+OR+%22My+Million%22+OR+jackpot)+when:90d&hl=fr&gl=FR&ceid=FR:fr",
   },
   {
+    id: "euromillions-gnews-fr-insolite",
+    siteId: "euromillions",
+    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+Loto+OR+EuroDreams+OR+%22My+Million%22)+(gagnant+OR+millionnaire)+(insolite+OR+anecdote+OR+chien+OR+ticket+OR+%22a+achet%C3%A9%22+OR+d%C3%A9pense+OR+bizarre+OR+couple+OR+village)+when:90d&hl=fr&gl=FR&ceid=FR:fr",
+  },
+  {
     id: "euromillions-gnews-fr-loto",
     siteId: "euromillions",
     url: "https://news.google.com/rss/search?q=(Loto)+(FDJ+OR+%22Fran%C3%A7aise+des+Jeux%22)+(tirage+OR+r%C3%A9sultat+OR+jackpot+OR+gagnant)+when:60d&hl=fr&gl=FR&ceid=FR:fr",

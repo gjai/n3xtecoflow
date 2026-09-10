@@ -41,7 +41,12 @@ yarn-error.log*
 /data/em-alerts.json
 /data/em-facebook.json
 /data/youtube-playlists.json
+/data/tiktok-oauth.json
 /data/ai-usage.json
+
+# aperçu Short actu (local, pas git)
+/tmp-preview/
+/public/preview-actu.mp4
 
 # vercel
 .vercel

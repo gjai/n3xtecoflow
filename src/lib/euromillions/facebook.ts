@@ -10,7 +10,13 @@ import {
 } from "@/lib/fdj-games/store";
 import type { FdjCompanionGameId, FdjGameDraw } from "@/lib/fdj-games/types";
 import { fdjAffiliateUrl } from "@/lib/fdj-affiliate";
-import { formatEuroMillionsLongDate, parisDateKey } from "./datetime";
+import {
+  formatEuroMillionsLongDate,
+  isNewsShortSlot,
+  parisHourKey,
+  parisDateKey,
+  parisIsoWeekKey,
+} from "./datetime";
 import {
   SHARE_IG_FEED,
   SHARE_STORY,
@@ -19,8 +25,14 @@ import {
   formatShareJackpot,
   type ShareCardInput,
 } from "./share-card";
-import { lotterySharePng, newsSharePng } from "./share-render";
-import { isEuroMillionsDrawPublished } from "./store";
+import { lotterySharePng, newsSharePng, newsCopyForShare } from "./share-render";
+import {
+  composeNewsShortScript,
+  type NewsShortFond,
+  type NewsShortMusic,
+  type NewsShortVisuel,
+} from "./news-short-script";
+import { isEuroMillionsDrawPublished, readEuroMillionsStore } from "./store";
 import type { EuroMillionsDraw } from "./types";
 import {
   postYoutubeShort,
@@ -33,11 +45,15 @@ import {
   youtubePlaylistsForEuroMillions,
   youtubeShortDescription,
   youtubeShortTitle,
+  youtubeNewsShortDescription,
+  youtubeNewsShortTitle,
   YOUTUBE_TAGS_EUROMILLIONS,
   YOUTUBE_TAGS_EURODREAMS,
   YOUTUBE_TAGS_LOTO,
+  YOUTUBE_TAGS_NEWS,
   type YoutubePlaylistKey,
 } from "./youtube";
+import { postTiktokVideo, tiktokConfigured } from "./tiktok";
 
 export const SOCIAL_DRAW_GAMES = [
   "euromillions",
@@ -59,10 +75,17 @@ type FacebookStore = {
   lastPostedIg?: PostedMap;
   lastPostedReel?: PostedMap;
   lastPostedYoutube?: PostedMap;
+  lastPostedTiktok?: PostedMap;
   lastPostedOk?: PostedOkMap;
   lastErrors?: Record<string, string>;
   newsSeeded?: boolean;
   postedNewsSlugs?: string[];
+  lastNewsShortWeek?: string | null;
+  lastNewsShortSlug?: string | null;
+  lastNewsShortDay?: string | null;
+  lastNewsShortHour?: string | null;
+  lastNewsShortFact?: string | null;
+  lastNewsShortFacts?: string[];
 };
 
 export type FacebookNotifyResult = {
@@ -73,6 +96,7 @@ export type FacebookNotifyResult = {
   reels: number;
   instagramReels: number;
   youtubeShorts: number;
+  tiktokPosts: number;
   instagramUsername: string | null;
   skipped: Record<string, string>;
 };
@@ -82,8 +106,14 @@ export type FacebookPublishSnapshot = {
   lastPostedIg: PostedMap;
   lastPostedReel: PostedMap;
   lastPostedYoutube: PostedMap;
+  lastPostedTiktok: PostedMap;
   lastPostedOk: PostedOkMap;
   lastErrors: Record<string, string>;
+  lastNewsShortWeek: string | null;
+  lastNewsShortSlug: string | null;
+  lastNewsShortDay: string | null;
+  lastNewsShortHour: string | null;
+  lastNewsShortFact: string | null;
 };
 
 function emptyNotify(
@@ -98,6 +128,7 @@ function emptyNotify(
     reels: 0,
     instagramReels: 0,
     youtubeShorts: 0,
+    tiktokPosts: 0,
     instagramUsername: null,
     skipped,
     ...extra,
@@ -145,10 +176,17 @@ const SEED: FacebookStore = {
   lastPostedIg: emptyPosted(),
   lastPostedReel: emptyPosted(),
   lastPostedYoutube: emptyPosted(),
+  lastPostedTiktok: emptyPosted(),
   lastPostedOk: emptyPostedOk(),
   lastErrors: {},
   newsSeeded: false,
   postedNewsSlugs: [],
+  lastNewsShortWeek: null,
+  lastNewsShortSlug: null,
+  lastNewsShortDay: null,
+  lastNewsShortHour: null,
+  lastNewsShortFact: null,
+  lastNewsShortFacts: [],
 };
 
 const COMPANION_SOCIAL_GAMES: FdjCompanionGameId[] = [
@@ -199,6 +237,7 @@ async function readState(): Promise<FacebookStore> {
       lastPostedIg: mergePosted(parsed.lastPostedIg),
       lastPostedReel: mergePosted(parsed.lastPostedReel),
       lastPostedYoutube: mergePosted(parsed.lastPostedYoutube),
+      lastPostedTiktok: mergePosted(parsed.lastPostedTiktok),
       lastPostedOk: mergePostedOk(parsed.lastPostedOk),
       lastErrors:
         parsed.lastErrors && typeof parsed.lastErrors === "object"
@@ -208,6 +247,33 @@ async function readState(): Promise<FacebookStore> {
       postedNewsSlugs: Array.isArray(parsed.postedNewsSlugs)
         ? parsed.postedNewsSlugs.filter((s) => typeof s === "string")
         : [],
+      lastNewsShortWeek:
+        typeof parsed.lastNewsShortWeek === "string"
+          ? parsed.lastNewsShortWeek
+          : null,
+      lastNewsShortSlug:
+        typeof parsed.lastNewsShortSlug === "string"
+          ? parsed.lastNewsShortSlug
+          : null,
+      lastNewsShortDay:
+        typeof parsed.lastNewsShortDay === "string"
+          ? parsed.lastNewsShortDay
+          : null,
+      lastNewsShortHour:
+        typeof parsed.lastNewsShortHour === "string"
+          ? parsed.lastNewsShortHour
+          : null,
+      lastNewsShortFact:
+        typeof parsed.lastNewsShortFact === "string"
+          ? parsed.lastNewsShortFact
+          : null,
+      lastNewsShortFacts: Array.isArray(parsed.lastNewsShortFacts)
+        ? parsed.lastNewsShortFacts
+            .filter((s): s is string => typeof s === "string" && s.length > 12)
+            .slice(-24)
+        : typeof parsed.lastNewsShortFact === "string"
+          ? [parsed.lastNewsShortFact]
+          : [],
     };
   } catch {
     return { ...SEED };
@@ -226,10 +292,17 @@ async function writeState(store: FacebookStore): Promise<void> {
         lastPostedIg: store.lastPostedIg ?? emptyPosted(),
         lastPostedReel: store.lastPostedReel ?? emptyPosted(),
         lastPostedYoutube: store.lastPostedYoutube ?? emptyPosted(),
+        lastPostedTiktok: store.lastPostedTiktok ?? emptyPosted(),
         lastPostedOk: store.lastPostedOk ?? emptyPostedOk(),
         lastErrors: store.lastErrors ?? {},
         newsSeeded: store.newsSeeded ?? false,
         postedNewsSlugs: store.postedNewsSlugs ?? [],
+        lastNewsShortWeek: store.lastNewsShortWeek ?? null,
+        lastNewsShortSlug: store.lastNewsShortSlug ?? null,
+        lastNewsShortDay: store.lastNewsShortDay ?? null,
+        lastNewsShortHour: store.lastNewsShortHour ?? null,
+        lastNewsShortFact: store.lastNewsShortFact ?? null,
+        lastNewsShortFacts: store.lastNewsShortFacts ?? [],
       },
       null,
       2,
@@ -706,17 +779,25 @@ export async function postEuroMillionsReels(args: {
   youtubePlaylists?: YoutubePlaylistKey[];
   skipReel?: boolean;
   skipYoutube?: boolean;
-}): Promise<{ facebook: boolean; instagram: boolean; youtube: boolean }> {
+  skipTiktok?: boolean;
+}): Promise<{
+  facebook: boolean;
+  instagram: boolean;
+  youtube: boolean;
+  tiktok: boolean;
+}> {
   let facebook = false;
   let instagram = false;
   let youtube = false;
+  let tiktok = false;
   const wantReel = !args.skipReel;
   const wantYt =
     !args.skipYoutube &&
     youtubeConfigured() &&
     Boolean(args.youtubeTitle && args.youtubeDescription);
-  if (!wantReel && !wantYt) {
-    return { facebook, instagram, youtube };
+  const wantTiktok = !args.skipTiktok && tiktokConfigured();
+  if (!wantReel && !wantYt && !wantTiktok) {
+    return { facebook, instagram, youtube, tiktok };
   }
   try {
     const { lotteryShareMp4 } = await import("./share-video");
@@ -747,10 +828,121 @@ export async function postEuroMillionsReels(args: {
       if (yt.ok) youtube = true;
       else console.error("youtube_short_fail", yt.error);
     }
+    if (wantTiktok) {
+      const tk = await postTiktokVideo({
+        bytes: mp4,
+        caption: args.caption,
+      });
+      if (tk.ok) tiktok = true;
+      else console.error("tiktok_post_fail", tk.error);
+    }
   } catch (err) {
     console.error("share_reel_fail", err);
   }
-  return { facebook, instagram, youtube };
+  return { facebook, instagram, youtube, tiktok };
+}
+
+async function postNewsReels(args: {
+  token: string;
+  title: string;
+  excerpt: string;
+  body?: string;
+  imageSrc?: string | null;
+  mood?: NewsShortMusic;
+  sfx?: string[];
+  fond?: NewsShortFond;
+  visuelSeed?: string | null;
+  visuels?: NewsShortVisuel[];
+  photoBufs?: Buffer[];
+  caption: string;
+  instagram?: InstagramAccount | null;
+  youtubeTitle: string;
+  youtubeDescription: string;
+  skipReel?: boolean;
+  skipYoutube?: boolean;
+  skipTiktok?: boolean;
+}): Promise<{
+  facebook: boolean;
+  instagram: boolean;
+  youtube: boolean;
+  tiktok: boolean;
+}> {
+  let facebook = false;
+  let instagram = false;
+  let youtube = false;
+  let tiktok = false;
+  const wantReel = !args.skipReel;
+  const wantYt = !args.skipYoutube && youtubeConfigured();
+  const wantTiktok = !args.skipTiktok && tiktokConfigured();
+  if (!wantReel && !wantYt && !wantTiktok) {
+    return { facebook, instagram, youtube, tiktok };
+  }
+  try {
+    const { newsShareMp4 } = await import("./share-video");
+    const generated =
+      args.photoBufs !== undefined
+        ? args.photoBufs
+        : await (await import("./news-short-script")).generateNewsShortPhotos({
+            title: args.title,
+            excerpt: args.excerpt,
+            body: args.body || "",
+            game: "euromillions",
+            fact: args.visuelSeed || args.title,
+            permalink: "",
+            imageSrc: null,
+            source: "ai",
+            voix: false,
+            music: args.mood,
+            sfx: args.sfx,
+            visuels: args.visuels,
+          });
+    const mp4 = await newsShareMp4(args.title, args.excerpt, {
+      body: args.body,
+      imageSrc: generated.length ? null : args.imageSrc,
+      mood: args.mood,
+      sfx: args.sfx,
+      fond: args.fond,
+      visuelSeed: args.visuelSeed,
+      visuels: args.visuels,
+      photoBufs: generated,
+    });
+    if (wantReel) {
+      const fb = await postFacebookReel(args.token, mp4, args.caption);
+      if (fb.ok) facebook = true;
+      else console.error("facebook_news_reel_fail", fb.error);
+      if (args.instagram) {
+        const ig = await postInstagramReel({
+          token: args.token,
+          igUserId: args.instagram.id,
+          bytes: mp4,
+          caption: args.caption,
+        });
+        if (ig.ok) instagram = true;
+        else console.error("instagram_news_reel_fail", ig.error);
+      }
+    }
+    if (wantYt) {
+      const yt = await postYoutubeShort({
+        bytes: mp4,
+        title: args.youtubeTitle,
+        description: args.youtubeDescription,
+        tags: YOUTUBE_TAGS_NEWS,
+      });
+      if (yt.ok) youtube = true;
+      else console.error("youtube_news_short_fail", yt.error);
+    }
+    if (wantTiktok) {
+      const tk = await postTiktokVideo({
+        bytes: mp4,
+        caption: args.caption,
+      });
+      if (tk.ok) tiktok = true;
+      else console.error("tiktok_news_post_fail", tk.error);
+    }
+  } catch (err) {
+    console.error("news_share_reel_fail", err);
+  }
+  return { facebook, instagram, youtube, tiktok };
 }
 
 async function publishInstagram(args: {
@@ -1023,8 +1215,14 @@ export async function facebookPublishSnapshot(): Promise<FacebookPublishSnapshot
     lastPostedIg: state.lastPostedIg ?? emptyPosted(),
     lastPostedReel: state.lastPostedReel ?? emptyPosted(),
     lastPostedYoutube: state.lastPostedYoutube ?? emptyPosted(),
+    lastPostedTiktok: state.lastPostedTiktok ?? emptyPosted(),
     lastPostedOk: state.lastPostedOk ?? emptyPostedOk(),
     lastErrors: state.lastErrors ?? {},
+    lastNewsShortWeek: state.lastNewsShortWeek ?? null,
+    lastNewsShortSlug: state.lastNewsShortSlug ?? null,
+    lastNewsShortDay: state.lastNewsShortDay ?? null,
+    lastNewsShortHour: state.lastNewsShortHour ?? null,
+    lastNewsShortFact: state.lastNewsShortFact ?? null,
   };
 }
 
@@ -1149,6 +1347,7 @@ export async function notifyFacebookOnPublish(
   let reels = 0;
   let instagramReels = 0;
   let youtubeShorts = 0;
+  let tiktokPosts = 0;
   const force = Boolean(options?.force);
   const only = options?.games;
   const want = (id: SocialDrawGameId) => !only || only.includes(id);
@@ -1192,6 +1391,15 @@ export async function notifyFacebookOnPublish(
     await persist({
       lastPostedYoutube: {
         ...(state.lastPostedYoutube ?? emptyPosted()),
+        [key]: value,
+      },
+    });
+  };
+
+  const stampTiktok = async (key: SocialDrawGameId, value: string) => {
+    await persist({
+      lastPostedTiktok: {
+        ...(state.lastPostedTiktok ?? emptyPosted()),
         [key]: value,
       },
     });
@@ -1329,6 +1537,8 @@ export async function notifyFacebookOnPublish(
         skipReel: !force && state.lastPostedReel?.[job.key] === job.fingerprint,
         skipYoutube:
           !force && state.lastPostedYoutube?.[job.key] === job.fingerprint,
+        skipTiktok:
+          !force && state.lastPostedTiktok?.[job.key] === job.fingerprint,
       });
       if (reel.facebook) reels += 1;
       if (reel.instagram) {
@@ -1356,6 +1566,17 @@ export async function notifyFacebookOnPublish(
       ) {
         skipped[`${skipKey}:youtube`] = "youtube_fail";
         await stampError(`${skipKey}:youtube`, "youtube_fail");
+      }
+      if (reel.tiktok) {
+        tiktokPosts += 1;
+        await stampTiktok(job.key, job.fingerprint);
+        skipped[`${skipKey}:tiktok`] = "ok";
+      } else if (
+        tiktokConfigured() &&
+        (force || state.lastPostedTiktok?.[job.key] !== job.fingerprint)
+      ) {
+        skipped[`${skipKey}:tiktok`] = "tiktok_fail";
+        await stampError(`${skipKey}:tiktok`, "tiktok_fail");
       }
     }
   };
@@ -1430,7 +1651,9 @@ export async function notifyFacebookOnPublish(
     (force ||
       state.lastPostedReel?.euromillions !== latest.date ||
       (youtubeConfigured() &&
-        state.lastPostedYoutube?.euromillions !== latest.date))
+        state.lastPostedYoutube?.euromillions !== latest.date) ||
+      (tiktokConfigured() &&
+        state.lastPostedTiktok?.euromillions !== latest.date))
   ) {
     const reel = await postEuroMillionsReels({
       token,
@@ -1444,6 +1667,8 @@ export async function notifyFacebookOnPublish(
       skipReel: !force && state.lastPostedReel?.euromillions === latest.date,
       skipYoutube:
         !force && state.lastPostedYoutube?.euromillions === latest.date,
+      skipTiktok:
+        !force && state.lastPostedTiktok?.euromillions === latest.date,
     });
     if (reel.facebook) reels += 1;
     if (reel.instagram) {
@@ -1471,6 +1696,17 @@ export async function notifyFacebookOnPublish(
     ) {
       skipped["euromillions:youtube"] = "youtube_backfill_fail";
     }
+    if (reel.tiktok) {
+      tiktokPosts += 1;
+      await stampTiktok("euromillions", latest.date);
+      skipped["euromillions:tiktok"] =
+        skipped["euromillions:tiktok"] || "tiktok_backfill";
+    } else if (
+      tiktokConfigured() &&
+      (force || state.lastPostedTiktok?.euromillions !== latest.date)
+    ) {
+      skipped["euromillions:tiktok"] = "tiktok_backfill_fail";
+    }
   }
 
   const companionReelGames: FdjCompanionGameId[] = ["loto", "eurodreams"];
@@ -1491,7 +1727,8 @@ export async function notifyFacebookOnPublish(
     if (
       !force &&
       state.lastPostedReel?.[gameId] === drawKey &&
-      (!youtubeConfigured() || state.lastPostedYoutube?.[gameId] === drawKey)
+      (!youtubeConfigured() || state.lastPostedYoutube?.[gameId] === drawKey) &&
+      (!tiktokConfigured() || state.lastPostedTiktok?.[gameId] === drawKey)
     ) {
       continue;
     }
@@ -1506,6 +1743,7 @@ export async function notifyFacebookOnPublish(
       youtubePlaylists: video.youtubePlaylists,
       skipReel: !force && state.lastPostedReel?.[gameId] === drawKey,
       skipYoutube: !force && state.lastPostedYoutube?.[gameId] === drawKey,
+      skipTiktok: !force && state.lastPostedTiktok?.[gameId] === drawKey,
     });
     if (reel.facebook) reels += 1;
     if (reel.instagram) {
@@ -1530,6 +1768,17 @@ export async function notifyFacebookOnPublish(
     ) {
       skipped[`${gameId}:youtube`] = "youtube_backfill_fail";
     }
+    if (reel.tiktok) {
+      tiktokPosts += 1;
+      await stampTiktok(gameId, drawKey);
+      skipped[`${gameId}:tiktok`] =
+        skipped[`${gameId}:tiktok`] || "tiktok_backfill";
+    } else if (
+      tiktokConfigured() &&
+      (force || state.lastPostedTiktok?.[gameId] !== drawKey)
+    ) {
+      skipped[`${gameId}:tiktok`] = "tiktok_backfill_fail";
+    }
   }
 
   return {
@@ -1540,6 +1789,7 @@ export async function notifyFacebookOnPublish(
     reels,
     instagramReels,
     youtubeShorts,
+    tiktokPosts,
     instagramUsername: instagram?.username || null,
     skipped,
   };
@@ -1551,19 +1801,185 @@ function newsPermalink(slug: string): string {
   return `https://euromillions-resultats.fr/fr/actualites/${slug}`;
 }
 
-function newsCaption(title: string, excerpt: string, slug: string): string {
+function newsCaption(title: string, excerpt: string, slugOrUrl: string): string {
   const playUrl = fdjAffiliateUrl("euromillions", "");
+  const url = slugOrUrl.startsWith("http")
+    ? slugOrUrl
+    : newsPermalink(slugOrUrl);
   return [
     title.trim(),
     "",
     excerpt.trim(),
     "",
-    newsPermalink(slug),
+    url,
     ...(playUrl ? ["", "Jouer sur FDJ.fr :", playUrl] : []),
     "",
     "Site indépendant · 18+ · jeu responsable. Nous ne vendons pas de tickets.",
     "#EuroMillions",
   ].join("\n");
+}
+
+export type WeeklyNewsPick = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  publishedAt: string;
+  body: string;
+  imageSrc: string | null;
+};
+
+/** Dernière actu EuroMillions publiée dans la semaine ISO Paris. Pas d’archive hors semaine. */
+export function pickWeeklyNewsArticle(
+  articles: {
+    slug: string;
+    siteId?: string;
+    publishedAt?: string;
+    imageSrc?: string;
+    fr?: { title?: string; excerpt?: string; body?: string[] };
+  }[],
+  weekKey: string,
+  extraFacts?: string[] | null,
+): WeeklyNewsPick | null {
+  const ranked = articles
+    .filter(
+      (a) =>
+        (a.siteId || "ecoflow") === "euromillions" &&
+        Boolean(a.slug) &&
+        Boolean(a.fr?.title) &&
+        Boolean(a.publishedAt),
+    )
+    .map((a) => {
+      const publishedAt = a.publishedAt!;
+      const at = new Date(publishedAt);
+      const week = Number.isNaN(at.getTime())
+        ? ""
+        : parisIsoWeekKey(at);
+      const copy = newsCopyForShare({
+        excerpt: a.fr?.excerpt,
+        body: a.fr?.body,
+        extraFacts,
+      });
+      return {
+        slug: a.slug,
+        title: a.fr!.title!.trim(),
+        excerpt: copy.excerpt,
+        publishedAt,
+        body: copy.body,
+        imageSrc: a.imageSrc?.trim() || null,
+        week,
+      };
+    })
+    .filter((a) => a.week === weekKey)
+    .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  const top = ranked[0];
+  if (!top) return null;
+  return {
+    slug: top.slug,
+    title: top.title,
+    excerpt: top.excerpt,
+    publishedAt: top.publishedAt,
+    body: top.body,
+    imageSrc: top.imageSrc,
+  };
+}
+
+/**
+ * Un Short/Reel histoire chaque heure : scénario IA (anecdote + visuels).
+ * Désactivé tant que `NEWS_SHORT_ENABLED` n’est pas `1`. `force` ignore créneau et flag.
+ */
+export async function notifyWeeklyNewsShort(options?: {
+  force?: boolean;
+}): Promise<FacebookNotifyResult> {
+  const skipped: Record<string, string> = {};
+  const enabled = process.env.NEWS_SHORT_ENABLED?.trim() === "1";
+  if (!options?.force && !enabled) {
+    return emptyNotify({ newsShort: "disabled" });
+  }
+  if (!options?.force && !isNewsShortSlot()) {
+    skipped.newsShort = "outside_hourly_slot";
+    return emptyNotify(skipped);
+  }
+  const dayKey = parisDateKey();
+  const hourKey = parisHourKey();
+  if (!facebookConfigured() && !youtubeConfigured() && !tiktokConfigured()) {
+    return emptyNotify({ newsShort: "unconfigured" });
+  }
+  let state = await readState();
+  if (!options?.force && state.lastNewsShortHour === hourKey) {
+    skipped.newsShort = "already_this_hour";
+    return emptyNotify(skipped);
+  }
+  const avoidFacts = [
+    ...(state.lastNewsShortFacts || []),
+    state.lastNewsShortFact,
+  ]
+    .filter((s): s is string => Boolean(s && s.length > 12))
+    .slice(-24);
+  const script = await composeNewsShortScript({
+    avoidFacts,
+  });
+  const { generateNewsShortPhotos } = await import("./news-short-script");
+  const photoBufs = await generateNewsShortPhotos(script);
+  const token = envPageToken();
+  const instagram = token ? await resolveInstagramAccount(token) : null;
+  if (token && !instagram) skipped.instagram = "unlinked";
+  if (!token) skipped.facebook = "unconfigured";
+  const stamp = `${script.game}:${hourKey}`;
+  const caption = newsCaption(script.title, script.excerpt, script.permalink);
+  const sent = await postNewsReels({
+    token,
+    title: script.title,
+    excerpt: script.excerpt,
+    body: script.body,
+    imageSrc: script.imageSrc,
+    mood: script.music,
+    sfx: script.sfx,
+    fond: script.visuels?.[0]?.fond,
+    visuelSeed: script.fact,
+    visuels: script.visuels,
+    photoBufs,
+    caption,
+    instagram,
+    youtubeTitle: youtubeNewsShortTitle(script.title),
+    youtubeDescription: youtubeNewsShortDescription({
+      title: script.title,
+      excerpt: script.excerpt,
+      url: script.permalink,
+    }),
+    skipReel: !token,
+  });
+  const ok = sent.facebook || sent.instagram || sent.youtube || sent.tiktok;
+  if (!ok) {
+    skipped.newsShort = "send_failed";
+    return emptyNotify(skipped, {
+      instagramUsername: instagram?.username || null,
+    });
+  }
+  state = {
+    ...state,
+    lastNewsShortWeek: parisIsoWeekKey(),
+    lastNewsShortSlug: stamp,
+    lastNewsShortDay: dayKey,
+    lastNewsShortHour: hourKey,
+    lastNewsShortFact: script.fact,
+    lastNewsShortFacts: [...avoidFacts, script.fact]
+      .filter((s, i, all) => all.indexOf(s) === i)
+      .slice(-24),
+  };
+  await writeState(state);
+  skipped.newsShort = stamp;
+  return {
+    posted: 0,
+    stories: 0,
+    instagramPosted: 0,
+    instagramStories: 0,
+    reels: sent.facebook ? 1 : 0,
+    instagramReels: sent.instagram ? 1 : 0,
+    youtubeShorts: sent.youtube ? 1 : 0,
+    tiktokPosts: sent.tiktok ? 1 : 0,
+    instagramUsername: instagram?.username || null,
+    skipped,
+  };
 }
 
 /**
@@ -1667,6 +2083,7 @@ export async function notifyFacebookNews(
     reels: 0,
     instagramReels: 0,
     youtubeShorts: 0,
+    tiktokPosts: 0,
     instagramUsername: instagram?.username || null,
     skipped,
   };

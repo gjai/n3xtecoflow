@@ -11,6 +11,8 @@ export type AiJob =
   | "news-rewrite"
   | "news-translate"
   | "news-image"
+  | "news-short-script"
+  | "news-short-image"
   | "guides-rewrite"
   | "guides-image"
   | "editorial-rewrite";
@@ -247,7 +249,7 @@ export function addToBucket(bucket: AiDayBucket, input: AiUsageInput): AiDayBuck
 }
 
 export async function recordGeminiImageUsage(args: {
-  job: Extract<AiJob, "news-image" | "guides-image">;
+  job: Extract<AiJob, "news-image" | "guides-image" | "news-short-image">;
   model: string;
   json: unknown;
   images?: number;
@@ -385,6 +387,8 @@ const JOB_LABELS: Record<AiJob, string> = {
   "news-rewrite": "actus rewrite",
   "news-translate": "actus FR",
   "news-image": "images actus",
+  "news-short-script": "scénario Short",
+  "news-short-image": "images Short",
   "guides-rewrite": "guides",
   "guides-image": "images guides",
   "editorial-rewrite": "fiches EcoFlow",

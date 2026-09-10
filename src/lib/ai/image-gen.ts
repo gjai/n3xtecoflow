@@ -8,12 +8,17 @@ export function resolveNewsImageModel(): string {
   return process.env.NEWS_IMAGE_MODEL?.trim() || DEFAULT_NEWS_IMAGE_MODEL;
 }
 
-export function geminiImageGenerationConfig(model: string): {
+export type GeminiImageAspect = "16:9" | "9:16";
+
+export function geminiImageGenerationConfig(
+  model: string,
+  aspectRatio: GeminiImageAspect = "16:9",
+): {
   responseModalities: ["IMAGE"];
-  imageConfig: { aspectRatio: "16:9"; imageSize?: "1K" };
+  imageConfig: { aspectRatio: GeminiImageAspect; imageSize?: "1K" };
 } {
-  const imageConfig: { aspectRatio: "16:9"; imageSize?: "1K" } = {
-    aspectRatio: "16:9",
+  const imageConfig: { aspectRatio: GeminiImageAspect; imageSize?: "1K" } = {
+    aspectRatio,
   };
   // 2.5 Flash Image is billed as a single ~1K size and may reject imageSize.
   if (/gemini-3/i.test(model)) {
@@ -38,7 +43,8 @@ async function requestGeminiImage(args: {
   apiKey: string;
   model: string;
   prompt: string;
-  job: Extract<AiJob, "news-image" | "guides-image">;
+  job: Extract<AiJob, "news-image" | "guides-image" | "news-short-image">;
+  aspectRatio?: GeminiImageAspect;
 }): Promise<ImageAttempt> {
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${args.model}:generateContent?key=${encodeURIComponent(args.apiKey)}`,
@@ -47,7 +53,10 @@ async function requestGeminiImage(args: {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ role: "user", parts: [{ text: args.prompt }] }],
-        generationConfig: geminiImageGenerationConfig(args.model),
+        generationConfig: geminiImageGenerationConfig(
+          args.model,
+          args.aspectRatio || "16:9",
+        ),
       }),
       signal: AbortSignal.timeout(90_000),
     },
@@ -103,7 +112,8 @@ async function requestGeminiImage(args: {
  */
 export async function generateGeminiImage(args: {
   prompt: string;
-  job: Extract<AiJob, "news-image" | "guides-image">;
+  job: Extract<AiJob, "news-image" | "guides-image" | "news-short-image">;
+  aspectRatio?: GeminiImageAspect;
 }): Promise<{ buf: Buffer; mime: string; model: string } | null> {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) return null;
@@ -121,6 +131,7 @@ export async function generateGeminiImage(args: {
         model,
         prompt: args.prompt,
         job: args.job,
+        aspectRatio: args.aspectRatio,
       });
       if (result.kind === "image") {
         return { buf: result.buf, mime: result.mime, model: result.model };

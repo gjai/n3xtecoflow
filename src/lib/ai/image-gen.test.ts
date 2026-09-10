@@ -21,6 +21,16 @@ describe("geminiImageGenerationConfig", () => {
       imageConfig: { aspectRatio: "16:9" },
     });
   });
+
+  it("demande une image 9:16 pour les Shorts", () => {
+    assert.deepEqual(
+      geminiImageGenerationConfig("gemini-3.1-flash-lite-image", "9:16"),
+      {
+        responseModalities: ["IMAGE"],
+        imageConfig: { aspectRatio: "9:16", imageSize: "1K" },
+      },
+    );
+  });
 });
 
 describe("resolveNewsImageModel", () => {

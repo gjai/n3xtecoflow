@@ -1,0 +1,37 @@
+name: EuroMillions hourly story Short
+
+on:
+  schedule:
+    # Toutes les heures. L’app n’envoie que minutes 00–19 Paris, si NEWS_SHORT_ENABLED=1.
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+jobs:
+  news-short:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Post hourly story Short
+        env:
+          NEWS_CRON_SECRET: ${{ secrets.NEWS_CRON_SECRET }}
+          SITE_URL: https://euromillions-resultats.fr
+        run: |
+          set -euo pipefail
+          if [ -z "$NEWS_CRON_SECRET" ]; then
+            echo "NEWS_CRON_SECRET missing"
+            exit 1
+          fi
+          curl -fsS --max-time 360 -X POST \
+            -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
+            "${SITE_URL}/api/euromillions/facebook?newsShort=1"
+      - name: Alert on failure
+        if: failure()
+        env:
+          NEWS_CRON_SECRET: ${{ secrets.NEWS_CRON_SECRET }}
+          SITE_URL: https://ecoflow-stream.com
+        run: |
+          curl -fsS -X POST \
+            -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
+            -H "Content-Type: application/json" \
+            -d "{\"job\":\"news-short\",\"workflow\":\"${{ github.workflow }}\",\"runUrl\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\",\"error\":\"workflow_failed\"}" \
+            "${SITE_URL}/api/cron/alert" || true
