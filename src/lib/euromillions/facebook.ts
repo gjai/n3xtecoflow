@@ -25,8 +25,18 @@ import type { EuroMillionsDraw } from "./types";
 import {
   postYoutubeShort,
   youtubeConfigured,
+  youtubeEuroDreamsShortDescription,
+  youtubeEuroDreamsShortTitle,
+  youtubeLotoShortDescription,
+  youtubeLotoShortTitle,
+  youtubePlaylistsForCompanion,
+  youtubePlaylistsForEuroMillions,
   youtubeShortDescription,
   youtubeShortTitle,
+  YOUTUBE_TAGS_EUROMILLIONS,
+  YOUTUBE_TAGS_EURODREAMS,
+  YOUTUBE_TAGS_LOTO,
+  type YoutubePlaylistKey,
 } from "./youtube";
 
 export const SOCIAL_DRAW_GAMES = [
@@ -290,6 +300,34 @@ export function facebookReelMessage(draw: EuroMillionsDraw): string {
     facebookDrawPermalink(draw.date),
     "18+ · jeu responsable · site indépendant",
     "#EuroMillions",
+  );
+  return lines.join("\n");
+}
+
+/** Légende Reel compagnon : Loto (sans 2e tirage) ou EuroDreams. */
+export function companionReelMessage(draw: FdjGameDraw): string {
+  const date = formatEuroMillionsLongDate(draw.date, "fr");
+  const hookTail =
+    typeof draw.jackpotEur === "number" && draw.jackpotEur > 0
+      ? formatShareJackpot(draw.jackpotEur).replace(/^Jackpot /, "jackpot ")
+      : "les numéros";
+  const main =
+    draw.groups.find(
+      (g) => g.kind === "numbers" && g.labelKey !== "secondDraw" && g.values.length,
+    ) || draw.groups.find((g) => g.kind === "numbers" && g.values.length);
+  const bonus = draw.groups.find((g) => g.kind === "bonus" && g.values.length);
+  const dreams = draw.gameId === "eurodreams";
+  const bonusWord = dreams ? "rêve" : "chance";
+  const lines = [
+    `${dreams ? "EuroDreams" : "Loto"} — tirage du ${date} — ${hookTail}`,
+    "",
+    `${(main?.values || []).join(" · ")}${bonus ? `  ·  ${bonusWord} ${bonus.values.join(" · ")}` : ""}`,
+  ];
+  lines.push(
+    "",
+    companionPermalink(draw),
+    "18+ · jeu responsable · site indépendant",
+    dreams ? "#EuroDreams" : "#Loto",
   );
   return lines.join("\n");
 }
@@ -664,6 +702,8 @@ export async function postEuroMillionsReels(args: {
   instagram?: InstagramAccount | null;
   youtubeTitle?: string;
   youtubeDescription?: string;
+  youtubeTags?: string[];
+  youtubePlaylists?: YoutubePlaylistKey[];
   skipReel?: boolean;
   skipYoutube?: boolean;
 }): Promise<{ facebook: boolean; instagram: boolean; youtube: boolean }> {
@@ -701,6 +741,8 @@ export async function postEuroMillionsReels(args: {
         bytes: mp4,
         title: args.youtubeTitle!,
         description: args.youtubeDescription!,
+        tags: args.youtubeTags,
+        playlists: args.youtubePlaylists,
       });
       if (yt.ok) youtube = true;
       else console.error("youtube_short_fail", yt.error);
@@ -968,6 +1010,8 @@ export async function postFacebookDraw(
     instagram,
     youtubeTitle: youtubeShortTitle(draw),
     youtubeDescription: youtubeShortDescription(draw),
+    youtubeTags: YOUTUBE_TAGS_EUROMILLIONS,
+    youtubePlaylists: youtubePlaylistsForEuroMillions(draw),
   });
   return { ok: true };
 }
@@ -989,11 +1033,47 @@ type DrawPostJob = {
   fingerprint: string;
   caption: string;
   reelCaption?: string;
+  youtubeTitle?: string;
+  youtubeDescription?: string;
+  youtubeTags?: string[];
+  youtubePlaylists?: YoutubePlaylistKey[];
   card: ShareCardInput;
   publicQuery: string;
   storyLinkUrl?: string;
   sortAt: string;
 };
+
+function postsVideoReel(key: SocialDrawGameId): boolean {
+  return key === "euromillions" || key === "loto" || key === "eurodreams";
+}
+
+function companionVideoFields(draw: FdjGameDraw): {
+  reelCaption: string;
+  youtubeTitle: string;
+  youtubeDescription: string;
+  youtubeTags: string[];
+  youtubePlaylists: YoutubePlaylistKey[];
+} | null {
+  if (draw.gameId === "loto") {
+    return {
+      reelCaption: companionReelMessage(draw),
+      youtubeTitle: youtubeLotoShortTitle(draw),
+      youtubeDescription: youtubeLotoShortDescription(draw),
+      youtubeTags: YOUTUBE_TAGS_LOTO,
+      youtubePlaylists: youtubePlaylistsForCompanion("loto"),
+    };
+  }
+  if (draw.gameId === "eurodreams") {
+    return {
+      reelCaption: companionReelMessage(draw),
+      youtubeTitle: youtubeEuroDreamsShortTitle(draw),
+      youtubeDescription: youtubeEuroDreamsShortDescription(draw),
+      youtubeTags: YOUTUBE_TAGS_EURODREAMS,
+      youtubePlaylists: youtubePlaylistsForCompanion("eurodreams"),
+    };
+  }
+  return null;
+}
 
 async function notifyYoutubeOnly(
   latest: EuroMillionsDraw | null,
@@ -1024,6 +1104,8 @@ async function notifyYoutubeOnly(
     bytes: mp4,
     title: youtubeShortTitle(latest),
     description: youtubeShortDescription(latest),
+    tags: YOUTUBE_TAGS_EUROMILLIONS,
+    playlists: youtubePlaylistsForEuroMillions(latest),
   });
   if (!yt.ok) {
     skipped["euromillions:youtube"] = yt.error || "youtube_fail";
@@ -1145,6 +1227,10 @@ export async function notifyFacebookOnPublish(
         fingerprint,
         caption: facebookDrawMessage(latest),
         reelCaption: facebookReelMessage(latest),
+        youtubeTitle: youtubeShortTitle(latest),
+        youtubeDescription: youtubeShortDescription(latest),
+        youtubeTags: YOUTUBE_TAGS_EUROMILLIONS,
+        youtubePlaylists: youtubePlaylistsForEuroMillions(latest),
         card: euroMillionsShareCard(latest),
         publicQuery: `date=${encodeURIComponent(latest.date)}`,
         storyLinkUrl: fdjAffiliateUrl("euromillions", ""),
@@ -1182,10 +1268,16 @@ export async function notifyFacebookOnPublish(
     }
     for (const draw of pending) {
       const fingerprint = companionDrawKey(draw);
+      const video = companionVideoFields(draw);
       jobs.push({
         key: gameId,
         fingerprint,
         caption: companionMessage(draw),
+        reelCaption: video?.reelCaption,
+        youtubeTitle: video?.youtubeTitle,
+        youtubeDescription: video?.youtubeDescription,
+        youtubeTags: video?.youtubeTags,
+        youtubePlaylists: video?.youtubePlaylists,
         card: companionShareCard(draw),
         publicQuery: `game=${encodeURIComponent(gameId)}&key=${encodeURIComponent(fingerprint)}`,
         storyLinkUrl: fdjAffiliateUrl(gameId, ""),
@@ -1209,7 +1301,7 @@ export async function notifyFacebookOnPublish(
       publicQuery: job.publicQuery,
       storyLinkUrl: job.storyLinkUrl,
       instagram,
-      skipInstagramFeed: job.key === "euromillions",
+      skipInstagramFeed: postsVideoReel(job.key),
       onFacebookPosted: () => stampFb(job.key, job.fingerprint),
     });
     if (!sent.posted) {
@@ -1224,17 +1316,19 @@ export async function notifyFacebookOnPublish(
     if (sent.igStory) instagramStories += 1;
     if (sent.igPosted || sent.igStory) await stampIg(job.key, job.fingerprint);
     skipped[skipKey] = "ok";
-    if (job.key === "euromillions" && latest) {
+    if (postsVideoReel(job.key)) {
       const reel = await postEuroMillionsReels({
         token,
         card: job.card,
         caption: job.reelCaption || job.caption,
         instagram,
-        youtubeTitle: youtubeShortTitle(latest),
-        youtubeDescription: youtubeShortDescription(latest),
-        skipReel: !force && state.lastPostedReel?.euromillions === job.fingerprint,
+        youtubeTitle: job.youtubeTitle,
+        youtubeDescription: job.youtubeDescription,
+        youtubeTags: job.youtubeTags,
+        youtubePlaylists: job.youtubePlaylists,
+        skipReel: !force && state.lastPostedReel?.[job.key] === job.fingerprint,
         skipYoutube:
-          !force && state.lastPostedYoutube?.euromillions === job.fingerprint,
+          !force && state.lastPostedYoutube?.[job.key] === job.fingerprint,
       });
       if (reel.facebook) reels += 1;
       if (reel.instagram) {
@@ -1247,7 +1341,7 @@ export async function notifyFacebookOnPublish(
         skipped[`${skipKey}:reel`] = "ok";
       } else if (
         force ||
-        state.lastPostedReel?.euromillions !== job.fingerprint
+        state.lastPostedReel?.[job.key] !== job.fingerprint
       ) {
         skipped[`${skipKey}:reel`] = "reel_fail";
         await stampError(`${skipKey}:reel`, "reel_fail");
@@ -1258,7 +1352,7 @@ export async function notifyFacebookOnPublish(
         skipped[`${skipKey}:youtube`] = "ok";
       } else if (
         youtubeConfigured() &&
-        (force || state.lastPostedYoutube?.euromillions !== job.fingerprint)
+        (force || state.lastPostedYoutube?.[job.key] !== job.fingerprint)
       ) {
         skipped[`${skipKey}:youtube`] = "youtube_fail";
         await stampError(`${skipKey}:youtube`, "youtube_fail");
@@ -1280,6 +1374,10 @@ export async function notifyFacebookOnPublish(
         fingerprint: latest.date,
         caption: facebookDrawMessage(latest),
         reelCaption: facebookReelMessage(latest),
+        youtubeTitle: youtubeShortTitle(latest),
+        youtubeDescription: youtubeShortDescription(latest),
+        youtubeTags: YOUTUBE_TAGS_EUROMILLIONS,
+        youtubePlaylists: youtubePlaylistsForEuroMillions(latest),
         card: euroMillionsShareCard(latest),
         publicQuery: `date=${encodeURIComponent(latest.date)}`,
         storyLinkUrl: fdjAffiliateUrl("euromillions", ""),
@@ -1289,10 +1387,16 @@ export async function notifyFacebookOnPublish(
     for (const gameId of COMPANION_SOCIAL_GAMES) {
       const draw = getGameLatest(fdj, gameId);
       if (!companionPublished(draw) || !draw) continue;
+      const video = companionVideoFields(draw);
       candidates.push({
         key: gameId,
         fingerprint: companionDrawKey(draw),
         caption: companionMessage(draw),
+        reelCaption: video?.reelCaption,
+        youtubeTitle: video?.youtubeTitle,
+        youtubeDescription: video?.youtubeDescription,
+        youtubeTags: video?.youtubeTags,
+        youtubePlaylists: video?.youtubePlaylists,
         card: companionShareCard(draw),
         publicQuery: `game=${encodeURIComponent(gameId)}&key=${encodeURIComponent(companionDrawKey(draw))}`,
         storyLinkUrl: fdjAffiliateUrl(gameId, ""),
@@ -1308,7 +1412,7 @@ export async function notifyFacebookOnPublish(
         caption: job.caption,
         publicQuery: job.publicQuery,
         instagram,
-        skipFeed: job.key === "euromillions",
+        skipFeed: postsVideoReel(job.key),
       });
       if (igSent.igPosted) instagramPosted += 1;
       if (igSent.igStory) instagramStories += 1;
@@ -1335,6 +1439,8 @@ export async function notifyFacebookOnPublish(
       instagram,
       youtubeTitle: youtubeShortTitle(latest),
       youtubeDescription: youtubeShortDescription(latest),
+      youtubeTags: YOUTUBE_TAGS_EUROMILLIONS,
+      youtubePlaylists: youtubePlaylistsForEuroMillions(latest),
       skipReel: !force && state.lastPostedReel?.euromillions === latest.date,
       skipYoutube:
         !force && state.lastPostedYoutube?.euromillions === latest.date,
@@ -1364,6 +1470,65 @@ export async function notifyFacebookOnPublish(
       (force || state.lastPostedYoutube?.euromillions !== latest.date)
     ) {
       skipped["euromillions:youtube"] = "youtube_backfill_fail";
+    }
+  }
+
+  const companionReelGames: FdjCompanionGameId[] = ["loto", "eurodreams"];
+  for (const gameId of companionReelGames) {
+    const latestDraw = getGameLatest(fdj, gameId);
+    const drawKey = latestDraw ? companionDrawKey(latestDraw) : null;
+    const video = latestDraw ? companionVideoFields(latestDraw) : null;
+    if (
+      queue.some((j) => j.key === gameId) ||
+      !want(gameId) ||
+      !companionPublished(latestDraw) ||
+      !latestDraw ||
+      !drawKey ||
+      !video
+    ) {
+      continue;
+    }
+    if (
+      !force &&
+      state.lastPostedReel?.[gameId] === drawKey &&
+      (!youtubeConfigured() || state.lastPostedYoutube?.[gameId] === drawKey)
+    ) {
+      continue;
+    }
+    const reel = await postEuroMillionsReels({
+      token,
+      card: companionShareCard(latestDraw),
+      caption: video.reelCaption,
+      instagram,
+      youtubeTitle: video.youtubeTitle,
+      youtubeDescription: video.youtubeDescription,
+      youtubeTags: video.youtubeTags,
+      youtubePlaylists: video.youtubePlaylists,
+      skipReel: !force && state.lastPostedReel?.[gameId] === drawKey,
+      skipYoutube: !force && state.lastPostedYoutube?.[gameId] === drawKey,
+    });
+    if (reel.facebook) reels += 1;
+    if (reel.instagram) {
+      instagramReels += 1;
+      instagramPosted += 1;
+      await stampIg(gameId, drawKey);
+    }
+    if (reel.facebook || reel.instagram) {
+      await stampReel(gameId, drawKey);
+      skipped[`${gameId}:reel`] = skipped[`${gameId}:reel`] || "reel_backfill";
+    } else if (force || state.lastPostedReel?.[gameId] !== drawKey) {
+      skipped[`${gameId}:reel`] = "reel_backfill_fail";
+    }
+    if (reel.youtube) {
+      youtubeShorts += 1;
+      await stampYoutube(gameId, drawKey);
+      skipped[`${gameId}:youtube`] =
+        skipped[`${gameId}:youtube`] || "youtube_backfill";
+    } else if (
+      youtubeConfigured() &&
+      (force || state.lastPostedYoutube?.[gameId] !== drawKey)
+    ) {
+      skipped[`${gameId}:youtube`] = "youtube_backfill_fail";
     }
   }
 

@@ -64,7 +64,7 @@ export async function GET(request: Request) {
       headers: {
         "Content-Type": "video/mp4",
         "Cache-Control": "public, max-age=120, s-maxage=300",
-        "Content-Disposition": 'inline; filename="euromillions-reel.mp4"',
+        "Content-Disposition": `inline; filename="${game === "loto" || game === "eurodreams" ? game : "euromillions"}-reel.mp4"`,
       },
     });
   } catch (err) {

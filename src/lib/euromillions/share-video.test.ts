@@ -91,6 +91,76 @@ describe("facebookReelMessage", () => {
   });
 });
 
+describe("companionReelMessage", () => {
+  it("accroche Loto jackpot sans 2e tirage", async () => {
+    const { companionReelMessage } = await import("./facebook.ts");
+    const text = companionReelMessage({
+      gameId: "loto",
+      date: "2026-09-10",
+      plannedAt: "2026-09-10T18:55:00.000Z",
+      jackpotEur: 2_000_000,
+      groups: [
+        {
+          type: "numeros principaux",
+          kind: "numbers",
+          labelKey: "main",
+          values: [4, 5, 18, 22, 35],
+        },
+        {
+          type: "numero chance",
+          kind: "bonus",
+          labelKey: "chance",
+          values: [2],
+        },
+        {
+          type: "2eme tirage",
+          kind: "numbers",
+          labelKey: "secondDraw",
+          values: [1, 15, 16, 34, 45],
+        },
+      ],
+      source: "fdj",
+      fetchedAt: "2026-09-10T19:00:00.000Z",
+    });
+    const first = text.split("\n")[0];
+    assert.match(first!, /Loto — tirage du jeudi 10 septembre 2026 — jackpot 2 M€/);
+    assert.match(text, /4 · 5 · 18 · 22 · 35/);
+    assert.match(text, /chance 2/);
+    assert.ok(!text.includes("1 · 15 · 16"));
+    assert.match(text, /#Loto/);
+  });
+
+  it("accroche EuroDreams avec le numéro rêve", async () => {
+    const { companionReelMessage } = await import("./facebook.ts");
+    const text = companionReelMessage({
+      gameId: "eurodreams",
+      date: "2026-09-07",
+      plannedAt: "2026-09-07T21:00:00.000+02:00",
+      jackpotEur: 20_000,
+      groups: [
+        {
+          type: "numeros principaux",
+          kind: "numbers",
+          labelKey: "main",
+          values: [7, 9, 10, 26, 33, 40],
+        },
+        {
+          type: "numero dream",
+          kind: "bonus",
+          labelKey: "dream",
+          values: [1],
+        },
+      ],
+      source: "fdj",
+      fetchedAt: "2026-09-07T21:10:00.000Z",
+    });
+    assert.match(text, /EuroDreams — tirage du lundi 7 septembre 2026/);
+    assert.match(text, /7 · 9 · 10 · 26 · 33 · 40/);
+    assert.match(text, /rêve 1/);
+    assert.match(text, /#EuroDreams/);
+  });
+});
+
 describe("lotteryShareWav", () => {
   it("écrit un WAV PCM 16-bit", async () => {
     const { lotteryShareWav } = await import("./share-audio.ts");
@@ -109,5 +179,7 @@ describe("lotteryShareWav", () => {
     }
     assert.ok(existsSync(path.join(dir, "numeros.wav")));
     assert.ok(existsSync(path.join(dir, "etoiles.wav")));
+    assert.ok(existsSync(path.join(dir, "chance.wav")));
+    assert.ok(existsSync(path.join(dir, "reve.wav")));
   });
 });

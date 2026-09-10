@@ -201,7 +201,7 @@ export function lotteryShareWav(
       mixClip(
         out,
         Math.max(0, firstStarVoice - 0.86),
-        loadClip("etoiles.wav"),
+        loadClip(card.bonusVoiceClip || "etoiles.wav"),
         VOICE_GAIN,
       );
       for (let s = 0; s < stars.length; s += 1) {

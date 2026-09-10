@@ -25,6 +25,12 @@ export type ShareCardInput = {
   rows: { values: Array<number | string>; outlined?: boolean }[];
   jackpotLabel?: string | null;
   myMillionLabel?: string | null;
+  /** Libellé rangée bonus (défaut : LES ÉTOILES). */
+  bonusLabel?: string | null;
+  /** Forme des valeurs `outlined` (défaut : étoile EuroMillions). */
+  bonusShape?: "star" | "ball";
+  /** Clip voix du libellé bonus (`etoiles.wav` / `chance.wav`). */
+  bonusVoiceClip?: string | null;
 };
 
 /** « Jackpot 111 M€ » — assez court pour une carte 9:16. */
@@ -93,12 +99,19 @@ export function companionShareCard(draw: FdjGameDraw): ShareCardInput {
   const rows: ShareCardInput["rows"] = [];
   const main = numbers.find((g) => g.labelKey !== "secondDraw") || numbers[0];
   if (main?.values.length) rows.push({ values: main.values });
-  if (bonus?.values.length) rows.push({ values: bonus.values, outlined: true });
+  if (bonus?.values.length) {
+    rows.push({
+      values: bonus.values,
+      outlined: true,
+    });
+  }
   if (letter?.values.length) rows.push({ values: letter.values, outlined: true });
   const jackpot =
     typeof draw.jackpotEur === "number" && draw.jackpotEur > 0
       ? formatShareJackpot(draw.jackpotEur)
       : null;
+  const loto = draw.gameId === "loto";
+  const dreams = draw.gameId === "eurodreams";
   return {
     kicker: `${title} · Résultats`,
     dateLabel,
@@ -106,5 +119,8 @@ export function companionShareCard(draw: FdjGameDraw): ShareCardInput {
     accentInk: id.accentInk,
     jackpotLabel: jackpot,
     rows,
+    bonusLabel: loto ? "NUMÉRO CHANCE" : dreams ? "NUMÉRO RÊVE" : null,
+    bonusShape: loto || dreams ? "ball" : "star",
+    bonusVoiceClip: loto ? "chance.wav" : dreams ? "reve.wav" : null,
   };
 }

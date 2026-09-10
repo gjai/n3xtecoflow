@@ -1,5 +1,5 @@
 /**
- * Jeton YouTube (upload Shorts). N’imprime jamais le secret client.
+ * Jeton YouTube (upload Shorts + playlists). N’imprime jamais le secret client.
  *
  * 1. Google Cloud → activer « YouTube Data API v3 »
  * 2. Écran de consentement (externe, test) + ton Gmail testeur
@@ -7,6 +7,8 @@
  *    URI de redirection : http://127.0.0.1:8765 (client « installed »)
  * 4. YOUTUBE_CLIENT_ID + YOUTUBE_CLIENT_SECRET dans .env.local
  * 5. npm run youtube:oauth  → coller YOUTUBE_REFRESH_TOKEN dans Coolify
+ *
+ * Relancer ce script après un changement de scopes (playlists).
  */
 import { createServer } from "node:http";
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
@@ -15,7 +17,7 @@ const PORT = 8765;
 const REDIRECT = `http://127.0.0.1:${PORT}`;
 const SCOPES = [
   "https://www.googleapis.com/auth/youtube.upload",
-  "https://www.googleapis.com/auth/youtube.readonly",
+  "https://www.googleapis.com/auth/youtube.force-ssl",
 ].join(" ");
 
 function loadEnv() {

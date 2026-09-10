@@ -134,13 +134,21 @@ export function lotteryShareSvg(
 ): string {
   const layout = shareLayout(size);
   const portrait = layout !== "feed";
-  const crowded = Math.max(0, ...card.rows.map((r) => r.values.length)) >= 12;
+  const widest = Math.max(0, ...card.rows.map((r) => r.values.length));
+  const crowded = widest >= 12;
+  const snug = widest >= 6 && widest < 12;
   const ball = crowded
     ? layout === "story"
       ? 88
       : layout === "ig"
         ? 78
         : 64
+    : snug
+      ? layout === "story"
+        ? 122
+        : layout === "ig"
+          ? 108
+          : 92
     : layout === "story"
       ? 148
       : layout === "ig"
@@ -292,7 +300,7 @@ export function lotteryShareSvg(
   }
   if (etoilesLblOp > 0.02) {
     parts.push(
-      `<text opacity="${etoilesLblOp.toFixed(3)}" x="${size.width / 2}" y="${numbersY - 28}" fill="${xml(card.accent)}" font-size="${portrait ? 28 : 22}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle">LES ÉTOILES</text>`,
+      `<text opacity="${etoilesLblOp.toFixed(3)}" x="${size.width / 2}" y="${numbersY - 28}" fill="${xml(card.accent)}" font-size="${portrait ? 28 : 22}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle">${xml(card.bonusLabel || "LES ÉTOILES")}</text>`,
     );
   }
 
@@ -321,7 +329,8 @@ export function lotteryShareSvg(
       );
     }
     let body: string;
-    if (p.kind === "star") {
+    const chanceBall = p.kind === "star" && card.bonusShape === "ball";
+    if (p.kind === "star" && !chanceBall) {
       const outerR = ball / 2 + 10;
       const innerR = outerR * 0.5;
       const starFill = xml(card.accent);
@@ -333,9 +342,11 @@ export function lotteryShareSvg(
       body = `${flashStar}<polygon points="${starPoints(p.cx, p.cy, outerR, innerR)}" fill="${starFill}" stroke="#fff6d0" stroke-width="5" stroke-linejoin="round"/>
         <text x="${p.cx}" y="${p.cy}" fill="${starInk}" font-size="${Math.round(digitSize * 0.88)}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle" dominant-baseline="central">${xml(String(p.cell.n))}</text>`;
     } else {
-      body = `${flash > 0.02 ? `<circle cx="${p.cx}" cy="${p.cy}" r="${ball / 2 + 10}" fill="${xml(card.accent)}" opacity="${flash.toFixed(3)}"/>` : ""}
-        <circle cx="${p.cx}" cy="${p.cy}" r="${ball / 2 - 2}" fill="${fill}" stroke="${xml(card.accent)}" stroke-width="6"/>
-        <text x="${p.cx}" y="${p.cy}" fill="${color}" font-size="${digitSize}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle" dominant-baseline="central">${xml(String(p.cell.n))}</text>`;
+        const ballFill = chanceBall ? xml(card.accent) : fill;
+        const ballInk = chanceBall ? xml(card.accentInk) : color;
+        body = `${flash > 0.02 ? `<circle cx="${p.cx}" cy="${p.cy}" r="${ball / 2 + 10}" fill="${xml(card.accent)}" opacity="${flash.toFixed(3)}"/>` : ""}
+        <circle cx="${p.cx}" cy="${p.cy}" r="${ball / 2 - 2}" fill="${ballFill}" stroke="${xml(card.accent)}" stroke-width="6"/>
+        <text x="${p.cx}" y="${p.cy}" fill="${ballInk}" font-size="${digitSize}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle" dominant-baseline="central">${xml(String(p.cell.n))}</text>`;
     }
     parts.push(
       `<g opacity="${(rev.opacity * (1 - loopFade)).toFixed(3)}" transform="translate(${p.cx} ${p.cy + rev.dy}) rotate(${rev.spin.toFixed(1)}) scale(${sx.toFixed(3)} ${sy.toFixed(3)}) translate(${-p.cx} ${-p.cy})">
