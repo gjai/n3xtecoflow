@@ -6,7 +6,8 @@ import { getEcoflowEntriesMap } from "@/lib/ecoflow/catalog-store";
 import { resolveProductMedia } from "@/lib/product-presentation";
 import { buildNewsCoverPrompt, getEditorial } from "@/sites/editorial";
 import type { SiteId } from "@/sites/types";
-import { recordGeminiImageUsage } from "@/lib/ai/usage";
+import { generateGeminiImage } from "@/lib/ai/image-gen";
+import { siteAllowsAi } from "@/sites/features";
 import { fetchSourcePage } from "./source";
 
 function mediaDir() {
@@ -210,88 +211,40 @@ function newsPackshotCredit(siteId: SiteId): string {
   return getEditorial(siteId).packshotCredit;
 }
 
+/** Cap paid AI covers per ingest — matches EM's max new articles. */
+export const MAX_AI_NEWS_COVERS_PER_RUN = 4;
+
 async function generateCoverWithGemini(args: {
   title: string;
   excerpt?: string;
   slug: string;
   siteId?: SiteId;
 }): Promise<string | null> {
-  const apiKey = process.env.GEMINI_API_KEY?.trim();
-  if (!apiKey) return null;
-
-  const model =
-    process.env.NEWS_IMAGE_MODEL?.trim() || "gemini-2.5-flash-image";
   const siteId = args.siteId || "ecoflow";
-  const prompt = `${newsAiCoverPrompt(siteId, args.title, args.excerpt)}
-Unique variation id: ${args.slug.slice(-18)}.`;
+  if (!siteAllowsAi(siteId)) return null;
 
-  try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: prompt }] }],
-          generationConfig: {
-            responseModalities: ["TEXT", "IMAGE"],
-          },
-        }),
-        signal: AbortSignal.timeout(90_000),
-      },
-    );
-    if (!res.ok) {
-      console.error("news_image_ai_failed", res.status, await res.text());
-      return null;
-    }
-    const json = (await res.json()) as {
-      candidates?: {
-        content?: {
-          parts?: {
-            inlineData?: { mimeType?: string; data?: string };
-            inline_data?: { mime_type?: string; data?: string };
-          }[];
-        };
-      }[];
-      usageMetadata?: Record<string, unknown>;
-    };
-    const parts = json.candidates?.[0]?.content?.parts || [];
-    let billed = false;
-    for (const part of parts) {
-      const data = part.inlineData?.data || part.inline_data?.data;
-      const mime =
-        part.inlineData?.mimeType ||
-        part.inline_data?.mime_type ||
-        "image/png";
-      if (!data) continue;
-      if (!billed) {
-        billed = true;
-        await recordGeminiImageUsage({
-          job: "news-image",
-          model,
-          json,
-        });
-      }
-      const buf = Buffer.from(data, "base64");
-      if (buf.length < 4_000) continue;
-      // AI covers can be square; only reject known tiny logos via hash/size floors
-      const size = readImageSize(buf);
-      if (size && (size.width < 512 || size.height < 512)) continue;
-      const sha1 = createHash("sha1").update(buf).digest("hex");
-      if (KNOWN_JUNK_SHA1.has(sha1)) continue;
-      const ext = mime.includes("jpeg") || mime.includes("jpg") ? "jpg" : "png";
-      return saveImageBuffer(
-        buf,
-        args.slug,
-        ext,
-        `ai:${model}:${args.slug}:${Date.now()}`,
-      );
-    }
-    return null;
-  } catch (err) {
-    console.error("news_image_ai_error", err);
-    return null;
-  }
+  const generated = await generateGeminiImage({
+    job: "news-image",
+    prompt: `${newsAiCoverPrompt(siteId, args.title, args.excerpt)}
+Unique variation id: ${args.slug.slice(-18)}.`,
+  });
+  if (!generated) return null;
+
+  const sha1 = createHash("sha1").update(generated.buf).digest("hex");
+  if (KNOWN_JUNK_SHA1.has(sha1)) return null;
+  const size = readImageSize(generated.buf);
+  if (size && (size.width < 512 || size.height < 512)) return null;
+
+  const ext =
+    generated.mime.includes("jpeg") || generated.mime.includes("jpg")
+      ? "jpg"
+      : "png";
+  return saveImageBuffer(
+    generated.buf,
+    args.slug,
+    ext,
+    `ai:${generated.model}:${args.slug}`,
+  );
 }
 
 /** Copy a local public asset into the news media store. */
@@ -406,7 +359,7 @@ export type NewsCoverResult = {
   imageKind: "source" | "fallback" | "ai";
 };
 
-/** Prefer OG / page image from source publisher; else AI; else product packshot. */
+/** Prefer OG / page image from source publisher; else one AI call; else packshot. */
 export async function resolveNewsCover(args: {
   sourceUrl: string;
   sourceName: string;
@@ -416,8 +369,11 @@ export async function resolveNewsCover(args: {
   tags?: string[];
   ogImageHint?: string | null;
   siteId?: SiteId;
+  /** When false, never call Gemini (OG / packshot only). */
+  allowAi?: boolean;
 }): Promise<NewsCoverResult | null> {
   const siteId = args.siteId || "ecoflow";
+  const allowAi = args.allowAi !== false;
   let imageUrl = args.ogImageHint?.trim() || null;
   if (imageUrl && isJunkImageUrl(imageUrl)) imageUrl = null;
 
@@ -439,10 +395,10 @@ export async function resolveNewsCover(args: {
   }
 
   const title = args.title || args.slug;
+  const preferAi = getEditorial(siteId).preferAiNewsCovers;
 
-  // Thèmes flat : après scrape OG, IA pour couvertures uniques
-  // (pas de catalogue packshot fiable — éviter les listicles sans image).
-  if (getEditorial(siteId).preferAiNewsCovers) {
+  // Un seul appel Gemini par article — jamais preferAi puis retry.
+  if (allowAi && preferAi) {
     const aiFirst = await generateCoverWithGemini({
       title,
       excerpt: args.excerpt,
@@ -458,7 +414,6 @@ export async function resolveNewsCover(args: {
     }
   }
 
-  // Marque nette → packshot catalogue du thème
   const packBrand = await resolveProductPackshotCover({
     title,
     tags: args.tags,
@@ -475,18 +430,20 @@ export async function resolveNewsCover(args: {
     };
   }
 
-  const ai = await generateCoverWithGemini({
-    title,
-    excerpt: args.excerpt,
-    slug: args.slug,
-    siteId,
-  });
-  if (ai) {
-    return {
-      imageSrc: ai,
-      imageCredit: newsAiCoverCredit(siteId),
-      imageKind: "ai",
-    };
+  if (allowAi && !preferAi) {
+    const ai = await generateCoverWithGemini({
+      title,
+      excerpt: args.excerpt,
+      slug: args.slug,
+      siteId,
+    });
+    if (ai) {
+      return {
+        imageSrc: ai,
+        imageCredit: newsAiCoverCredit(siteId),
+        imageKind: "ai",
+      };
+    }
   }
 
   const pack = await resolveProductPackshotCover({

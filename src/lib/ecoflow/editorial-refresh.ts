@@ -1,5 +1,6 @@
 import type { LocaleCopy, Product } from "@/data/products";
 import { completeChat } from "@/lib/ai/chat";
+import { siteAllowsAi } from "@/sites/features";
 import { ECOFLOW_HANDLES } from "./handles";
 import {
   readEcoflowEditorialStore,
@@ -69,6 +70,7 @@ Format:
     logTag: "editorial_ai_failed",
     temperature: 0.4,
     maxTokens: 4096,
+    siteId: "ecoflow",
     system:
       "You write bilingual product editorial sheets as strict JSON only. No markdown fences.",
     user: prompt,
@@ -134,6 +136,17 @@ export async function refreshEcoflowEditorial(options?: {
   /** Force rewrite even if entry exists */
   force?: boolean;
 }): Promise<RefreshEditorialResult> {
+  if (!siteAllowsAi("ecoflow")) {
+    return {
+      ok: true,
+      refreshed: 0,
+      failed: 0,
+      skipped: 0,
+      total: 0,
+      usedAi: false,
+      errors: [],
+    };
+  }
   const { products } = await import("@/data/products");
   const store = await readEcoflowEditorialStore();
   const mapped = products.filter((p) => ECOFLOW_HANDLES[p.slug]);

@@ -1,12 +1,13 @@
 import { buildNewsRewritePrompt, getEditorial } from "@/sites/editorial";
 import type { SiteId } from "@/sites/types";
+import { siteAllowsAi } from "@/sites/features";
 import { completeChat } from "@/lib/ai/chat";
 import { pricesToEuroText } from "@/lib/money";
 import type { NewsArticle, NewsLocaleCopy } from "./types";
 import type { RssItem } from "./rss";
 import { isOnTopicArticle, isRelevantItem } from "./rss";
 import { makeSlug } from "./store";
-import { resolveNewsCover } from "./images";
+import { resolveNewsCover, isStoredNewsImageJunk } from "./images";
 import { fetchSourcePage, type SourcePage } from "./source";
 
 function cleanTitle(title: string) {
@@ -120,6 +121,7 @@ async function rewriteWithAi(
   source: SourcePage | null,
   siteId: SiteId,
 ): Promise<AiPayload | null> {
+  if (!siteAllowsAi(siteId)) return null;
   const sourceText = (source?.text || item.description || "").slice(0, 5500);
   const prompt = aiPromptForSite(siteId, item, source, sourceText);
 
@@ -128,6 +130,7 @@ async function rewriteWithAi(
     logTag: "ai_rewrite_failed",
     temperature: 0.45,
     maxTokens: 8192,
+    siteId,
     system:
       "You write full original bilingual news articles as strict JSON only. No markdown fences. Substantial paragraphs, not short blurbs. French (fr) is the primary locale: fr.title/excerpt/body must be natural French, never a copy of the English RSS headline.",
     user: prompt,
@@ -218,6 +221,7 @@ async function translateArticleToFrench(
   en: NewsLocaleCopy,
   siteId: SiteId,
 ): Promise<NewsLocaleCopy | null> {
+  if (!siteAllowsAi(siteId)) return null;
   const brand = getEditorial(siteId).topicLabelFr;
   try {
     const result = await completeChat({
@@ -226,6 +230,7 @@ async function translateArticleToFrench(
       temperature: 0.3,
       maxTokens: 4096,
       timeoutMs: 60_000,
+      siteId,
       system:
         "Tu traduis / reformules en français journalistique naturel. JSON strict uniquement, sans markdown.",
       user: `Traduis cet article d’actualité en français pour un site sur ${brand}.
@@ -253,7 +258,13 @@ ${JSON.stringify(en)}`,
 
 export async function buildArticleFromRss(
   item: RssItem,
-  options?: { keepSlug?: string; siteId?: SiteId },
+  options?: {
+    keepSlug?: string;
+    siteId?: SiteId;
+    /** Default false: OG/packshot only. Ingest pays for AI after the article is kept. */
+    allowAiCover?: boolean;
+    skipCover?: boolean;
+  },
 ): Promise<NewsArticle | null> {
   const siteId = options?.siteId || "ecoflow";
   if (!isRelevantItem(item, siteId)) return null;
@@ -311,16 +322,19 @@ export async function buildArticleFromRss(
       ? source.finalUrl
       : item.link;
 
-  const cover = await resolveNewsCover({
-    sourceUrl: publisherUrl,
-    sourceName: source?.sourceHint || item.sourceName,
-    slug,
-    title: fr.title || item.title,
-    excerpt: fr.excerpt,
-    tags,
-    ogImageHint: source?.ogImage,
-    siteId,
-  });
+  const cover = options?.skipCover
+    ? null
+    : await resolveNewsCover({
+        sourceUrl: publisherUrl,
+        sourceName: source?.sourceHint || item.sourceName,
+        slug,
+        title: fr.title || item.title,
+        excerpt: fr.excerpt,
+        tags,
+        ogImageHint: source?.ogImage,
+        siteId,
+        allowAi: Boolean(options?.allowAiCover),
+      });
 
   return {
     slug,
@@ -373,9 +387,14 @@ export async function refreshArticle(
       article.en.excerpt ||
       "",
   };
+  const keepCover =
+    Boolean(article.imageSrc) &&
+    !(await isStoredNewsImageJunk(article.imageSrc));
   const next = await buildArticleFromRss(item, {
     keepSlug: article.slug,
     siteId: article.siteId || "ecoflow",
+    allowAiCover: false,
+    skipCover: keepCover,
   });
   if (!next) return article;
   return {
@@ -384,5 +403,12 @@ export async function refreshArticle(
     sourceGuid: article.sourceGuid,
     publishedAt: article.publishedAt,
     ingestedAt: article.ingestedAt,
+    ...(keepCover
+      ? {
+          imageSrc: article.imageSrc,
+          imageCredit: article.imageCredit,
+          imageKind: article.imageKind,
+        }
+      : {}),
   };
 }

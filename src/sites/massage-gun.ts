@@ -156,7 +156,7 @@ export const massageGunSite: SiteConfig = {
     coverShowOnly:
       "Show ONLY a massage gun, mini massage gun, neck massager, or shiatsu cushion — no energy/solar products. Make the composition unique for this article (angle, setting, and props can vary).",
     rssLenientAfterBrand: true,
-    preferAiNewsCovers: true,
+    preferAiNewsCovers: false,
     allowWeakPackshotDefault: false,
     topicBrandPattern:
       String.raw`\bpistolet\s+de\s+massage\b|\bmassage\s+gun\b|\btheragun\b|\btherabody\b|\bhypervolt\b|\bhyperice\b|\brenpho\b|\btoloco\b|\bbob\s+and\s*brad\b|\bopove\b|\bbrelley\b|\baerlang\b|\bjolt\b|\bpercussion\s+(massage|massager|therapy)\b|\bmasseur\s+(musculaire|cervical|dos|shiatsu)\b|\bcoussin\s+(de\s+)?massage\b|\bneck\s+massager\b|\bshiatsu\s+massager\b`,

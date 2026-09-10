@@ -3,7 +3,8 @@ import { promises as fs } from "fs";
 import path from "path";
 import { buildGuideCoverPrompt, getEditorial } from "@/sites/editorial";
 import type { SiteId } from "@/sites/types";
-import { recordGeminiImageUsage } from "@/lib/ai/usage";
+import { generateGeminiImage } from "@/lib/ai/image-gen";
+import { siteAllowsAi } from "@/sites/features";
 
 function mediaDir() {
   return (
@@ -12,94 +13,37 @@ function mediaDir() {
   );
 }
 
-function readPngSize(buf: Buffer): { width: number; height: number } | null {
-  if (buf.length < 24 || buf[0] !== 0x89 || buf[1] !== 0x50) return null;
-  return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
-}
-
 export async function generateGuideCoverAi(args: {
   slug: string;
   title: string;
   subtitle?: string;
   siteId?: SiteId;
 }): Promise<{ imageSrc: string; imageCredit: string } | null> {
-  const apiKey = process.env.GEMINI_API_KEY?.trim();
-  if (!apiKey) return null;
-
-  const model =
-    process.env.NEWS_IMAGE_MODEL?.trim() || "gemini-2.5-flash-image";
-
   const siteId = args.siteId || "ecoflow";
-  const prompt = buildGuideCoverPrompt(siteId, args.title, args.subtitle);
+  if (!siteAllowsAi(siteId)) return null;
 
-  try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ role: "user", parts: [{ text: prompt }] }],
-          generationConfig: { responseModalities: ["TEXT", "IMAGE"] },
-        }),
-        signal: AbortSignal.timeout(90_000),
-      },
-    );
-    if (!res.ok) {
-      console.error("guide_image_ai_failed", res.status, await res.text());
-      return null;
-    }
-    const json = (await res.json()) as {
-      candidates?: {
-        content?: {
-          parts?: {
-            inlineData?: { mimeType?: string; data?: string };
-            inline_data?: { mime_type?: string; data?: string };
-          }[];
-        };
-      }[];
-      usageMetadata?: Record<string, unknown>;
-    };
-    const parts = json.candidates?.[0]?.content?.parts || [];
-    let billed = false;
-    for (const part of parts) {
-      const data = part.inlineData?.data || part.inline_data?.data;
-      const mime =
-        part.inlineData?.mimeType ||
-        part.inline_data?.mime_type ||
-        "image/png";
-      if (!data) continue;
-      if (!billed) {
-        billed = true;
-        await recordGeminiImageUsage({
-          job: "guides-image",
-          model,
-          json,
-        });
-      }
-      const buf = Buffer.from(data, "base64");
-      if (buf.length < 4_000) continue;
-      const size = readPngSize(buf);
-      if (size && (size.width < 512 || size.height < 512)) continue;
-      const dir = mediaDir();
-      await fs.mkdir(dir, { recursive: true });
-      const ext = mime.includes("jpeg") || mime.includes("jpg") ? "jpg" : "png";
-      const hash = createHash("sha1")
-        .update(`${args.slug}:${buf.length}`)
-        .digest("hex")
-        .slice(0, 8);
-      const filename = `${args.slug.slice(0, 40)}-${hash}.${ext}`;
-      await fs.writeFile(path.join(dir, filename), buf);
-      return {
-        imageSrc: `/api/media/guides/${filename}`,
-        imageCredit: getEditorial(siteId).coverCreditAi,
-      };
-    }
-    return null;
-  } catch (err) {
-    console.error("guide_image_ai_error", err);
-    return null;
-  }
+  const generated = await generateGeminiImage({
+    job: "guides-image",
+    prompt: buildGuideCoverPrompt(siteId, args.title, args.subtitle),
+  });
+  if (!generated) return null;
+
+  const dir = mediaDir();
+  await fs.mkdir(dir, { recursive: true });
+  const ext =
+    generated.mime.includes("jpeg") || generated.mime.includes("jpg")
+      ? "jpg"
+      : "png";
+  const hash = createHash("sha1")
+    .update(`${args.slug}:${generated.buf.length}`)
+    .digest("hex")
+    .slice(0, 8);
+  const filename = `${args.slug.slice(0, 40)}-${hash}.${ext}`;
+  await fs.writeFile(path.join(dir, filename), generated.buf);
+  return {
+    imageSrc: `/api/media/guides/${filename}`,
+    imageCredit: getEditorial(siteId).coverCreditAi,
+  };
 }
 
 export function guideImageAbsolutePath(filename: string) {

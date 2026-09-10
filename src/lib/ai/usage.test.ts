@@ -56,8 +56,22 @@ describe("estimateUsd", () => {
     );
   });
 
+  it("facture une image Flash Lite à 0,0336 $", () => {
+    assert.equal(
+      estimateUsd({
+        model: "gemini-3.1-flash-lite-image",
+        images: 1,
+      }),
+      0.0336,
+    );
+  });
+
   it("reconnaît un alias de modèle image", () => {
     assert.equal(ratesForModel("models/gemini-2.5-flash-image").imageUsd, 0.039);
+    assert.equal(
+      ratesForModel("models/gemini-3.1-flash-lite-image").imageUsd,
+      0.0336,
+    );
   });
 });
 

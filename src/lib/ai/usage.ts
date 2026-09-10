@@ -72,6 +72,11 @@ const MODEL_RATES: Record<string, ModelRates> = {
     outUsdPerM: 30,
     imageUsd: 0.039,
   },
+  "gemini-3.1-flash-lite-image": {
+    inUsdPerM: 0.25,
+    outUsdPerM: 30,
+    imageUsd: 0.0336,
+  },
   "gemini-3.1-flash-image": {
     inUsdPerM: 2.0,
     outUsdPerM: 60,
@@ -90,6 +95,12 @@ export function ratesForModel(model: string): ModelRates {
   const exact = MODEL_RATES[key];
   if (exact) return applyEnvOverrides(exact);
 
+  if (key.includes("flash-lite-image")) {
+    return applyEnvOverrides(MODEL_RATES["gemini-3.1-flash-lite-image"]);
+  }
+  if (key.includes("3.1-flash-image")) {
+    return applyEnvOverrides(MODEL_RATES["gemini-3.1-flash-image"]);
+  }
   if (key.includes("flash-image") || (key.includes("image") && key.includes("gemini"))) {
     return applyEnvOverrides(MODEL_RATES["gemini-2.5-flash-image"]);
   }

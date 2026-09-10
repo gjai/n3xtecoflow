@@ -5,6 +5,7 @@ import { euromillionsSite } from "./euromillions.ts";
 import { massageGunSite } from "./massage-gun.ts";
 import { tumblerSite } from "./tumbler.ts";
 import {
+  siteAllowsAi,
   siteIndexedLocales,
   siteIndexesLocale,
   siteLocales,
@@ -26,5 +27,14 @@ describe("siteIndexesLocale", () => {
     assert.equal(siteIndexesLocale(euromillionsSite, "it"), false);
     assert.deepEqual(siteIndexedLocales(euromillionsSite), ["fr"]);
     assert.deepEqual(siteLocales(euromillionsSite), ["fr"]);
+  });
+});
+
+describe("siteAllowsAi", () => {
+  it("n’autorise l’IA que sur EuroMillions", () => {
+    assert.equal(siteAllowsAi("euromillions"), true);
+    assert.equal(siteAllowsAi("ecoflow"), false);
+    assert.equal(siteAllowsAi("tumbler"), false);
+    assert.equal(siteAllowsAi("massage-gun"), false);
   });
 });

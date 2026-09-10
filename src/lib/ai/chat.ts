@@ -3,6 +3,8 @@ import {
   recordAiUsage,
   type AiJob,
 } from "./usage";
+import type { SiteId } from "@/sites/types";
+import { siteAllowsAi } from "@/sites/features";
 
 export function resolveChatConfig(): {
   apiKey: string;
@@ -49,7 +51,9 @@ export async function completeChat(args: {
   maxTokens?: number;
   timeoutMs?: number;
   logTag?: string;
+  siteId?: SiteId;
 }): Promise<{ content: string; model: string } | null> {
+  if (args.siteId && !siteAllowsAi(args.siteId)) return null;
   const cfg = resolveChatConfig();
   if (!cfg) return null;
 

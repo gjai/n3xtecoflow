@@ -2,7 +2,7 @@ import type { SiteId } from "@/sites/types";
 import { NEWS_FEEDS, maxNewPerSiteRun, newsSiteId } from "./types";
 import { fetchFeedItems, isBlockedLotteryNewsSource, isOnTopicArticle, type RssItem } from "./rss";
 import { buildArticleFromRss, refreshArticle } from "./rewrite";
-import { isStoredNewsImageJunk, resolveNewsCover } from "./images";
+import { isStoredNewsImageJunk, resolveNewsCover, MAX_AI_NEWS_COVERS_PER_RUN } from "./images";
 import {
   pruneLowQualityNewsArticles,
   rankNewsCandidates,
@@ -161,7 +161,10 @@ export async function ingestNews(
   let rejected = 0;
   let aiUsed = false;
   for (const item of selected) {
-    const article = await buildArticleFromRss(item, { siteId: item.siteId });
+    const article = await buildArticleFromRss(item, {
+      siteId: item.siteId,
+      allowAiCover: false,
+    });
     if (!article) {
       rejected += 1;
       continue;
@@ -221,7 +224,21 @@ export async function ingestNews(
   store.articles = store.articles.filter(articleOnTopic);
   const topicPurged = beforePurge - store.articles.length;
 
-  let backfilled = 0;
+  store.articles = [...created, ...store.articles];
+  const quality = pruneLowQualityNewsArticles(store.articles);
+  store.articles = quality.kept;
+  purgedSlugs.push(...quality.removedSlugs);
+  const purged = topicPurged + quality.removedSlugs.length;
+
+  const keptCreatedSlugs = new Set(
+    created
+      .filter((a) => store.articles.some((kept) => kept.slug === a.slug))
+      .map((a) => a.slug),
+  );
+  const aiEligibleSlugs = new Set([
+    ...keptCreatedSlugs,
+    ...(options?.refreshExisting ? refreshedSlugs : []),
+  ]);
   const fixAll =
     Boolean(options?.backfillImagesAll) || Boolean(options?.fixJunkImages);
   const forceWrongThemeCovers = Boolean(options?.fixJunkImages);
@@ -229,12 +246,11 @@ export async function ingestNews(
     Boolean(options?.fixJunkImages) &&
     Boolean(options?.forceRefresh) &&
     Boolean(options?.siteId);
-  const backfillCap = fixAll || forceSiteCovers
-    ? store.articles.length + created.length
-    : 6;
-  for (const article of [...created, ...store.articles]) {
+
+  let backfilled = 0;
+  let aiCovers = 0;
+  for (const article of store.articles) {
     if (options?.siteId && newsSiteId(article) !== options.siteId) continue;
-    if (backfilled >= backfillCap) break;
     const junk = await isStoredNewsImageJunk(article.imageSrc);
     const sid = newsSiteId(article);
     const credit = (article.imageCredit || "").toLowerCase();
@@ -246,6 +262,17 @@ export async function ingestNews(
     const needsCover =
       !article.imageSrc || junk || wrongTheme || forceSiteCovers;
     if (!needsCover) continue;
+    if (
+      !fixAll &&
+      !forceSiteCovers &&
+      !aiEligibleSlugs.has(article.slug)
+    ) {
+      continue;
+    }
+
+    const allowAi =
+      aiCovers < MAX_AI_NEWS_COVERS_PER_RUN &&
+      (fixAll || forceSiteCovers || aiEligibleSlugs.has(article.slug));
 
     const cover = await resolveNewsCover({
       sourceUrl: article.sourceUrl,
@@ -255,19 +282,18 @@ export async function ingestNews(
       excerpt: article.fr?.excerpt || article.en?.excerpt,
       tags: article.tags,
       siteId: sid,
+      allowAi,
     });
     if (!cover) continue;
     article.imageSrc = cover.imageSrc;
     article.imageCredit = cover.imageCredit;
     article.imageKind = cover.imageKind;
     backfilled += 1;
+    if (cover.imageKind === "ai") {
+      aiCovers += 1;
+      aiUsed = true;
+    }
   }
-
-  store.articles = [...created, ...store.articles];
-  const quality = pruneLowQualityNewsArticles(store.articles);
-  store.articles = quality.kept;
-  purgedSlugs.push(...quality.removedSlugs);
-  const purged = topicPurged + quality.removedSlugs.length;
 
   if (created.length || backfilled || refreshed || purged) {
     await writeNewsStore(store);
@@ -282,6 +308,7 @@ export async function ingestNews(
   if (created.length) {
     const byHost = new Map<string, string[]>();
     for (const article of created) {
+      if (!store.articles.some((kept) => kept.slug === article.slug)) continue;
       const site = sitesById[newsSiteId(article)];
       const host = site.primaryHost;
       const urls = byHost.get(host) || [
@@ -305,7 +332,9 @@ export async function ingestNews(
     try {
       const { notifyFacebookNews } = await import("@/lib/euromillions/facebook");
       const fb = await notifyFacebookNews(
-        created.filter((a) => newsSiteId(a) === "euromillions"),
+        created.filter((a) =>
+          store.articles.some((kept) => kept.slug === a.slug),
+        ),
       );
       facebookNews = {
         posted: fb.posted,

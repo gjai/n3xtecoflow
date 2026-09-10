@@ -7,6 +7,7 @@ import { getEditorial, siteUsesStaticBuyingGuide } from "@/sites/editorial";
 import { getSiteById } from "@/sites/index";
 import type { SiteId } from "@/sites/types";
 import { completeChat } from "@/lib/ai/chat";
+import { siteAllowsAi } from "@/sites/features";
 import { generateGuideCoverAi } from "./images";
 import { readGuidesStore, writeGuidesStore } from "./store";
 import {
@@ -43,6 +44,7 @@ async function rewriteGuideWithAi(topic: GuideTopic): Promise<{
   en: GuideLocaleCopy;
   model: string;
 } | null> {
+  if (!siteAllowsAi(guideSiteId(topic))) return null;
   const existing = staticGuides.find((g) => g.slug === topic.slug);
 
   const site = guideSiteId(topic);
@@ -78,6 +80,7 @@ Format:
     logTag: "guide_ai_failed",
     temperature: 0.45,
     maxTokens: 8192,
+    siteId: site,
     system: `You write long bilingual ${brand} buying guides as strict JSON only. No markdown fences.`,
     user: prompt,
   });
@@ -247,8 +250,20 @@ export async function refreshGuides(options?: {
   /** Defaults to ecoflow (cron / existing AI prompts). */
   siteId?: SiteId;
 }): Promise<RefreshGuidesResult> {
-  const store = await readGuidesStore();
   const siteId = options?.siteId ?? "ecoflow";
+  if (!siteAllowsAi(siteId)) {
+    return {
+      ok: true,
+      refreshed: 0,
+      images: 0,
+      failed: 0,
+      skipped: 0,
+      total: 0,
+      usedAi: false,
+      errors: [],
+    };
+  }
+  const store = await readGuidesStore();
   const list = guidesForSite(GUIDE_TOPICS, siteId).slice(
     0,
     options?.limit ?? GUIDE_TOPICS.length,

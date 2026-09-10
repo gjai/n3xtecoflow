@@ -2,7 +2,12 @@ import {
   DEFAULT_SITE_LOCALES,
   type AppLocale,
 } from "@/i18n/locales";
-import type { SiteConfig } from "./types";
+import type { SiteConfig, SiteId } from "./types";
+
+/** Gemini (rewrite + images) : EuroMillions only. */
+export function siteAllowsAi(siteId: SiteId): boolean {
+  return siteId === "euromillions";
+}
 
 export function siteShowsProducts(site: SiteConfig): boolean {
   return site.features?.products !== false;
