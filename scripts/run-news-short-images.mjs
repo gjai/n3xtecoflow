@@ -1,5 +1,6 @@
 /**
- * Dans le conteneur Coolify : génère 3 images 9:16 avec GEMINI_API_KEY.
+ * Hors pipeline horaire : génère 3 images 9:16 pour enrichir le pack stock.
+ * Les Reels histoire lisent public/images/euromillions/news-short/, pas Gemini.
  * Lit /tmp/actu-short.json, écrit /tmp/news-short-scene-0.jpg …
  */
 import { readFileSync, writeFileSync } from "node:fs";

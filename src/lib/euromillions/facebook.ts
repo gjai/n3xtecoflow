@@ -1886,7 +1886,7 @@ export function pickWeeklyNewsArticle(
 let newsShortRunning = false;
 
 /**
- * Un Short/Reel histoire chaque heure : scénario IA (anecdote + visuels).
+ * Un Short/Reel histoire chaque heure : scénario IA + photos déjà générées.
  * Désactivé tant que `NEWS_SHORT_ENABLED` n’est pas `1`. `force` ignore créneau et flag.
  */
 export async function notifyWeeklyNewsShort(options?: {
@@ -1938,6 +1938,7 @@ async function notifyWeeklyNewsShortBody(
   });
   const { generateNewsShortPhotos } = await import("./news-short-script");
   const photoBufs = await generateNewsShortPhotos(script);
+  console.error("news_short_photos", photoBufs.length, "stock");
   const token = envPageToken();
   const instagram = token ? await resolveInstagramAccount(token) : null;
   if (token && !instagram) skipped.instagram = "unlinked";

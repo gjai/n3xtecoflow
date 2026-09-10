@@ -1,5 +1,7 @@
+import { existsSync, readdirSync } from "node:fs";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { completeChat } from "@/lib/ai/chat";
-import { generateGeminiImage } from "@/lib/ai/image-gen";
 import { parisDateKey } from "./datetime";
 
 const SITE = "https://euromillions-resultats.fr";
@@ -128,13 +130,13 @@ const SYSTEM = JSON.stringify(
       voix:
         "voix = true (recommandé : le récit gagne à être dit).",
       visuels:
-        "Exactement 3 plans. accroche = le LIEU / la situation, pas le twist. corps = la TENSION (recherche, attente, doute). chute = l'image de la SURPRISE. Chaque plan : at, plan (B-roll FR), fond (navy|gold|cold|warm), imagePrompt (EN 9:16 photoreal, no text in image).",
+        "Exactement 3 plans. accroche = le LIEU / la situation, pas le twist. corps = la TENSION (recherche, attente, doute). chute = le moment de la SURPRISE. Chaque plan : at, plan (B-roll FR), fond (navy|gold|cold|warm). Les photos viennent d'un pack déjà généré : ne fournis pas d'imagePrompt.",
       musique:
         "tension ou mystere par défaut. chaleur si fin émue. ironie seulement si la surprise est absurde.",
       sfx: "tick (tension) + sting (révélation). whoosh optionnel au changement de tableau.",
     },
     output_format:
-      'JSON only: {"game":"euromillions"|"loto"|"eurodreams"|"keno"|"crescendo"|"mymillion","fact":"année, ville, jeu, montant, ce qui s\'est passé, la surprise","title":"...","accroche":"...","corps":["...","...","...","..."],"chute":"...","voix":true,"voixOff":"...","visuels":[{"at":"accroche","plan":"...","fond":"navy","imagePrompt":"..."}],"musique":"tension","sfx":["tick","sting"],"newsSlug":null}',
+      'JSON only: {"game":"euromillions"|"loto"|"eurodreams"|"keno"|"crescendo"|"mymillion","fact":"année, ville, jeu, montant, ce qui s\'est passé, la surprise","title":"...","accroche":"...","corps":["...","...","...","..."],"chute":"...","voix":true,"voixOff":"...","visuels":[{"at":"accroche","plan":"...","fond":"navy"}],"musique":"tension","sfx":["tick","sting"],"newsSlug":null}',
   },
   null,
   2,
@@ -148,7 +150,7 @@ export function newsShortUserPrompt(briefing: NewsShortBriefing): string {
       date_actuelle: briefing.today,
       faits_a_eviter: briefing.avoidFacts,
       consigne:
-        "Une anecdote DIFFÉRENTE, vérifiable (ville, date, montant). Suspense : ne spoile pas la chute dans le titre ni l'accroche. Surprise nette à la fin. Tout le scénario (texte, voix, 3 imagePrompt, musique, sfx). Pas d'actus site, pas de boules de tirage.",
+        "Une anecdote DIFFÉRENTE, vérifiable (ville, date, montant). Suspense : ne spoile pas la chute dans le titre ni l'accroche. Surprise nette à la fin. Tout le scénario (texte, voix, 3 plans B-roll, musique, sfx). Pas d'imagePrompt, pas d'actus site, pas de boules de tirage.",
     },
     null,
     2,
@@ -335,38 +337,84 @@ export async function composeNewsShortScript(options?: {
   return fallbackNewsShortScript(briefing);
 }
 
-function sceneImagePrompt(visuel: NewsShortVisuel, script: NewsShortScript): string {
-  const mood =
-    visuel.fond === "gold"
-      ? "warm gold lighting"
-      : visuel.fond === "cold"
-        ? "cold blue cinematic light"
-        : visuel.fond === "warm"
-          ? "warm indoor tungsten light"
-          : "dark navy cinematic light";
-  const custom = visuel.imagePrompt?.trim();
-  const scene = custom || visuel.plan;
-  return `Vertical 9:16 photoreal cinematic still, no text, no letters, no logo, no watermark. Subject: ${scene}. Story: ${clip(script.fact, 120)}. Lighting: ${mood}. Shallow depth of field, film still, lottery ticket atmosphere, Europe.`;
+const STOCK_PUBLIC_DIR = "images/euromillions/news-short";
+
+function hashSeed(s: string): number {
+  let h = 2166136261;
+  for (const ch of s) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
+  return h >>> 0;
 }
 
+function shuffleInPlace<T>(items: T[], seed: string): T[] {
+  let h = hashSeed(seed || "news-short");
+  for (let i = items.length - 1; i > 0; i -= 1) {
+    h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
+    const j = h % (i + 1);
+    const tmp = items[i]!;
+    items[i] = items[j]!;
+    items[j] = tmp;
+  }
+  return items;
+}
+
+function listImageFiles(dir: string): string[] {
+  if (!existsSync(dir)) return [];
+  try {
+    return readdirSync(dir)
+      .filter((name) => /\.(jpe?g|png|webp)$/i.test(name))
+      .sort()
+      .map((name) => path.join(dir, name));
+  } catch {
+    return [];
+  }
+}
+
+/** Pack 9:16 déjà généré (git) + dossier volume optionnel. */
+export function newsShortStockFiles(): string[] {
+  const extra =
+    process.env.NEWS_SHORT_PHOTOS_PATH?.trim() ||
+    path.join(process.cwd(), "data", "news-short-photos");
+  const seen = new Set<string>();
+  const files: string[] = [];
+  for (const file of [
+    ...listImageFiles(path.join(process.cwd(), "public", STOCK_PUBLIC_DIR)),
+    ...listImageFiles(extra),
+  ]) {
+    if (seen.has(file)) continue;
+    seen.add(file);
+    files.push(file);
+  }
+  return files;
+}
+
+/**
+ * Photos du Short histoire : pack déjà généré, pas d'appel Gemini.
+ * L'ordre change selon le fait pour éviter le même montage à chaque heure.
+ */
 export async function generateNewsShortPhotos(
   script: NewsShortScript,
 ): Promise<Buffer[]> {
-  const visuels = script.visuels?.length
-    ? script.visuels
-    : [
-        { at: "accroche" as const, plan: "crumpled lottery ticket", fond: "navy" as const },
-        { at: "corps" as const, plan: "hands holding cash and a ticket", fond: "warm" as const },
-        { at: "chute" as const, plan: "empty chair under a spotlight", fond: "gold" as const },
-      ];
-  const shots = await Promise.all(
-    visuels.slice(0, 3).map((v) =>
-      generateGeminiImage({
-        prompt: sceneImagePrompt(v, script),
-        job: "news-short-image",
-        aspectRatio: "9:16",
-      }),
-    ),
+  const stock = newsShortStockFiles();
+  const files = shuffleInPlace(
+    stock.length
+      ? stock
+      : [
+          "images/euromillions/guides/comprendre-euromillions.jpg",
+          "images/euromillions/guides/euromillions-et-autres-tirages.jpg",
+          "images/euromillions/guides/lire-resultats-tirages.jpg",
+        ]
+          .map((rel) => path.join(process.cwd(), "public", rel))
+          .filter((file) => existsSync(file)),
+    script.fact || script.title || "",
   );
-  return shots.map((s) => s?.buf).filter((b): b is Buffer => Boolean(b));
+  const picked = files.length <= 3 ? files : files.slice(0, 3);
+  const bufs: Buffer[] = [];
+  for (const file of picked) {
+    try {
+      bufs.push(await readFile(file));
+    } catch {
+      // skip unreadable still
+    }
+  }
+  return bufs;
 }

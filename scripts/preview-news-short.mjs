@@ -133,63 +133,6 @@ async function composeViaServerAi() {
   return parsed;
 }
 
-async function photosViaServer(script) {
-  const sshBase = script._sshBase;
-  const container = script._container;
-  if (!sshBase || !container) return [];
-  const put = (remote, localPath) => {
-    const putRun = spawnSync(
-      "ssh",
-      [...sshBase, `sudo docker exec -i ${container} tee ${remote} >/dev/null`],
-      { input: readFileSync(localPath), maxBuffer: 4_000_000 },
-    );
-    if (putRun.status !== 0) {
-      throw new Error(
-        `docker_tee_fail ${remote}: ${String(putRun.stderr || "").slice(0, 300)}`,
-      );
-    }
-  };
-  const jsonPath = path.join(root, "actu-short.json");
-  put("/tmp/actu-short.json", jsonPath);
-  put(
-    "/tmp/run-news-short-images.mjs",
-    path.join(process.cwd(), "scripts/run-news-short-images.mjs"),
-  );
-  const imgRun = spawnSync(
-    "ssh",
-    [
-      ...sshBase,
-      `sudo docker exec ${container} node /tmp/run-news-short-images.mjs`,
-    ],
-    { encoding: "utf8", timeout: 240_000, maxBuffer: 2_000_000 },
-  );
-  await writeFileP(
-    path.join(root, "actu-short.images-log.txt"),
-    `${imgRun.stdout || ""}\n--- stderr ---\n${imgRun.stderr || ""}`,
-  );
-  if (imgRun.status !== 0) {
-    console.error("images_serveur_fail", (imgRun.stderr || "").slice(0, 400));
-    return [];
-  }
-  const bufs = [];
-  for (let i = 0; i < 3; i += 1) {
-    const pull = spawnSync(
-      "ssh",
-      [
-        ...sshBase,
-        `sudo docker exec ${container} cat /tmp/news-short-scene-${i}.jpg`,
-      ],
-      { encoding: "buffer", maxBuffer: 8_000_000 },
-    );
-    if (pull.status === 0 && pull.stdout && pull.stdout.length > 4000) {
-      const file = path.join(root, `scene-${i}.jpg`);
-      await writeFileP(file, pull.stdout);
-      bufs.push(pull.stdout);
-    }
-  }
-  return bufs;
-}
-
 const script = REUSE
   ? JSON.parse(readFileSync(path.join(root, "actu-short.json"), "utf8"))
   : SERVER_AI
@@ -202,14 +145,7 @@ if (!REUSE) {
   );
 }
 
-const photoBufs = REUSE
-  ? [0, 1, 2]
-      .map((i) => path.join(root, `scene-${i}.jpg`))
-      .filter((f) => existsSync(f))
-      .map((f) => readFileSync(f))
-  : SERVER_AI
-    ? await photosViaServer(script)
-    : await generateNewsShortPhotos(script);
+const photoBufs = await generateNewsShortPhotos(script);
 const mp4 = await newsShareMp4(script.title, script.excerpt, {
   body: script.body,
   mood: script.music,

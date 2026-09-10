@@ -3,7 +3,9 @@ import { describe, it } from "node:test";
 import {
   composeNewsShortScript,
   fallbackNewsShortScript,
+  generateNewsShortPhotos,
   NEWS_SHORT_SYSTEM_PROMPT,
+  newsShortStockFiles,
   parseNewsShortAiJson,
 } from "./news-short-script.ts";
 
@@ -132,7 +134,8 @@ describe("composeNewsShortScript", () => {
 describe("prompt Short", () => {
   it("laisse l’IA fournir anecdote et scénario ; l’abonnement est ajouté à l’écran", () => {
     assert.match(NEWS_SHORT_SYSTEM_PROMPT, /system_role/);
-    assert.match(NEWS_SHORT_SYSTEM_PROMPT, /imagePrompt/);
+    assert.match(NEWS_SHORT_SYSTEM_PROMPT, /pack déjà généré/);
+    assert.match(NEWS_SHORT_SYSTEM_PROMPT, /ne fournis pas d'imagePrompt/);
     assert.match(NEWS_SHORT_SYSTEM_PROMPT, /voix/);
     assert.match(NEWS_SHORT_SYSTEM_PROMPT, /faits_a_eviter/);
     assert.match(NEWS_SHORT_SYSTEM_PROMPT, /abonnement/);
@@ -141,5 +144,21 @@ describe("prompt Short", () => {
     assert.match(NEWS_SHORT_SYSTEM_PROMPT, /SURPRISE/);
     assert.match(NEWS_SHORT_SYSTEM_PROMPT, /SPOILENT PAS/);
     assert.ok(!/anecdotes_source/.test(NEWS_SHORT_SYSTEM_PROMPT));
+  });
+});
+
+describe("photos Short stock", () => {
+  it("charge le pack 9:16 déjà généré, sans Gemini", async () => {
+    const files = newsShortStockFiles();
+    assert.ok(files.length >= 3, `pack trop petit (${files.length})`);
+    const script = await composeNewsShortScript({ skipAi: true });
+    const a = await generateNewsShortPhotos(script);
+    const b = await generateNewsShortPhotos(script);
+    assert.equal(a.length, 3);
+    assert.ok(a[0] && a[0].length > 8000);
+    assert.deepEqual(
+      a.map((buf) => buf.length),
+      b.map((buf) => buf.length),
+    );
   });
 });
