@@ -182,7 +182,8 @@ export function parseNewsShortAiJson(
   } catch {
     return null;
   }
-  const game = isGame(String(parsed.game || "")) ? parsed.game : "euromillions";
+  const rawGame = String(parsed.game || "");
+  const game: NewsShortGame = isGame(rawGame) ? rawGame : "euromillions";
   const fact = clip(String(parsed.fact || ""), 360);
   const title = clip(stripSubscribeCta(String(parsed.title || parsed.titre || "")), 88);
   const excerpt = clip(
