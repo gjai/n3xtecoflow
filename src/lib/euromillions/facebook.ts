@@ -1901,6 +1901,7 @@ export async function notifyWeeklyNewsShort(options?: {
   }
   const dayKey = parisDateKey();
   const hourKey = parisHourKey();
+  console.error("news_short_start", hourKey, options?.force ? "force" : "cron");
   if (!facebookConfigured() && !youtubeConfigured() && !tiktokConfigured()) {
     return emptyNotify({ newsShort: "unconfigured" });
   }

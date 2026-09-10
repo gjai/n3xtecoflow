@@ -12,7 +12,7 @@ import { getLatestDraw, readEuroMillionsStore } from "@/lib/euromillions/store";
 import { cronAuthorized } from "@/lib/http/cron-auth";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 360;
+export const maxDuration = 600;
 
 /** Statut Meta, `?force=1` dernier tirage, `?game=euromillions`, `?newsShort=1` Short histoire horaire. */
 export async function POST(request: Request) {

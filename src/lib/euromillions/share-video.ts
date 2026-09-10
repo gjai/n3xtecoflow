@@ -8,6 +8,7 @@ import { SHARE_STORY, type ShareCardInput } from "./share-card";
 import { lotteryShareWav, newsShareWav, type NewsShareMood } from "./share-audio";
 import type { NewsShortFond, NewsShortVisuel } from "./news-short-script";
 import {
+  SHARE_NEWS_FPS,
   SHARE_VIDEO_FPS,
   SHARE_VIDEO_FRAMES,
   clamp01,
@@ -333,7 +334,7 @@ export async function newsShareMp4(
   options?: NewsShareVideoOptions,
 ): Promise<Buffer> {
   const size = options?.size || SHARE_STORY;
-  const fps = options?.fps ?? SHARE_VIDEO_FPS;
+  const fps = options?.fps ?? SHARE_NEWS_FPS;
   const tl = newsShareTimeline(excerpt, options?.body);
   const frames = options?.frames ?? Math.max(8, Math.round(fps * tl.seconds));
   const photos = await loadNewsPhotos(

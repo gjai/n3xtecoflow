@@ -108,6 +108,11 @@ export const SHARE_VIDEO_FPS = 24;
 export const SHARE_VIDEO_SECONDS = 11;
 export const SHARE_VIDEO_FRAMES = Math.round(SHARE_VIDEO_FPS * SHARE_VIDEO_SECONDS);
 
+/** Short histoire : 12 fps pour rester sous le timeout VPS. */
+export const SHARE_NEWS_FPS = 12;
+export const SHARE_NEWS_SECONDS = 55;
+export const SHARE_NEWS_FRAMES = Math.round(SHARE_NEWS_FPS * SHARE_NEWS_SECONDS);
+
 /** 0 pendant [start,end], avec fondu d’entrée/sortie (playhead 0..1). */
 export function holdFade(
   t: number,
@@ -120,7 +125,3 @@ export function holdFade(
   const fadeOut = 1 - windowT(t, Math.max(start + fade, end - fade), fade);
   return clamp01(Math.min(fadeIn, fadeOut));
 }
-
-/** Short actu : 55 s (accroche, histoire, chute, abonnement). */
-export const SHARE_NEWS_SECONDS = 55;
-export const SHARE_NEWS_FRAMES = Math.round(SHARE_VIDEO_FPS * SHARE_NEWS_SECONDS);
