@@ -231,6 +231,7 @@ export type SiteConfig = {
   socials?: {
     facebook?: string;
     instagram?: string;
+    youtube?: string;
   };
   /** Profil éditorial (prompts, CTA Amazon, guide unique, covers) */
   editorial: SiteEditorialProfile;

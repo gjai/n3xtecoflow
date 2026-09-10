@@ -42,6 +42,9 @@ export type EuroMillionsRefreshResult = {
     stories: number;
     instagramPosted?: number;
     instagramStories?: number;
+    reels?: number;
+    instagramReels?: number;
+    youtubeShorts?: number;
     instagramUsername?: string | null;
     skipped: Record<string, string>;
   };

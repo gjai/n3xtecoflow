@@ -5,6 +5,7 @@ import {
   notifyFacebookOnPublish,
   SOCIAL_DRAW_GAMES,
 } from "@/lib/euromillions/facebook";
+import { youtubeConfigured } from "@/lib/euromillions/youtube";
 import { getLatestDraw, readEuroMillionsStore } from "@/lib/euromillions/store";
 import { cronAuthorized } from "@/lib/http/cron-auth";
 
@@ -35,6 +36,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       ...meta,
       ...snapshot,
+      youtube: youtubeConfigured(),
       latest: latest?.date || null,
       force: false,
     });
@@ -44,6 +46,7 @@ export async function POST(request: Request) {
   return NextResponse.json({
     ...meta,
     ...after,
+    youtube: youtubeConfigured(),
     latest: latest?.date || null,
     ...result,
   });

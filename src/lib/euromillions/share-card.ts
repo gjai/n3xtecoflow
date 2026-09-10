@@ -23,15 +23,46 @@ export type ShareCardInput = {
   accent: string;
   accentInk: string;
   rows: { values: Array<number | string>; outlined?: boolean }[];
+  jackpotLabel?: string | null;
+  myMillionLabel?: string | null;
 };
+
+/** « Jackpot 111 M€ » — assez court pour une carte 9:16. */
+export function formatShareJackpot(n: number): string {
+  if (n >= 1_000_000) {
+    const m = n / 1_000_000;
+    const rounded = m >= 20 ? Math.round(m) : Math.round(m * 10) / 10;
+    const s = Number.isInteger(rounded)
+      ? String(rounded)
+      : String(rounded).replace(".", ",");
+    return `Jackpot ${s} M€`;
+  }
+  const euros = new Intl.NumberFormat("fr-FR", {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0,
+  })
+    .format(n)
+    .replace(/[\u00a0\u202f]/g, " ");
+  return `Jackpot ${euros}`;
+}
 
 export function euroMillionsShareCard(draw: EuroMillionsDraw): ShareCardInput {
   const id = GAME_IDENTITY.euromillions;
+  const jackpot =
+    typeof draw.jackpotEur === "number" && draw.jackpotEur > 0
+      ? formatShareJackpot(draw.jackpotEur)
+      : null;
+  const million = draw.myMillionCode?.trim()
+    ? `My Million ${draw.myMillionCode.trim()}`
+    : null;
   return {
     kicker: "EuroMillions Résultats",
     dateLabel: formatEuroMillionsLongDate(draw.date, "fr"),
     accent: id.accent,
     accentInk: id.accentInk,
+    jackpotLabel: jackpot,
+    myMillionLabel: million,
     rows: [
       { values: draw.numbers },
       { values: draw.stars, outlined: true },
@@ -64,11 +95,16 @@ export function companionShareCard(draw: FdjGameDraw): ShareCardInput {
   if (main?.values.length) rows.push({ values: main.values });
   if (bonus?.values.length) rows.push({ values: bonus.values, outlined: true });
   if (letter?.values.length) rows.push({ values: letter.values, outlined: true });
+  const jackpot =
+    typeof draw.jackpotEur === "number" && draw.jackpotEur > 0
+      ? formatShareJackpot(draw.jackpotEur)
+      : null;
   return {
     kicker: `${title} · Résultats`,
     dateLabel,
     accent: id.accent,
     accentInk: id.accentInk,
+    jackpotLabel: jackpot,
     rows,
   };
 }

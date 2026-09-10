@@ -118,6 +118,7 @@ export const euromillionsSite: SiteConfig = {
   socials: {
     facebook: "https://www.facebook.com/euromillionsresultats/",
     instagram: "https://www.instagram.com/euromillionsresultats/",
+    youtube: "https://www.youtube.com/@euromillionsresultats",
   },
   monetization: {
     disableAmazon: true,

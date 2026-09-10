@@ -16,11 +16,18 @@ import {
   SHARE_STORY,
   companionShareCard,
   euroMillionsShareCard,
+  formatShareJackpot,
   type ShareCardInput,
 } from "./share-card";
 import { lotterySharePng, newsSharePng } from "./share-render";
 import { isEuroMillionsDrawPublished } from "./store";
 import type { EuroMillionsDraw } from "./types";
+import {
+  postYoutubeShort,
+  youtubeConfigured,
+  youtubeShortDescription,
+  youtubeShortTitle,
+} from "./youtube";
 
 export const SOCIAL_DRAW_GAMES = [
   "euromillions",
@@ -40,6 +47,8 @@ type FacebookStore = {
   lastPostedDrawDate?: string | null;
   lastPosted: PostedMap;
   lastPostedIg?: PostedMap;
+  lastPostedReel?: PostedMap;
+  lastPostedYoutube?: PostedMap;
   lastPostedOk?: PostedOkMap;
   lastErrors?: Record<string, string>;
   newsSeeded?: boolean;
@@ -51,6 +60,9 @@ export type FacebookNotifyResult = {
   stories: number;
   instagramPosted: number;
   instagramStories: number;
+  reels: number;
+  instagramReels: number;
+  youtubeShorts: number;
   instagramUsername: string | null;
   skipped: Record<string, string>;
 };
@@ -58,9 +70,29 @@ export type FacebookNotifyResult = {
 export type FacebookPublishSnapshot = {
   lastPosted: PostedMap;
   lastPostedIg: PostedMap;
+  lastPostedReel: PostedMap;
+  lastPostedYoutube: PostedMap;
   lastPostedOk: PostedOkMap;
   lastErrors: Record<string, string>;
 };
+
+function emptyNotify(
+  skipped: Record<string, string>,
+  extra?: Partial<FacebookNotifyResult>,
+): FacebookNotifyResult {
+  return {
+    posted: 0,
+    stories: 0,
+    instagramPosted: 0,
+    instagramStories: 0,
+    reels: 0,
+    instagramReels: 0,
+    youtubeShorts: 0,
+    instagramUsername: null,
+    skipped,
+    ...extra,
+  };
+}
 
 function emptyPosted(): PostedMap {
   return {
@@ -101,6 +133,8 @@ const SEED: FacebookStore = {
   updatedAt: new Date().toISOString(),
   lastPosted: emptyPosted(),
   lastPostedIg: emptyPosted(),
+  lastPostedReel: emptyPosted(),
+  lastPostedYoutube: emptyPosted(),
   lastPostedOk: emptyPostedOk(),
   lastErrors: {},
   newsSeeded: false,
@@ -153,6 +187,8 @@ async function readState(): Promise<FacebookStore> {
       ...SEED,
       lastPosted: mergePosted(parsed.lastPosted, parsed.lastPostedDrawDate),
       lastPostedIg: mergePosted(parsed.lastPostedIg),
+      lastPostedReel: mergePosted(parsed.lastPostedReel),
+      lastPostedYoutube: mergePosted(parsed.lastPostedYoutube),
       lastPostedOk: mergePostedOk(parsed.lastPostedOk),
       lastErrors:
         parsed.lastErrors && typeof parsed.lastErrors === "object"
@@ -178,6 +214,8 @@ async function writeState(store: FacebookStore): Promise<void> {
         updatedAt: new Date().toISOString(),
         lastPosted: store.lastPosted,
         lastPostedIg: store.lastPostedIg ?? emptyPosted(),
+        lastPostedReel: store.lastPostedReel ?? emptyPosted(),
+        lastPostedYoutube: store.lastPostedYoutube ?? emptyPosted(),
         lastPostedOk: store.lastPostedOk ?? emptyPostedOk(),
         lastErrors: store.lastErrors ?? {},
         newsSeeded: store.newsSeeded ?? false,
@@ -232,6 +270,28 @@ export function facebookDrawMessage(draw: EuroMillionsDraw): string {
     lines.push(`Jackpot : ${formatJackpot(draw.jackpotEur)}`);
   }
   return [...lines, ...legalLines(url, "#EuroMillions", "euromillions")].join("\n");
+}
+
+/** Légende Reel : accroche en première ligne, plus courte que le post photo. */
+export function facebookReelMessage(draw: EuroMillionsDraw): string {
+  const date = formatEuroMillionsLongDate(draw.date, "fr");
+  const hookTail =
+    typeof draw.jackpotEur === "number" && draw.jackpotEur > 0
+      ? formatShareJackpot(draw.jackpotEur).replace(/^Jackpot /, "jackpot ")
+      : "les numéros";
+  const lines = [
+    `Tirage du ${date} — ${hookTail}`,
+    "",
+    `${draw.numbers.join(" · ")}  ·  étoiles ${draw.stars.join(" · ")}`,
+  ];
+  if (draw.myMillionCode) lines.push(`My Million : ${draw.myMillionCode}`);
+  lines.push(
+    "",
+    facebookDrawPermalink(draw.date),
+    "18+ · jeu responsable · site indépendant",
+    "#EuroMillions",
+  );
+  return lines.join("\n");
 }
 
 function companionPermalink(draw: FdjGameDraw): string {
@@ -350,7 +410,14 @@ function companionJobsForGame(
 async function graphJson(
   url: string,
   body: FormData,
-): Promise<{ id?: string; post_id?: string; error?: { message?: string } }> {
+): Promise<{
+  id?: string;
+  post_id?: string;
+  video_id?: string;
+  upload_url?: string;
+  uri?: string;
+  error?: { message?: string };
+}> {
   const res = await fetch(url, { method: "POST", body });
   return (await res.json().catch(() => ({}))) as {
     id?: string;
@@ -469,6 +536,181 @@ async function waitIgContainer(
   return { ok: true };
 }
 
+async function waitIgReelReady(
+  token: string,
+  creationId: string,
+): Promise<{ ok: boolean; error?: string }> {
+  for (let i = 0; i < 24; i += 1) {
+    const json = await graphGet(
+      encodeURIComponent(creationId),
+      token,
+      "status_code,status",
+    );
+    const code = String(json.status_code || "");
+    if (code === "FINISHED") return { ok: true };
+    if (code === "ERROR" || code === "EXPIRED") {
+      return { ok: false, error: String(json.status || code).slice(0, 220) };
+    }
+    await new Promise((r) => setTimeout(r, 1500));
+  }
+  return { ok: false, error: "ig_reel_timeout" };
+}
+
+async function ruploadVideo(
+  uri: string,
+  token: string,
+  bytes: Buffer,
+): Promise<{ ok: boolean; error?: string }> {
+  const res = await fetch(uri, {
+    method: "POST",
+    headers: {
+      Authorization: `OAuth ${token}`,
+      offset: "0",
+      file_size: String(bytes.length),
+    },
+    body: new Uint8Array(bytes),
+  });
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    return { ok: false, error: (text || `rupload_${res.status}`).slice(0, 220) };
+  }
+  return { ok: true };
+}
+
+async function postFacebookReel(
+  token: string,
+  bytes: Buffer,
+  caption: string,
+): Promise<{ ok: boolean; error?: string }> {
+  const start = new FormData();
+  start.append("access_token", token);
+  start.append("upload_phase", "start");
+  const started = await graphJson(
+    `${GRAPH}/${encodeURIComponent(pageId())}/video_reels`,
+    start,
+  );
+  const videoId = started.video_id || started.id;
+  if (!videoId || !started.upload_url) {
+    return {
+      ok: false,
+      error: (started.error?.message || "reel_start_fail").slice(0, 220),
+    };
+  }
+  const uploaded = await ruploadVideo(started.upload_url, token, bytes);
+  if (!uploaded.ok) return uploaded;
+  const finish = new FormData();
+  finish.append("access_token", token);
+  finish.append("upload_phase", "finish");
+  finish.append("video_id", videoId);
+  finish.append("video_state", "PUBLISHED");
+  finish.append("description", caption.slice(0, 8000));
+  const done = await graphJson(
+    `${GRAPH}/${encodeURIComponent(pageId())}/video_reels`,
+    finish,
+  );
+  if (done.error?.message && !done.id && !done.post_id) {
+    return { ok: false, error: done.error.message.slice(0, 220) };
+  }
+  return { ok: true };
+}
+
+async function postInstagramReel(args: {
+  token: string;
+  igUserId: string;
+  bytes: Buffer;
+  caption: string;
+}): Promise<{ ok: boolean; error?: string }> {
+  const form = new FormData();
+  form.append("access_token", args.token);
+  form.append("media_type", "REELS");
+  form.append("upload_type", "resumable");
+  form.append("share_to_feed", "true");
+  form.append("thumb_offset", "0");
+  form.append("caption", args.caption.slice(0, 2200));
+  const created = await graphJson(
+    `${GRAPH}/${encodeURIComponent(args.igUserId)}/media`,
+    form,
+  );
+  if (!created.id) {
+    return {
+      ok: false,
+      error: (created.error?.message || "ig_reel_container_fail").slice(0, 220),
+    };
+  }
+  const uri =
+    created.uri ||
+    `https://rupload.facebook.com/ig-api-upload/${encodeURIComponent(created.id)}`;
+  const uploaded = await ruploadVideo(uri, args.token, args.bytes);
+  if (!uploaded.ok) return uploaded;
+  const ready = await waitIgReelReady(args.token, created.id);
+  if (!ready.ok) return ready;
+  const publish = new FormData();
+  publish.append("access_token", args.token);
+  publish.append("creation_id", created.id);
+  const json = await graphJson(
+    `${GRAPH}/${encodeURIComponent(args.igUserId)}/media_publish`,
+    publish,
+  );
+  if (json.error?.message && !json.id) {
+    return { ok: false, error: json.error.message.slice(0, 220) };
+  }
+  return { ok: true };
+}
+
+export async function postEuroMillionsReels(args: {
+  token: string;
+  card: ShareCardInput;
+  caption: string;
+  instagram?: InstagramAccount | null;
+  youtubeTitle?: string;
+  youtubeDescription?: string;
+  skipReel?: boolean;
+  skipYoutube?: boolean;
+}): Promise<{ facebook: boolean; instagram: boolean; youtube: boolean }> {
+  let facebook = false;
+  let instagram = false;
+  let youtube = false;
+  const wantReel = !args.skipReel;
+  const wantYt =
+    !args.skipYoutube &&
+    youtubeConfigured() &&
+    Boolean(args.youtubeTitle && args.youtubeDescription);
+  if (!wantReel && !wantYt) {
+    return { facebook, instagram, youtube };
+  }
+  try {
+    const { lotteryShareMp4 } = await import("./share-video");
+    const mp4 = await lotteryShareMp4(args.card);
+    if (wantReel) {
+      const fb = await postFacebookReel(args.token, mp4, args.caption);
+      if (fb.ok) facebook = true;
+      else console.error("facebook_reel_fail", fb.error);
+      if (args.instagram) {
+        const ig = await postInstagramReel({
+          token: args.token,
+          igUserId: args.instagram.id,
+          bytes: mp4,
+          caption: args.caption,
+        });
+        if (ig.ok) instagram = true;
+        else console.error("instagram_reel_fail", ig.error);
+      }
+    }
+    if (wantYt) {
+      const yt = await postYoutubeShort({
+        bytes: mp4,
+        title: args.youtubeTitle!,
+        description: args.youtubeDescription!,
+      });
+      if (yt.ok) youtube = true;
+      else console.error("youtube_short_fail", yt.error);
+    }
+  } catch (err) {
+    console.error("share_reel_fail", err);
+  }
+  return { facebook, instagram, youtube };
+}
+
 async function publishInstagram(args: {
   token: string;
   igUserId: string;
@@ -515,6 +757,7 @@ async function postFeedAndStoryImages(args: {
   publicStoryUrl?: string;
   storyLinkUrl?: string;
   instagram?: InstagramAccount | null;
+  skipInstagramFeed?: boolean;
   onFacebookPosted?: () => Promise<void>;
 }): Promise<{
   posted: boolean;
@@ -558,25 +801,27 @@ async function postFeedAndStoryImages(args: {
   let igStory = false;
   const ig = args.instagram;
   if (ig?.id) {
-    const feedFallback = feed.id
-      ? await photoCdnUrl(args.token, feed.id)
-      : null;
-    const feedUrls = [args.publicFeedUrl, feedFallback].filter(
-      (u): u is string => Boolean(u),
-    );
-    for (const imageUrl of feedUrls) {
-      const sent = await publishInstagram({
-        token: args.token,
-        igUserId: ig.id,
-        imageUrl,
-        caption: args.caption,
-        story: false,
-      });
-      if (sent.ok) {
-        igPosted = true;
-        break;
+    if (!args.skipInstagramFeed) {
+      const feedFallback = feed.id
+        ? await photoCdnUrl(args.token, feed.id)
+        : null;
+      const feedUrls = [args.publicFeedUrl, feedFallback].filter(
+        (u): u is string => Boolean(u),
+      );
+      for (const imageUrl of feedUrls) {
+        const sent = await publishInstagram({
+          token: args.token,
+          igUserId: ig.id,
+          imageUrl,
+          caption: args.caption,
+          story: false,
+        });
+        if (sent.ok) {
+          igPosted = true;
+          break;
+        }
+        console.error("instagram_feed_fail", sent.error);
       }
-      console.error("instagram_feed_fail", sent.error);
     }
     const storyFallback = unpublished.id
       ? await photoCdnUrl(args.token, unpublished.id)
@@ -607,20 +852,23 @@ async function postInstagramOnly(args: {
   caption: string;
   publicQuery: string;
   instagram: InstagramAccount;
+  skipFeed?: boolean;
 }): Promise<{ igPosted: boolean; igStory: boolean }> {
   const feedUrl = shareJpegUrl(`${args.publicQuery}&format=ig`);
   const storyUrl = shareJpegUrl(`${args.publicQuery}&format=story`);
   let igPosted = false;
   let igStory = false;
-  const feed = await publishInstagram({
-    token: args.token,
-    igUserId: args.instagram.id,
-    imageUrl: feedUrl,
-    caption: args.caption,
-    story: false,
-  });
-  if (feed.ok) igPosted = true;
-  else console.error("instagram_feed_fail", feed.error);
+  if (!args.skipFeed) {
+    const feed = await publishInstagram({
+      token: args.token,
+      igUserId: args.instagram.id,
+      imageUrl: feedUrl,
+      caption: args.caption,
+      story: false,
+    });
+    if (feed.ok) igPosted = true;
+    else console.error("instagram_feed_fail", feed.error);
+  }
   const story = await publishInstagram({
     token: args.token,
     igUserId: args.instagram.id,
@@ -639,6 +887,7 @@ async function postFeedAndStory(args: {
   publicQuery: string;
   storyLinkUrl?: string;
   instagram?: InstagramAccount | null;
+  skipInstagramFeed?: boolean;
   onFacebookPosted?: () => Promise<void>;
 }): Promise<{
   posted: boolean;
@@ -656,6 +905,7 @@ async function postFeedAndStory(args: {
     publicStoryUrl: shareJpegUrl(`${args.publicQuery}&format=story`),
     storyLinkUrl: args.storyLinkUrl,
     instagram: args.instagram,
+    skipInstagramFeed: args.skipInstagramFeed,
     onFacebookPosted: args.onFacebookPosted,
   });
 }
@@ -708,8 +958,17 @@ export async function postFacebookDraw(
     publicQuery: `date=${encodeURIComponent(draw.date)}`,
     storyLinkUrl: fdjAffiliateUrl("euromillions", ""),
     instagram,
+    skipInstagramFeed: true,
   });
   if (!sent.posted) return { ok: false, error: sent.error };
+  await postEuroMillionsReels({
+    token,
+    card: euroMillionsShareCard(draw),
+    caption: facebookReelMessage(draw),
+    instagram,
+    youtubeTitle: youtubeShortTitle(draw),
+    youtubeDescription: youtubeShortDescription(draw),
+  });
   return { ok: true };
 }
 
@@ -718,6 +977,8 @@ export async function facebookPublishSnapshot(): Promise<FacebookPublishSnapshot
   return {
     lastPosted: state.lastPosted,
     lastPostedIg: state.lastPostedIg ?? emptyPosted(),
+    lastPostedReel: state.lastPostedReel ?? emptyPosted(),
+    lastPostedYoutube: state.lastPostedYoutube ?? emptyPosted(),
     lastPostedOk: state.lastPostedOk ?? emptyPostedOk(),
     lastErrors: state.lastErrors ?? {},
   };
@@ -727,11 +988,57 @@ type DrawPostJob = {
   key: SocialDrawGameId;
   fingerprint: string;
   caption: string;
+  reelCaption?: string;
   card: ShareCardInput;
   publicQuery: string;
   storyLinkUrl?: string;
   sortAt: string;
 };
+
+async function notifyYoutubeOnly(
+  latest: EuroMillionsDraw | null,
+  options?: { force?: boolean; games?: SocialDrawGameId[] },
+): Promise<FacebookNotifyResult> {
+  const skipped: Record<string, string> = { all: "facebook_unconfigured" };
+  const only = options?.games;
+  const wantEm = !only || only.includes("euromillions");
+  if (
+    !youtubeConfigured() ||
+    !wantEm ||
+    !isEuroMillionsDrawPublished(latest) ||
+    !latest
+  ) {
+    return emptyNotify(skipped);
+  }
+  const state = await readState();
+  if (
+    !options?.force &&
+    state.lastPostedYoutube?.euromillions === latest.date
+  ) {
+    skipped["euromillions:youtube"] = "already";
+    return emptyNotify(skipped);
+  }
+  const { lotteryShareMp4 } = await import("./share-video");
+  const mp4 = await lotteryShareMp4(euroMillionsShareCard(latest));
+  const yt = await postYoutubeShort({
+    bytes: mp4,
+    title: youtubeShortTitle(latest),
+    description: youtubeShortDescription(latest),
+  });
+  if (!yt.ok) {
+    skipped["euromillions:youtube"] = yt.error || "youtube_fail";
+    return emptyNotify(skipped);
+  }
+  await writeState({
+    ...state,
+    lastPostedYoutube: {
+      ...(state.lastPostedYoutube ?? emptyPosted()),
+      euromillions: latest.date,
+    },
+  });
+  skipped["euromillions:youtube"] = "ok";
+  return emptyNotify(skipped, { youtubeShorts: 1 });
+}
 
 /**
  * Poste fil + story au passage d’un nouveau tirage
@@ -746,14 +1053,7 @@ export async function notifyFacebookOnPublish(
 ): Promise<FacebookNotifyResult> {
   const skipped: Record<string, string> = {};
   if (!facebookConfigured()) {
-    return {
-      posted: 0,
-      stories: 0,
-      instagramPosted: 0,
-      instagramStories: 0,
-      instagramUsername: null,
-      skipped: { all: "facebook_unconfigured" },
-    };
+    return notifyYoutubeOnly(latest, options);
   }
   let state = await readState();
   const token = envPageToken();
@@ -764,6 +1064,9 @@ export async function notifyFacebookOnPublish(
   let stories = 0;
   let instagramPosted = 0;
   let instagramStories = 0;
+  let reels = 0;
+  let instagramReels = 0;
+  let youtubeShorts = 0;
   const force = Boolean(options?.force);
   const only = options?.games;
   const want = (id: SocialDrawGameId) => !only || only.includes(id);
@@ -789,6 +1092,24 @@ export async function notifyFacebookOnPublish(
     await persist({
       lastPostedIg: {
         ...(state.lastPostedIg ?? emptyPosted()),
+        [key]: value,
+      },
+    });
+  };
+
+  const stampReel = async (key: SocialDrawGameId, value: string) => {
+    await persist({
+      lastPostedReel: {
+        ...(state.lastPostedReel ?? emptyPosted()),
+        [key]: value,
+      },
+    });
+  };
+
+  const stampYoutube = async (key: SocialDrawGameId, value: string) => {
+    await persist({
+      lastPostedYoutube: {
+        ...(state.lastPostedYoutube ?? emptyPosted()),
         [key]: value,
       },
     });
@@ -823,6 +1144,7 @@ export async function notifyFacebookOnPublish(
         key: "euromillions",
         fingerprint,
         caption: facebookDrawMessage(latest),
+        reelCaption: facebookReelMessage(latest),
         card: euroMillionsShareCard(latest),
         publicQuery: `date=${encodeURIComponent(latest.date)}`,
         storyLinkUrl: fdjAffiliateUrl("euromillions", ""),
@@ -887,6 +1209,7 @@ export async function notifyFacebookOnPublish(
       publicQuery: job.publicQuery,
       storyLinkUrl: job.storyLinkUrl,
       instagram,
+      skipInstagramFeed: job.key === "euromillions",
       onFacebookPosted: () => stampFb(job.key, job.fingerprint),
     });
     if (!sent.posted) {
@@ -901,6 +1224,46 @@ export async function notifyFacebookOnPublish(
     if (sent.igStory) instagramStories += 1;
     if (sent.igPosted || sent.igStory) await stampIg(job.key, job.fingerprint);
     skipped[skipKey] = "ok";
+    if (job.key === "euromillions" && latest) {
+      const reel = await postEuroMillionsReels({
+        token,
+        card: job.card,
+        caption: job.reelCaption || job.caption,
+        instagram,
+        youtubeTitle: youtubeShortTitle(latest),
+        youtubeDescription: youtubeShortDescription(latest),
+        skipReel: !force && state.lastPostedReel?.euromillions === job.fingerprint,
+        skipYoutube:
+          !force && state.lastPostedYoutube?.euromillions === job.fingerprint,
+      });
+      if (reel.facebook) reels += 1;
+      if (reel.instagram) {
+        instagramReels += 1;
+        instagramPosted += 1;
+        await stampIg(job.key, job.fingerprint);
+      }
+      if (reel.facebook || reel.instagram) {
+        await stampReel(job.key, job.fingerprint);
+        skipped[`${skipKey}:reel`] = "ok";
+      } else if (
+        force ||
+        state.lastPostedReel?.euromillions !== job.fingerprint
+      ) {
+        skipped[`${skipKey}:reel`] = "reel_fail";
+        await stampError(`${skipKey}:reel`, "reel_fail");
+      }
+      if (reel.youtube) {
+        youtubeShorts += 1;
+        await stampYoutube(job.key, job.fingerprint);
+        skipped[`${skipKey}:youtube`] = "ok";
+      } else if (
+        youtubeConfigured() &&
+        (force || state.lastPostedYoutube?.euromillions !== job.fingerprint)
+      ) {
+        skipped[`${skipKey}:youtube`] = "youtube_fail";
+        await stampError(`${skipKey}:youtube`, "youtube_fail");
+      }
+    }
   };
 
   for (const job of queue) {
@@ -916,6 +1279,7 @@ export async function notifyFacebookOnPublish(
         key: "euromillions",
         fingerprint: latest.date,
         caption: facebookDrawMessage(latest),
+        reelCaption: facebookReelMessage(latest),
         card: euroMillionsShareCard(latest),
         publicQuery: `date=${encodeURIComponent(latest.date)}`,
         storyLinkUrl: fdjAffiliateUrl("euromillions", ""),
@@ -944,6 +1308,7 @@ export async function notifyFacebookOnPublish(
         caption: job.caption,
         publicQuery: job.publicQuery,
         instagram,
+        skipFeed: job.key === "euromillions",
       });
       if (igSent.igPosted) instagramPosted += 1;
       if (igSent.igStory) instagramStories += 1;
@@ -953,11 +1318,63 @@ export async function notifyFacebookOnPublish(
     }
   }
 
+  if (
+    !queue.some((j) => j.key === "euromillions") &&
+    want("euromillions") &&
+    isEuroMillionsDrawPublished(latest) &&
+    latest &&
+    (force ||
+      state.lastPostedReel?.euromillions !== latest.date ||
+      (youtubeConfigured() &&
+        state.lastPostedYoutube?.euromillions !== latest.date))
+  ) {
+    const reel = await postEuroMillionsReels({
+      token,
+      card: euroMillionsShareCard(latest),
+      caption: facebookReelMessage(latest),
+      instagram,
+      youtubeTitle: youtubeShortTitle(latest),
+      youtubeDescription: youtubeShortDescription(latest),
+      skipReel: !force && state.lastPostedReel?.euromillions === latest.date,
+      skipYoutube:
+        !force && state.lastPostedYoutube?.euromillions === latest.date,
+    });
+    if (reel.facebook) reels += 1;
+    if (reel.instagram) {
+      instagramReels += 1;
+      instagramPosted += 1;
+      await stampIg("euromillions", latest.date);
+    }
+    if (reel.facebook || reel.instagram) {
+      await stampReel("euromillions", latest.date);
+      skipped["euromillions:reel"] = skipped["euromillions:reel"] || "reel_backfill";
+    } else if (
+      force ||
+      state.lastPostedReel?.euromillions !== latest.date
+    ) {
+      skipped["euromillions:reel"] = "reel_backfill_fail";
+    }
+    if (reel.youtube) {
+      youtubeShorts += 1;
+      await stampYoutube("euromillions", latest.date);
+      skipped["euromillions:youtube"] =
+        skipped["euromillions:youtube"] || "youtube_backfill";
+    } else if (
+      youtubeConfigured() &&
+      (force || state.lastPostedYoutube?.euromillions !== latest.date)
+    ) {
+      skipped["euromillions:youtube"] = "youtube_backfill_fail";
+    }
+  }
+
   return {
     posted,
     stories,
     instagramPosted,
     instagramStories,
+    reels,
+    instagramReels,
+    youtubeShorts,
     instagramUsername: instagram?.username || null,
     skipped,
   };
@@ -1002,14 +1419,7 @@ export async function notifyFacebookNews(
     (a) => (a.siteId || "ecoflow") === "euromillions" && a.slug && a.fr?.title,
   );
   if (!facebookConfigured()) {
-    return {
-      posted: 0,
-      stories: 0,
-      instagramPosted: 0,
-      instagramStories: 0,
-      instagramUsername: null,
-      skipped: { news: "facebook_unconfigured" },
-    };
+    return emptyNotify({ news: "facebook_unconfigured" });
   }
   let state = await readState();
   const token = envPageToken();
@@ -1089,6 +1499,9 @@ export async function notifyFacebookNews(
     stories,
     instagramPosted,
     instagramStories,
+    reels: 0,
+    instagramReels: 0,
+    youtubeShorts: 0,
     instagramUsername: instagram?.username || null,
     skipped,
   };

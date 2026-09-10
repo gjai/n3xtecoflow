@@ -20,7 +20,14 @@ describe("lotteryShareSvg", () => {
     assert.match(svg, />11</);
     assert.match(svg, />46</);
     assert.match(svg, />4</);
+    assert.match(svg, /<polygon /);
     assert.match(svg, /font-family="Inter"/);
+  });
+
+  it("met le jackpot en M€", async () => {
+    const { formatShareJackpot } = await import("./share-card.ts");
+    assert.equal(formatShareJackpot(111_000_000), "Jackpot 111 M€");
+    assert.equal(formatShareJackpot(14_500_000), "Jackpot 14,5 M€");
   });
 
   it("rasterise un PNG via resvg (texte réel, pas des tofu)", async () => {

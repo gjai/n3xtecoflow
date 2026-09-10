@@ -33,6 +33,7 @@ ENV EUROMILLIONS_DATA_PATH=/app/data/euromillions.json
 ENV FDJ_GAMES_DATA_PATH=/app/data/fdj-games.json
 ENV AI_USAGE_PATH=/app/data/ai-usage.json
 ENV SHARE_FONT_PATH=/app/public/fonts/Inter-Bold.ttf
+ENV SHARE_VOICE_PATH=/app/public/share-voice
 
 RUN addgroup -S nodejs && adduser -S nextjs -G nodejs \
   && mkdir -p /app/data /app/data/news-images /app/data-seed \

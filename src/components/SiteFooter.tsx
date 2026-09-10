@@ -74,6 +74,7 @@ export function SiteFooter() {
           <SocialIcons
             facebook={site.socials?.facebook}
             instagram={site.socials?.instagram}
+            youtube={site.socials?.youtube}
             rssHref={
               siteShowsNews(site)
                 ? locale === "fr" || !siteIndexesLocale(site, "en")
@@ -128,12 +129,14 @@ export function SiteFooter() {
 function SocialIcons({
   facebook,
   instagram,
+  youtube,
   rssHref,
   rssLabel,
   contactLabel,
 }: {
   facebook?: string;
   instagram?: string;
+  youtube?: string;
   rssHref?: string;
   rssLabel?: string;
   contactLabel: string;
@@ -153,6 +156,14 @@ function SocialIcons({
           <path
             fill="currentColor"
             d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM17.5 6a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5z"
+          />
+        </SocialIcon>
+      ) : null}
+      {youtube ? (
+        <SocialIcon href={youtube} label="YouTube" external>
+          <path
+            fill="currentColor"
+            d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.5 31.5 0 0 0 0 12a31.5 31.5 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.5 31.5 0 0 0 24 12a31.5 31.5 0 0 0-.5-5.8zM9.75 15.5v-7l6.5 3.5-6.5 3.5z"
           />
         </SocialIcon>
       ) : null}
