@@ -1,0 +1,38 @@
+name: EuroMillions ticket gagnant Short
+
+on:
+  schedule:
+    # 10h Europe/Paris : 08:00 UTC en CEST, 09:00 UTC en CET.
+    # L’app n’envoie que lun/mar/mer/ven/sam, 10h00–10h19 Paris.
+    - cron: "0 8,9 * * 1,2,3,5,6"
+  workflow_dispatch:
+
+jobs:
+  jackpot-buys:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Post ticket gagnant Short
+        env:
+          NEWS_CRON_SECRET: ${{ secrets.NEWS_CRON_SECRET }}
+          SITE_URL: https://euromillions-resultats.fr
+        run: |
+          set -euo pipefail
+          if [ -z "$NEWS_CRON_SECRET" ]; then
+            echo "NEWS_CRON_SECRET missing"
+            exit 1
+          fi
+          curl -fsS --max-time 30 -X POST \
+            -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
+            "${SITE_URL}/api/euromillions/facebook?jackpotBuys=1"
+      - name: Alert on failure
+        if: failure()
+        env:
+          NEWS_CRON_SECRET: ${{ secrets.NEWS_CRON_SECRET }}
+          SITE_URL: https://ecoflow-stream.com
+        run: |
+          curl -fsS -X POST \
+            -H "Authorization: Bearer ${NEWS_CRON_SECRET}" \
+            -H "Content-Type: application/json" \
+            -d "{\"job\":\"jackpot-buys\",\"workflow\":\"${{ github.workflow }}\",\"runUrl\":\"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\",\"error\":\"workflow_failed\"}" \
+            "${SITE_URL}/api/cron/alert" || true

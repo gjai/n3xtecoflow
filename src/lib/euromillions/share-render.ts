@@ -631,10 +631,12 @@ export function lotteryShareSvg(
       (!callout || callout.opacity < 0.35 ? 1 : 0)
     : 0;
   if (titleOp > 0.02) {
+    const headline = card.titleHeadline?.trim() || "LES NUMÉROS";
+    const sub = card.titleSub?.trim() || `Tirage du ${card.dateLabel}`;
     parts.push(
       `<g opacity="${titleOp.toFixed(3)}">
-        <text x="${size.width / 2}" y="${numbersY + Math.max(40, numbersH / 2 - 28)}" fill="#ffffff" font-size="${portrait ? 56 : 40}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle">LES NUMÉROS</text>
-        <text x="${size.width / 2}" y="${numbersY + Math.max(40, numbersH / 2 - 28) + (portrait ? 52 : 40)}" fill="${xml(card.accent)}" font-size="${portrait ? 32 : 24}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle">${xml(`Tirage du ${card.dateLabel}`)}</text>
+        <text x="${size.width / 2}" y="${numbersY + Math.max(40, numbersH / 2 - 28)}" fill="#ffffff" font-size="${portrait ? 56 : 40}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle">${xml(headline)}</text>
+        <text x="${size.width / 2}" y="${numbersY + Math.max(40, numbersH / 2 - 28) + (portrait ? 52 : 40)}" fill="${xml(card.accent)}" font-size="${portrait ? 32 : 24}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle">${xml(sub)}</text>
       </g>`,
     );
   }
@@ -752,8 +754,10 @@ export function newsShareSvg(
     t?: number;
     overlay?: boolean;
     body?: string;
-    mood?: "ironie" | "tension" | "mystere" | "chaleur";
+    mood?: "ironie" | "tension" | "mystere" | "chaleur" | "stats" | "rock";
     fond?: "navy" | "gold" | "cold" | "warm";
+    kicker?: string;
+    ctaLine?: string;
   },
 ): string {
   const layout = shareLayout(size);
@@ -806,7 +810,13 @@ export function newsShareSvg(
         ? "#c4b5fd"
         : anim?.mood === "chaleur"
           ? "#f0b36a"
-          : "#f5c542";
+          : anim?.mood === "stats"
+            ? "#5eead4"
+            : anim?.mood === "rock"
+              ? "#ff4d4d"
+              : "#f5c542";
+  const kicker = (anim?.kicker || "HISTOIRE").replace(/\s+/g, " ").trim().toUpperCase();
+  const ctaLine = (anim?.ctaLine || "pour d'autres histoires").replace(/\s+/g, " ").trim();
 
   const bg = overlay
     ? `<defs>
@@ -827,7 +837,7 @@ export function newsShareSvg(
         <circle cx="16" cy="16" r="8" fill="none" stroke="#0b1220" stroke-width="2"/>
         <path d="M16 11.2l1.2 2.5 2.7.4-2 1.9.5 2.7-2.4-1.3-2.4 1.3.5-2.7-2-1.9 2.7-.4L16 11.2z" fill="#0b1220"/>
       </g>
-      <text x="${pad + logoS + 16}" y="${headerY + (portrait ? 26 : 18)}" fill="${accent}" font-size="${portrait ? 28 : 20}" font-family="${FONT_FAMILY}" font-weight="700">HISTOIRE</text>
+      <text x="${pad + logoS + 16}" y="${headerY + (portrait ? 26 : 18)}" fill="${accent}" font-size="${portrait ? 28 : 20}" font-family="${FONT_FAMILY}" font-weight="700">${xml(kicker)}</text>
       <text x="${pad + logoS + 16}" y="${headerY + (portrait ? 52 : 36)}" fill="#e8eef8" font-size="${portrait ? 22 : 16}" font-family="${FONT_FAMILY}" font-weight="700">euromillions-resultats.fr</text>
     </g>`,
   ];
@@ -883,7 +893,7 @@ export function newsShareSvg(
       `<g opacity="${(ctaM.opacity * (1 - loopFade)).toFixed(3)}" transform="translate(0 ${ctaM.dy.toFixed(1)})">
         <rect x="${pad}" y="${ctaBoxY}" width="${size.width - pad * 2}" height="${ctaBoxH}" rx="32" fill="${accent}"/>
         <text x="${size.width / 2}" y="${ctaBoxY + 70}" fill="#0b1220" font-size="${layout === "story" ? 48 : 36}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle">Abonne-toi</text>
-        <text x="${size.width / 2}" y="${ctaBoxY + 128}" fill="#0b1220" font-size="${layout === "story" ? 28 : 22}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle">pour d'autres histoires</text>
+        <text x="${size.width / 2}" y="${ctaBoxY + 128}" fill="#0b1220" font-size="${layout === "story" ? 28 : 22}" font-family="${FONT_FAMILY}" font-weight="700" text-anchor="middle">${xml(ctaLine)}</text>
       </g>`,
     );
   }

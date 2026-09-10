@@ -12,11 +12,20 @@ import type { FdjCompanionGameId, FdjGameDraw } from "@/lib/fdj-games/types";
 import { fdjAffiliateUrl } from "@/lib/fdj-affiliate";
 import {
   formatEuroMillionsLongDate,
+  isJackpotBuysSlot,
   isNewsShortSlot,
   parisHourKey,
   parisDateKey,
   parisIsoWeekKey,
 } from "./datetime";
+import {
+  composeJackpotBuysScript,
+  generateJackpotBuyPhotos,
+  JACKPOT_BUYS_CTA,
+  JACKPOT_BUYS_KICKER,
+  resolveNextJackpotTarget,
+} from "./jackpot-buys";
+import type { NewsShareMood } from "./share-audio";
 import {
   SHARE_IG_FEED,
   SHARE_STORY,
@@ -86,6 +95,8 @@ type FacebookStore = {
   lastNewsShortHour?: string | null;
   lastNewsShortFact?: string | null;
   lastNewsShortFacts?: string[];
+  lastJackpotBuysDay?: string | null;
+  lastJackpotBuysFact?: string | null;
 };
 
 export type FacebookNotifyResult = {
@@ -114,6 +125,8 @@ export type FacebookPublishSnapshot = {
   lastNewsShortDay: string | null;
   lastNewsShortHour: string | null;
   lastNewsShortFact: string | null;
+  lastJackpotBuysDay: string | null;
+  lastJackpotBuysFact: string | null;
 };
 
 function emptyNotify(
@@ -187,6 +200,8 @@ const SEED: FacebookStore = {
   lastNewsShortHour: null,
   lastNewsShortFact: null,
   lastNewsShortFacts: [],
+  lastJackpotBuysDay: null,
+  lastJackpotBuysFact: null,
 };
 
 const COMPANION_SOCIAL_GAMES: FdjCompanionGameId[] = [
@@ -274,6 +289,14 @@ async function readState(): Promise<FacebookStore> {
         : typeof parsed.lastNewsShortFact === "string"
           ? [parsed.lastNewsShortFact]
           : [],
+      lastJackpotBuysDay:
+        typeof parsed.lastJackpotBuysDay === "string"
+          ? parsed.lastJackpotBuysDay
+          : null,
+      lastJackpotBuysFact:
+        typeof parsed.lastJackpotBuysFact === "string"
+          ? parsed.lastJackpotBuysFact
+          : null,
     };
   } catch {
     return { ...SEED };
@@ -303,6 +326,8 @@ async function writeState(store: FacebookStore): Promise<void> {
         lastNewsShortHour: store.lastNewsShortHour ?? null,
         lastNewsShortFact: store.lastNewsShortFact ?? null,
         lastNewsShortFacts: store.lastNewsShortFacts ?? [],
+        lastJackpotBuysDay: store.lastJackpotBuysDay ?? null,
+        lastJackpotBuysFact: store.lastJackpotBuysFact ?? null,
       },
       null,
       2,
@@ -848,12 +873,14 @@ async function postNewsReels(args: {
   excerpt: string;
   body?: string;
   imageSrc?: string | null;
-  mood?: NewsShortMusic;
+  mood?: NewsShareMood;
   sfx?: string[];
   fond?: NewsShortFond;
   visuelSeed?: string | null;
   visuels?: NewsShortVisuel[];
   photoBufs?: Buffer[];
+  kicker?: string;
+  ctaLine?: string;
   caption: string;
   instagram?: InstagramAccount | null;
   youtubeTitle: string;
@@ -892,7 +919,13 @@ async function postNewsReels(args: {
             imageSrc: null,
             source: "ai",
             voix: false,
-            music: args.mood,
+            music:
+              args.mood === "tension" ||
+              args.mood === "mystere" ||
+              args.mood === "chaleur" ||
+              args.mood === "ironie"
+                ? args.mood
+                : "ironie",
             sfx: args.sfx,
             visuels: args.visuels,
           });
@@ -905,6 +938,8 @@ async function postNewsReels(args: {
       visuelSeed: args.visuelSeed,
       visuels: args.visuels,
       photoBufs: generated,
+      kicker: args.kicker,
+      ctaLine: args.ctaLine,
     });
     if (wantReel) {
       const fb = await postFacebookReel(args.token, mp4, args.caption);
@@ -1223,6 +1258,8 @@ export async function facebookPublishSnapshot(): Promise<FacebookPublishSnapshot
     lastNewsShortDay: state.lastNewsShortDay ?? null,
     lastNewsShortHour: state.lastNewsShortHour ?? null,
     lastNewsShortFact: state.lastNewsShortFact ?? null,
+    lastJackpotBuysDay: state.lastJackpotBuysDay ?? null,
+    lastJackpotBuysFact: state.lastJackpotBuysFact ?? null,
   };
 }
 
@@ -1987,6 +2024,117 @@ async function notifyWeeklyNewsShortBody(
   };
   await writeState(state);
   skipped.newsShort = stamp;
+  return {
+    posted: 0,
+    stories: 0,
+    instagramPosted: 0,
+    instagramStories: 0,
+    reels: sent.facebook ? 1 : 0,
+    instagramReels: sent.instagram ? 1 : 0,
+    youtubeShorts: sent.youtube ? 1 : 0,
+    tiktokPosts: sent.tiktok ? 1 : 0,
+    instagramUsername: instagram?.username || null,
+    skipped,
+  };
+}
+
+let jackpotBuysRunning = false;
+
+/**
+ * Reel « Ticket gagnant » : 3 achats fous avec le prochain jackpot.
+ * Jours de tirage Loto / EuroMillions, 10h Paris.
+ */
+export async function notifyJackpotBuys(options?: {
+  force?: boolean;
+}): Promise<FacebookNotifyResult> {
+  const skipped: Record<string, string> = {};
+  if (jackpotBuysRunning) {
+    return emptyNotify({ jackpotBuys: "in_flight" });
+  }
+  jackpotBuysRunning = true;
+  try {
+    return await notifyJackpotBuysBody(options, skipped);
+  } finally {
+    jackpotBuysRunning = false;
+  }
+}
+
+async function notifyJackpotBuysBody(
+  options: { force?: boolean } | undefined,
+  skipped: Record<string, string>,
+): Promise<FacebookNotifyResult> {
+  if (!options?.force && !isJackpotBuysSlot()) {
+    skipped.jackpotBuys = "outside_draw_morning";
+    return emptyNotify(skipped);
+  }
+  const dayKey = parisDateKey();
+  console.error("jackpot_buys_start", dayKey, options?.force ? "force" : "cron");
+  if (!facebookConfigured() && !youtubeConfigured() && !tiktokConfigured()) {
+    return emptyNotify({ jackpotBuys: "unconfigured" });
+  }
+  let state = await readState();
+  if (!options?.force && state.lastJackpotBuysDay === dayKey) {
+    skipped.jackpotBuys = "already_today";
+    return emptyNotify(skipped);
+  }
+  const target = await resolveNextJackpotTarget();
+  if (!target) {
+    skipped.jackpotBuys = "no_jackpot";
+    return emptyNotify(skipped);
+  }
+  const avoidFacts = [state.lastJackpotBuysFact].filter(
+    (s): s is string => Boolean(s && s.length > 12),
+  );
+  const script = await composeJackpotBuysScript({
+    target,
+    avoidFacts,
+  });
+  const photoBufs = await generateJackpotBuyPhotos(script);
+  console.error("jackpot_buys_photos", photoBufs.length, script.source, target.game);
+  const token = envPageToken();
+  const instagram = token ? await resolveInstagramAccount(token) : null;
+  if (token && !instagram) skipped.instagram = "unlinked";
+  if (!token) skipped.facebook = "unconfigured";
+  const stamp = `ticket:${target.game}:${dayKey}`;
+  const caption = newsCaption(script.title, script.excerpt, script.permalink);
+  const sent = await postNewsReels({
+    token,
+    title: script.title,
+    excerpt: script.excerpt,
+    body: script.body,
+    imageSrc: script.imageSrc,
+    mood: "rock",
+    sfx: script.sfx,
+    fond: script.visuels?.[0]?.fond,
+    visuelSeed: script.fact,
+    visuels: script.visuels,
+    photoBufs,
+    kicker: JACKPOT_BUYS_KICKER,
+    ctaLine: JACKPOT_BUYS_CTA,
+    caption,
+    instagram,
+    youtubeTitle: youtubeNewsShortTitle(script.title),
+    youtubeDescription: youtubeNewsShortDescription({
+      title: script.title,
+      excerpt: script.excerpt,
+      url: script.permalink,
+    }),
+    skipReel: !token,
+  });
+  const ok = sent.facebook || sent.instagram || sent.youtube || sent.tiktok;
+  if (!ok) {
+    skipped.jackpotBuys = "send_failed";
+    return emptyNotify(skipped, {
+      instagramUsername: instagram?.username || null,
+    });
+  }
+  state = {
+    ...state,
+    lastJackpotBuysDay: dayKey,
+    lastJackpotBuysFact: script.fact,
+  };
+  await writeState(state);
+  skipped.jackpotBuys = stamp;
   return {
     posted: 0,
     stories: 0,

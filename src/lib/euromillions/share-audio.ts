@@ -255,10 +255,16 @@ export function lotteryShareWav(
   return encodeWav(out, SAMPLE_RATE);
 }
 
-export type NewsShareMood = "ironie" | "tension" | "mystere" | "chaleur";
+export type NewsShareMood =
+  | "ironie"
+  | "tension"
+  | "mystere"
+  | "chaleur"
+  | "stats"
+  | "rock";
 
 const NEWS_MOOD: Record<
-  NewsShareMood,
+  Exclude<NewsShareMood, "rock">,
   { bpm: number; chords: number[][]; melody: number[] }
 > = {
   ironie: {
@@ -301,6 +307,16 @@ const NEWS_MOOD: Record<
     ],
     melody: [349.23, 392.0, 440.0, 523.25, 440.0, 392.0, 349.23, 261.63],
   },
+  stats: {
+    bpm: 128,
+    chords: [
+      [196.0, 246.94, 293.66, 392.0],
+      [220.0, 277.18, 329.63, 440.0],
+      [164.81, 207.65, 246.94, 329.63],
+      [246.94, 311.13, 370.0, 493.88],
+    ],
+    melody: [587.33, 659.25, 783.99, 659.25, 523.25, 587.33, 698.46, 784.0],
+  },
 };
 
 function mixWhoosh(out: Float32Array, startSec: number) {
@@ -323,6 +339,79 @@ function mixTick(out: Float32Array, startSec: number) {
   });
 }
 
+function hashNoise(i: number): number {
+  let x = Math.imul(i + 1, 1597334677) >>> 0;
+  x ^= x << 13;
+  x ^= x >>> 17;
+  x ^= x << 5;
+  return (x / 4294967295) * 2 - 1;
+}
+
+function mixKick(out: Float32Array, startSec: number) {
+  mixTone(out, startSec, 0.16, (lt) => {
+    const f = 150 * Math.exp(-lt * 16);
+    const click = Math.sin(2 * Math.PI * 1800 * lt) * Math.exp(-lt / 0.006) * 0.18;
+    return Math.sin(2 * Math.PI * f * lt) * Math.exp(-lt / 0.07) * 0.62 + click;
+  });
+}
+
+function mixSnare(out: Float32Array, startSec: number) {
+  mixTone(out, startSec, 0.12, (lt) => {
+    const n = Math.floor(startSec * SAMPLE_RATE + lt * SAMPLE_RATE);
+    const noise = hashNoise(n) * Math.exp(-lt / 0.045);
+    return noise * 0.28 + Math.sin(2 * Math.PI * 190 * lt) * Math.exp(-lt / 0.04) * 0.1;
+  });
+}
+
+function mixHat(out: Float32Array, startSec: number) {
+  mixTone(out, startSec, 0.028, (lt) => {
+    const n = Math.floor(startSec * SAMPLE_RATE + lt * SAMPLE_RATE);
+    return hashNoise(n + 97) * Math.exp(-lt / 0.007) * 0.07;
+  });
+}
+
+function mixPowerChord(
+  out: Float32Array,
+  startSec: number,
+  duration: number,
+  root: number,
+  gain: number,
+) {
+  const ratios = [1, 1.5, 2, 3.01];
+  for (const ratio of ratios) {
+    mixTone(out, startSec, duration, (lt) => {
+      const env = Math.min(1, lt / 0.012) * Math.exp(-lt / Math.max(0.08, duration * 0.55));
+      const f = root * ratio;
+      const ph = 2 * Math.PI * f * lt;
+      const saw =
+        Math.sin(ph) +
+        0.45 * Math.sin(ph * 2) +
+        0.22 * Math.sin(ph * 3) +
+        0.12 * Math.sin(ph * 4);
+      return Math.tanh(saw * 1.8) * env * (gain / ratio);
+    });
+  }
+}
+
+/** Rock original : 4/4, power chords, kick/snare. Pas de morceau tiers. */
+function mixRockGroove(out: Float32Array, durationSec: number) {
+  const bpm = 152;
+  const beat = 60 / bpm;
+  const roots = [82.41, 110.0, 123.47, 110.0];
+  const bar = beat * 4;
+  mixPowerChord(out, 0.02, 0.28, 82.41, 0.22);
+  mixPowerChord(out, 0.16, 0.22, 123.47, 0.16);
+  for (let t = 0; t < durationSec - 0.04; t += beat) {
+    const i = Math.round(t / beat);
+    const root = roots[Math.floor(t / bar) % roots.length]!;
+    mixHat(out, t);
+    if (i % 2 === 0) mixKick(out, t);
+    if (i % 2 === 1) mixSnare(out, t);
+    if (i % 2 === 0) mixPowerChord(out, t, beat * 1.15, root, 0.2);
+    else mixPowerChord(out, t, beat * 0.55, root, 0.1);
+  }
+}
+
 /**
  * Fond original (pas de morceau tiers). Mood + SFX varient selon le scénario.
  */
@@ -333,44 +422,52 @@ export function newsShareWav(
 ): Buffer {
   const samples = Math.max(1, Math.ceil(durationSec * SAMPLE_RATE));
   const out = new Float32Array(samples);
-  const spec = NEWS_MOOD[mood] || NEWS_MOOD.ironie;
-  const beat = 60 / spec.bpm;
-  const chords = spec.chords;
-  const melody = spec.melody;
+  if (mood === "rock") {
+    mixRockGroove(out, durationSec);
+  } else {
+    const spec = NEWS_MOOD[mood] || NEWS_MOOD.ironie;
+    const beat = 60 / spec.bpm;
+    const chords = spec.chords;
+    const melody = spec.melody;
 
-  pluck(out, 0.02, melody[0]!, 0.18, 0.14);
-  pluck(out, 0.12, melody[1] || melody[0]!, 0.2, 0.12);
+    pluck(out, 0.02, melody[0]!, 0.18, 0.14);
+    pluck(out, 0.12, melody[1] || melody[0]!, 0.2, 0.12);
 
-  const chordDur = durationSec / chords.length;
-  for (let c = 0; c < chords.length; c += 1) {
-    const start = c * chordDur;
-    const chord = chords[c]!;
-    for (let b = 0; b * beat < chordDur - 0.02; b += 1) {
-      const at = start + b * beat;
-      if (b % 2 === 0) {
-        for (const f of chord) {
-          pluck(out, at, f, 0.22, f < 180 ? 0.09 : 0.045);
+    const chordDur = durationSec / chords.length;
+    for (let c = 0; c < chords.length; c += 1) {
+      const start = c * chordDur;
+      const chord = chords[c]!;
+      for (let b = 0; b * beat < chordDur - 0.02; b += 1) {
+        const at = start + b * beat;
+        if (b % 2 === 0) {
+          for (const f of chord) {
+            pluck(out, at, f, 0.22, f < 180 ? 0.09 : 0.045);
+          }
+        } else {
+          pluck(out, at, chord[0]!, 0.16, 0.07);
         }
-      } else {
-        pluck(out, at, chord[0]!, 0.16, 0.07);
+        mixTone(out, at, 0.04, (lt) => {
+          const env = Math.exp(-lt / 0.007);
+          return Math.sin(2 * Math.PI * 7200 * lt) * env * 0.024;
+        });
+        const note = melody[b % melody.length]!;
+        mixTone(out, at + 0.02, 0.18, (lt) => {
+          const env = Math.min(1, lt / 0.008) * Math.exp(-lt / 0.11);
+          return (
+            Math.sin(2 * Math.PI * note * lt) * env * 0.05 +
+            Math.sin(2 * Math.PI * note * 2 * lt) * env * 0.01
+          );
+        });
       }
-      mixTone(out, at, 0.04, (lt) => {
-        const env = Math.exp(-lt / 0.007);
-        return Math.sin(2 * Math.PI * 7200 * lt) * env * 0.024;
-      });
-      const note = melody[b % melody.length]!;
-      mixTone(out, at + 0.02, 0.18, (lt) => {
-        const env = Math.min(1, lt / 0.008) * Math.exp(-lt / 0.11);
-        return (
-          Math.sin(2 * Math.PI * note * lt) * env * 0.05 +
-          Math.sin(2 * Math.PI * note * 2 * lt) * env * 0.01
-        );
-      });
     }
   }
 
   const tags = sfx.map((s) => s.toLowerCase());
-  if (tags.includes("whoosh")) mixWhoosh(out, 0.08);
+  if (tags.includes("whoosh")) {
+    mixWhoosh(out, 0.08);
+    mixWhoosh(out, durationSec * 0.34);
+    mixWhoosh(out, durationSec * 0.62);
+  }
   if (tags.includes("tick")) {
     mixTick(out, durationSec * 0.32);
     mixTick(out, durationSec * 0.52);
@@ -383,7 +480,7 @@ export function newsShareWav(
     let g = 1;
     if (i < fadeIn) g *= i / fadeIn;
     if (i > samples - fadeOut) g *= Math.max(0, (samples - i) / fadeOut);
-    out[i] = Math.tanh(out[i] * 1.08) * g * 0.88;
+    out[i] = Math.tanh(out[i] * (mood === "rock" ? 1.25 : 1.08)) * g * (mood === "rock" ? 0.82 : 0.88);
   }
   return encodeWav(out, SAMPLE_RATE);
 }

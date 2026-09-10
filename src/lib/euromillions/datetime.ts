@@ -158,6 +158,19 @@ export function isNewsShortSlot(now = new Date()): boolean {
   return minute < 20;
 }
 
+/** Loto lun/mer/sam + EuroMillions mar/ven. */
+export function isJackpotBuysDrawDay(now = new Date()): boolean {
+  const wd = parisWeekday(parisDateKey(now));
+  return wd === 1 || wd === 2 || wd === 3 || wd === 5 || wd === 6;
+}
+
+/** 10h00–10h19 Paris, jours de tirage Loto / EuroMillions. */
+export function isJackpotBuysSlot(now = new Date()): boolean {
+  if (!isJackpotBuysDrawDay(now)) return false;
+  const { hour, minute } = parisHourMinute(now);
+  return hour === 10 && minute < 20;
+}
+
 export function formatParisTime(iso: string, locale: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;

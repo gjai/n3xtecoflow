@@ -270,7 +270,11 @@ describe("lotteryShareWav", () => {
     assert.ok(wav.length > 44 + 80000);
     const ironie = newsShareWav(2, "ironie", ["whoosh"]);
     const tension = newsShareWav(2, "tension", ["sting"]);
+    const stats = newsShareWav(2, "stats", ["tick"]);
+    const rock = newsShareWav(2, "rock", ["whoosh"]);
     assert.notEqual(ironie.compare(tension), 0);
+    assert.notEqual(stats.compare(tension), 0);
+    assert.notEqual(rock.compare(stats), 0);
   });
 
   it("charge les clips voix du tirage", async () => {

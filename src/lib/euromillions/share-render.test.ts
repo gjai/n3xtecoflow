@@ -141,6 +141,45 @@ describe("newsShareSvg", () => {
     assert.ok(!svg.includes("Abonne-toi"));
   });
 
+  it("accepte un kicker STATS et un CTA chiffres", async () => {
+    const { newsShareSvg, newsShareTimeline } = await import("./share-render.ts");
+    const { SHARE_STORY } = await import("./share-card.ts");
+    const svg = newsShareSvg("Les 5 numéros les plus sortis", "Depuis 2004.", SHARE_STORY, {
+      kicker: "STATS",
+      ctaLine: "pour d'autres stats",
+      mood: "stats",
+    });
+    assert.match(svg, />STATS</);
+    assert.ok(!svg.includes(">HISTOIRE<"));
+    const tl = newsShareTimeline("Depuis 2004.");
+    const late = newsShareSvg("Les 5 numéros les plus sortis", "Depuis 2004.", SHARE_STORY, {
+      t: Math.min(0.99, tl.ctaStart + 0.04),
+      kicker: "STATS",
+      ctaLine: "pour d'autres stats",
+      mood: "stats",
+    });
+    assert.match(late, /d'autres stats/);
+    assert.ok(!late.includes("d'autres histoires"));
+  });
+
+  it("accepte un kicker TICKET GAGNANT, un CTA jackpot et l’accent rock", async () => {
+    const { newsShareSvg } = await import("./share-render.ts");
+    const { SHARE_STORY } = await import("./share-card.ts");
+    const svg = newsShareSvg(
+      "3 achats fous avec 111 millions",
+      "Vendredi, 111 millions à l’EuroMillions.",
+      SHARE_STORY,
+      {
+        kicker: "TICKET GAGNANT",
+        ctaLine: "pour le prochain jackpot",
+        mood: "rock",
+      },
+    );
+    assert.match(svg, />TICKET GAGNANT</);
+    assert.ok(!svg.includes(">HISTOIRE<"));
+    assert.match(svg, /#ff4d4d/);
+  });
+
   it("Reel : titre invisible au départ, CTA en fin de timeline", async () => {
     const { newsShareSvg, newsShareTimeline } = await import("./share-render.ts");
     const { SHARE_STORY } = await import("./share-card.ts");

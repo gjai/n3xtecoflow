@@ -31,6 +31,9 @@ export type ShareCardInput = {
   bonusShape?: "star" | "ball";
   /** Clip voix du libellé bonus (`etoiles.wav` / `chance.wav`). */
   bonusVoiceClip?: string | null;
+  /** Écran titre (défaut : LES NUMÉROS / Tirage du {dateLabel}). */
+  titleHeadline?: string | null;
+  titleSub?: string | null;
 };
 
 /** « Jackpot 111 M€ » — assez court pour une carte 9:16. */

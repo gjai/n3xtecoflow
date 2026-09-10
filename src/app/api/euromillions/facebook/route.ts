@@ -3,6 +3,7 @@ import {
   facebookMetaStatus,
   facebookPublishSnapshot,
   notifyFacebookOnPublish,
+  notifyJackpotBuys,
   notifyWeeklyNewsShort,
   SOCIAL_DRAW_GAMES,
 } from "@/lib/euromillions/facebook";
@@ -14,7 +15,7 @@ import { cronAuthorized } from "@/lib/http/cron-auth";
 export const dynamic = "force-dynamic";
 export const maxDuration = 600;
 
-/** Statut Meta, `?force=1` dernier tirage, `?game=euromillions`, `?newsShort=1` Short histoire horaire. */
+/** Statut Meta, `?force=1` dernier tirage, `?newsShort=1` histoire, `?jackpotBuys=1` Ticket gagnant. */
 export async function POST(request: Request) {
   if (!cronAuthorized(request)) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
@@ -23,6 +24,7 @@ export async function POST(request: Request) {
   const force = url.searchParams.get("force") === "1";
   const notify = url.searchParams.get("notify") === "1";
   const newsShort = url.searchParams.get("newsShort") === "1";
+  const jackpotBuys = url.searchParams.get("jackpotBuys") === "1";
   const gameRaw = url.searchParams.get("game")?.trim();
   const games = SOCIAL_DRAW_GAMES.includes(
     gameRaw as (typeof SOCIAL_DRAW_GAMES)[number],
@@ -35,6 +37,38 @@ export async function POST(request: Request) {
     facebookMetaStatus(),
     facebookPublishSnapshot(),
   ]);
+  if (jackpotBuys) {
+    runAfter(async () => {
+      try {
+        const result = await notifyJackpotBuys({ force });
+        console.error(
+          "jackpot_buys_done",
+          result.skipped?.jackpotBuys,
+          "fb",
+          result.reels,
+          "ig",
+          result.instagramReels,
+          "yt",
+          result.youtubeShorts,
+          "tt",
+          result.tiktokPosts,
+        );
+      } catch (err) {
+        console.error(
+          "jackpot_buys_fail",
+          err instanceof Error ? err.message : err,
+        );
+      }
+    });
+    return NextResponse.json({
+      ok: true,
+      accepted: true,
+      jackpotBuys: true,
+      force,
+      youtube: youtubeConfigured(),
+      tiktok: tiktokConfigured(),
+    });
+  }
   if (newsShort) {
     runAfter(async () => {
       try {

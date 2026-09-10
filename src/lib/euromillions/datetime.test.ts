@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   isEuroMillionsLiveWindow,
+  isJackpotBuysDrawDay,
+  isJackpotBuysSlot,
   isNewsShortSlot,
   parisHourKey,
   isoWeekKeyFromParisDate,
@@ -90,6 +92,37 @@ describe("isNewsShortSlot", () => {
       parisHourKey(new Date("2026-09-13T11:07:00+02:00")),
       "2026-09-13T11",
     );
+  });
+});
+
+describe("isJackpotBuysSlot", () => {
+  it("ouvre à 10h Paris les jours Loto / EuroMillions", () => {
+    assert.equal(
+      isJackpotBuysSlot(new Date("2026-09-11T10:00:00+02:00")),
+      true,
+    );
+    assert.equal(
+      isJackpotBuysSlot(new Date("2026-09-11T10:19:00+02:00")),
+      true,
+    );
+    assert.equal(
+      isJackpotBuysSlot(new Date("2026-09-11T10:20:00+02:00")),
+      false,
+    );
+    assert.equal(
+      isJackpotBuysSlot(new Date("2026-09-11T09:00:00+02:00")),
+      false,
+    );
+    assert.equal(
+      isJackpotBuysDrawDay(new Date("2026-09-10T10:00:00+02:00")),
+      false,
+    );
+    assert.equal(
+      isJackpotBuysSlot(new Date("2026-09-10T10:05:00+02:00")),
+      false,
+    );
+    assert.equal(isJackpotBuysDrawDay(new Date("2026-09-12T08:00:00+02:00")), true);
+    assert.equal(isJackpotBuysDrawDay(new Date("2026-09-14T08:00:00+02:00")), true);
   });
 });
 

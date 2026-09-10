@@ -312,6 +312,8 @@ export type NewsShareVideoOptions = ShareVideoOptions & {
   visuelSeed?: string | null;
   visuels?: NewsShortVisuel[];
   photoBufs?: Buffer[];
+  kicker?: string;
+  ctaLine?: string;
 };
 
 function fondAtTime(
@@ -346,7 +348,7 @@ export async function newsShareMp4(
   const dir = await mkdtemp(path.join(tmpdir(), "em-news-reel-"));
   try {
     const sharp = overlay ? (await import("sharp")).default : null;
-    const photoCuts = [tl.hookEnd, tl.storyEnd];
+    const photoCuts = [tl.hookEnd, tl.bodyCStart];
     for (let i = 0; i < frames; i += 1) {
       const t = frames <= 1 ? 1 : i / (frames - 1);
       const svg = newsShareSvg(title, excerpt, size, {
@@ -354,6 +356,8 @@ export async function newsShareMp4(
         overlay,
         body: options?.body,
         mood: options?.mood,
+        kicker: options?.kicker,
+        ctaLine: options?.ctaLine,
         fond: fondAtTime(
           t,
           options?.fond,
