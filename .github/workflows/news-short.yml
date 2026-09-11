@@ -1,10 +1,7 @@
 name: EuroMillions hourly story Short
 
 on:
-  schedule:
-    # Toutes les heures. L’app n’envoie que minutes 00–19 Paris, si NEWS_SHORT_ENABLED=1.
-    # Sauf si un autre Reel est déjà prévu (Ticket gagnant 10h, résultats 21h).
-    - cron: "0 * * * *"
+  # HISTOIRE arrêté — ne plus poster. Relancer à la main seulement si besoin.
   workflow_dispatch:
 
 jobs:

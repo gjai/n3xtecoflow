@@ -2,9 +2,10 @@ name: EuroMillions ticket gagnant Short
 
 on:
   schedule:
-    # 10h Europe/Paris : 08:00 UTC en CEST, 09:00 UTC en CET.
-    # L’app n’envoie que lun/mar/mer/ven/sam, 10h00–10h19 Paris.
-    - cron: "0 8,9 * * 1,2,3,5,6"
+    # 10h Europe/Paris + rattrapage (GitHub retarde souvent, 1er cron d’un
+    # nouveau workflow est parfois sauté). L’app n’envoie qu’une fois par jour,
+    # lun/mar/mer/ven/sam, à partir de 10h Paris.
+    - cron: "0 8,9,10,11,12 * * 1,2,3,5,6"
   workflow_dispatch:
 
 jobs:

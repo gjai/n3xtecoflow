@@ -1924,22 +1924,12 @@ export function pickWeeklyNewsArticle(
 let newsShortRunning = false;
 
 /**
- * Un Short/Reel histoire chaque heure : scénario IA + photos déjà générées.
- * Désactivé tant que `NEWS_SHORT_ENABLED` n’est pas `1`. `force` ignore créneau et flag.
+ * Short/Reel histoire horaire — arrêté (Ticket gagnant + résultats seulement).
  */
-export async function notifyWeeklyNewsShort(options?: {
+export async function notifyWeeklyNewsShort(_options?: {
   force?: boolean;
 }): Promise<FacebookNotifyResult> {
-  const skipped: Record<string, string> = {};
-  if (newsShortRunning) {
-    return emptyNotify({ newsShort: "in_flight" });
-  }
-  newsShortRunning = true;
-  try {
-    return await notifyWeeklyNewsShortBody(options, skipped);
-  } finally {
-    newsShortRunning = false;
-  }
+  return emptyNotify({ newsShort: "stopped" });
 }
 
 async function notifyWeeklyNewsShortBody(
@@ -2047,7 +2037,7 @@ let jackpotBuysRunning = false;
 
 /**
  * Reel « Ticket gagnant » : 3 achats fous avec le prochain jackpot.
- * Jours de tirage Loto / EuroMillions, 10h Paris.
+ * Jours de tirage Loto / EuroMillions, à partir de 10h Paris (rattrapage jusqu’à 21h).
  */
 export async function notifyJackpotBuys(options?: {
   force?: boolean;

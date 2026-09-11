@@ -108,6 +108,14 @@ describe("isJackpotBuysSlot", () => {
     );
     assert.equal(
       isJackpotBuysSlot(new Date("2026-09-11T10:20:00+02:00")),
+      true,
+    );
+    assert.equal(
+      isJackpotBuysSlot(new Date("2026-09-11T13:05:00+02:00")),
+      true,
+    );
+    assert.equal(
+      isJackpotBuysSlot(new Date("2026-09-11T21:00:00+02:00")),
       false,
     );
     assert.equal(

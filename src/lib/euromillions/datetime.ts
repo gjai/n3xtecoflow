@@ -164,11 +164,11 @@ export function isJackpotBuysDrawDay(now = new Date()): boolean {
   return wd === 1 || wd === 2 || wd === 3 || wd === 5 || wd === 6;
 }
 
-/** 10h00–10h19 Paris, jours de tirage Loto / EuroMillions. */
+/** 10h Paris le jour de tirage, jusqu’à 21h si le cron du matin a loupé. */
 export function isJackpotBuysSlot(now = new Date()): boolean {
   if (!isJackpotBuysDrawDay(now)) return false;
-  const { hour, minute } = parisHourMinute(now);
-  return hour === 10 && minute < 20;
+  const { hour } = parisHourMinute(now);
+  return hour >= 10 && hour < 21;
 }
 
 /**
@@ -176,9 +176,9 @@ export function isJackpotBuysSlot(now = new Date()): boolean {
  * Ticket gagnant (10h Loto/EM) ou résultats vidéo (21h, + 22h EuroMillions).
  */
 export function newsShortBlockedByOtherReel(now = new Date()): boolean {
-  if (isJackpotBuysSlot(now)) return true;
   const { hour } = parisHourMinute(now);
   const wd = parisWeekday(parisDateKey(now));
+  if (hour === 10 && isJackpotBuysDrawDay(now)) return true;
   if (hour === 21 && wd >= 1 && wd <= 6) return true;
   if (hour === 22 && (wd === 2 || wd === 5)) return true;
   return false;
