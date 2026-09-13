@@ -17,4 +17,5 @@ if [ -d /app/data-seed ]; then
   done
   chown -R nextjs:nodejs /app/data 2>/dev/null || true
 fi
+node scripts/cleanup-off-policy-news.mjs || true
 exec su-exec nextjs node server.js

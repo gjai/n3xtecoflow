@@ -45,6 +45,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/data ./data-seed
 COPY --chmod=755 docker-entrypoint.sh /app/docker-entrypoint.sh
+COPY --from=builder /app/scripts/cleanup-off-policy-news.mjs ./scripts/cleanup-off-policy-news.mjs
 
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=50s --retries=3 \
