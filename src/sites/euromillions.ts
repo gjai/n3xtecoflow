@@ -200,7 +200,8 @@ export const euromillionsSite: SiteConfig = {
     coverShowOnly:
       "Show abstract lottery atmosphere — numbered balls, stars, charts — never FDJ or EuroMillions official logos.",
     rssLenientAfterBrand: true,
-    preferAiNewsCovers: true,
+    preferAiNewsCovers: false,
+    allowAiNewsCovers: false,
     allowWeakPackshotDefault: false,
     topicBrandPattern:
       String.raw`\beuromillions\b|\beuro\s*millions\b|\beuromillones\b|\bjackpot\b|\btirage\b|\bloterie\b|\bmy\s*million\b|\beurodreams\b|\beuro\s*dreams\b|\bloto\b|\bfdjd?\b|\bsorteo\b`,

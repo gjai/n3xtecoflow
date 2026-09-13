@@ -353,6 +353,30 @@ async function resolveProductPackshotCover(args: {
   return materializeCoverFromSrc(media.src, args.slug);
 }
 
+/** Pool d'images génériques loterie déjà en repo (public/images/euromillions/guides) —
+ * évite l'appel IA quand le scraping échoue. Choix déterministe par slug (varié, stable). */
+const GENERIC_LOTTERY_COVER_POOL = [
+  "/images/euromillions/guides/comprendre-euromillions.jpg",
+  "/images/euromillions/guides/rangs-gains-euromillions.jpg",
+  "/images/euromillions/guides/probabilites-euromillions.jpg",
+  "/images/euromillions/guides/lire-resultats-tirages.jpg",
+  "/images/euromillions/guides/euromillions-et-autres-tirages.jpg",
+  "/images/euromillions/guides/comprendre-loto.jpg",
+  "/images/euromillions/guides/comprendre-eurodreams.jpg",
+  "/images/euromillions/guides/comprendre-keno.jpg",
+  "/images/euromillions/guides/comprendre-my-million.jpg",
+  "/images/euromillions/guides/comprendre-crescendo.jpg",
+  "/images/euromillions/guides/horaires-tirages-fdj.jpg",
+  "/images/euromillions/guides/jeu-responsable-euromillions.jpg",
+];
+
+async function resolveGenericLotteryCover(slug: string): Promise<string | null> {
+  const h = createHash("sha1").update(slug).digest();
+  const idx = h.readUInt32BE(0) % GENERIC_LOTTERY_COVER_POOL.length;
+  const src = GENERIC_LOTTERY_COVER_POOL[idx];
+  return materializeLocalCover(src, slug);
+}
+
 export type NewsCoverResult = {
   imageSrc: string;
   imageCredit: string;
@@ -373,7 +397,8 @@ export async function resolveNewsCover(args: {
   allowAi?: boolean;
 }): Promise<NewsCoverResult | null> {
   const siteId = args.siteId || "ecoflow";
-  const allowAi = args.allowAi !== false;
+  const allowAi =
+    args.allowAi !== false && getEditorial(siteId).allowAiNewsCovers !== false;
   let imageUrl = args.ogImageHint?.trim() || null;
   if (imageUrl && isJunkImageUrl(imageUrl)) imageUrl = null;
 
@@ -428,6 +453,17 @@ export async function resolveNewsCover(args: {
       imageCredit: newsPackshotCredit(siteId),
       imageKind: "fallback",
     };
+  }
+
+  if (siteId === "euromillions") {
+    const generic = await resolveGenericLotteryCover(args.slug);
+    if (generic) {
+      return {
+        imageSrc: generic,
+        imageCredit: "euromillions-resultats.fr",
+        imageKind: "fallback",
+      };
+    }
   }
 
   if (allowAi && !preferAi) {

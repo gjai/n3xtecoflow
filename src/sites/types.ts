@@ -171,6 +171,8 @@ export type SiteEditorialProfile = {
   rssLenientAfterBrand: boolean;
   /** IA avant packshot pour couvertures actus uniques */
   preferAiNewsCovers: boolean;
+  /** false = jamais d'appel IA pour les couvertures d'actus (cout) — scrape + pool generique uniquement. */
+  allowAiNewsCovers?: boolean;
   /** Packshot faible autorisé en dernier recours (catalogue riche type EcoFlow) */
   allowWeakPackshotDefault: boolean;
   /**
