@@ -24,6 +24,20 @@ export function siteUsesStaticBuyingGuide(siteId: SiteId): boolean {
 }
 
 /** Prompt rewrite actus — construit depuis le profil (plus de if siteId). */
+/** Jour de semaine FR calculé en code — jamais laissé au LLM (source du bug
+ * "vendredi 13 septembre" : le 13 était en fait un dimanche). */
+function frWeekdayDate(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("fr-FR", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "Europe/Paris",
+  });
+}
+
 export function buildNewsRewritePrompt(args: {
   siteId: SiteId;
   sourceName: string;
@@ -40,6 +54,7 @@ export function buildNewsRewritePrompt(args: {
   const extra = (ed.newsExtraRules || [])
     .map((r) => `- ${r}`)
     .join("\n");
+  const dateFr = frWeekdayDate(args.publishedAt);
 
   return `Tu es journaliste / rédacteur senior pour ${brand} (site éditorial indépendant, audience FR d’abord).
 
@@ -70,10 +85,12 @@ ${
 - Structure par langue: titre, excerpt, body = 7 à 10 paragraphes utiles
 - Développer: contexte, faits, critères d’achat (${ed.newsBuyingCriteria}), limites, conclusion actionable — pas une fiche promo
 - JSON strict uniquement, sans markdown
+- DATE OBLIGATOIRE : "${dateFr}" est la date de PUBLICATION de cet article chez nous — ce n'est pas forcément la date de l'événement. Pour la date des faits (ex. un tirage précis), utilise UNIQUEMENT ce qui est explicitement écrit dans sourceText ci-dessous. Ne recalcule JAMAIS un jour de la semaine toi-même (ex. "vendredi 13 septembre" est une vraie erreur déjà publiée par erreur — le 13 était un dimanche) : recopie une date/jour uniquement si elle est écrite telle quelle dans la source, sinon reste vague ("récemment", "lors du dernier tirage").
 
 Entrée:
 sourceName=${args.sourceName}
-date=${args.publishedAt}
+date=${dateFr}
+dateIso=${args.publishedAt}
 rssTitle=${args.rssTitle}
 publisherTitle=${args.publisherTitle}
 publisherUrl=${args.publisherUrl}
