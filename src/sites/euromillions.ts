@@ -190,6 +190,7 @@ export const euromillionsSite: SiteConfig = {
       "Ne jamais promettre de méthode pour gagner",
       "Rappeler 18+ et jeu responsable",
       "Rester factuel sur les montants de jackpot et codes My Million",
+      "Gain hors France (Espagne, Portugal, Irlande, Belgique, Suisse, Royaume-Uni...) : {\"skip\":true} SAUF s'il s'agit explicitement du jackpot EuroMillions (le gros lot, pas un rang secondaire) — un gain de rang 2/3 etc. à l'étranger n'intéresse pas l'audience FR",
     ],
     coverSubject: "EuroMillions lottery editorial cover",
     coverContextDefault:

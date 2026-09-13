@@ -103,6 +103,20 @@ export function isEuroMillionsResultClone(title: string): boolean {
   return Math.abs(resultIdx - brandIdx) <= 80;
 }
 
+/** Pays/villes EuroMillions hors France — un gain n'y intéresse que s'il s'agit du jackpot. */
+const FOREIGN_EUROMILLIONS_COUNTRY =
+  /\bespagne\b|\bespagnol\w*\b|\bportugal\b|\bportugais\w*\b|\birlande\b|\birlandais\w*\b|\bbelgique\b|\bbelge\w*\b|\bsuisse\b|\bsuisses?e?\b|\broyaume.uni\b|\bangleterre\b|\bécosse\b|\bpays\s+de\s+galles\b|\bluxembourg\b|\bautriche\b|\bautrichien\w*\b|\btarragone\b|\bleganés\b|\bcalatayud\b|\bmadrid\b|\bbarcelone\b|\blisbonne\b|\bdublin\b|\bbruxelles\b|\bgen[eè]ve\b|\bzurich\b/i;
+const WIN_WORD = /\bgain\b|\bgagn[ée]e?s?\b|\bremport[eé]\w*\b|\bmillionnaire\b/i;
+const JACKPOT_WORD = /\bjackpot\b|\bcagnotte\b|\bsuper\s*cagnotte\b|\bgros\s+lot\b/i;
+
+/** Gain hors France qui n'est pas le jackpot EuroMillions — hors périmètre éditorial (2026-09-13). */
+export function isForeignNonJackpotWin(text: string): boolean {
+  const t = text || "";
+  if (!FOREIGN_EUROMILLIONS_COUNTRY.test(t)) return false;
+  if (!WIN_WORD.test(t)) return false;
+  return !JACKPOT_WORD.test(t);
+}
+
 export function isBlockedLotteryNewsSource(item: {
   sourceName?: string;
   sourceUrl?: string;
@@ -141,6 +155,7 @@ export function isRelevantItem(item: RssItem, siteId: SiteId = "ecoflow") {
   if (siteId === "euromillions" && isEuroMillionsResultClone(item.title)) {
     return false;
   }
+  if (siteId === "euromillions" && isForeignNonJackpotWin(hay)) return false;
   if (!brand.test(hay)) return false;
   if (!brandPrimary(item.title, brand) && !brandPrimary(hay.slice(0, 160), brand)) {
     return false;
@@ -169,6 +184,9 @@ export function isOnTopicArticle(
     return false;
   }
   if (siteId === "euromillions" && isEuroMillionsResultClone(titles)) {
+    return false;
+  }
+  if (siteId === "euromillions" && isForeignNonJackpotWin(`${titles} ${excerpts}`)) {
     return false;
   }
   if (
