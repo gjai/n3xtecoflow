@@ -59,6 +59,13 @@ export async function EuroMillionsStatsTeaser({
       >
         {t("fullPageCta")} →
       </Link>
+      {" "}
+      <Link
+        href="/records"
+        className="mt-6 inline-block text-sm font-semibold text-[var(--accent)] hover:underline"
+      >
+        {t("recordsCta")} →
+      </Link>
     </div>
   );
 }

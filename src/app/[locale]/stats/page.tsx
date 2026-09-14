@@ -110,6 +110,10 @@ export default async function StatsPage({
               {t("pressCta")}
             </Link>
             {" · "}
+            <Link href="/records" className="font-semibold text-[var(--accent)] hover:underline">
+              {t("recordsCta")}
+            </Link>
+            {" · "}
             <a
               href="/api/euromillions/export"
               className="font-semibold text-[var(--accent)] hover:underline"

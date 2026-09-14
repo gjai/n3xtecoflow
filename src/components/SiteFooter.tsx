@@ -42,6 +42,7 @@ export function SiteFooter() {
         { href: OTHER_GAMES_HUB_HREF, label: tNav("otherGames") },
         { href: "/guides", label: t("guides") },
         { href: "/stats", label: t.has("stats") ? t("stats") : tNav("stats") },
+        { href: "/records", label: t.has("records") ? t("records") : "Records" },
         { href: "/actualites", label: t("news") },
         { href: "/presse", label: t.has("press") ? t("press") : "Presse" },
         { href: "/a-propos", label: t("about") },

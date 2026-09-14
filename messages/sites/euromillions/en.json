@@ -62,6 +62,7 @@
     "contact": "Contact",
     "press": "Press",
     "stats": "Stats",
+    "records": "Records",
     "manageCookies": "Manage cookies",
     "blurb": "Independent site — EuroMillions results & archives · 18+ · Play responsibly"
   },
@@ -89,6 +90,12 @@
     "nextJackpotLabel": "Estimated jackpot",
     "archiveCta": "View details",
     "statsCta": "View stats",
+    "recordsCta": "Records",
+    "citeStripTitle": "Citable figures",
+    "citeHot": "Most drawn: {n} ({count} times)",
+    "citeCold": "Longest delay: {n} (gap {delay})",
+    "citeAbsence": "Return: {n} after {delay} draws",
+    "citeNoAbsence": "No long return on the latest draw.",
     "guidesTitle": "Guides",
     "guidesLead": "Tiers, odds, Loto, Keno, schedules and responsible play — with no promised system.",
     "allGuidesCta": "All guides",
@@ -298,7 +305,15 @@
     "prizesEtoilePlus": "Étoile+ prizes",
     "prizesEtoilePlusHelp": "Extra tiers if the Étoile+ option was played — same 5+2 combination.",
     "csvExport": "Download archives (CSV)",
-    "claimCta": "How to claim a prize"
+    "claimCta": "How to claim a prize",
+    "insightTitle": "What the archive says",
+    "insightLead": "Reading as of this draw date, from our local history — not a forecast.",
+    "insightAbsence": "Return: number {n} after {delay} draws away.",
+    "insightAbsenceStar": "Return: star {n} after {delay} draws away.",
+    "insightCold": "Longest-absent number on this date: {n} (gap {delay}).",
+    "insightHot": "Most drawn number up to here: {n} ({count} times).",
+    "insightStats": "Statistics",
+    "insightRecords": "Records"
   },
   "myMillion": {
     "title": "My Million — codes & locations",
@@ -350,6 +365,7 @@
     "citeAbsence": "Longest return on the latest draw: number {n} after {delay} draws away.",
     "pressCta": "Press kit and widget",
     "csvCta": "Download CSV",
+    "recordsCta": "Archive records",
     "subtitle": "Observed frequencies and delays on the local history — descriptive only, not a forecast.",
     "hotNumbers": "Hottest numbers",
     "coldNumbers": "Longest delays",
@@ -385,6 +401,31 @@
     "colForm10": "Form 10",
     "colForm30": "Form 30",
     "howForm": "“Form 10 / 30” counts appearances in the last 10 and 30 draws. Not a prediction."
+  },
+  "records": {
+    "eyebrow": "Local archive",
+    "title": "EuroMillions records",
+    "pageTitle": "EuroMillions records: jackpots, absences, frequencies",
+    "pageMeta": "Biggest jackpots, longest absences and most drawn numbers — from our archive, citable. Not a forecast. 18+.",
+    "lead": "Rankings from the local history, updated after every draw. A long gap does not make a number more likely.",
+    "sample": "Across {count} draws, from {from} to {to}.",
+    "jackpotsTitle": "Biggest jackpots",
+    "jackpotsLead": "Highest advertised amounts, won or rolled over.",
+    "winsTitle": "Biggest jackpots won",
+    "winsLead": "Only draws where the 5+2 tier was won.",
+    "absencesTitle": "Current absences",
+    "absencesLead": "Longest-absent numbers right now.",
+    "gapsTitle": "Longest historical gaps",
+    "gapsLead": "The longest drought observed for each number, even if it has since returned.",
+    "hotTitle": "Most drawn numbers",
+    "hotLead": "Appearances across the whole local archive.",
+    "delayValue": "gap {n}",
+    "maxDelayValue": "max gap {n}",
+    "countValue": "{n} times",
+    "empty": "Not enough data in the archive yet.",
+    "disclaimer": "These records describe the past. They do not change the 139,838,160 possible lines. 18+ · play responsibly.",
+    "statsCta": "Full tables",
+    "pressCta": "Press kit"
   },
   "notFound": {
     "title": "Page not found",
@@ -552,7 +593,8 @@
     "contactBody": "A question on a stat, a correction, a reprint:",
     "contactCta": "write via the form",
     "copy": "Copy",
-    "copied": "Copied"
+    "copied": "Copied",
+    "recordsLink": "Records (jackpots, absences)"
   },
   "guides": {
     "title": "Guides",

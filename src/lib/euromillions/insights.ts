@@ -1,6 +1,10 @@
 import { formatEuroMillionsLongDate, isoWeekKeyFromParisDate } from "./datetime";
 import { isEuroMillionsDrawPublished } from "./store";
-import { euroMillionsNumberStats, type NumberStat } from "./stats";
+import {
+  euroMillionsNumberStats,
+  type JackpotRow,
+  type NumberStat,
+} from "./stats";
 import type { EuroMillionsDraw } from "./types";
 
 const ABSENCE_MIN = 12;
@@ -345,7 +349,7 @@ export function buildWeeklyStory(draws: EuroMillionsDraw[]): EditorialStory | nu
       DISCLAIMER_EN,
     ],
     tags: ["euromillions", "stats", "hebdo"],
-    sourcePath: "/stats",
+    sourcePath: "/records",
   };
 }
 
@@ -377,6 +381,7 @@ export function buildPressPitch(draws: EuroMillionsDraw[]): { fr: string; en: st
         ? `Boule la plus en retard à cette heure : ${snap.coldest.n} (écart ${snap.coldest.delay}).`
         : null,
     `Tableaux et CSV : https://euromillions-resultats.fr/fr/stats`,
+    `Records (jackpots, absences) : https://euromillions-resultats.fr/fr/records`,
     `Fiche du tirage : https://euromillions-resultats.fr/fr/tirages/${latest.date}`,
     `Citation libre avec lien vers la source. Site indépendant, 18+, jeu responsable — pas un opérateur FDJ.`,
   ].filter(Boolean);
@@ -392,8 +397,71 @@ export function buildPressPitch(draws: EuroMillionsDraw[]): { fr: string; en: st
         ? `Longest-absent number right now: ${snap.coldest.n} (gap ${snap.coldest.delay}).`
         : null,
     `Tables and CSV: https://euromillions-resultats.fr/fr/stats`,
+    `Records (jackpots, absences): https://euromillions-resultats.fr/fr/records`,
     `Draw sheet: https://euromillions-resultats.fr/fr/tirages/${latest.date}`,
     `Free to quote with a link. Independent site, 18+, play responsibly — not an FDJ operator.`,
   ].filter(Boolean);
   return { fr: lines.join("\n"), en: linesEn.join("\n") };
+}
+
+export type RecordsSnapshot = {
+  sampleSize: number;
+  fromDate: string | null;
+  toDate: string | null;
+  biggestJackpots: JackpotRow[];
+  biggestWins: JackpotRow[];
+  longestCurrentAbsences: NumberStat[];
+  hottest: NumberStat[];
+  longestHistoricalGaps: NumberStat[];
+};
+
+const RECORDS_TOP = 10;
+
+function jackpotRow(draw: EuroMillionsDraw): JackpotRow {
+  return {
+    date: draw.date,
+    jackpotEur: draw.jackpotEur as number,
+    hasWinner: draw.hasWinner ?? null,
+  };
+}
+
+export function buildRecordsSnapshot(draws: EuroMillionsDraw[]): RecordsSnapshot {
+  const newest = publishedNewestFirst(draws);
+  const latest = newest[0] || null;
+  const oldest = newest[newest.length - 1] || null;
+  const withJackpot = newest.filter(
+    (d) => typeof d.jackpotEur === "number" && d.jackpotEur > 0,
+  );
+  const byAmount = (a: EuroMillionsDraw, b: EuroMillionsDraw) =>
+    (b.jackpotEur || 0) - (a.jackpotEur || 0) || b.date.localeCompare(a.date);
+  const { numbers } = euroMillionsNumberStats(newest);
+  return {
+    sampleSize: newest.length,
+    fromDate: oldest?.date || null,
+    toDate: latest?.date || null,
+    biggestJackpots: [...withJackpot].sort(byAmount).slice(0, RECORDS_TOP).map(jackpotRow),
+    biggestWins: [...withJackpot]
+      .filter((d) => d.hasWinner === true)
+      .sort(byAmount)
+      .slice(0, RECORDS_TOP)
+      .map(jackpotRow),
+    longestCurrentAbsences: [...numbers]
+      .sort((a, b) => b.delay - a.delay)
+      .slice(0, RECORDS_TOP),
+    hottest: [...numbers].sort((a, b) => b.count - a.count).slice(0, RECORDS_TOP),
+    longestHistoricalGaps: [...numbers]
+      .sort((a, b) => b.maxDelay - a.maxDelay)
+      .slice(0, RECORDS_TOP),
+  };
+}
+
+/** Stats as if `date` were the latest published draw (for draw sheets). */
+export function insightForDraw(
+  draws: EuroMillionsDraw[],
+  date: string,
+): CiteSnapshot | null {
+  const newest = publishedNewestFirst(draws);
+  const idx = newest.findIndex((d) => d.date === date);
+  if (idx < 0) return null;
+  return buildCiteSnapshot(newest.slice(idx));
 }

@@ -76,6 +76,11 @@ export default async function PressPage({
               {t("statsLink")}
             </Link>
           </li>
+          <li>
+            <Link href="/records" className="font-semibold text-[var(--accent)] hover:underline">
+              {t("recordsLink")}
+            </Link>
+          </li>
           {snap.latestDate ? (
             <li>
               <Link

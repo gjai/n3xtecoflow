@@ -34,6 +34,7 @@ import {
 } from "@/lib/euromillions/store";
 import { formatEuroMillionsLongDate } from "@/lib/euromillions/datetime";
 import { sequentialDrawId } from "@/lib/euromillions/draw-id";
+import { EuroMillionsDrawInsight } from "@/components/EuroMillionsDrawInsight";
 
 export const revalidate = 600;
 export const dynamic = "force-dynamic";
@@ -237,6 +238,13 @@ export default async function TirageDetailPage({
           </div>
         )}
 
+        {published ? (
+          <EuroMillionsDrawInsight
+            locale={locale}
+            draws={store.draws}
+            date={draw.date}
+          />
+        ) : null}
 
         {draw.prizeTiers && draw.prizeTiers.length > 0 ? (
           <div>

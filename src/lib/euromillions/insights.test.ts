@@ -6,8 +6,10 @@ import {
   buildCiteSnapshot,
   buildDrawStory,
   buildPressPitch,
+  buildRecordsSnapshot,
   buildWeeklyStory,
   formatMillionsEur,
+  insightForDraw,
   rolloverStreak,
 } from "./insights.ts";
 
@@ -132,5 +134,25 @@ describe("buildCiteSnapshot / pitch", () => {
     const pitch = buildPressPitch(archiveWithLate22());
     assert.match(pitch.fr, /ANALYSE/);
     assert.match(pitch.fr, /euromillions-resultats\.fr\/fr\/stats/);
+    assert.match(pitch.fr, /euromillions-resultats\.fr\/fr\/records/);
+  });
+});
+
+describe("buildRecordsSnapshot / insightForDraw", () => {
+  it("classe le plus gros jackpot remporté", () => {
+    const rec = buildRecordsSnapshot(archiveWithLate22());
+    assert.equal(rec.biggestJackpots[0]?.jackpotEur, 111_000_000);
+    assert.equal(rec.biggestWins[0]?.date, "2026-09-11");
+    assert.ok(rec.longestCurrentAbsences.length >= 1);
+    assert.equal(rec.hottest[0]?.n, 1);
+  });
+
+  it("recalcule les absences comme si la date était le dernier tirage", () => {
+    const draws = archiveWithLate22();
+    const latest = insightForDraw(draws, "2026-09-11");
+    assert.ok(latest?.brokenAbsences.some((a) => a.n === 22));
+    const older = insightForDraw(draws, draws[draws.length - 1]!.date);
+    assert.equal(older?.brokenAbsences.length, 0);
+    assert.equal(insightForDraw(draws, "1999-01-01"), null);
   });
 });

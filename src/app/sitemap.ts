@@ -172,6 +172,7 @@ export function buildSitemapForSite(
       ? [
           "/tirages",
           "/stats",
+          "/records",
           "/presse",
           "/prochain-tirage",
           "/alerte-email",
@@ -209,6 +210,7 @@ export function buildSitemapForSite(
         changeFrequency:
           path === "" ||
           path === "/stats" ||
+          path === "/records" ||
           path === "/tirages" ||
           path === "/actualites"
             ? "daily"
@@ -216,7 +218,7 @@ export function buildSitemapForSite(
         priority:
           path === ""
             ? 1
-            : path === "/stats"
+            : path === "/stats" || path === "/records"
               ? 0.85
               : isNewsHub
               ? emNewsDeweighted

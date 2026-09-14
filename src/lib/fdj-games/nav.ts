@@ -106,6 +106,7 @@ export function lotteryGameFromPath(pathname: string): LotteryGameId | null {
     p.startsWith("/simulateur") ||
     p.startsWith("/prochain-tirage") ||
     p.startsWith("/stats") ||
+    p.startsWith("/records") ||
     p.startsWith("/presse") ||
     p.startsWith("/embed") ||
     p.startsWith("/generateur") ||

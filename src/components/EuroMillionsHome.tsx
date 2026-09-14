@@ -32,6 +32,7 @@ import {
 import { lotteryFingerprint } from "@/lib/euromillions/fingerprint";
 import { getLatestDraw, isEuroMillionsDrawPublished } from "@/lib/euromillions/store";
 import { sequentialDrawId } from "@/lib/euromillions/draw-id";
+import { buildCiteSnapshot } from "@/lib/euromillions/insights";
 import { euroMillionsResultsFaq } from "@/lib/euromillions/home-faq";
 import type { FdjGamesStore } from "@/lib/fdj-games/types";
 import { GAME_IDENTITY } from "@/lib/fdj-games/identity";
@@ -263,6 +264,7 @@ export async function EuroMillionsHome({
     "euromillions",
     fdjOffer?.href ?? "https://www.fdj.fr/jeux-de-tirage/euromillions-my-million",
   );
+  const cite = buildCiteSnapshot(store.draws);
 
   return (
     <>
@@ -453,6 +455,59 @@ export async function EuroMillionsHome({
           </div>
         </div>
       </section>
+
+      {cite.sampleSize > 0 ? (
+        <section className="border-b border-[var(--line)] bg-[var(--surface)]">
+          <div className="mx-auto max-w-6xl px-5 py-8 md:px-8">
+            <p className="text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
+              {t("citeStripTitle")}
+            </p>
+            <div className="mt-4 grid gap-4 sm:grid-cols-3">
+              {cite.hottest ? (
+                <p className="text-sm text-[var(--heading)]">
+                  {t("citeHot", {
+                    n: cite.hottest.n,
+                    count: cite.hottest.count,
+                  })}
+                </p>
+              ) : null}
+              {cite.coldest ? (
+                <p className="text-sm text-[var(--heading)]">
+                  {t("citeCold", {
+                    n: cite.coldest.n,
+                    delay: cite.coldest.delay,
+                  })}
+                </p>
+              ) : null}
+              {cite.brokenAbsences[0] ? (
+                <p className="text-sm text-[var(--heading)]">
+                  {t("citeAbsence", {
+                    n: cite.brokenAbsences[0].n,
+                    delay: cite.brokenAbsences[0].delayBefore,
+                  })}
+                </p>
+              ) : (
+                <p className="text-sm text-[var(--muted)]">{t("citeNoAbsence")}</p>
+              )}
+            </div>
+            <p className="mt-4 text-sm">
+              <Link
+                href="/stats"
+                className="font-semibold text-[var(--accent)] hover:underline"
+              >
+                {t("statsCta")}
+              </Link>
+              {" · "}
+              <Link
+                href="/records"
+                className="font-semibold text-[var(--accent)] hover:underline"
+              >
+                {t("recordsCta")}
+              </Link>
+            </p>
+          </div>
+        </section>
+      ) : null}
 
       <div className="border-b border-[var(--line)]">
         <div className="mx-auto max-w-6xl overflow-hidden px-5 py-3 md:px-8">

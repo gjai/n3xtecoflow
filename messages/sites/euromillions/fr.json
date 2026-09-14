@@ -62,6 +62,7 @@
     "contact": "Contact",
     "press": "Presse",
     "stats": "Stats",
+    "records": "Records",
     "manageCookies": "Gérer les cookies",
     "blurb": "Site indépendant — résultats & archives EuroMillions · 18+ · Jeu responsable"
   },
@@ -89,6 +90,12 @@
     "nextJackpotLabel": "Jackpot estimé",
     "archiveCta": "Voir le détail",
     "statsCta": "Voir les stats",
+    "recordsCta": "Records",
+    "citeStripTitle": "Chiffres citables",
+    "citeHot": "Plus sortie : {n} ({count} fois)",
+    "citeCold": "Plus en retard : {n} (écart {delay})",
+    "citeAbsence": "Retour : {n} après {delay} tirages",
+    "citeNoAbsence": "Pas de retour long sur le dernier tirage.",
     "guidesTitle": "Guides",
     "guidesLead": "Rangs, probabilités, Loto, Keno, horaires et jeu responsable — sans promesse de méthode.",
     "allGuidesCta": "Tous les guides",
@@ -298,7 +305,15 @@
     "prizesEtoilePlus": "Gains Étoile+",
     "prizesEtoilePlusHelp": "Rangs extra si l’option Étoile+ a été jouée — même combinaison 5+2.",
     "csvExport": "Télécharger les archives (CSV)",
-    "claimCta": "Toucher un gain"
+    "claimCta": "Toucher un gain",
+    "insightTitle": "Ce que dit l’archive",
+    "insightLead": "Lecture à la date de ce tirage, sur notre historique local — pas un pronostic.",
+    "insightAbsence": "Retour : boule {n} après {delay} tirages d’absence.",
+    "insightAbsenceStar": "Retour : étoile {n} après {delay} tirages d’absence.",
+    "insightCold": "Boule la plus en retard à cette date : {n} (écart {delay}).",
+    "insightHot": "Boule la plus sortie jusqu’ici : {n} ({count} fois).",
+    "insightStats": "Statistiques",
+    "insightRecords": "Records"
   },
   "myMillion": {
     "title": "My Million — codes & localisations",
@@ -350,6 +365,7 @@
     "citeAbsence": "Plus long retour du dernier tirage : boule {n} après {delay} tirages d’absence.",
     "pressCta": "Kit presse et widget",
     "csvCta": "Télécharger le CSV",
+    "recordsCta": "Records de l’archive",
     "subtitle": "Fréquences et écarts observés sur l’historique local — descriptif seulement, pas un pronostic.",
     "hotNumbers": "Boules les plus sorties",
     "coldNumbers": "Boules les plus en retard",
@@ -385,6 +401,31 @@
     "colForm10": "Forme 10",
     "colForm30": "Forme 30",
     "howForm": "« Forme 10 / 30 » compte les sorties sur les 10 et 30 derniers tirages. Ce n’est pas un pronostic."
+  },
+  "records": {
+    "eyebrow": "Archive locale",
+    "title": "Records EuroMillions",
+    "pageTitle": "Records EuroMillions : jackpots, absences, fréquences",
+    "pageMeta": "Plus gros jackpots, plus longues absences et boules les plus sorties — calculés sur notre archive, citables. Pas un pronostic. 18+.",
+    "lead": "Classements extraits de l’historique local, mis à jour après chaque tirage. Un écart long ne rend pas un numéro plus probable.",
+    "sample": "Sur {count} tirages, du {from} au {to}.",
+    "jackpotsTitle": "Plus gros jackpots",
+    "jackpotsLead": "Montants annoncés les plus élevés, remportés ou reportés.",
+    "winsTitle": "Plus gros jackpots remportés",
+    "winsLead": "Uniquement les tirages où le rang 5+2 a été gagné.",
+    "absencesTitle": "Absences actuelles",
+    "absencesLead": "Boules les plus en retard à cette heure.",
+    "gapsTitle": "Plus longs écarts historiques",
+    "gapsLead": "Le plus long trou observé pour chaque boule, même s’il est refermé.",
+    "hotTitle": "Boules les plus sorties",
+    "hotLead": "Apparitions sur tout l’historique local.",
+    "delayValue": "écart {n}",
+    "maxDelayValue": "écart max {n}",
+    "countValue": "{n} sorties",
+    "empty": "Pas encore assez de données dans l’archive.",
+    "disclaimer": "Ces records décrivent le passé. Ils ne changent pas les 139 838 160 combinaisons. 18+ · jeu responsable.",
+    "statsCta": "Tableaux complets",
+    "pressCta": "Kit presse"
   },
   "notFound": {
     "title": "Page introuvable",
@@ -552,7 +593,8 @@
     "contactBody": "Une question sur une stat, une correction, une reprise :",
     "contactCta": "écrire via le formulaire",
     "copy": "Copier",
-    "copied": "Copié"
+    "copied": "Copié",
+    "recordsLink": "Records (jackpots, absences)"
   },
   "guides": {
     "title": "Guides",

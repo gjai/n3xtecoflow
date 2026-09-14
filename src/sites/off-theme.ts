@@ -16,6 +16,9 @@ const EURO_MILLIONS_PREFIXES = [
   "/alerte-email",
   "/simulateur",
   "/stats",
+  "/records",
+  "/presse",
+  "/embed",
 ] as const;
 
 function withLocale(locale: string, path: string): string {
