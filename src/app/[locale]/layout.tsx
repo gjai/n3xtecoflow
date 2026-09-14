@@ -213,6 +213,9 @@ export default async function LocaleLayout({
       )
     : null;
 
+  const pathname = hdrs.get("x-pathname") || "";
+  const isEmbed = /\/embed(\/|$)/.test(pathname);
+
   return (
     <html
       lang={locale}
@@ -244,14 +247,14 @@ export default async function LocaleLayout({
             <ThemeProvider>
               <ConsentProvider>
                 <PwaRegister />
-                <AdSenseScript />
+                {isEmbed ? null : <AdSenseScript />}
                 <div className="flex min-h-full flex-col">
-                  <SiteHeader />
+                  {isEmbed ? null : <SiteHeader />}
                   <main className="flex-1">{children}</main>
-                  <NetworkLinks />
-                  <SiteFooter />
+                  {isEmbed ? null : <NetworkLinks />}
+                  {isEmbed ? null : <SiteFooter />}
                 </div>
-                <CookieBanner />
+                {isEmbed ? null : <CookieBanner />}
                 <p className="sr-only">{disclaimer}</p>
               </ConsentProvider>
             </ThemeProvider>

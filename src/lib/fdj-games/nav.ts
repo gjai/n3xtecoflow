@@ -51,7 +51,7 @@ export const LOTTERY_GAMES_NAV: LotteryGameNav[] = [
       { id: "simulator", href: "/tirages#simulateur" },
       { id: "generator", href: "/tirages#generateur" },
       { id: "nextDraw", href: "/prochain-tirage" },
-      { id: "stats", href: "/tirages#stats" },
+      { id: "stats", href: "/stats" },
       { id: "guides", href: "/guides" },
       { id: "news", href: "/actualites" },
     ],
@@ -106,6 +106,8 @@ export function lotteryGameFromPath(pathname: string): LotteryGameId | null {
     p.startsWith("/simulateur") ||
     p.startsWith("/prochain-tirage") ||
     p.startsWith("/stats") ||
+    p.startsWith("/presse") ||
+    p.startsWith("/embed") ||
     p.startsWith("/generateur") ||
     p.startsWith("/guides") ||
     p.startsWith("/actualites")

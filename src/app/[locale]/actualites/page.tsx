@@ -7,6 +7,7 @@ import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { getEditorialImages } from "@/data/images";
 import { getNewsArticles, readNewsStore } from "@/lib/news/store";
 import { isBlockedLotteryNewsSource } from "@/lib/news/rss";
+import { isOriginalEuroMillionsArticle } from "@/lib/news/original-euromillions";
 import { paginate, parsePageParam } from "@/lib/pagination";
 import {
   DATE_LOCALE,
@@ -116,6 +117,7 @@ export default async function NewsIndexPage({
         ) : (
           items.map((article) => {
             const copy = isEn ? article.en : article.fr;
+            const original = isOriginalEuroMillionsArticle(article);
             const published = new Date(article.publishedAt);
             const date = published.toLocaleDateString(
               DATE_LOCALE[toAppLocale(locale)],
@@ -155,7 +157,9 @@ export default async function NewsIndexPage({
                       {date} · {time}
                     </time>
                     <span>·</span>
-                    <span>{article.sourceName}</span>
+                    <span>
+                      {original ? t("originalBadge") : article.sourceName}
+                    </span>
                     {article.rewrittenBy === "ai" ? (
                       <span className="text-[var(--accent)]">{t("aiBadge")}</span>
                     ) : null}

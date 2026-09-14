@@ -15,7 +15,7 @@ export type NewsArticle = {
   sourceGuid: string;
   publishedAt: string;
   ingestedAt: string;
-  rewrittenBy: "ai" | "template";
+  rewrittenBy: "ai" | "template" | "original";
   tags: string[];
   /** Local path like /api/media/news/... or static /images/... */
   imageSrc?: string;
@@ -78,56 +78,6 @@ export const NEWS_FEEDS: NewsFeed[] = [
     siteId: "massage-gun",
     url: "https://news.google.com/rss/search?q=(%22massage+gun%22+OR+%22neck+massager%22+OR+%22shiatsu+massager%22+OR+Theragun+OR+Therabody+OR+Hypervolt+OR+Hyperice+OR+Renpho+OR+TOLOCO+OR+Brelley+OR+Jolt+OR+percussion+massager+OR+%22muscle+recovery%22)+when:45d&hl=en-US&gl=US&ceid=US:en",
   },
-  {
-    id: "euromillions-gnews-fr",
-    siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(jackpot+OR+gagnant+OR+millionnaire+OR+%22My+Million%22+OR+FDJ)+-r%C3%A9sultat+-r%C3%A9sultats+when:90d&hl=fr&gl=FR&ceid=FR:fr",
-  },
-  {
-    id: "euromillions-gnews-fr-gagnants",
-    siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(gagnant+OR+millionnaire+OR+%22My+Million%22+OR+jackpot)+when:90d&hl=fr&gl=FR&ceid=FR:fr",
-  },
-  {
-    id: "euromillions-gnews-fr-insolite",
-    siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+Loto+OR+EuroDreams+OR+%22My+Million%22)+(gagnant+OR+millionnaire)+(insolite+OR+anecdote+OR+chien+OR+ticket+OR+%22a+achet%C3%A9%22+OR+d%C3%A9pense+OR+bizarre+OR+couple+OR+village)+when:90d&hl=fr&gl=FR&ceid=FR:fr",
-  },
-  {
-    id: "euromillions-gnews-fr-loto",
-    siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(Loto)+(FDJ+OR+%22Fran%C3%A7aise+des+Jeux%22)+(tirage+OR+r%C3%A9sultat+OR+jackpot+OR+gagnant)+when:60d&hl=fr&gl=FR&ceid=FR:fr",
-  },
-  {
-    id: "euromillions-gnews-fr-eurodreams",
-    siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(EuroDreams+OR+%22Euro+Dreams%22)+(tirage+OR+r%C3%A9sultat+OR+gagnant+OR+FDJ)+when:60d&hl=fr&gl=FR&ceid=FR:fr",
-  },
-  {
-    id: "euromillions-gnews-fr-mymillion",
-    siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(%22My+Million%22+OR+MyMillion)+(gagnant+OR+code+OR+tirage+OR+EuroMillions)+when:60d&hl=fr&gl=FR&ceid=FR:fr",
-  },
-  {
-    id: "euromillions-gnews-fr-fdj",
-    siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(FDJ)+(EuroMillions+OR+Loto+OR+EuroDreams+OR+Keno)+(r%C3%A9sultat+OR+tirage+OR+jackpot)+when:45d&hl=fr&gl=FR&ceid=FR:fr",
-  },
-  {
-    id: "euromillions-gnews-en",
-    siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(jackpot+OR+winner+OR+%22My+Million%22)+(France+OR+FDJ)+-result+-results+-Thunderball+-%22UK+Lotto%22+-%22National+Lottery%22+when:90d&hl=en&gl=FR&ceid=FR:en",
-  },
-  {
-    id: "euromillions-gnews-en-ie",
-    siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(EuroMillions+OR+%22Euro+Millions%22)+(jackpot+OR+winner)+(France+OR+FDJ)+-result+-results+-Thunderball+when:90d&hl=en-IE&gl=IE&ceid=IE:en",
-  },
-  {
-    id: "euromillions-gnews-es",
-    siteId: "euromillions",
-    url: "https://news.google.com/rss/search?q=(Euromillones+OR+EuroMillions)+(bote+OR+ganador+OR+millonario)+-resultado+-resultados+when:60d&hl=es&gl=ES&ceid=ES:es",
-  },
 ];
 
 export const MAX_NEWS_ARTICLES = 140;
@@ -144,7 +94,7 @@ export const MAX_NEW_PER_RUN = 8;
 /** Default cap when ingesting a single theme (`?siteId=`). */
 export const MAX_NEW_PER_SITE_RUN = 2;
 export const MAX_NEW_PER_SITE_RUN_BY_ID: Partial<Record<SiteId, number>> = {
-  euromillions: 4,
+  euromillions: 2,
 };
 
 export function maxNewPerSiteRun(siteId?: SiteId): number {

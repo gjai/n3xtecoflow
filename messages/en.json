@@ -255,6 +255,8 @@
     "back": "All news",
     "source": "Source",
     "readSource": "Open source article",
+    "readData": "See the data",
+    "originalBadge": "Original analysis",
     "catalogCta": "Compare EcoFlow products →",
     "aiBadge": "Editorial article",
     "count": "{count} articles",

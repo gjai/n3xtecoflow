@@ -2,6 +2,12 @@ import type { SiteId } from "@/sites/types";
 import { NEWS_FEEDS, maxNewPerSiteRun, newsSiteId } from "./types";
 import { fetchFeedItems, isBlockedLotteryNewsSource, isOnTopicArticle, type RssItem } from "./rss";
 import { buildArticleFromRss, refreshArticle } from "./rewrite";
+import {
+  buildOriginalEuroMillionsArticles,
+  isOriginalEuroMillionsArticle,
+  keepOriginalEuroMillionsNews,
+} from "./original-euromillions";
+import { readEuroMillionsStore } from "@/lib/euromillions/store";
 import { isStoredNewsImageJunk, resolveNewsCover, MAX_AI_NEWS_COVERS_PER_RUN } from "./images";
 import {
   pruneLowQualityNewsArticles,
@@ -59,11 +65,13 @@ export type IngestResult = {
 function articleOnTopic(article: {
   siteId?: SiteId;
   slug?: string;
+  sourceGuid?: string;
   sourceName?: string;
   sourceUrl?: string;
   fr?: { title?: string; excerpt?: string };
   en?: { title?: string; excerpt?: string };
 }) {
+  if (isOriginalEuroMillionsArticle(article)) return true;
   if (
     newsSiteId(article) === "euromillions" &&
     isBlockedLotteryNewsSource({
@@ -95,9 +103,11 @@ export async function ingestNews(
 
   type Collected = RssItem & { siteId: SiteId };
   const collected: Collected[] = [];
-  const feeds = options?.siteId
-    ? NEWS_FEEDS.filter((f) => f.siteId === options.siteId)
-    : NEWS_FEEDS;
+  const feeds = (
+    options?.siteId
+      ? NEWS_FEEDS.filter((f) => f.siteId === options.siteId)
+      : NEWS_FEEDS
+  ).filter((f) => f.siteId !== "euromillions");
 
   for (const feed of feeds) {
     try {
@@ -183,7 +193,8 @@ export async function ingestNews(
     const refreshOffset = options.refreshOffset ?? 0;
     const feedByGuid = byGuid;
     const needsRefresh = (a: (typeof store.articles)[number]) =>
-      options.forceRefresh ||
+      a.rewrittenBy !== "original" &&
+      (options.forceRefresh ||
       (a.fr?.body?.length || 0) < 6 ||
       (a.en?.body?.length || 0) < 6 ||
       a.rewrittenBy === "template" ||
@@ -194,7 +205,7 @@ export async function ingestNews(
         a.fr!.title.trim() === a.en!.title.trim()) ||
       /googleusercontent|gstatic|google-analytics|googletagmanager|\.js$/i.test(
         a.sourceUrl || "",
-      );
+      ));
     const targets = store.articles
       .map((article, index) => ({ article, index }))
       .filter(
@@ -220,6 +231,19 @@ export async function ingestNews(
     }
   }
 
+  let originalRssPurged = 0;
+  if (!options?.siteId || options.siteId === "euromillions") {
+    const rssPurged = store.articles.length;
+    store.articles = keepOriginalEuroMillionsNews(store.articles);
+    originalRssPurged = rssPurged - store.articles.length;
+    const emStore = await readEuroMillionsStore();
+    const originalCreated = buildOriginalEuroMillionsArticles(
+      emStore.draws,
+      store.articles,
+    );
+    created.push(...originalCreated);
+  }
+
   const beforePurge = store.articles.length;
   const purgedSlugs = store.articles
     .filter((a) => !articleOnTopic(a))
@@ -231,7 +255,7 @@ export async function ingestNews(
   const quality = pruneLowQualityNewsArticles(store.articles);
   store.articles = quality.kept;
   purgedSlugs.push(...quality.removedSlugs);
-  const purged = topicPurged + quality.removedSlugs.length;
+  const purged = topicPurged + quality.removedSlugs.length + originalRssPurged;
 
   const keptCreatedSlugs = new Set(
     created
@@ -265,6 +289,7 @@ export async function ingestNews(
     const needsCover =
       !article.imageSrc || junk || wrongTheme || forceSiteCovers;
     if (!needsCover) continue;
+    if (article.rewrittenBy === "original") continue;
     if (
       !fixAll &&
       !forceSiteCovers &&

@@ -322,6 +322,25 @@ export async function refreshEuroMillionsData(options?: {
     }
   }
 
+  if (changed) {
+    try {
+      const { publishOriginalEuroMillionsNews } = await import(
+        "@/lib/news/original-publish"
+      );
+      const orig = await publishOriginalEuroMillionsNews();
+      if (orig.created.length) {
+        try {
+          const { notifyFacebookNews } = await import("./facebook");
+          await notifyFacebookNews(orig.created);
+        } catch (err) {
+          console.error("facebook_original_news_fail", err);
+        }
+      }
+    } catch (err) {
+      console.error("original_news_fail", err);
+    }
+  }
+
   return {
     ok: true,
     draws: next.draws.length,

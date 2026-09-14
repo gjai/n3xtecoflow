@@ -13,6 +13,7 @@ import { getEditorialImages } from "@/data/images";
 import { affiliateCtaForNews } from "@/lib/news/affiliate-cta";
 import { amazonCtaForNews } from "@/lib/news/amazon-cta";
 import { isEuroMillionsResultClone } from "@/lib/news/rss";
+import { isOriginalEuroMillionsArticle } from "@/lib/news/original-euromillions";
 import { getNewsBySlug, readNewsStore } from "@/lib/news/store";
 import {
   DATE_LOCALE,
@@ -176,7 +177,18 @@ export default async function NewsArticlePage({
     );
   }
 
+  const original = isOriginalEuroMillionsArticle(article);
   const CtaBlock = useAmazon ? AmazonCtaBlock : AffiliateCtaBlock;
+
+  const sourcePath = (() => {
+    try {
+      const u = new URL(article.sourceUrl);
+      if (!/euromillions-resultats\.fr$/i.test(u.hostname)) return null;
+      return u.pathname.replace(/^\/(fr|en)(?=\/|$)/, "") || "/";
+    } catch {
+      return null;
+    }
+  })();
 
   return (
     <article>
@@ -220,15 +232,28 @@ export default async function NewsArticlePage({
             </time>
             {" · "}
             {t("source")}{" "}
-            <a
-              href={article.sourceUrl}
-              target="_blank"
-              rel="nofollow noopener noreferrer"
-              className="text-[var(--accent)] underline-offset-2 hover:underline"
-            >
-              {article.sourceName}
-            </a>
-            {article.rewrittenBy === "ai" ? ` · ${t("aiBadge")}` : null}
+            {original && sourcePath ? (
+              <Link
+                href={sourcePath}
+                className="text-[var(--accent)] underline-offset-2 hover:underline"
+              >
+                {article.sourceName}
+              </Link>
+            ) : (
+              <a
+                href={article.sourceUrl}
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+                className="text-[var(--accent)] underline-offset-2 hover:underline"
+              >
+                {article.sourceName}
+              </a>
+            )}
+            {article.rewrittenBy === "original" ? (
+              <span> · {t("originalBadge")}</span>
+            ) : article.rewrittenBy === "ai" ? (
+              ` · ${t("aiBadge")}`
+            ) : null}
           </p>
           <div className="mt-6">
             <CtaBlock />
@@ -249,14 +274,23 @@ export default async function NewsArticlePage({
           <p key={p.slice(0, 48)}>{p}</p>
         ))}
         <p className="border-t border-[var(--line)] pt-6">
-          <a
-            href={article.sourceUrl}
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-            className="font-semibold text-[var(--accent)] underline-offset-2 hover:underline"
-          >
-            {t("readSource")}
-          </a>
+          {original && sourcePath ? (
+            <Link
+              href={sourcePath}
+              className="font-semibold text-[var(--accent)] underline-offset-2 hover:underline"
+            >
+              {t("readData")}
+            </Link>
+          ) : (
+            <a
+              href={article.sourceUrl}
+              target="_blank"
+              rel="nofollow noopener noreferrer"
+              className="font-semibold text-[var(--accent)] underline-offset-2 hover:underline"
+            >
+              {t("readSource")}
+            </a>
+          )}
         </p>
         <p>
           {siteShowsProducts(site) ? (

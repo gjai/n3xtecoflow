@@ -3,7 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { EuroMillionsSimulator } from "@/components/EuroMillionsSimulator";
-import { EuroMillionsStatsPanel } from "@/components/EuroMillionsStatsPanel";
+import { EuroMillionsStatsTeaser } from "@/components/EuroMillionsStatsTeaser";
 import { FlashGridGenerator } from "@/components/FlashGridGenerator";
 import { GameToolsNav } from "@/components/EuroMillionsNav";
 import { ResultsLivePoller } from "@/components/ResultsLivePoller";
@@ -244,7 +244,7 @@ export default async function TiragesPage({
           <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--heading)]">
             {statsT("title")}
           </h2>
-          <EuroMillionsStatsPanel locale={locale} store={store} />
+          <EuroMillionsStatsTeaser locale={locale} store={store} />
         </section>
       </main>
       <KwankoBanner

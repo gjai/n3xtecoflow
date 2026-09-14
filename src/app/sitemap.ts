@@ -171,6 +171,8 @@ export function buildSitemapForSite(
     ...(site.id === "euromillions"
       ? [
           "/tirages",
+          "/stats",
+          "/presse",
           "/prochain-tirage",
           "/alerte-email",
           "/jeux",
@@ -205,13 +207,20 @@ export function buildSitemapForSite(
         url: `${siteUrl}/${locale}${path}`,
         lastModified: new Date(),
         changeFrequency:
-          path === "" ? "daily" : isNewsHub && !emNewsDeweighted ? "daily" : "monthly",
+          path === "" ||
+          path === "/stats" ||
+          path === "/tirages" ||
+          path === "/actualites"
+            ? "daily"
+            : "monthly",
         priority:
           path === ""
             ? 1
-            : isNewsHub
+            : path === "/stats"
+              ? 0.85
+              : isNewsHub
               ? emNewsDeweighted
-                ? 0.45
+                ? 0.7
                 : 0.85
               : 0.7,
       });
@@ -230,7 +239,7 @@ export function buildSitemapForSite(
           url: `${siteUrl}/${locale}/actualites/${article.slug}`,
           lastModified: new Date(article.publishedAt),
           changeFrequency: "weekly",
-          priority: emNewsDeweighted ? 0.45 : 0.7,
+          priority: emNewsDeweighted ? 0.65 : 0.7,
         });
       }
     }
