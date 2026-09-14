@@ -5,6 +5,7 @@ import {
   type EditorialStory,
 } from "@/lib/euromillions/insights";
 import { makeSlug } from "./store";
+import type { SiteId } from "@/sites/types";
 import type { NewsArticle } from "./types";
 import { newsSiteId } from "./types";
 
@@ -14,7 +15,7 @@ const ORIGIN = "https://euromillions-resultats.fr";
 
 export function isOriginalEuroMillionsArticle(article: {
   sourceGuid?: string;
-  siteId?: string;
+  siteId?: SiteId;
 }): boolean {
   return (
     newsSiteId(article) === "euromillions" &&
