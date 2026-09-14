@@ -9,6 +9,10 @@ import {
 } from "@/lib/seo/ahrefs";
 import { sendResendEmail } from "@/lib/mail/resend";
 import { formatAiUsageDigest, summarizeAiUsage } from "@/lib/ai/usage";
+import {
+  fetchGscDigestSnapshot,
+  formatGscDigestLines,
+} from "@/lib/seo/gsc-api";
 
 export function parisDateKey(date = new Date()): string {
   return new Intl.DateTimeFormat("en-CA", {
@@ -47,14 +51,17 @@ function listedDomains(): string[] {
   return [...set].sort();
 }
 
-/** Digest ops quotidien (crons, actus, prix) — trafic = Umami. */
+/** Digest ops quotidien (crons, actus, prix, GSC). Trafic site = Umami. */
 export async function buildDailyDigest(options?: { dayKey?: string }) {
   const today = parisDateKey();
   const dayKey = options?.dayKey || shiftParisDateKey(today, -1);
   const news = await readNewsStore();
   const prices = await readAmazonPriceStore();
   const domains = listedDomains();
-  const ahrefs = await fetchNetworkDomainRatings();
+  const [ahrefs, gsc] = await Promise.all([
+    fetchNetworkDomainRatings(),
+    fetchGscDigestSnapshot(),
+  ]);
 
   const priced = Object.values(prices.offers).filter(
     (o) => o.price.display,
@@ -77,7 +84,9 @@ export async function buildDailyDigest(options?: { dayKey?: string }) {
     `Généré le : ${new Date().toLocaleString("fr-FR", { timeZone: "Europe/Paris" })}`,
     "",
     `=== Trafic ===`,
-    `Voir le dashboard Umami (self-host Coolify) — plus de compteur maison.`,
+    `Umami (visite site) : https://umami.n3xt.xyz`,
+    "",
+    ...formatGscDigestLines(gsc),
     "",
     `=== Santé des crons ===`,
     cronHealth.ok ? `Statut : OK` : `Statut : ALERTE`,

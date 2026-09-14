@@ -8,7 +8,7 @@ import {
 import { markCronFail, markCronOk } from "@/lib/cron/status";
 import { cronAuthorized } from "@/lib/http/cron-auth";
 
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 export async function POST(request: Request) {
   if (

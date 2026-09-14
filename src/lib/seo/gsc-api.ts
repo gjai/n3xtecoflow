@@ -182,11 +182,13 @@ export async function queryGscSearchAnalytics(options?: {
   endDate?: string;
   queryContains?: string;
   rowLimit?: number;
-}): Promise<{ siteUrl: string; rows: GscAnalyticsRow[] }> {
+  dimensions?: string[];
+}): Promise<{ siteUrl: string; startDate: string; endDate: string; rows: GscAnalyticsRow[] }> {
   const siteUrl = options?.siteUrl || pickGscProperty(await listGscSites());
   const end = options?.endDate || isoDate(new Date(Date.now() - 3 * 86400000));
   const start =
     options?.startDate || isoDate(new Date(Date.now() - 90 * 86400000));
+  const dimensions = options?.dimensions ?? ["query", "page"];
   const encoded = encodeURIComponent(siteUrl);
   const res = await gscFetch(
     `https://searchconsole.googleapis.com/webmasters/v3/sites/${encoded}/searchAnalytics/query`,
@@ -195,7 +197,7 @@ export async function queryGscSearchAnalytics(options?: {
       body: JSON.stringify({
         startDate: start,
         endDate: end,
-        dimensions: ["query", "page"],
+        ...(dimensions.length ? { dimensions } : {}),
         rowLimit: options?.rowLimit ?? 100,
         dimensionFilterGroups: options?.queryContains
           ? [
@@ -228,15 +230,161 @@ export async function queryGscSearchAnalytics(options?: {
       `gsc_query ${res.status} ${json.error?.message || ""}`.trim(),
     );
   }
+  const qIdx = dimensions.indexOf("query");
+  const pIdx = dimensions.indexOf("page");
   const rows = (json.rows || []).map((row) => ({
-    query: row.keys?.[0] || "",
-    page: row.keys?.[1] || "",
+    query: qIdx >= 0 ? row.keys?.[qIdx] || "" : "",
+    page: pIdx >= 0 ? row.keys?.[pIdx] || "" : "",
     clicks: row.clicks || 0,
     impressions: row.impressions || 0,
     ctr: row.ctr || 0,
     position: row.position || 0,
   }));
-  return { siteUrl, rows };
+  return { siteUrl, startDate: start, endDate: end, rows };
+}
+
+const LEFTOVER_LOCALE = /\/(en|de|es|it|pt|nl)(\/|$)/i;
+
+export type GscDigestSnapshot = {
+  enabled: boolean;
+  error?: string;
+  siteUrl?: string;
+  startDate?: string;
+  endDate?: string;
+  clicks: number;
+  impressions: number;
+  ctr: number;
+  position: number;
+  topQueries: {
+    query: string;
+    clicks: number;
+    impressions: number;
+    position: number;
+  }[];
+  headImpressions: number;
+  headClicks: number;
+  headPosition: number;
+  leftoverImpressions: number;
+  leftoverClicks: number;
+};
+
+export async function fetchGscDigestSnapshot(): Promise<GscDigestSnapshot> {
+  const empty: GscDigestSnapshot = {
+    enabled: false,
+    clicks: 0,
+    impressions: 0,
+    ctr: 0,
+    position: 0,
+    topQueries: [],
+    headImpressions: 0,
+    headClicks: 0,
+    headPosition: 0,
+    leftoverImpressions: 0,
+    leftoverClicks: 0,
+  };
+  if (!gscEnabled()) return empty;
+  try {
+    const sites = await listGscSites();
+    const siteUrl = pickGscProperty(sites);
+    const endDate = isoDate(new Date(Date.now() - 3 * 86400000));
+    const startDate = isoDate(new Date(Date.now() - 31 * 86400000));
+    const range = { siteUrl, startDate, endDate };
+    const [totals, queries, pages, head] = await Promise.all([
+      queryGscSearchAnalytics({ ...range, dimensions: [], rowLimit: 1 }),
+      queryGscSearchAnalytics({
+        ...range,
+        dimensions: ["query"],
+        rowLimit: 8,
+      }),
+      queryGscSearchAnalytics({
+        ...range,
+        dimensions: ["page"],
+        rowLimit: 250,
+      }),
+      queryGscSearchAnalytics({
+        ...range,
+        queryContains: "euromillions",
+        dimensions: ["query", "page"],
+        rowLimit: 250,
+      }),
+    ]);
+    const total = totals.rows[0];
+    const headRows = head.rows.filter((r) => isResultsHeadTerm(r.query));
+    const headImp = headRows.reduce((n, r) => n + r.impressions, 0);
+    const headClk = headRows.reduce((n, r) => n + r.clicks, 0);
+    const leftover = pages.rows.filter((r) => LEFTOVER_LOCALE.test(r.page));
+    return {
+      enabled: true,
+      siteUrl,
+      startDate,
+      endDate,
+      clicks: total?.clicks || 0,
+      impressions: total?.impressions || 0,
+      ctr: total?.ctr || 0,
+      position: total?.position || 0,
+      topQueries: queries.rows.slice(0, 8).map((r) => ({
+        query: r.query,
+        clicks: r.clicks,
+        impressions: r.impressions,
+        position: r.position,
+      })),
+      headImpressions: headImp,
+      headClicks: headClk,
+      headPosition: weightedPosition(headRows),
+      leftoverImpressions: leftover.reduce((n, r) => n + r.impressions, 0),
+      leftoverClicks: leftover.reduce((n, r) => n + r.clicks, 0),
+    };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "gsc_digest_fail";
+    console.error("gsc_digest_fail", msg);
+    return { ...empty, enabled: true, error: msg.slice(0, 180) };
+  }
+}
+
+function weightedPosition(rows: GscAnalyticsRow[]): number {
+  let imp = 0;
+  let acc = 0;
+  for (const r of rows) {
+    imp += r.impressions;
+    acc += r.position * r.impressions;
+  }
+  return imp ? acc / imp : 0;
+}
+
+export function formatGscDigestLines(snap: GscDigestSnapshot): string[] {
+  const lines = ["=== Google Search Console ==="];
+  if (!snap.enabled) {
+    lines.push("Compte de service absent — inspection / perfs GSC désactivées.");
+    return lines;
+  }
+  if (snap.error) {
+    lines.push(`Erreur : ${snap.error}`);
+    return lines;
+  }
+  lines.push(`Propriété : ${snap.siteUrl || "—"}`);
+  lines.push(
+    `Période : ${snap.startDate || "—"} → ${snap.endDate || "—"} (délai GSC ~3 j)`,
+  );
+  lines.push(
+    `Clics ${snap.clicks} · impressions ${snap.impressions} · CTR ${(snap.ctr * 100).toFixed(1)} % · pos. moy. ${snap.position.toFixed(1)}`,
+  );
+  lines.push(
+    `Requêtes « résultat(s) euromillions » : ${snap.headImpressions} imp · ${snap.headClicks} clic · pos ${snap.headPosition ? snap.headPosition.toFixed(1) : "—"}`,
+  );
+  if (snap.leftoverImpressions || snap.leftoverClicks) {
+    lines.push(
+      `Anciennes URLs /en /es… : ${snap.leftoverImpressions} imp · ${snap.leftoverClicks} clic (308 vers /fr)`,
+    );
+  }
+  if (snap.topQueries.length) {
+    lines.push("Top requêtes :");
+    for (const q of snap.topQueries) {
+      lines.push(
+        `  ${q.impressions} imp · ${q.clicks} clic · pos ${q.position.toFixed(1)} · ${q.query}`,
+      );
+    }
+  }
+  return lines;
 }
 
 export function isResultsHeadTerm(query: string): boolean {
