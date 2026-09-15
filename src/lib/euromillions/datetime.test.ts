@@ -176,7 +176,7 @@ describe("newsShortBlockedByOtherReel", () => {
 });
 
 describe("isEuroMillionsLiveWindow", () => {
-  it("ouvre mar/ven à 21h15, pas un mercredi ni trop tôt", () => {
+  it("ouvre mar/ven dès 20h50 (avant le tirage), pas un mercredi ni trop tôt", () => {
     assert.equal(
       isEuroMillionsLiveWindow(new Date("2026-09-01T21:15:00+02:00")),
       true,
@@ -187,6 +187,10 @@ describe("isEuroMillionsLiveWindow", () => {
     );
     assert.equal(
       isEuroMillionsLiveWindow(new Date("2026-09-01T20:50:00+02:00")),
+      true,
+    );
+    assert.equal(
+      isEuroMillionsLiveWindow(new Date("2026-09-01T20:45:00+02:00")),
       false,
     );
     assert.equal(

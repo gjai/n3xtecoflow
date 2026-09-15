@@ -137,13 +137,15 @@ export function parisHourMinute(date = new Date()): { hour: number; minute: numb
   return { hour, minute };
 }
 
-/** Mar/ven 21h05–22h25 Paris : poll VPS, pas GitHub Actions. */
+/** Mar/ven 20h50–22h25 Paris : poll VPS, pas GitHub Actions.
+ * Demarre AVANT le tirage (21h00) — un depart a 21h05 laissait 5 min
+ * d'avance a des concurrents qui pollent des la fermeture des mises. */
 export function isEuroMillionsLiveWindow(now = new Date()): boolean {
   const wd = parisWeekday(parisDateKey(now));
   if (wd !== 2 && wd !== 5) return false;
   const { hour, minute } = parisHourMinute(now);
   const t = hour * 60 + minute;
-  return t >= 21 * 60 + 5 && t < 22 * 60 + 25;
+  return t >= 20 * 60 + 50 && t < 22 * 60 + 25;
 }
 
 /** Clé Paris `YYYY-MM-DDTHH` : un Short histoire par heure civile. */
