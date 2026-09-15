@@ -19,6 +19,18 @@ Deux pipelines distincts dans `src/lib/euromillions/` :
    - Mais `NEWS_SHORT_ENABLED=1` en prod, et des vidéos "Histoire" continuent de sortir (vu dans le flux RSS YouTube du 10-11/09) — mécanisme de déclenchement encore actif à identifier si besoin
    - **Data réelle (flux RSS YouTube, chaîne @euromillionsresultats, 2026-09-13)** : les Shorts résultats font 359-868 vues, les Shorts "Histoire" font 2-51 vues. Format nettement sous-performant — ne pas investir dessus sans données contraires.
 
+## TikTok — configuré mais échoue systématiquement (investigué 2026-09-15)
+
+Les clés (`TIKTOK_CLIENT_KEY/SECRET`, `TIKTOK_REFRESH_TOKEN`) sont présentes en prod, `TIKTOK_PRIVACY=SELF_ONLY` correctement réglé (mode sûr avant audit). Pourtant chaque post échoue avec l'erreur TikTok *"Please review our integration guidelines"* (visible via `docker logs` du conteneur ecoflow, grep `tiktok_post_fail`). `lastPostedTiktok` reste `null` pour tous les jeux dans `em-facebook.json`.
+
+**Diagnostic** : ce n'est pas un bug côté code (clés OK, logique `pickTiktokPrivacy` correcte, `TIKTOK_PRIVACY` bien réglé). C'est très probablement une restriction **TikTok Developer Portal** : app encore en mode sandbox/non auditée, et le compte TikTok connecté n'est pas dans la liste des comptes de test autorisés pour cette app — restriction côté TikTok, pas corrigeable dans ce repo.
+
+**À vérifier sur developers.tiktok.com (accès humain requis, pas accessible depuis Claude Code)** :
+1. Le compte TikTok utilisé est-il dans la liste des comptes de test de l'app ?
+2. Statut d'audit de l'app (en review / refusé / jamais soumis) ?
+
+Ne pas re-déboguer le code TikTok sans avoir d'abord vérifié ces deux points côté TikTok.
+
 ## État réel de la chaîne YouTube (@euromillionsresultats)
 
 - Channel ID `UCGwhv-PTDTlpisv2UwXgg9A`, **active depuis le 10/09/2026 seulement**, 4 abonnés, ~2200 vues au 13/09/2026 — chaîne toute jeune.
