@@ -18,6 +18,8 @@ function env(name: string): string {
 }
 
 export function tiktokConfigured(): boolean {
+  // Kill-switch : app TikTok non auditée → "integration guidelines" en boucle
+  if (/^(0|false|off|no)$/i.test(env("TIKTOK_ENABLED"))) return false;
   return Boolean(
     env("TIKTOK_CLIENT_KEY") &&
       env("TIKTOK_CLIENT_SECRET") &&
