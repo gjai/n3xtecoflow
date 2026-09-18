@@ -31,6 +31,8 @@ Les clés (`TIKTOK_CLIENT_KEY/SECRET`, `TIKTOK_REFRESH_TOKEN`) sont présentes e
 
 Ne pas re-déboguer le code TikTok sans avoir d'abord vérifié ces deux points côté TikTok.
 
+**Contournement prod (2026-09-18)** : `TIKTOK_ENABLED=0` coupe `tiktokConfigured()` — plus d'appels API / spam logs tant que le portail n'est pas OK.
+
 ## État réel de la chaîne YouTube (@euromillionsresultats)
 
 - Channel ID `UCGwhv-PTDTlpisv2UwXgg9A`, **active depuis le 10/09/2026 seulement**, 4 abonnés, ~2200 vues au 13/09/2026 — chaîne toute jeune.

@@ -41,4 +41,20 @@ describe("tiktok caption + privacy", () => {
       if (prev !== undefined) process.env.TIKTOK_REFRESH_TOKEN = prev;
     }
   });
+
+  it("TIKTOK_ENABLED=0 coupe même avec creds", () => {
+    const prev = process.env.TIKTOK_ENABLED;
+    process.env.TIKTOK_ENABLED = "0";
+    process.env.TIKTOK_CLIENT_KEY = process.env.TIKTOK_CLIENT_KEY || "k";
+    process.env.TIKTOK_CLIENT_SECRET =
+      process.env.TIKTOK_CLIENT_SECRET || "s";
+    process.env.TIKTOK_REFRESH_TOKEN =
+      process.env.TIKTOK_REFRESH_TOKEN || "r";
+    try {
+      assert.equal(tiktokConfigured(), false);
+    } finally {
+      if (prev === undefined) delete process.env.TIKTOK_ENABLED;
+      else process.env.TIKTOK_ENABLED = prev;
+    }
+  });
 });
