@@ -55,22 +55,29 @@ function mapFdjApiDraws(data: FdjDraw[], sourceUrl: string): EuroMillionsDraw[] 
     const mm = d.results.find((r) => r.type === "mymillion");
     const numbers = nums(main?.numbers || []);
     const starNums = nums(stars?.numbers || []);
-    if (numbers.length !== 5 || starNums.length !== 2) continue;
+    const hasGrid = numbers.length === 5 && starNums.length === 2;
     const codeRaw = mm?.numbers?.[0];
-    const prizeTiers = attachEuropeWinners(
-      parseRegularPrizeTiers(d.shares),
-      parseEuropeanWinnerCounts(d.european_shares),
-    );
-    const prizeTiersEtoilePlus = parseWinsetTiers(d.shares, "etoile");
+    const myMillionCode = codeRaw ? normalizeMyMillionCode(codeRaw) : null;
+    // FDJ publie My Million ~20h20, les 5+2 plus tard : garder le code seul.
+    if (!hasGrid && !myMillionCode) continue;
+    const prizeTiers = hasGrid
+      ? attachEuropeWinners(
+          parseRegularPrizeTiers(d.shares),
+          parseEuropeanWinnerCounts(d.european_shares),
+        )
+      : [];
+    const prizeTiersEtoilePlus = hasGrid
+      ? parseWinsetTiers(d.shares, "etoile")
+      : [];
     out.push({
-        date: toParisIsoDate(d.planned_at),
+      date: toParisIsoDate(d.planned_at),
       drawId: d.external_id || d.id,
-      numbers,
-      stars: starNums,
+      numbers: hasGrid ? numbers : [],
+      stars: hasGrid ? starNums : [],
       jackpotEur:
         amountEur(d.estimated_jackpot) ?? amountEur(d.guaranteed_amounts),
       hasWinner: null,
-      myMillionCode: codeRaw ? normalizeMyMillionCode(codeRaw) : null,
+      myMillionCode,
       prizeTiers: prizeTiers.length ? prizeTiers : undefined,
       prizeTiersEtoilePlus: prizeTiersEtoilePlus.length
         ? prizeTiersEtoilePlus

@@ -185,44 +185,75 @@ export async function refreshEuroMillionsData(options?: {
   const beforeFp = lotteryFingerprint(store, beforeFdj);
 
   // EuroMillions d’abord : écrire + revalider avant Keno/Loto (même lock live).
-  try {
-    const fdj = await fetchFdjEuroMillionsDraws(fast ? 8 : 20, fast ? 1 : 8);
-    incoming = incoming.concat(fdj);
-    sources.push(`fdj:${fdj.length}`);
-  } catch (err) {
-    console.error("euromillions_fdj_fail", err);
-  }
-
+  // En live : FDJ + UK en parallèle (course — UK publie parfois les 5+2 avant FDJ).
   let nextDrawDate = store.nextDrawDate ?? null;
   let nextJackpotEur = store.nextJackpotEur ?? null;
-  try {
-    const fdjNext = await fetchFdjNextEuroMillions();
-    if (fdjNext) {
-      nextDrawDate = fdjNext.date;
-      if (fdjNext.jackpotEur != null) nextJackpotEur = fdjNext.jackpotEur;
+  if (live) {
+    const [fdjResult, nextResult, ukResult] = await Promise.all([
+      fetchFdjEuroMillionsDraws(8, 1)
+        .then((fdj) => ({ ok: true as const, fdj }))
+        .catch((err) => {
+          console.error("euromillions_fdj_fail", err);
+          return { ok: false as const, fdj: [] as EuroMillionsDraw[] };
+        }),
+      fetchFdjNextEuroMillions()
+        .then((fdjNext) => ({ ok: true as const, fdjNext }))
+        .catch((err) => {
+          console.error("euromillions_fdj_next_fail", err);
+          return { ok: false as const, fdjNext: null };
+        }),
+      fetchUkLatestDraw()
+        .then((uk) => ({ ok: true as const, uk }))
+        .catch((err) => {
+          console.error("euromillions_uk_live_fail", err);
+          return { ok: false as const, uk: null };
+        }),
+    ]);
+    incoming = incoming.concat(fdjResult.fdj);
+    sources.push(`fdj:${fdjResult.fdj.length}`);
+    if (nextResult.ok && nextResult.fdjNext) {
+      nextDrawDate = nextResult.fdjNext.date;
+      if (nextResult.fdjNext.jackpotEur != null) {
+        nextJackpotEur = nextResult.fdjNext.jackpotEur;
+      }
       sources.push(
-        `fdj-next:${fdjNext.date}:${fdjNext.jackpotEur ?? "na"}`,
+        `fdj-next:${nextResult.fdjNext.date}:${nextResult.fdjNext.jackpotEur ?? "na"}`,
       );
     }
-  } catch (err) {
-    console.error("euromillions_fdj_next_fail", err);
-  }
-
-  if (live) {
     const today = parisDateKey();
     const fdjHasToday = incoming.some(
       (d) => d.date === today && isEuroMillionsDrawPublished(d),
     );
-    if (!fdjHasToday) {
-      try {
-        const uk = await fetchUkLatestDraw();
-        if (uk?.draw && isEuroMillionsDrawPublished(uk.draw)) {
-          incoming.push(uk.draw);
-          sources.push("uk-lottery:live");
-        }
-      } catch (err) {
-        console.error("euromillions_uk_live_fail", err);
+    const ukDraw = ukResult.ok ? ukResult.uk?.draw : null;
+    if (
+      !fdjHasToday &&
+      ukDraw &&
+      isEuroMillionsDrawPublished(ukDraw) &&
+      ukDraw.date === today
+    ) {
+      incoming.push(ukDraw);
+      sources.push("uk-lottery:live");
+    }
+  } else {
+    try {
+      const fdj = await fetchFdjEuroMillionsDraws(fast ? 8 : 20, fast ? 1 : 8);
+      incoming = incoming.concat(fdj);
+      sources.push(`fdj:${fdj.length}`);
+    } catch (err) {
+      console.error("euromillions_fdj_fail", err);
+    }
+
+    try {
+      const fdjNext = await fetchFdjNextEuroMillions();
+      if (fdjNext) {
+        nextDrawDate = fdjNext.date;
+        if (fdjNext.jackpotEur != null) nextJackpotEur = fdjNext.jackpotEur;
+        sources.push(
+          `fdj-next:${fdjNext.date}:${fdjNext.jackpotEur ?? "na"}`,
+        );
       }
+    } catch (err) {
+      console.error("euromillions_fdj_next_fail", err);
     }
   }
 

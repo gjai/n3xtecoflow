@@ -228,6 +228,15 @@ export async function EuroMillionsHome({
   const newsT = await getTranslations({ locale, namespace: "news" });
   const latest = getLatestDraw(store);
   const published = isEuroMillionsDrawPublished(latest);
+  const tonightDraw = store.nextDrawDate
+    ? store.draws.find((d) => d.date === store.nextDrawDate)
+    : undefined;
+  /** My Million sort ~20h20, avant les 5+2 — afficher dès qu’FDJ le pousse. */
+  const tonightMyMillion =
+    tonightDraw?.myMillionCode &&
+    !isEuroMillionsDrawPublished(tonightDraw)
+      ? tonightDraw.myMillionCode
+      : null;
   const ficheHref = latest ? `/tirages/${latest.date}` : "/tirages";
   const tonightHref =
     store.nextDrawDate && store.nextDrawDate !== latest?.date
@@ -444,6 +453,28 @@ export async function EuroMillionsHome({
                   {t("archiveCta")} →
                 </Link>
               </p>
+            ) : null}
+            {tonightMyMillion && store.nextDrawDate ? (
+              <div className="mt-6 border-t border-[var(--line)] pt-5">
+                <p
+                  className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide"
+                  style={{ color: GAME_IDENTITY["my-million"].accent }}
+                >
+                  <GameMark gameId="my-million" size={16} />
+                  {t("myMillionLabel")}
+                </p>
+                <p className="mt-1 font-[family-name:var(--font-display)] text-xl font-semibold tracking-wider text-[var(--heading)]">
+                  <Link
+                    href={`/tirages/${store.nextDrawDate}`}
+                    className="hover:underline"
+                  >
+                    {tonightMyMillion}
+                  </Link>
+                </p>
+                <p className="mt-2 text-sm text-[var(--muted)]">
+                  {formatDate(store.nextDrawDate, locale)}
+                </p>
+              </div>
             ) : null}
             {pending && latest ? (
               <p className="mt-6 text-sm text-[var(--muted)]">

@@ -7,9 +7,25 @@ import {
   readEuroMillionsStore,
 } from "./store";
 
-const INTERVAL_MS = 30_000;
+/** Hors pic : 30 s. Pic résultats (21h30–22h05 Paris) : 15 s. */
+const INTERVAL_MS = 15_000;
 
 let started = false;
+let tickRunning = false;
+
+function isPeakLiveWindow(now = new Date()): boolean {
+  if (!isEuroMillionsLiveWindow(now)) return false;
+  const paris = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/Paris",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(now);
+  const hour = Number(paris.find((p) => p.type === "hour")?.value);
+  const minute = Number(paris.find((p) => p.type === "minute")?.value);
+  const t = hour * 60 + minute;
+  return t >= 21 * 60 + 30 && t < 22 * 60 + 5;
+}
 
 export function startVpsLivePoll(): void {
   if (started) return;
@@ -26,6 +42,8 @@ export function startVpsLivePoll(): void {
 
   const tick = async () => {
     if (!isEuroMillionsLiveWindow()) return;
+    if (tickRunning) return;
+    tickRunning = true;
     try {
       const store = await readEuroMillionsStore();
       const today = parisDateKey();
@@ -48,6 +66,7 @@ export function startVpsLivePoll(): void {
         result.latest,
         `changed=${result.changed}`,
         result.sources.join(","),
+        isPeakLiveWindow() ? "peak" : "warm",
       );
       await markCronOk(
         "euromillions",
@@ -59,10 +78,13 @@ export function startVpsLivePoll(): void {
         "euromillions",
         err instanceof Error ? err.message : "vps_live_fail",
       );
+    } finally {
+      tickRunning = false;
     }
   };
 
   setInterval(() => {
+    // Interval fixe 15 s ; hors pic le tick no-op hors fenêtre, en pic on poll.
     void tick();
   }, INTERVAL_MS);
   void tick();

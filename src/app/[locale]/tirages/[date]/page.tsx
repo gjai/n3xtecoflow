@@ -233,8 +233,29 @@ export default async function TirageDetailPage({
           ) : null}
         </div>
         ) : (
-          <div className="mt-8 border border-[var(--line)] bg-[var(--surface)] p-6 text-[var(--muted)]">
-            {t("pendingLead")}
+          <div className="mt-8 border border-[var(--line)] bg-[var(--surface)] p-6">
+            {draw.myMillionCode ? (
+              <div>
+                <p
+                  className="flex items-center gap-2 text-xs uppercase tracking-[0.18em]"
+                  style={{ color: GAME_IDENTITY["my-million"].accent }}
+                >
+                  <GameMark gameId="my-million" size={16} />
+                  {t("myMillion")}
+                </p>
+                <p
+                  className="mt-2 font-mono text-xl tracking-wide"
+                  style={{ color: GAME_IDENTITY["my-million"].accent }}
+                >
+                  {draw.myMillionCode}
+                </p>
+                <p className="mt-4 text-sm text-[var(--muted)]">
+                  {t("pendingLead")}
+                </p>
+              </div>
+            ) : (
+              <p className="text-[var(--muted)]">{t("pendingLead")}</p>
+            )}
           </div>
         )}
 
