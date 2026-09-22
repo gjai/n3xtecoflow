@@ -76,4 +76,28 @@ describe("mergeDraws", () => {
     assert.equal(out.drawId, 1973);
     assert.equal(out.source, "fdj");
   });
+
+  it("garde My Million seul puis fusionne les 5+2 FDJ", () => {
+    const mmOnly = draw({
+      source: "fdj",
+      numbers: [],
+      stars: [],
+      myMillionCode: "BE 101 8833",
+      jackpotEur: 37_000_000,
+    });
+    const withGrid = draw({
+      source: "fdj",
+      numbers: [1, 2, 3, 4, 5],
+      stars: [6, 7],
+      myMillionCode: "BE 101 8833",
+      jackpotEur: 37_000_000,
+    });
+    const [partial] = mergeDraws([], [mmOnly]);
+    assert.equal(partial.myMillionCode, "BE 101 8833");
+    assert.deepEqual(partial.numbers, []);
+    const [full] = mergeDraws([partial], [withGrid]);
+    assert.deepEqual(full.numbers, [1, 2, 3, 4, 5]);
+    assert.deepEqual(full.stars, [6, 7]);
+    assert.equal(full.myMillionCode, "BE 101 8833");
+  });
 });
