@@ -156,7 +156,9 @@ export async function fetchFdjEuroMillionsDraws(
   const pageCount = Math.min(Math.max(pages, 1), 8);
   const seen = new Set<string>();
   const out: EuroMillionsDraw[] = [];
-  let cursor = "now";
+  // Pas "now" : le tirage du soir a planned_at ~21h45 — avant cette heure
+  // FDJ l’exclut, alors que My Million (~20h20) est déjà dans results.
+  let cursor = new Date(Date.now() + 6 * 3600_000).toISOString();
   for (let p = 0; p < pageCount; p++) {
     const { raw, url } = await fetchFdjDrawPage(cursor, size);
     if (!raw.length) break;
